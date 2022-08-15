@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 import requests
 import boto3
-
+from uuid import getnode as get_mac
 import torch.cuda
 
 from src.errors import exceptions as ex
@@ -771,6 +771,9 @@ class Util():
         result['startDate'] = datetime.datetime.strptime(result['startDate'], '%Y-%m-%d').date()
         result['endDate'] = datetime.datetime.strptime(result['endDate'], '%Y-%m-%d').date()
         today = datetime.datetime.now().date()
+
+        if get_mac() != result['mac']:
+            return False
 
         if today < result.get("startDate") or today > result.get("endDate"):
             return False
