@@ -109,7 +109,6 @@ temp/.DS_Store
 
 
 *.pkl
-aistore_config.py
 
 data/*.zip*
 data/*.pkl*
