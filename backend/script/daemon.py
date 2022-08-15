@@ -37,7 +37,6 @@ from machine_learning.torch_ann import TorchAnn
 from machine_learning.fastai_ann import FastAnn
 import sys
 import random
-from src.visualizing.autovisualizing import AutoVisualizing
 from src.errors import exceptions as ex
 import numpy as np
 
@@ -280,13 +279,6 @@ class Daemon():
                 self.dbClass.updateProjectStatusById(project['id'], 9, "9 : 전처리 조건에 의해 모든 행이 삭제되었습니다. 조건을 재확인해주세요.")
                 continue
 
-            if not 'time_series' in project['trainingMethod']:
-                AutoVisClass = AutoVisualizing(project=project)
-                dft = AutoVisClass.AutoViz("", "", dep_var, df, header=0, verbose=2)
-                try:
-                    shutil.rmtree(f"./temp/project_analytics_images_{project['id']}")
-                except:
-                    pass
             self.createModels(project)
             self.trainModels(project, self.instanceName)
             self.finishProject(project)
@@ -330,13 +322,6 @@ class Daemon():
             #
             # if project.get('algorithm', 'auto') != 'auto':
             #     self.train_models(project, dep_var, df, num_cols, str_cols)
-            #
-            # AutoVisClass = AutoVisualizing(project=project)
-            # dft = AutoVisClass.AutoViz("", "", dep_var, df, header=0, verbose=2)
-            # try:
-            #     shutil.rmtree(f"./temp/project_analytics_images_{project['id']}")
-            # except:
-            #     pass
 
             self.createModels(project)
             self.trainModels(project, self.instanceName)
@@ -545,13 +530,6 @@ class Daemon():
             self.dbClass.updateProjectStatusById(project['id'], 9, "9 : 전처리 조건에 의해 모든 행이 삭제되었습니다. 조건을 재확인해주세요.")
             return False
 
-        if not 'time_series' in project['trainingMethod']:
-            # AutoVisClass = AutoVisualizing(project=project)
-            # dft = AutoVisClass.AutoViz("", "", dep_var, df, header=0, verbose=2)
-            try:
-                shutil.rmtree(f"./temp/project_analytics_images_{project['id']}")
-            except:
-                pass
         self.createModels(project)
         return True
 
