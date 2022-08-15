@@ -22,7 +22,7 @@ from src.errors import exceptions as ex
 
 from dateutil.relativedelta import relativedelta
 
-if os.path.exists('./aistore_config.py'):
+if os.path.exists('./backend/src/training/aistore_config.py'):
     from aistore_config import aistore_configs
 else:
     aistore_configs = {
@@ -33,7 +33,7 @@ else:
         "eximbay_mid": None,
     }
 
-if os.path.exists('./util_config.py'):
+if os.path.exists('./astoredaemon/util_config.py'):
     from util_config import util_configs
 else:
     util_configs = {}
