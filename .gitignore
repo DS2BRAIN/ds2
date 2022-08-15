@@ -182,7 +182,6 @@ venv.bak/
 .mypy_cache/
 temp/.DS_Store
 *.pkl
-aistore_config.py
 backend/data/*.zip*
 backend/data/*.pkl*
 backend/data/*.csv*
@@ -216,5 +215,3 @@ backend/astoretest/
 backend/models/bpe.model
 
 backend/gan/
-
-backend/util_config.py

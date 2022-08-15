@@ -18,7 +18,7 @@ from src.util import Util
 from src.errorResponseList import ErrorResponseList, EXTENSION_NAME_ERROR
 
 import os
-if os.path.exists('./aistore_config.py'):
+if os.path.exists('./src/training/aistore_config.py'):
     from aistore_config import aistore_configs
 else:
     aistore_configs = {}

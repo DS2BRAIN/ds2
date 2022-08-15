@@ -9,7 +9,7 @@ import sys
 from src.util import Util
 
 import os
-if os.path.exists('./aistore_config.py'):
+if os.path.exists('./src/training/aistore_config.py'):
     from aistore_config import aistore_configs
 else:
     aistore_configs = {}
@@ -18,7 +18,7 @@ from playhouse.signals import Model, post_save
 from bson.objectid import ObjectId
 from pymongo import MongoClient, UpdateOne
 
-if os.path.exists('./util_config.py'):
+if os.path.exists('./astoredaemon/util_config.py'):
     from util_config import util_configs
 else:
     util_configs = {}
