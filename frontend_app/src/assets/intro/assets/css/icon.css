@@ -1,0 +1,124 @@
+.processIcon.large {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 128px;
+  height: 128px;
+  min-width: 32px;
+}
+
+.processIconTop:hover, .processIconTop.mobile:hover {
+  box-shadow: 0px 6px 16px rgba(0,0,0,0.2);
+  margin-top: 1px;
+  margin-bottom: 3px;
+  -webkit-transition: 0.25s ease-in-out;
+}
+
+.processIconTop {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 64px;
+  height: 64px;
+  min-width: 32px;
+  margin: 2px;
+}
+
+.processIconTop.mobile, .processIcon.mobile {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 48px;
+  height: 48px;
+  min-width: 32px;
+  margin: 2px;
+}
+
+.processIconInverse {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  background-color: var(--main);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 64px;
+  height: 64px;
+  min-width: 32px;
+  margin: 2px;
+  opacity: 0.7;
+}
+
+.processIconInverse:hover {
+  box-shadow: 0px 6px 16px rgba(0,0,0,0.2);
+  margin-top: 1px;
+  margin-bottom: 3px;
+  -webkit-transition: 0.25s ease-in-out;
+  opacity: 1;
+}
+
+.processIcon.small {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 64px;
+  height: 64px;
+  min-width: 32px;
+}
+
+.processIcon.active, .processIcon:hover {
+  opacity: 1;
+}
+
+.processIcon {
+  width: 96px;
+  height: 96px;
+  border-radius: 48px;
+  opacity: 0.3;
+  background-color: white;
+}
+
+.processIconImage {
+  height: 80%;
+  width: 70%;
+}
+
+.iconRight {
+  margin-right: 12px;
+  width: 16px;
+}
+
+.iconLabelingTool {
+  max-width: 48px;
+  max-height: 48px;
+  padding: 8px;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+

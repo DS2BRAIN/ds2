@@ -1,0 +1,168 @@
+/* feedback box */
+#feedback_container > div > button {
+  border: 4px solid var(--secondary1);
+  color: var(--secondary1);
+}
+
+#feedback_container > div > button svg {
+  fill: var(--secondary1);
+}
+
+.ReactModalPortal {
+  color: var(--text);
+}
+
+.ReactModalPortal textarea {
+  padding: 8px 16px;
+}
+
+.ReactModalPortal svg {
+  fill: var(--secondary1);
+}
+
+.ReactModalPortal button {
+  background: var(--secondary1);
+}
+
+.ReactModalPortal button:hover {
+  background: var(--secondaryHovering);
+}
+
+/* header */
+.navLinkDefault {
+  min-width: 85px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
+  color: lightgray;
+  letter-spacing: -0.01em;
+  padding: 0 16px;
+}
+.hoverTextColorSubPoint:hover {
+  color: white;
+}
+.focusTextColorLightGray:focus {
+  color: lightgray;
+}
+.navLinkActive {
+  position: relative;
+  color: white !important;
+  cursor: default;
+}
+.navLinkActive::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #0a84ff, #1bc6b4);
+}
+.noUnderlineHoverUnderline {
+  text-decoration: none;
+}
+.noUnderlineHoverUnderline:hover {
+  text-decoration: underline;
+}
+.hoverOutlineGreen {
+  background: rgba(11, 78, 71, 0.5) !important;
+  border: 1px solid transparent;
+}
+.hoverOutlineGreen:hover {
+  background: none !important;
+  border: 1px solid #1bc6b4;
+}
+.dataMetabaseActionBtnImp {
+  padding: 4px 16px !important;
+  margin-left: 16px !important;
+  color: #1bc6b4 !important;
+  border: 1px solid #1bc6b4 !important;
+  border-radius: 50px !important;
+  background: transparent !important;
+  white-space: nowrap !important;
+  font-size: 14px !important;
+  height: 32px !important;
+  line-height: 1 !important;
+}
+.dataMetabaseDisabledBtnImp {
+  padding: 4px 16px !important;
+  margin-left: 16px !important;
+  color: gray !important;
+  border: 1px solid gray !important;
+  border-radius: 50px !important;
+  background: transparent !important;
+  font-size: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  cursor: default !important;
+  height: 32px !important;
+  line-height: 1 !important;
+}
+.modeltableActionBtnImp {
+  color: var(--main) !important;
+  border: 1px solid var(--main) !important;
+  border-radius: 50px !important;
+  background-color: transparent !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+  min-height: 30px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  margin-left: 8px !important;
+  padding: 0 8px !important;
+}
+.modeltableActionDisabledBtnImp {
+  color: gray !important;
+  border: 1px solid gray !important;
+  border-radius: 50px !important;
+  background-color: transparent !important;
+  white-space: nowrap !important;
+  font-size: 12px !important;
+  min-height: 30px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+  cursor: default !important;
+  margin-left: 8px !important;
+  padding: 0 8px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.tableRowCell {
+  color: var(--textWhite87) !important;
+  cursor: "default";
+  border-bottom: 0.75px solid #3a3b3c !important;
+  font-size: 0.95rem;
+}
+.forgetPasswordContainer {
+  background-color: var(--background2);
+  border-radius: 4px;
+  padding: 40px;
+}
+.MuiCircularProgress-colorPrimary {
+  color: var(--main) !important;
+}
+.emptyListTable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 330px;
+  width: 100%;
+}
+
+.dataModalContainer {
+  background: #212121;
+  border: 1px solid rgba(60, 60, 60, 0.87);
+  border-radius: 4px;
+  position: absolute;
+  min-width: 800px;
+  min-height: 600px;
+  max-height: 98vh;
+  width: 30%;
+  padding: 16px;
+  display: flex;
+  overflow-y: auto;
+}

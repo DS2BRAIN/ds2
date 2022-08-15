@@ -1,0 +1,146 @@
+/* size */
+.fullWidth {
+  width: 100%;
+}
+.fullHeight {
+  height: 100%;
+}
+.fullCover {
+  width: 100%;
+  height: 100%;
+}
+
+/* display */
+.block {
+  display: block;
+}
+.flex {
+  display: flex;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+.contentCenter {
+  display: flex;
+  justify-content: center;
+}
+.contentFlexStart {
+  display: flex;
+  justify-content: flex-start;
+}
+.contentFlexEnd {
+  display: flex;
+  justify-content: flex-end;
+}
+.contentSpaceBtw {
+  display: flex;
+  justify-content: space-between;
+}
+.contentSpaceEven {
+  display: flex;
+  justify-content: space-evenly;
+}
+.itemsCenter {
+  display: flex;
+  align-items: center;
+}
+.itemsFlexStart {
+  display: flex;
+  align-items: flex-start;
+}
+.itemsFlexEnd {
+  display: flex;
+  align-items: flex-end;
+}
+.centerCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* font */
+.font32 {
+  font-size: 32px;
+}
+.font28 {
+  font-size: 28px;
+}
+.font24 {
+  font-size: 24px;
+}
+.font20 {
+  font-size: 20px;
+}
+.font18 {
+  font-size: 18px;
+}
+.font16 {
+  font-size: 16px;
+}
+.font15 {
+  font-size: 15px;
+}
+.font14 {
+  font-size: 14px;
+}
+.font12 {
+  font-size: 12px;
+}
+.font11 {
+  font-size: 11px;
+}
+.font10 {
+  font-size: 10px;
+}
+.font9 {
+  font-size: 9px;
+}
+.font8 {
+  font-size: 8px;
+}
+.font7 {
+  font-size: 7px;
+}
+.weightBold {
+  font-weight: bold;
+}
+.weight600 {
+  font-weight: 600;
+}
+.weight500 {
+  font-weight: 500;
+}
+.weight400 {
+  font-weight: 400;
+}
+.weightNormal {
+  font-weight: 400;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.ellipsis {
+  text-overflow: ellipsis;
+}
+.breakAll {
+  word-break: break-all;
+}
+.keepAll {
+  word-break: keep-all;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.decoNone {
+  text-decoration: none;
+}
+.decoUnderline {
+  text-decoration: underline;
+}

@@ -1,0 +1,48 @@
+.footer-clean {
+  padding: 50px 0;
+  background: linear-gradient(135deg, rgba(48,50,54,1), rgba(22,22,22,1) 100%);
+  color: white;
+  font-size: 12px;
+}
+
+.footer-clean ul {
+  padding: 0;
+  list-style: none;
+  line-height: 1.6;
+  font-size: 12px;
+  margin-bottom: 0;
+  color: white;
+}
+
+.footer-clean ul a {
+  color: white;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.footer-clean ul a:hover {
+  opacity: 1;
+}
+
+.footer-clean .copyright {
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 300;
+  color: white;
+}
+
+.footer-clean .copyright > a {
+  color: rgb(108,232,255);
+}
+
+.footer-clean .li {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.footer-clean .title {
+  color: white;
+  font-size: 14px;
+  padding: 0px;
+}
+

@@ -1,0 +1,163 @@
+#work {
+  margin-bottom: 48px !important;
+}
+
+work__projects {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+.project {
+  background-color: white;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+}
+
+.project.invisible {
+  display: none;
+}
+
+.work__projects {
+  margin: 16px;
+  background: white;
+  border-radius: 0.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.work__projects > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--darkSub);
+}
+
+.work__projects > a:hover {
+  color: black;
+}
+
+.industryThumbnail {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.industryThumbnail > img {
+  /*max-height: 196px;*/
+  width: auto;
+}
+
+.apiDescription {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 2;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.apiDescription {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  line-height: 2;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.marketContent > div > a {
+  font-size: 14px;
+}
+
+.apiCategory {
+  background: var(--main);
+  font-size: 12px;
+}
+
+.marketContent {
+  overflow: hidden;
+  padding: 16px !important;
+  /*display: flex;*/
+  align-items: start;
+}
+
+.marketListThumbnail {
+  object-fit: cover;
+  height: 96px;
+  width: 96px;
+  margin: 24px;
+}
+
+.pagenation > ul > li {
+  margin: 8px;
+}
+
+.pagenation > ul > li.unable {
+  margin: 8px;
+  opacity: 0.3;
+}
+
+.pagenation > ul > li > a {
+  color: var(--text);
+}
+
+.pagenation > ul > li > a:hover {
+  color: var(--main);
+}
+
+.pagenation > ul > li.active > a {
+  font-weight: 400;
+  color: var(--main);
+}
+
+.pagenation > ul {
+  display: flex;
+  max-width: 480px;
+  min-width: 320px;
+}
+
+.pagenation {
+  display: flex;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.marketListSide > ul > li {
+  font-size: 14px;
+  color: var(--text);
+  margin: 8px 0;
+}
+
+.marketListSide > ul > li.active > a {
+  font-weight: 500;
+  color: var(--main);
+}
+
+.marketListSide > ul > li > a {
+  color: var(--text);
+}
+
+.marketListSide > ul > li > a:hover {
+  color: var(--main);
+  font-weight: 500;
+}
+
+.requestCard {
+  box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+  border-radius: 0.75rem;
+  padding: 24px;
+  background: url("https://www.dropbox.com/s/4pl41fn6v8miujl/img_background_flow.png?raw=1") center / cover no-repeat;
+  color: white;
+  margin: 0 24px;
+}
+

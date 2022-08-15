@@ -1,0 +1,78 @@
+.vertical-menu {
+  display: flex;
+  height: inherit;
+  padding: 0 36px;
+}
+
+.vertical-menu .nav-tabs {
+  border-bottom: none;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+  padding-top: 24px;
+}
+
+.vertical-menu .tab-content {
+  padding: 10px;
+}
+
+.vertical-menu .nav-tabs > li {
+  float: left;
+  margin: 0 12px;
+  width: auto !important;
+  max-width: none !important;
+  text-align: start !important;
+}
+
+.vertical-menu .nav-link {
+  cursor: default;
+  border: none;
+  text-decoration: none;
+  border-bottom: none !important;
+  opacity: 0.3;
+  border-radius: 0.25rem;
+  margin: 4px;
+  color: var(--text);
+  padding: 0;
+  font-size: 14px;
+}
+
+.vertical-menu .nav-link:hover {
+  -webkit-transition: 0.25s ease-in-out;
+}
+
+.vertical-menu .nav-link.active, .vertical-menu .nav-link:hover {
+  opacity: 1;
+  background: transparent;
+  color: var(--main);
+}
+
+.vertical-menu .nav-link .nav-title {
+  margin-bottom: 8px;
+}
+
+.vertical-menu .nav-link > h5 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.vertical-menu .nav-link .nav-title > img {
+  height: 12px;
+}
+
+.vertical-menu .nav-link .nav-title > a {
+  font-size: 12px;
+}
+
+.tabContents {
+  padding: 24px 0;
+}
+
+.tabContents > div {
+  margin-bottom: 36px;
+}
+
+.tabContents > div > h2 {
+  margin-bottom: 16px;
+}
+

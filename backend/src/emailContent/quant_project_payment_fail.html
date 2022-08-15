@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="margin: 0;padding: 0;background-color: #E5E5E5;">
+    <Main>
+        <div class="email_contents_container" style="display: flex; min-width:1080px;min-height:800px;justify-content: center;align-items: center;">
+            <div class="email_contents" style="width: 800px;height: 900px;margin: auto; padding:0 100px;box-sizing:border-box;background-color: #fff;border-radius: 8px;">
+                <div class="title_area" style="padding: 62px 0 40px;text-align: center;border-bottom: 1px solid #BDBDBD" ><img src="https://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/song/220107094637logo_ds2quant.png" alt="logo" style="height:40px"></div>
+                <div class="contents_area">
+                    <div class="text_area">
+                        <p style="margin:40px 20px 14px;line-height:22.4px;word-break: keep-all;color: #333333;">
+                            Hello {name}, thank you for using Ds2.Quant.
+                            <br /><br />
+                            Regular payment of the project failed. Please check the card information.
+                            <br />
+                            Please note that if payment is not made within {remain_days}, the project will be suspended.
+                            <br /><br />
+                            Thank you.
+                            <br /><br />
+                            <b>Projcet Name</b>: {project_name}
+                            <br /><br />
+                            <b>Price</b> : $ {price}
+                            <br /><br />
+                            <b>Card Number</b> : {card_number}
+                            <br /><br />
+                            <b>Remain Days</b> : {remain_days}
+                            <br /><br />
+                            Did you experience any inconvenience using Ds2.Quant?
+                            <br />
+                            If you have any questions, please feel free to contact us.
+                            <br /><br />
+                            Team DS2.Quant.
+                            <br /><br />
+                        </p>
+                    </div>
+                    <div class="btn_area" style="text-align: center;padding-bottom: 46px;border-bottom: 1px solid #BDBDBD;">
+                        <a href="{link}"
+                           target="_blank"
+                           style="
+                               text-decoration: none;
+                               border: none;
+                               margin: 0;
+                               padding: 12px 32px;
+                               width: auto;
+                               overflow: visible;
+                               background: #0EC08A;
+                               border-radius: 50px;
+                               cursor: pointer;
+
+                               /* inherit font & color from ancestor */
+                               font: inherit;
+
+                               /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+                               line-height: normal;
+
+                               /* Corrects font smoothing for webkit */
+                               -webkit-font-smoothing: inherit;
+                               -moz-osx-font-smoothing: inherit;
+
+                               /* Corrects inability to style clickable `input` types in iOS */
+                               -webkit-appearance: none;">
+                            <span style="color: #fff;font-weight: 600;">Check out payment information</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer_area" style="padding: 20px 0 50px;text-align: center;color: #828282;">
+                    <span style="display:block;margin-bottom: 20px;font-size: 14px;">www.ds2quant.com</span>
+                    <span style="font-size: 12px;">Copyright ⓒ 2022 dslab global. All Rights Reserved.</span>
+                </div>
+            </div>
+        </div>
+    </Main>
+</body>
+</html>

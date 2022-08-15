@@ -1,0 +1,15 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+#crosshairContainer>div>div>div>span {
+  padding: 0 16px;
+  font-size: 14px !important;
+}
+#crosshairContainer>div>div>div>div>svg {
+  display: none;
+}
+#crosshairContainer>div>div>div>div {
+  padding: 0 8px;
+}

@@ -1,0 +1,63 @@
+.modelingComparison {
+  height: 100%;
+  padding-bottom: 12px;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.modelingComparison > div > ul > li {
+  margin-bottom: 12px;
+  align-items: start;
+  display: flex;
+  justify-content: start;
+  font-size: 14px;
+  font-weight: 350;
+}
+
+.modelingComparison > div > ul > li > i {
+  font-size: 10px;
+  margin-right: 16px;
+  padding: 4px;
+  border-radius: 4rem;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.modelingComparison > div > ul > li > i.fa.fa-check {
+  background: rgba(10,132,255,0.25);
+  color: var(--main);
+  font-weight: bold;
+}
+
+.modelingComparison > ul > li > i.fa.fa-remove {
+  background: rgba(220,53,69,0.25);
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.modelingComparison > div > h5 {
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #2979ff 0%, #1BC6B4 100%);
+  color: white;
+  padding: 12px 0;
+}
+
+.modelingComparisonContent {
+  padding: 0 24px;
+}
+
+.modelingComparisonContent > ul > li {
+  margin-left: 14px;
+}
+
+.modelingComparisonContent > p {
+  text-align: left;
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+

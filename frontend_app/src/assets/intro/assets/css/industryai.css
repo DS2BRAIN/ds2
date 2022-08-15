@@ -1,0 +1,178 @@
+.industClass > ul {
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  justify-content: start;
+  padding: 0;
+}
+
+.industClass > ul > li {
+  margin-right: 16px;
+}
+
+.industClass > ul > li > a {
+  color: var(--textSub);
+}
+
+.industryDetail {
+  display: flex;
+  margin-bottom: 48px;
+}
+
+.marketSell {
+  display: flex;
+  background: white;
+  border-radius: 1rem;
+  padding: 36px 48px;
+}
+
+.industryDetailTitle {
+  margin-bottom: 24px;
+}
+
+.industryDetail h2 {
+  background: rgba(0,0,0,0.025);
+  /*color: white;*/
+  padding: 4px 12px;
+  font-weight: 600;
+  font-size: 20px;
+  border-left: 4px solid var(--main);
+}
+
+.industryDetail .table, .marketSell .table {
+  /*margin-top: 12px;*/
+  font-size: 16px;
+  border-collapse: collapse;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.industryDetail .table th, .industryDetail .table td, .marketSell .table th, .marketSell .table td {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.industryDetail .table > thead > tr > th {
+  font-weight: 500;
+}
+
+.industryDetail .banner {
+  background: white;
+  border-radius: 1rem;
+  /* \: 0 0 15px rgba(0,0,0,0.1); */
+  padding: 24px 36px;
+}
+
+.industryDetail .banner h2 {
+  background: none;
+  border: none;
+  font-size: 36px;
+}
+
+.industryDetail .banner .table {
+  font-size: 14px;
+}
+
+.industryDetail .banner .table > thead {
+  font-weight: 300;
+  background: rgba(10,132,255,0.05);
+}
+
+.industryDetailContents {
+  padding-left: 24px;
+}
+
+.industryProcess {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.industryProcess > ul {
+  font-size: 14px;
+  list-style-type: none;
+  display: flex;
+  justify-content: start;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.industryProcess > ul > li {
+  margin-right: 19px;
+  display: flex;
+  align-items: center;
+}
+
+.industryDetail > .industryContent > ul {
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  padding: 0;
+}
+
+.industryDetail > .industryContent > ul > li {
+  margin-left: 8px;
+}
+
+.industryButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.industCard {
+  margin: 16px 0;
+  border: 2px solid rgba(0,0,0,0.1);
+  padding: 24px;
+  border-radius: 0.5rem;
+  display: flex;
+}
+
+.quickStart {
+  display: flex;
+  margin: 8px 0;
+}
+
+.quickStart > span {
+  background: var(--mainSub);
+  padding: 4px 8px;
+  opacity: 0.5;
+  margin-right: 16px;
+}
+
+.quickStart > span.active {
+  opacity: 1;
+}
+
+.industryContent {
+  overflow: hidden;
+  padding: 16px !important;
+  /*display: flex;*/
+  align-items: start;
+}
+
+.industryThumbnail {
+  overflow: hidden;
+}
+
+.industCard > .thumbnail > image {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.industCard > .content > p, .industCard > .content > a {
+  font-size: 14px;
+}
+
+.marketBlock.top {
+  background: url("../img/img_background_4.png") bottom / cover;
+  margin-top: 90px;
+}
+
+.marketBlock.bottom {
+  margin-bottom: 48px;
+}
+
+.marketBlock {
+  background: white;
+  margin-top: 36px;
+}
+

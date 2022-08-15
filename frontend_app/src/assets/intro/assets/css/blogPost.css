@@ -1,0 +1,187 @@
+a.postTitle {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+a.postTitle:hover {
+  color: var(--main);
+  text-decoration: none;
+}
+
+.postDiv {
+  width: 320px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.postSubTitle {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.4;
+  margin-bottom: 8px;
+}
+
+.postBox {
+  padding: 24px 16px;
+  line-height: 1.5;
+}
+
+.postColumn {
+  padding: 24px 16px;
+}
+
+@media (max-width: 576px) {
+  .postRow {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .postRow {
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 576px) {
+  .postIndex {
+    color: var(--text);
+    font-weight: 500;
+    font-size: 80%;
+    margin-bottom: 8px;
+  }
+}
+
+.postIndex a {
+  color: var(--text);
+  opacity: 0.6;
+}
+
+.postIndex a:hover {
+  opacity: 1;
+  text-decoration: none;
+  -webkit-transition: 0.25s ease-in-out;
+}
+
+.postSpan {
+  padding: 24px 0px;
+}
+
+.postSpanTitle {
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.postSpanTitle.sub {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.postImageBox {
+  margin: 36px 0px;
+}
+
+@media (min-width: 768px) {
+  .postImageBox > p > img {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 576px) {
+  .postImageBox > p > img {
+    max-width: 100%;
+  }
+}
+
+.postImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0px;
+}
+
+.postImageDescription {
+  font-size: 14px;
+  color: var(--text);
+  opacity: 0.5;
+  font-weight: 400;
+}
+
+.postBlockquote {
+  font-size: 16px;
+  opacity: 0.7;
+  font-weight: 400;
+  text-align: center;
+  margin: 36px 0px;
+}
+
+.postTable {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.postTable table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow: auto;
+  page-break-inside: avoid;
+  font-size: 12px;
+  border-top: 2px solid var(--textSub);
+  border-bottom: 2px solid var(--textSub);
+}
+
+.postTable table > thead > tr > th {
+  padding: 8px 24px 8px 24px;
+  border-bottom: 1px solid var(--textSub);
+}
+
+.postTable table > tbody > tr > td {
+  padding: 8px 24px 8px 24px;
+}
+
+.postTableBox {
+  margin: 36px 0px;
+}
+
+.postExpBox {
+  padding: 16px 24px;
+  margin: 36px 36px;
+  border-radius: 0.5rem;
+  background-color: var(--bgSideMenu);
+}
+
+.postBlock {
+  padding: 60px 30px;
+}
+
+@media (max-width: 576px) {
+  .postBlock {
+    padding: 60px 0px;
+  }
+}
+
+.card-body > .readmore {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body > .readmore > p {
+  margin: 0;
+}
+
+.modelingTable > .table > thead > tr > th, .modelingTable > .table > tbody > tr > td {
+  vertical-align: middle;
+  border: none;
+  padding-left: 36px;
+  padding-right: 36px;
+  font-size: 14px;
+}
+

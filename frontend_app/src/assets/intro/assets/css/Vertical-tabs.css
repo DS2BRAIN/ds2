@@ -1,0 +1,69 @@
+.vertical-tabs {
+  display: flex;
+  height: inherit;
+  padding: 0 36px;
+}
+
+.vertical-tabs .nav-tabs {
+  border-bottom: none;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: column;
+}
+
+.vertical-tabs .tab-content {
+  padding: 10px;
+}
+
+.vertical-tabs .nav-tabs > li {
+  float: left;
+  margin: 0 12px;
+  width: 100% !important;
+  max-width: none !important;
+  text-align: start !important;
+}
+
+.vertical-tabs .nav-link {
+  cursor: default;
+  border: none;
+  text-decoration: none;
+  border-bottom: none !important;
+  opacity: 0.3;
+  border-radius: 0.25rem;
+  margin: 8px 0;
+  padding: 12px 24px;
+}
+
+.vertical-tabs .nav-link > p {
+  color: rgba(82,85,87,0.8);
+}
+
+.vertical-tabs .nav-link:hover {
+  opacity: 1;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  -webkit-transition: 0.25s ease-in-out;
+}
+
+.vertical-tabs .nav-link.active {
+  opacity: 1;
+  background: transparent;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.vertical-tabs .nav-link .nav-title {
+  margin-bottom: 8px;
+}
+
+.vertical-tabs .nav-link > h5 {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.vertical-tabs .nav-link .nav-title > img {
+  height: 14px;
+}
+
+.vertical-tabs .nav-link .nav-title > a {
+  font-size: 14px;
+}
+

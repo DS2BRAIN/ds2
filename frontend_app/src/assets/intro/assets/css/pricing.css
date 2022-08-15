@@ -1,0 +1,60 @@
+.table.price > thead > tr > th {
+  text-align: center;
+}
+
+.pricingTable {
+  font-size: 14px;
+}
+
+.pricingTable > table > tbody > tr > td {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table.mobile > tbody > tr > td {
+  font-size: 14px;
+}
+
+@media (max-width: 576px) {
+  .table.mobile > tbody > tr > td {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .table > tbody > tr > td {
+    font-size: 12px;
+    letter-spacing: -1px;
+    line-height: 1.7em;
+  }
+}
+
+.table > thead > tr > th {
+  text-align: center;
+}
+
+.table > tbody > tr > td {
+  text-align: center;
+}
+
+.alignLeft {
+  text-align: left !important;
+}
+
+.paddingLeft {
+  padding-left: 24px !important;
+}
+
+.red {
+  padding: 4px;
+  color: red;
+  margin-top: 8px;
+  opacity: 0.4;
+}
+
+.listIcon {
+  padding: 4px;
+  color: var(--main);
+  margin-top: 0px;
+}
+

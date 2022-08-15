@@ -1,0 +1,92 @@
+.dropzoneContainerNoBorder > div {
+  border-style: none !important;
+  padding: 0px !important;
+}
+
+.dropzoneContainerSolidSquareBorder > div {
+  border: 1px solid #d0d0d0 !important;
+  border-radius: 4px !important;
+  padding: 29px !important;
+}
+
+.dropzoneSolidSquareBorder {
+  border: 1px solid #d0d0d0 !important;
+  border-radius: 4px !important;
+  padding: 29px;
+  text-align: center;
+}
+
+.selectColumn {
+  border-radius: 4px !important;
+}
+
+.selectColumn > div {
+  padding: 15px;
+}
+
+.selectColumn > select {
+  padding: 16px;
+}
+
+.dataUploadModalCheckLabel {
+  margin-left: -3px !important;
+  margin-bottom: 1rem;
+}
+
+#languageSelector > div > div {
+  padding-right: 0px;
+}
+
+#languageSelector > div > div:hover {
+  color: white !important;
+}
+
+.predictDropzoneContainer > div {
+  min-height: 50px;
+  padding: 5px;
+  border: 1px solid white;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.predictDropzoneContainer > div > div {
+  margin: 0px;
+}
+
+.predictDropzoneContainer > div > div > .MuiGrid-item {
+  padding: 0px;
+}
+
+.predictDropzoneContainer p {
+  font-size: 12px;
+  margin-bottom: 0px;
+  color: white;
+}
+
+.predictDropzoneContainer svg {
+  /* display: none; */
+  margin: auto;
+  width: 20px;
+  height: 20px;
+}
+
+.tableRowCellCustom {
+  color: var(--textWhite87) !important;
+  border-bottom: 1px solid #3a3b3c !important;
+}
+
+.paginationCustom {
+  border-bottom: none !important;
+}
+.paginationCustom p {
+  margin: 0;
+  color: var(--textWhite6);
+}
+.paginationCustom .MuiTablePagination-select {
+  background-color: transparent !important;
+  color: var(--textWhite6);
+}
+
+.MuiInputBase-input {
+  caret-color: var(--textWhite87);
+}

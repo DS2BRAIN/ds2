@@ -1,0 +1,28 @@
+.serverComparison {
+  border-radius: 0.25rem;
+  background: white;
+}
+
+.serverComparison thead th {
+  border-bottom: none;
+  vertical-align: middle;
+}
+
+.serverComparison th, .serverComparison td {
+  border-top: none;
+}
+
+.serverComparison > .table > tbody > tr.back {
+  background: rgba(0,0,0,0.03);
+}
+
+.serverComparison > .table > tbody {
+  font-size: 14px;
+}
+
+.languageTabs > .nav.nav-tabs > .nav-item {
+  width: auto !important;
+  font-size: 12px;
+  margin: 0 4px !important;
+}
+

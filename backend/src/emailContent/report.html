@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Ds2Ai Report</title>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap" rel="stylesheet"> -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 14px;
+        }
+        table {
+            border-collapse: collapse;
+            border: 2px solid black;
+            width:100%;
+        }
+        th {
+            border:1px solid black;
+            border-bottom: 2px solid black;
+            justify-content: center;
+            align-content: center;
+            padding: 8px 4px;
+        }
+        td {
+            border:1px solid black;
+            justify-content: center;
+            align-content: center;
+            padding: 6px 4px;
+        }
+        .tdTitle {
+            font-weight: 600;
+            /* background: rgba(0,0,0,0.25); */
+            background: rgb(225, 239, 255);
+            /* background: rgba(0,0,0,0.25); */
+            color:rgba(0,0,0,0.85);
+            }
+    </style>
+
+</head>
+
+
+
+<body style="margin: 0; padding: 0; background-color: #e5e5e5">
+<main>
+    <div
+            class="email_contents_container"
+            style="
+          display: flex;
+          min-width: 1080px;
+          min-height: 800px;
+          justify-content: center;
+          align-items: center;
+        "
+    >
+        <div
+                class="email_contents"
+                style="
+            width: auto;
+            height: auto;
+            margin: auto;
+            padding: 0 100px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-radius: 8px;
+          "
+        >
+            <div
+                    class="title_area"
+                    style="
+              padding: 62px 0 40px;
+              text-align: center;
+              border-bottom: 1px solid #bdbdbd;
+            "
+            >
+                <img
+                        src="https://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/front/img/logo_transparent.png"
+                        alt="logo"
+                        style="height: 40px"
+                />
+            </div>
+            <div class="contents_area" style="border-bottom: 1px solid #bdbdbd;">
+                <b><p style="font-size:24px;text-align: center;">학습 데이터 요약 보고서 </p></b>
+                <table>
+                        <tr>
+                            <td class="tdTitle">
+                                프로젝트명
+                             </td>
+                            <td>
+                               reachOnTime_final_train.csv
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdTitle">유저명
+                            </td>
+                            <td>
+                                 %%user_name%%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdTitle">
+                                학습형태
+                            </td>
+                            <td>
+                                %%training_method%%
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdTitle">
+                                기관명
+                            </td>
+                            <td>
+                                디에스랩글로벌
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdTitle">
+                                출력일시
+                            </td>
+                            <td>
+                               %%print_date%%
+                            </td>
+                        </tr>
+                </table>
+                <br>
+                <div class="text_area">
+                    %%tabledata%%
+                </div>
+                <br><br><br><br>
+            </div>
+            %%labeldata%%
+            %%modeldata%%
+            %%modelchart%%
+            <div
+                    class="footer_area"
+                    style="padding: 20px 0 50px; text-align: center; color: #828282"
+            >
+                <span style="font-size: 12px"
+                >Copyright ⓒ 2022 dslab global. All Rights Reserved.</span
+                >
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

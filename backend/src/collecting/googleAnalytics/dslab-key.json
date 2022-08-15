@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "my-project-277408",
+  "private_key_id": "c8f632e857412eaac3d77ea2a8331f951cff826b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7dgOItGPmmAif\nOWNWQHGMQ8BIK5QxtZZ4ATurG87c/d0YVrAjxNqjyumLQKQZJGZKz4ET59XyroyD\n+PFOuOF4FZq1r7bwyw02cya6HNTuqIO0c7hObIMNggLyeP91PR9OpKxDjgjyY/Qi\niPviu7CBI6A2V6YR/idPyr3lgpEDoBEzS1EKrebdNUOLmp340BfkVJFOvEmNk0PT\nCGRH0OfDUhwstntLLjXjq+1K3kbyUYikNPfawq9Ycz6i2wOm+w77TzpcDk/fIDwb\nzzHBjbRBsClyd+tS0uo9bLEmVmxgFH3FAeF9QAf8aqk1RlfHq0Tqwn+e6phL82T/\nKAgV/uFdAgMBAAECggEACjlV2KyF+lChFRYLLewWhUuN/sxUU8sPPtJKZSWqHZwW\n5TntIgudemtvBgeWK5eJoLDlMvxk9cxr9igAo9t/feN9FvBTbkSUyZB0NJhX9gA+\nK/xXuVHqaoqEYKHAGlklY6OlkDWnP+5lpUXf/wNfjVuFDxGutAfZhbI4CH7GK/Kv\nHR5OOy1eo7fchKtpJWb+kvTaczHSLr3baM1LFChysk5XvpMNJtX7v5hY4DmvRK8w\nBQElryzqtgXtjkpkI57phvc4QEV8axgm3l39ruL4Z2Zs+EgXHlGju0yabjMRnSy/\nZ5+a56jPCKt7e55NLC2cVoUNudfP36PLWqmL7qLLwQKBgQD+unSXJmTlBup4gFAs\nwAzYs3WA3M9JBGrqQJzXzyLUdS4GVXnMcBvvkxlrZLRckrxPHRUdxaO6rWlIaEI6\nhpgBoA6RdlNSH37FBKMExt5jNsyBb56FZDOHwwu46wjJnUsG9NAfzkv83PmZYj+3\nlpSt4ewN24zXHKTtWwKlrGtATQKBgQC8ZZcZ2qswmYt/lp/BySReHHPRP1FLE9y6\n+mNwrHj3Y+9eO3+Ms0OOa5c5fwk4fHxGGHsSkabm5azcHnomBOFn/Zbmk4cKN4hO\nA5sjV8tGp5wgnobWX3G104Yc6oai3OEOyrn9tRXlDrFkHavTCF/3HiEIZB5XiMMR\nZ31RNcotUQKBgQDRKtyILW/WHQq2Lm8ngABMhXhse2T/CVCd0La6A44PNbW4X8Hn\nHPvjiz/pTsVH6voUYMYxL1SV+sWkPnB7zH/PfdXYnngmzFP1hiwyxPZiM+JUOwrJ\ncBFcXs4mZ2FM5Qtxx9+K7oS5O979k47MuyqVahnC+1C4Zv4LJZuT3XQoVQKBgGUR\nQuxVyLy7woBh97ZoB6CNNvysMRpLv4B3Tt1lSUe+Tu2IkbaTfMxsn6Xypqms7qZT\n/8JIbPc1g3RazUCUIbA99LQhtLIgdHkVqiZdtOlkhXdiVAexEDlxDmN41V2NjRb4\nXqrieKp3JWcGG+WMep8BhMsRms1uyucNU8c7SgjhAoGBAOzaeFoLPfPRYmTrFpba\nzPMS583VZFL0FTwoY9VP07rCoigkyo3HFVbUp6uYuUQDooShOpyfVQkVva1dS4Qz\nctlQ6whkt7YQIa4gX1xcnitW4pbqKHDN7naKWc95hTN9mMuCNtBSuOtMM1SpR+kB\nDJ2Oiw22vjYNHYZLfO36tbCF\n-----END PRIVATE KEY-----\n",
+  "client_email": "dslab-service@my-project-277408.iam.gserviceaccount.com",
+  "client_id": "117972340222522967730",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dslab-service%40my-project-277408.iam.gserviceaccount.com"
+}

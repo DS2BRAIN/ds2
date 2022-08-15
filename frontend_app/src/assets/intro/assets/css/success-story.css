@@ -1,0 +1,17 @@
+.useProduct > span {
+  background: white;
+  padding: 6px 12px;
+  margin-right: 16px;
+  border-radius: 1rem;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.useProduct > span:hover {
+  box-shadow: 0 0 15px rgba(10,132,255,0.5);
+  -webkit-transition: 0.25s ease-in-out;
+}
+
+.useProduct > span > img {
+  max-height: 12px;
+}
+

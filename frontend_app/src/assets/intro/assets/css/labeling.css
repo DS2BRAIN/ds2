@@ -1,0 +1,57 @@
+.labelingProcessBox:hover {
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+  margin-top: 0;
+  margin-bottom: 12px;
+  -webkit-transition: 0.5s ease-in-out;
+}
+
+.startCard {
+  box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+  border-radius: 0.75rem;
+  padding: 48px;
+  background: url("https://www.dropbox.com/s/4pl41fn6v8miujl/img_background_flow.png?raw=1") center / cover no-repeat;
+  color: white;
+}
+
+.labelingProcessBox {
+  box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+  margin-top: 10px;
+  margin-bottom: 2px;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 30px;
+}
+
+.processLine {
+  position: absolute;
+  z-index: 0;
+  background: linear-gradient(315deg, #1BC6B4, #0A84FF);
+  padding: 24px;
+  margin-top: 48px;
+}
+
+@media (max-width: 767px) {
+  .processLine {
+    position: absolute;
+    z-index: 0;
+    background: linear-gradient(315deg, #1BC6B4, #0A84FF);
+    padding: 196px 0px;
+    margin-top: 48px;
+  }
+}
+
+.mainVideo {
+  border-radius: 0.25rem;
+  overflow: hidden;
+  padding: 0px;
+}
+
+.whyLabeling {
+  padding-bottom: 60px;
+  padding-top: 60px;
+  color: white;
+  background: linear-gradient(135deg, rgb(58,60,64), rgba(22,22,22,1));
+  border-radius: 12px;
+  box-shadow: 0px 0px 20px rgba(0,0,0,0.3);
+}
+
