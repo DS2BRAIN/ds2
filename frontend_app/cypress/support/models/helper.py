@@ -7,7 +7,7 @@ import json
 import peewee as pw
 import sys
 from util import Util
-from aistore_config import aistore_configs
+from src.training.aistore_config import aistore_configs
 from models import *
 
 utilClass = Util()
