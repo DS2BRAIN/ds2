@@ -388,11 +388,11 @@ class ManagePayment:
 
         return HTTP_200_OK, result
 
-    def send_ds2ai_license(self, user_email, lang):
+    def send_ds2ai_license(self, user_email, lang, mac):
 
         from src.creating.license import License
 
-        license_key = License().generate_license(email=user_email)
+        license_key = License().generate_license(email=user_email, mac=mac)
 
         if lang == 'ko':
             subject = f'[DS2.AI] 라이센스 결제가 완료되었습니다.'
@@ -405,7 +405,7 @@ class ManagePayment:
 
     def payple_webhook(self, webhook_info):
         # TODO: 결제 내역 저장 -> 유저 정보 없이 구매하는 방식이라 현재는 불가
-        if webhook_info.PCD_PAY_GOODS == "ds2ai_license":
+        if "ds2ai_license" in webhook_info.PCD_PAY_GOODS :
             user_email = webhook_info.PCD_PAYER_EMAIL
             if user_email is None:
                 self.utilClass.sendSlackMessage(f"유저 이메일 정보가 없습니다.(Payple) | 주문번호 : {webhook_info.PCD_PAY_OID}", appLog=True)
@@ -414,7 +414,7 @@ class ManagePayment:
             return_url = webhook_info.PCD_PAY_OID.split("_")[0]
             pg_result = None
             try:
-                self.send_ds2ai_license(user_email, lang="ko")
+                self.send_ds2ai_license(user_email, lang="ko", mac=webhook_info.PCD_PAY_GOODS.split("ds2ai_license")[1])
                 pg_result = "true"
             except Exception as e:
                 pg_result = "false"

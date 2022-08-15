@@ -34,7 +34,7 @@ else:
     }
 
 if os.path.exists('./astoredaemon/util_config.py'):
-    from util_config import util_configs
+    from astoredaemon.util_config import util_configs
 else:
     util_configs = {}
 
