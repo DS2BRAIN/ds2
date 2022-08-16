@@ -3481,7 +3481,7 @@ const Process = (props) => {
                                     style={{ fontSize: 14 }}
                                   >
                                     {t(
-                                      "분석/예측하고 싶은 값 싶은 값을 선택해주세요."
+                                      "Please choose the value for Data Analysis/Prediction."
                                     )}
                                   </MenuItem>
                                   {datacolumns &&
