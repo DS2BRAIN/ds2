@@ -105,7 +105,7 @@ const HyperParameters = ({
           )}
           {preferedMethod && preferedMethod !== "colab" && (
             <span className={classes.text87size12} style={{ display: "block" }}>
-              * {t("Model generation limit")} : 300{t("개")} (
+              * {t("Model generation limit")} : 300{t("")} (
               {t("cross product of the number of set values for each parameter")})
             </span>
           )}

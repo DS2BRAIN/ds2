@@ -83,11 +83,11 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const PREFER_TYPE = [
-  { value: "custom", label: "수동 설정" },
-  { value: "colab", label: "코드 생성" },
-  { value: "speed", label: "학습속도가 빠르게" },
-  { value: "accuracy", label: "정확도가 높게" },
-  { value: "labeling", label: "오토라벨링" },
+  { value: "custom", label: "Manual Setting" },
+  { value: "colab", label: "Code Generation" },
+  { value: "speed", label: "Faster training speed" },
+  { value: "accuracy", label: "Higher accuracy" },
+  { value: "labeling", label: "Auto Labeling" },
 ];
 const INITIAL_ALGORITHM_TYPE = Object.keys(INITIAL_ALGORITHM_INFO)[0];
 
