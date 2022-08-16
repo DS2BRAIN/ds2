@@ -1057,7 +1057,7 @@ const Dataconnector = ({ history }) => {
         selectedDataIdList.length === 1 ||
         (selectedDataIdList.length > 1 && countNotCsvSelected === 0);
       let isTypeDev = type === "develop";
-      let btnActionText = isTypeDev ? "AI 개발 시작하기" : "AI 검증 시작하기";
+      let btnActionText = isTypeDev ? "Start AI Modeling" : "Start AI Verification";
 
       const startProject = async (type) => {
         // var isError = false;
