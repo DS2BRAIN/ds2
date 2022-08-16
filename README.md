@@ -19,6 +19,10 @@ DS2.ai is the MLOps platform that serves all processes of building your customiz
  
  - API & Python SDK Support
 
+
+![Supported Frameworks](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2F4cquinURNdHEAHZr1i98%2FScreenshot%20from%202022-08-16%2015-43-37.png?alt=media&token=6fa686f3-f62a-4ca3-8775-73f8047b2462)
+
+
 ---
 ### Install
 
@@ -29,7 +33,7 @@ DS2.ai is the MLOps platform that serves all processes of building your customiz
 
 Supports training data labeling tools needed to create artificial intelligence models. 
 After clicking Labeling on the top menu, upload the dataset, and you can start labeling by selecting the desired function between manual labeling and auto-labeling tool.
-[![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FET7lJppgRFTt7hoZJkXd%2FScreenshot%20from%202022-08-14%2010-59-17.png?alt=media&token=4756bcf0-ea78-4605-a8d5-7f3e223d57e7)](ttps://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/labelingai_header_en.mp4)
+[![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
 
 
 ### Training AI models
@@ -43,7 +47,7 @@ On the setting screen, three types of development environments are supported.
 After selecting the desired learning method, click the Start button on the right to start learning. If you click the "Model" tab at the bottom after starting, you can check the progress of the model being developed. It provides the function of "distribute" and the function of "analyzing" through the data set of the prediction result created by the model.
 
 * Setting Training Options
-![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2F7sz4HnUgiXmxpbShqyUQ%2Ftraining.png?alt=media&token=3cc3ca6f-f872-478d-80f0-97b9ac2076fb)
+![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FiTSJJ0Y7N8evuJlhSG4s%2FScreenshot%20from%202022-08-16%2016-55-26.png?alt=media&token=9858bd59-f47f-4c67-8cbc-ae6683e4c452)
 
 * Confusion Matrix
 ![Confusion Matrix](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FyLLLjg3AYBEkEfo7bRAI%2Fconfusion_matrix.png?alt=media&token=3cc0160b-bc35-4bdf-afa5-80bbf890df79)
