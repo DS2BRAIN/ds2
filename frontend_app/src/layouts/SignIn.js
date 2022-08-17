@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
@@ -7,10 +7,9 @@ import * as api from "controller/api.js";
 import { fileurl } from "controller/api";
 import Cookies from "helpers/Cookies";
 
-import { Box, Checkbox, CssBaseline, FormControlLabel, InputBase, Link, Modal, Snackbar } from "@material-ui/core";
+import { Box, Checkbox, CssBaseline, FormControlLabel, InputBase, Link, Snackbar } from "@material-ui/core";
 import { CircularProgress, Grid } from "@mui/material";
 import MySnackbar from "components/MySnackbar/MySnackbar.js";
-import CachedIcon from "@material-ui/icons/Cached";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
@@ -22,13 +21,10 @@ import Button from "components/CustomButtons/Button";
 
 export default function SignIn(props) {
   const classes = currentTheme();
-  const dispatch = useDispatch();
-  const { user, messages } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
+  const { user } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const [checkEmail, setCheckEmail] = useState(false);
   const [password, setPassword] = useState("");
-  const [checkPassword, setCheckPassword] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState({
     variant: "success",
@@ -36,57 +32,21 @@ export default function SignIn(props) {
   });
   const [userId, setUserId] = useState(null);
   const [isRememberChecked, setIsRememberChecked] = useState(false);
-  const [isMainForTrial, setIsMainForTrial] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const queryString = require("query-string");
   const parsed = queryString.parse(props.location.search);
   const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
   const [lang, setLang] = useState("");
-  // const [endDate, setEndDate] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const logo = fileurl + "asset/front/img/logo_transparent.png";
-  const visualization = fileurl + "asset/front/img/visualization.gif";
   const mainImage = fileurl + "asset/front/img/img_mainCircle.png";
   const date = new Date();
 
   let year = date.getFullYear().toString();
   let month = (date.getMonth() + 1).toString();
   let day = date.getDate().toString();
-  let dateString = `${year}-${parseInt(month) < 10 ? "0" + month : month}-${parseInt(day) < 10 ? "0" + day : day}`;
-  const currentDate = dateString;
-
-  //키값 인증 스낵바 알림
-  // useEffect(() => {
-  //   if (process.env.REACT_APP_ENTERPRISE) {
-  //     let query = window.location.search.substr(1).split("=");
-  //     if (query[0] == "key") {
-  //       switch (query[1]){
-  //         case "expired":
-  //           setSnackbarOption(
-  //             "error",
-  //             t(
-  //               "기존 Key값 인증이 만료되었습니다. 새로운 키값의 인증이 필요합니다."
-  //             )
-  //           );
-  //           break;
-  //         case "null":
-  //           break;
-  //         case "error":
-  //           break;
-  //       }
-  //       if (query[1] == "expired") {
-
-  //       } else if (query[1] == "fail") {
-  //         setSnackbarOption(
-  //           "error",
-  //           t("Key value authentication failed. Please try license authentication again.")
-  //         );
-  //       }
-  //     }
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
@@ -165,12 +125,8 @@ export default function SignIn(props) {
     }
   };
 
-  const onFailure = (error) => {
-    if (!process.env.REACT_APP_DEPLOY) console.log(error);
-  };
-
   const tryLogin = async (user) => {
-    await setIsLoading(true);
+    setIsLoading(true);
     return api
       .Login(user)
       .then((res) => {
@@ -180,7 +136,7 @@ export default function SignIn(props) {
         Cookies.setCookie("apptoken", JSON.stringify(res.data.user.appTokenCode), 90);
         return res.data.user.isAgreedWithPolicy;
       })
-      .then((isAgreed) => {
+      .then(() => {
         window.location.href = "/admin";
       })
       .then(() => {
@@ -216,10 +172,6 @@ export default function SignIn(props) {
     setIsSnackbarOpen(true);
   };
 
-  const onChangeMainContent = () => {
-    setIsMainForTrial(!isMainForTrial);
-  };
-
   const compLoading = () => (
     <div className={classes.loading}>
       <CircularProgress size={50} sx={{ mb: 2 }} />
@@ -231,7 +183,6 @@ export default function SignIn(props) {
 
   const formSignin = () => {
     const signInSubmit = async (e) => {
-      // 로그인시 입력값 확인까지 진행
       e.preventDefault();
       if (email === "") {
         await setSnackbarOption("error", t("Please enter your email address."));
@@ -470,16 +421,6 @@ export default function SignIn(props) {
             {t("DS2.ai is the MLOps platform that serves all processes of building your customized AI from automatic annotation to cloud deployment.")}
           </div>
           <div className={classes.settingFontWhite87}>
-            {/* <video
-              style={{ width: "100%", borderRadius: "10px", marginTop: "20px" }}
-              autoPlay
-              loop
-            >
-              <source
-                src=fileurl+"asset/ecosystem/etc.mov"
-                type="video/mp4"
-              />
-            </video> */}
             <img src={mainImage} alt={"logo"} style={{ width: "80%", height: "50%" }} />
           </div>
         </Grid>
