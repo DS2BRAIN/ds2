@@ -181,7 +181,7 @@ const Group = () => {
                     <Grid sx={{ width: "10%" }}>
                       <Tooltip title={t("Change name")}>
                         <IconButton
-                          id="onSetNameChangeBtn"
+                          id="change_group_name_btn"
                           onClick={(e) => {
                             handleClickForChangeGroupName(e, groupId);
                           }}
@@ -192,6 +192,7 @@ const Group = () => {
                     </Grid>
 
                     <Popover
+                      id="change_group_name_popover"
                       open={Boolean(anchorElForGroupName)}
                       anchorEl={anchorElForGroupName}
                       onClose={onCloseGroupNameMenu}
@@ -215,7 +216,7 @@ const Group = () => {
                       >
                         <GridItem xs={9}>
                           <TextField
-                            id="companyInput"
+                            id="change_group_name_input"
                             placeholder={t("Please enter the group name to change.")}
                             onChange={onChangeNextGroupName}
                             value={groupNameForChange}
@@ -228,7 +229,7 @@ const Group = () => {
                           style={{ height: "50px", lineHeight: "50px" }}
                         >
                           <Button
-                            id="changeGroupName"
+                            id="submit_group_name_btn"
                             shape="greenOutlined"
                             size="sm"
                             onClick={onChangeGroupAction}
@@ -276,7 +277,7 @@ const Group = () => {
                 </TableCell>
                 <TableCell align="center" className={classes.tableRowCell}>
                   <IconButton
-                    id="add_membertogroup_btn"
+                    id="add_member_to_group_btn"
                     onClick={(e) => {
                       checkIsValidKey(user, dispatch, t);
                       handleClickForAddMember(e, groupId);
@@ -285,6 +286,7 @@ const Group = () => {
                     <AddCircleOutlineIcon />
                   </IconButton>
                   <Popover
+                    id="add_member_to_group_modal"
                     open={Boolean(anchorEl)}
                     anchorEl={anchorEl}
                     onClose={onCloseAddMemberMenu}
@@ -304,11 +306,12 @@ const Group = () => {
                         width: "480px",
                         padding: "16px 0",
                         backgroundColor: `${currentThemeColor.background2}`,
+                        border: "2px solid var(--surface2)",
                       }}
                     >
                       <GridItem xs={9}>
                         <TextField
-                          id="memberEmailInput"
+                          id="member_email_input"
                           placeholder={t("Please enter e-mail address correctly.")}
                           onChange={onChangeMemberEmail}
                           value={userEmailForAdd}
@@ -321,7 +324,7 @@ const Group = () => {
                         style={{ height: "50px", lineHeight: "50px" }}
                       >
                         <Button
-                          id={groupId}
+                          id="submit_btn"
                           shape="greenOutlined"
                           size="sm"
                           disabled={userEmailForAdd === "" ? true : false}
@@ -335,7 +338,7 @@ const Group = () => {
                 </TableCell>
                 <TableCell align="center" className={classes.tableRowCell}>
                   <Button
-                    id="deleteGroup"
+                    id="delete_group_btn"
                     shape="whiteOutlined"
                     size="sm"
                     onClick={() => {
@@ -501,8 +504,8 @@ const Group = () => {
           alignItems: "center",
         }}
       >
-        <div>{t("")}</div>
-        <Button id="addGroupBtn" shape="greenOutlined" onClick={onAddGroup}>
+        <div>{t("Groups")}</div>
+        <Button id="add_group_btn" shape="greenOutlined" onClick={onAddGroup}>
           {t("Add Group")}
         </Button>
       </div>
@@ -619,6 +622,7 @@ const Group = () => {
       </div>
       <div className={classes.settingTitle}></div>
       <Modal
+        id="add_group_modal"
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={isGroupAddModalOpen}
@@ -647,7 +651,7 @@ const Group = () => {
                     </GridItem>
                     <GridItem xs={10} style={{ padding: 0 }}>
                       <TextField
-                        id="groupInput"
+                        id="add_group_input"
                         placeholder={t("Please enter the group name.")}
                         onChange={onChangeGroupName}
                         value={groupName}

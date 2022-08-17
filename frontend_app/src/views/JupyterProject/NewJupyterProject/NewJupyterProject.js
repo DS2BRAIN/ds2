@@ -28,10 +28,7 @@ import Button from "components/CustomButtons/Button";
 
 //redux
 import { useDispatch } from "react-redux";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { sendErrorMessage } from "components/Function/globalFunc.js";
 
@@ -176,11 +173,7 @@ const NewJupyterProject = (props) => {
         setValidPorts(tmpPorts);
       })
       .catch((err) => {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("An error occurred while searching for the port number in use.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("An error occurred while searching for the port number in use.")));
         setIsPortModal(false);
       })
       .finally(() => {
@@ -195,41 +188,17 @@ const NewJupyterProject = (props) => {
 
   const createProject = () => {
     if (projectId) {
-      if (
-        process.env.REACT_APP_ENTERPRISE !== "true" &&
-        cloudRegion.display_name === undefined
-      ) {
+      if (process.env.REACT_APP_ENTERPRISE !== "true" && cloudRegion.display_name === undefined) {
         dispatch(openErrorSnackbarRequestAction(t("Select Region.")));
-      } else if (
-        process.env.REACT_APP_ENTERPRISE !== "true" &&
-        cloudDetail === null
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Select Server Tier."))
-        );
-      } else if (
-        process.env.REACT_APP_ENTERPRISE == "true" &&
-        !portRef?.current?.value
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Select Port Number"))
-        );
-      } else if (
-        process.env.REACT_APP_ENTERPRISE == "true" &&
-        (13010 > parseInt(portRef?.current?.value) ||
-          parseInt(portRef?.current?.value) > 13029)
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Only port numbers in the range of 13010 to 13029 are available.")
-          )
-        );
+      } else if (process.env.REACT_APP_ENTERPRISE !== "true" && cloudDetail === null) {
+        dispatch(openErrorSnackbarRequestAction(t("Select Server Tier.")));
+      } else if (process.env.REACT_APP_ENTERPRISE == "true" && !portRef?.current?.value) {
+        dispatch(openErrorSnackbarRequestAction(t("Select Port Number")));
+      } else if (process.env.REACT_APP_ENTERPRISE == "true" && (13010 > parseInt(portRef?.current?.value) || parseInt(portRef?.current?.value) > 13029)) {
+        dispatch(openErrorSnackbarRequestAction(t("Only port numbers in the range of 13010 to 13029 are available.")));
       } else {
         setWarning("");
-        if (
-          process.env.REACT_APP_ENTERPRISE !== "true" &&
-          (user.cardInfo == null || user.cardInfo.cardName == null)
-        ) {
+        if (process.env.REACT_APP_ENTERPRISE !== "true" && (user.cardInfo == null || user.cardInfo.cardName == null)) {
           if (process.env.REACT_APP_ENTERPRISE !== "true") {
             props.history.push(`/admin/setting/payment/?message=need`);
             return;
@@ -241,21 +210,11 @@ const NewJupyterProject = (props) => {
             jupyterProjectId: projectId,
             region: cloudRegion?.region,
             serverType: cloudDetail?.serverType,
-            port:
-              process.env.REACT_APP_ENTERPRISE == "true"
-                ? parseInt(portRef.current.value)
-                : 0,
-            gpu:
-              process.env.REACT_APP_ENTERPRISE == "true"
-                ? gpuRef?.current?.value
-                : "",
+            port: process.env.REACT_APP_ENTERPRISE == "true" ? parseInt(portRef.current.value) : 0,
+            gpu: process.env.REACT_APP_ENTERPRISE == "true" ? gpuRef?.current?.value : "",
           })
           .then((res) => {
-            dispatch(
-              openSuccessSnackbarRequestAction(
-                t("A new server has been created in the project.")
-              )
-            );
+            dispatch(openSuccessSnackbarRequestAction(t("A new server has been created in the project.")));
             setFinish(projectId);
           })
           .catch((error) => {
@@ -268,15 +227,7 @@ const NewJupyterProject = (props) => {
             } else {
               dispatch(
                 openErrorSnackbarRequestAction(
-                  t(
-                    error?.response.data?.msg !== undefined
-                      ? error?.response?.data.msg
-                      : error.response.data.message !== undefined
-                      ? user.language === "ko"
-                        ? error.response.data.message
-                        : error.response.data.message_en
-                      : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다"
-                  )
+                  t(error?.response.data?.msg !== undefined ? error?.response?.data.msg : error.response.data.message !== undefined ? (user.language === "ko" ? error.response.data.message : error.response.data.message_en) : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다")
                 )
               );
             }
@@ -286,47 +237,21 @@ const NewJupyterProject = (props) => {
       }
     } else {
       if (projectName === "") {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Input Your Project Name."))
-        );
-      } else if (
-        process.env.REACT_APP_ENTERPRISE !== "true" &&
-        cloudRegion.display_name === undefined
-      ) {
+        dispatch(openErrorSnackbarRequestAction(t("Input Your Project Name.")));
+      } else if (process.env.REACT_APP_ENTERPRISE !== "true" && cloudRegion.display_name === undefined) {
         dispatch(openErrorSnackbarRequestAction(t("Select Region.")));
-      } else if (
-        process.env.REACT_APP_ENTERPRISE !== "true" &&
-        cloudDetail === null
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Select Server Tier."))
-        );
-      } else if (
-        process.env.REACT_APP_ENTERPRISE == "true" &&
-        !portRef?.current?.value
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Select Port Number"))
-        );
-      } else if (
-        process.env.REACT_APP_ENTERPRISE == "true" &&
-        (13010 > parseInt(portRef?.current?.value) ||
-          parseInt(portRef?.current?.value) > 13029)
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Only port numbers in the range of 13010 to 13029 are available.")
-          )
-        );
+      } else if (process.env.REACT_APP_ENTERPRISE !== "true" && cloudDetail === null) {
+        dispatch(openErrorSnackbarRequestAction(t("Select Server Tier.")));
+      } else if (process.env.REACT_APP_ENTERPRISE == "true" && !portRef?.current?.value) {
+        dispatch(openErrorSnackbarRequestAction(t("Select Port Number")));
+      } else if (process.env.REACT_APP_ENTERPRISE == "true" && (13010 > parseInt(portRef?.current?.value) || parseInt(portRef?.current?.value) > 13029)) {
+        dispatch(openErrorSnackbarRequestAction(t("Only port numbers in the range of 13010 to 13029 are available.")));
       } else {
         setWarning("");
         //생성 API 호출부분
         // window.alert("프로젝트 생성 API 호출(추가내용)");
         setLoading(true);
-        if (
-          process.env.REACT_APP_ENTERPRISE !== "true" &&
-          (user.cardInfo == null || user.cardInfo.cardName == null)
-        ) {
+        if (process.env.REACT_APP_ENTERPRISE !== "true" && (user.cardInfo == null || user.cardInfo.cardName == null)) {
           if (process.env.REACT_APP_ENTERPRISE !== "true") {
             props.history.push(`/admin/setting/payment/?message=need`);
             return;
@@ -337,21 +262,11 @@ const NewJupyterProject = (props) => {
             projectName: projectName,
             region: cloudRegion?.region ? cloudRegion?.region : "",
             serverType: cloudDetail?.serverType ? cloudDetail?.serverType : "",
-            port:
-              process.env.REACT_APP_ENTERPRISE == "true"
-                ? parseInt(portRef?.current?.value)
-                : 0,
-            gpu:
-              process.env.REACT_APP_ENTERPRISE == "true"
-                ? gpuRef?.current?.value
-                : "",
+            port: process.env.REACT_APP_ENTERPRISE == "true" ? parseInt(portRef?.current?.value) : 0,
+            gpu: process.env.REACT_APP_ENTERPRISE == "true" ? gpuRef?.current?.value : "",
           })
           .then((res) => {
-            dispatch(
-              openSuccessSnackbarRequestAction(
-                t("A new project has been created.")
-              )
-            );
+            dispatch(openSuccessSnackbarRequestAction(t("A new project has been created.")));
             setFinish(res.data.id);
           })
           .catch((error) => {
@@ -364,15 +279,7 @@ const NewJupyterProject = (props) => {
             } else {
               dispatch(
                 openErrorSnackbarRequestAction(
-                  t(
-                    error?.response.data?.msg !== undefined
-                      ? error?.response?.data.msg
-                      : error.response.data.message !== undefined
-                      ? user.language === "ko"
-                        ? error.response.data.message
-                        : error.response.data.message_en
-                      : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다"
-                  )
+                  t(error?.response.data?.msg !== undefined ? error?.response?.data.msg : error.response.data.message !== undefined ? (user.language === "ko" ? error.response.data.message : error.response.data.message_en) : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다")
                 )
               );
             }
@@ -385,60 +292,17 @@ const NewJupyterProject = (props) => {
   return (
     <div>
       <div style={defaultStyles.div_title}>{t("Create a Training Server")}</div>
-      <div style={defaultStyles.div_detail}>
-        {process.env.REACT_APP_ENTERPRISE !== "true" &&
-          t(
-            "가장 인기있는 몇 가지 옵션을 권장하지만 필요에 따라 서버를 자유롭게 맞춤 설정할 수 있습니다."
-          )}
-      </div>
+      <div style={defaultStyles.div_detail}>{process.env.REACT_APP_ENTERPRISE !== "true" && t("We've recommended some of our most popular options, but feel free to customize your server to your needs")}</div>
       {/* Cloud Provider & Region   :  Section_1 */}
       <div>
-        <Grid
-          container
-          item
-          xs={12}
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid
-            ref={accrodionRef}
-            item
-            container
-            xs={process.env.REACT_APP_ENTERPRISE !== "true" ? 5 : 12}
-            alignItems="center"
-            style={defaultStyles.Grid_menuTitle}
-          >
-            {process.env.REACT_APP_ENTERPRISE !== "true"
-              ? t("Cloud Provider & Region")
-              : t("Choose a cloud-provided port and GPU.")}
+        <Grid container item xs={12} justify="space-between" alignItems="center">
+          <Grid ref={accrodionRef} item container xs={process.env.REACT_APP_ENTERPRISE !== "true" ? 5 : 12} alignItems="center" style={defaultStyles.Grid_menuTitle}>
+            {process.env.REACT_APP_ENTERPRISE !== "true" ? t("Cloud Provider & Region") : t("Choose a cloud-provided port and GPU.")}
           </Grid>
-          {cloudRegion && (
-            <Grid
-              id="cloudRegionConfirm"
-              item
-              container
-              justify="flex-end"
-              xs={6}
-              style={defaultStyles.Grid_selectedTitle}
-            >{`${
-              cloudRegion.display_name !== undefined
-                ? cloudRegion.display_name
-                : ""
-            }`}</Grid>
-          )}
+          {cloudRegion && <Grid id="cloudRegionConfirm" item container justify="flex-end" xs={6} style={defaultStyles.Grid_selectedTitle}>{`${cloudRegion.display_name !== undefined ? cloudRegion.display_name : ""}`}</Grid>}
         </Grid>
         {cloudContinents !== null && (
-          <Section_1
-            setWarning={setWarning}
-            project={[projectName, setProjectName]}
-            cloudRegion={[cloudRegion, setCloudRegion]}
-            cloudContinents={[cloudContinents, setCloudContinents]}
-            cloudContinentsDetail={[
-              cloudContinentsDetail,
-              setCloudContinentsDetail,
-            ]}
-            projectId={projectId}
-          />
+          <Section_1 setWarning={setWarning} project={[projectName, setProjectName]} cloudRegion={[cloudRegion, setCloudRegion]} cloudContinents={[cloudContinents, setCloudContinents]} cloudContinentsDetail={[cloudContinentsDetail, setCloudContinentsDetail]} projectId={projectId} />
         )}
       </div>
 
@@ -446,105 +310,37 @@ const NewJupyterProject = (props) => {
 
       {Object.keys(cloudRegion).length !== 0 && (
         <div style={{ marginTop: "20px" }}>
-          <Grid
-            container
-            item
-            xs={12}
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid
-              item
-              container
-              xs={3}
-              alignItems="center"
-              style={defaultStyles.Grid_menuTitle}
-            >
+          <Grid container item xs={12} justify="space-between" alignItems="center">
+            <Grid item container xs={3} alignItems="center" style={defaultStyles.Grid_menuTitle}>
               {t("Server Tier")}
             </Grid>
-            {cloudDetail && (
-              <Grid
-                id="cloudServerConfirm"
-                item
-                container
-                justify="flex-end"
-                xs={9}
-                style={defaultStyles.Grid_selectedTitle}
-              >{`${cloudDetail.serverType}(${cloudDetail.memory} Memory, ${cloudDetail.storage} Storage, ${cloudDetail.vCPU} vCPU)`}</Grid>
-            )}
+            {cloudDetail && <Grid id="cloudServerConfirm" item container justify="flex-end" xs={9} style={defaultStyles.Grid_selectedTitle}>{`${cloudDetail.serverType}(${cloudDetail.memory} Memory, ${cloudDetail.storage} Storage, ${cloudDetail.vCPU} vCPU)`}</Grid>}
           </Grid>
           {cloudContinents !== null && cloudRegion !== null && (
-            <Section_2
-              setWarning={setWarning}
-              cloudDetail={[cloudDetail, setCloudDetail]}
-              cloudContinents={[cloudContinents, setCloudContinents]}
-              cloudContinentsDetail={[
-                cloudContinentsDetail,
-                setCloudContinentsDetail,
-              ]}
-              cloudRegion={[cloudRegion, setCloudRegion]}
-            />
+            <Section_2 setWarning={setWarning} cloudDetail={[cloudDetail, setCloudDetail]} cloudContinents={[cloudContinents, setCloudContinents]} cloudContinentsDetail={[cloudContinentsDetail, setCloudContinentsDetail]} cloudRegion={[cloudRegion, setCloudRegion]} />
           )}
         </div>
       )}
       {process.env.REACT_APP_ENTERPRISE !== "true" ? (
         <>
-          <Grid
-            container
-            item
-            xs={12}
-            alignItems="left"
-            style={{ marginTop: 15, marginBottom: 15 }}
-          >
-            {t(
-              "종량제입니다. 시간당 비용이 청구되며 언제든지 서버를 종료 할 수 있습니다."
-            )}
+          <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
+            {t("Pay-as-you-go! You will be billed hourly and can terminate your server anytime.")}
             {t("Excludes variable data Transfer, backup, and taxes.")}
             {warning !== "" && (
-              <Grid
-                className={classes.Grid_warning}
-                container
-                item
-                xs={4}
-                justify="center"
-                alignItems="center"
-              >
+              <Grid className={classes.Grid_warning} container item xs={4} justify="center" alignItems="center">
                 {t(warning)}
               </Grid>
             )}
           </Grid>
 
-          <Grid
-            container
-            item
-            xs={12}
-            alignItems="left"
-            style={{ marginTop: 15, marginBottom: 15 }}
-          >
-            {t("Total Cost") +
-              ` : ${
-                cloudDetail !== null
-                  ? user.language == "ko"
-                    ? (
-                        cloudDetail?.pricePerHourSelfModeling * 1200 -
-                        0.5
-                      ).toFixed(0)
-                    : (cloudDetail?.pricePerHourSelfModeling - 0.005).toFixed(2)
-                  : 0
-              }${user.language == "ko" ? " KRW" : "$"}/hour`}
+          <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
+            {t("Total Cost") + ` : ${cloudDetail !== null ? (user.language == "ko" ? (cloudDetail?.pricePerHourSelfModeling * 1200 - 0.5).toFixed(0) : (cloudDetail?.pricePerHourSelfModeling - 0.005).toFixed(2)) : 0}${user.language == "ko" ? " KRW" : "$"}/hour`}
           </Grid>
         </>
       ) : (
         <>
           <Grid container item xs={12} justify="center" alignItems="flex-start">
-            <Grid
-              container
-              item
-              xs={12}
-              justify="flex-start"
-              alignItems="center"
-              style={defaultStyles.Grid_smallText}
-            >
+            <Grid container item xs={12} justify="flex-start" alignItems="center" style={defaultStyles.Grid_smallText}>
               <Grid>
                 <StarIcon style={{ fontSize: "16px", marginRigth: "2px" }} />
                 {t("Port Number") + " (13010~13029)"}
@@ -564,14 +360,7 @@ const NewJupyterProject = (props) => {
                 {t("Select an available port")}
               </Grid>
             </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              justify="flex-start"
-              alignItems="center"
-              style={{ paddingLeft: "10px", marginBottom: "10px" }}
-            >
+            <Grid container item xs={12} justify="flex-start" alignItems="center" style={{ paddingLeft: "10px", marginBottom: "10px" }}>
               <TextField
                 inputRef={portRef}
                 className={classes.text_projectName}
@@ -579,11 +368,7 @@ const NewJupyterProject = (props) => {
                   if (/^[0-9]*$/.test(e.target.value)) {
                     portRef.current.value = e.target.value;
                   } else {
-                    dispatch(
-                      openErrorSnackbarRequestAction(
-                        t("Only numbers can be entered for the port number.")
-                      )
-                    );
+                    dispatch(openErrorSnackbarRequestAction(t("Only numbers can be entered for the port number.")));
                     portRef.current.value = null;
                   }
                 }}
@@ -592,24 +377,10 @@ const NewJupyterProject = (props) => {
                 // value={project[0]}
               />
             </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              justify="flex-start"
-              alignItems="center"
-              style={defaultStyles.Grid_smallText_choice}
-            >
+            <Grid container item xs={12} justify="flex-start" alignItems="center" style={defaultStyles.Grid_smallText_choice}>
               {t("GPU Allocation") + " (ex: 0,1)"}
             </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              justify="flex-start"
-              alignItems="center"
-              style={{ paddingLeft: "10px" }}
-            >
+            <Grid container item xs={12} justify="flex-start" alignItems="center" style={{ paddingLeft: "10px" }}>
               <TextField
                 inputRef={gpuRef}
                 className={classes.text_projectName}
@@ -617,11 +388,7 @@ const NewJupyterProject = (props) => {
                   if (/^[0-9,\,]*$/.test(e.target.value)) {
                     gpuRef.current.value = e.target.value;
                   } else {
-                    dispatch(
-                      openErrorSnackbarRequestAction(
-                        t('Only number or "," can be entered for the GPU.')
-                      )
-                    );
+                    dispatch(openErrorSnackbarRequestAction(t('Only number or "," can be entered for the GPU.')));
                     gpuRef.current.value = null;
                   }
                 }}
@@ -629,26 +396,13 @@ const NewJupyterProject = (props) => {
                 placeholder="GPU"
               />
             </Grid>
-            <Grid
-              container
-              item
-              xs={12}
-              justify="flex-start"
-              alignItems="center"
-              style={defaultStyles.Grid_smallText_choice}
-            >
+            <Grid container item xs={12} justify="flex-start" alignItems="center" style={defaultStyles.Grid_smallText_choice}>
               {"* " + t("If not entered, all GPUs will be allocated.")}
             </Grid>
           </Grid>
         </>
       )}
-      <Grid
-        container
-        item
-        xs={12}
-        alignItems="left"
-        style={{ marginTop: 15, marginBottom: 15 }}
-      >
+      <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
         <Button
           id="createJupyterButton"
           // onClick={
@@ -662,11 +416,7 @@ const NewJupyterProject = (props) => {
           // }
           onClick={createProject}
           disabled={loading}
-          className={
-            loading === false
-              ? classes.submitButton
-              : classes.submitButtonLoading
-          }
+          className={loading === false ? classes.submitButton : classes.submitButtonLoading}
         >
           {loading === false ? t("Create Server") : t("로딩중입니다.")}
         </Button>
@@ -696,23 +446,12 @@ const NewJupyterProject = (props) => {
           }}
         >
           {isPortLoading ? (
-            <Grid
-              container
-              justify="center"
-              alignItems="center"
-              className={classes.loading}
-            >
+            <Grid container justify="center" alignItems="center" className={classes.loading}>
               <CircularProgress size={20} />
             </Grid>
           ) : (
             <Grid container item xs={12} style={{ overflow: "scroll" }}>
-              <Grid
-                container
-                item
-                xs={12}
-                alignItems="flex-start"
-                justify="center"
-              >
+              <Grid container item xs={12} alignItems="flex-start" justify="center">
                 {validPorts.length > 0 ? (
                   <Grid
                     container
@@ -749,13 +488,7 @@ const NewJupyterProject = (props) => {
                 </div>
                 {validPorts.length > 0 &&
                   validPorts.map((port) => (
-                    <Grid
-                      container
-                      item
-                      xs={12}
-                      alignItems="center"
-                      justify="center"
-                    >
+                    <Grid container item xs={12} alignItems="center" justify="center">
                       <Button
                         onClick={() => {
                           setSelectedPort(port);

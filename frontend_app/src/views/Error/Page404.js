@@ -12,19 +12,9 @@ const Page404 = ({ history, isAdminPage }) => {
   const logo = fileurl + "asset/front/img/logo_transparent.png";
 
   return (
-    <Grid
-      container
-      alignItems="center"
-      justifyContent="center"
-      sx={{ height: isAdminPage ? "calc(100vh - 144px)" : "100vh" }}
-    >
+    <Grid container alignItems="center" justifyContent="center" sx={{ height: isAdminPage ? "calc(100vh - 144px)" : "100vh" }}>
       <Grid item xs={10}>
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Grid container direction="column" alignItems="center" justifyContent="center">
           <Grid item sx={{ mb: 6 }}>
             <Link to="/">
               <img alt="ds2ai logo" src={logo} width={280} />
@@ -34,11 +24,7 @@ const Page404 = ({ history, isAdminPage }) => {
             <span>404 - Page not found</span>
           </Grid>
           <Grid item sx={{ fontSize: 16 }}>
-            <span style={{ wordBreak: "keep-all" }}>
-              {t(
-                "죄송합니다. 찾으시는 페이지가 삭제되었거나 일시적으로 사용할 수 없습니다."
-              )}
-            </span>
+            <span style={{ wordBreak: "keep-all" }}>{t("Sorry. The page you are looking for has been removed or is temporarily unavailable.")}</span>
           </Grid>
           <Grid item sx={{ mt: 8 }}>
             <Button onClick={() => history.push("/")}>

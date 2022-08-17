@@ -2190,7 +2190,7 @@ const currentTheme = makeStyles((theme) => ({
     color: currentThemeColor.textLightGrey,
     fontSize: "16px",
   },
-  startLabellingBtn: {
+  start_labelling_btn: {
     width: "140px",
     height: "25px",
     marginRight: "24px",

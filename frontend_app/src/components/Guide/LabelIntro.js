@@ -40,18 +40,8 @@ const LabelIntro = (props) => {
   const [selectedNav, setSelectedNav] = useState(0);
   const language = ["COCO JSON", "VOC"];
   const langImgs = [codeLabellingCocoJsonImg, codeLabellingVocImg];
-  const barColor = [
-    "rgba(41,121,255,0.25)",
-    "rgba(41,121,255,0.5)",
-    "rgba(41,121,255,0.75)",
-    "rgba(41,121,255,1)",
-  ];
-  const barCost = [
-    "인공지능 개발 비용",
-    "라벨링 검수 비용",
-    "수동 라벨링 비용",
-    "라벨링 도구 비용",
-  ];
+  const barColor = ["rgba(41,121,255,0.25)", "rgba(41,121,255,0.5)", "rgba(41,121,255,0.75)", "rgba(41,121,255,1)"];
+  const barCost = ["인공지능 개발 비용", "라벨링 검수 비용", "수동 라벨링 비용", "라벨링 도구 비용"];
   const normalBarHeight = ["30%", "10%", "45%", "15%"];
   const aiBarHeight = ["0%", "15%", "5%", "25%"];
 
@@ -60,29 +50,16 @@ const LabelIntro = (props) => {
     props.setIntroOffClicked(true);
   };
 
-  const Img01_header_dashboard =
-    userLang === "ko"
-      ? fileurl + "asset/labelingai_header.mp4"
-      : fileurl + "asset/labelingai_header_en.mp4";
+  const Img01_header_dashboard = userLang === "ko" ? fileurl + "asset/labelingai_header.mp4" : fileurl + "asset/labelingai_header_en.mp4";
   const Img02_mainprocess = fileurl + "asset/img_labelingai_mainprocess.jpg";
-  const Img02_mainprocess_mobile =
-    fileurl + "asset/img_labelingai_mainprocess_mobile.jpg";
+  const Img02_mainprocess_mobile = fileurl + "asset/img_labelingai_mainprocess_mobile.jpg";
   const Img03_video_magictool = fileurl + "asset/video_magictool.mp4";
   const Img04_01_sementic = fileurl + "asset/img_labeling_sementic.jpg";
   const Img04_02_skeleton = fileurl + "asset/img_labeling_skeleton.jpg";
   const Img05_Ex = fileurl + "asset/img_labelingEx.jpg";
-  const Img06_feature_1 =
-    userLang === "ko"
-      ? fileurl + "asset/img_labeling_feature_1.jpg"
-      : fileurl + "asset/img_labeling_feature_1_en.jpg";
-  const Img07_feature_2 =
-    userLang === "ko"
-      ? fileurl + "asset/img_labeling_feature_2.jpg"
-      : fileurl + "asset/img_labeling_feature_2_en.jpg";
-  const Img08_select =
-    userLang === "ko"
-      ? fileurl + "asset/img_labeling_select.jpg"
-      : fileurl + "asset/img_labeling_select_en.jpg";
+  const Img06_feature_1 = userLang === "ko" ? fileurl + "asset/img_labeling_feature_1.jpg" : fileurl + "asset/img_labeling_feature_1_en.jpg";
+  const Img07_feature_2 = userLang === "ko" ? fileurl + "asset/img_labeling_feature_2.jpg" : fileurl + "asset/img_labeling_feature_2_en.jpg";
+  const Img08_select = userLang === "ko" ? fileurl + "asset/img_labeling_select.jpg" : fileurl + "asset/img_labeling_select_en.jpg";
   const Img09_codeSDKPython = codeLabellingSDKPythonImg;
 
   const ImgFrame06_feature_1 = (
@@ -92,19 +69,14 @@ const LabelIntro = (props) => {
   );
 
   const Text06_feature_1 = (
-    <div
-      class="col-12 col-lg-5 d-flex justify-content-center"
-      style={{ padding: "8px 24px" }}
-    >
+    <div class="col-12 col-lg-5 d-flex justify-content-center" style={{ padding: "8px 24px" }}>
       <div>
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Auto-Labeling for continuous training")}
           <br />
         </h4>
         <p className={classes.P}>
-          {t(
-            "최초 10개의 수동 라벨링 학습을 시작으로 Auto-Labeling 결과물의 검수/보정 및 재학습을 반복하며 LABELING AI의 성능이 더욱 향상됩니다."
-          )}
+          {t("Starting with the first 10 manual labeling, the performance of LABELING AI is further improved by repeating the inspection/correction and re-training of Auto-Labeling results.")}
           <br />
         </p>
       </div>
@@ -118,19 +90,12 @@ const LabelIntro = (props) => {
   );
 
   const Text07_feature_2 = (
-    <div
-      class="col-12 col-lg-5 d-flex justify-content-center"
-      style={{ padding: "8px 24px" }}
-    >
+    <div class="col-12 col-lg-5 d-flex justify-content-center" style={{ padding: "8px 24px" }}>
       <div>
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Project management through dashboard")}
         </h4>
-        <p className={classes.P}>
-          {t(
-            "라벨링 프로젝트에 관한 대시보드를 통해 작업현황을 한눈에 확인하고 관리할 수 있습니다."
-          )}
-        </p>
+        <p className={classes.P}>{t("Check and manage work status at a glance through the dashboard for the labeling project.")}</p>
         <ul class="list-unstyled" style={{ fontSize: "14px" }}>
           <li className={classes.Li}>✓ {t("Data labeling progress")}</li>
           <li className={classes.Li}>✓ {t("Status by labeling class")}</li>
@@ -154,26 +119,15 @@ const LabelIntro = (props) => {
   );
 
   const Text08_select = (
-    <div
-      class="col-12 col-lg-5 d-flex justify-content-center"
-      style={{ padding: "8px 24px" }}
-    >
+    <div class="col-12 col-lg-5 d-flex justify-content-center" style={{ padding: "8px 24px" }}>
       <div>
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Auto-Labeling using various artificial intelligence")}
         </h4>
-        <p className={classes.P}>
-          {t(
-            "LABELING AI에서는 Auto-Labeling을 수행하기 위한 다양한 방법을 지원합니다."
-          )}
-        </p>
+        <p className={classes.P}>{t("LABELING AI supports various methods to perform Auto-Labeling.")}</p>
         <ul class="list-unstyled" style={{ fontSize: "14px" }}>
-          <li className={classes.Li}>
-            ✓ Custom AI: {t("Custom AI: Perform Auto-Labeling by training manually labeled data")}
-          </li>
-          <li className={classes.Li}>
-            ✓ General AI: {t("General AI: Auto-Labeling immediately without training")}
-          </li>
+          <li className={classes.Li}>✓ Custom AI: {t("Custom AI: Perform Auto-Labeling by training manually labeled data")}</li>
+          <li className={classes.Li}>✓ General AI: {t("General AI: Auto-Labeling immediately without training")}</li>
           {/* <li className={classes.Li}>
         ✓{" "}
         {t(
@@ -186,32 +140,18 @@ const LabelIntro = (props) => {
   );
 
   const ImgFrame09_codeSDKPython = (
-    <div
-      class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center"
-      style={{ width: "520px", padding: "20px" }}
-    >
-      <img
-        class="img-fluid"
-        src={Img09_codeSDKPython}
-        style={{ width: "520px", padding: "20px" }}
-      />
+    <div class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center" style={{ width: "520px", padding: "20px" }}>
+      <img class="img-fluid" src={Img09_codeSDKPython} style={{ width: "520px", padding: "20px" }} />
     </div>
   );
 
   const Text09_codeSDKPython = (
-    <div
-      class="col-12 col-lg-5 d-flex justify-content-start justify-content-lg-center"
-      style={{ padding: "8px 24px" }}
-    >
+    <div class="col-12 col-lg-5 d-flex justify-content-start justify-content-lg-center" style={{ padding: "8px 24px" }}>
       <div>
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("SDK support for convenient programming development")}
         </h4>
-        <p className={classes.P}>
-          {t(
-            "DS2.ai의 MLOps를 위한 데이터 파이프라인을 Python 코드로 구축할 수 있습니다. SDK를 통해 데이터의 업로드부터 라벨링 생성, 인공지능 학습 및 배포까지 모든 기능을 사용할 수 있습니다."
-          )}
-        </p>
+        <p className={classes.P}>{t("Build a data pipeline for MLOps at DS2.ai with Python. SDK gives you access to all of the processes from uploading and labeling data, to training and deploying the artificial intelligence model.")}</p>
       </div>
     </div>
   );
@@ -235,17 +175,10 @@ const LabelIntro = (props) => {
                   color: "var(--bg)",
                 }}
               >
-                {t(
-                  "LABELING AI는 딥러닝 기반의 Auto-Labeling 기술을 활용하여 소량의 데이터만 라벨링하면 AI를 활용하여 자동화하고 신속하게 대량의 데이터를 라벨링합니다."
-                )}
+                {t("LABELING AI is a deep learning-based Auto-Labeling technology that utilizes AI to automate and quickly label large amounts of data, after labeling only a small amount of data manually.")}
                 <br />
               </p>
-              <Button
-                id="labelintro_top_start_btn"
-                shape="blueContained"
-                size="xl"
-                onClick={closeIntro}
-              >
+              <Button id="labelintro_top_start_btn" shape="blueContained" size="xl" onClick={closeIntro}>
                 {t("Start Service")}
               </Button>
             </div>
@@ -254,18 +187,13 @@ const LabelIntro = (props) => {
       </section>
       <section className={classes.Section}>
         <div class="container bodyContainer">
-          <div
-            class="row justify-content-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-center" style={{ marginBottom: "10%" }}>
             <div class="col-12 tab-content">
               <h2 className={classes.H2} style={{ textAlign: "center" }}>
                 {t("Easier data labeling with just inspection")}
               </h2>
               <p className={classes.P} style={{ textAlign: "center" }}>
-                {t(
-                  "10개의 라벨링만으로 Auto-Labeling을 수행하고, Auto-Labeling 결과물에 대한 검수만으로 대량의 라벨링 데이터를 확보할 수 있습니다."
-                )}
+                {t("Auto-Labeling is performed with artificial intelligence and a large amount of data can be labeled only by inspecting the results.")}
               </p>
             </div>
             <div class="col-10 d-flex justify-content-center align-items-center">
@@ -282,37 +210,19 @@ const LabelIntro = (props) => {
             {t("The most efficient way to label your data")}
           </h2>
           <p className={classes.P} style={{ textAlign: "center" }}>
-            {t(
-              "10개의 라벨링만으로 딥러닝 기반의 Auto-Labeling을 수행하고, Auto-Labeling 결과물을 검수 및 보정하는 작업만으로 대량의 데이터를 라벨링할 수 있습니다."
-            )}
+            {t("Deep learning-based Auto-Labeling can be performed with only 10 labels, and a large amount of data can be labeled only by inspecting and correcting the result of Auto-Labeling.")}
           </p>
-          <div
-            class="row justify-content-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-center" style={{ marginBottom: "10%" }}>
             <div class="col text-center">
-              <div
-                class="d-none d-lg-flex justify-content-center align-items-center"
-                style={{ margin: "60px 0" }}
-              >
+              <div class="d-none d-lg-flex justify-content-center align-items-center" style={{ margin: "60px 0" }}>
                 <img class="img-fluid" src={Img02_mainprocess} />
               </div>
-              <div
-                class="d-flex d-lg-none justify-content-center align-items-center"
-                style={{ margin: "60px 0" }}
-              >
-                <img
-                  class="img-fluid"
-                  src={Img02_mainprocess_mobile}
-                  style={{ marginBottom: "30px" }}
-                />
+              <div class="d-flex d-lg-none justify-content-center align-items-center" style={{ margin: "60px 0" }}>
+                <img class="img-fluid" src={Img02_mainprocess_mobile} style={{ marginBottom: "30px" }} />
               </div>
             </div>
           </div>
-          <div
-            class="row justify-content-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-center" style={{ marginBottom: "10%" }}>
             <div class="col-2 col-md-5 processLine"></div>
             <div class="col-12 col-md-4" style={{ marginBottom: "24px" }}>
               <div class="labelingProcessBox">
@@ -330,9 +240,7 @@ const LabelIntro = (props) => {
                   2. Traing Model
                 </h5>
                 <p className={classes.P} style={{ fontSize: "small" }}>
-                  {t(
-                    "10건의 수동 라벨링 데이터로 Auto-labeling AI를 학습합니다. Auto-labeling 결과를 검수/보정하면 재학습을 통해 Auto-labeling AI 성능을 고도화합니다."
-                  )}
+                  {t("Train an auto labeling AI with the 10 pre-labeled data. Review and correct the results to enhance auto labeling performance.")}
                 </p>
               </div>
             </div>
@@ -342,9 +250,7 @@ const LabelIntro = (props) => {
                   3. Deploy the best AI
                 </h5>
                 <p className={classes.P} style={{ fontSize: "small" }}>
-                  {t(
-                    "이러한 과정을 반복하며 100개의 수동 라벨링으로 1,000개, 10,000개, 100,000개 라벨링을 간편하게 수행할 수 있습니다. 또한, 고도화된 Auto-labeling AI는 물체인식 AI로 바로 배포 및 활용할 수 있습니다."
-                  )}
+                  {t("Repeat the previous step to generate 1,000, 10,000, or 100,000 auto labeled data. Transform your auto labeling AI into an object detection AI model to perform object detection as needed.")}
                 </p>
               </div>
             </div>
@@ -355,19 +261,11 @@ const LabelIntro = (props) => {
             {t("Convenient labeling inspection and modification with smart magic tool")}
           </h2>
           <p className={classes.P} style={{ textAlign: "center" }}>
-            {t(
-              "복잡한 형태의 개체도 신속하게 라벨링할 수 있는 매직툴을 통해 라벨링 검수 및 수정도 간편하게 수행합니다."
-            )}
+            {t("Labeling inspection and modification are also easily performed through the magic tool that can quickly label even complex-shaped objects.")}
           </p>
           <div class="row justify-content-center">
-            <div
-              class="col-12 col-md-10 col-lg-8 text-center"
-              style={{ marginBottom: "24px" }}
-            >
-              <div
-                class="d-flex justify-content-center align-items-center mainVideo"
-                style={{ margin: "60px 0" }}
-              >
+            <div class="col-12 col-md-10 col-lg-8 text-center" style={{ marginBottom: "24px" }}>
+              <div class="d-flex justify-content-center align-items-center mainVideo" style={{ margin: "60px 0" }}>
                 <video
                   autoPlay
                   style={{
@@ -396,57 +294,28 @@ const LabelIntro = (props) => {
                 {t("We offer a variety of smart labeling tools.")}
                 <br />
               </h4>
-              <p
-                className={classes.P}
-                style={{ textAlign: "left", fontSize: "small" }}
-              >
-                {t(
-                  "Polygon 형태의 매직툴 뿐만 아니라 Bounding Box, Polyline 등 다양한 형태의 라벨링을 위한 툴을 제공합니다."
-                )}
+              <p className={classes.P} style={{ textAlign: "left", fontSize: "small" }}>
+                {t("We provide a variety of labeling tools such as Bounding Box, Polyline, and Polygon magic tool.")}
               </p>
             </div>
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid rounded"
-                src={Img04_01_sementic}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid rounded" src={Img04_01_sementic} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 Semantic Segmentation
                 <br />
               </h4>
-              <p
-                className={classes.P}
-                style={{ textAlign: "left", fontSize: "small" }}
-              >
-                {t(
-                  "전체 이미지를 구역 별로 인식 및 분할하며, 자율주행 분야에서 활발하게 활용되고 있습니다."
-                )}
+              <p className={classes.P} style={{ textAlign: "left", fontSize: "small" }}>
+                {t("It recognizes and classifies the entire image by region, and is actively used in autonomous driving technology.")}
               </p>
             </div>
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid rounded"
-                src={Img04_02_skeleton}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid rounded" src={Img04_02_skeleton} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 Skeleton
                 <br />
               </h4>
-              <p
-                className={classes.P}
-                style={{ textAlign: "left", fontSize: "small" }}
-              >
-                {t(
-                  "사람의 골격을 감지하여 동작을 인식/추적하며, 스포츠 분야 혹은 보안 등 동작 감지 분야에서 활용되고 있습니다."
-                )}
+              <p className={classes.P} style={{ textAlign: "left", fontSize: "small" }}>
+                {t("It recognizes and tracks human motion by detecting the skeleton, and is used in motion detection fields such as sports or security.")}
               </p>
             </div>
           </div>
@@ -456,24 +325,15 @@ const LabelIntro = (props) => {
             {t("Free data import/export")}
           </h2>
           <p className={classes.P} style={{ textAlign: "center" }}>
-            {t(
-              "라벨링 작업 환경과 상관없이 다양한 좌표 데이터를 LABELING AI로 가져와 라벨링 작업을 진행할 수 있으며, 작업된 라벨링 좌표 데이터를 다양한 형식으로 추출할 수 있습니다."
-            )}
+            {t("Regardless of the labeling work environment, various coordinate data can be imported to LABELING AI to perform labeling, and the processed labeling coordinate data can be extracted in various formats.")}
           </p>
           <div class="row justify-content-center">
             <div class="col text-center" style={{ marginBottom: "24px" }}>
               <div id="minimal-tabs">
-                <ul
-                  class="nav nav-tabs d-flex justify-content-center"
-                  role="tablist"
-                >
+                <ul class="nav nav-tabs d-flex justify-content-center" role="tablist">
                   {language.map((lang, i) => {
                     return (
-                      <li
-                        class="nav-item"
-                        role="presentation"
-                        style={{ width: "50%" }}
-                      >
+                      <li class="nav-item" role="presentation" style={{ width: "50%" }}>
                         {i === selectedNav ? (
                           <a class="nav-link active">{lang}</a>
                         ) : (
@@ -493,10 +353,7 @@ const LabelIntro = (props) => {
                 </ul>
                 <div class="tab-content" style={{ marginBottom: "0" }}>
                   {/* <div class="tab-pane active" role="tabpanel"> */}
-                  <div
-                    class="row justify-content-center codeLabelingBox"
-                    style={{ background: "rgba(0,0,0,0.05)" }}
-                  >
+                  <div class="row justify-content-center codeLabelingBox" style={{ background: "rgba(0,0,0,0.05)" }}>
                     <div
                       class="col-12 col-lg-6 d-flex justify-content-center align-items-center"
                       style={{
@@ -506,20 +363,10 @@ const LabelIntro = (props) => {
                         borderRadius: "0.5rem",
                       }}
                     >
-                      <img
-                        className={classes.Code}
-                        src={langImgs[selectedNav]}
-                      />
+                      <img className={classes.Code} src={langImgs[selectedNav]} />
                     </div>
-                    <div
-                      class="col-12 col-lg-6 text-center d-flex justify-content-center align-items-center"
-                      style={{ margin: "20px" }}
-                    >
-                      <img
-                        class="img-fluid"
-                        src={Img05_Ex}
-                        style={{ height: "240px" }}
-                      />
+                    <div class="col-12 col-lg-6 text-center d-flex justify-content-center align-items-center" style={{ margin: "20px" }}>
+                      <img class="img-fluid" src={Img05_Ex} style={{ height: "240px" }} />
                     </div>
                   </div>
                   {/* </div> */}
@@ -529,14 +376,8 @@ const LabelIntro = (props) => {
           </div>
         </div>
         <div class="container d-flex justify-content-center bodyContainer">
-          <div
-            class="row justify-content-center whyLabeling"
-            style={{ width: "100%" }}
-          >
-            <div
-              class="col-12 col-lg-4 align-self-center"
-              style={{ margin: "24px 0px" }}
-            >
+          <div class="row justify-content-center whyLabeling" style={{ width: "100%" }}>
+            <div class="col-12 col-lg-4 align-self-center" style={{ margin: "24px 0px" }}>
               {userLang === "ko" ? (
                 <h6 className={classes.H6} style={{ marginBottom: "0px" }}>
                   {t("Contrast")}
@@ -553,15 +394,10 @@ const LabelIntro = (props) => {
                 {t("80% cost reduction")}
               </h1>
               <p className={classes.P} style={{ color: "var(--bg)" }}>
-                {t(
-                  "학습 데이터 준비부터 인공지능 배포까지의 모든 과정을 LABELING AI 하나로 해결할 수 있어, 프로젝트의 비용 및 기간을 절약할 수 있습니다."
-                )}
+                {t("The entire process from training data preparation to AI deployment can be solved with LABELING AI, saving the cost and duration of the project.")}
               </p>
             </div>
-            <div
-              class="col-10 col-md-7 col-lg-4 d-flex justify-content-center align-items-center"
-              style={{ marginBottom: "36px" }}
-            >
+            <div class="col-10 col-md-7 col-lg-4 d-flex justify-content-center align-items-center" style={{ marginBottom: "36px" }}>
               <div
                 style={{
                   height: "240px",
@@ -583,17 +419,12 @@ const LabelIntro = (props) => {
                 })}
                 <div></div>
                 <div>
-                  <h5
-                    className={classes.H5}
-                    style={{ textAlign: "center", margin: "16px 0px" }}
-                  >
+                  <h5 className={classes.H5} style={{ textAlign: "center", margin: "16px 0px" }}>
                     {t("Traditional labeling")}
                   </h5>
                 </div>
               </div>
-              <div
-                style={{ height: "240px", width: "40%", marginLeft: "16px" }}
-              >
+              <div style={{ height: "240px", width: "40%", marginLeft: "16px" }}>
                 <div
                   style={{
                     width: "100%",
@@ -613,19 +444,13 @@ const LabelIntro = (props) => {
                   );
                 })}
                 <div>
-                  <h5
-                    className={classes.H5}
-                    style={{ textAlign: "center", margin: "16px 0px" }}
-                  >
+                  <h5 className={classes.H5} style={{ textAlign: "center", margin: "16px 0px" }}>
                     LABELING AI
                   </h5>
                 </div>
               </div>
             </div>
-            <div
-              class="col-10 col-md-5 col-lg-3 d-flex justify-content-center align-items-center"
-              style={{ paddingTop: "90px" }}
-            >
+            <div class="col-10 col-md-5 col-lg-3 d-flex justify-content-center align-items-center" style={{ paddingTop: "90px" }}>
               <div style={{ maxWidth: "196px" }}>
                 {barColor.map((color, idx) => {
                   return (
@@ -646,16 +471,10 @@ const LabelIntro = (props) => {
                 })}
               </div>
             </div>
-            <div
-              class="col-12 d-lg-flex justify-content-center align-items-start"
-              style={{ marginTop: "36px" }}
-            >
+            <div class="col-12 d-lg-flex justify-content-center align-items-start" style={{ marginTop: "36px" }}>
               <div class="d-sm-flex justify-content-sm-center">
                 <div>
-                  <div
-                    class="text-nowrap text-center"
-                    style={{ color: "white", marginBottom: "8px" }}
-                  >
+                  <div class="text-nowrap text-center" style={{ color: "white", marginBottom: "8px" }}>
                     * {t("Only the auto-labeling results")}&nbsp;
                   </div>
                 </div>
@@ -673,10 +492,7 @@ const LabelIntro = (props) => {
                 </div>
               </div>
               <div>
-                <div
-                  class="text-nowrap text-center"
-                  style={{ color: "white", marginBottom: "8px" }}
-                >
+                <div class="text-nowrap text-center" style={{ color: "white", marginBottom: "8px" }}>
                   {userLang === "ko" ? null : <span>&nbsp;</span>}
                   {t("will be processed for payment.")};
                 </div>
@@ -685,54 +501,33 @@ const LabelIntro = (props) => {
           </div>
         </div>
         <div class="container d-none d-lg-block bodyContainer">
-          <div
-            class="row justify-content-around align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-around align-items-center" style={{ marginBottom: "10%" }}>
             {Text06_feature_1}
             {ImgFrame06_feature_1}
           </div>
-          <div
-            class="row justify-content-around align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-around align-items-center" style={{ marginBottom: "10%" }}>
             {ImgFrame07_feature_2}
             {Text07_feature_2}
           </div>
-          <div
-            class="row justify-content-around align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-around align-items-center" style={{ marginBottom: "10%" }}>
             {Text08_select}
             {ImgFrame08_select}
           </div>
-          <div
-            class="row justify-content-between align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-between align-items-center" style={{ marginBottom: "10%" }}>
             {ImgFrame09_codeSDKPython}
             {Text09_codeSDKPython}
           </div>
         </div>
         <div class="container-fluid d-lg-none bodyContainer">
-          <div
-            class="row justify-content-center align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-center align-items-center" style={{ marginBottom: "20%" }}>
             {Text06_feature_1}
             {ImgFrame06_feature_1}
           </div>
-          <div
-            class="row justify-content-center align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-center align-items-center" style={{ marginBottom: "20%" }}>
             {Text07_feature_2}
             {ImgFrame07_feature_2}
           </div>
-          <div
-            class="row justify-content-center align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-center align-items-center" style={{ marginBottom: "20%" }}>
             {Text08_select}
             {ImgFrame08_select}
           </div>
@@ -742,12 +537,7 @@ const LabelIntro = (props) => {
           </div>
         </div>
         <div style={{ textAlign: "center" }}>
-          <Button
-            id="labelintro_bottom_start_btn"
-            shape="blueContained"
-            size="xl"
-            onClick={closeIntro}
-          >
+          <Button id="labelintro_bottom_start_btn" shape="blueContained" size="xl" onClick={closeIntro}>
             {t("Start Service")}
           </Button>
         </div>

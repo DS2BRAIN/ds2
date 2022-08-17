@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 import { deleteIdListForLabelProjectRequestAction } from "redux/reducers/projects.js";
-import {
-  postLabelProjectRequestAction,
-  setLabelProjectStarted,
-} from "redux/reducers/labelprojects.js";
+import { postLabelProjectRequestAction, setLabelProjectStarted } from "redux/reducers/labelprojects.js";
 
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
@@ -103,9 +97,7 @@ export default function NewProject({ history }) {
   const [isLoading, setIsLoading] = useState(false);
   const [skipStepper, setSkipStepper] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [isFromDataconnectorDetail, setIsFromDataconnetorDetail] = useState(
-    false
-  );
+  const [isFromDataconnectorDetail, setIsFromDataconnetorDetail] = useState(false);
 
   let workapp = {
     object_detection: "물체 인식",
@@ -118,11 +110,7 @@ export default function NewProject({ history }) {
 
   useEffect(() => {
     if (!projects.idListForLabelProject.length) {
-      dispatch(
-        openSuccessSnackbarRequestAction(
-          t("Please select project data again.")
-        )
-      );
+      dispatch(openSuccessSnackbarRequestAction(t("Please select project data again.")));
       history.push("/admin/dataconnector");
     }
 
@@ -130,11 +118,7 @@ export default function NewProject({ history }) {
 
     const url = window.location.href;
     if (url.indexOf("&detail=true") !== -1) setIsFromDataconnetorDetail(true);
-    if (
-      url.indexOf("?file=ready") !== -1 &&
-      projects.idListForLabelProject &&
-      projects.categoryForLabelProject
-    ) {
+    if (url.indexOf("?file=ready") !== -1 && projects.idListForLabelProject && projects.categoryForLabelProject) {
       const type = projects.categoryForLabelProject;
       setUploadFile(projects.idListForLabelProject);
       if (type === "ZIP" || type === "Video") {
@@ -220,30 +204,16 @@ export default function NewProject({ history }) {
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       } else {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Project name and category are required.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Project name and category are required.")));
       }
     } else if (activeStep === 1) {
       if (uploadFile && uploadFile.length > 0) {
         if (shouldUpdateFrame && !frameValue) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t(
-                "동영상 파일을 업로드하기 위해서는 분당 프레임 수를 입력해야합니다."
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("You must enter frames per minute to upload a video file.")));
           return;
         }
         if (frameValue !== null && (frameValue < 1 || frameValue > 60)) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t("The number of frames must be between 1 and 600")
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("The number of frames must be between 1 and 600")));
           return;
         }
 
@@ -261,9 +231,7 @@ export default function NewProject({ history }) {
         dispatch(openErrorSnackbarRequestAction(t("Upload file")));
       }
     } else {
-      history.push(
-        `/admin/labelling?page=1&sorting=created_at&desc=true&rows=10`
-      );
+      history.push(`/admin/labelling?page=1&sorting=created_at&desc=true&rows=10`);
       // history.push(`/admin/labelling/${newProjectId}`);
     }
   };
@@ -285,13 +253,9 @@ export default function NewProject({ history }) {
     if (type === "object_detection" || type === "image") {
       return (
         <>
-          {t(
-            "이미지 파일(png/jpg/jpeg), 이미지 압축파일(zip), 동영상 파일(mp4)만 업로드 가능합니다."
-          )}
+          {t("Only image files (png/jpg/jpeg), compressed image files (zip), and video files (mp4) can be uploaded.")}
           <br />
-          {t(
-            "이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요."
-          )}
+          {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
         </>
       );
     } else {
@@ -305,34 +269,16 @@ export default function NewProject({ history }) {
     let maximum = user.maximumFileSize;
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > maximum) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t(
-              `${user.maximumFileSize /
-                1073741824}GB 크기이상의 파일은 업로드 불가합니다.`
-            )
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t(`${user.maximumFileSize / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)));
       } else {
         const name = files[idx].name;
         if (dataCategory === "object_detection" || dataCategory === "image") {
-          if (
-            idx < 100 &&
-            /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())
-          ) {
+          if (idx < 100 && /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())) {
             tmpFiles.push(files[idx]);
           } else {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                t(" Please upload file again")
-              )
-            );
+            dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
           }
-          if (
-            files[idx].type === "video/mp4" ||
-            files[idx].type === "video/quicktime" ||
-            files[idx].type === "video/mov"
-          ) {
+          if (files[idx].type === "video/mp4" || files[idx].type === "video/quicktime" || files[idx].type === "video/mov") {
             setShouldUpdateFrame(true);
             maximum = 5000000000;
           }
@@ -340,19 +286,13 @@ export default function NewProject({ history }) {
           if (idx < 1 && /\.(csv)$/g.test(name.toLowerCase())) {
             tmpFiles.push(files[idx]);
           } else {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                t(" Please upload file again")
-              )
-            );
+            dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
           }
         }
       }
     }
     if (tmpFiles.length === 0) {
-      dispatch(
-        openErrorSnackbarRequestAction(t(" Please upload file again"))
-      );
+      dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
 
       setIsUploadLoading(false);
       return;
@@ -390,13 +330,7 @@ export default function NewProject({ history }) {
     switch (stepIndex) {
       case 0:
         return (
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="stretch"
-            style={{ marginTop: "20px" }}
-          >
+          <Grid container direction="column" justify="center" alignItems="stretch" style={{ marginTop: "20px" }}>
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={12} style={{ marginBottom: "20px" }}>
@@ -425,7 +359,7 @@ export default function NewProject({ history }) {
                     value={projectDescriptionValue}
                     onChange={changeProjectDescriptionValue}
                     placeholder={t("Please enter a project description.")}
-                    id="projectNameInput"
+                    id="projectDescInput"
                   />
                 </Grid>
               </Grid>
@@ -442,25 +376,11 @@ export default function NewProject({ history }) {
             >
               <FormControl component="fieldset">
                 <FormLabel component="legend">
-                  <span style={{ fontWeight: 600 }}>
-                    {t("Select Data Category")} &#42;
-                  </span>
+                  <span style={{ fontWeight: 600 }}>{t("Select Data Category")} &#42;</span>
                 </FormLabel>
-                <RadioGroup
-                  aria-label="dataCategory"
-                  name="dataCategory"
-                  value={dataCategory}
-                  onChange={changeDataCategory}
-                  row
-                >
+                <RadioGroup aria-label="dataCategory" name="dataCategory" value={dataCategory} onChange={changeDataCategory} row>
                   {categories.map((category) => {
-                    return (
-                      <FormControlLabel
-                        value={category}
-                        label={t(workapp[category])}
-                        control={<Radio color="primary" />}
-                      />
-                    );
+                    return <FormControlLabel value={category} label={t(workapp[category])} control={<Radio color="primary" />} />;
                   })}
                 </RadioGroup>
               </FormControl>
@@ -479,9 +399,7 @@ export default function NewProject({ history }) {
             }}
           >
             <CircularProgress style={{ marginBottom: "20px" }} />
-            <b style={{ display: "inline-block", marginBottom: 60 }}>
-              {t("Creating project. Please wait")}
-            </b>
+            <b style={{ display: "inline-block", marginBottom: 60 }}>{t("Creating project. Please wait")}</b>
           </div>
         ) : (
           <>
@@ -495,9 +413,7 @@ export default function NewProject({ history }) {
                   }}
                 >
                   <CircularProgress sx={{ mb: 2 }} />
-                  <b className={classes.settingFontWhite6}>
-                    {t("Uploading. Please wait a moment")}
-                  </b>
+                  <b className={classes.settingFontWhite6}>{t("Uploading. Please wait a moment")}</b>
                 </div>
               ) : (
                 <Dropzone onDrop={dropFiles}>
@@ -515,19 +431,14 @@ export default function NewProject({ history }) {
                             {/* fileUploadButton */}
                             {t("Import file")}
                           </Button>
-                          <div
-                            className={classes.settingFontWhite6}
-                            style={{ wordBreak: "keep-all", marginTop: "16px" }}
-                          >
+                          <div className={classes.settingFontWhite6} style={{ wordBreak: "keep-all", marginTop: "16px" }}>
                             {dataTypeText(dataCategory)}
                             {/* {t(
                             "파일을 드래그하거나 박스를 클릭해서 업로드해주세요!"
                           )}
                           <br /> */}
                             <br />
-                            {t(
-                              "용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다."
-                            )}
+                            {t("Uploading large-size files may take more than 5 minutes")}
                           </div>
                         </div>
                       )}
@@ -547,20 +458,13 @@ export default function NewProject({ history }) {
                               >
                                 {uploadFile.map((file, idx) => {
                                   if (idx === 10) {
-                                    return (
-                                      <li style={{ listStyle: "none" }}>
-                                        .......
-                                      </li>
-                                    );
+                                    return <li style={{ listStyle: "none" }}>.......</li>;
                                   }
                                   if (idx >= 10) {
                                     return null;
                                   }
                                   return (
-                                    <li
-                                      key={file.name}
-                                      style={{ paddingBottom: "12px" }}
-                                    >
+                                    <li key={file.name} style={{ paddingBottom: "12px" }}>
                                       <div className={classes.alignCenterDiv}>
                                         <div
                                           style={{
@@ -594,10 +498,7 @@ export default function NewProject({ history }) {
                           {t("Re-upload")}
                         </span> */}
 
-                              <span
-                                className="totalFile"
-                                style={{ borderTop: "none" }}
-                              >
+                              <span className="totalFile" style={{ borderTop: "none" }}>
                                 {t("Total")} {uploadFile.length}
                                 {t("")}
                               </span>
@@ -618,9 +519,7 @@ export default function NewProject({ history }) {
                   marginBottom: "10px",
                 }}
               >
-                <InputLabel id="demo-simple-select-label">
-                  {t("Enter frames per minute")}
-                </InputLabel>
+                <InputLabel id="demo-simple-select-label">{t("Enter frames per minute")}</InputLabel>
                 <InputBase
                   variant="outlined"
                   required
@@ -645,9 +544,7 @@ export default function NewProject({ history }) {
         );
       case 2:
         return (
-          <div
-            style={{ height: "160px", padding: "50px 0", textAlign: "center" }}
-          >
+          <div style={{ height: "160px", padding: "50px 0", textAlign: "center" }}>
             {t("The project has been created!")}
             <br />
             {t("Proceed with manual labeling for automatic labeling.")}
@@ -699,24 +596,14 @@ export default function NewProject({ history }) {
                     <Grid container justify="flex-end" spacing={2}>
                       <Grid item>
                         {activeStep < 2 && (
-                          <Button
-                            shape="greenOutlined"
-                            style={{ minWidth: 130 }}
-                            onClick={handleBack}
-                          >
+                          <Button id={activeStep === 0 ? "cancel_btn" : "go_back_btn"} shape="greenOutlined" style={{ minWidth: 130 }} onClick={handleBack}>
                             {activeStep === 0 ? t("Cancel") : t("뒤로가기")}
                           </Button>
                         )}
                       </Grid>
                       <Grid item>
-                        <Button
-                          shape="greenContained"
-                          style={{ minWidth: 130 }}
-                          onClick={handleNext}
-                        >
-                          {activeStep === steps.length - 1
-                            ? t("Go to project list")
-                            : t("Next")}
+                        <Button id={activeStep === steps.length - 1 ? "go_to_project_lists_btn" : "next_btn"} shape="greenContained" style={{ minWidth: 130 }} onClick={handleNext}>
+                          {activeStep === steps.length - 1 ? t("Go to project list") : t("Next")}
                         </Button>
                       </Grid>
                     </Grid>

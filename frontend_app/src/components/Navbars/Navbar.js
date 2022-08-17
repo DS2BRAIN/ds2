@@ -68,7 +68,7 @@ export default function Header(props) {
               key="setting"
               href="/admin/setting/userinfo"
               className={classes.freeLink}
-              id="settingLink"
+              id="setting_link"
               style={{ alignItems: "center" }}
             >
               <AccountCircleOutlinedIcon

@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-
-import * as api from "controller/api.js";
-
-import currentTheme from "assets/jss/custom.js";
 import { useTranslation } from "react-i18next";
-import {
-  convertToLocalDateStr,
-  setMemoryUnit,
-} from "../../components/Function/globalFunc.js";
+import { convertToLocalDateStr, setMemoryUnit } from "../../components/Function/globalFunc.js";
 
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
@@ -16,7 +9,6 @@ import MetabaseButton from "components/CustomButtons/MetabaseButton.js";
 
 const DataconnectorTopInfo = ({ connectorInfo }) => {
   const { t } = useTranslation();
-  const classes = currentTheme();
   const { user } = useSelector((state) => ({ user: state.user }), []);
 
   const [selectedProject, setSelectedProject] = useState("");

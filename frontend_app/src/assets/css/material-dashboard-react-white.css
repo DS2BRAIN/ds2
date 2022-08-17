@@ -657,7 +657,7 @@ form > svg > path {
 #projectModal svg {
   height: 50px !important;
 }
-#fileModal > div:first-child {
+#file_upload_modal > div:first-child {
   min-height: 260px;
   background: var(--whiteThemeBackground2) !important;
   border-radius: 20px !important;
@@ -815,7 +815,7 @@ td {
 #instructionLink > svg > path {
   color: var(--whiteThemeText1) !important;
 }
-#settingLink > svg > path {
+#setting_link > svg > path {
   color: var(--whiteThemeText1) !important;
 }
 #logoutLink > svg > path {

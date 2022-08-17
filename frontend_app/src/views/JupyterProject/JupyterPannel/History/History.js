@@ -24,10 +24,7 @@ import * as api from "../../../../controller/api";
 import { fileurl, backendurl } from "controller/api";
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 import { getCardRequestAction } from "../../../../redux/reducers/user";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "components/CustomButtons/Button";
@@ -142,16 +139,12 @@ const History = (props) => {
   const [renameServerModal, setRenameServerModal] = useState(false); //프로젝트명 변경 모달 switch
   const [renameText, setRenameText] = useState(""); //새로운 프로젝트명 입력 변수
   const [intervalRefresh, setIntervalRefresh] = useState(0); //60초마다 받아오는 로직 상태(instances값 입력 없이 interval 실행되면 계속 undefined값으로 확인하는것 방지)
-  const [instanceCountLimit, setInstanceCountLimit] = useState(
-    process.env.REACT_APP_ENTERPRISE ? 99999999999 : 4
-  ); //instance 개수 제한 (n)개 까지 가능
+  const [instanceCountLimit, setInstanceCountLimit] = useState(process.env.REACT_APP_ENTERPRISE ? 99999999999 : 4); //instance 개수 제한 (n)개 까지 가능
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
   const [switchStatus, setSwitchStatus] = useState("");
   const [serverStatusModal, setServerStatusModal] = useState(false);
   const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
-  const [isFullSizeStatisticModal, setIsFullSizeStatisticModal] = useState(
-    false
-  );
+  const [isFullSizeStatisticModal, setIsFullSizeStatisticModal] = useState(false);
   const [timeTickAsync, setTimeTickAsync] = useState(0);
   const [timeTickAsyncCount, setTimeTickAsyncCount] = useState(0);
   const imgRef = useRef();
@@ -247,10 +240,7 @@ const History = (props) => {
   const isEnableToChange = (time, option = null) => {
     let updatedAt = new Date(time).getTime() / 60000;
     let nowTime = new Date();
-    nowTime =
-      new Date(
-        nowTime.getTime() + nowTime.getTimezoneOffset() * 60000
-      ).getTime() / 60000;
+    nowTime = new Date(nowTime.getTime() + nowTime.getTimezoneOffset() * 60000).getTime() / 60000;
     if (option == null) return nowTime - updatedAt > 10;
     else return 10 - Math.floor(nowTime - updatedAt);
   };
@@ -259,23 +249,14 @@ const History = (props) => {
     if (ip[ip.length - 1] === "/") {
       ip = ip.slice(0, ip.length - 1);
     }
-    window
-      .open(
-        `http://${ip}:${port == null ? 9999 : port}/?token=${JSON.parse(
-          Cookies.getCookie("apptoken")
-        )}`,
-        "_blank"
-      )
-      .focus();
+    window.open(`http://${ip}:${port == null ? 9999 : port}/?token=${JSON.parse(Cookies.getCookie("apptoken"))}`, "_blank").focus();
   };
 
   const shutdownJupyter = (instance) => {
     api
       .shutdownJupyterServer(instance.InstanceId)
       .then((response) => {
-        dispatch(
-          openSuccessSnackbarRequestAction(t("Server deletion successful."))
-        );
+        dispatch(openSuccessSnackbarRequestAction(t("Server deletion successful.")));
         setIsgettingStatus(true);
         api.getJupyterServerStatus(props.match.params.id).then((res) => {
           setDeleteServerModal(false);
@@ -289,9 +270,7 @@ const History = (props) => {
         setDeleteServerModal(false);
         setDeleteLoading(false);
         setDeleteText("");
-        dispatch(
-          openErrorSnackbarRequestAction(t("Deletion of server failed."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Deletion of server failed.")));
       });
   };
 
@@ -299,11 +278,7 @@ const History = (props) => {
     if (instances && instances.length < instanceCountLimit) {
       history.push(`/admin/newjupyterproject/${project.id}`);
     } else {
-      dispatch(
-        openSuccessSnackbarRequestAction(
-          t("Additional servers can be added after contacting the sales team.")
-        )
-      );
+      dispatch(openSuccessSnackbarRequestAction(t("Additional servers can be added after contacting the sales team.")));
       openChat();
     }
   };
@@ -328,8 +303,7 @@ const History = (props) => {
           instancesRaw.push(instance);
         });
       }
-      if (JSON.stringify(instances) !== JSON.stringify(instancesRaw))
-        setIntervalRefresh(intervalRefresh + 1);
+      if (JSON.stringify(instances) !== JSON.stringify(instancesRaw)) setIntervalRefresh(intervalRefresh + 1);
       setInstances(instancesRaw);
       if (project.inferenceCount) {
         setInferenceCount(project.inferenceCount);
@@ -352,8 +326,7 @@ const History = (props) => {
   }, [selectedIndex]);
 
   const getAsyncTaskData = () => {
-    if (instances[selectedIndex]?.InstanceId == undefined)
-      setIntervalRefresh(intervalRefresh + 1);
+    if (instances[selectedIndex]?.InstanceId == undefined) setIntervalRefresh(intervalRefresh + 1);
     api.getJupyterServerStatus(props.match.params.id).then((res) => {
       setInstances(res.data);
     });
@@ -375,11 +348,7 @@ const History = (props) => {
   const reloadButton = (
     <AutorenewIcon
       id="jupyterRefreshBtn"
-      className={
-        isRefreshAbuse === false
-          ? classes.refreshIconActive
-          : classes.refreshIconDefault
-      }
+      className={isRefreshAbuse === false ? classes.refreshIconActive : classes.refreshIconDefault}
       style={{ marginLeft: "4px" }}
       onClick={() => {
         if (!isRefreshAbuse) {
@@ -431,35 +400,11 @@ const History = (props) => {
   return (
     <>
       {isReadyToShow === true ? (
-        <Grid
-          container
-          item
-          xs={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid
-            container
-            item
-            xs={12}
-            justifyContent="center"
-            alignItems="center"
-          >
+        <Grid container item xs={12} justifyContent="center" alignItems="center">
+          <Grid container item xs={12} justifyContent="center" alignItems="center">
             {/*상단 : 그래프, api 호출 수*/}
-            <Grid
-              container
-              item
-              xs={12}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent="flex-start"
-                alignItems="center"
-              >
+            <Grid container item xs={12} justifyContent="center" alignItems="center">
+              <Grid container item xs={12} justifyContent="flex-start" alignItems="center">
                 <div
                   id="projectName"
                   style={{
@@ -471,12 +416,7 @@ const History = (props) => {
                 >
                   {project !== null && `${projectName}`}
                 </div>
-                <Button
-                  id="changeJupyterPorjectName"
-                  className={classes.defaultF0F0OutlineButton}
-                  style={{ fontSize: "12px", margin: "0 10px" }}
-                  onClick={() => setRenameServerModal(true)}
-                >
+                <Button id="changeJupyterPorjectName" className={classes.defaultF0F0OutlineButton} style={{ fontSize: "12px", margin: "0 10px" }} onClick={() => setRenameServerModal(true)}>
                   {t("Change")}
                 </Button>
                 <Button
@@ -484,17 +424,11 @@ const History = (props) => {
                   className={classes.defaultDeleteButton}
                   style={{ fontSize: "12px" }}
                   onClick={() => {
-                    if (
-                      process.env.REACT_APP_ENTERPRISE === "true" ||
-                      isEnableToChange(props.project.created_at)
-                    )
-                      setDeleteProjectModal(true);
+                    if (process.env.REACT_APP_ENTERPRISE === "true" || isEnableToChange(props.project.created_at)) setDeleteProjectModal(true);
                     else {
                       dispatch(
                         openErrorSnackbarRequestAction(
-                          `${t(
-                            "프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다."
-                          )}
+                          `${t("Deleting a project is possible after a certain period of time has passed since creation.")}
                           `
                           // ${isEnableToChange(props.project.created_at, true)}
                           // ${t("minutes left")}
@@ -505,14 +439,7 @@ const History = (props) => {
                 >
                   {t("Delete Project")}
                 </Button>
-                <Tooltip
-                  title={
-                    <text style={{ fontSize: "12px" }}>
-                      {t("refresh project")}
-                    </text>
-                  }
-                  placement="top"
-                >
+                <Tooltip title={<text style={{ fontSize: "12px" }}>{t("refresh project")}</text>} placement="top">
                   {reloadButton}
                 </Tooltip>
                 <Modal
@@ -530,13 +457,7 @@ const History = (props) => {
                     }}
                   >
                     {isDeleteProjectLoading == false ? (
-                      <Grid
-                        container
-                        item
-                        xs={12}
-                        justifyContent="center"
-                        alignItems="center"
-                      >
+                      <Grid container item xs={12} justifyContent="center" alignItems="center">
                         <Grid
                           container
                           item
@@ -582,9 +503,7 @@ const History = (props) => {
                           <TextField
                             id="inputDeleteMethod"
                             fullWidth={true}
-                            onChange={(e) =>
-                              setDeleteProjectText(e.target.value)
-                            }
+                            onChange={(e) => setDeleteProjectText(e.target.value)}
                             inputProps={{
                               className: newClasses.deleteModalText,
                             }}
@@ -592,13 +511,7 @@ const History = (props) => {
                             placeholder={t("Enter 'Delete' correctly.")}
                           />
                         </Grid>
-                        <Grid
-                          container
-                          item
-                          xs={11}
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
-                        >
+                        <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">
                           <div style={{ wordBreak: "break-all" }}>
                             <div
                               style={{
@@ -618,51 +531,22 @@ const History = (props) => {
                                     setDeleteProjectTextError(false);
                                     setIsDeleteProjectLoading(true);
                                     api
-                                      .deleteJupyterProjects([
-                                        props.match.params.id,
-                                      ])
+                                      .deleteJupyterProjects([props.match.params.id])
                                       .then((res) => {
                                         if (res?.data?.failList.length == 0) {
                                           setDeleteProjectModal(false);
-                                          dispatch(
-                                            openSuccessSnackbarRequestAction(
-                                              t(
-                                                "Jupyter 프로젝트를 삭제하였습니다."
-                                              ) +
-                                                (process.env
-                                                  .REACT_APP_ENTERPRISE
-                                                  ? " " +
-                                                    t(
-                                                      "컴퓨터 재시작 시 적용됩니다."
-                                                    )
-                                                  : "")
-                                            )
-                                          );
-                                          props.history.push(
-                                            "/admin/jupyterproject/"
-                                          );
+                                          dispatch(openSuccessSnackbarRequestAction(t("The Jupyter project has been deleted.") + (process.env.REACT_APP_ENTERPRISE ? " " + t("컴퓨터 재시작 시 적용됩니다.") : "")));
+                                          props.history.push("/admin/jupyterproject/");
                                         } else {
                                           setIsDeleteProjectLoading(false);
                                           setDeleteProjectModal(false);
-                                          dispatch(
-                                            openErrorSnackbarRequestAction(
-                                              t(
-                                                "Jupyter 프로젝트 삭제를 실패하였습니다."
-                                              )
-                                            )
-                                          );
+                                          dispatch(openErrorSnackbarRequestAction(t("Failed to delete Jupyter project.")));
                                         }
                                       })
                                       .catch((err) => {
                                         setIsDeleteProjectLoading(false);
                                         setDeleteProjectModal(false);
-                                        dispatch(
-                                          openErrorSnackbarRequestAction(
-                                            t(
-                                              "Jupyter 프로젝트 삭제를 실패하였습니다."
-                                            )
-                                          )
-                                        );
+                                        dispatch(openErrorSnackbarRequestAction(t("Failed to delete Jupyter project.")));
                                       });
                                   }
                                 }}
@@ -679,12 +563,7 @@ const History = (props) => {
                                 justifyContent: "center",
                               }}
                             >
-                              <Button
-                                id="cancelJupyterDelete"
-                                className={classes.defaultGreenOutlineButton}
-                                style={{ textAlign: "center" }}
-                                onClick={deleteProjectModalClose}
-                              >
+                              <Button id="cancelJupyterDelete" className={classes.defaultGreenOutlineButton} style={{ textAlign: "center" }} onClick={deleteProjectModalClose}>
                                 {t("No")}
                               </Button>
                             </div>
@@ -717,17 +596,8 @@ const History = (props) => {
                         >
                           {t("Deleting project")}
                         </Grid>
-                        <Grid
-                          container
-                          item
-                          xs={12}
-                          justifyContent="center"
-                          alignItems="flex-start"
-                        >
-                          <div
-                            className={classes.loading}
-                            style={{ height: "150px" }}
-                          >
+                        <Grid container item xs={12} justifyContent="center" alignItems="flex-start">
+                          <div className={classes.loading} style={{ height: "150px" }}>
                             <CircularProgress size={20} />
                           </div>
                         </Grid>
@@ -736,11 +606,7 @@ const History = (props) => {
                   </div>
                 </Modal>
               </Grid>
-              <Modal
-                className={newClasses.serverModal}
-                open={renameServerModal}
-                onClose={renameServerModalClose}
-              >
+              <Modal className={newClasses.serverModal} open={renameServerModal} onClose={renameServerModalClose}>
                 <div
                   style={{
                     minWidth: "400px",
@@ -751,18 +617,9 @@ const History = (props) => {
                     background: "#212121",
                   }}
                 >
-                  <Grid style={{ margin: "10px" }}>
-                    {t("Submit Project Name")}
-                  </Grid>
+                  <Grid style={{ margin: "10px" }}>{t("Submit Project Name")}</Grid>
                   <Grid>
-                    <TextField
-                      id="inputJupyterNewName"
-                      fullWidth={true}
-                      onChange={(e) => setRenameText(e.target.value)}
-                      inputProps={{ className: newClasses.renameModalText }}
-                      variant="outlined"
-                      placeholder={t("Enter a new project name.")}
-                    />
+                    <TextField id="inputJupyterNewName" fullWidth={true} onChange={(e) => setRenameText(e.target.value)} inputProps={{ className: newClasses.renameModalText }} variant="outlined" placeholder={t("Enter a new project name.")} />
                   </Grid>
                   <Grid container justifyContent="center">
                     <Button
@@ -776,19 +633,11 @@ const History = (props) => {
                             projectName: renameText,
                           })
                           .then((res) => {
-                            dispatch(
-                              openSuccessSnackbarRequestAction(
-                                t("The project name has been changed.")
-                              )
-                            );
+                            dispatch(openSuccessSnackbarRequestAction(t("The project name has been changed.")));
                             setProjectName(renameText);
                           })
                           .catch((err) => {
-                            dispatch(
-                              openErrorSnackbarRequestAction(
-                                t("Failed to change project name.")
-                              )
-                            );
+                            dispatch(openErrorSnackbarRequestAction(t("Failed to change project name.")));
                           });
 
                         setRenameServerModal(false);
@@ -796,11 +645,7 @@ const History = (props) => {
                     >
                       {t("Change name")}
                     </Button>
-                    <Button
-                      id="cancelJupyterNewName"
-                      className={classes.defaultF0F0OutlineButton}
-                      onClick={() => setRenameServerModal(false)}
-                    >
+                    <Button id="cancelJupyterNewName" className={classes.defaultF0F0OutlineButton} onClick={() => setRenameServerModal(false)}>
                       {t("Cancel")}
                     </Button>
                   </Grid>
@@ -817,12 +662,7 @@ const History = (props) => {
               }}
             >
               {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                <Grid
-                  container
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{ height: "400px" }}
-                >
+                <Grid container justifyContent="center" alignItems="center" style={{ height: "400px" }}>
                   {statistic !== null ? (
                     <>
                       <div
@@ -853,15 +693,7 @@ const History = (props) => {
                           zIndex: "2",
                         }}
                       >
-                        <img
-                          ref={imgRef}
-                          className={
-                            statistic !== null
-                              ? classes.statisticImgBlock
-                              : classes.statisticImgNone
-                          }
-                          src={statistic}
-                        />
+                        <img ref={imgRef} className={statistic !== null ? classes.statisticImgBlock : classes.statisticImgNone} src={statistic} />
                       </div>
                     </>
                   ) : (
@@ -873,40 +705,12 @@ const History = (props) => {
               )}
             </Grid>
           </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            justifyContent="center"
-            alignItems="flex-start"
-            style={defaultStyles.Grid_bottom}
-          >
+          <Grid container item xs={12} justifyContent="center" alignItems="flex-start" style={defaultStyles.Grid_bottom}>
             {/*하단 : 서버 인터페이스 */}
 
-            <iframe
-              src={monitoring_url + "/tv.html"}
-              width="100%"
-              height="400"
-            />
-            <Grid
-              container
-              item
-              xs={12}
-              justifyContent="center"
-              alignItems="flex-start"
-              className={
-                process.env.REACT_APP_ENTERPRISE
-                  ? classes.bottomServer_enterprise
-                  : classes.bottomServer
-              }
-            >
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent="center"
-                alignItems="center"
-              >
+            <iframe src={monitoring_url + "/tv.html"} width="100%" height="400" />
+            <Grid container item xs={12} justifyContent="center" alignItems="flex-start" className={process.env.REACT_APP_ENTERPRISE ? classes.bottomServer_enterprise : classes.bottomServer}>
+              <Grid container item xs={12} justifyContent="center" alignItems="center">
                 <Table
                   style={{
                     width: "100%",
@@ -919,12 +723,7 @@ const History = (props) => {
                       {tableHeads.map((head, idx) => {
                         if (head.condition)
                           return (
-                            <TableCell
-                              key={`tableHeadCell_${idx}`}
-                              className={classes.tableHead}
-                              align="center"
-                              style={{ cursor: "default" }}
-                            >
+                            <TableCell key={`tableHeadCell_${idx}`} className={classes.tableHead} align="center" style={{ cursor: "default" }}>
                               <div className={classes.tableHeader}>
                                 <b>{t(head.label)}</b>
                               </div>
@@ -935,107 +734,49 @@ const History = (props) => {
                   </TableHead>
                   <TableBody
                     style={{
-                      height: process.env.REACT_APP_ENTERPRISE
-                        ? "58px"
-                        : "240px",
+                      height: process.env.REACT_APP_ENTERPRISE ? "58px" : "240px",
                       overflow: "scroll",
                     }}
                   >
                     {instances.map((instance, idx) => (
                       <TableRow
                         key={idx}
-                        className={
-                          selectedIndex === idx
-                            ? classes.tableFocused
-                            : classes.tableRow
-                        }
+                        className={selectedIndex === idx ? classes.tableFocused : classes.tableRow}
                         onClick={() => {
-                          if (
-                            deleteServerModal === false &&
-                            idx !== selectedIndex
-                          ) {
+                          if (deleteServerModal === false && idx !== selectedIndex) {
                             setSelectedIndex(idx);
                           }
                         }}
                       >
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          style={{ width: "10%" }}
-                        >
+                        <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
                           <div style={{ wordBreak: "break-all" }}>{idx}</div>
                         </TableCell>
                         {process.env.REACT_APP_ENTERPRISE !== "true" ? (
                           <>
-                            <TableCell
-                              className={classes.tableRowCell}
-                              align="center"
-                              style={{ width: "10%" }}
-                            >
-                              <div style={{ wordBreak: "break-all" }}>
-                                {instance.Placement?.AvailabilityZone}
-                              </div>
+                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                              <div style={{ wordBreak: "break-all" }}>{instance.Placement?.AvailabilityZone}</div>
                             </TableCell>
-                            <TableCell
-                              className={classes.tableRowCell}
-                              align="center"
-                              style={{ width: "10%" }}
-                            >
-                              <div style={{ wordBreak: "break-all" }}>
-                                {instance.InstanceId}
-                              </div>
+                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                              <div style={{ wordBreak: "break-all" }}>{instance.InstanceId}</div>
                             </TableCell>
-                            <TableCell
-                              className={classes.tableRowCell}
-                              align="center"
-                              style={{ width: "10%" }}
-                            >
-                              <div style={{ wordBreak: "break-all" }}>
-                                {instance.InstanceType}
-                              </div>
+                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                              <div style={{ wordBreak: "break-all" }}>{instance.InstanceType}</div>
                             </TableCell>
                           </>
                         ) : (
                           <>
-                            <TableCell
-                              className={classes.tableRowCell}
-                              align="center"
-                              style={{ width: "10%" }}
-                            >
-                              <div style={{ wordBreak: "break-all" }}>
-                                {instance.port}
-                              </div>
+                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                              <div style={{ wordBreak: "break-all" }}>{instance.port}</div>
                             </TableCell>
-                            <TableCell
-                              className={classes.tableRowCell}
-                              align="center"
-                              style={{ width: "10%" }}
-                            >
-                              <div style={{ wordBreak: "break-all" }}>
-                                {instance.gpu == "" ? t("All") : instance.gpu}
-                              </div>
+                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                              <div style={{ wordBreak: "break-all" }}>{instance.gpu == "" ? t("All") : instance.gpu}</div>
                             </TableCell>
                           </>
                         )}
 
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          style={{ width: "10%" }}
-                        >
-                          <div
-                            id="instanceStatus"
-                            style={{ wordBreak: "break-all" }}
-                          >
-                            {instance?.State?.Name == "running"
-                              ? t("running")
-                              : instance?.State?.Name == "pending"
-                              ? t("pending")
-                              : instance?.State?.Name == "stopping"
-                              ? t("stopping")
-                              : instance?.State?.Name == "stopped"
-                              ? t("stopped")
-                              : t("terminating") //terminated
+                        <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                          <div id="instanceStatus" style={{ wordBreak: "break-all" }}>
+                            {instance?.State?.Name == "running" ? t("running") : instance?.State?.Name == "pending" ? t("pending") : instance?.State?.Name == "stopping" ? t("stopping") : instance?.State?.Name == "stopped" ? t("stopped") : t("terminating") //terminated
                             }
                           </div>
                         </TableCell>
@@ -1075,32 +816,16 @@ const History = (props) => {
                           </div>
                         </TableCell> */}
                         {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                          <TableCell
-                            className={classes.tableRowCell}
-                            align="center"
-                            style={{ width: "10%" }}
-                          >
+                          <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
                             <Button
                               className={classes.defaultGreenOutlineButton}
                               onClick={() => {
-                                if (
-                                  ["running", "stopped"].indexOf(
-                                    instance?.State?.Name
-                                  ) !== -1
-                                ) {
+                                if (["running", "stopped"].indexOf(instance?.State?.Name) !== -1) {
                                   setServerStatusModal(true);
                                 }
                               }}
                             >
-                              {instance?.State?.Name == "running"
-                                ? t("stop")
-                                : instance?.State?.Name == "stopping"
-                                ? t("stopping")
-                                : instance?.State?.Name == "stopped"
-                                ? t("resume")
-                                : instance?.State?.Name == "pending"
-                                ? t("pending")
-                                : t("terminating")}
+                              {instance?.State?.Name == "running" ? t("stop") : instance?.State?.Name == "stopping" ? t("stopping") : instance?.State?.Name == "stopped" ? t("resume") : instance?.State?.Name == "pending" ? t("pending") : t("terminating")}
                             </Button>
                             <Modal
                               className={newClasses.serverModal}
@@ -1122,70 +847,35 @@ const History = (props) => {
                                 }}
                               >
                                 {t(switchStatus)}
-                                <div
-                                  className={classes.loading}
-                                  style={{ height: "150px" }}
-                                >
+                                <div className={classes.loading} style={{ height: "150px" }}>
                                   <CircularProgress size={20} />
                                 </div>
                               </div>
                             </Modal>
                           </TableCell>
                         )}
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          style={{ width: "10%" }}
-                        >
+                        <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
                           <Button
-                            className={
-                              instance?.State?.Name === "running"
-                                ? classes.defaultGreenOutlineButton
-                                : classes.defaultDisabledButton
-                            }
+                            className={instance?.State?.Name === "running" ? classes.defaultGreenOutlineButton : classes.defaultDisabledButton}
                             onClick={() => {
-                              instance?.State?.Name === "running" &&
-                                (process.env.REACT_APP_ENTERPRISE !== "true"
-                                  ? executeJupyter(instance.PublicIpAddress)
-                                  : executeJupyter(
-                                      backendurl.split("//")[1].split(":")[0],
-                                      instance.port
-                                    ));
+                              instance?.State?.Name === "running" && (process.env.REACT_APP_ENTERPRISE !== "true" ? executeJupyter(instance.PublicIpAddress) : executeJupyter(backendurl.split("//")[1].split(":")[0], instance.port));
                             }}
                           >
-                            {instance?.State?.Name == "running"
-                              ? t("Jupyter")
-                              : instance?.State?.Name == "pending"
-                              ? t("pending")
-                              : instance?.State?.Name == "stopping"
-                              ? t("stopping")
-                              : instance?.State?.Name == "stopped"
-                              ? t("stopped")
-                              : t("terminating") //terminated
+                            {instance?.State?.Name == "running" ? t("Jupyter") : instance?.State?.Name == "pending" ? t("pending") : instance?.State?.Name == "stopping" ? t("stopping") : instance?.State?.Name == "stopped" ? t("stopped") : t("terminating") //terminated
                             }
                           </Button>
                         </TableCell>
                         {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                          <TableCell
-                            className={classes.tableRowCell}
-                            align="center"
-                            style={{ width: "10%" }}
-                          >
+                          <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
                             <Button
                               id="jupyterDelete"
                               className={classes.defaultDeleteButton}
                               onClick={() => {
-                                ["pending", "terminated"].indexOf(
-                                  instance?.State.Name
-                                ) == -1 && setDeleteServerModal(true);
+                                ["pending", "terminated"].indexOf(instance?.State.Name) == -1 && setDeleteServerModal(true);
                               }}
                               style={{ color: "red", borderColor: "red" }}
                             >
-                              {instance?.State?.Name == "pending"
-                                ? t("pending")
-                                : instance?.State?.Name == "terminated"
-                                ? t("terminating")
-                                : t("Terminate")}
+                              {instance?.State?.Name == "pending" ? t("pending") : instance?.State?.Name == "terminated" ? t("terminating") : t("Terminate")}
                             </Button>
                             <Modal
                               className={newClasses.serverModal}
@@ -1203,13 +893,7 @@ const History = (props) => {
                                 }}
                               >
                                 {deleteLoading !== true ? (
-                                  <Grid
-                                    container
-                                    item
-                                    xs={12}
-                                    justifyContent="center"
-                                    alignItems="center"
-                                  >
+                                  <Grid container item xs={12} justifyContent="center" alignItems="center">
                                     <Grid
                                       container
                                       item
@@ -1275,18 +959,10 @@ const History = (props) => {
                                           className: newClasses.deleteModalText,
                                         }}
                                         variant="outlined"
-                                        placeholder={t(
-                                          "'Delete'를 정확히 입력하세요."
-                                        )}
+                                        placeholder={t("Enter 'Delete' correctly.")}
                                       />
                                     </Grid>
-                                    <Grid
-                                      container
-                                      item
-                                      xs={11}
-                                      justifyContent="flex-start"
-                                      alignItems="flex-start"
-                                    >
+                                    <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">
                                       <div style={{ wordBreak: "break-all" }}>
                                         <div
                                           style={{
@@ -1296,24 +972,13 @@ const History = (props) => {
                                           }}
                                         >
                                           <Button
-                                            className={
-                                              classes.defaultGreenOutlineButton
-                                            }
+                                            className={classes.defaultGreenOutlineButton}
                                             style={{ textAlign: "center" }}
                                             onClick={() => {
-                                              if (
-                                                deleteText == "Delete" &&
-                                                deleteLoading == false &&
-                                                instance.State.Name !==
-                                                  "shutting-down"
-                                              ) {
+                                              if (deleteText == "Delete" && deleteLoading == false && instance.State.Name !== "shutting-down") {
                                                 setDeleteLoading(true);
-                                                shutdownJupyter(
-                                                  instances[selectedIndex]
-                                                );
-                                                instances[
-                                                  selectedIndex
-                                                ].State.Name = "shutting-down";
+                                                shutdownJupyter(instances[selectedIndex]);
+                                                instances[selectedIndex].State.Name = "shutting-down";
                                                 setDeleteTextError(false);
                                                 //setDeleteServerModal(false); 로딩 끝나면 닫기
                                               } else {
@@ -1333,13 +998,7 @@ const History = (props) => {
                                             justifyContent: "center",
                                           }}
                                         >
-                                          <Button
-                                            className={
-                                              classes.defaultF0F0OutlineButton
-                                            }
-                                            style={{ textAlign: "center" }}
-                                            onClick={deleteServerModalClose}
-                                          >
+                                          <Button className={classes.defaultF0F0OutlineButton} style={{ textAlign: "center" }} onClick={deleteServerModalClose}>
                                             {t("No")}
                                           </Button>
                                         </div>
@@ -1388,17 +1047,8 @@ const History = (props) => {
                                         {t("Updating project information")}
                                       </Grid>
                                     )}
-                                    <Grid
-                                      container
-                                      item
-                                      xs={12}
-                                      justifyContent="center"
-                                      alignItems="flex-start"
-                                    >
-                                      <div
-                                        className={classes.loading}
-                                        style={{ height: "150px" }}
-                                      >
+                                    <Grid container item xs={12} justifyContent="center" alignItems="flex-start">
+                                      <div className={classes.loading} style={{ height: "150px" }}>
                                         <CircularProgress size={20} />
                                       </div>
                                     </Grid>
@@ -1412,10 +1062,7 @@ const History = (props) => {
                     ))}
                     {project && process.env.REACT_APP_ENTERPRISE !== "true" && (
                       <TableRow className={classes.tableRow}>
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                        >
+                        <TableCell className={classes.tableRowCell} align="center">
                           <Button
                             id="jupyterInstanceCreate"
                             className={classes.defaultGreenOutlineButton}
@@ -1441,20 +1088,8 @@ const History = (props) => {
               // }}
               className={classes.modalContainer}
             >
-              <Grid
-                item
-                container
-                xs={12}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Grid
-                  item
-                  container
-                  xs={10}
-                  justifyContent="center"
-                  alignItems="center"
-                >
+              <Grid item container xs={12} justifyContent="center" alignItems="center">
+                <Grid item container xs={10} justifyContent="center" alignItems="center">
                   <div
                     style={{
                       marginLeft: `${(100 * 5) / 6}vw`,
@@ -1476,11 +1111,7 @@ const History = (props) => {
                 </Grid>
               </Grid>
             </Modal>
-            <Modal
-              className={newClasses.serverModal}
-              style={{ backgroundColor: "#11ffee00;" }}
-              open={serverStatusModal}
-            >
+            <Modal className={newClasses.serverModal} style={{ backgroundColor: "#11ffee00;" }} open={serverStatusModal}>
               <div
                 style={{
                   width: "400px",
@@ -1491,13 +1122,7 @@ const History = (props) => {
                   borderColor: "#373738",
                 }}
               >
-                <Grid
-                  container
-                  item
-                  xs={12}
-                  justifyContent="center"
-                  alignItems="center"
-                >
+                <Grid container item xs={12} justifyContent="center" alignItems="center">
                   <Grid
                     container
                     item
@@ -1510,17 +1135,9 @@ const History = (props) => {
                       marginBottom: "20px",
                     }}
                   >
-                    {instances[selectedIndex]?.State?.Name === "running"
-                      ? t("Do you want to stop the server?")
-                      : t("Do you want to resume the server?")}
+                    {instances[selectedIndex]?.State?.Name === "running" ? t("Do you want to stop the server?") : t("Do you want to resume the server?")}
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={11}
-                    justifyContent="center"
-                    alignItems="flex-start"
-                  >
+                  <Grid container item xs={11} justifyContent="center" alignItems="flex-start">
                     <div style={{ wordBreak: "break-all" }}>
                       <div
                         style={{
@@ -1529,97 +1146,52 @@ const History = (props) => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Grid
-                          container
-                          item
-                          xs={12}
-                          justifyContent="space-evenly"
-                          alignItems="center"
-                          style={{ marginTop: "5px" }}
-                        >
+                        <Grid container item xs={12} justifyContent="space-evenly" alignItems="center" style={{ marginTop: "5px" }}>
                           <Button
                             style={{ color: "#FFFFFF", marginRight: "10px" }}
                             onClick={() => {
-                              if (
-                                instances[selectedIndex]?.State?.Name ===
-                                "running"
-                              ) {
+                              if (instances[selectedIndex]?.State?.Name === "running") {
                                 setIsSwitchLoading(true);
                                 setSwitchStatus("서버를 중지중입니다.");
                                 api
-                                  .stopJupyterServer(
-                                    instances[selectedIndex].InstanceId
-                                  )
+                                  .stopJupyterServer(instances[selectedIndex].InstanceId)
                                   .then(() => {
                                     api
-                                      .getJupyterServerStatus(
-                                        props.match.params.id
-                                      )
+                                      .getJupyterServerStatus(props.match.params.id)
                                       .then((res) => {
                                         setInstances(res.data);
                                         setIsSwitchLoading(false);
                                         setServerStatusModal(false);
                                       })
                                       .catch((err) => {
-                                        dispatch(
-                                          openErrorSnackbarRequestAction(
-                                            user.language == "ko"
-                                              ? err?.response?.data?.message
-                                              : err?.response?.data?.message_en
-                                          )
-                                        );
+                                        dispatch(openErrorSnackbarRequestAction(user.language == "ko" ? err?.response?.data?.message : err?.response?.data?.message_en));
                                         setIsSwitchLoading(false);
                                       });
                                   })
                                   .catch((err) => {
-                                    dispatch(
-                                      openErrorSnackbarRequestAction(
-                                        user.language == "ko"
-                                          ? err?.response?.data?.message
-                                          : err?.response?.data?.message_en
-                                      )
-                                    );
+                                    dispatch(openErrorSnackbarRequestAction(user.language == "ko" ? err?.response?.data?.message : err?.response?.data?.message_en));
                                     setIsSwitchLoading(false);
                                   });
-                              } else if (
-                                instances[selectedIndex]?.State?.Name ===
-                                "stopped"
-                              ) {
+                              } else if (instances[selectedIndex]?.State?.Name === "stopped") {
                                 setIsSwitchLoading(true);
                                 setSwitchStatus("서버를 재개중입니다.");
                                 api
-                                  .resumeJupyterServer(
-                                    instances[selectedIndex].InstanceId
-                                  )
+                                  .resumeJupyterServer(instances[selectedIndex].InstanceId)
                                   .then(() => {
                                     api
-                                      .getJupyterServerStatus(
-                                        props.match.params.id
-                                      )
+                                      .getJupyterServerStatus(props.match.params.id)
                                       .then((res) => {
                                         setInstances(res.data);
                                         setIsSwitchLoading(false);
                                         setServerStatusModal(false);
                                       })
                                       .catch((err) => {
-                                        dispatch(
-                                          openErrorSnackbarRequestAction(
-                                            user.language == "ko"
-                                              ? err?.response?.data?.message
-                                              : err?.response?.data?.message_en
-                                          )
-                                        );
+                                        dispatch(openErrorSnackbarRequestAction(user.language == "ko" ? err?.response?.data?.message : err?.response?.data?.message_en));
                                         setIsSwitchLoading(false);
                                       });
                                   })
                                   .catch((err) => {
-                                    dispatch(
-                                      openErrorSnackbarRequestAction(
-                                        user.language == "ko"
-                                          ? err?.response?.data?.message
-                                          : err?.response?.data?.message_en
-                                      )
-                                    );
+                                    dispatch(openErrorSnackbarRequestAction(user.language == "ko" ? err?.response?.data?.message : err?.response?.data?.message_en));
                                     setIsSwitchLoading(false);
                                   });
                               } else {
@@ -1628,10 +1200,7 @@ const History = (props) => {
                           >
                             {t("Yes")}
                           </Button>
-                          <Button
-                            style={{ color: "#FFFFFF", marginLeft: "10px" }}
-                            onClick={serverStatusModalClose}
-                          >
+                          <Button style={{ color: "#FFFFFF", marginLeft: "10px" }} onClick={serverStatusModalClose}>
                             {t("No")}
                           </Button>
                         </Grid>
@@ -1644,13 +1213,7 @@ const History = (props) => {
           </Grid>
         </Grid>
       ) : (
-        <Grid
-          container
-          item
-          xs={12}
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Grid container item xs={12} justifyContent="center" alignItems="center">
           <div className={classes.loading}>
             <CircularProgress />
           </div>

@@ -21,11 +21,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-  setMainPageSettingRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction, setMainPageSettingRequestAction } from "redux/reducers/messages.js";
 import { getProjectRequestAction } from "redux/reducers/projects.js";
 import { getModelRequestAction } from "redux/reducers/models.js";
 import { useTranslation } from "react-i18next";
@@ -119,23 +115,13 @@ const Sample = React.memo((props) => {
   const onSetSampleData = () => {
     let sampleDataRaw = {};
 
-    if (
-      projects.project.trainingMethod === "image" ||
-      projects.project.trainingMethod === "object_detection" ||
-      projects.project.trainingMethod === "cycle_gan"
-    ) {
+    if (projects.project.trainingMethod === "image" || projects.project.trainingMethod === "object_detection" || projects.project.trainingMethod === "cycle_gan") {
       setSelectedPage("rawdata");
     }
 
-    projects.project &&
-      projects.project.timeSeriesColumnInfo &&
-      setTimeSeriesColumnInfo(projects.project.timeSeriesColumnInfo);
-    projects.project &&
-      projects.project.preprocessingInfo &&
-      setPreprocessingInfo(projects.project.preprocessingInfo);
-    projects.project &&
-      projects.project.preprocessingInfoValue &&
-      setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
+    projects.project && projects.project.timeSeriesColumnInfo && setTimeSeriesColumnInfo(projects.project.timeSeriesColumnInfo);
+    projects.project && projects.project.preprocessingInfo && setPreprocessingInfo(projects.project.preprocessingInfo);
+    projects.project && projects.project.preprocessingInfoValue && setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
 
     if (projects.project.trainingColumnInfo) {
       var trainingColumnInfoRaw = {};
@@ -149,9 +135,7 @@ const Sample = React.memo((props) => {
       var trainingColumnInfoRaw = {};
       JSON.parse(projects.project.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
-          trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(
-            columnInfo.use
-          );
+          trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(columnInfo.use);
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
@@ -167,20 +151,15 @@ const Sample = React.memo((props) => {
         dataconnector.datacolumns &&
           dataconnector.datacolumns.map((datacolumn) => {
             datacolumn.dataconnectorName = dataconnector.dataconnectorName;
-            datacolumn.length =
-              dataconnector.yClass && dataconnector.yClass.length;
+            datacolumn.length = dataconnector.yClass && dataconnector.yClass.length;
             datacolumnsRaw.push(datacolumn);
           });
-        sampleDataRaw[dataconnector.dataconnectorName] =
-          dataconnector.sampleData;
+        sampleDataRaw[dataconnector.dataconnectorName] = dataconnector.sampleData;
         if (dataconnector.fileSize) fileSizeRaw += dataconnector.fileSize;
       });
     setSampleData(sampleDataRaw);
 
-    if (
-      !(datacolumnsRaw && datacolumnsRaw.length > 0) &&
-      projects.project.fileStructure
-    ) {
+    if (!(datacolumnsRaw && datacolumnsRaw.length > 0) && projects.project.fileStructure) {
       datacolumnsRaw = JSON.parse(projects.project.fileStructure);
     }
     setdatacolumns(datacolumnsRaw);
@@ -188,11 +167,7 @@ const Sample = React.memo((props) => {
 
   const startProcess = () => {
     document.getElementById("opacityDiv").style.visibility = "visible";
-    dispatch(
-      openSuccessSnackbarRequestAction(
-        t("AI modeling is imported using sample data.")
-      )
-    );
+    dispatch(openSuccessSnackbarRequestAction(t("AI modeling is imported using sample data.")));
     setSelectedPage("model");
     setProjectStatus(1);
     setModelPercentage(10);
@@ -264,9 +239,7 @@ const Sample = React.memo((props) => {
       {isLoading || projects.isLoading ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />
-          <div style={{ fontSize: 15 }}>
-            {t("Loading sample data. Please wait.")}
-          </div>
+          <div style={{ fontSize: 15 }}>{t("Loading sample data. Please wait.")}</div>
         </div>
       ) : (
         <Grid container sx={{ mt: "30px" }}>
@@ -279,11 +252,9 @@ const Sample = React.memo((props) => {
             <div style={{ margin: "10px 10px 0 10px" }}>
               {projects.project.description &&
                 (projects.project.description.includes("\\n")
-                  ? projects.project.description
-                      .split("\\n")
-                      .map((sentence, idx) => {
-                        return <div key={idx}>{sentence}</div>;
-                      })
+                  ? projects.project.description.split("\\n").map((sentence, idx) => {
+                      return <div key={idx}>{sentence}</div>;
+                    })
                   : projects.project.description)}
             </div>
             {/* <Button id='goBackToProject' className={classes.backButton} onClick={()=>{dispatch(askGoToMainPageRequestAction());}}>
@@ -317,12 +288,7 @@ const Sample = React.memo((props) => {
             }}
           >
             <GridItem xs={6}>
-              <Container
-                component="main"
-                maxWidth="false"
-                className={classes.processMainCard}
-                style={{ padding: 24 }}
-              >
+              <Container component="main" maxWidth="false" className={classes.processMainCard} style={{ padding: 24 }}>
                 <GridContainer>
                   <GridItem xs={12} lg={10} style={{ marginBottom: 20 }}>
                     <p className={classes.text87size16}>
@@ -331,26 +297,12 @@ const Sample = React.memo((props) => {
                     </p>
                     <FormControl
                       onClick={() => {
-                        dispatch(
-                          openErrorSnackbarRequestAction(
-                            t("You cannot make changes to sample data.")
-                          )
-                        );
+                        dispatch(openErrorSnackbarRequestAction(t("You cannot make changes to sample data.")));
                       }}
                       className={classes.formControl}
                     >
-                      <Select
-                        labelid="demo-simple-select-outlined-label"
-                        id="disabledSelectBox"
-                        value={projects.project.valueForPredict}
-                        disabled={true}
-                        className={classes.selectForm}
-                      >
-                        {projects.project && (
-                          <MenuItem value={projects.project.valueForPredict}>
-                            {projects.project.valueForPredict}
-                          </MenuItem>
-                        )}
+                      <Select labelid="demo-simple-select-outlined-label" id="disabledSelectBox" value={projects.project.valueForPredict} disabled={true} className={classes.selectForm}>
+                        {projects.project && <MenuItem value={projects.project.valueForPredict}>{projects.project.valueForPredict}</MenuItem>}
                       </Select>
                     </FormControl>
                   </GridItem>
@@ -359,17 +311,10 @@ const Sample = React.memo((props) => {
                       {t("Preferred Method")}
                       {handleHelpIconTip("option")}
                     </p>
-                    <FormControl
-                      component="fieldset"
-                      id="optionForPredictSelectBox"
-                    >
+                    <FormControl component="fieldset" id="optionForPredictSelectBox">
                       <RadioGroup
                         onChange={() => {
-                          dispatch(
-                            openErrorSnackbarRequestAction(
-                              t("You cannot make changes to sample data.")
-                            )
-                          );
+                          dispatch(openErrorSnackbarRequestAction(t("You cannot make changes to sample data.")));
                         }}
                         row
                         aria-label="position"
@@ -378,43 +323,15 @@ const Sample = React.memo((props) => {
                         value={projects.project.option}
                       >
                         {/*<FormControlLabel value="colab" control={<Radio color="primary" />} label={t('Magic Code')} /><br/>*/}
-                        <FormControlLabel
-                          value="accuracy"
-                          control={
-                            <Radio
-                              color="primary"
-                              style={{ marginRight: "0px" }}
-                            />
-                          }
-                          label={t("Higher accuracy")}
-                          style={{ margin: 0, marginRight: "8px" }}
-                        />
-                        <span
-                          style={{ fontSize: "10px", marginRight: "24px" }}
-                          className={classes.modelTabFirstButton}
-                        >
+                        <FormControlLabel value="accuracy" control={<Radio color="primary" style={{ marginRight: "0px" }} />} label={t("Higher accuracy")} style={{ margin: 0, marginRight: "8px" }} />
+                        <span style={{ fontSize: "10px", marginRight: "24px" }} className={classes.modelTabFirstButton}>
                           Enterprise
                         </span>
-                        <FormControlLabel
-                          value="speed"
-                          control={<Radio color="primary" />}
-                          label={t("Faster training speed")}
-                          style={{ margin: 0, marginRight: "8px" }}
-                        />
-                        <span
-                          style={{ fontSize: "10px", marginRight: "24px" }}
-                          className={classes.modelTabFirstButton}
-                        >
+                        <FormControlLabel value="speed" control={<Radio color="primary" />} label={t("Faster training speed")} style={{ margin: 0, marginRight: "8px" }} />
+                        <span style={{ fontSize: "10px", marginRight: "24px" }} className={classes.modelTabFirstButton}>
                           Enterprise
                         </span>
-                        {projects.project.option === "labeling" && (
-                          <FormControlLabel
-                            value="labeling"
-                            control={<Radio color="primary" />}
-                            label={t("Auto-labeling")}
-                            style={{ margin: 0, marginRight: "8px" }}
-                          />
-                        )}
+                        {projects.project.option === "labeling" && <FormControlLabel value="labeling" control={<Radio color="primary" />} label={t("Auto-labeling")} style={{ margin: 0, marginRight: "8px" }} />}
                       </RadioGroup>
                     </FormControl>
                   </GridItem>
@@ -425,42 +342,20 @@ const Sample = React.memo((props) => {
                     </p>
                     <FormControl
                       onClick={() => {
-                        dispatch(
-                          openErrorSnackbarRequestAction(
-                            t("You cannot make changes to sample data.")
-                          )
-                        );
+                        dispatch(openErrorSnackbarRequestAction(t("You cannot make changes to sample data.")));
                       }}
                       className={classes.formControl}
                     >
-                      <Select
-                        labelid="demo-simple-select-outlined-label"
-                        value={projects.project.trainingMethod}
-                        disabled={true}
-                        id="disabledSelectBox"
-                        style={{ marginBottom: "8px" }}
-                      >
-                        <MenuItem value="normal">
-                          {t("structured data classification")}
-                        </MenuItem>
-                        <MenuItem value="normal_classification">
-                          {t("Structured Data Category Classification")}
-                        </MenuItem>
-                        <MenuItem value="normal_regression">
-                          {t("Structured Data Regression")}
-                        </MenuItem>
+                      <Select labelid="demo-simple-select-outlined-label" value={projects.project.trainingMethod} disabled={true} id="disabledSelectBox" style={{ marginBottom: "8px" }}>
+                        <MenuItem value="normal">{t("structured data classification")}</MenuItem>
+                        <MenuItem value="normal_classification">{t("Structured Data Category Classification")}</MenuItem>
+                        <MenuItem value="normal_regression">{t("Structured Data Regression")}</MenuItem>
                         <MenuItem value="text">{t("Natural Language Processing (NLP)")}</MenuItem>
                         <MenuItem value="image">{t("Image Classification")}</MenuItem>
-                        <MenuItem value="object_detection">
-                          {t("Object Detection")}
-                        </MenuItem>
+                        <MenuItem value="object_detection">{t("Object Detection")}</MenuItem>
                         {/* <MenuItem value='cycle_gan' >{t('Generative Adversarial Network (GAN)')}</MenuItem> */}
-                        <MenuItem value="time_series">
-                          {t("Time Series Prediction")}
-                        </MenuItem>
-                        <MenuItem value="recommender">
-                          {t("Recommendation system (matrix)")}
-                        </MenuItem>
+                        <MenuItem value="time_series">{t("Time Series Prediction")}</MenuItem>
+                        <MenuItem value="recommender">{t("Recommendation system (matrix)")}</MenuItem>
                       </Select>
                       {projects.project.trainingMethod === "normal" && (
                         <p className={classes.settingFontWhite6}>
@@ -477,8 +372,7 @@ const Sample = React.memo((props) => {
                           {t("Training Method")} - {t("이미지 분류")}
                         </p>
                       )}
-                      {projects.project.trainingMethod ===
-                        "object_detection" && (
+                      {projects.project.trainingMethod === "object_detection" && (
                         <p className={classes.settingFontWhite6}>
                           {t("Training Method")} - {t("물체 인식")}
                         </p>
@@ -488,22 +382,8 @@ const Sample = React.memo((props) => {
                           {t("Training Method")} - {t("이미지 생성(GAN)")}
                         </p>
                       )} */}
-                      {projects.project.trainingMethod ===
-                        "normal_classification" && (
-                        <p className={classes.settingFontWhite6}>
-                          {t(
-                            "'개', '고양이'등 카테고리에 맞춰 예측해주는 기능입니다."
-                          )}
-                        </p>
-                      )}
-                      {projects.project.trainingMethod ===
-                        "normal_regression" && (
-                        <p className={classes.settingFontWhite6}>
-                          {t(
-                            "'1~10'사이의 값등 연속된 값에 맞춰 예측해주는 기능입니다."
-                          )}{" "}
-                        </p>
-                      )}
+                      {projects.project.trainingMethod === "normal_classification" && <p className={classes.settingFontWhite6}>{t("This function predicts each category such as 'dog', 'cat', etc.")}</p>}
+                      {projects.project.trainingMethod === "normal_regression" && <p className={classes.settingFontWhite6}>{t("This function predicts continuous values, such as values between 1 and 10")} </p>}
                       {projects.project.trainingMethod === "time_series" && (
                         <p className={classes.settingFontWhite6}>
                           {t("Training Method")} - {t("시계열 예측")}
@@ -521,34 +401,20 @@ const Sample = React.memo((props) => {
             </GridItem>
             <GridItem xs={6} style={{ display: "flex", alignItems: "center" }}>
               <Container component="main" maxWidth="false">
-                <div
-                  className={classes.addressContainer}
-                  style={{ minHeight: "360px" }}
-                >
+                <div className={classes.addressContainer} style={{ minHeight: "360px" }}>
                   {projectStatus === 0 ? (
                     <>
                       <div className={classes.opacityDiv} id="opacityDiv"></div>
                       <div className={classes.circleDiv}>
-                        <b
-                          className={classes.textDiv}
-                          onMouseEnter={onMakeCircleOpacity}
-                          onMouseLeave={onBackCircleOpacity}
-                          onClick={startProcess}
-                        >
+                        <b className={classes.textDiv} onMouseEnter={onMakeCircleOpacity} onMouseLeave={onBackCircleOpacity} onClick={startProcess}>
                           START
                         </b>
-                        <StartCircle
-                          projectStatus={projectStatus}
-                          id="startProcess"
-                        />
+                        <StartCircle projectStatus={projectStatus} id="startProcess" />
                       </div>
                     </>
                   ) : isPredictDone ? (
                     <div className={classes.circleDiv}>
-                      <StartCircle
-                        projectStatus={projectStatus}
-                        id="startProcess"
-                      />
+                      <StartCircle projectStatus={projectStatus} id="startProcess" />
                     </div>
                   ) : (
                     <div className={classes.circleDiv}>
@@ -560,14 +426,8 @@ const Sample = React.memo((props) => {
             </GridItem>
           </GridContainer>
           <GridContainer style={{ height: "20px" }}></GridContainer>
-          <GridContainer
-            style={{ borderTop: "1px solid " + currentTheme.border2 }}
-          >
-            <GridItem
-              xs={8}
-              lg={10}
-              style={{ marginTop: "20px", display: "flex" }}
-            >
+          <GridContainer style={{ borderTop: "1px solid " + currentTheme.border2 }}>
+            <GridItem xs={8} lg={10} style={{ marginTop: "20px", display: "flex" }}>
               {/*<div*/}
               {/*  onClick={handleChange}*/}
               {/*  id="rawdata"*/}
@@ -579,62 +439,28 @@ const Sample = React.memo((props) => {
               {/*>*/}
               {/*  {t("Data")}*/}
               {/*</div>*/}
-              {!(
-                projects.project.trainingMethod === "image" ||
-                projects.project.trainingMethod === "object_detection" ||
-                projects.project.trainingMethod === "cycle_gan"
-              ) && (
-                <div
-                  onClick={handleChange}
-                  id="summary"
-                  className={
-                    selectedPage === "summary"
-                      ? classes.selectedTab
-                      : classes.notSelectedTab
-                  }
-                >
+              {!(projects.project.trainingMethod === "image" || projects.project.trainingMethod === "object_detection" || projects.project.trainingMethod === "cycle_gan") && (
+                <div onClick={handleChange} id="summary" className={selectedPage === "summary" ? classes.selectedTab : classes.notSelectedTab}>
                   {t("Summary")}
                 </div>
               )}
               {(projectStatus > 0 || isAnyModelFinished) && (
-                <div
-                  onClick={handleChange}
-                  id="model"
-                  className={
-                    selectedPage === "model"
-                      ? classes.selectedTab + " "
-                      : selectedPage === "detail" ||
-                        selectedPage === "analytics"
-                      ? classes.notSelectedTab
-                      : classes.notSelectedTab
-                  }
-                >
+                <div onClick={handleChange} id="model" className={selectedPage === "model" ? classes.selectedTab + " " : selectedPage === "detail" || selectedPage === "analytics" ? classes.notSelectedTab : classes.notSelectedTab}>
                   {t("Model")}
                 </div>
               )}
               {selectedPage === "detail" && (
-                <div
-                  onClick={handleChange}
-                  id="detail"
-                  className={classes.selectedTab}
-                >
+                <div onClick={handleChange} id="detail" className={classes.selectedTab}>
                   {t("Details")}
                 </div>
               )}
               {selectedPage === "analytics" && (
-                <div
-                  id="analytics"
-                  className={classes.selectedTab + " " + classes.lastTab}
-                >
+                <div id="analytics" className={classes.selectedTab + " " + classes.lastTab}>
                   {t("Analysis")}
                 </div>
               )}
             </GridItem>
-            <GridItem
-              xs={4}
-              lg={2}
-              style={{ marginTop: "20px", display: "flex" }}
-            >
+            <GridItem xs={4} lg={2} style={{ marginTop: "20px", display: "flex" }}>
               <div className={classes.predictCountDiv}>
                 {/* {user.me && (
                   <div style={{ width: "100%" }}>
@@ -666,11 +492,7 @@ const Sample = React.memo((props) => {
               </div>
             </GridItem>
           </GridContainer>
-          <Container
-            component="main"
-            maxWidth="false"
-            className={classes.mainCard}
-          >
+          <Container component="main" maxWidth="false" className={classes.mainCard}>
             <GridContainer>
               {/*{selectedPage === "rawdata" && (*/}
               {/*  <RawDataTable category="sample" sampleData={sampleData} />*/}
@@ -690,43 +512,15 @@ const Sample = React.memo((props) => {
                   handleIsTimeSeries={handleIsTimeSeries}
                 />
               )}
-              {selectedPage === "model" && (
-                <ModelTable
-                  category="sample"
-                  projectStatus={projectStatus}
-                  csv={datacolumns}
-                  trainingColumnInfo={trainingColumnInfo}
-                  history={props.history}
-                  isAnyModelFinished={isAnyModelFinished}
-                  setIsAnyModelFinished={setIsAnyModelFinished}
-                />
-              )}
-              {selectedPage === "detail" && (
-                <Detail datacolumns={datacolumns} />
-              )}
-              {selectedPage === "analytics" && (
-                <Analytics
-                  valueForPredictName={projects.project.valueForPredict}
-                  csv={datacolumns}
-                  trainingColumnInfo={trainingColumnInfo}
-                  history={props.history}
-                />
-              )}
+              {selectedPage === "model" && <ModelTable category="sample" projectStatus={projectStatus} csv={datacolumns} trainingColumnInfo={trainingColumnInfo} history={props.history} isAnyModelFinished={isAnyModelFinished} setIsAnyModelFinished={setIsAnyModelFinished} />}
+              {selectedPage === "detail" && <Detail datacolumns={datacolumns} />}
+              {selectedPage === "analytics" && <Analytics valueForPredictName={projects.project.valueForPredict} csv={datacolumns} trainingColumnInfo={trainingColumnInfo} history={props.history} />}
             </GridContainer>
           </Container>
         </Grid>
       )}
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isTooltipModalOpen}
-        onClose={closeTooltipModalOpen}
-        className={classes.modalContainer}
-      >
-        <Tooltip
-          tooltipCategory={tooltipCategory}
-          closeTooltipModalOpen={closeTooltipModalOpen}
-        />
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isTooltipModalOpen} onClose={closeTooltipModalOpen} className={classes.modalContainer}>
+        <Tooltip tooltipCategory={tooltipCategory} closeTooltipModalOpen={closeTooltipModalOpen} />
       </Modal>
     </div>
   );

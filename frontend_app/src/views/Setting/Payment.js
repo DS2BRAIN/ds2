@@ -3,10 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import * as api from "controller/api.js";
 import { getCardRequestAction } from "redux/reducers/user.js";
-import {
-  openSuccessSnackbarRequestAction,
-  openErrorSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { openSuccessSnackbarRequestAction, openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
 import Cookies from "helpers/Cookies";
 import currentTheme from "assets/jss/custom.js";
 import { convertToLocalDateStr } from "components/Function/globalFunc.js";
@@ -15,21 +12,11 @@ import { IS_ENTERPRISE } from "variables/common";
 
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import {
-  Modal,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TablePagination,
-} from "@material-ui/core";
+import { Modal, Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from "@material-ui/core";
 import { CircularProgress, Container, Grid } from "@mui/material";
 
-const TEST_CLIENT =
-  "AXhvfOLCYT3v9RdqL4xlEAtsFNhjS9EfxJjqVwasDH4S-YunYHroWdWRflCWfsBhSHO9FJH03xu__pTH";
-const CONSOLE_CLIENT =
-  "AW0HlGqynLRhTTNBk23S-_o3hkzqhimbU32Uq6S56n0Hk7HEVHxvOuqMXQBHqomTjSGbEcwh-i36lMnZ";
+const TEST_CLIENT = "AXhvfOLCYT3v9RdqL4xlEAtsFNhjS9EfxJjqVwasDH4S-YunYHroWdWRflCWfsBhSHO9FJH03xu__pTH";
+const CONSOLE_CLIENT = "AW0HlGqynLRhTTNBk23S-_o3hkzqhimbU32Uq6S56n0Hk7HEVHxvOuqMXQBHqomTjSGbEcwh-i36lMnZ";
 
 const Payment = ({ history }) => {
   const classes = currentTheme();
@@ -40,14 +27,8 @@ const Payment = ({ history }) => {
   const [postPaymentBillings, setPostPaymentBillings] = useState([]);
   const [prePaymentHistoryPage, setPrePaymentHistoryPage] = useState(0);
   const [postPaymentHistoryPage, setPostPaymentHistoryPage] = useState(0);
-  const [
-    rowsPerPrePaymentHistoryPage,
-    setRowsPerPrePaymentHistoryPage,
-  ] = useState(10);
-  const [
-    rowsPerPostPaymentHistoryPage,
-    setRowsPerPostPaymentHistoryPage,
-  ] = useState(10);
+  const [rowsPerPrePaymentHistoryPage, setRowsPerPrePaymentHistoryPage] = useState(10);
+  const [rowsPerPostPaymentHistoryPage, setRowsPerPostPaymentHistoryPage] = useState(10);
   const [cardRequestModalOpen, setCardRequestModalOpen] = useState(false);
   const [eximbayParamsNames, setEximbayParamsNames] = useState(null);
   const [eximbayParams, setEximbayParams] = useState(null);
@@ -140,38 +121,20 @@ const Payment = ({ history }) => {
       dispatch(openSuccessSnackbarRequestAction(t("Charging failed.")));
     }
     if (url.indexOf("?message=true") !== -1) {
-      dispatch(
-        openSuccessSnackbarRequestAction(t("You have successfully registered your card."))
-      );
+      dispatch(openSuccessSnackbarRequestAction(t("You have successfully registered your card.")));
     }
     if (url.indexOf("?message=duplicate") !== -1) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("This card has already been registered. Please try a different card.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("This card has already been registered. Please try a different card.")));
     }
     if (url.indexOf("?message=false") !== -1) {
-      dispatch(
-        openErrorSnackbarRequestAction(t("Failed to register the card."))
-      );
+      dispatch(openErrorSnackbarRequestAction(t("Failed to register the card.")));
     }
     if (url.indexOf("?message=need") !== -1) {
-      dispatch(
-        openSuccessSnackbarRequestAction(
-          t("You can use the service after registering your card.")
-        )
-      );
+      dispatch(openSuccessSnackbarRequestAction(t("You can use the service after registering your card.")));
       setCardRequestModalOpen(true);
     }
     if (url.indexOf("?cardRequest=true") !== -1) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          `${t("")} ${t(
-            parsed.message
-          )}`
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(`${t("")} ${t(parsed.message)}`));
 
       // dispatch(
       //   openErrorSnackbarRequestAction(
@@ -212,9 +175,7 @@ const Payment = ({ history }) => {
 
   const handleChange = (event, year, month) => {
     event.preventDefault();
-    history.push(
-      `/admin/setting/${event.currentTarget.id}?year=${year}&month=${month}`
-    );
+    history.push(`/admin/setting/${event.currentTarget.id}?year=${year}&month=${month}`);
     window.scrollTo(0, 0);
   };
 
@@ -291,12 +252,7 @@ const Payment = ({ history }) => {
       <CircularProgress />
     </div>
   ) : (
-    <Container
-      component="main"
-      maxWidth="false"
-      disableGutters
-      className={classes.mainCard}
-    >
+    <Container component="main" maxWidth="false" disableGutters className={classes.mainCard}>
       {/* <CreditChargeButton history={history} setIsLoading={setIsLoading} /> */}
       <Grid
         container
@@ -310,27 +266,11 @@ const Payment = ({ history }) => {
         </Grid>
         <Grid item>
           {user.language === "ko" ? (
-            <Button
-              id="addCardInfo"
-              shape="whiteOutlined"
-              onClick={renderCardInfoInKR}
-            >
-              {!user.cardInfo ||
-              Object.keys(user.cardInfo).length === 0 ||
-              (user.cardInfo.cardName === null &&
-                user.cardInfo.created === null)
-                ? t("Register payment card")
-                : t("Modify payment card")}
+            <Button id="addCardInfo" shape="whiteOutlined" onClick={renderCardInfoInKR}>
+              {!user.cardInfo || Object.keys(user.cardInfo).length === 0 || (user.cardInfo.cardName === null && user.cardInfo.created === null) ? t("Register payment card") : t("Modify payment card")}
             </Button>
           ) : (
-            renderCardInfoInAbroad(
-              !user.cardInfo ||
-                Object.keys(user.cardInfo).length === 0 ||
-                (user.cardInfo.cardName === null &&
-                  user.cardInfo.created === null)
-                ? t("Register payment card")
-                : t("Modify payment card")
-            )
+            renderCardInfoInAbroad(!user.cardInfo || Object.keys(user.cardInfo).length === 0 || (user.cardInfo.cardName === null && user.cardInfo.created === null) ? t("Register payment card") : t("Modify payment card"))
           )}
         </Grid>
         <Grid
@@ -342,10 +282,7 @@ const Payment = ({ history }) => {
             color: "var(--secondary1)",
           }}
         >
-          *{" "}
-          {t(
-            "서비스 언어 설정을 국문으로 할 경우 Payple, 영문으로 할 경우 EXIMBAY에서 카드 등록이 진행됩니다."
-          )}
+          * {t("If the service language is set to Korean, the card registration is carried out in Payple, if it is in English, EXIMBAY.")}
         </Grid>
         <Grid
           container
@@ -356,10 +293,7 @@ const Payment = ({ history }) => {
             padding: "24px 0",
           }}
         >
-          {!user.cardInfo ||
-          Object.keys(user.cardInfo).length === 0 ||
-          (user.cardInfo.cardName === null &&
-            user.cardInfo.created === null) ? (
+          {!user.cardInfo || Object.keys(user.cardInfo).length === 0 || (user.cardInfo.cardName === null && user.cardInfo.created === null) ? (
             <Grid
               item
               xs={12}
@@ -390,8 +324,7 @@ const Payment = ({ history }) => {
           )}
           {user.language === "en" && (
             <Grid item xs={12} style={{ color: "red" }}>
-              Note: Please note that the billing descriptor will be listed as
-              EXIMBAY.COM.
+              Note: Please note that the billing descriptor will be listed as EXIMBAY.COM.
             </Grid>
           )}
         </Grid>
@@ -407,11 +340,7 @@ const Payment = ({ history }) => {
       >
         <div className={classes.title}>{t("Prepaid Recharge History")}</div>
       </Grid>
-      <Grid
-        container
-        justifyContent="center"
-        style={{ minHeight: 100, marginBottom: 3 }}
-      >
+      <Grid container justifyContent="center" style={{ minHeight: 100, marginBottom: 3 }}>
         <hr className={classes.line} />
         {prePaymentBillings && prePaymentBillings.length ? (
           <div style={{ width: "100%" }}>
@@ -434,74 +363,39 @@ const Payment = ({ history }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {prePaymentBillings
-                  .slice(
-                    prePaymentHistoryPage * rowsPerPrePaymentHistoryPage,
-                    prePaymentHistoryPage * rowsPerPrePaymentHistoryPage +
-                      rowsPerPrePaymentHistoryPage
-                  )
-                  .map((data, idx) => (
-                    <TableRow
-                      key={data.cardName + data.id}
-                      className={classes.tableRow}
-                      style={{
-                        background:
-                          idx % 2 === 0
-                            ? currentTheme.tableRow1
-                            : currentTheme.tableRow2,
-                      }}
-                    >
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {prePaymentHistoryPage * rowsPerPrePaymentHistoryPage +
-                          idx +
-                          1}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.created_at === null
-                          ? ""
-                          : convertToLocalDateStr(data.created_at)}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.currency === "usd" && "$"}
-                        {data.price.toLocaleString()}
-                        {data.currency === "krw" && t("KRW")}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_RST === "success"
-                          ? `${data.PCD_PAY_CARDNUM}(${data.PCD_PAY_CARDNAME})`
-                          : ""}{" "}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_RST === "success" ? (
-                          <a href={data.PCD_PAY_CARDRECEIPT} target="_blank">
-                            {t("See receipt")}
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {prePaymentBillings.slice(prePaymentHistoryPage * rowsPerPrePaymentHistoryPage, prePaymentHistoryPage * rowsPerPrePaymentHistoryPage + rowsPerPrePaymentHistoryPage).map((data, idx) => (
+                  <TableRow
+                    key={data.cardName + data.id}
+                    className={classes.tableRow}
+                    style={{
+                      background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                    }}
+                  >
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {prePaymentHistoryPage * rowsPerPrePaymentHistoryPage + idx + 1}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.created_at === null ? "" : convertToLocalDateStr(data.created_at)}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.currency === "usd" && "$"}
+                      {data.price.toLocaleString()}
+                      {data.currency === "krw" && t("KRW")}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_RST === "success" ? `${data.PCD_PAY_CARDNUM}(${data.PCD_PAY_CARDNAME})` : ""}{" "}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_RST === "success" ? (
+                        <a href={data.PCD_PAY_CARDRECEIPT} target="_blank">
+                          {t("See receipt")}
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
             <TablePagination
@@ -521,11 +415,7 @@ const Payment = ({ history }) => {
             />
           </div>
         ) : (
-          <div style={{ fontSize: 16 }}>
-            {user.language === "ko"
-              ? "선불 충전 내역이 없습니다."
-              : "No history"}
-          </div>
+          <div style={{ fontSize: 16 }}>{user.language === "ko" ? "선불 충전 내역이 없습니다." : "No history"}</div>
         )}
       </Grid>
       <Grid
@@ -562,121 +452,57 @@ const Payment = ({ history }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {postPaymentBillings
-                  .slice(
-                    postPaymentHistoryPage * rowsPerPostPaymentHistoryPage,
-                    postPaymentHistoryPage * rowsPerPostPaymentHistoryPage +
-                      rowsPerPostPaymentHistoryPage
-                  )
-                  .map((data, idx) => (
-                    <TableRow
-                      key={data.cardName + data.id}
-                      className={classes.tableRow}
-                      style={{
-                        background:
-                          idx % 2 === 0
-                            ? currentTheme.tableRow1
-                            : currentTheme.tableRow2,
-                      }}
-                    >
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {postPaymentHistoryPage *
-                          rowsPerPostPaymentHistoryPage +
-                          idx +
-                          1}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_YEAR}.{data.PCD_PAY_MONTH - 1}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.created_at === null
-                          ? ""
-                          : convertToLocalDateStr(data.created_at)}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_TYPE === "prepaid"
-                          ? t("Prepaid Recharge")
-                          : t("Postpay Payment")}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.currency === "usd" && "$"}
-                        {data.price !== null && data.price.toLocaleString()}
-                        {data.currency === "krw" && t("KRW")}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_RST === "success" ? t("Approval") : t("실패")}{" "}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_RST === "success"
-                          ? `${data.PCD_PAY_CARDNUM}(${data.PCD_PAY_CARDNAME})`
-                          : ""}{" "}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_TYPE === "prepaid" ? (
-                          <span>{t("Check details")}</span>
-                        ) : (
-                          <a
-                            href="#"
-                            onClick={(e) =>
-                              handleChange(
-                                e,
-                                data.PCD_PAY_YEAR,
-                                data.PCD_PAY_MONTH
-                              )
-                            }
-                            id="usagehistory"
-                          >
-                            {t("Check details")}
-                          </a>
-                        )}
-                      </TableCell>
-                      <TableCell
-                        id="paymentCell"
-                        align="center"
-                        style={{ color: "white" }}
-                      >
-                        {data.PCD_PAY_RST === "success" ? (
-                          <a href={data.PCD_PAY_CARDRECEIPT} target="_blank">
-                            {t("See receipt")}
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {postPaymentBillings.slice(postPaymentHistoryPage * rowsPerPostPaymentHistoryPage, postPaymentHistoryPage * rowsPerPostPaymentHistoryPage + rowsPerPostPaymentHistoryPage).map((data, idx) => (
+                  <TableRow
+                    key={data.cardName + data.id}
+                    className={classes.tableRow}
+                    style={{
+                      background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                    }}
+                  >
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {postPaymentHistoryPage * rowsPerPostPaymentHistoryPage + idx + 1}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_YEAR}.{data.PCD_PAY_MONTH - 1}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.created_at === null ? "" : convertToLocalDateStr(data.created_at)}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_TYPE === "prepaid" ? t("Prepaid Recharge") : t("Postpay Payment")}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.currency === "usd" && "$"}
+                      {data.price !== null && data.price.toLocaleString()}
+                      {data.currency === "krw" && t("KRW")}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_RST === "success" ? t("Approval") : t("실패")}{" "}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_RST === "success" ? `${data.PCD_PAY_CARDNUM}(${data.PCD_PAY_CARDNAME})` : ""}{" "}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_TYPE === "prepaid" ? (
+                        <span>{t("Check details")}</span>
+                      ) : (
+                        <a href="#" onClick={(e) => handleChange(e, data.PCD_PAY_YEAR, data.PCD_PAY_MONTH)} id="usagehistory">
+                          {t("Check details")}
+                        </a>
+                      )}
+                    </TableCell>
+                    <TableCell id="paymentCell" align="center" style={{ color: "white" }}>
+                      {data.PCD_PAY_RST === "success" ? (
+                        <a href={data.PCD_PAY_CARDRECEIPT} target="_blank">
+                          {t("See receipt")}
+                        </a>
+                      ) : (
+                        ""
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
             <TablePagination
@@ -696,11 +522,7 @@ const Payment = ({ history }) => {
             />
           </div>
         ) : (
-          <div style={{ fontSize: 16 }}>
-            {user.language === "ko"
-              ? "후불결제 내역이 없습니다."
-              : "No history"}
-          </div>
+          <div style={{ fontSize: 16 }}>{user.language === "ko" ? "후불결제 내역이 없습니다." : "No history"}</div>
         )}
       </Grid>
       <Modal
@@ -713,17 +535,11 @@ const Payment = ({ history }) => {
         }}
       >
         <div className={classes.defaultModalContent} style={{ width: "500px" }}>
-          <h6 id="cardNeedText">
-            {t("You can continue to use the card after registering it on the account management page.")}
-          </h6>
+          <h6 id="cardNeedText">{t("You can continue to use the card after registering it on the account management page.")}</h6>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <>
               {user.language === "ko" ? (
-                <Button
-                  id="registCard"
-                  shape="greenOutlined"
-                  onClick={renderCardInfoInKR}
-                >
+                <Button id="registCard" shape="greenOutlined" onClick={renderCardInfoInKR}>
                   {t("Go to card registration")}
                 </Button>
               ) : (
@@ -732,17 +548,9 @@ const Payment = ({ history }) => {
                 eximbayUrl && (
                   <form name="regForm" method="post" action={eximbayUrl}>
                     {eximbayParamsNames.map((name) => (
-                      <input
-                        type="hidden"
-                        name={name}
-                        value={eximbayParams[name]}
-                      />
+                      <input type="hidden" name={name} value={eximbayParams[name]} />
                     ))}
-                    <Button
-                      id="registCard_en"
-                      type="submit"
-                      shape="greenOutlined"
-                    >
+                    <Button id="registCard_en" type="submit" shape="greenOutlined">
                       {t("Go to card registration")}
                     </Button>
                   </form>

@@ -82,8 +82,7 @@ function* getMainPageData() {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다. 일시적인 오류가 발생하였습니다."
       ),
     });
@@ -108,8 +107,7 @@ function* getMeData() {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다. 일시적인 오류가 발생하였습니다."
       ),
     });
@@ -134,8 +132,7 @@ function* getCardData() {
         type: REQUEST_ERROR_MESSAGE,
         data: renderSnackbarMessage(
           "error",
-          err.response.data.message,
-          err.response.data.message_en,
+          err.response,
           "죄송합니다. 일시적인 오류 발생으로 카드정보를 불러오는데 실패하였습니다."
         ),
       });
@@ -212,8 +209,7 @@ function* postAppCode() {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다. 일시적인 오류 발생으로 인하여 앱코드 발행에 실패하였습니다."
       ),
     });
@@ -244,8 +240,7 @@ function* postResetPassword(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다, 일시적인 오류 발생으로 인하여 메일전송에 실패하였습니다."
       ),
     });
@@ -272,8 +267,7 @@ function* postWidthdraw(action) {
           type: REQUEST_ERROR_MESSAGE,
           data: renderSnackbarMessage(
             "error",
-            err.response.data.message,
-            err.response.data.message_en,
+            err.response,
             "죄송합니다, 다시한번 시도해주세요."
           ),
         });
@@ -293,12 +287,7 @@ function* postWidthdraw(action) {
     }
     yield put({
       type: REQUEST_ERROR_MESSAGE,
-      data: renderSnackbarMessage(
-        "error",
-        err.response.data.message,
-        err.response.data.message_en,
-        errorMessage
-      ),
+      data: renderSnackbarMessage("error", err.response, errorMessage),
     });
     yield put({
       type: POST_WITHDRAW_FAILURE,
@@ -325,8 +314,7 @@ function* postCompanyLogo(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다, 로고 업로드에 실패하였습니다. 다시 시도해주세요."
       ),
     });
@@ -354,8 +342,7 @@ function* deleteCompanyLogo(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다, 로고 삭제에 실패하였습니다. 다시 시도해주세요."
       ),
     });
@@ -387,8 +374,7 @@ function* putUser(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다, 일시적 오류로 인하여, 회원정보 변경에 실패하였습니다. 다시 시도해주세요."
       ),
     });
@@ -412,8 +398,7 @@ function* putUserWithoutMessage(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요."
       ),
     });
@@ -447,8 +432,7 @@ function* postCancelPlan(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다, 일시적인 오류로 인하여 구독취소에 실패하였습니다. 다시 시도해주세요."
       ),
     });
@@ -480,8 +464,7 @@ function* postCancelNextPlan() {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다, 일시적인 오류로 인하여 이용플랜 취소에 실패하였습니다. 다시 시도해주세요."
       ),
     });
@@ -506,8 +489,7 @@ function* postCheckAsynctasks(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
@@ -535,8 +517,7 @@ function* postCheckAllAsynctasks(action) {
       type: REQUEST_ERROR_MESSAGE,
       data: renderSnackbarMessage(
         "error",
-        err.response.data.message,
-        err.response.data.message_en,
+        err.response,
         "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });

@@ -589,7 +589,7 @@ const Admin = ({ history, ...rest }) => {
                 <div style={{ marginBottom: "-8px" }}>
                   {t("Multiple AI models focused on accuracy and training speed")}
                 </div>
-                <div>{t("DS2.AI 솔루션을 이용하여 개발할 수 있습니다.")}</div>
+                <div>{t("You can develop using DS2.AI solution.")}</div>
               </div>
               <div className={classes.upgradePlanSubTitle}>
                 {t("This option is only available on the Enterprise plan.")}

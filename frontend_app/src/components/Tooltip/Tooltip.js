@@ -7,10 +7,7 @@ import { fileurl } from "controller/api";
 const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
   const classes = currentTheme();
   const { t } = useTranslation();
-  const { user, projects } = useSelector(
-    (state) => ({ user: state.user, projects: state.projects }),
-    []
-  );
+  const { user, projects } = useSelector((state) => ({ user: state.user, projects: state.projects }), []);
 
   const renderTooltip = () => {
     switch (tooltipCategory) {
@@ -23,41 +20,29 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             <div style={{ marginBottom: "10px" }}>
               <b>{t("If you upload a .csv file")}</b>
               <div>
-                - {t("Structured Data Regression")} :{" "}
-                {t("Categories and continuous values are automatically classified.")}{" "}
+                - {t("Structured Data Regression")} : {t("Categories and continuous values are automatically classified.")}{" "}
               </div>
               <div>
-                - {t("Structured Data Category Classification")} :{" "}
-                {t("Categories and similar non-continuous values are predicted.")}
+                - {t("Structured Data Category Classification")} : {t("Categories and similar non-continuous values are predicted.")}
               </div>
               <div>
-                - {t("Structured Data Regression")} :{" "}
-                {t("Continuous numeric values are predicted.")}
+                - {t("Structured Data Regression")} : {t("Continuous numeric values are predicted.")}
               </div>
               <div>
                 - {t("Natural Language Processing (NLP)")} : {t("텍스트의 감정을 분석합니다.")}
               </div>
               <div>
-                - {t("Recommendation system (matrix)")} :{" "}
-                {t("We recommend products by analyzing the association between users.")}
+                - {t("Recommendation system (matrix)")} : {t("We recommend products by analyzing the association between users.")}
               </div>
             </div>
             <div style={{ marginBottom: "10px" }}>
               <b>{t("If you upload a .zip file")}</b>
               <div>
-                - {t("Image Classification")} :{" "}
-                {t(
-                  "카테고리 별로 분류된 이미지를 활용하여 이미지의 카테고리를 예측합니다."
-                )}{" "}
+                - {t("Image Classification")} : {t("카테고리 별로 분류된 이미지를 활용하여 이미지의 카테고리를 예측합니다.")}{" "}
               </div>
               <div>
-                - {t("Object Detection")} :{" "}
-                {t(
-                  "이미지 내 여러 물체에 대해 어떤 물체인지와 위치를 분류하고 예측합니다."
-                )}
-                {t(
-                  "사전 라벨링 작업이 필요합니다. 라벨링은 메인메뉴에 물체인식 라벨링을 통해서 작업하실 수 있습니다."
-                )}
+                - {t("Object Detection")} : {t("이미지 내 여러 물체에 대해 어떤 물체인지와 위치를 분류하고 예측합니다.")}
+                {t("Pre-labeling is required. Labeling can be done through object recognition labeling in the main menu.")}
               </div>
               {/* <div>
                 - GAN :{" "}
@@ -77,35 +62,23 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Generate Code")}</b>
-              <div>
-                {t(
-                  "주피터 환경에서 바로 실행이 가능한 딥러닝 개발 코드를 생성합니다."
-                )}
-              </div>
+              <div>{t("Generate ready-to-run deep learning development code in Jupyter environment.")}</div>
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Higher accuracy")}</b>
               <div>
-                {t(
-                  "인공지능 모델 중 정확도가 높은 모델을 위주로  모델을 생성합니다."
-                )}{" "}
-                <br /> {t("However, training can take a long time.")}
+                {t("AI models with higher accuracy are prioritized when generating models.")} <br /> {t("However, training can take a long time.")}
               </div>
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Faster training speed")}</b>
               <div>
-                {t("Fast AI models are prioritized during model generation.")}{" "}
-                <br /> {t("However, the accuracy may be lower.")}
+                {t("Fast AI models are prioritized during model generation.")} <br /> {t("However, the accuracy may be lower.")}
               </div>
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Manual setting")}</b>
-              <div>
-                {t(
-                  "원하는 머신러닝/딥러닝 라이브러리와 하이퍼파라미터를 직접 설정하여 사용할 수 있습니다."
-                )}
-              </div>
+              <div>{t("Set and use your preferred machine learning/deep learning library and hyperparameter.")}</div>
             </div>
           </>
         );
@@ -122,84 +95,32 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
         return (
           <div>
             <div className={classes.modelStatusContainer}>
-              <div
-                className={classes.modelStatusImgContainer}
-                style={
-                  user.language === "en"
-                    ? { minWidth: "140px" }
-                    : { minWidth: "60px" }
-                }
-              >
-                <img
-                  src={fileurl + "asset/front/img/modelIcon/modelError.png"}
-                  className={classes.modelStatusImg}
-                />
+              <div className={classes.modelStatusImgContainer} style={user.language === "en" ? { minWidth: "140px" } : { minWidth: "60px" }}>
+                <img src={fileurl + "asset/front/img/modelIcon/modelError.png"} className={classes.modelStatusImg} />
                 <b>{t("Error")}</b>
               </div>
-              <div className={classes.modelStatusFont}>
-                {t("Number of models where errors occurred during training.")}
-              </div>
+              <div className={classes.modelStatusFont}>{t("Number of models where errors occurred during training.")}</div>
             </div>
             <div className={classes.modelStatusContainer}>
-              <div
-                className={classes.modelStatusImgContainer}
-                style={
-                  user.language === "en"
-                    ? { minWidth: "140px" }
-                    : { minWidth: "60px" }
-                }
-              >
-                <img
-                  src={
-                    fileurl + "asset/front/img/modelIcon/modelProcessing.png"
-                  }
-                  className={classes.modelStatusImg}
-                />
+              <div className={classes.modelStatusImgContainer} style={user.language === "en" ? { minWidth: "140px" } : { minWidth: "60px" }}>
+                <img src={fileurl + "asset/front/img/modelIcon/modelProcessing.png"} className={classes.modelStatusImg} />
                 <b>{t("Train")}</b>
               </div>
-              <div className={classes.modelStatusFont}>
-                {t("Number of models with training currently in progress.")}
-              </div>
+              <div className={classes.modelStatusFont}>{t("Number of models with training currently in progress.")}</div>
             </div>
             <div className={classes.modelStatusContainer}>
-              <div
-                className={classes.modelStatusImgContainer}
-                style={
-                  user.language === "en"
-                    ? { minWidth: "140px" }
-                    : { minWidth: "60px" }
-                }
-              >
-                <img
-                  src={fileurl + "asset/front/img/modelIcon/modelPause.png"}
-                  className={classes.modelStatusImg}
-                />
+              <div className={classes.modelStatusImgContainer} style={user.language === "en" ? { minWidth: "140px" } : { minWidth: "60px" }}>
+                <img src={fileurl + "asset/front/img/modelIcon/modelPause.png"} className={classes.modelStatusImg} />
                 <b>{t("Pending")}</b>
               </div>
-              <div className={classes.modelStatusFont}>
-                {t(
-                  "인공지능 학습 순서 상 대기 중인 모델의 수를 표시합니다. 잠시 후 학습은 재게될 예정입니다."
-                )}
-              </div>
+              <div className={classes.modelStatusFont}>{t("Number of models pending. Training will start again.")}</div>
             </div>
             <div className={classes.alignCenterContainer}>
-              <div
-                className={classes.modelStatusImgContainer}
-                style={
-                  user.language === "en"
-                    ? { minWidth: "140px" }
-                    : { minWidth: "60px" }
-                }
-              >
-                <img
-                  src={fileurl + "asset/front/img/modelIcon/modelDone.png"}
-                  className={classes.modelStatusImg}
-                />
+              <div className={classes.modelStatusImgContainer} style={user.language === "en" ? { minWidth: "140px" } : { minWidth: "60px" }}>
+                <img src={fileurl + "asset/front/img/modelIcon/modelDone.png"} className={classes.modelStatusImg} />
                 <b>{t("Completed")}</b>
               </div>
-              <div className={classes.modelStatusFont}>
-                {t("Number of models that have completed training.")}
-              </div>
+              <div className={classes.modelStatusFont}>{t("Number of models that have completed training.")}</div>
             </div>
           </div>
         );
@@ -209,9 +130,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             <div className={classes.title} style={{ marginBottom: "20px" }}>
               {t("AI Training Priority")}
             </div>
-            <div>
-              {t("Select whether or not you want to start training for this project first.")}
-            </div>
+            <div>{t("Select whether or not you want to start training for this project first.")}</div>
           </>
         );
       case "isVerify":
@@ -220,11 +139,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             <div className={classes.title} style={{ marginBottom: "20px" }}>
               {t("Whether to use the validation function")}
             </div>
-            <div>
-              {t(
-                "해당 프로젝트를 통해 만든 인공지능으로 더 상세한 데이터 검증을 사용할지 여부를 체크합니다."
-              )}
-            </div>
+            <div>{t("Check whether to use more detailed data validation with the artificial intelligence created through the project.")}</div>
           </>
         );
       case "algorithm":
@@ -245,11 +160,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
               {t("Training GPU Option")}
             </div>
             <div style={{ marginBottom: "20px" }}>
-              <div>
-                {t(
-                  "특정 GPU 로 학습을 지정하고 싶은 경우에 원하는 GPU 로 선택하여 학습할 수 있습니다."
-                )}
-              </div>
+              <div>{t("To utilize a specific GPU, select and train with the desired GPU.")}</div>
             </div>
           </>
         );
@@ -262,10 +173,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
   return (
     <div className={classes.modalContent}>
       <div className={classes.alignRight}>
-        <CloseIcon
-          className={classes.closeImg}
-          onClick={closeTooltipModalOpen}
-        />
+        <CloseIcon className={classes.closeImg} onClick={closeTooltipModalOpen} />
       </div>
       <div
         style={{

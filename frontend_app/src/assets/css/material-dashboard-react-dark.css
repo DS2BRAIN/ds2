@@ -687,7 +687,7 @@ form > svg > path {
 #projectModal svg {
   height: 50px !important;
 }
-#fileModal > div:first-child {
+#file_upload_modal > div:first-child {
   min-height: 260px;
   background: transparent !important;
   border-radius: 20px !important;
@@ -1011,7 +1011,7 @@ td {
 #moreBtn path {
   color: var(--secondary1) !important;
 }
-#addLabelFilesBtn path {
+#add_label_file_btn path {
   color: var(--secondary1) !important;
 }
 #startLabelBtn path {
@@ -1059,7 +1059,7 @@ td {
 #disabledSelectBox {
   color: darkgray !important;
 }
-#languageSelectForm {
+#language_select_form {
   background: transparent !important;
 }
 .MuiFormHelperText-filled {
@@ -1087,7 +1087,7 @@ td {
 #outlined-helperText-helper-text {
   color: var(--textWhite6) !important;
 }
-#renameInput {
+#labelclass_name_input {
   border-bottom: 1px solid var(--textWhite87);
 }
 .primaryColorIcon > path {

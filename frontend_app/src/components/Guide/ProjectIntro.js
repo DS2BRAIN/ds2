@@ -42,44 +42,21 @@ const ProjectIntro = (props) => {
 
   const Img02_01_customServer = fileurl + "asset/img_customServer.jpg";
   const Img02_02_clickai_jupyter = fileurl + "asset/img_clickai_jupyter.jpg";
-  const Img02_03_clickai_magiccode =
-    fileurl + "asset/img_clickai_magiccode.jpg";
-  const Img03_clickai_automl_1 =
-    userLang === "ko"
-      ? fileurl + "asset/img_clickai_automl_1.jpg"
-      : fileurl + "asset/img_clickai_automl_1_en.jpg";
-  const Img03_clickai_automl_1_mobile =
-    userLang === "ko"
-      ? fileurl + "asset/img_clickai_automl_1_mobile.jpg"
-      : fileurl + "asset/img_clickai_automl_1_en_mobile.jpg";
+  const Img02_03_clickai_magiccode = fileurl + "asset/img_clickai_magiccode.jpg";
+  const Img03_clickai_automl_1 = userLang === "ko" ? fileurl + "asset/img_clickai_automl_1.jpg" : fileurl + "asset/img_clickai_automl_1_en.jpg";
+  const Img03_clickai_automl_1_mobile = userLang === "ko" ? fileurl + "asset/img_clickai_automl_1_mobile.jpg" : fileurl + "asset/img_clickai_automl_1_en_mobile.jpg";
   const Img04_clickai_project = fileurl + "asset/img_clickai_project.jpg";
-  const Img05_dataset_preprocessing =
-    userLang === "ko"
-      ? fileurl + "asset/img_dataset_preprocessing.jpg"
-      : fileurl + "asset/img_dataset_preprocessing_en.jpg";
+  const Img05_dataset_preprocessing = userLang === "ko" ? fileurl + "asset/img_dataset_preprocessing.jpg" : fileurl + "asset/img_dataset_preprocessing_en.jpg";
   const Img06_clickai_modelist = fileurl + "asset/img_clickai_modellist.jpg";
-  const Img07_serviceapp =
-    userLang === "ko"
-      ? fileurl + "asset/img_serviceapp.jpg"
-      : fileurl + "asset/img_serviceapp_en.jpg";
+  const Img07_serviceapp = userLang === "ko" ? fileurl + "asset/img_serviceapp.jpg" : fileurl + "asset/img_serviceapp_en.jpg";
   const Img08_codeSDKPython = codeClickaiSDKPythonImg;
-  const Img09_01_clickai_consulting_1 =
-    fileurl + "asset/img_clickai_consulting_1.jpg";
-  const Img09_02_clickai_consulting_2 =
-    userLang === "ko"
-      ? fileurl + "asset/img_clickai_consulting_2.jpg"
-      : fileurl + "asset/img_clickai_consulting_2_en.jpg";
-  const Img09_03_clickai_consulting_3 =
-    userLang === "ko"
-      ? fileurl + "asset/img_clickai_consulting_3.jpg"
-      : fileurl + "asset/img_clickai_consulting_3_en.jpg";
-  const Img10_01_icon_clickaitabular =
-    fileurl + "asset/icon_clickaitabular.jpg";
-  const Img10_02_icon_clickaitimeseries =
-    fileurl + "asset/icon_clickaitimeseries.jpg";
+  const Img09_01_clickai_consulting_1 = fileurl + "asset/img_clickai_consulting_1.jpg";
+  const Img09_02_clickai_consulting_2 = userLang === "ko" ? fileurl + "asset/img_clickai_consulting_2.jpg" : fileurl + "asset/img_clickai_consulting_2_en.jpg";
+  const Img09_03_clickai_consulting_3 = userLang === "ko" ? fileurl + "asset/img_clickai_consulting_3.jpg" : fileurl + "asset/img_clickai_consulting_3_en.jpg";
+  const Img10_01_icon_clickaitabular = fileurl + "asset/icon_clickaitabular.jpg";
+  const Img10_02_icon_clickaitimeseries = fileurl + "asset/icon_clickaitimeseries.jpg";
   const Img10_03_icon_clickaivision = fileurl + "asset/icon_clickaivision.jpg";
-  const Img10_04_icon_clickaitextvoice =
-    fileurl + "asset/icon_clickaitextvoice.jpg";
+  const Img10_04_icon_clickaitextvoice = fileurl + "asset/icon_clickaitextvoice.jpg";
 
   const ImgFrame04_clickai_project = (
     <div class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center">
@@ -94,11 +71,7 @@ const ProjectIntro = (props) => {
           {t("Rapid development of AI models within 3 days")}
           <br />
         </h4>
-        <p className={classes.P}>
-          {t(
-            "데이터 업로드만으로도 클라우드 학습 서버에서 모델을 개발하기에 최소 3일 이내에 인공지능 모델 결과를 확인할 수 있습니다."
-          )}
-        </p>
+        <p className={classes.P}>{t("From the time you upload the data, you can view the AI model results on a cloud training server in at least three days.")}</p>
       </div>
     </div>
   );
@@ -115,11 +88,7 @@ const ProjectIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Automate basic data preprocessing")}
         </h4>
-        <p className={classes.P}>
-          {t(
-            "데이터 공백값 혹은 비식별화, 일괄치환 등 기본적인 데이터 전처리를 간편하게 수행할 수 있습니다."
-          )}
-        </p>
+        <p className={classes.P}>{t("Basic data preprocessing such as missing data, de-identification, batch replacement is simple and easy.")}</p>
       </div>
     </div>
   );
@@ -138,9 +107,7 @@ const ProjectIntro = (props) => {
           <br />
         </h4>
         <p className={classes.P}>
-          {t(
-            "하나의 데이터셋에 대하여 최대 100여 개의 인공지능 모델을 자동 개발하고 검증할 수 있기에 높은 수준의 인공지능 정확도를 도출할 수 있습니다."
-          )}
+          {t("Up to 100 artificial intelligence models can be automatically developed and verified for a single dataset, so a highly accurate artificial intelligence can be derived.")}
           <br />
         </p>
       </div>
@@ -148,54 +115,36 @@ const ProjectIntro = (props) => {
   );
 
   const ImgFrame07_serviceapp = (
-    <div
-      class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center"
-      style={{ margin: "20px 0" }}
-    >
+    <div class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center" style={{ margin: "20px 0" }}>
       <img class="img-fluid rounded" src={Img07_serviceapp} />
     </div>
   );
 
   const Text07_serviceapp = (
-    <div
-      class="col-12 col-lg-4 col-xl-5 d-flex justify-content-center"
-      style={{ padding: "8px 24px" }}
-    >
+    <div class="col-12 col-lg-4 col-xl-5 d-flex justify-content-center" style={{ padding: "8px 24px" }}>
       <div>
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Easy deployment and sharing of service apps")}
         </h4>
-        <p className={classes.P}>
-          {t(
-            "개발된 인공지능은 API만으로 바로 배포하고 서비스에 적용할 수 있습니다. 또한, 별도의 서비스 연동 없이 서비스앱 공유하기를 통해 URL만으로 인공지능을 웹서비스화할 수 있습니다."
-          )}
-        </p>
+        <p className={classes.P}>{t("The completed artificial intelligence model can be deployed and applied to services right away through API integration. In addition, using sharing service apps allows you to view the artificial intelligence results through the provided URL on the web without separate interworking services.")}</p>
       </div>
     </div>
   );
 
   const ImgFrame08_codeSDKPython = (
-    <div
-      class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center"
-      style={{ margin: "20px 0" }}
-    >
+    <div class="col-12 col-lg-5 col-xl-6 d-flex justify-content-center align-items-center" style={{ margin: "20px 0" }}>
       <img class="img-fluid rounded" src={Img08_codeSDKPython} />
     </div>
   );
 
   const Text08_codeSDKPython = (
-    <div
-      class="col-12 col-lg-5 d-flex justify-content-start justify-content-lg-center"
-      style={{ margin: "20px 0" }}
-    >
+    <div class="col-12 col-lg-5 d-flex justify-content-start justify-content-lg-center" style={{ margin: "20px 0" }}>
       <div>
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("SDK support for convenient programming development")}
         </h4>
         <p className={classes.P} style={{ marginBottom: "8px" }}>
-          {t(
-            "DS2.ai의 MLOps를 위한 데이터 파이프라인을 Python 코드로 구축할 수 있습니다. SDK를 통해 데이터의 업로드부터 라벨링 생성, 인공지능 학습 및 배포까지 모든 기능을 사용할 수 있습니다."
-          )}
+          {t("Build a data pipeline for MLOps at DS2.ai with Python. SDK gives you access to all of the processes from uploading and labeling data, to training and deploying the artificial intelligence model.")}
         </p>
       </div>
     </div>
@@ -220,17 +169,10 @@ const ProjectIntro = (props) => {
                   color: "var(--bg)",
                 }}
               >
-                {t(
-                  "코딩없이 한 번의 클릭으로 인공지능을 개발할 수 있습니다. 인공지능 자동개발 솔루션 CLICK AI와 더욱 다양한 미래의 가능성을 열어보세요."
-                )}
+                {t("You can develop artificial intelligence with just one click without coding. Open up more diverse future possibilities with CLICK AI, an artificial intelligence auto-development solution.")}
                 <br />
               </p>
-              <Button
-                id="projectintro_top_start_btn"
-                shape="blueContained"
-                size="xl"
-                onClick={closeIntro}
-              >
+              <Button id="projectintro_top_start_btn" shape="blueContained" size="xl" onClick={closeIntro}>
                 {t("Start Service")}
               </Button>
             </div>
@@ -240,22 +182,12 @@ const ProjectIntro = (props) => {
       <section className={classes.Section}>
         <div class="container bodyContainer">
           <div class="row justify-content-center align-items-center">
-            <div
-              class="col-12 col-lg-12 d-flex justify-content-center"
-              style={{ marginBottom: "36px" }}
-            >
+            <div class="col-12 col-lg-12 d-flex justify-content-center" style={{ marginBottom: "36px" }}>
               <div class="text-center" style={{ marginBottom: "24px" }}>
-                <h2
-                  className={classes.H2}
-                  style={{ marginBottom: "16px", color: "#525557" }}
-                >
+                <h2 className={classes.H2} style={{ marginBottom: "16px", color: "#525557" }}>
                   {t("Simpler for experts, easier for nonexperts")}
                 </h2>
-                <p className={classes.P}>
-                  {t(
-                    "CLICK AI는 3가지 방식 중 적합한 방식을 선택하여 인공지능을 개발할 수 있도록 제공합니다."
-                  )}
-                </p>
+                <p className={classes.P}>{t("CLICK AI provides AI development by following the 3 methods below.")}</p>
               </div>
             </div>
           </div>
@@ -266,15 +198,8 @@ const ProjectIntro = (props) => {
                   <h5 className={classes.H5}>{t("Custom training")}</h5>
                 </div>
                 <div class="modelingComparisonContent">
-                  <p className={classes.P}>
-                    {t(
-                      "원하는 성능의 학습서버를 임대하여 Jupyter 환경에서 직접 인공지능 코딩 개발"
-                    )}
-                  </p>
-                  <ul
-                    class="text-left"
-                    style={{ listStyle: "none", paddingLeft: "0px" }}
-                  >
+                  <p className={classes.P}>{t("Develop AI directly in a Jupiter environment by leasing the training server with the desired performance")}</p>
+                  <ul class="text-left" style={{ listStyle: "none", paddingLeft: "0px" }}>
                     <li className={classes.Li}>
                       <i class="fa fa-check"></i>
                       <span>{t("Tune Algorithms freely")}</span>
@@ -308,24 +233,15 @@ const ProjectIntro = (props) => {
                   <h5 className={classes.H5}>AutoML</h5>
                 </div>
                 <div class="modelingComparisonContent">
-                  <p className={classes.P}>
-                    {t(
-                      "CLICK AI를 활용하여 코딩없이 클릭만으로 원하는 인공지능을 자동 개발"
-                    )}
-                  </p>
-                  <ul
-                    class="text-left"
-                    style={{ listStyle: "none", paddingLeft: "0px" }}
-                  >
+                  <p className={classes.P}>{t("Using CLICK AI, automatically develop artificial intelligence you want with just a click without any coding")}</p>
+                  <ul class="text-left" style={{ listStyle: "none", paddingLeft: "0px" }}>
                     <li className={classes.Li}>
                       <i class="fa fa-check"></i>
                       <span>{t("Automated artificial intelligence development")}</span>
                     </li>
                     <li className={classes.Li}>
                       <i class="fa fa-check"></i>
-                      <span>
-                        {t("Get AI models rapidly within 3 days")}
-                      </span>
+                      <span>{t("Get AI models rapidly within 3 days")}</span>
                     </li>
                     <li className={classes.Li}>
                       <i class="fa fa-check"></i>
@@ -355,15 +271,8 @@ const ProjectIntro = (props) => {
                   </h5>
                 </div>
                 <div class="modelingComparisonContent">
-                  <p className={classes.P}>
-                    {t(
-                      "CLICK AI를 활용하여 컨설턴트가 데이터 전처리부터 인공지능 개발까지 제공"
-                    )}
-                  </p>
-                  <ul
-                    class="text-left"
-                    style={{ listStyle: "none", paddingLeft: "0px" }}
-                  >
+                  <p className={classes.P}>{t("Consultants provide from data preprocessing to artificial intelligence development using CLICK AI")}</p>
+                  <ul class="text-left" style={{ listStyle: "none", paddingLeft: "0px" }}>
                     <li className={classes.Li}>
                       <i class="fa fa-check"></i>
                       <span>{t("Automated artificial intelligence development")}</span>
@@ -415,9 +324,7 @@ const ProjectIntro = (props) => {
                 {t("It is easy to configure servers and develop your own models.")}
               </h2>
               <p className={classes.P}>
-                {t(
-                  "CLICK AI의 커스텀 학습을 활용하면 클라우드 학습 서버를 간편하게 설정할 수 있으며, 익숙한 Jupyter 환경에서 인공지능을 개발할 수 있습니다."
-                )}
+                {t("CLICK AI's Custom Training makes it easy to set up a cloud training server and develop artificial intelligence in a Jupyter environment.")}
                 <br />
               </p>
             </div>
@@ -431,68 +338,32 @@ const ProjectIntro = (props) => {
               paddingRight: "24px",
             }}
           >
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid"
-                src={Img02_01_customServer}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid" src={Img02_01_customServer} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 {t("Customized Training Server Configuration")}
                 <br />
               </h4>
-              <p class="small">
-                {t(
-                  "백엔드 서버 구축 역량이 없어도 원하는 성능의 맞춤형 학습 서버를 간편하게 직접 구성할 수 있습니다."
-                )}
-              </p>
+              <p class="small">{t("Without the ability to deploy back-end servers, customized training servers with desired performance can be easily configured.")}</p>
             </div>
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid rounded"
-                src={Img02_02_clickai_jupyter}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid rounded" src={Img02_02_clickai_jupyter} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 {t("Code with the Jupyter environment")}
                 <br />
               </h4>
-              <p class="small">
-                {t(
-                  "Jupyter 환경에서 원하는 알고리즘을 직접 코딩하고 하이퍼 파라미터 튜닝을 통해 인공지능을 개발할 수 있습니다."
-                )}
-              </p>
+              <p class="small">{t("In a Jupyter environment, you can code the desired algorithm directly and develop artificial intelligence by tuning the hyper-parameters.")}</p>
             </div>
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid rounded"
-                src={Img02_03_clickai_magiccode}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid rounded" src={Img02_03_clickai_magiccode} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>{t("Magic Code Automatically Generated")}</h4>
-              <p class="small">
-                {t(
-                  "Jupyter로의 복사 및 붙여넣기만으로 비전문가도 인공지능 개발을 시작할 수 있는 Magic Code를 자동으로 생성합니다."
-                )}
-              </p>
+              <p class="small">{t("Just copy and paste into Jupyter to automatically generate Magic Code that even non-professionals can start developing artificial intelligence.")}</p>
             </div>
           </div>
         </div>
         <div class="container bodyContainer">
           <div class="row justify-content-center align-items-center">
-            <div
-              class="col-12 col-lg-12 text-center justify-content-center"
-              style={{ marginBottom: "60px" }}
-            >
+            <div class="col-12 col-lg-12 text-center justify-content-center" style={{ marginBottom: "60px" }}>
               <div style={{ marginBottom: "16px" }}>
                 <span
                   style={{
@@ -508,14 +379,10 @@ const ProjectIntro = (props) => {
                 </span>
               </div>
               <h2 className={classes.H2} style={{ marginBottom: "16px" }}>
-                {t(
-                  "단 한 줄의 코드 작성없이도 딥러닝 기반 인공지능을 개발할 수 있습니다."
-                )}
+                {t("Deep learning-based artificial intelligence can be developed without writing a single line of code.")}
               </h2>
               <p className={classes.P}>
-                {t(
-                  "CLICK AI는 딥러닝 기반 인공지능을 위해 필요한 데이터 모델링, 알고리즘 튜닝과 모델 테스트 등 인공지능 개발 프로세스를 모두 자동화하였습니다."
-                )}
+                {t("CLICK AI has automated all of the AI development processes such as data modeling, algorithm tuning and model testing needed for deep learning-based artificial intelligence.")}
                 <br />
               </p>
             </div>
@@ -528,68 +395,41 @@ const ProjectIntro = (props) => {
           </div>
         </div>
         <div class="container d-none d-lg-block bodyContainer">
-          <div
-            class="row justify-content-between align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-between align-items-center" style={{ marginBottom: "10%" }}>
             {Text04_clickai_project}
             {ImgFrame04_clickai_project}
           </div>
-          <div
-            class="row justify-content-between align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-between align-items-center" style={{ marginBottom: "10%" }}>
             {ImgFrame05_dataset_preprocessing}
             {Text05_dataset_preprocessing}
           </div>
-          <div
-            class="row justify-content-between align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-between align-items-center" style={{ marginBottom: "10%" }}>
             {Text06_clickai_modelist}
             {ImgFrame06_clickai_modelist}
           </div>
-          <div
-            class="row justify-content-between align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-between align-items-center" style={{ marginBottom: "10%" }}>
             {ImgFrame07_serviceapp}
             {Text07_serviceapp}
           </div>
-          <div
-            class="row justify-content-around align-items-center"
-            style={{ marginBottom: "10%" }}
-          >
+          <div class="row justify-content-around align-items-center" style={{ marginBottom: "10%" }}>
             {Text08_codeSDKPython}
             {ImgFrame08_codeSDKPython}
           </div>
         </div>
         <div class="container d-block d-lg-none bodyContainer">
-          <div
-            class="row justify-content-center align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-center align-items-center" style={{ marginBottom: "20%" }}>
             {Text04_clickai_project}
             {ImgFrame04_clickai_project}
           </div>
-          <div
-            class="row justify-content-center align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-center align-items-center" style={{ marginBottom: "20%" }}>
             {Text05_dataset_preprocessing}
             {ImgFrame05_dataset_preprocessing}
           </div>
-          <div
-            class="row justify-content-center align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-center align-items-center" style={{ marginBottom: "20%" }}>
             {Text06_clickai_modelist}
             {ImgFrame06_clickai_modelist}
           </div>
-          <div
-            class="row justify-content-between align-items-center"
-            style={{ marginBottom: "20%" }}
-          >
+          <div class="row justify-content-between align-items-center" style={{ marginBottom: "20%" }}>
             {Text07_serviceapp}
             {ImgFrame07_serviceapp}
           </div>
@@ -619,9 +459,7 @@ const ProjectIntro = (props) => {
                 {t("Request the AI development only with data.")}
               </h2>
               <p className={classes.P}>
-                {t(
-                  "CLICK AI를 활용하여 전문 컨설턴트가 직접 데이터를 확인하고 데이터 전처리부터 인공지능 모델 개발까지 제공하여 드립니다."
-                )}
+                {t("With CLICK AI, professional consultants will check the data themselves, provide data preprocessing and develop the artificial intelligence model.")}
                 <br />
               </p>
             </div>
@@ -635,62 +473,29 @@ const ProjectIntro = (props) => {
               paddingRight: "24px",
             }}
           >
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid"
-                src={Img09_01_clickai_consulting_1}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid" src={Img09_01_clickai_consulting_1} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 {t("Reviewed data from professional consultants")}
                 <br />
               </h4>
-              <p class="small">
-                {t(
-                  "업로드된 데이터에 대해서 전문 컨설턴트가 직접 검토하고 데이터에 대한 컨설팅을 제공합니다."
-                )}
-              </p>
+              <p class="small">{t("A professional consultant reviews the uploaded data and provides consulting on the data.")}</p>
             </div>
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid rounded"
-                src={Img09_02_clickai_consulting_2}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid rounded" src={Img09_02_clickai_consulting_2} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 {t("Customized data preprocessing")}
                 <br />
               </h4>
-              <p class="small">
-                {t(
-                  "데이터에 최적화된 데이터 전처리를 수행하여 높은 수준의 학습용 데이터셋을 구성합니다."
-                )}
-              </p>
+              <p class="small">{t("Perform optimized pre-processing to configure high-level training datasets.")}</p>
             </div>
-            <div
-              class="col-10 col-lg-4 text-center"
-              style={{ margin: "5% 0", padding: "0 12px" }}
-            >
-              <img
-                class="img-fluid rounded"
-                src={Img09_03_clickai_consulting_3}
-                style={{ maxHeight: "128px", marginBottom: "24px" }}
-              />
+            <div class="col-10 col-lg-4 text-center" style={{ margin: "5% 0", padding: "0 12px" }}>
+              <img class="img-fluid rounded" src={Img09_03_clickai_consulting_3} style={{ maxHeight: "128px", marginBottom: "24px" }} />
               <h4 className={classes.H4}>
                 {t("High levels of AI accuracy")}
                 <br />
               </h4>
-              <p class="small">
-                {t(
-                  "높은 수준의 학습용 데이터셋을 토대로 최대 100여 개의 인공지능을 개발하고 검증하기에 높은 수준의 인공지능 정확도를 도출할 수 있습니다."
-                )}
-              </p>
+              <p class="small">{t("Based on high-level training datasets, you can derive highly accurate artificial intelligence to develop and validate up to 100 AI models.")}</p>
             </div>
           </div>
         </div>
@@ -702,9 +507,7 @@ const ProjectIntro = (props) => {
                 {t("Teach AI suitable for each type of data.")}
               </h2>
               <p className={classes.P}>
-                {t(
-                  "CLICK AI의 AutoML은 다양한 형태의 데이터 별로 적합한 기능의 인공지능 자동 개발을 제공합니다."
-                )}
+                {t("CLICK AI's AutoML provides the automatic development of artificial intelligence, which is suitable for each type of data.")}
                 <br />
               </p>
             </div>
@@ -719,11 +522,7 @@ const ProjectIntro = (props) => {
                     <br />
                     TABULAR™
                   </h5>
-                  <p class="small">
-                    {t(
-                      "최상의 데이터 과학 전문성과 결합된 고급 딥러닝 모델 생성을 자동화합니다."
-                    )}
-                  </p>
+                  <p class="small">{t("Automates the creation of advanced deep learning models combined with leading data science expertise.")}</p>
                 </div>
               </div>
             </div>
@@ -738,11 +537,7 @@ const ProjectIntro = (props) => {
                     <br />
                     TIME SERIES™
                   </h5>
-                  <p class="small">
-                    {t(
-                      "이력과 추이를 기반으로 연속적인 데이터의 가치를 예측하는 정교한 시계열 모델 개발을 자동화합니다."
-                    )}
-                  </p>
+                  <p class="small">{t("Automates the development of sophisticated time series models that predict the value of continuous data based on history and trends.")}</p>
                 </div>
               </div>
             </div>
@@ -757,11 +552,7 @@ const ProjectIntro = (props) => {
                     <br />
                     VISION™
                   </h5>
-                  <p class="small">
-                    {t(
-                      "이미지 데이터를 기반으로 특정 물체나 불량품을 AI를 활용하여 인식합니다."
-                    )}
-                  </p>
+                  <p class="small">{t("Based on image data, AI recognizes specific objects or defective products.")}</p>
                 </div>
               </div>
             </div>
@@ -776,23 +567,14 @@ const ProjectIntro = (props) => {
                     <br />
                     TEXT™
                   </h5>
-                  <p class="small">
-                    {t(
-                      "단어나 문장을 이해하여 사용자의 감정이나 계약서의 오류를 인식합니다."
-                    )}
-                  </p>
+                  <p class="small">{t("Understand words, sentences, or voices to recognize the user's feelings or errors in the contract.")}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div style={{ textAlign: "center" }}>
-          <Button
-            id="projectintro_bottom_start_btn"
-            shape="blueContained"
-            size="xl"
-            onClick={closeIntro}
-          >
+          <Button id="projectintro_bottom_start_btn" shape="blueContained" size="xl" onClick={closeIntro}>
             {t("Start Service")}
           </Button>
         </div>

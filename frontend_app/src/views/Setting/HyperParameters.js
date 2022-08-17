@@ -13,19 +13,7 @@ import Button from "components/CustomButtons/Button";
 import HyperParametersForm from "./HyperParametersForm";
 import ColabInfoForm from "./ColabInfoForm";
 
-const HyperParameters = ({
-  preferedMethod,
-  algorithmInfo,
-  setAlgorithmInfo,
-  option,
-  trainingMethod,
-  colabInfo,
-  onChangeColabInfo,
-  isParameterCompressedChecked,
-  projectStatus,
-  hyperParamsData,
-  initialInfo,
-}) => {
+const HyperParameters = ({ preferedMethod, algorithmInfo, setAlgorithmInfo, option, trainingMethod, colabInfo, onChangeColabInfo, isParameterCompressedChecked, projectStatus, hyperParamsData, initialInfo }) => {
   const { t } = useTranslation();
   const classes = currentTheme();
   const dispatch = useDispatch();
@@ -55,8 +43,7 @@ const HyperParameters = ({
 
             setSelectedSubParams(tmpSelected);
 
-            if (!projects.subHyperParameters)
-              dispatch(setSubHyperParameters(tmpSelected));
+            if (!projects.subHyperParameters) dispatch(setSubHyperParameters(tmpSelected));
           }
         });
       }
@@ -93,20 +80,13 @@ const HyperParameters = ({
             {t("Hyperparameter setting")}
           </span>
           {preferedMethod === "custom" && projectStatus === 0 && (
-            <Button
-              id="intialize_hyperparametersetting_btn"
-              shape="greenOutlined"
-              size="sm"
-              sx={{ ml: 0.5, mr: 3 }}
-              onClick={resetCondition}
-            >
+            <Button id="intialize_hyperparametersetting_btn" shape="greenOutlined" size="sm" sx={{ ml: 0.5, mr: 3 }} onClick={resetCondition}>
               {t("Reset settings")}
             </Button>
           )}
           {preferedMethod && preferedMethod !== "colab" && (
             <span className={classes.text87size12} style={{ display: "block" }}>
-              * {t("Model generation limit")} : 300{t("")} (
-              {t("cross product of the number of set values for each parameter")})
+              * {t("Model generation limit")} : 300{t("")} ({t("cross product of the number of set values for each parameter")})
             </span>
           )}
         </Grid>
@@ -134,36 +114,24 @@ const HyperParameters = ({
           </Grid>
           <Grid item sx={{ ml: "auto" }} xs={6} textAlign="center">
             <span>{t("Value")}</span>
-            {option &&
-              option !== "auto" &&
-              preferedMethod !== "colab" &&
-              projectStatus === 0 && (
-                <Tooltip
-                  title={t(
-                    "int, float 타입의 경우 콤마, 스페이스, 엔터키를 이용하여 다중값을 설정할 수 있습니다."
-                  )}
-                  placement="right"
-                >
-                  <HelpOutlineIcon
-                    fontSize="small"
-                    sx={{
-                      ml: 0.5,
-                      fill: "var(--primary)",
-                      "&:hover": { cursor: "pointer" },
-                    }}
-                  />
-                </Tooltip>
-              )}
+            {option && option !== "auto" && preferedMethod !== "colab" && projectStatus === 0 && (
+              <Tooltip title={t("For int and float types, multiple values can be set using comma, space, and enter key.")} placement="right">
+                <HelpOutlineIcon
+                  fontSize="small"
+                  sx={{
+                    ml: 0.5,
+                    fill: "var(--primary)",
+                    "&:hover": { cursor: "pointer" },
+                  }}
+                />
+              </Tooltip>
+            )}
           </Grid>
         </Grid>
 
         <Grid container sx={{ border: "2px solid var(--surface2)" }}>
           {preferedMethod === "colab" ? (
-            <ColabInfoForm
-              colabInfo={colabInfo}
-              onChangeColabInfo={onChangeColabInfo}
-              projectStatus={projectStatus}
-            />
+            <ColabInfoForm colabInfo={colabInfo} onChangeColabInfo={onChangeColabInfo} projectStatus={projectStatus} />
           ) : (
             <HyperParametersForm
               preferedMethod={preferedMethod}

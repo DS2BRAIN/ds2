@@ -2,54 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages";
 import { getRecentProjectsRequestAction } from "redux/reducers/projects";
 import * as api from "controller/labelApi.js";
 import Cookies from "helpers/Cookies";
 import currentTheme from "assets/jss/custom";
 import { IS_ENTERPRISE } from "variables/common";
-import {
-  checkIsValidKey,
-  sendErrorMessage,
-} from "components/Function/globalFunc.js";
+import { checkIsValidKey, sendErrorMessage } from "components/Function/globalFunc.js";
 import Button from "components/CustomButtons/Button";
 
-import {
-  Grid,
-  Modal,
-  Typography,
-  FormControl,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-  Tooltip,
-  CircularProgress,
-  Checkbox,
-} from "@mui/material";
+import { Grid, Modal, Typography, FormControl, FormControlLabel, RadioGroup, Radio, Tooltip, CircularProgress, Checkbox } from "@mui/material";
 
-const CustomAICreateModal = ({
-  history,
-  isCustomAIModalOpen,
-  setIsCustomAIModalOpen,
-  dataColumns,
-  isSendingAPI,
-  setIsSendingAPI,
-  predictColumnName,
-  totalLabelClasses,
-  setIsCustomAiLoading,
-  getProjectsStatus,
-  setIsAbleToAutoLabeling,
-  setCreatingCustomAiProjectId,
-}) => {
+const CustomAICreateModal = ({ history, isCustomAIModalOpen, setIsCustomAIModalOpen, dataColumns, isSendingAPI, setIsSendingAPI, predictColumnName, totalLabelClasses, setIsCustomAiLoading, getProjectsStatus, setIsAbleToAutoLabeling, setCreatingCustomAiProjectId }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
-  const { user, labelprojects } = useSelector(
-    (state) => ({ user: state.user, labelprojects: state.labelprojects }),
-    []
-  );
+  const { user, labelprojects } = useSelector((state) => ({ user: state.user, labelprojects: state.labelprojects }), []);
   const { t } = useTranslation();
 
   const [customAIType, setCustomAIType] = useState("box");
@@ -76,11 +43,7 @@ const CustomAICreateModal = ({
 
   const onClickPredictColumn = (e) => {
     if (e.target.name === predictColumnName) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("Prediction columns cannot be used as training data.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("Prediction columns cannot be used as training data.")));
       e.target.checked = false;
     }
   };
@@ -93,36 +56,23 @@ const CustomAICreateModal = ({
   };
 
   const startBuildingCustomAI = (type) => {
-    const isAvailableCustomAI =
-      (IS_ENTERPRISE && user.isValidUser) || !IS_ENTERPRISE;
+    const isAvailableCustomAI = (IS_ENTERPRISE && user.isValidUser) || !IS_ENTERPRISE;
 
     if (isAvailableCustomAI) {
       const useClassArray = Object.keys(useClass);
       const useColumnArray = Object.keys(useColumn);
-      const predictColumn = dataColumns.filter(
-        (dataColumn) => dataColumn.columnName === predictColumnName
-      );
+      const predictColumn = dataColumns.filter((dataColumn) => dataColumn.columnName === predictColumnName);
       let predictColumnId = null;
 
       if (predictColumn.length > 0) {
         predictColumnId = predictColumn[0]?.id;
       }
       if (type !== "normal_regression" && useClassArray.length === 0) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Please select at least one class."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Please select at least one class.")));
         return;
       }
-      if (
-        type !== "image" &&
-        type !== "object_detection" &&
-        useColumnArray.length === 0
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Please select one or more data columns.")
-          )
-        );
+      if (type !== "image" && type !== "object_detection" && useColumnArray.length === 0) {
+        dispatch(openErrorSnackbarRequestAction(t("Please select one or more data columns.")));
         return;
       }
 
@@ -144,11 +94,7 @@ const CustomAICreateModal = ({
         getProjectsStatus();
         setIsCustomAiLoading(true);
         setIsAbleToAutoLabeling(false);
-        dispatch(
-          openSuccessSnackbarRequestAction(
-            t("Creating Custom AI. You will be notified via email when completed.")
-          )
-        );
+        dispatch(openSuccessSnackbarRequestAction(t("Creating Custom AI. You will be notified via email when completed.")));
         setCreatingCustomAiProjectId(res.data.id);
         dispatch(getRecentProjectsRequestAction());
       })
@@ -156,11 +102,7 @@ const CustomAICreateModal = ({
         setIsCustomAiLoading(false);
         setIsAbleToAutoLabeling(true);
         if (e.response && e.response.status === 401) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t("You have been logged out automatically, please log in again")
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("You have been logged out automatically, please log in again")));
           setTimeout(() => {
             Cookies.deleteAllCookies();
             history.push("/signin/");
@@ -173,23 +115,9 @@ const CustomAICreateModal = ({
         }
 
         if (e.response && e.response.data.message) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              sendErrorMessage(
-                e.response.data.message,
-                e.response.data.message_en,
-                user.language
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t(
-                "학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요."
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
         }
       })
       .finally(() => {
@@ -256,199 +184,122 @@ const CustomAICreateModal = ({
   }, [useClass, labelprojects.projectDetail]);
 
   return (
-    <Modal
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-      open={isCustomAIModalOpen}
-      onClose={customAIModalClose}
-      className={classes.modalContainer}
-    >
+    <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isCustomAIModalOpen} onClose={customAIModalClose} className={classes.modalContainer}>
       <div className={classes.autoLabelingContent}>
         <div>
-          {labelprojects.projectDetail &&
-            labelprojects.projectDetail.workapp === "object_detection" && (
-              <>
-                <Grid item xs={12} sx={{ fontWeight: 600 }}>
-                  {t("Select Custom AI Type")}
-                </Grid>
-                <div
+          {labelprojects.projectDetail && labelprojects.projectDetail.workapp === "object_detection" && (
+            <>
+              <Grid item xs={12} sx={{ fontWeight: 600 }}>
+                {t("Select Custom AI Type")}
+              </Grid>
+              <div
+                style={{
+                  maxHeight: "200px",
+                  overflow: "auto",
+                }}
+              >
+                <FormControl component="fieldset" style={{ margin: "16px 20px 24px" }}>
+                  {/*<FormLabel component="legend" style={{paddingTop: '20px', color:currentTheme.text1 + ' !important'}}>{t('Analyze Unit')}</FormLabel>*/}
+                  <RadioGroup row aria-label="position" name="position" defaultValue="box" onChange={onChangeCustomAIType}>
+                    <FormControlLabel value="box" label={t("General (Box)")} control={<Radio color="primary" />} />
+                    <FormControlLabel value="polygon" label={t("Polygon")} control={<Radio color="primary" />} />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <br />
+            </>
+          )}
+
+          {labelprojects.projectDetail && labelprojects.projectDetail.workapp !== "image" && labelprojects.projectDetail.workapp !== "object_detection" && (
+            <div style={{ marginBottom: 16 }}>
+              <span style={{ fontWeight: 600 }}>{t("Select the data column to use")}</span>
+              <div style={{ maxHeight: 200, overflowY: "auto" }}>
+                <FormControl
+                  component="fieldset"
                   style={{
-                    maxHeight: "200px",
-                    overflow: "auto",
+                    width: "100%",
+                    padding: 20,
+                    flexDirection: "row",
+                    flexWrap: "wrap",
                   }}
                 >
-                  <FormControl
-                    component="fieldset"
-                    style={{ margin: "16px 20px 24px" }}
-                  >
-                    {/*<FormLabel component="legend" style={{paddingTop: '20px', color:currentTheme.text1 + ' !important'}}>{t('Analyze Unit')}</FormLabel>*/}
-                    <RadioGroup
-                      row
-                      aria-label="position"
-                      name="position"
-                      defaultValue="box"
-                      onChange={onChangeCustomAIType}
-                    >
-                      <FormControlLabel
-                        value="box"
-                        label={t("General (Box)")}
-                        control={<Radio color="primary" />}
-                      />
-                      <FormControlLabel
-                        value="polygon"
-                        label={t("Polygon")}
-                        control={<Radio color="primary" />}
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </div>
-                <br />
-              </>
-            )}
-
-          {labelprojects.projectDetail &&
-            labelprojects.projectDetail.workapp !== "image" &&
-            labelprojects.projectDetail.workapp !== "object_detection" && (
-              <div style={{ marginBottom: 16 }}>
-                <span style={{ fontWeight: 600 }}>
-                  {t("Select the data column to use")}
-                </span>
-                <div style={{ maxHeight: 200, overflowY: "auto" }}>
-                  <FormControl
-                    component="fieldset"
-                    style={{
-                      width: "100%",
-                      padding: 20,
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {dataColumns &&
-                      dataColumns.map((dataColumn) => {
-                        return (
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                onClick={onChangeUseColumn}
-                                value={dataColumn.id}
-                                defaultChecked={
-                                  dataColumn.columnName !== predictColumnName
+                  {dataColumns &&
+                    dataColumns.map((dataColumn) => {
+                      return (
+                        <FormControlLabel
+                          control={<Checkbox onClick={onChangeUseColumn} value={dataColumn.id} defaultChecked={dataColumn.columnName !== predictColumnName} label={dataColumn.columnName} name={dataColumn.columnName} style={{ marginRight: 4 }} />}
+                          label={dataColumn.columnName}
+                          onClick={onClickPredictColumn}
+                          style={
+                            dataColumn.columnName === predictColumnName
+                              ? {
+                                  minWidth: "30%",
+                                  margin: 10,
+                                  opacity: 0.6,
                                 }
-                                label={dataColumn.columnName}
-                                name={dataColumn.columnName}
-                                style={{ marginRight: 4 }}
-                              />
-                            }
-                            label={dataColumn.columnName}
-                            onClick={onClickPredictColumn}
-                            style={
-                              dataColumn.columnName === predictColumnName
-                                ? {
-                                    minWidth: "30%",
-                                    margin: 10,
-                                    opacity: 0.6,
-                                  }
-                                : { minWidth: "30%", margin: 10 }
-                            }
-                          />
-                        );
-                      })}
-                  </FormControl>
-                </div>
+                              : { minWidth: "30%", margin: 10 }
+                          }
+                        />
+                      );
+                    })}
+                </FormControl>
               </div>
-            )}
+            </div>
+          )}
 
-          {labelprojects.projectDetail &&
-            labelprojects.projectDetail.workapp !== "normal_regression" && (
-              <>
-                <div style={{ fontWeight: 600 }}>
-                  {t("Choose the class to use")}
-                </div>
-                <span className={classes.subHighlightText}>
-                  *{" "}
-                  {t(
-                    "최소 10개 이상 라벨링 된 데이터를 가진 클래스만 선택 가능합니다."
-                  )}
-                </span>
-                <div style={{ maxHeight: 200, overflowY: "auto" }}>
-                  <FormControl
-                    component="fieldset"
-                    style={{
-                      width: "100%",
-                      padding: 20,
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {totalLabelClasses &&
-                      totalLabelClasses.map((labelClass) => {
-                        return (
-                          <FormControlLabel
-                            className={
-                              labelClass.completedLabelCount < 10
-                                ? "disabled"
-                                : "active"
-                            }
-                            disabled={labelClass.completedLabelCount < 10}
-                            control={
-                              <Checkbox
-                                onClick={onChangeUseClass}
-                                value={labelClass.name}
-                                defaultChecked={
-                                  labelClass.completedLabelCount >= 10
-                                }
-                                label={labelClass.name}
-                                style={{ marginRight: 4 }}
-                              />
-                            }
-                            label={
-                              <span>
-                                <span
-                                  style={{
-                                    fontWeight: 600,
-                                    marginRight: 8,
-                                    verticalAlign: "middle",
-                                  }}
-                                >
-                                  {labelClass.name}
-                                </span>
-                                <span style={{ fontSize: 14 }}>
-                                  {/* {` [ ${labelClass.completedLabelCount} / 10 ]`} */}
-                                  {`[ ${
-                                    labelClass.completedLabelCount
-                                      ? labelClass.completedLabelCount.toLocaleString()
-                                      : 0
-                                  }${t("")} ]`}
-                                </span>
+          {labelprojects.projectDetail && labelprojects.projectDetail.workapp !== "normal_regression" && (
+            <>
+              <div style={{ fontWeight: 600 }}>{t("Choose the class to use")}</div>
+              <span className={classes.subHighlightText}>* {t("Only classes with at least 10 labeled data can be selected.")}</span>
+              <div style={{ maxHeight: 200, overflowY: "auto" }}>
+                <FormControl
+                  component="fieldset"
+                  style={{
+                    width: "100%",
+                    padding: 20,
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {totalLabelClasses &&
+                    totalLabelClasses.map((labelClass) => {
+                      return (
+                        <FormControlLabel
+                          className={labelClass.completedLabelCount < 10 ? "disabled" : "active"}
+                          disabled={labelClass.completedLabelCount < 10}
+                          control={<Checkbox onClick={onChangeUseClass} value={labelClass.name} defaultChecked={labelClass.completedLabelCount >= 10} label={labelClass.name} style={{ marginRight: 4 }} />}
+                          label={
+                            <span>
+                              <span
+                                style={{
+                                  fontWeight: 600,
+                                  marginRight: 8,
+                                  verticalAlign: "middle",
+                                }}
+                              >
+                                {labelClass.name}
                               </span>
-                            }
-                            style={{ minWidth: "30%", margin: 10 }}
-                          />
-                        );
-                      })}
-                  </FormControl>
-                </div>
-              </>
-            )}
+                              <span style={{ fontSize: 14 }}>
+                                {/* {` [ ${labelClass.completedLabelCount} / 10 ]`} */}
+                                {`[ ${labelClass.completedLabelCount ? labelClass.completedLabelCount.toLocaleString() : 0}${t("")} ]`}
+                              </span>
+                            </span>
+                          }
+                          style={{ minWidth: "30%", margin: 10 }}
+                        />
+                      );
+                    })}
+                </FormControl>
+              </div>
+            </>
+          )}
 
-          <Typography
-            component="div"
-            style={{ marginTop: "36px", fontSize: 16, fontWeight: 500 }}
-          >
-            {t(
-              "현재까지 라벨링된 학습데이터를 기반으로 Custom AI 를 만듭니다. 만들어진 인공지능으로 오토라벨링을 진행할 수 있습니다."
-            )}
+          <Typography component="div" style={{ marginTop: "36px", fontSize: 16, fontWeight: 500 }}>
+            {t("Create a custom AI based on the training data labeled so far. You can proceed with auto-labeling with the created AI.")}
           </Typography>
         </div>
 
-        <Grid
-          container
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-          style={{ margin: "16px 0 24px" }}
-          columnSpacing={2}
-        >
+        <Grid container justifyContent="space-between" alignItems="center" width="100%" style={{ margin: "16px 0 24px" }} columnSpacing={2}>
           <Grid item xs={6} style={{ padding: 0 }}>
             <Button
               id="close_customaimodal_btn"
@@ -471,9 +322,7 @@ const CustomAICreateModal = ({
                   onClick={() => {
                     if (!isSendingAPI) {
                       checkIsValidKey(user, dispatch, t).then(() => {
-                        startBuildingCustomAI(
-                          labelprojects.projectDetail?.workapp
-                        );
+                        startBuildingCustomAI(labelprojects.projectDetail?.workapp);
                       });
                     } else return;
                   }}
@@ -494,23 +343,9 @@ const CustomAICreateModal = ({
               </>
             ) : (
               <>
-                <Tooltip
-                  title={
-                    <span style={{ fontSize: "11px" }}>
-                      {t(
-                        "클래스당 라벨링 10개 이상 있어야 Custom AI 를 만들 수 있습니다."
-                      )}
-                    </span>
-                  }
-                  placement="top"
-                >
+                <Tooltip title={<span style={{ fontSize: "11px" }}>{t("클래스당 라벨링 10개 이상 있어야 Custom AI 를 만들 수 있습니다.")}</span>} placement="top">
                   <div>
-                    <Button
-                      id="start_customai_disabled_btn"
-                      shape="Contained"
-                      disabled
-                      style={{ width: "100%", textAlign: "center" }}
-                    >
+                    <Button id="start_customai_disabled_btn" shape="Contained" disabled style={{ width: "100%", textAlign: "center" }}>
                       {t("Getting Started with AI Development")}
                     </Button>
                   </div>

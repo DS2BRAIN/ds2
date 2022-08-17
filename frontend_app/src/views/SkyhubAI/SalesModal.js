@@ -108,11 +108,7 @@ const SalesModal = (props) => {
 
   const onChangeIsModelChecked = () => {
     if (isChipsetChecked) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("In case of offering chipset sales, model download has to be included.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("In case of offering chipset sales, model download has to be included.")));
       return;
     } else {
       setIsModelChecked(!isModelChecked);
@@ -190,37 +186,17 @@ const SalesModal = (props) => {
 
   const salesRequest = () => {
     if (isLoading) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("Sending a sales request. Please wait.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("Sending a sales request. Please wait.")));
       return;
     }
     if (currency === "krw") {
-      if (
-        (isApiChecked && apiPrice < apiMinPrice * 1200) ||
-        (isModelChecked && modelPrice < modelMinPrice * 1200) ||
-        (isChipsetChecked && chipsetPrice < chipsetMinPrice * 1200)
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Please set the desired price not less than minimum price.")
-          )
-        );
+      if ((isApiChecked && apiPrice < apiMinPrice * 1200) || (isModelChecked && modelPrice < modelMinPrice * 1200) || (isChipsetChecked && chipsetPrice < chipsetMinPrice * 1200)) {
+        dispatch(openErrorSnackbarRequestAction(t("Please set the desired price not less than minimum price.")));
         return;
       }
     } else {
-      if (
-        (isApiChecked && apiPrice < apiMinPrice) ||
-        (isModelChecked && modelPrice < modelMinPrice) ||
-        (isChipsetChecked && chipsetPrice < chipsetMinPrice)
-      ) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Please set the desired price not less than minimum price.")
-          )
-        );
+      if ((isApiChecked && apiPrice < apiMinPrice) || (isModelChecked && modelPrice < modelMinPrice) || (isChipsetChecked && chipsetPrice < chipsetMinPrice)) {
+        dispatch(openErrorSnackbarRequestAction(t("Please set the desired price not less than minimum price.")));
         return;
       }
     }
@@ -253,14 +229,7 @@ const SalesModal = (props) => {
   return (
     <>
       {/* sales modal */}
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={props.isSalesModalOpen}
-        onClose={closeSalesModal}
-        className={classes.modalContainer}
-        style={{ wordBreak: "keep-all" }}
-      >
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={props.isSalesModalOpen} onClose={closeSalesModal} className={classes.modalContainer} style={{ wordBreak: "keep-all" }}>
         <div className={classes.modalDataconnectorContent} id="projectModal">
           <div className={classes.gridRoot} style={{ height: "100%" }}>
             <div
@@ -273,19 +242,10 @@ const SalesModal = (props) => {
             >
               <GridItem xs={11}>
                 <div className={classes.highlightText}>
-                  <b style={{ fontSize: "1rem" }}>
-                    {props.api_type === "AI"
-                      ? t("AI sales")
-                      : t("API sales")}
-                  </b>
+                  <b style={{ fontSize: "1rem" }}>{props.api_type === "AI" ? t("AI sales") : t("API sales")}</b>
                 </div>
               </GridItem>
-              <CloseIcon
-                xs={1}
-                id="deleteLabelIcon"
-                onClick={closeSalesModal}
-                style={{ cursor: "pointer" }}
-              />
+              <CloseIcon xs={1} id="deleteLabelIcon" onClick={closeSalesModal} style={{ cursor: "pointer" }} />
             </div>
             <>
               <div style={{ width: "100%", textAlign: "center" }}>
@@ -317,13 +277,7 @@ const SalesModal = (props) => {
                               borderBottom: "transparent",
                             }}
                           >
-                            <Checkbox
-                              className={classes.tableCheckBox}
-                              value="isApiChecked"
-                              checked={isApiChecked}
-                              style={{ margin: "0 .5rem .6rem .5rem" }}
-                              onChange={onChangeIsApiChecked}
-                            />
+                            <Checkbox className={classes.tableCheckBox} value="isApiChecked" checked={isApiChecked} style={{ margin: "0 .5rem .6rem .5rem" }} onChange={onChangeIsApiChecked} />
                             <b style={{ fontSize: "1rem" }}>{t("API provision")}</b>
                           </TableCell>
                           <TableCell
@@ -348,12 +302,7 @@ const SalesModal = (props) => {
                                   disabled={!isApiChecked}
                                   type="text"
                                   value={apiPrice && apiPrice.toLocaleString()}
-                                  placeholder={
-                                    currency === "krw"
-                                      ? `${t("minimum price")} ${apiMinPrice *
-                                          1200}`
-                                      : `${t("minimum price")} $ ${apiMinPrice}`
-                                  }
+                                  placeholder={currency === "krw" ? `${t("minimum price")} ${apiMinPrice * 1200}` : `${t("minimum price")} $ ${apiMinPrice}`}
                                   onChange={apiPriceChange}
                                   style={{
                                     color: apiCellColor,
@@ -398,11 +347,7 @@ const SalesModal = (props) => {
                                         textAlign: "right",
                                       }}
                                     >
-                                      {currency === "krw"
-                                        ? `${(apiPrice * 0.1).toFixed(1)} ${t(
-                                            "원"
-                                          )}`
-                                        : `$ ${(apiPrice * 0.1).toFixed(1)}`}
+                                      {currency === "krw" ? `${(apiPrice * 0.1).toFixed(1)} ${t("KRW")}` : `$ ${(apiPrice * 0.1).toFixed(1)}`}
                                     </td>
                                   </tr>
                                 </div>
@@ -419,16 +364,8 @@ const SalesModal = (props) => {
                               borderBottom: "transparent",
                             }}
                           >
-                            <Checkbox
-                              className={classes.tableCheckBox}
-                              value="isModelChecked"
-                              checked={isModelChecked}
-                              style={{ margin: "0 .5rem .6rem .5rem" }}
-                              onChange={onChangeIsModelChecked}
-                            />
-                            <b style={{ fontSize: "1rem" }}>
-                              {t("Model download available")}
-                            </b>
+                            <Checkbox className={classes.tableCheckBox} value="isModelChecked" checked={isModelChecked} style={{ margin: "0 .5rem .6rem .5rem" }} onChange={onChangeIsModelChecked} />
+                            <b style={{ fontSize: "1rem" }}>{t("Model download available")}</b>
                           </TableCell>
                           <TableCell
                             style={{
@@ -451,18 +388,8 @@ const SalesModal = (props) => {
                                 <input
                                   disabled={!isModelChecked}
                                   type="text"
-                                  value={
-                                    modelPrice && modelPrice.toLocaleString()
-                                  }
-                                  placeholder={
-                                    currency === "krw"
-                                      ? `${t("minimum price")} ${(
-                                          modelMinPrice * 1200
-                                        ).toLocaleString()}`
-                                      : `${t(
-                                          "최소 금액"
-                                        )} $ ${modelMinPrice.toLocaleString()}`
-                                  }
+                                  value={modelPrice && modelPrice.toLocaleString()}
+                                  placeholder={currency === "krw" ? `${t("minimum price")} ${(modelMinPrice * 1200).toLocaleString()}` : `${t("최소 금액")} $ ${modelMinPrice.toLocaleString()}`}
                                   onChange={modelPriceChange}
                                   style={{
                                     color: modelCellColor,
@@ -507,11 +434,7 @@ const SalesModal = (props) => {
                                         textAlign: "right",
                                       }}
                                     >
-                                      {currency === "krw"
-                                        ? `${(modelPrice * 0.1).toFixed(1)} ${t(
-                                            "원"
-                                          )}`
-                                        : `$ ${(modelPrice * 0.1).toFixed(1)}`}
+                                      {currency === "krw" ? `${(modelPrice * 0.1).toFixed(1)} ${t("KRW")}` : `$ ${(modelPrice * 0.1).toFixed(1)}`}
                                     </td>
                                   </tr>
                                 </div>
@@ -528,16 +451,8 @@ const SalesModal = (props) => {
                               borderBottom: "transparent",
                             }}
                           >
-                            <Checkbox
-                              className={classes.tableCheckBox}
-                              value="isChipsetChecked"
-                              checked={isChipsetChecked}
-                              style={{ margin: "0 .5rem .6rem .5rem" }}
-                              onChange={onChangeIsChipsetChecked}
-                            />
-                            <b style={{ fontSize: "1rem" }}>
-                              {t("Chipset sales offer")}
-                            </b>
+                            <Checkbox className={classes.tableCheckBox} value="isChipsetChecked" checked={isChipsetChecked} style={{ margin: "0 .5rem .6rem .5rem" }} onChange={onChangeIsChipsetChecked} />
+                            <b style={{ fontSize: "1rem" }}>{t("Chipset sales offer")}</b>
                           </TableCell>
                           <TableCell
                             style={{
@@ -560,17 +475,8 @@ const SalesModal = (props) => {
                                 <input
                                   disabled={!isChipsetChecked}
                                   type="text"
-                                  value={
-                                    chipsetPrice &&
-                                    chipsetPrice.toLocaleString()
-                                  }
-                                  placeholder={
-                                    currency === "krw"
-                                      ? `${t("minimum price")} ${(
-                                          chipsetMinPrice * 1200
-                                        ).toLocaleString()}`
-                                      : `${t("minimum price")} $ ${chipsetMinPrice}`
-                                  }
+                                  value={chipsetPrice && chipsetPrice.toLocaleString()}
+                                  placeholder={currency === "krw" ? `${t("minimum price")} ${(chipsetMinPrice * 1200).toLocaleString()}` : `${t("minimum price")} $ ${chipsetMinPrice}`}
                                   onChange={chipsetPriceChange}
                                   style={{
                                     color: chipsetCellColor,
@@ -615,13 +521,7 @@ const SalesModal = (props) => {
                                         textAlign: "right",
                                       }}
                                     >
-                                      {currency === "krw"
-                                        ? `${(chipsetPrice * 0.1).toFixed(
-                                            1
-                                          )} ${t("KRW")}`
-                                        : `$ ${(chipsetPrice * 0.1).toFixed(
-                                            1
-                                          )}`}
+                                      {currency === "krw" ? `${(chipsetPrice * 0.1).toFixed(1)} ${t("KRW")}` : `$ ${(chipsetPrice * 0.1).toFixed(1)}`}
                                     </td>
                                   </tr>
                                 </div>
@@ -632,9 +532,7 @@ const SalesModal = (props) => {
                         </TableRow>
                         {/* 취소, 판매요청 버튼 */}
                         <TableRow>
-                          <TableCell
-                            style={{ borderBottom: "transparent" }}
-                          ></TableCell>
+                          <TableCell style={{ borderBottom: "transparent" }}></TableCell>
                           <TableCell
                             style={{
                               marginTop: "10%",
@@ -657,9 +555,7 @@ const SalesModal = (props) => {
                             >
                               {t("Cancel")}
                             </Button>
-                            {isApiChecked ||
-                            isModelChecked ||
-                            isChipsetChecked ? (
+                            {isApiChecked || isModelChecked || isChipsetChecked ? (
                               <Button
                                 id="requestSales"
                                 style={{
@@ -670,11 +566,7 @@ const SalesModal = (props) => {
                                   fontWeight: "bold",
                                   cursor: "pointer",
                                 }}
-                                className={
-                                  isLoading
-                                    ? classes.defaultDisabledButton
-                                    : classes.defaultGreenOutlineButton
-                                }
+                                className={isLoading ? classes.defaultDisabledButton : classes.defaultGreenOutlineButton}
                                 onClick={salesRequest}
                               >
                                 {t("Sales request")}
