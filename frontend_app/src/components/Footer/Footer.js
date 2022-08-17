@@ -134,7 +134,7 @@ export default function Footer({ footerHeight, containerWidth }) {
           </Grid>
           <Grid container>
             <Grid item>
-              <span style={{ marginRight: "4px" }}>{t("서울특별시 영등포구 의사당대로 83, 오투타워 5층 위워크 05-103호")}</span>
+              <span style={{ marginRight: "4px" }}>{t("WeWork 05-103, 83 Uisadang-daero, Yeongdeungpo-gu, Seoul, Republic of Korea")}</span>
             </Grid>
           </Grid>
           <Grid container>
