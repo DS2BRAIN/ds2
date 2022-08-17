@@ -18,7 +18,7 @@ import DataconnectorSummary from "./DataconnectorSummary.js";
 import DataconnectorTopInfo from "./DataconnectorTopInfo.js";
 
 const DataconnectorDetail = ({ history, match }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const classes = currentTheme();
   const { projects } = useSelector((state) => ({ projects: state.projects }));
   const dispatch = useDispatch();
@@ -156,10 +156,10 @@ const DataconnectorDetail = ({ history, match }) => {
         <span>
           {connectorInfo.total_count && (
             <span style={{ fontSize: 15 }}>
-              {t("Total number of datas")} : <b>{connectorInfo.total_count.toLocaleString()}</b> {t(connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" ? "" : "")}
+              {t("Total number of datas")} : <b>{connectorInfo.total_count.toLocaleString()}</b> {i18n.language === "ko" && t(connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" ? "행" : "개")}
             </span>
           )}
-          {selectedTab === "preview" && <span style={{ marginLeft: 8 }}>[ {t(connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" ? "샘플 데이터(120개행 이내)로 보여집니다." : "샘플 데이터(20장 이내)로 보여집니다.")} ]</span>}
+          {selectedTab === "preview" && <span style={{ marginLeft: 8 }}>[ {t(connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" ? "This is a sample of your data (up to 120 rows)." : "It is shown as sample data (within 20 sheets).")} ]</span>}
         </span>
         <Button
           aria-controls="customized-menu"
@@ -265,7 +265,7 @@ const DataconnectorDetail = ({ history, match }) => {
             </Grid>
             <Grid item>
               <Button id="start_verify_btn" shape="greenOutlined" disabled={isDisabledStartBtn} sx={startBtnStyle} onClick={() => startProject(connectorInfo.id, "verify")}>
-                <span>{t("Start AI Verification")}</span>
+                <span>{t("Start AI verification")}</span>
                 {isStartLoading["verify"] && (
                   <CircularProgress
                     size={15}
