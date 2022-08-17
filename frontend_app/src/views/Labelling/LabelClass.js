@@ -157,7 +157,7 @@ const LabelClass = ({ history, isMarketProject }) => {
 
   const onSetChangeClassName = () => {
     if (inputClassChangeValue.match(/[/~!@#$%^&*()+=|<>?:{}\-]/g)) {
-      let a = dispatch(openErrorSnackbarRequestAction(t("클래스명은 영문, 숫자, 한글로 시작하는 문자만 입력할 수 있습니다.(_ 포함 가능)")));
+      let a = dispatch(openErrorSnackbarRequestAction(t("Class names can contain only letters, numbers, and letters starting with Korean. (You can include _)")));
       return;
     }
 

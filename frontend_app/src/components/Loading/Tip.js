@@ -97,7 +97,7 @@ const Tip = () => {
                   wordBreak: "keep-all",
                 }}
               >
-                {t("데이터를 직접 업로드하거나 DB 연동 불러오기를 통해 기존 데이터를 간편하게 학습용 데이터셋으로 구성해 보세요!")}
+                {t("Existing data can be configured as a data set for training by directly uploading data and importing it through DB server.")}
               </span>
             </p>
             <div className={classes.imageContainer} style={{ marginBottom: "20px" }}>
@@ -125,7 +125,7 @@ const Tip = () => {
                   wordBreak: "keep-all",
                 }}
               >
-                {t("최초 10개의 수동 라벨링 학습을 시작으로 Auto-Labeling 결과물의 검수/보정 및 재학습을 반복적으로 진행하여 LABELING AI의 성능을 더욱 높혀보세요!")}
+                {t("Starting with the first 10 manual labeling, Improve your LABELING AI model performance by repeating the inspection/correction and re-training Auto-Labeling outputs.")}
               </span>
             </p>
             <div className={classes.imageContainer} style={{ marginBottom: "20px" }}>
@@ -153,7 +153,7 @@ const Tip = () => {
                   wordBreak: "keep-all",
                 }}
               >
-                {t("데이터 업로드 이후 3일 이내에 클라우드 학습서버에서 개발된 인공지능 모델을 확인하실 수 있습니다.")}
+                {t("From the time you uploaded the data, you can check your developed AI model on a cloud training server with in only 3 days.")}
               </span>
             </p>
             <div className={classes.imageContainer} style={{ marginBottom: "20px" }}>
@@ -181,7 +181,7 @@ const Tip = () => {
                   wordBreak: "keep-all",
                 }}
               >
-                {t("DS2.ai의 외부에서 별도 개발한 인공지능 또한 SKYHUB AI를 활용하여 배포 및 관리해 보세요!")}
+                {t("Artificial intelligence developed outside of DS2.ai can also be deployed or managed by using SKYHUB AI.")}
               </span>
             </p>
             <div className={classes.imageContainer} style={{ marginBottom: "20px" }}>
@@ -209,7 +209,7 @@ const Tip = () => {
                   wordBreak: "keep-all",
                 }}
               >
-                {t("직접 만든 우수한 인공지능을 AI Market을 통해 간편하게 판매하고 수익을 창출해보세요!")}
+                {t("All artificial intelligence developed through DS2.ai Studio can be commercialized, sold, and monetized through the AI MARKET by simply selecting the desired selling price and sales method.")}
               </span>
             </p>
             <div className={classes.imageContainer} style={{ marginBottom: "20px" }}>
@@ -237,7 +237,7 @@ const Tip = () => {
                   wordBreak: "keep-all",
                 }}
               >
-                {t("대시보드를 통해 진행중인 라벨링 프로젝트의 작업현황을 한 눈에 확인하고 관리할 수 있습니다.")}
+                {t("You can check and manage work status of your labeling projects at a glance through the dashboard.")}
               </span>
             </p>
             <div className={classes.imageContainer} style={{ marginBottom: "20px" }}>

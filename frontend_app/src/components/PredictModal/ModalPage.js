@@ -209,7 +209,7 @@ const ModalPage = React.memo(({ isStandard, closeModal, chosenItem, isMarket, op
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 일시적 오류로 인하여 탬플릿 다운에 실패하였습니다.")));
+          dispatch(openErrorSnackbarRequestAction(t("Template download failed due to a temporary error.")));
         }
       })
       .finally(() => {
@@ -320,7 +320,7 @@ const ModalPage = React.memo(({ isStandard, closeModal, chosenItem, isMarket, op
                 <Button style={{ width: "200px " }} className={`${classes.defaultF0F0OutlineButton} ${classes.neoBtnH30}`} onClick={downloadTemplate}>
                   {t("Download template")}
                 </Button>
-                <span style={{ marginLeft: "20px" }}>{t("템플릿 파일을 다운로드하여 데이터를 채운 뒤 파일을 업로드해주시길 바랍니다.")}</span>
+                <span style={{ marginLeft: "20px" }}>{t("Please download the template file, fill in the data, and upload the file.")}</span>
               </div>
 
               <div className={classes.predictAllContainer} id="predictModal">
@@ -331,7 +331,7 @@ const ModalPage = React.memo(({ isStandard, closeModal, chosenItem, isMarket, op
                   showPreviewsInDropzone={false}
                   maxFileSize={2147483648}
                   dialogTitle={t("Batch upload")}
-                  dropzoneText={t("드래그 앤 드롭으로 csv 파일을 업로드해주세요.")}
+                  dropzoneText={t("Drag and drop .csv file to upload")}
                   onDropRejected={dropFilesReject}
                   onDrop={dropFiles}
                   onDelete={deleteFiles}

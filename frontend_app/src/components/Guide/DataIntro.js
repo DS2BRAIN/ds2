@@ -80,7 +80,7 @@ const DataconnectorIntro = (props) => {
           {t("Composition of training data using public data")}
         </h4>
         <p className={classes.P}>
-          {t("기존 보유 데이터가 없더라도 Public Data로 바로 학습용 데이터셋을 구성하고 인공지능 개발에 활용할 수 있습니다.")}
+          {t("Even if you don't have any existing data, you can use Public Data to configure a dataset for training and utilize it for artificial intelligence development.")}
           <br />
         </p>
       </div>
@@ -100,7 +100,7 @@ const DataconnectorIntro = (props) => {
           {t("Easy to configure training dataset")}
         </h4>
         <p className={classes.P}>
-          {t("기존 데이터를 활용하거나, Public Data를 활용할 때 복수의 데이터를 결합하여 학습용 데이터셋을 구축하거나 자동 데이터 전처리 기능을 활용하여 기본적인 전처리 작업을 수행할 수 있습니다.")}
+          {t("When using existing data or utilizing public data, you can combine multiple data to build a data set for training, or perform basic pre-processing by using the automatic data pre-processing function.")}
         </p>
       </div>
     </div>
@@ -119,11 +119,11 @@ const DataconnectorIntro = (props) => {
           {t("Data for re-training for the advancement of artificial intelligence")}
         </h4>
         <p class="justify-content-center align-items-xl-center">
-          {t("인공지능을 지속적으로 고도화할 수 있도록 인공지능 운영을 통해 발생하는 데이터를 초기 학습 데이터에 추가하고 재학습할 수 있도록 축적합니다.")}
+          {t("In order to continuously advance artificial intelligence, data generated through artificial intelligence operation is added to the initial training data and accumulated for retraining.")}
           <br />
         </p>
         <p class="justify-content-center align-items-xl-center" style={{ fontSize: "12px" }}>
-          *{t("인공지능 재학습을 위한 데이터 축적은 SKYHUB AI를 활용하는 경우에만 사용할 수 있습니다.")}
+          *{t("Data accumulation for AI training is only available with SKYHUB AI.")}
           <br />
         </p>
       </div>
@@ -143,7 +143,7 @@ const DataconnectorIntro = (props) => {
           {t("SDK support for convenient programming development")}
         </h4>
         <p className={classes.P}>
-          {t("DS2.ai의 MLOps를 위한 데이터 파이프라인을 Python 코드로 구축할 수 있습니다. SDK를 통해 데이터의 업로드부터 라벨링 생성, 인공지능 학습 및 배포까지 모든 기능을 사용할 수 있습니다.")}
+          {t("Build a data pipeline for MLOps at DS2.ai with Python. SDK gives you access to all of the processes from uploading and labeling data, to training and deploying the artificial intelligence model.")}
         </p>
       </div>
     </div>
@@ -167,7 +167,7 @@ const DataconnectorIntro = (props) => {
                   color: "var(--bg)",
                 }}
               >
-                {t("DS2 DATASET을 활용하면 인공지능 개발 준비단계인 학습용 데이터셋 구성을 간편하게 수행할 수 있습니다.")}
+                {t("With DS2 DATASET, you can easily perform the data set configuration for training, which is the preparation stage of AI development.")}
                 <br />
               </p>
               <Button id="dataintro_top_start_btn" shape="blueContained" size="xl" onClick={closeIntro}>

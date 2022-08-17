@@ -347,7 +347,7 @@ const SalesModal = (props) => {
                                         textAlign: "right",
                                       }}
                                     >
-                                      {currency === "krw" ? `${(apiPrice * 0.1).toFixed(1)} ${t("원")}` : `$ ${(apiPrice * 0.1).toFixed(1)}`}
+                                      {currency === "krw" ? `${(apiPrice * 0.1).toFixed(1)} ${t("KRW")}` : `$ ${(apiPrice * 0.1).toFixed(1)}`}
                                     </td>
                                   </tr>
                                 </div>
@@ -434,7 +434,7 @@ const SalesModal = (props) => {
                                         textAlign: "right",
                                       }}
                                     >
-                                      {currency === "krw" ? `${(modelPrice * 0.1).toFixed(1)} ${t("원")}` : `$ ${(modelPrice * 0.1).toFixed(1)}`}
+                                      {currency === "krw" ? `${(modelPrice * 0.1).toFixed(1)} ${t("KRW")}` : `$ ${(modelPrice * 0.1).toFixed(1)}`}
                                     </td>
                                   </tr>
                                 </div>

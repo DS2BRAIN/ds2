@@ -415,7 +415,7 @@ const Project = ({ history }) => {
     }
     //if (!isLoading && (!projects.projects || projects.projects.length === 0)) {
     if (!projects.projects || projects.projects.length === 0) {
-      return <div className="emptyListTable">{searchedValue ? (user.language === "ko" ? `"${searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedValue}"`) : t("진행중인 배포 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.")}</div>;
+      return <div className="emptyListTable">{searchedValue ? (user.language === "ko" ? `"${searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedValue}"`) : t("There is no deployed project in process. Please create a new project")}</div>;
     } else {
       return (
         <div>
@@ -907,7 +907,7 @@ const Project = ({ history }) => {
                             }}
                           >
                             <CircularProgress size={20} style={{ mb: 2 }} />
-                            <b className={classes.text87}>{t("파일을 업로드 중입니다. 잠시만 기다려주세요.")}</b>
+                            <b className={classes.text87}>{t("Uploading file. Please wait a moment.")}</b>
                           </div>
                         ) : (
                           <Dropzone onDrop={dropFiles}>
@@ -923,9 +923,9 @@ const Project = ({ history }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <p className={classes.dropzoneText}>
-                                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                                        {t("Drag the file or click the box to upload it!")}
                                         <br />
-                                        {t("5GB 이하 크기의 pth 파일 또는 zip 파일만 지원합니다.")}
+                                        {t("Only PTH and ZIP files under 5GB are supported.")}
                                         <br />
                                       </p>
                                       <CloudUploadIcon fontSize="large" />
@@ -983,7 +983,7 @@ const Project = ({ history }) => {
                           </div>
                         ) : (
                           <div style={{ marginTop: "40px" }} className={classes.text87} id="informText">
-                            {t("현재 업로드된 파일이 없습니다. 파일을 업로드해주세요.")} <br />
+                            {t("No files uploaded. Please upload your data file.")} <br />
                           </div>
                         )}
                       </div>
@@ -1195,13 +1195,13 @@ const Project = ({ history }) => {
                     <div {...getRootProps({ className: "dropzoneArea" })} style={{ margin: "10px" }}>
                       <input {...getInputProps()} />
                       <p className={classes.settingFontWhite6}>
-                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                        {t("Drag the file or click the box to upload it!")}
                         <br />
-                        {t("이미지 파일(png/jpg/jpeg) 혹은 이미지 압축파일(zip)만 업로드 가능합니다.")}
+                        {t("Only image files (png/jpg/jpeg) or image compression files (zip) can be uploaded")}
                         <br />
-                        {t("이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요.")}
+                        {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
                         <br />
-                        {t("용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다.")}
+                        {t("Uploading large-size files may take more than 5 minutes")}
                       </p>
                       <CloudUploadIcon fontSize="large" />
                     </div>

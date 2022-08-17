@@ -1433,7 +1433,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                 <>
                   {(projects.project.status === 99 || projects.project.status === 100) && (
                     <div style={{ marginLeft: "20px", marginTop: "24px" }}>
-                      {projects.project.errorCountMemory >= 8 ? <b>[ERROR] {t("GPU 메모리가 초과하여 중단되었습니다. 학습 데이터 크기를 줄인 후 새로운 프로젝트로 다시 시도 부탁드립니다.")}</b> : <b>[ERROR] {t("오류로 인하여 프로젝트가 중단되었습니다. 새로운 프로젝트로 다시 시도 부탁드립니다.")}</b>}
+                      {projects.project.errorCountMemory >= 8 ? <b>[ERROR] {t("The project has been stopped due to exceeded GPU memory. Please reduce the size of your training data and try again with a new project")}</b> : <b>[ERROR] {t("오류로 인하여 프로젝트가 중단되었습니다. 새로운 프로젝트로 다시 시도 부탁드립니다.")}</b>}
                       <div
                         style={{
                           marginTop: "40px",
@@ -1441,7 +1441,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                           alignItems: "center",
                         }}
                       >
-                        <ReportProblem style={{ marginRight: "8px" }} /> {t("에러가 일어날 수 있는 상황은 크게 4가지로 나누어집니다.")}
+                        <ReportProblem style={{ marginRight: "8px" }} /> {t("There are four main situations in which an error can occur")}
                       </div>
                       <br />
                       <div>
@@ -1473,26 +1473,26 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                       </div>
                       <br />
                       <div>
-                        <b>2. {t("학습 데이터와 라벨링 데이터(분석/예측하고 싶은 값) 간 연관성이 없을 경우")}</b>
+                        <b>2. {t("There is no association between training data and labeling data (what you want to analyze/predict)")}</b>
                       </div>
                       <div>
-                        ⇒ {t("데이터간 연관성이 없는 경우 인공지능이 만들어지지 않습니다.")} ({t("예를 들어, 한국 전기료를 학습데이터로 넣고 콜롬비아 집값을 라벨링 데이터로 넣으면, 이는 상관관계가 거의 없기 때문에 에러가 나오게 됩니다.")})
+                        ⇒ {t("Artificial intelligence is not created if there is no correlation between the data")} ({t("예를 들어, 한국 전기료를 학습데이터로 넣고 콜롬비아 집값을 라벨링 데이터로 넣으면, 이는 상관관계가 거의 없기 때문에 에러가 나오게 됩니다.")})
                       </div>
                       <br />
                       <div>
-                        <b>3. {t("학습 데이터 크기 혹은 개수가 많아서 에러가 일어나는 경우")}</b>
+                        <b>3. {t("When an error occurs due to too large data size")}</b>
                       </div>
-                      <div>⇒ {t("인공지능 학습은 GPU 서버의 용량 대비 학습 데이터가 큰 경우 에러가 나올 가능성이 있습니다.")}</div>
+                      <div>⇒ {t("Error may occur during AI training when the training data is large compared to the capacity of the GPU server.")}</div>
                       <br />
                       <div>
                         <b>4. {t("When training is not possible because there is not enough data,")}</b>
                       </div>
                       <div>
-                        ⇒ {t("인공지능 학습을 위해서는 충분한 양의 학습데이터가 필요합니다.")} {t("연관성이 적을수록 더 많은 데이터가 있어야 인공지능 학습이 성공할 확률이 커집니다.")}
+                        ⇒ {t("A sufficient amount of training data is required for AI training.")} {t("연관성이 적을수록 더 많은 데이터가 있어야 인공지능 학습이 성공할 확률이 커집니다.")}
                       </div>
                       <br />
                       <div>
-                        <b>{t("모든 에러 사항에 포함되지 않는다고 여겨질 경우, 챗봇으로 문의주시면 신속히 조치해드리겠습니다.")}</b>
+                        <b>{t("If your error is not listed, please contact us via chatbot and we will get back to you as soon as possible.")}</b>
                       </div>
                     </div>
                   )}
@@ -1505,21 +1505,21 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                           alignItems: "center",
                         }}
                       >
-                        <ReportProblem style={{ marginRight: "8px" }} /> {t("학습 전 학습데이터 가공 중 학습데이터가 모두 삭제되어 진행되지 않습니다.")}
+                        <ReportProblem style={{ marginRight: "8px" }} /> {t("During pre-training data processing, all training data has been deleted and therefore won’t be processed.")}
                       </div>
                       <br />
                       <div>
                         <b>1. {t("If the preprocessing option deletes all training data")}</b>
                       </div>
                       <div>
-                        ⇒ {t("학습 데이터를 모두 삭제하도록 전처리가 될 경우 학습이 이루어지지 않습니다.")} {t("Please change the preprocessing option and proceed.")}
+                        ⇒ {t("If the preprocessing option deletes all training data, the training will not proceed.")} {t("Please change the preprocessing option and proceed.")}
                       </div>
                       <br />
                       <div>
                         <b>2. {t("In case linked information is inconsistent")}</b>
                       </div>
                       <div>
-                        ⇒ {t("학습 데이터간 연동 정보가 불일치 하는 경우 학습이 이루어지지 않을 수 있습니다.")} {t("Please change the linked information option and proceed.")}
+                        ⇒ {t("If there is a mismatch in linked information between training data, training may not proceed.")} {t("Please change the linked information option and proceed.")}
                       </div>
                       <br />
                     </div>
@@ -1581,12 +1581,12 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
             }}
           >
             <span style={{ fontSize: "16px", lineHeight: "2em", paddingTop: 15 }}>
-              * {t("해당 딥러닝 모델의 사용권을 구매 시 사용권을 부여 받아 모델을 다운로드 할 수 있습니다.")}
-              <br />* {t("해당 모델은 딥러닝 기반 오픈소스 프레임워크를 사용하였으며, 해당 모델 사용권 구매시 딥러닝 모델 파일과 주피터에서 추론 (Inference) 기능을 사용할 수 있는 코드를 함께 이메일로 받게 됩니다.")}
-              <br />* {t("사용권 구매 시 모델 다운로드 링크는 영업일 2일이내에 이메일을 통해 제공되며, 하드웨어 키트 구매 상담을 요청한 경우에는 상담 일정을 이메일을 통해 받게 됩니다.")}
-              <br />* {t("모델의 라이센스는 (주)디에스랩글로벌이 소유권을 가지고 있으며, 사용권 구매시 소유권이 아닌 사용권의 권리만 가지게 됩니다. (재판매 불가)")}
-              <br />* {t("고유 AutoDL 기술 유출을 막기 위해 모델 사용권 구매시 다운로드 되는 모델의 하이퍼 파라미터는 기존 모델과 유사도 99% 를 보장하는 보정 모델로 다운로드 됩니다.")}
-              <br />* {t("기타 자세한 사항은 통합 이용약관을 확인 후 구매해주시길 바랍니다.")}
+              * {t("When you purchase the license for the deep learning model, you can download the model.")}
+              <br />* {t("The model used an open source framework based on deep learning, and when you purchase the model license, you will receive an email with the deep learning model file and the code to use the inference function in Jupyter.")}
+              <br />* {t("When purchasing a license, a link to download the model will be emailed to you within 2 business days, and if you have requested a consultation to purchase a hardware kit, you will receive a consultation schedule via email.")}
+              <br />* {t("The license of the model is owned by DS Lab Global Co., Ltd., and when you purchase a license, you only have the right to use the model. You do not gain ownership of the model. (Not for resale)")}
+              <br />* {t("In order to prevent leakage of proprietary AutoDL technology, hyperparameters of the model downloaded when purchasing a model license are downloaded as a calibration model that guarantees 99% similarity to the existing model.")}
+              <br />* {t("For other details, please check the integrated terms of use before purchasing.")}
             </span>
           </GridContainer>
           <Divider className={classes.titleDivider} style={{ border: "1px solid white" }} />
@@ -1647,7 +1647,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                 <small>{t("Price")} :</small> {price.toLocaleString()} <small>{t("Credit")}</small>
               </span>
             ) : (
-              <span style={{ fontSize: "16px", color: "red" }}>{t("금액 산정에 오류가 발생하였습니다. 문의하기를 이용해주세요.")}</span>
+              <span style={{ fontSize: "16px", color: "red" }}>{t("An error has occurred during pricing. Please contact us")}</span>
             )}
           </GridContainer>
           <GridContainer

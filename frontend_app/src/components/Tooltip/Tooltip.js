@@ -42,7 +42,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
               </div>
               <div>
                 - {t("Object Detection")} : {t("이미지 내 여러 물체에 대해 어떤 물체인지와 위치를 분류하고 예측합니다.")}
-                {t("사전 라벨링 작업이 필요합니다. 라벨링은 메인메뉴에 물체인식 라벨링을 통해서 작업하실 수 있습니다.")}
+                {t("Pre-labeling is required. Labeling can be done through object recognition labeling in the main menu.")}
               </div>
               {/* <div>
                 - GAN :{" "}
@@ -62,12 +62,12 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Generate Code")}</b>
-              <div>{t("주피터 환경에서 바로 실행이 가능한 딥러닝 개발 코드를 생성합니다.")}</div>
+              <div>{t("Generate ready-to-run deep learning development code in Jupyter environment.")}</div>
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Higher accuracy")}</b>
               <div>
-                {t("인공지능 모델 중 정확도가 높은 모델을 위주로  모델을 생성합니다.")} <br /> {t("However, training can take a long time.")}
+                {t("AI models with higher accuracy are prioritized when generating models.")} <br /> {t("However, training can take a long time.")}
               </div>
             </div>
             <div style={{ marginBottom: "20px" }}>
@@ -78,7 +78,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Manual setting")}</b>
-              <div>{t("원하는 머신러닝/딥러닝 라이브러리와 하이퍼파라미터를 직접 설정하여 사용할 수 있습니다.")}</div>
+              <div>{t("Set and use your preferred machine learning/deep learning library and hyperparameter.")}</div>
             </div>
           </>
         );
@@ -113,7 +113,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
                 <img src={fileurl + "asset/front/img/modelIcon/modelPause.png"} className={classes.modelStatusImg} />
                 <b>{t("Pending")}</b>
               </div>
-              <div className={classes.modelStatusFont}>{t("인공지능 학습 순서 상 대기 중인 모델의 수를 표시합니다. 잠시 후 학습은 재게될 예정입니다.")}</div>
+              <div className={classes.modelStatusFont}>{t("Number of models pending. Training will start again.")}</div>
             </div>
             <div className={classes.alignCenterContainer}>
               <div className={classes.modelStatusImgContainer} style={user.language === "en" ? { minWidth: "140px" } : { minWidth: "60px" }}>
@@ -139,7 +139,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
             <div className={classes.title} style={{ marginBottom: "20px" }}>
               {t("Whether to use the validation function")}
             </div>
-            <div>{t("해당 프로젝트를 통해 만든 인공지능으로 더 상세한 데이터 검증을 사용할지 여부를 체크합니다.")}</div>
+            <div>{t("Check whether to use more detailed data validation with the artificial intelligence created through the project.")}</div>
           </>
         );
       case "algorithm":
@@ -160,7 +160,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
               {t("Training GPU Option")}
             </div>
             <div style={{ marginBottom: "20px" }}>
-              <div>{t("특정 GPU 로 학습을 지정하고 싶은 경우에 원하는 GPU 로 선택하여 학습할 수 있습니다.")}</div>
+              <div>{t("To utilize a specific GPU, select and train with the desired GPU.")}</div>
             </div>
           </>
         );

@@ -62,7 +62,7 @@ const PasswordCard = ({ type, props }) => {
     } else if (password !== passwordCheck) {
       setSnackbarOption("error", t("Passwords do not match."));
     } else if (!/[A-Za-z0-9!@#$%^&+=]{8,}/.test(password) || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&+=]/.test(password)) {
-      setSnackbarOption("error", t("비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다."));
+      setSnackbarOption("error", t("Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"));
     } else {
       let code = "";
       let query = props.location.search;
@@ -89,7 +89,7 @@ const PasswordCard = ({ type, props }) => {
           if (e.response && e.response.data.message) {
             setSnackbarOption("error", sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language));
           } else {
-            setSnackbarOption("error", t("죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."));
+            setSnackbarOption("error", t("A temporary error has occured. Please try again."));
           }
           if (!process.env.REACT_APP_DEPLOY) console.log(e);
           setIsLoading(false);
@@ -134,7 +134,7 @@ const PasswordCard = ({ type, props }) => {
           if (res.status === 200) {
             onSetSnackbarOption("success", t(res.data.message));
           } else {
-            onSetSnackbarOption("success", `${t("유저 이메일 정보와 일치할 경우 비밀번호 찾기 링크가 발송됩니다.")} ${t("The e-mail may take up to 10 minutes to arrive in your inbox")}`);
+            onSetSnackbarOption("success", `${t("Once you verify your e-mail, the password reset link will be sent to your inbox.")} ${t("The e-mail may take up to 10 minutes to arrive in your inbox")}`);
           }
           setEmail("");
         })
@@ -145,7 +145,7 @@ const PasswordCard = ({ type, props }) => {
           if (e.response && e.response.data.message) {
             onSetSnackbarOption("error", sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language));
           } else {
-            onSetSnackbarOption("error", t("죄송합니다, 일시적인 에러가 발생하여 메일전송에 실패하였습니다."));
+            onSetSnackbarOption("error", t("E-mail has not been sent due to a temporary error."));
           }
           setIsLoading(false);
           if (!process.env.REACT_APP_DEPLOY) console.log(e);

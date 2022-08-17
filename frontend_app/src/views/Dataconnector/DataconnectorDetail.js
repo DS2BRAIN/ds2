@@ -104,7 +104,7 @@ const DataconnectorDetail = ({ history, match }) => {
         if (JSON.stringify(error).indexOf("507") > -1) {
           dispatch(openErrorSnackbarRequestAction(t("The total number of data exceeded.")));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("The project was not created due to a temporary error. Please try again.")));
         }
       })
       .finally(() => {

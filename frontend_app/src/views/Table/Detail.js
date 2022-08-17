@@ -233,7 +233,7 @@ const Detail = React.memo(({ datacolumns }) => {
         case "javascript":
           setApiContent(
             `
-                    var data = JSON.stringify({"modelid": ${models.model.id},"apptoken": ${apptoken},"file": "${t("파일데이터를 업로드해주세요.")}""filename": "${t("Please write down the file name here.")}"});
+                    var data = JSON.stringify({"modelid": ${models.model.id},"apptoken": ${apptoken},"file": "${t("Please upload the file data.")}""filename": "${t("Please write down the file name here.")}"});
 
                     var xhr = new XMLHttpRequest();
                     xhr.withCredentials = true;
@@ -255,7 +255,7 @@ const Detail = React.memo(({ datacolumns }) => {
 
                         url = f"${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/"
                         files = [('file', open("${t("파일경로를 여기에 적어주세요.")}", 'rb'))]  
-                        payload = {"modelid":${models.model.id},"apptoken":${apptoken}, "filename": "${t("파일명을 여기에 적어주세요.")}"}
+                        payload = {"modelid":${models.model.id},"apptoken":${apptoken}, "filename": "${t("Please write down the file name here.")}"}
                         headers = {}
 
                         response = requests.request("POST", url, data=payload, headers=headers, files=files)
@@ -266,7 +266,7 @@ const Detail = React.memo(({ datacolumns }) => {
           setApiContent(`
                         wget \\
                         --method POST \\
-                        --body-data '{"modelid":${models.model.id},"apptoken":${apptoken},"parameter": ${parameterColumns}',"file": "${t("파일데이터를 업로드해주세요.")}","filename": "${t("Please write down the file name here.")}" \\
+                        --body-data '{"modelid":${models.model.id},"apptoken":${apptoken},"parameter": ${parameterColumns}',"file": "${t("Please upload the file data.")}","filename": "${t("Please write down the file name here.")}" \\
                         -O predict_result.txt \\
                         - ${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/`);
           break;
@@ -275,7 +275,7 @@ const Detail = React.memo(({ datacolumns }) => {
                         OkHttpClient client = new OkHttpClient();
 
                         MediaType mediaType = MediaType.parse("application/json");
-                        RequestBody body = RequestBody.create(mediaType, "{\"modelid\":${models.model.id},\"apptoken\":${apptoken},\"file\": \"${t("파일데이터를 업로드해주세요.")}\",\"filename\": \"${t("Please write down the file name here.")}\"}");
+                        RequestBody body = RequestBody.create(mediaType, "{\"modelid\":${models.model.id},\"apptoken\":${apptoken},\"file\": \"${t("Please upload the file data.")}\",\"filename\": \"${t("Please write down the file name here.")}\"}");
                         Request request = new Request.Builder()
                         .url("${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/")
                         .post(body)
@@ -1007,7 +1007,7 @@ const Detail = React.memo(({ datacolumns }) => {
                     fontWeight: "400",
                   }}
                 >
-                  {t("링크 공유 시 소모되는 예측 카운트는 동일하게 적용되니 이용에 참고해주시길 바랍니다.")}
+                  {t("Please note that you will consume the same amount of prediction counting when you share link.")}
                 </div>
               </GridItem>
               <GridItem xs={9}></GridItem>

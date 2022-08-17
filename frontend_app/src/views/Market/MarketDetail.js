@@ -1696,7 +1696,7 @@ const MarketDetail = ({ history, match }) => {
                     <div {...getRootProps({ className: "dropzoneArea" })} style={{ padding: "36px 0" }}>
                       <input {...getInputProps()} accept="image/jpeg, image/jpg, image/png" />
                       <p className={classes.settingFontWhite6}>
-                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                        {t("Drag the file or click the box to upload it!")}
                         <br />
                         {dataTypeText()}
                       </p>

@@ -968,7 +968,7 @@ const Project = ({ history }) => {
 
   const onOpenStartProject = () => {
     if (parseInt(user.me.cumulativeProjectCount) >= parseInt(+user.me.remainProjectCount + +user.me.usageplan.projects)) {
-      dispatch(openErrorSnackbarRequestAction(`${t("프로젝트 생성 한도를 초과하여 새로운 프로젝트를 추가할 수 없습니다.")} ${t("To continue, please upgrade your plan")}`));
+      dispatch(openErrorSnackbarRequestAction(`${t("You can’t add a new project. You’ve reached the maximum number of projects allowed for your account")} ${t("To continue, please upgrade your plan")}`));
       return;
     }
     setIsNewStartModelModalOpen(true);
@@ -1247,7 +1247,7 @@ const Project = ({ history }) => {
           <GridContainer style={{ alignItems: "center" }}>
             <GridItem xs={12} style={currentTheme.titleGridItem}>
               <div className={classes.topTitle}>{t("AI development")}</div>
-              <div className={classes.subTitleText}>{t("새로운 프로젝트를 생성하여 AI모델을 통한 데이터 예측을 할 수 있습니다.")}</div>
+              <div className={classes.subTitleText}>{t("Create new projects and develop your own AI models. Analyze your data and make predictions.")}</div>
             </GridItem>
             {isLoading || projects.isLoading ? (
               <GridItem xs={12}>
@@ -1369,7 +1369,7 @@ const Project = ({ history }) => {
                               }}
                             >
                               <span className={classes.startTriggerBtn} id="newProjectDiv">
-                                {t("우측 상단의 버튼을 눌러 프로젝트를 생성해보세요.")}
+                                {t("You can start a project by clicking the top right button.")}
                               </span>
                               <div style={{ cursor: "pointer" }}>
                                 <span
@@ -1468,7 +1468,7 @@ const Project = ({ history }) => {
                             }}
                           >
                             <Loading size={200} />
-                            <b className={classes.text87}>{t("파일을 업로드 중입니다. 잠시만 기다려주세요.")}</b>
+                            <b className={classes.text87}>{t("Uploading file. Please wait a moment.")}</b>
                           </div>
                         ) : (
                           <Dropzone onDrop={dropFiles}>
@@ -1484,9 +1484,9 @@ const Project = ({ history }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <p className={classes.dropzoneText}>
-                                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                                        {t("Drag the file or click the box to upload it!")}
                                         <br />
-                                        {t("5GB 이하 크기의 pth 파일 또는 zip 파일만 지원합니다.")}
+                                        {t("Only PTH and ZIP files under 5GB are supported.")}
                                         <br />
                                       </p>
                                       <CloudUploadIcon fontSize="large" />
@@ -1544,7 +1544,7 @@ const Project = ({ history }) => {
                           </div>
                         ) : (
                           <div style={{ marginTop: "40px" }} className={classes.text87} id="informText">
-                            {t("현재 업로드된 파일이 없습니다. 파일을 업로드해주세요.")} <br />
+                            {t("No files uploaded. Please upload your data file.")} <br />
                           </div>
                         )}
                       </div>
@@ -1653,14 +1653,14 @@ const Project = ({ history }) => {
                               {t("Content")}
                             </TableCell>
                             <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                              {t("학습서버 임대해서 주피터 환경에서 직접 코딩하여 개발")}
+                              {t("Develop by renting a training server and coding directly in the Jupyter environment")}
                             </TableCell>
                             <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                              {t("코딩 없이 자동으로 인공지능을 개발해주는 서비스")}
+                              {t("Service that automatically develops artificial intelligence without coding")}
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
                               <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                                {t("컨설턴트가 직접 상담을 통해 데이터 전처리 가공 후 인공지능을 개발해주는 서비스")}
+                                {t("Service for developing artificial intelligence after data pre-processing through direct consultation with a consultant")}
                               </TableCell>
                             )}
                           </TableRow>

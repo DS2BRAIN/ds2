@@ -382,8 +382,8 @@ const Sample = React.memo((props) => {
                           {t("Training Method")} - {t("이미지 생성(GAN)")}
                         </p>
                       )} */}
-                      {projects.project.trainingMethod === "normal_classification" && <p className={classes.settingFontWhite6}>{t("'개', '고양이'등 카테고리에 맞춰 예측해주는 기능입니다.")}</p>}
-                      {projects.project.trainingMethod === "normal_regression" && <p className={classes.settingFontWhite6}>{t("'1~10'사이의 값등 연속된 값에 맞춰 예측해주는 기능입니다.")} </p>}
+                      {projects.project.trainingMethod === "normal_classification" && <p className={classes.settingFontWhite6}>{t("This function predicts each category such as 'dog', 'cat', etc.")}</p>}
+                      {projects.project.trainingMethod === "normal_regression" && <p className={classes.settingFontWhite6}>{t("This function predicts continuous values, such as values between 1 and 10")} </p>}
                       {projects.project.trainingMethod === "time_series" && (
                         <p className={classes.settingFontWhite6}>
                           {t("Training Method")} - {t("시계열 예측")}

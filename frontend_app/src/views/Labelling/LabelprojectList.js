@@ -453,7 +453,7 @@ const LabelprojectList = ({ history }) => {
                         ? user.language === "ko"
                           ? `"${searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
                           : `There were no results found for "${searchedValue}"`
-                        : t("진행중인 라벨링 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.")}
+                        : t("There is no labeling project in process. Please create a new project")}
                     </div>
                   )}
                 </GridItem>

@@ -1327,7 +1327,7 @@ const Process = (props) => {
     }
 
     if (project.trainingMethod.indexOf("time_series") > -1 && startTimeSeriesDatetime > endTimeSeriesDatetime && analyticsStandard !== "auto") {
-      dispatch(openErrorSnackbarRequestAction(t("분석 기간은 종료 기간이 시작 기간보다 이르게 설정할 수 없습니다. 계속 진행하시려면 분석 기간을 재설정해주세요.")));
+      dispatch(openErrorSnackbarRequestAction(t("The end point cannot be set earlier than the starting point. Please reset the analysis period to continue.")));
       return;
     }
 
@@ -1365,7 +1365,7 @@ const Process = (props) => {
       }
     });
     if (hasMuchUniqueObject && (project.trainingMethod === "normal_classification" || (project.trainingMethod === "normal" && valueForPredictInfo["type"] === "object"))) {
-      dispatch(openErrorSnackbarRequestAction(`${t("테이블 형식의 데이터에 쓰일 수 있는 문자열의 유일값(Unique)는 250개로 제한됩니다.")} ${t("계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요.")}`));
+      dispatch(openErrorSnackbarRequestAction(`${t("The number of unique values ​​of strings that can be used in tabular data is limited to 250.")} ${t("계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요.")}`));
       return;
     }
 
@@ -1468,26 +1468,26 @@ const Process = (props) => {
 
     console.log(projectInfo);
     if (valueForPredictInfo["unique"] > 250 && (project.trainingMethod === "text" || project.trainingMethod === "image" || project.trainingMethod === "object_detection" || project.trainingMethod === "normal_classification")) {
-      dispatch(openErrorSnackbarRequestAction(t("예측하고 싶은 분류값의 유일값(Unique)는 250개로 제한됩니다. 다른 값을 예측하거나 분류값을 줄여주세요.")));
+      dispatch(openErrorSnackbarRequestAction(t("The unique value of the classification you are trying to predict is more than 250. Please predict other values or reduce the classification value.")));
       return;
     } else if (hasMissingValue && valueForPredictInfo["unique"] > 25 && valueForPredictInfo["type"] === "object") {
       await dispatch(
         askStartProjectRequestAction({
-          message: `${t("예측하고자하는 값의 유일값(Unique)이 25개 이상이면 정확도가 감소할 수 있으며, 전처리를 하지 않을시 유실값을 가진 행은 제거됩니다.")} ${t("Would you like to proceed?")}`,
+          message: `${t("If there are more than 25 unique values that you want to predict, the accuracy may decrease. If preprocessing is not performed, the rows with missing values will be removed.")} ${t("Would you like to proceed?")}`,
           project: projectInfo,
         })
       );
     } else if (hasMissingValue && !(valueForPredictInfo["unique"] > 25 && valueForPredictInfo["type"] === "object")) {
       await dispatch(
         askStartProjectRequestAction({
-          message: `${t("전처리를 하지 않을시, 유실값을 가진 행은 제거됩니다.")} ${t("Would you like to proceed?")}`,
+          message: `${t("If preprocessing is not performed, the rows with missing values will be removed.")} ${t("Would you like to proceed?")}`,
           project: projectInfo,
         })
       );
     } else if (!hasMissingValue && valueForPredictInfo["unique"] > 25 && valueForPredictInfo["type"] === "object") {
       await dispatch(
         askStartProjectRequestAction({
-          message: `${t("예측하고자하는 값의 유일값(Unique)이 25개 이상이면 정확도가 감소할 수 있습니다.")} ${t("Would you like to proceed?")}`,
+          message: `${t("If there are more than 25 unique values that you want to predict, the accuracy may decrease.")} ${t("Would you like to proceed?")}`,
           project: projectInfo,
         })
       );
@@ -1673,7 +1673,7 @@ const Process = (props) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
         }
       })
       .finally(() => {
@@ -1688,7 +1688,7 @@ const Process = (props) => {
 
   const handleClickForShare = (event) => {
     if (!(groups.parentsGroup && groups.parentsGroup.length > 0)) {
-      dispatch(openErrorSnackbarRequestAction(t("프로젝트를 공유하기전에 그룹을 생성해주세요. 그룹생성은 세팅->공유하기 탭에서 가능합니다.")));
+      dispatch(openErrorSnackbarRequestAction(t("Please create a group before sharing a project. You can create a group in Settings -> Sharing tab.")));
       return;
     }
     setAnchorEl(event.currentTarget);
@@ -1815,7 +1815,7 @@ const Process = (props) => {
   };
 
   const downloadReport = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("해당 작업은 10초 이상의 시간이 소요될 수 있습니다. 잠시만 기다려주세요.")));
+    dispatch(openSuccessSnackbarRequestAction(t("This operation may take more than 10 seconds. Please wait.")));
 
     setIsDownloadReportLoading(true);
 
@@ -1836,7 +1836,7 @@ const Process = (props) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(e.response.data.message, e.response.data.message_en, user.language));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다. 보고서 다운로드 중 일시적인 오류가 발생하였습니다. 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry. A temporary error occurred while downloading the report. please try again.")));
         }
       })
       .finally(() => {
@@ -2470,7 +2470,7 @@ const Process = (props) => {
                               onChange={methodChange}
                             >
                               {hasStructuredData && <MenuItem value="normal">{t("Structured Data Automatic Classification")}</MenuItem>}
-                              {hasStructuredData && <MenuItem value="normal_classification">{t("정형 데이터 카테고리 분류 (Classification)")}</MenuItem>}
+                              {hasStructuredData && <MenuItem value="normal_classification">{t("Structured Data Category Classification")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="normal_regression">{t("Structured Data Regression")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="text">{t("Natural Language Processing (NLP)")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="recommender">{t("Recommendation system (matrix)")}</MenuItem>}
@@ -2568,7 +2568,7 @@ const Process = (props) => {
                                 id={projects.project.status !== 0 || (projects.project.statusText === "중단" && projects.project.option !== "custom") ? "disabledSelectBox" : "valueForPredictSelectBox"}
                               >
                                 <MenuItem value="placeholder" disabled style={{ fontSize: 14 }}>
-                                  {t("분석/예측하고 싶은 값 싶은 값을 선택해주세요.")}
+                                  {t("Select the value you want to analyze/predict.")}
                                 </MenuItem>
                                 {datacolumns &&
                                   datacolumns.map(
@@ -3054,7 +3054,7 @@ const Process = (props) => {
                 </div>
                 <br />
                 <div>
-                  <b className={classes.subHighlightText}>* {t("라이브러리 설치 후 런타임 재시작 (Runtime reboot) 버튼을 누른 후 다시 실행시켜야 정상동작 하니 참고바랍니다.")}</b>
+                  <b className={classes.subHighlightText}>* {t("Please note that after installing the library, press the 'restart runtime' button and run it again otherwise you may get an error.")}</b>
                 </div>
                 <br />
               </div>

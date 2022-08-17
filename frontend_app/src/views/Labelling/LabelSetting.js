@@ -441,7 +441,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
         <Grid item xs={9}>
           <div style={{ margin: "0 0 10px 5px", textAlign: "right" }}>
-            <FormControlLabel control={<Switch id="inspection_switch_btn" checked={hasReviewProcess} onChange={changeHasReviewProcess} />} label={<span style={{ fontSize: 16, fontWeight: 600 }}>{`${t("검수진행여부")}`}</span>} style={{ margin: 0 }} />
+            <FormControlLabel control={<Switch id="inspection_switch_btn" checked={hasReviewProcess} onChange={changeHasReviewProcess} />} label={<span style={{ fontSize: 16, fontWeight: 600 }}>{`${t("Inspection progress")}`}</span>} style={{ margin: 0 }} />
 
             <Tooltip title={t("It is decided whether to proceed with the inspection of the manual labeling case.")}>
               <HelpOutlineOutlinedIcon fontSize="small" sx={{ fill: "var(--primary)", marginLeft: "4px" }} />
@@ -521,7 +521,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
                                   </Button>
                                 )}
                                 {asynctask.status === 99 && (
-                                  <Tooltip title={<span style={{ fontSize: "12px" }}>{t("문의 시 에러 생성일과 파일명을 말씀해 주세요.")}</span>} placement="bottom">
+                                  <Tooltip title={<span style={{ fontSize: "12px" }}>{t("When inquiring, please tell us the date of creation of the error and the name of the file.")}</span>} placement="bottom">
                                     <div>
                                       <Button shape="greenOutlined" onClick={() => openChat()}>
                                         {t("Contact us")}

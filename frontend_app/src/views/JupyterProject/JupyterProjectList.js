@@ -379,7 +379,7 @@ const Project = ({ history }) => {
     }
     if (!isLoading && (!projects.jupyterProjects || projects.jupyterProjects.length === 0)) {
       return (
-        <div className="emptyListTable">{searchedValue ? (user.language === "ko" ? `"${searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedValue}"`) : t("진행중인 주피터 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.")}</div>
+        <div className="emptyListTable">{searchedValue ? (user.language === "ko" ? `"${searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedValue}"`) : t("There is no jupyter project in process. Please create a new project")}</div>
       );
     } else {
       return (
@@ -700,7 +700,7 @@ const Project = ({ history }) => {
           <ReactTitle title={"DS2.AI - " + t("Lease Training Server")} />
           <GridItem xs={12} style={currentTheme.titleGridItem}>
             <div className={classes.topTitle}>{t("Lease Training Server")}</div>
-            <div className={classes.subTitleText}>{t("새로운 프로젝트를 생성하여 클라우드 학습 서버를 임대한 후 커스텀 개발을 시작할 수 있습니다.")}</div>
+            <div className={classes.subTitleText}>{t("Create a new project to lease a cloud training server and start custom development.")}</div>
           </GridItem>
           <>
             <GridContainer
@@ -860,7 +860,7 @@ const Project = ({ history }) => {
                             }}
                           >
                             <CircularProgress size={20} sx={{ mb: 2 }} />
-                            <b className={classes.text87}>{t("파일을 업로드 중입니다. 잠시만 기다려주세요.")}</b>
+                            <b className={classes.text87}>{t("Uploading file. Please wait a moment.")}</b>
                           </div>
                         ) : (
                           <Dropzone onDrop={dropFiles}>
@@ -876,9 +876,9 @@ const Project = ({ history }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <p className={classes.dropzoneText}>
-                                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                                        {t("Drag the file or click the box to upload it!")}
                                         <br />
-                                        {t("5GB 이하 크기의 pth 파일 또는 zip 파일만 지원합니다.")}
+                                        {t("Only PTH and ZIP files under 5GB are supported.")}
                                         <br />
                                       </p>
                                       <CloudUploadIcon fontSize="large" />
@@ -936,7 +936,7 @@ const Project = ({ history }) => {
                           </div>
                         ) : (
                           <div style={{ marginTop: "40px" }} className={classes.text87} id="informText">
-                            {t("현재 업로드된 파일이 없습니다. 파일을 업로드해주세요.")} <br />
+                            {t("No files uploaded. Please upload your data file.")} <br />
                           </div>
                         )}
                       </div>
