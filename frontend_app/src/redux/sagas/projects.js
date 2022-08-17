@@ -1246,7 +1246,7 @@ function* putMarketProject(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트가 정보가 정상적으로 변경되었습니다.",
+      data: "프로젝트 정보가 정상적으로 변경되었습니다.",
     });
   } catch (err) {
     yield put({

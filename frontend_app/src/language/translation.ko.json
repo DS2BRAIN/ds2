@@ -596,7 +596,7 @@
   "Please select a training method.": "학습형태를 선택해주세요.",
   "The end point cannot be set earlier than the starting point. Please reset the analysis period to continue.": "분석 기간은 종료 기간이 시작 기간보다 이르게 설정할 수 없습니다. 계속 진행하시려면 분석 기간을 재설정해주세요.",
   "Set the standard row of time series for each data.": "각 데이터별 시계열 기준행을 설정해주세요.",
-  "Select the value you want to analyze/predict.": "분석/예측하고 싶은 값을 선택해주세요.",
+  "Select the value you want to analyze/predict.": "분석/예측하고 싶은 값 싶은 값을 선택해주세요.",
   "Please enter all the linkage information.": "연동 정보를 모두 입력해주세요.",
   "The number of unique values ​​of strings that can be used in tabular data is limited to 250.": "테이블 형식의 데이터에 쓰일 수 있는 문자열의 유일값(Unique)는 250개로 제한됩니다.",
   "To continue, uncheck 'Training data usage' for columns with more than 250 unique values.": "계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요.",

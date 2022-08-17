@@ -19,14 +19,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
 
-const ExpandedImageModal = ({
-  sampleListDict,
-  step,
-  selectedSampleResultArr,
-  closerModalSelectedImageIndex,
-  isImageCloserModalOpen,
-  setIsImageCloserModalOpen,
-}) => {
+const ExpandedImageModal = ({ sampleListDict, step, selectedSampleResultArr, closerModalSelectedImageIndex, isImageCloserModalOpen, setIsImageCloserModalOpen }) => {
   const classes = currentTheme();
 
   return (
@@ -41,12 +34,7 @@ const ExpandedImageModal = ({
       <Grid container justifyContent="center" alignItems="center" height="100%">
         <div style={{ position: "relative", width: "60vw", maxWidth: "900px" }}>
           <img
-            src={`${IS_ENTERPRISE ? fileurl + "static" : ""}${sampleListDict?.[
-              `step${step}`
-            ]?.[selectedSampleResultArr?.[closerModalSelectedImageIndex]] &&
-              sampleListDict[`step${step}`][
-                selectedSampleResultArr[closerModalSelectedImageIndex]
-              ]["s3path"]}
+            src={`${IS_ENTERPRISE ? fileurl + "static" : ""}${sampleListDict?.[`step${step}`]?.[selectedSampleResultArr?.[closerModalSelectedImageIndex]] && sampleListDict[`step${step}`][selectedSampleResultArr[closerModalSelectedImageIndex]]["s3path"]}
               `}
             width="100%"
           />
@@ -72,16 +60,7 @@ const ExpandedImageModal = ({
 };
 
 const BestCustomAISelectModal = (props) => {
-  const {
-    isSampleModelModalOpen,
-    setIsSampleModelModalOpen,
-    setIsAbleToAutoLabeling,
-    setIsAutoLabelingLoading,
-    creatingCustomAiProjectId,
-    setCreatingCustomAiProjectId,
-    customAiModels,
-    setCustomAiModels,
-  } = props;
+  const { isSampleModelModalOpen, setIsSampleModelModalOpen, setIsAbleToAutoLabeling, setIsAutoLabelingLoading, creatingCustomAiProjectId, setCreatingCustomAiProjectId, customAiModels, setCustomAiModels } = props;
 
   const classes = currentTheme();
   const dispatch = useDispatch();
@@ -101,10 +80,7 @@ const BestCustomAISelectModal = (props) => {
   const [isReadyToShowModels, setIsReadyToShowModels] = useState(false);
   const [selectedSampleResultArr, setSelectedSampleResultArr] = useState([]);
   const [isImageCloserModalOpen, setIsImageCloserModalOpen] = useState(false);
-  const [
-    closerModalSelectedImageIndex,
-    setCloserModalSelectedImageIndex,
-  ] = useState(0);
+  const [closerModalSelectedImageIndex, setCloserModalSelectedImageIndex] = useState(0);
   const [isSampleModelLoading, setIsSampleModelLoading] = useState(false);
   const [sampleListDict, setSampleListDict] = useState({});
   const [selectedSampleResultDict, setSelectedSampleResultDict] = useState({});
@@ -137,11 +113,7 @@ const BestCustomAISelectModal = (props) => {
         }
       })
       .catch((e) => {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("There was an error selecting the Best Custom Ai.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("There was an error selecting the Best Custom Ai.")));
       });
   };
 
@@ -154,13 +126,9 @@ const BestCustomAISelectModal = (props) => {
       if (key === id) {
         tempDict[`step${step}`][key] = checked;
         if (checked) {
-          setSelectedSampleResultCnt(
-            (prevSelectedSampleResultCnt) => prevSelectedSampleResultCnt + 1
-          );
+          setSelectedSampleResultCnt((prevSelectedSampleResultCnt) => prevSelectedSampleResultCnt + 1);
         } else {
-          setSelectedSampleResultCnt(
-            (prevSelectedSampleResultCnt) => prevSelectedSampleResultCnt - 1
-          );
+          setSelectedSampleResultCnt((prevSelectedSampleResultCnt) => prevSelectedSampleResultCnt - 1);
         }
       }
     }
@@ -215,18 +183,9 @@ const BestCustomAISelectModal = (props) => {
             fill: "var(--textWhite87)",
           }}
         />
-        <ExpandedImageModal
-          sampleListDict={sampleListDict}
-          step={step}
-          selectedSampleResultArr={selectedSampleResultArr}
-          closerModalSelectedImageIndex={closerModalSelectedImageIndex}
-          isImageCloserModalOpen={isImageCloserModalOpen}
-          setIsImageCloserModalOpen={setIsImageCloserModalOpen}
-        />
+        <ExpandedImageModal sampleListDict={sampleListDict} step={step} selectedSampleResultArr={selectedSampleResultArr} closerModalSelectedImageIndex={closerModalSelectedImageIndex} isImageCloserModalOpen={isImageCloserModalOpen} setIsImageCloserModalOpen={setIsImageCloserModalOpen} />
         <img
-          src={`${IS_ENTERPRISE ? fileurl + "static" : ""}${sampleListDict[
-            `step${step}`
-          ][key] && sampleListDict[`step${step}`][key]["s3path"]}`}
+          src={`${IS_ENTERPRISE ? fileurl + "static" : ""}${sampleListDict[`step${step}`][key] && sampleListDict[`step${step}`][key]["s3path"]}`}
           style={{
             width: "100%",
             position: "relative",
@@ -241,10 +200,7 @@ const BestCustomAISelectModal = (props) => {
       setIsSampleModelLoading(true);
 
       api
-        .getSampleList(
-          labelprojects.projectDetail.id,
-          creatingCustomAiProjectId
-        )
+        .getSampleList(labelprojects.projectDetail.id, creatingCustomAiProjectId)
         .then((res) => {
           setSampleListDict(res.data);
 
@@ -341,10 +297,7 @@ const BestCustomAISelectModal = (props) => {
           ) : (
             <>
               {step > lastStep ? (
-                <div
-                  className={classes.defaultGreenContainedButton}
-                  style={{ margin: "auto" }}
-                >
+                <div className={classes.defaultGreenContainedButton} style={{ margin: "auto" }}>
                   <Grid item xs={6}>
                     <Button
                       id="closeCancelModalBtn"
@@ -361,9 +314,7 @@ const BestCustomAISelectModal = (props) => {
               ) : (
                 <>
                   <div>
-                    <span style={{ fontSize: 24, fontWeight: 600 }}>
-                      {t("Choose Best Custom AI")}
-                    </span>
+                    <span style={{ fontSize: 24, fontWeight: 600 }}>{t("Choose Best Custom AI")}</span>
                     <Grid container style={{ margin: "16px 0 24px" }}>
                       <span
                         style={{
@@ -381,19 +332,11 @@ const BestCustomAISelectModal = (props) => {
                             marginRight: 8,
                           }}
                         >
-                          {t(
-                            "샘플 오토라벨링을 가장 잘한 모델을 선택해주세요."
-                          )}
+                          {t("샘플 오토라벨링을 가장 잘한 모델을 선택해주세요.")}
                         </span>
                         <span>({t("Multiple selection possible")})</span>
-                        <div
-                          className={classes.subHighlightText}
-                          style={{ marginTop: 8 }}
-                        >
-                          *
-                          {t(
-                            "선택이 완료되면 가장 최적화된 모델로 오토라벨링이 진행됩니다."
-                          )}
+                        <div className={classes.subHighlightText} style={{ marginTop: 8 }}>
+                          *{t("선택이 완료되면 가장 최적화된 모델로 오토라벨링이 진행됩니다.")}
                         </div>
                       </Grid>
                     </Grid>
@@ -402,11 +345,7 @@ const BestCustomAISelectModal = (props) => {
                       <Grid
                         container
                         alignItems="flex-start"
-                        justifyContent={
-                          selectedSampleResultArr.length === 1
-                            ? "flext-start"
-                            : "center"
-                        }
+                        justifyContent={selectedSampleResultArr.length === 1 ? "flext-start" : "center"}
                         style={{
                           overflow: "auto",
                           maxHeight: "500px",
@@ -416,27 +355,13 @@ const BestCustomAISelectModal = (props) => {
                       >
                         {selectedSampleResultArr.map((key, idx) => {
                           return (
-                            <Grid
-                              item
-                              xs={12}
-                              lg={6}
-                              key={key}
-                              style={{ padding: "12px" }}
-                            >
+                            <Grid item xs={12} lg={6} key={key} style={{ padding: "12px" }}>
                               <FormControlLabel
                                 control={
                                   <Checkbox
-                                    checked={
-                                      selectedSampleResultDict[`step${step}`][
-                                        key
-                                      ]
-                                    }
+                                    checked={selectedSampleResultDict[`step${step}`][key]}
                                     onChange={selectSampleModel}
-                                    value={
-                                      selectedSampleResultDict[`step${step}`][
-                                        key
-                                      ]
-                                    }
+                                    value={selectedSampleResultDict[`step${step}`][key]}
                                     id={key}
                                     sx={{
                                       position: "absolute",
@@ -477,11 +402,7 @@ const BestCustomAISelectModal = (props) => {
                     <Grid item xs={6} sx={{ pl: 1 }}>
                       <Button
                         id="closeCancelModalBtn"
-                        className={
-                          step !== lastStep
-                            ? classes.defaultGreenOutlineButton
-                            : classes.defaultGreenContainedButton
-                        }
+                        className={step !== lastStep ? classes.defaultGreenOutlineButton : classes.defaultGreenContainedButton}
                         style={{ width: "100%", height: 32 }}
                         onClick={() => {
                           if (step !== lastStep) {

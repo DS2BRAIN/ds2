@@ -243,7 +243,7 @@ function MySnackbarAction(props) {
           aria-label="close"
           className={classes.yesAction}
           onClick={renderAction}
-          id="yesBtn"
+          id="yes_btn"
         >
           {t("Yes")}
         </Button>,
@@ -254,7 +254,7 @@ function MySnackbarAction(props) {
           onClick={() => {
             dispatch(closeAskSnackbarRequestAction());
           }}
-          id="noBtn"
+          id="no_btn"
         >
           {t("No")}
         </Button>,

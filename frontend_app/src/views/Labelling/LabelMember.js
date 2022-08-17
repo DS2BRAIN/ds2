@@ -127,6 +127,7 @@ const LabelMember = ({ history }) => {
             style={{ display: "flex", alignItems: "center" }}
           >
             <select
+              id="group_select_box"
               name="selectedTeamName"
               onChange={handleChangeTarget}
               label="selectedTeam"

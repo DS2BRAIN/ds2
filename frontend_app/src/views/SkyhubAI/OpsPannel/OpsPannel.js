@@ -3,19 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as api from "../../../controller/api";
 import currentTheme, { currentThemeColor } from "../../../assets/jss/custom";
-import {
-  getOpsProjectRequestAction,
-  getProjectRequestAction,
-  putProjectServiceAppRequestActionWithoutLoading,
-} from "../../../redux/reducers/projects";
+import { getOpsProjectRequestAction, getProjectRequestAction, putProjectServiceAppRequestActionWithoutLoading } from "../../../redux/reducers/projects";
 import { getModelRequestAction } from "../../../redux/reducers/models";
 import { IS_ENTERPRISE } from "variables/common";
 import { getCardRequestAction } from "../../../redux/reducers/user";
-import {
-  askModalRequestAction,
-  openSuccessSnackbarRequestAction,
-  openErrorSnackbarRequestAction,
-} from "../../../redux/reducers/messages";
+import { askModalRequestAction, openSuccessSnackbarRequestAction, openErrorSnackbarRequestAction } from "../../../redux/reducers/messages";
 import Button from "components/CustomButtons/Button";
 import GridContainer from "../../../components/Grid/GridContainer";
 import GridItem from "../../../components/Grid/GridItem";
@@ -134,16 +126,11 @@ const OpsPannel = (props) => {
   const [minServerSizeToChange, setMinServerSizeToChange] = useState(1);
   const [maxServerSizeToChange, setMaxServerSizeToChange] = useState(1);
   const [isChangeSizeLoading, setIsChangeSizeLoading] = useState(false);
-  const [isDeleteServerGroupLoading, setIsDeleteServerGroupLoading] = useState(
-    false
-  );
+  const [isDeleteServerGroupLoading, setIsDeleteServerGroupLoading] = useState(false);
   const [serverSizeSubmitLock, setServerSizeSubmitLock] = useState(false);
   const [isSalesModalOpen, setIsSalesModalOpen] = useState(false);
 
-  const [
-    isOpenDeleteServerGroupModal,
-    setIsOpenDeleteServerGroupModal,
-  ] = useState(false); //삭제 모달창 switch
+  const [isOpenDeleteServerGroupModal, setIsOpenDeleteServerGroupModal] = useState(false); //삭제 모달창 switch
   const [projectName, setProjectName] = useState(null);
   const [deleteText, setDeleteText] = useState(""); //"삭제" 입력값 확인하는 변수
   const [deleteTextError, setDeleteTextError] = useState(false); //삭제시 오류 switch
@@ -169,9 +156,7 @@ const OpsPannel = (props) => {
   const imgRef = useRef();
   const [currentProjects, setCurrentProjects] = useState(projects.opsProject);
   const [isReloadLoading, setIsReloadLoading] = useState(true);
-  const [isFullSizeStatisticModal, setIsFullSizeStatisticModal] = useState(
-    false
-  );
+  const [isFullSizeStatisticModal, setIsFullSizeStatisticModal] = useState(false);
   const [colorPickerModal, setColorPickerModal] = useState(false);
   const [jsonEditMode, setJsonEditMode] = useState(false);
   const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
@@ -215,10 +200,7 @@ const OpsPannel = (props) => {
   const isEnableToChange = (time, option = null) => {
     let updatedAt = new Date(time).getTime() / 60000;
     let nowTime = new Date();
-    nowTime =
-      new Date(
-        nowTime.getTime() + nowTime.getTimezoneOffset() * 60000
-      ).getTime() / 60000;
+    nowTime = new Date(nowTime.getTime() + nowTime.getTimezoneOffset() * 60000).getTime() / 60000;
     if (option == null) return nowTime - updatedAt > 10;
     else return 10 - Math.floor(nowTime - updatedAt);
   };
@@ -264,13 +246,7 @@ const OpsPannel = (props) => {
 
   useEffect(() => {
     //timeTickAsync 돌때마다 실행
-    if (
-      existProject == -1 &&
-      isPredictModalOpen == false &&
-      renameServerModal == false &&
-      projects?.opsProject !== undefined &&
-      props?.match?.params?.id == projects?.opsProject?.id
-    ) {
+    if (existProject == -1 && isPredictModalOpen == false && renameServerModal == false && projects?.opsProject !== undefined && props?.match?.params?.id == projects?.opsProject?.id) {
       if (timeTickAsyncCount <= 20) {
         getAsyncTaskData();
       } else if (timeTickAsyncCount <= 240) {
@@ -297,11 +273,7 @@ const OpsPannel = (props) => {
   }, [user.cardInfo]);
 
   useEffect(() => {
-    if (
-      projects?.opsProject?.id == undefined ||
-      projects?.opsProject?.id != props.match.params.id
-    )
-      setIsReloadLoading(false);
+    if (projects?.opsProject?.id == undefined || projects?.opsProject?.id != props.match.params.id) setIsReloadLoading(false);
   }, []);
 
   useEffect(() => {
@@ -340,11 +312,7 @@ const OpsPannel = (props) => {
   }, []);
 
   useEffect(() => {
-    if (
-      existProject !== -1 &&
-      projects.isOpsProjectLoading == false &&
-      projects?.opsProject?.id !== props.match.params.id / 1
-    ) {
+    if (existProject !== -1 && projects.isOpsProjectLoading == false && projects?.opsProject?.id !== props.match.params.id / 1) {
       const pathArr = path.split("/");
       const id = pathArr[pathArr.length - 1];
       dispatch(getOpsProjectRequestAction(props.match.params.id / 1));
@@ -357,10 +325,8 @@ const OpsPannel = (props) => {
     if (projects.opsProject) {
       dispatch(getProjectRequestAction(projects.opsProject.project));
       dispatch(getModelRequestAction(projects.opsProject.model.id));
-      if (projects.opsProject.background)
-        setBackgroundColor(projects.opsProject.background);
-      if (projects.opsProject.resultJson)
-        setResultJson(projects.opsProject.resultJson);
+      if (projects.opsProject.background) setBackgroundColor(projects.opsProject.background);
+      if (projects.opsProject.resultJson) setResultJson(projects.opsProject.resultJson);
     }
   }, [opsServerGroups]);
 
@@ -393,18 +359,16 @@ const OpsPannel = (props) => {
     if (!IS_ENTERPRISE) {
       if (projects.opsProject && projects.opsProject.opsServerGroups) {
         let opsServerGroupRaw = [];
-        projects.opsProject.opsServerGroups.forEach(
-          (opsServerGroup, indexOpsServerGroup) => {
-            let instancesRaw = [];
-            if (opsServerGroup.instances !== null) {
-              opsServerGroup.instances.forEach((instance, index) => {
-                instancesRaw.push(instance);
-              });
-            }
-            opsServerGroup.instances = instancesRaw;
-            opsServerGroupRaw.push(opsServerGroup);
+        projects.opsProject.opsServerGroups.forEach((opsServerGroup, indexOpsServerGroup) => {
+          let instancesRaw = [];
+          if (opsServerGroup.instances !== null) {
+            opsServerGroup.instances.forEach((instance, index) => {
+              instancesRaw.push(instance);
+            });
           }
-        );
+          opsServerGroup.instances = instancesRaw;
+          opsServerGroupRaw.push(opsServerGroup);
+        });
         setOpsServerGroups(opsServerGroupRaw);
         if (projects.opsProject.inferenceCount) {
           setInferenceCount(projects.opsProject.inferenceCount);
@@ -420,10 +384,7 @@ const OpsPannel = (props) => {
             datacolumnsRaw.push(datacolumn);
           });
       });
-    if (
-      !(datacolumnsRaw && datacolumnsRaw.length > 0) &&
-      projects.opsProject?.fileStructure
-    ) {
+    if (!(datacolumnsRaw && datacolumnsRaw.length > 0) && projects.opsProject?.fileStructure) {
       datacolumnsRaw = JSON.parse(projects.opsProject.fileStructure);
     }
     setCsvDict(datacolumnsRaw);
@@ -439,9 +400,7 @@ const OpsPannel = (props) => {
       var trainingColumnInfoRaw = {};
       JSON.parse(projects.opsProject?.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
-          trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(
-            columnInfo.use
-          );
+          trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(columnInfo.use);
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
@@ -458,20 +417,10 @@ const OpsPannel = (props) => {
 
   useEffect(() => {
     if (opsServerGroups) {
-      if (
-        opsServerGroups[selectedOpsGroupIndex] !== undefined &&
-        opsServerGroups[selectedOpsGroupIndex]?.id !== undefined &&
-        opsServerGroups[selectedOpsGroupIndex]?.instances[selectedInstanceIndex]
-          ?.InstanceId !== undefined
-      ) {
+      if (opsServerGroups[selectedOpsGroupIndex] !== undefined && opsServerGroups[selectedOpsGroupIndex]?.id !== undefined && opsServerGroups[selectedOpsGroupIndex]?.instances[selectedInstanceIndex]?.InstanceId !== undefined) {
         if (!opsServerGroups) setIsLoadingStatistic(true);
         api
-          .getOpsServerStatistic(
-            opsServerGroups[selectedOpsGroupIndex]?.id,
-            opsServerGroups[selectedOpsGroupIndex]?.instances[
-              selectedInstanceIndex
-            ]?.InstanceId
-          )
+          .getOpsServerStatistic(opsServerGroups[selectedOpsGroupIndex]?.id, opsServerGroups[selectedOpsGroupIndex]?.instances[selectedInstanceIndex]?.InstanceId)
           .then((response) => {
             return new Blob([response.data]);
           })
@@ -512,13 +461,7 @@ const OpsPannel = (props) => {
   }, [existProject]);
 
   useEffect(() => {
-    if (
-      existProject == -1 &&
-      isPredictModalOpen == false &&
-      renameServerModal == false &&
-      projects?.opsProject !== undefined &&
-      props?.match?.params?.id == projects?.opsProject?.id
-    ) {
+    if (existProject == -1 && isPredictModalOpen == false && renameServerModal == false && projects?.opsProject !== undefined && props?.match?.params?.id == projects?.opsProject?.id) {
       getAsyncTaskData();
     }
   }, [
@@ -625,25 +568,14 @@ const OpsPannel = (props) => {
   };
 
   const addRegion = () => {
-    if (
-      opsServerGroups.length <
-      (!IS_ENTERPRISE ? groupCountLimit : 9999999999999)
-    ) {
+    if (opsServerGroups.length < (!IS_ENTERPRISE ? groupCountLimit : 9999999999999)) {
       const regions = [];
       opsServerGroups.map((group) => {
         if (regions.indexOf(group.region) == -1) regions.push(group.region);
       });
-      props.history.push(
-        `/admin/newskyhubai/${
-          projects.opsProject?.id
-        }/?regions=${JSON.stringify(regions)}`
-      );
+      props.history.push(`/admin/newskyhubai/${projects.opsProject?.id}/?regions=${JSON.stringify(regions)}`);
     } else {
-      dispatch(
-        openSuccessSnackbarRequestAction(
-          t("Additional servers can be added after contacting the sales team.")
-        )
-      );
+      dispatch(openSuccessSnackbarRequestAction(t("Additional servers can be added after contacting the sales team.")));
       openChat();
     }
   };
@@ -659,22 +591,13 @@ const OpsPannel = (props) => {
     setIsChangeSizeLoading(true);
     api
       .editOpsServerGroup(serverId == null ? seletedServerGroup.id : serverId, {
-        startServerSize:
-          quickMode == null ? startServerSizeToChange : quickMode == 0 ? 0 : 1,
-        minServerSize:
-          quickMode == null ? minServerSizeToChange : quickMode == 0 ? 0 : 1,
-        maxServerSize:
-          quickMode == null ? maxServerSizeToChange : quickMode == 0 ? 0 : 1,
+        startServerSize: quickMode == null ? startServerSizeToChange : quickMode == 0 ? 0 : 1,
+        minServerSize: quickMode == null ? minServerSizeToChange : quickMode == 0 ? 0 : 1,
+        maxServerSize: quickMode == null ? maxServerSizeToChange : quickMode == 0 ? 0 : 1,
       })
       .then(async (res) => {
         if (res.data) {
-          dispatch(
-            openSuccessSnackbarRequestAction(
-              t(
-                "서버 크기 변경이 진행됩니다. 변경이 완료될 때까지 시간이 소요될 수 있습니다."
-              )
-            )
-          );
+          dispatch(openSuccessSnackbarRequestAction(t("서버 크기 변경이 진행됩니다. 변경이 완료될 때까지 시간이 소요될 수 있습니다.")));
           getSyncTaskData();
         }
       })
@@ -682,11 +605,7 @@ const OpsPannel = (props) => {
         if (!IS_ENTERPRISE && err.response.data.result === "fail") {
           props.history.push(`/admin/setting/payment/?cardRequest=true`);
         } else {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t("Failed to resize server. Please try again later.")
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("Failed to resize server. Please try again later.")));
           setIsChangeSizeLoading(false);
           setIsChangeSizeModalOpen(false);
         }
@@ -711,11 +630,7 @@ const OpsPannel = (props) => {
         }
       })
       .catch((err) => {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Failed to resize server. Please try again later.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Failed to resize server. Please try again later.")));
         // setIsDeleteServerGroupLoading(false);
       });
   };
@@ -739,11 +654,7 @@ const OpsPannel = (props) => {
 
   const openCloudTab = () => {
     return (
-      <div
-        id="openCloudTab"
-        style={tabActiveStyle}
-        className={classes.selectedListObject}
-      >
+      <div id="openCloudTab" style={tabActiveStyle} className={classes.selectedListObject}>
         {t("Cloud")}
       </div>
     );
@@ -756,11 +667,7 @@ const OpsPannel = (props) => {
         style={tabDeactiveStyle}
         className={classes.listObject}
         onClick={() => {
-          dispatch(
-            openSuccessSnackbarRequestAction(
-              t("Connection to edge devices is available after inquiring from the sales team")
-            )
-          );
+          dispatch(openSuccessSnackbarRequestAction(t("Connection to edge devices is available after inquiring from the sales team")));
           openChat();
         }}
       >
@@ -776,11 +683,7 @@ const OpsPannel = (props) => {
         style={tabDeactiveStyle}
         className={classes.listObject}
         onClick={() => {
-          dispatch(
-            openSuccessSnackbarRequestAction(
-              t("Connection with the sensor device is available after contacting the sales team")
-            )
-          );
+          dispatch(openSuccessSnackbarRequestAction(t("Connection with the sensor device is available after contacting the sales team")));
           openChat();
         }}
       >
@@ -794,10 +697,7 @@ const OpsPannel = (props) => {
   };
 
   // return isLoading || models.isLoading ? (
-  return isReloadLoading ||
-    projects?.opsProject == undefined ||
-    projects?.opsProject?.id != props?.match?.params?.id ||
-    existProject !== -1 ? (
+  return isReloadLoading || projects?.opsProject == undefined || projects?.opsProject?.id != props?.match?.params?.id || existProject !== -1 ? (
     <div
       style={{
         width: "100%",
@@ -813,20 +713,8 @@ const OpsPannel = (props) => {
     <>
       <div>
         <Grid container justifyContent="center" alignItems="center">
-          <Grid
-            container
-            item
-            xs={12}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid
-              container
-              item
-              xs={12}
-              justifyContent="flex-start"
-              alignItems="center"
-            >
+          <Grid container item xs={12} justifyContent="center" alignItems="center">
+            <Grid container item xs={12} justifyContent="flex-start" alignItems="center">
               <div
                 style={{
                   padding: "2px",
@@ -866,17 +754,11 @@ const OpsPannel = (props) => {
               <Button
                 id="skyhubDelete"
                 onClick={() => {
-                  if (
-                    IS_ENTERPRISE ||
-                    isEnableToChange(projects.project.created_at)
-                  )
-                    setDeleteProjectModal(true);
+                  if (IS_ENTERPRISE || isEnableToChange(projects.project.created_at)) setDeleteProjectModal(true);
                   else {
                     dispatch(
                       openErrorSnackbarRequestAction(
-                        `${t(
-                          "프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다."
-                        )}
+                        `${t("프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다.")}
                         `
                         // ${isEnableToChange(projects.project.created_at, true)}
                         // ${t("minutes left")}
@@ -899,14 +781,7 @@ const OpsPannel = (props) => {
               >
                 {t("Delete Project")}
               </Button>
-              <Tooltip
-                title={
-                  <text style={{ fontSize: "12px" }}>
-                    {t("refresh project")}
-                  </text>
-                }
-                placement="top"
-              >
+              <Tooltip title={<text style={{ fontSize: "12px" }}>{t("refresh project")}</text>} placement="top">
                 {reloadButton}
               </Tooltip>
               <Modal
@@ -924,13 +799,7 @@ const OpsPannel = (props) => {
                   }}
                 >
                   {isDeleteProjectLoading == false ? (
-                    <Grid
-                      container
-                      item
-                      xs={12}
-                      justifyContent="center"
-                      alignItems="center"
-                    >
+                    <Grid container item xs={12} justifyContent="center" alignItems="center">
                       <Grid
                         container
                         item
@@ -983,13 +852,7 @@ const OpsPannel = (props) => {
                           placeholder={t("Enter 'Delete' correctly.")}
                         />
                       </Grid>
-                      <Grid
-                        container
-                        item
-                        xs={11}
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                      >
+                      <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">
                         <div style={{ wordBreak: "break-all" }}>
                           <div
                             style={{
@@ -1013,38 +876,20 @@ const OpsPannel = (props) => {
                                     .deleteOpsProjects([props.match.params.id])
                                     .then((res) => {
                                       if (res?.data?.failList.length == 0) {
-                                        dispatch(
-                                          openSuccessSnackbarRequestAction(
-                                            t(
-                                              "Skyhub AI 프로젝트를 삭제하였습니다."
-                                            )
-                                          )
-                                        );
+                                        dispatch(openSuccessSnackbarRequestAction(t("Skyhub AI 프로젝트를 삭제하였습니다.")));
                                         props.history.push("/admin/skyhubai/");
                                       } else {
                                         setIsDeleteProjectLoading(false);
                                         setDeleteProjectModal(false);
                                         setDeleteProjectText("");
-                                        dispatch(
-                                          openErrorSnackbarRequestAction(
-                                            t(
-                                              "Skyhub AI 프로젝트 삭제를 실패하였습니다."
-                                            )
-                                          )
-                                        );
+                                        dispatch(openErrorSnackbarRequestAction(t("Skyhub AI 프로젝트 삭제를 실패하였습니다.")));
                                       }
                                     })
                                     .catch((err) => {
                                       setIsDeleteProjectLoading(false);
                                       setDeleteProjectModal(false);
                                       setDeleteProjectText("");
-                                      dispatch(
-                                        openErrorSnackbarRequestAction(
-                                          t(
-                                            "Skyhub AI 프로젝트 삭제를 실패하였습니다."
-                                          )
-                                        )
-                                      );
+                                      dispatch(openErrorSnackbarRequestAction(t("Skyhub AI 프로젝트 삭제를 실패하였습니다.")));
                                     });
                                 }
                               }}
@@ -1100,17 +945,8 @@ const OpsPannel = (props) => {
                       >
                         {t("Deleting project")}
                       </Grid>
-                      <Grid
-                        container
-                        item
-                        xs={12}
-                        justifyContent="center"
-                        alignItems="flex-start"
-                      >
-                        <div
-                          className={classes.loading}
-                          style={{ height: "150px" }}
-                        >
+                      <Grid container item xs={12} justifyContent="center" alignItems="flex-start">
+                        <div className={classes.loading} style={{ height: "150px" }}>
                           <CircularProgress size={30} />
                         </div>
                       </Grid>
@@ -1134,38 +970,13 @@ const OpsPannel = (props) => {
                 }}
               >
                 <Grid container item xs={12} justifyContent="center">
-                  <Grid
-                    container
-                    item
-                    xs={11}
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                    style={{ margin: "10px" }}
-                  >
+                  <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start" style={{ margin: "10px" }}>
                     {t("Submit Project Name")}
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={11}
-                    justifyContent="center"
-                    alignItems="flex-start"
-                  >
-                    <TextField
-                      fullWidth={true}
-                      onChange={(e) => setRenameText(e.target.value)}
-                      inputProps={{ className: newClasses.renameModalText }}
-                      variant="outlined"
-                      placeholder={t("Enter a new project name.")}
-                    />
+                  <Grid container item xs={11} justifyContent="center" alignItems="flex-start">
+                    <TextField fullWidth={true} onChange={(e) => setRenameText(e.target.value)} inputProps={{ className: newClasses.renameModalText }} variant="outlined" placeholder={t("Enter a new project name.")} />
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={11}
-                    justifyContent="flex-start"
-                    alignItems="flex-start"
-                  >
+                  <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">
                     <div style={{ wordBreak: "break-all" }}>
                       <div
                         style={{
@@ -1194,29 +1005,19 @@ const OpsPannel = (props) => {
                                   projectName: renameText,
                                 })
                                 .then((res) => {
-                                  dispatch(
-                                    openSuccessSnackbarRequestAction(
-                                      t("The project name has been changed.")
-                                    )
-                                  );
+                                  dispatch(openSuccessSnackbarRequestAction(t("The project name has been changed.")));
                                   setProjectName(renameText);
                                   setRenameServerModal(false);
                                   setIsRenameLoading(false);
                                 })
                                 .catch((err) => {
-                                  dispatch(
-                                    openErrorSnackbarRequestAction(
-                                      t("Failed to change project name.")
-                                    )
-                                  );
+                                  dispatch(openErrorSnackbarRequestAction(t("Failed to change project name.")));
                                   setIsRenameLoading(false);
                                 });
                             }
                           }}
                         >
-                          {isRenameLoading === true
-                            ? t("Loading")
-                            : t("Submit")}
+                          {isRenameLoading === true ? t("Loading") : t("Submit")}
                         </div>
                       </div>
                     </div>
@@ -1255,31 +1056,12 @@ const OpsPannel = (props) => {
               </div>
             </Modal>
           </Grid>
-          <Grid
-            container
-            item
-            xs={12}
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Grid container item xs={12} justifyContent="center" alignItems="center">
             {/*상단 : 그래프, api 호출 수*/}
-            <iframe
-              ref={graphIframeRef}
-              src={monitoring_url + "/tv.html"}
-              width="100%"
-              height="400"
-              style={{ zIndex: 0 }}
-            />
+            <iframe ref={graphIframeRef} src={monitoring_url + "/tv.html"} width="100%" height="400" style={{ zIndex: 0 }} />
             {IS_ENTERPRISE && (
               <>
-                <Grid
-                  container
-                  item
-                  xs={9}
-                  justifyContent="space-evenly"
-                  alignItems="center"
-                  style={IS_ENTERPRISE ? {} : { height: "300px" }}
-                >
+                <Grid container item xs={9} justifyContent="space-evenly" alignItems="center" style={IS_ENTERPRISE ? {} : { height: "300px" }}>
                   <div
                     style={{
                       width: "100%",
@@ -1287,13 +1069,7 @@ const OpsPannel = (props) => {
                       marginBottom: "20px",
                     }}
                   ></div>
-                  <Grid
-                    container
-                    item
-                    xs={4}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
+                  <Grid container item xs={4} justifyContent="center" alignItems="center">
                     <Button
                       className={`${newClasses.sideButton} ${classes.defaultHighlightButton}`}
                       onClick={() => {
@@ -1309,44 +1085,15 @@ const OpsPannel = (props) => {
                       {t("Monitoring")}
                     </Button>
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={4}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Button
-                      disabled={isDisabledButton || existProject !== -1}
-                      className={
-                        isDisabledButton || existProject !== -1
-                          ? `${newClasses.sideButton} ${classes.defaultDisabledButton}`
-                          : `${newClasses.sideButton} ${classes.defaultHighlightButton}`
-                      }
-                      onClick={() => openPredictModal()}
-                    >
+                  <Grid container item xs={4} justifyContent="center" alignItems="center">
+                    <Button disabled={isDisabledButton || existProject !== -1} className={isDisabledButton || existProject !== -1 ? `${newClasses.sideButton} ${classes.defaultDisabledButton}` : `${newClasses.sideButton} ${classes.defaultHighlightButton}`} onClick={() => openPredictModal()}>
                       {t("Predict")}
                     </Button>
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={4}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Tooltip
-                      title={t(
-                        "예측하기를 통해 데이터 축적 후 이용 가능합니다"
-                      )}
-                      placement="top"
-                    >
+                  <Grid container item xs={4} justifyContent="center" alignItems="center">
+                    <Tooltip title={t("예측하기를 통해 데이터 축적 후 이용 가능합니다")} placement="top">
                       <Button
-                        className={
-                          inferenceCount == 0 || existProject !== -1
-                            ? `${newClasses.sideButton} ${classes.defaultDisabledButton}`
-                            : `${newClasses.sideButton} ${classes.defaultF0F0OutlineButton}`
-                        }
+                        className={inferenceCount == 0 || existProject !== -1 ? `${newClasses.sideButton} ${classes.defaultDisabledButton}` : `${newClasses.sideButton} ${classes.defaultF0F0OutlineButton}`}
                         //className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`}
                         onClick={() => {
                           if (inferenceCount == 0 || existProject !== -1) {
@@ -1364,43 +1111,13 @@ const OpsPannel = (props) => {
             )}
             {!IS_ENTERPRISE ? (
               <>
-                <Grid
-                  container
-                  item
-                  xs={9}
-                  justifyContent="center"
-                  alignItems="center"
-                  className={classes.Grid_300}
-                  style={{ height: "300px" }}
-                >
-                  <Grid
-                    container
-                    item
-                    xs={12}
-                    justifyContent="center"
-                    alignItems="center"
-                    style={
-                      statistic !== null
-                        ? { display: "none" }
-                        : { display: "block" }
-                    }
-                  >
-                    <div
-                      className={classes.loading}
-                      style={{ height: "300px" }}
-                    >
+                <Grid container item xs={9} justifyContent="center" alignItems="center" className={classes.Grid_300} style={{ height: "300px" }}>
+                  <Grid container item xs={12} justifyContent="center" alignItems="center" style={statistic !== null ? { display: "none" } : { display: "block" }}>
+                    <div className={classes.loading} style={{ height: "300px" }}>
                       <CircularProgress />
                     </div>
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={12}
-                    justifyContent="center"
-                    alignItems="center"
-                    className={classes.Grid_300}
-                    style={{ height: "300px" }}
-                  >
+                  <Grid container item xs={12} justifyContent="center" alignItems="center" className={classes.Grid_300} style={{ height: "300px" }}>
                     <div
                       style={
                         statistic == null
@@ -1433,16 +1150,7 @@ const OpsPannel = (props) => {
                         zIndex: "2",
                       }}
                     >
-                      <img
-                        ref={imgRef}
-                        className={
-                          statistic !== null
-                            ? classes.statisticImgBlock
-                            : classes.statisticImgNone
-                        }
-                        src={statistic}
-                        onLoad={onLoadStatistic}
-                      />
+                      <img ref={imgRef} className={statistic !== null ? classes.statisticImgBlock : classes.statisticImgNone} src={statistic} onLoad={onLoadStatistic} />
                     </div>
                   </Grid>
                 </Grid>
@@ -1450,48 +1158,19 @@ const OpsPannel = (props) => {
             ) : (
               <></>
             )}
-            <Grid
-              container
-              item
-              xs={3}
-              justifyContent="center"
-              alignItems="center"
-              className={classes.Grid_300}
-            >
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent="center"
-                alignItems="flex-start"
-              >
-                <div style={{ fontSize: "30px", color: "#FFFFFF" }}>
-                  {t("API Calls")}
-                </div>
+            <Grid container item xs={3} justifyContent="center" alignItems="center" className={classes.Grid_300}>
+              <Grid container item xs={12} justifyContent="center" alignItems="flex-start">
+                <div style={{ fontSize: "30px", color: "#FFFFFF" }}>{t("API Calls")}</div>
               </Grid>
               <div className={classes.div_apiStack}>
-                <Grid
-                  item
-                  container
-                  xs={12}
-                  justifyContent="center"
-                  alignItems="center"
-                  className={`${classes.Grid_circle}`}
-                >
+                <Grid item container xs={12} justifyContent="center" alignItems="center" className={`${classes.Grid_circle}`}>
                   {inferenceCount}
                 </Grid>
               </div>
             </Grid>
           </Grid>
 
-          <Grid
-            container
-            item
-            xs={12}
-            alignItems="flex-start"
-            className={IS_ENTERPRISE ? "" : classes.Grid_bottom}
-            style={{ marginTop: 20 }}
-          >
+          <Grid container item xs={12} alignItems="flex-start" className={IS_ENTERPRISE ? "" : classes.Grid_bottom} style={{ marginTop: 20 }}>
             {/*하단 : 서버 인터페이스 */}
             {!IS_ENTERPRISE && (
               <>
@@ -1523,18 +1202,10 @@ const OpsPannel = (props) => {
                       width: "100%",
                     }}
                   >
-                    <Table
-                      className={classes.table}
-                      style={{ width: "100%" }}
-                      aria-label="simple table"
-                    >
+                    <Table className={classes.table} style={{ width: "100%" }} aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell
-                            className={classes.tableHead}
-                            style={{ width: "7.5%" }}
-                            align="center"
-                          >
+                          <TableCell className={classes.tableHead} style={{ width: "7.5%" }} align="center">
                             <b
                               style={{
                                 color: currentThemeColor.textMediumGrey,
@@ -1543,47 +1214,27 @@ const OpsPannel = (props) => {
                               No
                             </b>
                           </TableCell>
-                          <TableCell
-                            className={classes.tableHead}
-                            align="center"
-                            style={{ width: "20%", cursor: "pointer" }}
-                          >
+                          <TableCell className={classes.tableHead} align="center" style={{ width: "20%", cursor: "pointer" }}>
                             <div className={classes.tableHeader}>
                               <b>{t("region")}</b>
                             </div>
                           </TableCell>
-                          <TableCell
-                            className={classes.tableHead}
-                            align="center"
-                            style={{ width: "20%", cursor: "pointer" }}
-                          >
+                          <TableCell className={classes.tableHead} align="center" style={{ width: "20%", cursor: "pointer" }}>
                             <div className={classes.tableHeader}>
                               <b>{t("Instance ID")}</b>
                             </div>
                           </TableCell>
-                          <TableCell
-                            className={classes.tableHead}
-                            align="center"
-                            style={{ width: "15%", cursor: "pointer" }}
-                          >
+                          <TableCell className={classes.tableHead} align="center" style={{ width: "15%", cursor: "pointer" }}>
                             <div className={classes.tableHeader}>
                               <b>{t("Instance Type")}</b>
                             </div>
                           </TableCell>
-                          <TableCell
-                            className={classes.tableHead}
-                            align="center"
-                            style={{ width: "20%", cursor: "pointer" }}
-                          >
+                          <TableCell className={classes.tableHead} align="center" style={{ width: "20%", cursor: "pointer" }}>
                             <div className={classes.tableHeader}>
                               <b>{t("Status")}</b>
                             </div>
                           </TableCell>
-                          <TableCell
-                            className={classes.tableHead}
-                            align="center"
-                            style={{ width: "15%", cursor: "pointer" }}
-                          >
+                          <TableCell className={classes.tableHead} align="center" style={{ width: "15%", cursor: "pointer" }}>
                             <div className={classes.tableHeader}></div>
                           </TableCell>
                         </TableRow>
@@ -1598,11 +1249,7 @@ const OpsPannel = (props) => {
                       width: "100%",
                     }}
                   >
-                    <Table
-                      className={classes.table}
-                      style={{ width: "100%" }}
-                      aria-label="simple table"
-                    >
+                    <Table className={classes.table} style={{ width: "100%" }} aria-label="simple table">
                       <TableBody>
                         {opsServerGroups.map((opsServerGroup, opsGroupIdx) => (
                           <>
@@ -1614,29 +1261,13 @@ const OpsPannel = (props) => {
                               //     : classes.tableRow
                               // }
                             >
-                              <TableCell
-                                className={classes.tableRowCellGroup}
-                                align="center"
-                                style={{ width: "7.5%" }}
-                              >
-                                <div style={{ wordBreak: "break-all" }}>
-                                  {opsGroupIdx}
-                                </div>
+                              <TableCell className={classes.tableRowCellGroup} align="center" style={{ width: "7.5%" }}>
+                                <div style={{ wordBreak: "break-all" }}>{opsGroupIdx}</div>
                               </TableCell>
-                              <TableCell
-                                className={classes.tableRowCellGroup}
-                                style={{ width: "20%" }}
-                                align="center"
-                              >
-                                <div style={{ wordBreak: "break-all" }}>
-                                  {opsServerGroup.region}
-                                </div>
+                              <TableCell className={classes.tableRowCellGroup} style={{ width: "20%" }} align="center">
+                                <div style={{ wordBreak: "break-all" }}>{opsServerGroup.region}</div>
                               </TableCell>
-                              <TableCell
-                                className={classes.tableRowCellGroup}
-                                align="center"
-                                style={{ width: "20%" }}
-                              >
+                              <TableCell className={classes.tableRowCellGroup} align="center" style={{ width: "20%" }}>
                                 <div
                                   style={{
                                     display: "flex",
@@ -1650,20 +1281,11 @@ const OpsPannel = (props) => {
                                       if (isChangeSizeLoading == true) {
                                         return;
                                       }
-                                      if (
-                                        isEnableToChange(
-                                          opsServerGroup.updated_at
-                                        )
-                                      )
-                                        openChangeServerSizeModal(
-                                          opsServerGroup
-                                        );
+                                      if (isEnableToChange(opsServerGroup.updated_at)) openChangeServerSizeModal(opsServerGroup);
                                       else {
                                         dispatch(
                                           openErrorSnackbarRequestAction(
-                                            `${t(
-                                              "서버 크기 변경은 일정 시간 이후 가능합니다."
-                                            )}
+                                            `${t("서버 크기 변경은 일정 시간 이후 가능합니다.")}
                                         `
                                             // ${isEnableToChange(
                                             //   opsServerGroup.updated_at,
@@ -1684,19 +1306,13 @@ const OpsPannel = (props) => {
                                       if (isChangeSizeLoading == true) {
                                         return;
                                       }
-                                      if (
-                                        isEnableToChange(
-                                          opsServerGroup.updated_at
-                                        )
-                                      ) {
+                                      if (isEnableToChange(opsServerGroup.updated_at)) {
                                         setIsServerControlModal(true);
                                         setSelectedServerGroup(opsServerGroup);
                                       } else {
                                         dispatch(
                                           openErrorSnackbarRequestAction(
-                                            `${t(
-                                              "서버 크기 변경은 일정 시간 이후 가능합니다."
-                                            )}
+                                            `${t("서버 크기 변경은 일정 시간 이후 가능합니다.")}
                                         `
                                             // ${isEnableToChange(
                                             //   opsServerGroup.updated_at,
@@ -1708,12 +1324,7 @@ const OpsPannel = (props) => {
                                       }
                                     }}
                                   >
-                                    {isChangeSizeLoading == true &&
-                                    opsGroupIdx == selectedOpsGroupIndex
-                                      ? t("Loading")
-                                      : opsServerGroup.maxServerSize == 0
-                                      ? t("resume")
-                                      : t("stop")}
+                                    {isChangeSizeLoading == true && opsGroupIdx == selectedOpsGroupIndex ? t("Loading") : opsServerGroup.maxServerSize == 0 ? t("resume") : t("stop")}
                                   </div>
                                   {/* <div
                                 className={`${classes.modelTab} analyticsBtn ${classes.modelTabHighlightButton}`}
@@ -1729,24 +1340,10 @@ const OpsPannel = (props) => {
                                     open={isOpenDeleteServerGroupModal}
                                     //onClose={closeDeleteServerGroupModal}
                                   >
-                                    <div
-                                      className={
-                                        classes.modalDataconnectorContent
-                                      }
-                                      id="projectModal"
-                                    >
-                                      <div
-                                        className={classes.gridRoot}
-                                        style={{ height: "100%" }}
-                                      >
+                                    <div className={classes.modalDataconnectorContent} id="projectModal">
+                                      <div className={classes.gridRoot} style={{ height: "100%" }}>
                                         {deleteLoading == false ? (
-                                          <Grid
-                                            container
-                                            item
-                                            xs={12}
-                                            justifyContent="center"
-                                            alignItems="center"
-                                          >
+                                          <Grid container item xs={12} justifyContent="center" alignItems="center">
                                             <Grid
                                               container
                                               item
@@ -1759,9 +1356,7 @@ const OpsPannel = (props) => {
                                                 marginTop: "10px",
                                               }}
                                             >
-                                              {t(
-                                                "해당 서버 그룹를 삭제하겠습니까?"
-                                              )}
+                                              {t("해당 서버 그룹를 삭제하겠습니까?")}
                                             </Grid>
                                             {deleteTextError == true && (
                                               <Grid
@@ -1776,9 +1371,7 @@ const OpsPannel = (props) => {
                                                   marginTop: "2px",
                                                 }}
                                               >
-                                                {t(
-                                                  "'Delete'를 정확히 입력하세요."
-                                                )}
+                                                {t("'Delete'를 정확히 입력하세요.")}
                                               </Grid>
                                             )}
                                             <Grid
@@ -1795,26 +1388,15 @@ const OpsPannel = (props) => {
                                             >
                                               <TextField
                                                 fullWidth={true}
-                                                onChange={(e) =>
-                                                  setDeleteText(e.target.value)
-                                                }
+                                                onChange={(e) => setDeleteText(e.target.value)}
                                                 inputProps={{
-                                                  className:
-                                                    newClasses.deleteModalText,
+                                                  className: newClasses.deleteModalText,
                                                 }}
                                                 variant="outlined"
-                                                placeholder={t(
-                                                  "'Delete'를 정확히 입력하세요."
-                                                )}
+                                                placeholder={t("'Delete'를 정확히 입력하세요.")}
                                               />
                                             </Grid>
-                                            <Grid
-                                              container
-                                              item
-                                              xs={11}
-                                              justifyContent="flex-start"
-                                              alignItems="flex-start"
-                                            >
+                                            <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">
                                               <div
                                                 style={{
                                                   wordBreak: "break-all",
@@ -1837,59 +1419,27 @@ const OpsPannel = (props) => {
                                                       textAlign: "center",
                                                     }}
                                                     onClick={() => {
-                                                      if (
-                                                        deleteText ==
-                                                          "Delete" &&
-                                                        deleteLoading == false
-                                                      ) {
+                                                      if (deleteText == "Delete" && deleteLoading == false) {
                                                         setDeleteLoading(true);
                                                         //shutdownOpsServer();
-                                                        setDeleteTextError(
-                                                          false
-                                                        );
+                                                        setDeleteTextError(false);
                                                         //loading lock
                                                         api
-                                                          .removeOpsServerGroup(
-                                                            opsServerGroups[
-                                                              selectedOpsGroupIndex
-                                                            ].id
-                                                          )
+                                                          .removeOpsServerGroup(opsServerGroups[selectedOpsGroupIndex].id)
                                                           .then((res) => {
                                                             getAsyncTaskData(); //sync로 바꾸고 sync에 모달창 닫기 추가 필요
-                                                            setDeleteTextError(
-                                                              false
-                                                            );
+                                                            setDeleteTextError(false);
                                                             getAsyncTaskData();
-                                                            dispatch(
-                                                              openSuccessSnackbarRequestAction(
-                                                                t(
-                                                                  "서버그룹을 삭제하였습니다."
-                                                                )
-                                                              )
-                                                            );
+                                                            dispatch(openSuccessSnackbarRequestAction(t("서버그룹을 삭제하였습니다.")));
                                                           })
                                                           .catch(() => {
-                                                            setDeleteLoading(
-                                                              false
-                                                            );
-                                                            setDeleteTextError(
-                                                              false
-                                                            );
-                                                            dispatch(
-                                                              openErrorSnackbarRequestAction(
-                                                                t(
-                                                                  "서버그룹을 삭제하지 못했습니다."
-                                                                )
-                                                              )
-                                                            );
-                                                            setIsOpenDeleteServerGroupModal(
-                                                              false
-                                                            );
+                                                            setDeleteLoading(false);
+                                                            setDeleteTextError(false);
+                                                            dispatch(openErrorSnackbarRequestAction(t("서버그룹을 삭제하지 못했습니다.")));
+                                                            setIsOpenDeleteServerGroupModal(false);
                                                           });
                                                       } else {
-                                                        setDeleteTextError(
-                                                          true
-                                                        );
+                                                        setDeleteTextError(true);
                                                       }
                                                     }}
                                                   >
@@ -1918,9 +1468,7 @@ const OpsPannel = (props) => {
                                                     style={{
                                                       textAlign: "center",
                                                     }}
-                                                    onClick={
-                                                      closeDeleteServerGroupModal
-                                                    }
+                                                    onClick={closeDeleteServerGroupModal}
                                                   >
                                                     {t("No")}
                                                   </div>
@@ -1944,17 +1492,8 @@ const OpsPannel = (props) => {
                                             >
                                               {t("The group is being deleted.")}
                                             </Grid>
-                                            <Grid
-                                              container
-                                              item
-                                              xs={12}
-                                              justifyContent="center"
-                                              alignItems="flex-start"
-                                            >
-                                              <div
-                                                className={classes.loading}
-                                                style={{ height: "150px" }}
-                                              >
+                                            <Grid container item xs={12} justifyContent="center" alignItems="flex-start">
+                                              <div className={classes.loading} style={{ height: "150px" }}>
                                                 <CircularProgress size={30} />
                                               </div>
                                             </Grid>
@@ -1965,126 +1504,65 @@ const OpsPannel = (props) => {
                                   </Modal>
                                 </div>
                               </TableCell>
-                              <TableCell
-                                className={classes.tableRowCellGroup}
-                                style={{ width: "15%" }}
-                                align="center"
-                              >
-                                {opsServerGroup.instances[0] == undefined &&
-                                  opsServerGroup.maxServerSize !== 0 &&
-                                  t("Pending")}
+                              <TableCell className={classes.tableRowCellGroup} style={{ width: "15%" }} align="center">
+                                {opsServerGroup.instances[0] == undefined && opsServerGroup.maxServerSize !== 0 && t("Pending")}
                               </TableCell>
-                              <TableCell
-                                className={classes.tableRowCellGroup}
-                                align="center"
-                                style={{ width: "10%" }}
-                              ></TableCell>
-                              <TableCell
-                                className={classes.tableRowCellGroup}
-                                style={{ width: "15%" }}
-                                align="center"
-                              ></TableCell>
+                              <TableCell className={classes.tableRowCellGroup} align="center" style={{ width: "10%" }}></TableCell>
+                              <TableCell className={classes.tableRowCellGroup} style={{ width: "15%" }} align="center"></TableCell>
                             </TableRow>
-                            {opsServerGroup.instances.map(
-                              (instance, instanceIdx) => (
-                                <TableRow
-                                  onClick={() => {
-                                    if (
-                                      instanceIdx !== selectedInstanceIndex ||
-                                      opsGroupIdx !== selectedOpsGroupIndex
-                                    ) {
-                                      setStatistic(null);
-                                      setSelectedOpsGroupIndex(opsGroupIdx);
-                                      setSelectedInstanceIndex(instanceIdx);
-                                    }
-                                  }}
-                                  key={instanceIdx}
-                                  className={
-                                    instanceIdx === selectedInstanceIndex &&
-                                    opsGroupIdx === selectedOpsGroupIndex
-                                      ? classes.tableFocused
-                                      : classes.tableRow
+                            {opsServerGroup.instances.map((instance, instanceIdx) => (
+                              <TableRow
+                                onClick={() => {
+                                  if (instanceIdx !== selectedInstanceIndex || opsGroupIdx !== selectedOpsGroupIndex) {
+                                    setStatistic(null);
+                                    setSelectedOpsGroupIndex(opsGroupIdx);
+                                    setSelectedInstanceIndex(instanceIdx);
                                   }
-                                >
-                                  <TableCell
-                                    className={classes.tableRowCell}
-                                    style={{ width: "7.5%" }}
-                                    align="center"
-                                  ></TableCell>
-                                  <TableCell
-                                    className={classes.tableRowCell}
-                                    style={{ width: "20%" }}
-                                    align="center"
-                                  ></TableCell>
-                                  <TableCell
-                                    className={classes.tableRowCell}
-                                    style={{ width: "20%" }}
-                                    align="center"
-                                  >
-                                    <div style={{ wordBreak: "break-all" }}>
-                                      {instance.InstanceId}
-                                    </div>
-                                  </TableCell>
-                                  <TableCell
-                                    className={classes.tableRowCell}
-                                    style={{ width: "15%" }}
-                                    align="center"
-                                  >
-                                    <div style={{ wordBreak: "break-all" }}>
-                                      {instance.InstanceType}
-                                    </div>
-                                  </TableCell>
-                                  <TableCell
-                                    className={classes.tableRowCell}
-                                    style={{ width: "20%" }}
-                                    align="center"
-                                  >
+                                }}
+                                key={instanceIdx}
+                                className={instanceIdx === selectedInstanceIndex && opsGroupIdx === selectedOpsGroupIndex ? classes.tableFocused : classes.tableRow}
+                              >
+                                <TableCell className={classes.tableRowCell} style={{ width: "7.5%" }} align="center"></TableCell>
+                                <TableCell className={classes.tableRowCell} style={{ width: "20%" }} align="center"></TableCell>
+                                <TableCell className={classes.tableRowCell} style={{ width: "20%" }} align="center">
+                                  <div style={{ wordBreak: "break-all" }}>{instance.InstanceId}</div>
+                                </TableCell>
+                                <TableCell className={classes.tableRowCell} style={{ width: "15%" }} align="center">
+                                  <div style={{ wordBreak: "break-all" }}>{instance.InstanceType}</div>
+                                </TableCell>
+                                <TableCell className={classes.tableRowCell} style={{ width: "20%" }} align="center">
+                                  <div id="instanceStatus" style={{ wordBreak: "break-all" }}>
+                                    {instance?.State?.Name !== "running" ? t("pending") : t("running")}
+                                  </div>
+                                </TableCell>
+                                <TableCell className={classes.tableRowCell} align="center" style={{ width: "15%" }}>
+                                  <div style={{ wordBreak: "break-all" }}>
                                     <div
-                                      id="instanceStatus"
-                                      style={{ wordBreak: "break-all" }}
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                      }}
                                     >
-                                      {instance?.State?.Name !== "running"
-                                        ? t("pending")
-                                        : t("running")}
-                                    </div>
-                                  </TableCell>
-                                  <TableCell
-                                    className={classes.tableRowCell}
-                                    align="center"
-                                    style={{ width: "15%" }}
-                                  >
-                                    <div style={{ wordBreak: "break-all" }}>
                                       <div
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                        }}
+                                        id="selectedInstance"
+                                        className={`${classes.modelTab} analyticsBtn ${classes.modelTabHighlightButton}`}
+                                        // onClick={() => {
+                                        //   setSelectedOpsGroupIndex(
+                                        //     opsGroupIdx
+                                        //   );
+                                        //   setSelectedInstanceIndex(
+                                        //     instanceIdx
+                                        //   );
+                                        // }}
                                       >
-                                        <div
-                                          id="selectedInstance"
-                                          className={`${classes.modelTab} analyticsBtn ${classes.modelTabHighlightButton}`}
-                                          // onClick={() => {
-                                          //   setSelectedOpsGroupIndex(
-                                          //     opsGroupIdx
-                                          //   );
-                                          //   setSelectedInstanceIndex(
-                                          //     instanceIdx
-                                          //   );
-                                          // }}
-                                        >
-                                          {opsGroupIdx ===
-                                            selectedOpsGroupIndex &&
-                                          instanceIdx === selectedInstanceIndex
-                                            ? t("Selected")
-                                            : t("Choose")}
-                                        </div>
+                                        {opsGroupIdx === selectedOpsGroupIndex && instanceIdx === selectedInstanceIndex ? t("Selected") : t("Choose")}
                                       </div>
                                     </div>
-                                  </TableCell>
-                                </TableRow>
-                              )
-                            )}
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            ))}
                           </>
                         ))}
                       </TableBody>
@@ -2093,65 +1571,24 @@ const OpsPannel = (props) => {
                 </Grid>
               </>
             )}
-            <Grid
-              container
-              item
-              xs={3}
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Grid container item xs={3} justifyContent="center" alignItems="center">
               {!IS_ENTERPRISE && (
                 <>
-                  <Grid
-                    container
-                    item
-                    xs={12}
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                    direction="column"
-                    style={{ height: "300px" }}
-                  >
-                    <Button
-                      disabled={isDisabledButton || existProject !== -1}
-                      className={
-                        isDisabledButton || existProject !== -1
-                          ? `${newClasses.sideButton} ${classes.defaultDisabledButton}`
-                          : `${newClasses.sideButton} ${classes.defaultHighlightButton}`
-                      }
-                      onClick={() => openPredictModal()}
-                    >
+                  <Grid container item xs={12} justifyContent="space-evenly" alignItems="center" direction="column" style={{ height: "300px" }}>
+                    <Button disabled={isDisabledButton || existProject !== -1} className={isDisabledButton || existProject !== -1 ? `${newClasses.sideButton} ${classes.defaultDisabledButton}` : `${newClasses.sideButton} ${classes.defaultHighlightButton}`} onClick={() => openPredictModal()}>
                       {t("Predict")}
                     </Button>
-                    {projects.project?.option?.indexOf("load") === -1 &&
-                      projects.project?.option?.indexOf("recommender") === -1 &&
-                      !IS_ENTERPRISE && (
-                        <Button
-                          id="share_serviceapp_btn"
-                          shape="greenOutlined"
-                          disabled={isDisabledButton || existProject !== -1}
-                          onClick={() => openServiceAppModal()}
-                        >
-                          {t("Sharing a service app")}
-                        </Button>
-                      )}
-                    <Button
-                      className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`}
-                      onClick={() => addRegion()}
-                    >
+                    {projects.project?.option?.indexOf("load") === -1 && projects.project?.option?.indexOf("recommender") === -1 && !IS_ENTERPRISE && (
+                      <Button id="share_serviceapp_btn" shape="greenOutlined" disabled={isDisabledButton || existProject !== -1} onClick={() => openServiceAppModal()}>
+                        {t("Sharing a service app")}
+                      </Button>
+                    )}
+                    <Button className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`} onClick={() => addRegion()}>
                       {t("Add Server Group")}
                     </Button>
-                    <Tooltip
-                      title={t(
-                        "예측하기를 통해 데이터 축적 후 이용 가능합니다"
-                      )}
-                      placement="top"
-                    >
+                    <Tooltip title={t("예측하기를 통해 데이터 축적 후 이용 가능합니다")} placement="top">
                       <Button
-                        className={
-                          inferenceCount == 0 || existProject !== -1
-                            ? `${newClasses.sideButton} ${classes.defaultDisabledButton}`
-                            : `${newClasses.sideButton} ${classes.defaultF0F0OutlineButton}`
-                        }
+                        className={inferenceCount == 0 || existProject !== -1 ? `${newClasses.sideButton} ${classes.defaultDisabledButton}` : `${newClasses.sideButton} ${classes.defaultF0F0OutlineButton}`}
                         //className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`}
                         onClick={() => {
                           if (inferenceCount == 0 || existProject !== -1) {
@@ -2163,10 +1600,7 @@ const OpsPannel = (props) => {
                         {t("Retraining Labeling")}
                       </Button>
                     </Tooltip>
-                    <Button
-                      className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`}
-                      onClick={() => goToSales()}
-                    >
+                    <Button className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`} onClick={() => goToSales()}>
                       {t("API sales")}
                     </Button>
                   </Grid>
@@ -2176,36 +1610,16 @@ const OpsPannel = (props) => {
           </Grid>
         </Grid>
       </div>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isPredictModalOpen}
-        onClose={closeModal}
-        className={classes.modalContainer}
-      >
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPredictModalOpen} onClose={closeModal} className={classes.modalContainer}>
         <ModalPage
           closeModal={closeModal}
-          chosenItem={
-            projects.opsProject?.trainingMethod !== "object_detection" &&
-            projects.opsProject?.trainingMethod !== "cycle_gan" &&
-            projects.opsProject?.trainingMethod !== "image"
-              ? "api"
-              : "apiImage"
-          }
+          chosenItem={projects.opsProject?.trainingMethod !== "object_detection" && projects.opsProject?.trainingMethod !== "cycle_gan" && projects.opsProject?.trainingMethod !== "image" ? "api" : "apiImage"}
           isMarket={false}
           csv={csvDict}
           trainingColumnInfo={trainingColumnInfo}
           history={props.history}
           opsId={projects.opsProject?.id}
-          chosenItem={
-            projects.opsProject?.trainingMethod !== "object_detection" &&
-            projects.opsProject?.trainingMethod !== "cycle_gan" &&
-            projects.opsProject?.trainingMethod !== "image"
-              ? projects?.project?.option?.indexOf("load") === -1
-                ? "api"
-                : "apiLoaded"
-              : "apiImage"
-          }
+          chosenItem={projects.opsProject?.trainingMethod !== "object_detection" && projects.opsProject?.trainingMethod !== "cycle_gan" && projects.opsProject?.trainingMethod !== "image" ? (projects?.project?.option?.indexOf("load") === -1 ? "api" : "apiLoaded") : "apiImage"}
           isMarket={false}
           opsId={projects.opsProject?.id}
           csv={csvDict}
@@ -2237,13 +1651,7 @@ const OpsPannel = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Grid
-                      container
-                      item
-                      xs={12}
-                      justifyContent="center"
-                      alignItems="flex-start"
-                    >
+                    <Grid container item xs={12} justifyContent="center" alignItems="flex-start">
                       <Grid
                         container
                         item
@@ -2268,9 +1676,7 @@ const OpsPannel = (props) => {
                           fontSize: "15px",
                         }}
                       >
-                        {t(
-                          "원하는 용량을 변경하여 Auto Scaling 그룹의 크기를 지정합니다."
-                        )}
+                        {t("원하는 용량을 변경하여 Auto Scaling 그룹의 크기를 지정합니다.")}
                       </Grid>
                       <Grid
                         container
@@ -2294,26 +1700,10 @@ const OpsPannel = (props) => {
                           fontSize: "15px",
                         }}
                       >
-                        {t(
-                          "최대용량의 한도를 0으로 설정시 그룹 사용이 중단됩니다."
-                        )}
+                        {t("최대용량의 한도를 0으로 설정시 그룹 사용이 중단됩니다.")}
                       </Grid>
-                      <Grid
-                        container
-                        item
-                        xs={11}
-                        direction="column"
-                        justifyContent="flex-start"
-                        alignItems="flex-start"
-                      >
-                        <Grid
-                          container
-                          item
-                          xs={11}
-                          direction="column"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
-                        >
+                      <Grid container item xs={11} direction="column" justifyContent="flex-start" alignItems="flex-start">
+                        <Grid container item xs={11} direction="column" justifyContent="flex-start" alignItems="flex-start">
                           {t("Current Volume")}
                           <TextField
                             variant="outlined"
@@ -2326,35 +1716,17 @@ const OpsPannel = (props) => {
                             onChange={(e) => {
                               if (+e.target.value > 4) {
                                 setServerSizeSubmitLock(true);
-                                dispatch(
-                                  openSuccessSnackbarRequestAction(
-                                    t(
-                                      "5개 이상은 영업팀 문의를 통해 이용이 가능합니다."
-                                    )
-                                  )
-                                );
+                                dispatch(openSuccessSnackbarRequestAction(t("5개 이상은 영업팀 문의를 통해 이용이 가능합니다.")));
                                 openChat();
                                 setStartServerSizeToChange(5);
                               } else {
-                                if (
-                                  maxServerSizeToChange < 5 &&
-                                  minServerSizeToChange < 5 &&
-                                  startServerSizeToChange < 5
-                                )
-                                  setServerSizeSubmitLock(false);
+                                if (maxServerSizeToChange < 5 && minServerSizeToChange < 5 && startServerSizeToChange < 5) setServerSizeSubmitLock(false);
                                 setStartServerSizeToChange(+e.target.value);
                               }
                             }}
                           />
                         </Grid>
-                        <Grid
-                          container
-                          item
-                          xs={11}
-                          direction="column"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
-                        >
+                        <Grid container item xs={11} direction="column" justifyContent="flex-start" alignItems="flex-start">
                           {t("Minimum Volume")}
                           <TextField
                             variant="outlined"
@@ -2367,35 +1739,17 @@ const OpsPannel = (props) => {
                             onChange={(e) => {
                               if (+e.target.value > 4) {
                                 setServerSizeSubmitLock(true);
-                                dispatch(
-                                  openSuccessSnackbarRequestAction(
-                                    t(
-                                      "5개 이상은 영업팀 문의를 통해 이용이 가능합니다."
-                                    )
-                                  )
-                                );
+                                dispatch(openSuccessSnackbarRequestAction(t("5개 이상은 영업팀 문의를 통해 이용이 가능합니다.")));
                                 openChat();
                                 setMinServerSizeToChange(5);
                               } else {
-                                if (
-                                  maxServerSizeToChange < 5 &&
-                                  minServerSizeToChange < 5 &&
-                                  startServerSizeToChange < 5
-                                )
-                                  setServerSizeSubmitLock(false);
+                                if (maxServerSizeToChange < 5 && minServerSizeToChange < 5 && startServerSizeToChange < 5) setServerSizeSubmitLock(false);
                                 setMinServerSizeToChange(+e.target.value);
                               }
                             }}
                           />
                         </Grid>
-                        <Grid
-                          container
-                          item
-                          xs={11}
-                          direction="column"
-                          justifyContent="flex-start"
-                          alignItems="flex-start"
-                        >
+                        <Grid container item xs={11} direction="column" justifyContent="flex-start" alignItems="flex-start">
                           {t("Maximum Volume")}
                           <TextField
                             variant="outlined"
@@ -2408,22 +1762,11 @@ const OpsPannel = (props) => {
                             onChange={(e) => {
                               if (+e.target.value > 4) {
                                 setServerSizeSubmitLock(true);
-                                dispatch(
-                                  openSuccessSnackbarRequestAction(
-                                    t(
-                                      "5개 이상은 영업팀 문의를 통해 이용이 가능합니다."
-                                    )
-                                  )
-                                );
+                                dispatch(openSuccessSnackbarRequestAction(t("5개 이상은 영업팀 문의를 통해 이용이 가능합니다.")));
                                 openChat();
                                 setMaxServerSizeToChange(5);
                               } else {
-                                if (
-                                  maxServerSizeToChange < 5 &&
-                                  minServerSizeToChange < 5 &&
-                                  startServerSizeToChange < 5
-                                )
-                                  setServerSizeSubmitLock(false);
+                                if (maxServerSizeToChange < 5 && minServerSizeToChange < 5 && startServerSizeToChange < 5) setServerSizeSubmitLock(false);
                                 setMaxServerSizeToChange(+e.target.value);
                               }
                             }}
@@ -2446,11 +1789,7 @@ const OpsPannel = (props) => {
                         id="closeLoadModelModal"
                         style={{ width: "100%" }}
                         // className={classes.defaultOutlineButton}
-                        className={
-                          isChangeSizeLoading === true
-                            ? classes.defaultDisabledButton
-                            : classes.defaultOutlineButton
-                        }
+                        className={isChangeSizeLoading === true ? classes.defaultDisabledButton : classes.defaultOutlineButton}
                         disabled={isChangeSizeLoading}
                         onClick={() => {
                           setIsChangeSizeModalOpen(false);
@@ -2466,40 +1805,20 @@ const OpsPannel = (props) => {
                       <Button
                         id="nextLoadModelModal"
                         style={{ width: "100%" }}
-                        className={
-                          isChangeSizeLoading === false
-                            ? serverSizeSubmitLock === true
-                              ? classes.defaultDisabledButton
-                              : classes.defaultHighlightButton
-                            : classes.defaultDisabledButton
-                        }
+                        className={isChangeSizeLoading === false ? (serverSizeSubmitLock === true ? classes.defaultDisabledButton : classes.defaultHighlightButton) : classes.defaultDisabledButton}
                         disabled={isChangeSizeLoading || serverSizeSubmitLock}
                         onClick={() => {
-                          if (
-                            minServerSizeToChange <= startServerSizeToChange &&
-                            startServerSizeToChange <= maxServerSizeToChange
-                          ) {
-                            if (isEnableToChange(seletedServerGroup.updated_at))
-                              changeSize();
+                          if (minServerSizeToChange <= startServerSizeToChange && startServerSizeToChange <= maxServerSizeToChange) {
+                            if (isEnableToChange(seletedServerGroup.updated_at)) changeSize();
                             else {
-                              openErrorSnackbarRequestAction(
-                                t(
-                                  "최근에 변경된 서버입니다. 잠시후에 다시 시도해 주시기 바랍니다"
-                                )
-                              );
+                              openErrorSnackbarRequestAction(t("최근에 변경된 서버입니다. 잠시후에 다시 시도해 주시기 바랍니다"));
                             }
                           } else {
-                            dispatch(
-                              openErrorSnackbarRequestAction(
-                                t("Invalid input.")
-                              )
-                            );
+                            dispatch(openErrorSnackbarRequestAction(t("Invalid input.")));
                           }
                         }}
                       >
-                        {isChangeSizeLoading === false
-                          ? t("Confirm")
-                          : t("Loading")}
+                        {isChangeSizeLoading === false ? t("Confirm") : t("Loading")}
                       </Button>
                     </GridItem>
                   </>
@@ -2518,20 +1837,8 @@ const OpsPannel = (props) => {
         // }}
         className={classes.modalContainer}
       >
-        <Grid
-          item
-          container
-          xs={12}
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Grid
-            item
-            container
-            xs={10}
-            justifyContent="center"
-            alignItems="center"
-          >
+        <Grid item container xs={12} justifyContent="center" alignItems="center">
+          <Grid item container xs={10} justifyContent="center" alignItems="center">
             <div
               style={{
                 marginLeft: `${(100 * 5) / 6}vw`,
@@ -2553,22 +1860,12 @@ const OpsPannel = (props) => {
           </Grid>
         </Grid>
       </Modal>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isServiceAppModalOpen}
-        onClose={serviceAppModalActionClose}
-        className={classes.modalContainer}
-      >
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isServiceAppModalOpen} onClose={serviceAppModalActionClose} className={classes.modalContainer}>
         <div className={classes.shareModalContent} id="projectModal">
           <div className={classes.gridRoot} style={{ margin: "0 20px" }}>
             <div className={classes.titleContainer} style={{ width: "100%" }}>
               <b>{t("Sharing a service app")}</b>
-              <CloseIcon
-                className={classes.closeImg}
-                id="planModalCloseBtn"
-                onClick={serviceAppModalActionClose}
-              />
+              <CloseIcon className={classes.closeImg} id="planModalCloseBtn" onClick={serviceAppModalActionClose} />
             </div>
             <GridContainer style={{ margin: "0 20px", width: "100%" }}>
               <GridItem xs={12}>
@@ -2716,11 +2013,7 @@ const OpsPannel = (props) => {
                       overflow: "hidden",
                     }}
                     target={"_blank"}
-                    href={
-                      user.language === "ko"
-                        ? `https://ko.ds2.ai//skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`
-                        : `https://ds2.ai/skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`
-                    }
+                    href={user.language === "ko" ? `https://ko.ds2.ai//skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}` : `https://ds2.ai/skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`}
                   >
                     <u
                       style={{
@@ -2729,9 +2022,7 @@ const OpsPannel = (props) => {
                         overflow: "hidden",
                       }}
                     >
-                      {user.language === "ko"
-                        ? `https://ko.ds2.ai//skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`
-                        : `https://ds2.ai/skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`}
+                      {user.language === "ko" ? `https://ko.ds2.ai//skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}` : `https://ds2.ai/skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`}
                     </u>
                   </a>
                 </div>
@@ -2745,20 +2036,12 @@ const OpsPannel = (props) => {
                     fontWeight: "400",
                   }}
                 >
-                  {t(
-                    "링크 공유 시 소모되는 예측 카운트는 동일하게 적용되니 이용에 참고해주시길 바랍니다."
-                  )}
+                  {t("링크 공유 시 소모되는 예측 카운트는 동일하게 적용되니 이용에 참고해주시길 바랍니다.")}
                 </div>
               </GridItem>
               <GridItem xs={9}></GridItem>
               <GridItem xs={3} style={{ textAlign: "right" }}>
-                <CopyToClipboard
-                  text={
-                    user.language === "ko"
-                      ? `https://ko.ds2.ai//skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`
-                      : `https://ds2.ai/skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`
-                  }
-                >
+                <CopyToClipboard text={user.language === "ko" ? `https://ko.ds2.ai//skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}` : `https://ds2.ai/skyhub_app.html/?modeltoken=${models.model?.token}&opsid=${projects.opsProject?.id}`}>
                   <Button
                     className={classes.defaultHighlightButton}
                     style={{
@@ -2777,38 +2060,14 @@ const OpsPannel = (props) => {
           </div>
         </div>
       </Modal>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={colorPickerModal}
-        onClose={closeColorPickerModal}
-        className={classes.modalContainer}
-      >
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={colorPickerModal} onClose={closeColorPickerModal} className={classes.modalContainer}>
         <div style={{ height: "200px" }}>
-          <ChromePicker
-            color={backgroundColor}
-            onChangeComplete={onChangeBackgroundColor}
-            disableAlpha={true}
-          />
-          <CloseIcon
-            className={classes.closeImg}
-            id="planModalCloseBtn"
-            onClick={closeColorPickerModal}
-          />
+          <ChromePicker color={backgroundColor} onChangeComplete={onChangeBackgroundColor} disableAlpha={true} />
+          <CloseIcon className={classes.closeImg} id="planModalCloseBtn" onClick={closeColorPickerModal} />
         </div>
       </Modal>
-      <SalesModal
-        isSalesModalOpen={isSalesModalOpen}
-        setIsSalesModalOpen={setIsSalesModalOpen}
-        api_type="Ops"
-        model_id={projects.opsProject?.id}
-      />
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isServerControlModal}
-        className={classes.modalContainer}
-      >
+      <SalesModal isSalesModalOpen={isSalesModalOpen} setIsSalesModalOpen={setIsSalesModalOpen} api_type="Ops" model_id={projects.opsProject?.id} />
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isServerControlModal} className={classes.modalContainer}>
         <div
           style={{
             width: "350px",
@@ -2851,32 +2110,14 @@ const OpsPannel = (props) => {
             </div>
           ) : (
             <>
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent="center"
-                alignItems="center"
-              >
-                {selectedServerGroup?.maxServerSize == 0
-                  ? t("Do you want to resume the server?")
-                  : t("Do you want to stop the server?")}
+              <Grid container item xs={12} justifyContent="center" alignItems="center">
+                {selectedServerGroup?.maxServerSize == 0 ? t("Do you want to resume the server?") : t("Do you want to stop the server?")}
               </Grid>
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent="space-evenly"
-                alignItems="center"
-                style={{ marginTop: "5px" }}
-              >
+              <Grid container item xs={12} justifyContent="space-evenly" alignItems="center" style={{ marginTop: "5px" }}>
                 <Button
                   style={{ color: "#FFFFFF" }}
                   onClick={() => {
-                    changeSize(
-                      selectedServerGroup?.maxServerSize == 0 ? 1 : 0,
-                      selectedServerGroup?.id
-                    );
+                    changeSize(selectedServerGroup?.maxServerSize == 0 ? 1 : 0, selectedServerGroup?.id);
                   }}
                 >
                   {t("Yes")}

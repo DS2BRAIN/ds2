@@ -20,11 +20,7 @@ import Container from "@material-ui/core/Container";
 import InputBase from "@material-ui/core/InputBase";
 import GridFullContainer from "components/Grid/GridFullContainer";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  askModalRequestAction,
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { askModalRequestAction, openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 import { sendErrorMessage } from "components/Function/globalFunc.js";
@@ -35,10 +31,7 @@ let sortObj = { name: "up", displayName: "up", projectName: "up" };
 const FavoriteLists = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
-  const { user, messages } = useSelector(
-    (state) => ({ user: state.user, messages: state.messages }),
-    []
-  );
+  const { user, messages } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
   const { t } = useTranslation();
 
   const [favoriteModels, setFavoriteModels] = useState([]);
@@ -103,23 +96,9 @@ const FavoriteLists = ({ history }) => {
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              sendErrorMessage(
-                e.response.data.message,
-                e.response.data.message_en,
-                user.language
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t(
-                "죄송합니다, 즐겨찾기 목록을 가져오는데 실패했습니다. 잠시후 다시 시도해주세요."
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 즐겨찾기 목록을 가져오는데 실패했습니다. 잠시후 다시 시도해주세요.")));
         }
       });
   };
@@ -128,31 +107,13 @@ const FavoriteLists = ({ history }) => {
     api
       .setFavoriteModel(isTrue, id)
       .then((res) => {
-        setFavoriteModels(
-          favoriteModels.filter(
-            (model, i) => model.id !== parseInt(res.data.modelId)
-          )
-        );
+        setFavoriteModels(favoriteModels.filter((model, i) => model.id !== parseInt(res.data.modelId)));
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              sendErrorMessage(
-                e.response.data.message,
-                e.response.data.message_en,
-                user.language
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t(
-                "죄송합니다, 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요."
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요.")));
         }
       });
   };
@@ -220,47 +181,19 @@ const FavoriteLists = ({ history }) => {
       <>
         {favoriteModels && favoriteModels.length > 0 ? (
           <>
-            <Table
-              className={classes.table}
-              stickyheader="true"
-              aria-label="sticky table"
-            >
+            <Table className={classes.table} stickyheader="true" aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell
-                    className={classes.tableHead}
-                    align="center"
-                    style={{ width: "10%", padding: "16px 40px 16px 16px" }}
-                  ></TableCell>
-                  <TableCell
-                    className={classes.tableHead}
-                    align="center"
-                    style={{ width: "45%", cursor: "pointer" }}
-                    onClick={() => onSetSortValue("projectName")}
-                  >
+                  <TableCell className={classes.tableHead} align="center" style={{ width: "10%", padding: "16px 40px 16px 16px" }}></TableCell>
+                  <TableCell className={classes.tableHead} align="center" style={{ width: "45%", cursor: "pointer" }} onClick={() => onSetSortValue("projectName")}>
                     <div className={classes.tableHeader}>
-                      {sortValue === "projectName" &&
-                        (sortObj[sortValue] === "down" ? (
-                          <ArrowUpwardIcon fontSize="small" />
-                        ) : (
-                          <ArrowDownwardIcon fontSize="small" />
-                        ))}
+                      {sortValue === "projectName" && (sortObj[sortValue] === "down" ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
                       <b>{t("Project name")}</b>
                     </div>
                   </TableCell>
-                  <TableCell
-                    className={classes.tableHead}
-                    align="center"
-                    style={{ width: "45%", cursor: "pointer" }}
-                    onClick={() => onSetSortValue("name")}
-                  >
+                  <TableCell className={classes.tableHead} align="center" style={{ width: "45%", cursor: "pointer" }} onClick={() => onSetSortValue("name")}>
                     <div className={classes.tableHeader}>
-                      {sortValue === "name" &&
-                        (sortObj[sortValue] === "down" ? (
-                          <ArrowUpwardIcon fontSize="small" />
-                        ) : (
-                          <ArrowDownwardIcon fontSize="small" />
-                        ))}
+                      {sortValue === "name" && (sortObj[sortValue] === "down" ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
                       <b>{t("Model name")}</b>
                     </div>
                   </TableCell>
@@ -268,57 +201,26 @@ const FavoriteLists = ({ history }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {favoriteModels
-                  .slice(
-                    modelPage * rowsPerModelPage,
-                    modelPage * rowsPerModelPage + rowsPerModelPage
-                  )
-                  .map((model, idx) => {
-                    const id = model.id;
-                    return (
-                      <TableRow
-                        className={classes.tableRow}
-                        key={model.name + idx}
-                        style={{
-                          background:
-                            idx % 2 === 0
-                              ? currentTheme.tableRow1
-                              : currentTheme.tableRow2,
-                        }}
-                      >
-                        <TableCell className={classes.tableRowCell}>
-                          <IconButton aria-label="add to favorites">
-                            {model.isFavorite ? (
-                              <StarIcon
-                                id="modelStarIcon"
-                                className="favoriteIcon"
-                                onClick={() => onClickForFavorite(false, id)}
-                              />
-                            ) : (
-                              <StarBorderIcon
-                                className="favoriteIcon"
-                                onClick={() => onClickForFavorite(true, id)}
-                              />
-                            )}
-                          </IconButton>
-                        </TableCell>
-                        <TableCell
-                          onClick={() => openModal(model, "detail")}
-                          className={classes.defaultOutlineButton}
-                          className={classes.tableRowCell}
-                          align="center"
-                        >
-                          {model.projectName}{" "}
-                        </TableCell>
-                        <TableCell
-                          onClick={() => openModal(model, "detail")}
-                          className={classes.defaultOutlineButton}
-                          className={classes.tableRowCell}
-                          align="center"
-                        >
-                          {model.name}
-                        </TableCell>
-                        {/* <TableCell onClick={() => openModal(model, 'detail')} className={classes.defaultOutlineButton} className={classes.tableRowCell} align="center" >
+                {favoriteModels.slice(modelPage * rowsPerModelPage, modelPage * rowsPerModelPage + rowsPerModelPage).map((model, idx) => {
+                  const id = model.id;
+                  return (
+                    <TableRow
+                      className={classes.tableRow}
+                      key={model.name + idx}
+                      style={{
+                        background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                      }}
+                    >
+                      <TableCell className={classes.tableRowCell}>
+                        <IconButton aria-label="add to favorites">{model.isFavorite ? <StarIcon id="modelStarIcon" className="favoriteIcon" onClick={() => onClickForFavorite(false, id)} /> : <StarBorderIcon className="favoriteIcon" onClick={() => onClickForFavorite(true, id)} />}</IconButton>
+                      </TableCell>
+                      <TableCell onClick={() => openModal(model, "detail")} className={classes.defaultOutlineButton} className={classes.tableRowCell} align="center">
+                        {model.projectName}{" "}
+                      </TableCell>
+                      <TableCell onClick={() => openModal(model, "detail")} className={classes.defaultOutlineButton} className={classes.tableRowCell} align="center">
+                        {model.name}
+                      </TableCell>
+                      {/* <TableCell onClick={() => openModal(model, 'detail')} className={classes.defaultOutlineButton} className={classes.tableRowCell} align="center" >
                                 {
                                 model.status === 100 &&
                                 <div className={classes.defaultContainer} >
@@ -328,9 +230,9 @@ const FavoriteLists = ({ history }) => {
                                 </div>
                                 }
                             </TableCell> */}
-                      </TableRow>
-                    );
-                  })}
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
             <TablePagination
@@ -350,9 +252,7 @@ const FavoriteLists = ({ history }) => {
             />
           </>
         ) : (
-          <div className={classes.pageList}>
-            {t("There is no model on the Favorites list.")}
-          </div>
+          <div className={classes.pageList}>{t("There is no model on the Favorites list.")}</div>
         )}
       </>
     );
@@ -372,18 +272,9 @@ const FavoriteLists = ({ history }) => {
           justifyContent: "space-between",
         }}
       >
-        <div className={classes.subTitleText}>
-          {t(
-            "즐겨찾는 인공지능에서 즐겨찾기한 모델리스트를 확인할 수 있습니다."
-          )}
-        </div>
+        <div className={classes.subTitleText}>{t("즐겨찾는 인공지능에서 즐겨찾기한 모델리스트를 확인할 수 있습니다.")}</div>
         <div>
-          <Button
-            id="sellAIModelBtn"
-            className={classes.defaultOutlineButton}
-            style={{ fontSize: user.language === "en" && "10px" }}
-            onClick={() => openChat()}
-          >
+          <Button id="sellAIModelBtn" className={classes.defaultOutlineButton} style={{ fontSize: user.language === "en" && "10px" }} onClick={() => openChat()}>
             {t("Sell AI (Contact Us)")}
           </Button>
         </div>
@@ -394,11 +285,7 @@ const FavoriteLists = ({ history }) => {
         </div>
       ) : (
         <div className={classes.tableWrapper} style={{ marginTop: "80px" }}>
-          <Container
-            component="main"
-            maxWidth="false"
-            className={classes.mainCard}
-          >
+          <Container component="main" maxWidth="false" className={classes.mainCard}>
             <GridContainer>{showFavoriteTable()}</GridContainer>
           </Container>
         </div>

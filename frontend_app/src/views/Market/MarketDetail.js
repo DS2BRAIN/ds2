@@ -6,17 +6,9 @@ import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import Cookies from "helpers/Cookies";
 import { getMeRequestAction } from "redux/reducers/user";
 import { getMarketProjectRequestAction } from "redux/reducers/projects";
-import {
-  getLabelProjectRequestAction,
-  getObjectListsRequestAction,
-  postUploadFileRequestAction,
-} from "../../redux/reducers/labelprojects";
+import { getLabelProjectRequestAction, getObjectListsRequestAction, postUploadFileRequestAction } from "../../redux/reducers/labelprojects";
 import { getMarketModelRequestAction } from "../../redux/reducers/models";
-import {
-  askModalRequestAction,
-  openSuccessSnackbarRequestAction,
-  openErrorSnackbarRequestAction,
-} from "../../redux/reducers/messages";
+import { askModalRequestAction, openSuccessSnackbarRequestAction, openErrorSnackbarRequestAction } from "../../redux/reducers/messages";
 import LabelPreview from "views/Labelling/LabelPreview";
 import Button from "components/CustomButtons/Button";
 import { IS_ENTERPRISE } from "variables/common";
@@ -25,18 +17,7 @@ import MarketDetailSetting from "./MarketDetailSetting";
 import MarketMovieAnalysis from "./MarketMovieAnalysis";
 import LabelClass from "../Labelling/LabelClass";
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Line,
-  LineChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  LabelList,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis, ResponsiveContainer, LabelList } from "recharts";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 import Dropzone from "react-dropzone";
@@ -75,8 +56,7 @@ const MarketDetail = ({ history, match }) => {
   );
   const { t } = useTranslation();
   const path = window.location.pathname;
-  const chartWidth =
-    window.innerWidth < 1100 ? 600 : window.innerWidth < 1500 ? 800 : 1000;
+  const chartWidth = window.innerWidth < 1100 ? 600 : window.innerWidth < 1500 ? 800 : 1000;
   const COLOR_MINT = "#1BC6B4";
   const COLOR_BLUE = currentThemeColor.primary1;
   const COLOR_GRAY = "#999999";
@@ -152,27 +132,21 @@ const MarketDetail = ({ history, match }) => {
   let l_year = l_date.getFullYear().toString();
   let l_month = (l_date.getMonth() + 1).toString();
   let l_day = l_date.getDate().toString();
-  let l_dateString = `${l_year}-${
-    parseInt(l_month) < 10 ? "0" + l_month : l_month
-  }-${parseInt(l_day) < 10 ? "0" + l_day : l_day}`;
+  let l_dateString = `${l_year}-${parseInt(l_month) < 10 ? "0" + l_month : l_month}-${parseInt(l_day) < 10 ? "0" + l_day : l_day}`;
   const lastDate = l_dateString;
 
   const l7_date = new Date(l_date.setDate(l_date.getDate() - 6));
   let l7_year = l7_date.getFullYear().toString();
   let l7_month = (l7_date.getMonth() + 1).toString();
   let l7_day = l7_date.getDate().toString();
-  let l7_dateString = `${l7_year}-${
-    parseInt(l7_month) < 10 ? "0" + l7_month : l7_month
-  }-${parseInt(l7_day) < 10 ? "0" + l7_day : l7_day}`;
+  let l7_dateString = `${l7_year}-${parseInt(l7_month) < 10 ? "0" + l7_month : l7_month}-${parseInt(l7_day) < 10 ? "0" + l7_day : l7_day}`;
   const last7Date = l7_dateString;
 
   const lm_date = new Date(date.setMonth(date.getMonth() - 1));
   let lm_year = lm_date.getFullYear().toString();
   let lm_month = (lm_date.getMonth() + 1).toString();
   let lm_day = lm_date.getDate().toString();
-  let lm_dateString = `${lm_year}-${
-    parseInt(lm_month) < 10 ? "0" + lm_month : lm_month
-  }-${parseInt(lm_day) < 10 ? "0" + lm_day : lm_day}`;
+  let lm_dateString = `${lm_year}-${parseInt(lm_month) < 10 ? "0" + lm_month : lm_month}-${parseInt(lm_day) < 10 ? "0" + lm_day : lm_day}`;
   const lastMDate = lm_dateString;
 
   const [startDate, setStartDate] = useState(last7Date);
@@ -234,11 +208,7 @@ const MarketDetail = ({ history, match }) => {
     let maximum = user.maximumFileSize;
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > maximum) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t(`${maximum / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t(`${maximum / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)));
       } else {
         const name = files[idx].name;
         if (/\.(jpg|jpeg|png)$/g.test(name.toLowerCase())) {
@@ -247,9 +217,7 @@ const MarketDetail = ({ history, match }) => {
       }
     }
     if (tmpFiles.length === 0) {
-      dispatch(
-        openErrorSnackbarRequestAction(t(" Please upload file again"))
-      );
+      dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
       setIsUploadLoading(false);
       return;
     }
@@ -264,24 +232,12 @@ const MarketDetail = ({ history, match }) => {
   const goToSettingAreaPage = () => {
     const { id, status } = settingAreaImgFiles[0];
 
-    if (
-      labelprojects.projectDetail &&
-      labelprojects.projectDetail.labelclasses.length === 0
-    ) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("There is no class registered. Please add class")
-        )
-      );
+    if (labelprojects.projectDetail && labelprojects.projectDetail.labelclasses.length === 0) {
+      dispatch(openErrorSnackbarRequestAction(t("There is no class registered. Please add class")));
       return;
     }
 
-    window.open(
-      `${tempLabellingUrl}${
-        labelprojects.projectDetail.id
-      }/${id}/?token=${token}&start=true&appStatus=${status}&timeStamp=${Date.now()}`,
-      "_blank"
-    );
+    window.open(`${tempLabellingUrl}${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${status}&timeStamp=${Date.now()}`, "_blank");
   };
 
   useEffect(() => {
@@ -290,19 +246,14 @@ const MarketDetail = ({ history, match }) => {
 
       setMarketProjectId(id);
 
-      projects.project?.service_type?.includes("offline_")
-        ? setSelectedPage("overview")
-        : setSelectedPage("movieAnalysis");
+      projects.project?.service_type?.includes("offline_") ? setSelectedPage("overview") : setSelectedPage("movieAnalysis");
 
       setOfflineType(projects.project?.service_type);
     }
   }, [user.me && path, projects.project]);
 
   useEffect(() => {
-    if (
-      (selectedPage === "overview" || selectedPage === "movieAnalysis") &&
-      marketProjectId
-    ) {
+    if ((selectedPage === "overview" || selectedPage === "movieAnalysis") && marketProjectId) {
       setIsLoading(true);
       dispatch(getMarketProjectRequestAction(marketProjectId));
     }
@@ -315,10 +266,7 @@ const MarketDetail = ({ history, match }) => {
   }, [selectedPage && marketProjectId, refreshProject]);
 
   useEffect(() => {
-    if (
-      labelprojects?.projectDetail &&
-      labelprojects.projectDetail.labelclasses
-    ) {
+    if (labelprojects?.projectDetail && labelprojects.projectDetail.labelclasses) {
       let tmp = [];
       labelprojects.projectDetail.labelclasses.map((labelClass, i) => {
         let visitPerClass = { name: labelClass.name };
@@ -345,10 +293,7 @@ const MarketDetail = ({ history, match }) => {
   };
 
   useEffect(() => {
-    if (
-      selectedPage !== "movieAnalysis" &&
-      history.location.search.includes("?list=")
-    ) {
+    if (selectedPage !== "movieAnalysis" && history.location.search.includes("?list=")) {
       let path = history.location.pathname;
       history.push(path);
     }
@@ -366,16 +311,11 @@ const MarketDetail = ({ history, match }) => {
     if (isValid == true) {
       const key = `first_${match.params.key}_expiration_date`;
       let expired_at = new Date(user.me[key]);
-      expired_at =
-        (expired_at.getTime() + expired_at.getTimezoneOffset() * 60000) / 60000;
+      expired_at = (expired_at.getTime() + expired_at.getTimezoneOffset() * 60000) / 60000;
       let nowTime = new Date();
-      nowTime =
-        (nowTime.getTime() + nowTime.getTimezoneOffset() * 60000) / 60000;
+      nowTime = (nowTime.getTime() + nowTime.getTimezoneOffset() * 60000) / 60000;
       if (user.me[key] == null) expired_at = nowTime;
-      if (
-        nowTime > expired_at &&
-        (user.cardInfo == null || user.cardInfo.cardName == null)
-      ) {
+      if (nowTime > expired_at && (user.cardInfo == null || user.cardInfo.cardName == null)) {
         if (!IS_ENTERPRISE) {
           history.push(`/admin/setting/payment/?message=need`);
         }
@@ -389,17 +329,12 @@ const MarketDetail = ({ history, match }) => {
   }, [isValid]);
 
   useEffect(() => {
-    if (
-      projects.project !== null &&
-      projects.project.service_type !== undefined
-    ) {
+    if (projects.project !== null && projects.project.service_type !== undefined) {
       if (projects.project.labelproject !== null) {
         dispatch(getLabelProjectRequestAction(projects.project?.labelproject));
       } else if (projects.project?.service_type.indexOf("offline_") !== -1) {
         history.goBack();
-        dispatch(
-          openErrorSnackbarRequestAction(t(""))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("")));
       } else {
         setIsValidLabelProject(true);
       }
@@ -426,10 +361,7 @@ const MarketDetail = ({ history, match }) => {
     if (labelprojects.isLabelLoading && isLabelProjectLoading == false) {
       setIsLabelProjectLoading(true);
     }
-    if (
-      labelprojects.isLabelLoading == false &&
-      isLabelProjectLoading == true
-    ) {
+    if (labelprojects.isLabelLoading == false && isLabelProjectLoading == true) {
       if (labelprojects.isSuccess == true) {
         setIsValidLabelProject(true);
         setIsLabelProjectLoading(false);
@@ -447,20 +379,12 @@ const MarketDetail = ({ history, match }) => {
         setIsLoading(false);
       } else {
         history.goBack();
-        dispatch(
-          openSuccessSnackbarRequestAction(
-            t("The label project does not exist.")
-          )
-        );
+        dispatch(openSuccessSnackbarRequestAction(t("The label project does not exist.")));
       }
     }
     if (isValidMarketProject == false) {
       history.goBack();
-      dispatch(
-        openSuccessSnackbarRequestAction(
-          t("This service has not been paid for on a regular basis.")
-        )
-      );
+      dispatch(openSuccessSnackbarRequestAction(t("This service has not been paid for on a regular basis.")));
     }
   }, [isValidLabelProject, isValidMarketProject, isNeedLabel]);
 
@@ -486,12 +410,7 @@ const MarketDetail = ({ history, match }) => {
   }, [uploadFile]);
 
   useEffect(() => {
-    if (
-      (selectedPage === "class" ||
-        selectedPage === "list" ||
-        labelprojects.isPostSuccess) &&
-      labelprojects.projectDetail
-    ) {
+    if ((selectedPage === "class" || selectedPage === "list" || labelprojects.isPostSuccess) && labelprojects.projectDetail) {
       dispatch(
         getObjectListsRequestAction({
           sorting: labelprojects.sortingValue,
@@ -574,22 +493,13 @@ const MarketDetail = ({ history, match }) => {
       let tempCounts = 0;
       if (!section || areaGroup === section || section === "all") {
         totalFloat = totalFloat + avgCounts;
-        if (areaGroup && areaGroup !== "all")
-          totalVisit = totalVisit + avgCounts;
+        if (areaGroup && areaGroup !== "all") totalVisit = totalVisit + avgCounts;
         if (areaGroup === "Checkout") totalPurchase = totalPurchase + avgCounts;
         totalDuration = totalDuration + avgDuration;
         statYear = String(stat.statisticYear);
-        if (stat.statisticMonth)
-          statMonth =
-            stat.statisticMonth < 10
-              ? "0" + String(stat.statisticMonth)
-              : String(stat.statisticMonth);
+        if (stat.statisticMonth) statMonth = stat.statisticMonth < 10 ? "0" + String(stat.statisticMonth) : String(stat.statisticMonth);
         else dateType = "year";
-        if (stat.statisticDay)
-          statDay =
-            stat.statisticDay < 10
-              ? "0" + String(stat.statisticDay)
-              : String(stat.statisticDay);
+        if (stat.statisticDay) statDay = stat.statisticDay < 10 ? "0" + String(stat.statisticDay) : String(stat.statisticDay);
         else dateType = "month";
 
         if (type === "visit") {
@@ -775,11 +685,7 @@ const MarketDetail = ({ history, match }) => {
     if (val) {
       if (year < 1970) {
         setStartDate("1970-01-01");
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("The starting year can be set after 1970.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("The starting year can be set after 1970.")));
         return;
       } else {
         setStartDate(val);
@@ -814,27 +720,15 @@ const MarketDetail = ({ history, match }) => {
     else tempType = "day";
     if (startDate > lastDate) {
       setStartDate(lastDate);
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("You can search up to the day before the date of inquiry.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("You can search up to the day before the date of inquiry.")));
       return;
     } else if (endDate > lastDate) {
       setEndDate(lastDate);
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("You can search up to the day before the date of inquiry.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("You can search up to the day before the date of inquiry.")));
       return;
     } else if (startDate > endDate) {
       setStartDate(endDate);
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("종료일이 시작일보다 빠를 수 없습니다.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("종료일이 시작일보다 빠를 수 없습니다.")));
       return;
     }
     getMarketStat(
@@ -913,10 +807,7 @@ const MarketDetail = ({ history, match }) => {
     <>
       <ReactTitle title={"DS2.ai - " + t("service")} />
       <>
-        {isLoading ||
-        isChecking ||
-        !isValidMarketProject ||
-        !isValidLabelProject ? (
+        {isLoading || isChecking || !isValidMarketProject || !isValidLabelProject ? (
           <div className={classes.loading}>
             <CircularProgress />
           </div>
@@ -976,12 +867,7 @@ const MarketDetail = ({ history, match }) => {
                         } else {
                           isStandard = false;
                         }
-                        openModal(
-                          projects.project?.marketmodel,
-                          "apiVideo",
-                          false,
-                          isStandard
-                        );
+                        openModal(projects.project?.marketmodel, "apiVideo", false, isStandard);
                       });
                   }}
                   className={classes.defaultGreenOutlineButton}
@@ -1001,14 +887,7 @@ const MarketDetail = ({ history, match }) => {
                       fontSize: user.language === "ko" ? "16px" : "14px",
                     }}
                     id="uploadPredictAgain"
-                    onClick={() =>
-                      openModal(
-                        projects.project?.marketmodel,
-                        "apiVideo",
-                        true,
-                        false
-                      )
-                    }
+                    onClick={() => openModal(projects.project?.marketmodel, "apiVideo", true, false)}
                     className={classes.defaultF0F0OutlineButton}
                   >
                     {t("Standard Video Upload")}
@@ -1016,72 +895,28 @@ const MarketDetail = ({ history, match }) => {
                 )}
               </GridItem>
             </GridContainer>
-            <GridContainer
-              className={classes.pageList}
-              style={{ width: "100%", margin: "0 0 15px 15px" }}
-              wrap="nowrap"
-            >
+            <GridContainer className={classes.pageList} style={{ width: "100%", margin: "0 0 15px 15px" }} wrap="nowrap">
               {projects.project?.service_type.indexOf("offline_") > -1 && (
-                <Grid
-                  onClick={() => onSetSelectedPage("overview")}
-                  id="labelDashboardTab"
-                  className={
-                    selectedPage === "overview"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
+                <Grid onClick={() => onSetSelectedPage("overview")} id="labelDashboardTab" className={selectedPage === "overview" ? classes.selectedListObject : classes.listObject}>
                   {t("Dashboard")}
                 </Grid>
               )}
               {projects.project?.service_type.indexOf("offline_") > -1 && (
-                <Grid
-                  onClick={() => onSetSelectedPage("list")}
-                  id="labelListTab"
-                  className={
-                    selectedPage === "list"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
+                <Grid onClick={() => onSetSelectedPage("list")} id="labelListTab" className={selectedPage === "list" ? classes.selectedListObject : classes.listObject}>
                   {t("Detailed analysis")}
                 </Grid>
               )}
               {projects.project?.service_type.indexOf("offline_") > -1 && (
-                <Grid
-                  onClick={() => onSetSelectedPage("class")}
-                  id="labelClassTab"
-                  className={
-                    selectedPage === "class"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
+                <Grid onClick={() => onSetSelectedPage("class")} id="class_tab" className={selectedPage === "class" ? classes.selectedListObject : classes.listObject}>
                   {t("Zoning")}
                 </Grid>
               )}
               {projects.project?.trainingMethod === "object_detection" && (
-                <Grid
-                  onClick={() => onSetSelectedPage("movieAnalysis")}
-                  id="labelMovieAnalysisTab"
-                  className={
-                    selectedPage === "movieAnalysis"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
+                <Grid onClick={() => onSetSelectedPage("movieAnalysis")} id="labelMovieAnalysisTab" className={selectedPage === "movieAnalysis" ? classes.selectedListObject : classes.listObject}>
                   {t("Video list")}
                 </Grid>
               )}
-              <Grid
-                onClick={() => onSetSelectedPage("setting")}
-                id="labelMemberTab"
-                className={
-                  selectedPage === "setting"
-                    ? classes.selectedListObject
-                    : classes.listObject
-                }
-              >
+              <Grid onClick={() => onSetSelectedPage("setting")} id="labelMemberTab" className={selectedPage === "setting" ? classes.selectedListObject : classes.listObject}>
                 {t("General settings")}
               </Grid>
             </GridContainer>
@@ -1189,33 +1024,14 @@ const MarketDetail = ({ history, match }) => {
                       borderBottom: "1px solid var(--textWhite38)",
                     }}
                   >
-                    <GridItem
-                      xs={12}
-                      style={{ display: "flex", justifyContent: "center" }}
-                      justify="space-between"
-                      alignItems="center"
-                    >
+                    <GridItem xs={12} style={{ display: "flex", justifyContent: "center" }} justify="space-between" alignItems="center">
                       <GridContainer
                         style={{
                           alignItems: "center",
                         }}
                       >
-                        <GridItem
-                          xs={5}
-                          style={{ height: "250px", overflow: "hidden" }}
-                        >
-                          {labelprojects?.objectLists &&
-                            labelprojects.objectLists.length > 0 && (
-                              <LabelPreview
-                                history={history}
-                                selectedPreviewId={
-                                  labelprojects.objectLists[0].id
-                                }
-                                onClosePreviewModal={() => null}
-                                isMarketProject
-                                isDetailAnalysis
-                              />
-                            )}
+                        <GridItem xs={5} style={{ height: "250px", overflow: "hidden" }}>
+                          {labelprojects?.objectLists && labelprojects.objectLists.length > 0 && <LabelPreview history={history} selectedPreviewId={labelprojects.objectLists[0].id} onClosePreviewModal={() => null} isMarketProject isDetailAnalysis />}
                         </GridItem>
                         <GridItem xs={7}>
                           <ResponsiveContainer width="100%" height={280}>
@@ -1231,17 +1047,7 @@ const MarketDetail = ({ history, match }) => {
                             >
                               <XAxis dataKey="name" />
                               <YAxis type="number" domain={[0, 100]} />
-                              <Bar
-                                dataKey="visitPerClassAmt"
-                                fill="var(--mainSub)"
-                                barSize={30}
-                                isAnimationActive={false}
-                                label={
-                                  <CustomizedLabel
-                                    allVisitCount={allVisitCount}
-                                  />
-                                }
-                              ></Bar>
+                              <Bar dataKey="visitPerClassAmt" fill="var(--mainSub)" barSize={30} isAnimationActive={false} label={<CustomizedLabel allVisitCount={allVisitCount} />}></Bar>
                             </BarChart>
                           </ResponsiveContainer>
                           <div
@@ -1260,11 +1066,7 @@ const MarketDetail = ({ history, match }) => {
                 )}
                 <GridItem xs={12}>
                   {selectedPage === "list" && (
-                    <Grid
-                      container
-                      justifyContent="flex-end"
-                      style={{ margin: "40px 0 24px" }}
-                    >
+                    <Grid container justifyContent="flex-end" style={{ margin: "40px 0 24px" }}>
                       <Grid item xs={12}>
                         <Select
                           id="sectionSelect"
@@ -1282,29 +1084,20 @@ const MarketDetail = ({ history, match }) => {
                           <MenuItem id="menuItem_all" value="all">
                             {t("All")}
                           </MenuItem>
-                          {labelprojects?.projectDetail?.labelclasses?.map(
-                            (label) => {
-                              return (
-                                <MenuItem
-                                  id={`menuItem_${label.name}`}
-                                  value={label.name}
-                                >
-                                  {label.name}
-                                </MenuItem>
-                              );
-                            }
-                          )}
+                          {labelprojects?.projectDetail?.labelclasses?.map((label) => {
+                            return (
+                              <MenuItem id={`menuItem_${label.name}`} value={label.name}>
+                                {label.name}
+                              </MenuItem>
+                            );
+                          })}
                         </Select>
                       </Grid>
                     </Grid>
                   )}
                 </GridItem>
                 <GridItem xs={12}>
-                  <Grid
-                    container
-                    justifyContent="center"
-                    style={{ flexWrap: "nowrap" }}
-                  >
+                  <Grid container justifyContent="center" style={{ flexWrap: "nowrap" }}>
                     <div
                       id="floatSelect"
                       style={
@@ -1322,17 +1115,11 @@ const MarketDetail = ({ history, match }) => {
                       }}
                     >
                       <div style={{ width: "100%", marginBottom: "10px" }}>
-                        <b style={{ fontSize: "16px" }}>
-                          {t(graphContents.float.name)}
-                        </b>
+                        <b style={{ fontSize: "16px" }}>{t(graphContents.float.name)}</b>
                       </div>
                       <div>
                         <b style={{ fontSize: "36px" }}>{totalFloatCount}</b>
-                        <b style={{ fontSize: "16px" }}>
-                          {offlineType === "offline_shop"
-                            ? " " + t("")
-                            : " " + t("")}
-                        </b>
+                        <b style={{ fontSize: "16px" }}>{offlineType === "offline_shop" ? " " + t("") : " " + t("")}</b>
                       </div>
                     </div>
                     {offlineType === "offline_shop" && totalVisitCount ? (
@@ -1353,9 +1140,7 @@ const MarketDetail = ({ history, match }) => {
                         }}
                       >
                         <div style={{ width: "100%", marginBottom: "10px" }}>
-                          <b style={{ fontSize: "16px" }}>
-                            {t(graphContents.visit.name)}
-                          </b>
+                          <b style={{ fontSize: "16px" }}>{t(graphContents.visit.name)}</b>
                         </div>
                         <div>
                           <b style={{ fontSize: "36px" }}>{totalVisitCount}</b>
@@ -1381,14 +1166,10 @@ const MarketDetail = ({ history, match }) => {
                         }}
                       >
                         <div style={{ width: "100%", marginBottom: "10px" }}>
-                          <b style={{ fontSize: "16px" }}>
-                            {t(graphContents.purchase.name)}
-                          </b>
+                          <b style={{ fontSize: "16px" }}>{t(graphContents.purchase.name)}</b>
                         </div>
                         <div>
-                          <b style={{ fontSize: "36px" }}>
-                            {totalPurchaseCount}
-                          </b>
+                          <b style={{ fontSize: "36px" }}>{totalPurchaseCount}</b>
                           <b style={{ fontSize: "16px" }}>{" " + t("")}</b>
                         </div>
                       </div>
@@ -1409,26 +1190,18 @@ const MarketDetail = ({ history, match }) => {
                       // }}
                     >
                       <div style={{ width: "100%", marginBottom: "10px" }}>
-                        <b style={{ fontSize: "16px" }}>
-                          {t(graphContents.duration.name)}
-                        </b>
+                        <b style={{ fontSize: "16px" }}>{t(graphContents.duration.name)}</b>
                       </div>
                       <div style={{ display: "flex" }}>
-                        {totalDurationCount &&
-                        parseInt(totalDurationCount / 60) ? (
+                        {totalDurationCount && parseInt(totalDurationCount / 60) ? (
                           <>
-                            <b style={{ fontSize: "36px" }}>
-                              {parseInt(totalDurationCount / 60)}
-                            </b>
+                            <b style={{ fontSize: "36px" }}>{parseInt(totalDurationCount / 60)}</b>
                             <b style={{ fontSize: "16px" }}>{t("minutes")}</b>
                           </>
                         ) : null}
-                        {totalDurationCount &&
-                        parseInt(totalDurationCount % 60) ? (
+                        {totalDurationCount && parseInt(totalDurationCount % 60) ? (
                           <>
-                            <b style={{ fontSize: "36px" }}>
-                              {parseInt(totalDurationCount % 60)}
-                            </b>
+                            <b style={{ fontSize: "36px" }}>{parseInt(totalDurationCount % 60)}</b>
                             <b style={{ fontSize: "16px" }}>{t("Sec")}</b>
                           </>
                         ) : (
@@ -1444,137 +1217,71 @@ const MarketDetail = ({ history, match }) => {
                 {projects.workage && (
                   <GridItem xs={12}>
                     <div className={classes.dashboardMain}>
-                      <Typography
-                        className={classes.dashbordTitle}
-                        gutterBottom
-                      >
+                      <Typography className={classes.dashbordTitle} gutterBottom>
                         {t("Label Trainers")}
                       </Typography>
                       <Typography className={classes.content}>
                         <GridContainer className={classes.textContainer}>
-                          <Table
-                            className={classes.table}
-                            style={{ margin: "10px" }}
-                            aria-label="simple table"
-                          >
+                          <Table className={classes.table} style={{ margin: "10px" }} aria-label="simple table">
                             <TableHead>
                               <TableRow>
-                                <TableCell
-                                  className={classes.tableHead}
-                                  style={{ width: "5%" }}
-                                  align="center"
-                                >
+                                <TableCell className={classes.tableHead} style={{ width: "5%" }} align="center">
                                   <b>{t("")}</b>
                                 </TableCell>
-                                <TableCell
-                                  className={classes.tableHead}
-                                  style={{ width: "35%" }}
-                                  align="center"
-                                >
+                                <TableCell className={classes.tableHead} style={{ width: "35%" }} align="center">
                                   <b>{t("Assignee ")}</b>
                                 </TableCell>
-                                {projects.project &&
-                                  projects.project.workapp ===
-                                    "object_detection" && (
-                                    <>
-                                      <TableCell
-                                        className={classes.tableHead}
-                                        style={{ width: "15%" }}
-                                        align="center"
-                                      >
-                                        <b>{t("")}</b>
-                                      </TableCell>
-                                      <TableCell
-                                        className={classes.tableHead}
-                                        style={{ width: "15%" }}
-                                        align="center"
-                                      >
-                                        <b>{t("")}</b>
-                                      </TableCell>
-                                      <TableCell
-                                        className={classes.tableHead}
-                                        style={{ width: "15%" }}
-                                        align="center"
-                                      >
-                                        <b>{t("")}</b>
-                                      </TableCell>
-                                    </>
-                                  )}
-                                <TableCell
-                                  className={classes.tableHead}
-                                  style={{ width: "15%" }}
-                                  align="center"
-                                >
+                                {projects.project && projects.project.workapp === "object_detection" && (
+                                  <>
+                                    <TableCell className={classes.tableHead} style={{ width: "15%" }} align="center">
+                                      <b>{t("")}</b>
+                                    </TableCell>
+                                    <TableCell className={classes.tableHead} style={{ width: "15%" }} align="center">
+                                      <b>{t("")}</b>
+                                    </TableCell>
+                                    <TableCell className={classes.tableHead} style={{ width: "15%" }} align="center">
+                                      <b>{t("")}</b>
+                                    </TableCell>
+                                  </>
+                                )}
+                                <TableCell className={classes.tableHead} style={{ width: "15%" }} align="center">
                                   <b>{t("")}</b>
                                 </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {[projects.workage]
-                                .concat(projects.workage.aiTrainerWorkage)
-                                .map((workage, idx) => (
-                                  <TableRow
-                                    key={
-                                      workage.aiTrainerId
-                                        ? workage.aiTrainerId
-                                        : user.me.email
-                                    }
-                                    className={classes.tableRow}
-                                    style={{
-                                      background:
-                                        idx % 2 === 0
-                                          ? currentTheme.tableRow1
-                                          : currentTheme.tableRow2,
-                                    }}
-                                  >
-                                    <TableCell
-                                      className={classes.tableRowCell}
-                                      align="center"
-                                    >
-                                      {idx + 1}
-                                    </TableCell>
-                                    <TableCell
-                                      className={classes.tableRowCell}
-                                      align="center"
-                                    >
-                                      {workage.aiTrainerId
-                                        ? workage.aiTrainerId
-                                        : user.me.email}
-                                    </TableCell>
-                                    {projects.project &&
-                                      projects.project.workapp ===
-                                        "object_detection" && (
-                                        <>
-                                          <TableCell
-                                            className={classes.tableRowCell}
-                                            align="center"
-                                          >
-                                            {workage.box}
-                                          </TableCell>
-                                          <TableCell
-                                            className={classes.tableRowCell}
-                                            align="center"
-                                          >
-                                            {workage.polygon}
-                                          </TableCell>
-                                          <TableCell
-                                            className={classes.tableRowCell}
-                                            align="center"
-                                          >
-                                            {workage.magic}
-                                          </TableCell>
-                                        </>
-                                      )}
-                                    <TableCell
-                                      className={classes.tableRowCell}
-                                      align="center"
-                                    >
-                                      {workage.box +
-                                        workage.polygon +
-                                        workage.magic}
-                                    </TableCell>
-                                  </TableRow>
-                                ))}
+                              {[projects.workage].concat(projects.workage.aiTrainerWorkage).map((workage, idx) => (
+                                <TableRow
+                                  key={workage.aiTrainerId ? workage.aiTrainerId : user.me.email}
+                                  className={classes.tableRow}
+                                  style={{
+                                    background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                                  }}
+                                >
+                                  <TableCell className={classes.tableRowCell} align="center">
+                                    {idx + 1}
+                                  </TableCell>
+                                  <TableCell className={classes.tableRowCell} align="center">
+                                    {workage.aiTrainerId ? workage.aiTrainerId : user.me.email}
+                                  </TableCell>
+                                  {projects.project && projects.project.workapp === "object_detection" && (
+                                    <>
+                                      <TableCell className={classes.tableRowCell} align="center">
+                                        {workage.box}
+                                      </TableCell>
+                                      <TableCell className={classes.tableRowCell} align="center">
+                                        {workage.polygon}
+                                      </TableCell>
+                                      <TableCell className={classes.tableRowCell} align="center">
+                                        {workage.magic}
+                                      </TableCell>
+                                    </>
+                                  )}
+                                  <TableCell className={classes.tableRowCell} align="center">
+                                    {workage.box + workage.polygon + workage.magic}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
                             </TableBody>
                           </Table>
                         </GridContainer>
@@ -1589,60 +1296,26 @@ const MarketDetail = ({ history, match }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <Grid
-                    item
-                    xs={11}
-                    style={{ position: "relative", marginTop: "40px" }}
-                  >
+                  <Grid item xs={11} style={{ position: "relative", marginTop: "40px" }}>
                     {totalPerDate.length === 0 && (
                       <div id="dateBlackBox" style={blurBlackBox}>
                         <b>{t("There is no data for the period you searched for.")}</b>
                       </div>
                     )}
-                    <div style={{ margin: "0 36px 24px", fontWeight: "bold" }}>
-                      {user.language === "ko"
-                        ? (periodText ? t(periodText) : t("by period")) +
-                          " " +
-                          t(graphContents[checkedType].name)
-                        : t(graphContents[checkedType].name) +
-                          " " +
-                          (periodText ? t(periodText) : t("by period"))}
-                    </div>
+                    <div style={{ margin: "0 36px 24px", fontWeight: "bold" }}>{user.language === "ko" ? (periodText ? t(periodText) : t("by period")) + " " + t(graphContents[checkedType].name) : t(graphContents[checkedType].name) + " " + (periodText ? t(periodText) : t("by period"))}</div>
                     <ResponsiveContainer width="100%" height={400}>
-                      <LineChart
-                        id="dateChart"
-                        width={chartWidth}
-                        height={400}
-                        data={totalPerDate}
-                        margin={{ top: 5, right: 90, left: 0, bottom: 5 }}
-                      >
+                      <LineChart id="dateChart" width={chartWidth} height={400} data={totalPerDate} margin={{ top: 5, right: 90, left: 0, bottom: 5 }}>
                         <Tooltip />
                         {/* <Legend verticalAlign="top" height={36} /> */}
                         <Line
-                          name={
-                            user.language === "ko"
-                              ? (periodText ? t(periodText) : t("by period")) +
-                                " " +
-                                t(graphContents[checkedType].name)
-                              : t(graphContents[checkedType].name) +
-                                " " +
-                                (periodText ? t(periodText) : t("by period"))
-                          }
+                          name={user.language === "ko" ? (periodText ? t(periodText) : t("by period")) + " " + t(graphContents[checkedType].name) : t(graphContents[checkedType].name) + " " + (periodText ? t(periodText) : t("by period"))}
                           type="monotone"
                           dataKey="y1"
                           stroke={COLOR_MINT}
                           activeDot={{ r: 8 }}
                         />
-                        <CartesianGrid
-                          stroke="rgba(208, 208, 208, 0.4)"
-                          vertical={false}
-                        />
-                        <XAxis
-                          dataKey="x"
-                          interval={0}
-                          height={100}
-                          stroke={"#fff"}
-                        />
+                        <CartesianGrid stroke="rgba(208, 208, 208, 0.4)" vertical={false} />
+                        <XAxis dataKey="x" interval={0} height={100} stroke={"#fff"} />
                         <YAxis domain={[0, maxTotalPerDate]} stroke={"#fff"} />
                       </LineChart>
                     </ResponsiveContainer>
@@ -1656,68 +1329,21 @@ const MarketDetail = ({ history, match }) => {
                       justifyContent: "center",
                     }}
                   >
-                    <Grid
-                      item
-                      xs={11}
-                      style={{ position: "relative", marginTop: "40px" }}
-                    >
+                    <Grid item xs={11} style={{ position: "relative", marginTop: "40px" }}>
                       {totalPerHour.length === 0 && (
                         <div id="dateBlackBox" style={blurBlackBox}>
-                          <b>
-                            {t("There is no data for the period you searched for.")}
-                          </b>
+                          <b>{t("There is no data for the period you searched for.")}</b>
                         </div>
                       )}
-                      <div
-                        style={{ margin: "0 50px 24px", fontWeight: "bold" }}
-                      >
-                        {user.language === "ko"
-                          ? t("per hour") +
-                            " " +
-                            t(graphContents[checkedType].name)
-                          : t(graphContents[checkedType].name) +
-                            " " +
-                            t("per hour")}
-                      </div>
+                      <div style={{ margin: "0 50px 24px", fontWeight: "bold" }}>{user.language === "ko" ? t("per hour") + " " + t(graphContents[checkedType].name) : t(graphContents[checkedType].name) + " " + t("per hour")}</div>
                       <ResponsiveContainer width="100%" height={400}>
-                        <LineChart
-                          id="HourChart"
-                          width={chartWidth}
-                          height={400}
-                          data={totalPerHour}
-                          margin={{ top: 5, right: 90, left: 0, bottom: 5 }}
-                        >
+                        <LineChart id="HourChart" width={chartWidth} height={400} data={totalPerHour} margin={{ top: 5, right: 90, left: 0, bottom: 5 }}>
                           <Tooltip />
                           {/* <Legend verticalAlign="top" height={36} /> */}
-                          <Line
-                            name={
-                              user.language === "ko"
-                                ? t("per hour") +
-                                  " " +
-                                  t(graphContents[checkedType].name)
-                                : t(graphContents[checkedType].name) +
-                                  " " +
-                                  t("per hour")
-                            }
-                            type="monotone"
-                            dataKey="y1"
-                            stroke={COLOR_MINT}
-                            activeDot={{ r: 8 }}
-                          />
-                          <CartesianGrid
-                            stroke="rgba(208, 208, 208, 0.4)"
-                            vertical={false}
-                          />
-                          <XAxis
-                            dataKey="x"
-                            interval={0}
-                            height={100}
-                            stroke={"#fff"}
-                          />
-                          <YAxis
-                            domain={[0, maxTotalPerHour]}
-                            stroke={"#fff"}
-                          />
+                          <Line name={user.language === "ko" ? t("per hour") + " " + t(graphContents[checkedType].name) : t(graphContents[checkedType].name) + " " + t("per hour")} type="monotone" dataKey="y1" stroke={COLOR_MINT} activeDot={{ r: 8 }} />
+                          <CartesianGrid stroke="rgba(208, 208, 208, 0.4)" vertical={false} />
+                          <XAxis dataKey="x" interval={0} height={100} stroke={"#fff"} />
+                          <YAxis domain={[0, maxTotalPerHour]} stroke={"#fff"} />
                         </LineChart>
                       </ResponsiveContainer>
                     </Grid>
@@ -1730,56 +1356,21 @@ const MarketDetail = ({ history, match }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <Grid
-                    item
-                    xs={11}
-                    style={{ position: "relative", marginTop: "40px" }}
-                  >
+                  <Grid item xs={11} style={{ position: "relative", marginTop: "40px" }}>
                     {totalPerAge.length === 0 && (
                       <div id="dateBlackBox" style={blurBlackBox}>
                         <b>{t("There is no data for the period you searched for.")}</b>
                       </div>
                     )}
-                    <div style={{ margin: "0 50px 24px", fontWeight: "bold" }}>
-                      {user.language === "ko"
-                        ? t("by age group") +
-                          " " +
-                          t(graphContents[checkedType].name)
-                        : t(graphContents[checkedType].name) +
-                          " " +
-                          t("by age group")}
-                    </div>
+                    <div style={{ margin: "0 50px 24px", fontWeight: "bold" }}>{user.language === "ko" ? t("by age group") + " " + t(graphContents[checkedType].name) : t(graphContents[checkedType].name) + " " + t("by age group")}</div>
                     <ResponsiveContainer width="100%" height={400}>
-                      <BarChart
-                        id="ageChart"
-                        width={chartWidth}
-                        height={400}
-                        data={totalPerAge}
-                        margin={{ top: 5, right: 90, left: 0, bottom: 5 }}
-                      >
+                      <BarChart id="ageChart" width={chartWidth} height={400} data={totalPerAge} margin={{ top: 5, right: 90, left: 0, bottom: 5 }}>
                         {/* <CartesianGrid vertical={false} /> */}
-                        <XAxis
-                          dataKey="x"
-                          interval={0}
-                          height={100}
-                          stroke={COLOR_LIGHT}
-                        />
-                        <YAxis
-                          domain={[0, maxTotalPerAge]}
-                          stroke={COLOR_LIGHT}
-                        />
+                        <XAxis dataKey="x" interval={0} height={100} stroke={COLOR_LIGHT} />
+                        <YAxis domain={[0, maxTotalPerAge]} stroke={COLOR_LIGHT} />
                         {/* <Tooltip /> */}
-                        <Bar
-                          dataKey="y1"
-                          fill="var(--mainSub)"
-                          barSize={30}
-                          isAnimationActive={false}
-                        >
-                          <LabelList
-                            dataKey="y1Label"
-                            position="top"
-                            style={{ fill: "white", fontSize: "14px" }}
-                          />
+                        <Bar dataKey="y1" fill="var(--mainSub)" barSize={30} isAnimationActive={false}>
+                          <LabelList dataKey="y1Label" position="top" style={{ fill: "white", fontSize: "14px" }} />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
@@ -1825,29 +1416,16 @@ const MarketDetail = ({ history, match }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <Grid
-                    item
-                    xs={11}
-                    style={{ position: "relative", marginTop: "40px" }}
-                  >
+                  <Grid item xs={11} style={{ position: "relative", marginTop: "40px" }}>
                     <Grid container>
                       {totalPerGender.length === 0 && (
                         <div id="hourBlackBox" style={blurBlackBox_300}>
-                          <b>
-                            {t("There is no data for the period you searched for.")}
-                          </b>
+                          <b>{t("There is no data for the period you searched for.")}</b>
                         </div>
                       )}
-                      <div
-                        style={{ margin: "0 50px 24px", fontWeight: "bold" }}
-                      >
-                        {t("floating population gender")}
-                      </div>
+                      <div style={{ margin: "0 50px 24px", fontWeight: "bold" }}>{t("floating population gender")}</div>
                       <Grid item xs={11} style={{ margin: "0 50px" }}>
-                        <Grid
-                          container
-                          style={{ justifyContent: "space-between" }}
-                        >
+                        <Grid container style={{ justifyContent: "space-between" }}>
                           <Grid item>
                             <span
                               style={{
@@ -1865,13 +1443,7 @@ const MarketDetail = ({ history, match }) => {
                                 fontWeight: "bold",
                               }}
                             >
-                              {" " +
-                                (
-                                  totalPerGender.length > 1 &&
-                                  totalPerGender[0].value +
-                                    totalPerGender[1].value
-                                ).toLocaleString("ko-KR") +
-                                t("")}
+                              {" " + (totalPerGender.length > 1 && totalPerGender[0].value + totalPerGender[1].value).toLocaleString("ko-KR") + t("")}
                             </span>
                           </Grid>
                           <Grid item>
@@ -1889,11 +1461,7 @@ const MarketDetail = ({ history, match }) => {
                               </Grid>
                               <Grid item>
                                 <Grid container>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    style={{ fontSize: "14px" }}
-                                  >
+                                  <Grid item xs={12} style={{ fontSize: "14px" }}>
                                     {t("male")}
                                   </Grid>
                                   <Grid item xs={12}>
@@ -1904,10 +1472,7 @@ const MarketDetail = ({ history, match }) => {
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      {" " + totalPerGender.length > 1 &&
-                                        totalPerGender[0].value.toLocaleString(
-                                          "ko-KR"
-                                        ) + t("")}
+                                      {" " + totalPerGender.length > 1 && totalPerGender[0].value.toLocaleString("ko-KR") + t("")}
                                     </span>
                                   </Grid>
                                 </Grid>
@@ -1925,11 +1490,7 @@ const MarketDetail = ({ history, match }) => {
                               </Grid>
                               <Grid item>
                                 <Grid container>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    style={{ fontSize: "14px" }}
-                                  >
+                                  <Grid item xs={12} style={{ fontSize: "14px" }}>
                                     {t("female")}
                                   </Grid>
                                   <Grid item xs={12}>
@@ -1940,10 +1501,7 @@ const MarketDetail = ({ history, match }) => {
                                         fontWeight: "bold",
                                       }}
                                     >
-                                      {" " + totalPerGender.length > 1 &&
-                                        totalPerGender[1].value.toLocaleString(
-                                          "ko-KR"
-                                        ) + t("")}
+                                      {" " + totalPerGender.length > 1 && totalPerGender[1].value.toLocaleString("ko-KR") + t("")}
                                     </span>
                                   </Grid>
                                 </Grid>
@@ -1953,11 +1511,7 @@ const MarketDetail = ({ history, match }) => {
                         </Grid>
                       </Grid>
                       <Grid item xs={11} style={{ margin: "0 50px" }}>
-                        <Grid
-                          container
-                          justify="flex-start"
-                          style={{ position: "relative", marginTop: "16px" }}
-                        >
+                        <Grid container justify="flex-start" style={{ position: "relative", marginTop: "16px" }}>
                           <div
                             style={{
                               borderRadius: "10px",
@@ -1971,13 +1525,7 @@ const MarketDetail = ({ history, match }) => {
                           <div
                             style={{
                               borderRadius: "10px",
-                              width: `${
-                                totalPerGender.length > 1
-                                  ? (100 * totalPerGender[0].value) /
-                                    (totalPerGender[0].value +
-                                      totalPerGender[1].value)
-                                  : 50
-                              }%`,
+                              width: `${totalPerGender.length > 1 ? (100 * totalPerGender[0].value) / (totalPerGender[0].value + totalPerGender[1].value) : 50}%`,
                               height: "20px",
                               backgroundColor: "#748FFC",
                               zIndex: "3",
@@ -2013,18 +1561,12 @@ const MarketDetail = ({ history, match }) => {
             {/*)}*/}
             {selectedPage === "movieAnalysis" && (
               <GridItem xs={12}>
-                <MarketMovieAnalysis
-                  history={history}
-                  onSetSelectedPage={onSetSelectedPage}
-                />
+                <MarketMovieAnalysis history={history} onSetSelectedPage={onSetSelectedPage} />
               </GridItem>
             )}
             {selectedPage === "setting" && (
               <GridItem xs={12}>
-                <MarketDetailSetting
-                  history={history}
-                  onSetSelectedPage={onSetSelectedPage}
-                />
+                <MarketDetailSetting history={history} onSetSelectedPage={onSetSelectedPage} />
               </GridItem>
             )}
             {selectedPage === "class" && (
@@ -2042,11 +1584,7 @@ const MarketDetail = ({ history, match }) => {
                     onClick={() => {
                       goToSettingAreaPage();
                     }}
-                    className={
-                      !isPreviewImgExisted
-                        ? classes.defaultDisabledButton
-                        : classes.defaultGreenOutlineButton
-                    }
+                    className={!isPreviewImgExisted ? classes.defaultDisabledButton : classes.defaultGreenOutlineButton}
                     disabled={!isPreviewImgExisted}
                   >
                     {t("Labeling zoning settings")}
@@ -2073,11 +1611,7 @@ const MarketDetail = ({ history, match }) => {
                       if (!isRefreshAbuse) {
                         setIsRefreshAbuse(true);
                         setTimeout(() => {
-                          dispatch(
-                            getLabelProjectRequestAction(
-                              projects.project?.labelproject
-                            )
-                          );
+                          dispatch(getLabelProjectRequestAction(projects.project?.labelproject));
                           setIsRefreshAbuse(false);
                         }, 2000);
                       }
@@ -2087,10 +1621,7 @@ const MarketDetail = ({ history, match }) => {
                       width: user.language === "ko" ? "130px" : "150px",
                       fontSize: "13px",
                       borderRadius: "50px",
-                      border:
-                        isRefreshAbuse === false
-                          ? "1px solid #F0F0F0"
-                          : "1px solid gray",
+                      border: isRefreshAbuse === false ? "1px solid #F0F0F0" : "1px solid gray",
                       color: isRefreshAbuse === false ? "#F0F0F0" : "gray",
                       cursor: isRefreshAbuse === false ? "pointer" : "default",
                     }}
@@ -2098,11 +1629,7 @@ const MarketDetail = ({ history, match }) => {
                     {t("Refresh Zone")}
                     <AutorenewIcon
                       id="notificationRefreshBtn"
-                      className={
-                        isRefreshAbuse === false
-                          ? classes.refreshIconActive
-                          : classes.refreshIconDefault
-                      }
+                      className={isRefreshAbuse === false ? classes.refreshIconActive : classes.refreshIconDefault}
                       style={{
                         width: "25px",
                         height: "25px",
@@ -2112,8 +1639,7 @@ const MarketDetail = ({ history, match }) => {
                     />
                   </Button>
                 </GridItem>
-                {labelprojects?.objectLists &&
-                labelprojects.objectLists.length > 0 ? (
+                {labelprojects?.objectLists && labelprojects.objectLists.length > 0 ? (
                   <GridItem
                     xs={12}
                     style={{
@@ -2124,12 +1650,7 @@ const MarketDetail = ({ history, match }) => {
                     justify="space-between"
                     alignItems="center"
                   >
-                    <LabelPreview
-                      history={history}
-                      selectedPreviewId={labelprojects.objectLists[0].id}
-                      onClosePreviewModal={() => null}
-                      isMarketProject
-                    />
+                    <LabelPreview history={history} selectedPreviewId={labelprojects.objectLists[0].id} onClosePreviewModal={() => null} isMarketProject />
                   </GridItem>
                 ) : (
                   <Grid
@@ -2140,9 +1661,7 @@ const MarketDetail = ({ history, match }) => {
                       height: "240px",
                     }}
                   >
-                    <Grid item>
-                      {t("There are no images for zoning uploaded.")}
-                    </Grid>
+                    <Grid item>{t("There are no images for zoning uploaded.")}</Grid>
                   </Grid>
                 )}
                 <GridItem xs={12} style={{ marginTop: "60px" }}>
@@ -2159,56 +1678,25 @@ const MarketDetail = ({ history, match }) => {
         )}
       </>
 
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isModalOpen}
-        onClose={closeModal}
-        className={classes.modalContainer}
-      >
-        <ModalPage
-          isStandard={isStandard}
-          closeModal={closeModal}
-          chosenItem={chosenItem}
-          isMarket={true}
-          opsId={null}
-          marketProjectId={projects.project?.id}
-          csv={{}}
-          trainingColumnInfo={{}}
-          isStandardMovie={isStandardMovie}
-          history={history}
-        />
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isModalOpen} onClose={closeModal} className={classes.modalContainer}>
+        <ModalPage isStandard={isStandard} closeModal={closeModal} chosenItem={chosenItem} isMarket={true} opsId={null} marketProjectId={projects.project?.id} csv={{}} trainingColumnInfo={{}} isStandardMovie={isStandardMovie} history={history} />
       </Modal>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isOpenFileModal}
-        onClose={closeFileModal}
-        className={classes.modalContainer}
-      >
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isOpenFileModal} onClose={closeFileModal} className={classes.modalContainer}>
         {isFileUploading || isUploadLoading ? (
           <div className={classes.cancelModalContent}>
             {/* <Tip /> */}
             <LinearProgress />
           </div>
         ) : (
-          <div className={classes.cancelModalContent} id="fileModal">
+          <div className={classes.cancelModalContent} id="file_upload_modal">
             <Dropzone onDrop={dropFiles}>
               {({ getRootProps, getInputProps }) => (
                 <section className="container">
                   {(!uploadFile || uploadFile.length === 0) && (
-                    <div
-                      {...getRootProps({ className: "dropzoneArea" })}
-                      style={{ padding: "36px 0" }}
-                    >
-                      <input
-                        {...getInputProps()}
-                        accept="image/jpeg, image/jpg, image/png"
-                      />
+                    <div {...getRootProps({ className: "dropzoneArea" })} style={{ padding: "36px 0" }}>
+                      <input {...getInputProps()} accept="image/jpeg, image/jpg, image/png" />
                       <p className={classes.settingFontWhite6}>
-                        {t(
-                          "파일을 드래그하거나 박스를 클릭해서 업로드해주세요!"
-                        )}
+                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
                         <br />
                         {dataTypeText()}
                       </p>
@@ -2237,9 +1725,7 @@ const MarketDetail = ({ history, match }) => {
                           <ul>
                             {uploadFile.map((file, idx) => {
                               if (idx === 10) {
-                                return (
-                                  <li style={{ listStyle: "none" }}>.......</li>
-                                );
+                                return <li style={{ listStyle: "none" }}>.......</li>;
                               }
                               if (idx >= 10) {
                                 return null;
@@ -2288,34 +1774,19 @@ const MarketDetail = ({ history, match }) => {
             </Dropzone>
             <GridContainer style={{ paddingTop: "20px" }}>
               <GridItem xs={6}>
-                <Button
-                  id="closeModal"
-                  style={{ width: "100%" }}
-                  className={classes.defaultF0F0OutlineButton}
-                  onClick={closeFileModal}
-                >
+                <Button id="close_modal_btn" style={{ width: "100%" }} className={classes.defaultF0F0OutlineButton} onClick={closeFileModal}>
                   {t("Cancel")}
                 </Button>
               </GridItem>
               {uploadFile ? (
                 <GridItem xs={6}>
-                  <Button
-                    id="submitBtn"
-                    style={{ width: "100%" }}
-                    className={classes.defaultGreenOutlineButton}
-                    onClick={saveFiles}
-                  >
+                  <Button id="submitBtn" style={{ width: "100%" }} className={classes.defaultGreenOutlineButton} onClick={saveFiles}>
                     {t("Next")}
                   </Button>
                 </GridItem>
               ) : (
                 <GridItem xs={6}>
-                  <Button
-                    id="submitBtn"
-                    style={{ width: "100%" }}
-                    className={classes.defaultDisabledButton}
-                    disabled
-                  >
+                  <Button id="submitBtn" style={{ width: "100%" }} className={classes.defaultDisabledButton} disabled>
                     {t("Next")}
                   </Button>
                 </GridItem>

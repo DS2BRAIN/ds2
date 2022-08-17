@@ -20,10 +20,7 @@ const Templates = ({ closeTemplateModal }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const { user, messages } = useSelector(
-    (state) => ({ user: state.user, messages: state.messages }),
-    []
-  );
+  const { user, messages } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
 
   const [isLoading, setIsLoading] = useState(true);
   const [templateMethod, setTemplateMethod] = useState([]);
@@ -67,21 +64,9 @@ const Templates = ({ closeTemplateModal }) => {
         })
         .catch((e) => {
           if (e.response && e.response.data.message) {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                sendErrorMessage(
-                  e.response.data.message,
-                  e.response.data.message_en,
-                  i18n?.language
-                )
-              )
-            );
+            dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, i18n?.language)));
           } else {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                t("Template import failed due to a temporary error")
-              )
-            );
+            dispatch(openErrorSnackbarRequestAction(t("Template import failed due to a temporary error")));
           }
         })
         .finally(() => {
@@ -117,52 +102,23 @@ const Templates = ({ closeTemplateModal }) => {
         {templateMethod.map((method) => (
           <ListItem
             button
+            id={method.templateCategory + method.id}
             key={method.templateCategory + method.id}
-            style={
-              method.templateCategory === selectedMethod
-                ? { color: "white" }
-                : { color: "#D0D0D0" }
-            }
-            onClick={() =>
-              handleMethodListItemClick(
-                method.templateCategory,
-                method.templateDescription,
-                method.templateDescriptionEn
-              )
-            }
+            style={method.templateCategory === selectedMethod ? { color: "white" } : { color: "#D0D0D0" }}
+            onClick={() => handleMethodListItemClick(method.templateCategory, method.templateDescription, method.templateDescriptionEn)}
           >
             <ListItemText primary={t(method.templateName)} />
           </ListItem>
         ))}
       </Grid>
-      <Grid
-        item
-        xs={selectedMethod ? 9 : 1}
-        style={{ height: "400px", overflowY: "auto" }}
-      >
-        <div
-          style={{ fontSize: "14px", marginTop: "10px" }}
-          dangerouslySetInnerHTML={{ __html: templateDescription }}
-        />
-        {selectedMethod && (
-          <div style={{ fontWeight: "bold", margin: "30px 0 10px" }}>
-            EXAMPLE
-          </div>
-        )}
+      <Grid item xs={selectedMethod ? 9 : 1} style={{ height: "400px", overflowY: "auto" }}>
+        <div id="description_div" style={{ fontSize: "14px", marginTop: "10px" }} dangerouslySetInnerHTML={{ __html: templateDescription }} />
+        {selectedMethod && <div style={{ fontWeight: "bold", margin: "30px 0 10px" }}>EXAMPLE</div>}
         {templates.map((template) => {
           if (template.templateCategory === selectedMethod)
             return (
-              <ListItem
-                button
-                className={classes.templateItem}
-                key={template.templateName + template.id}
-                style={{ cursor: "default" }}
-              >
-                <ListItemText
-                  component="h1"
-                  className={classes.templateItem}
-                  primary={`${t(template.templateName)}`}
-                />
+              <ListItem button className={classes.templateItem} key={template.templateName + template.id} style={{ cursor: "default" }}>
+                <ListItemText component="h1" className={classes.templateItem} primary={`${t(template.templateName)}`} />
                 <Button
                   id={`${template.templateCategory + template.id}_download_btn`}
                   shape="greenOutlined"
@@ -190,46 +146,22 @@ const Templates = ({ closeTemplateModal }) => {
       if (!category.projects || category.projects.length === 0) return;
       return (
         <>
-          <ListItem
-            button
-            onClick={() => handleListItemClick(category.categoryName)}
-            key={category.categoryName + category.id}
-          >
+          <ListItem button id={`listItem_${category.id}`} key={category.categoryName + category.id} onClick={() => handleListItemClick(category.categoryName)}>
             <ListItemText primary={t(category.categoryName)} />
-            {isCategoryOpen[category.categoryName] ? (
-              <ExpandLess />
-            ) : (
-              <ExpandMore />
-            )}
+            {isCategoryOpen[category.categoryName] ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <Collapse
-            in={isCategoryOpen[category.categoryName]}
-            timeout="auto"
-            unmountOnExit
-          >
+          <Collapse in={isCategoryOpen[category.categoryName]} timeout="auto" unmountOnExit>
             {templates.map((template) => {
               if (template.projectcategory) {
                 if (template.templateCategory === "timeSeries") {
                   return;
                 }
-                if (
-                  template.projectcategory.__data__.categoryName ===
-                  category.categoryName
-                )
+                if (template.projectcategory.__data__.categoryName === category.categoryName)
                   return (
-                    <ListItem
-                      button
-                      className={classes.templateItem}
-                      key={template.templateName + template.id}
-                    >
-                      <ListItemText
-                        component="h1"
-                        className={classes.templateItem}
-                        primary={t(`${template.templateName}`)}
-                      />
+                    <ListItem button className={classes.templateItem} key={template.templateName + template.id}>
+                      <ListItemText component="h1" className={classes.templateItem} primary={t(`${template.templateName}`)} />
                       <Button
-                        id={`${template.templateCategory +
-                          template.id}_download_btn`}
+                        id={`${template.templateCategory + template.id}_download_btn`}
                         shape="greenOutlined"
                         onClick={() => {
                           // linkDownloadUrl(template.s3url);
@@ -271,44 +203,17 @@ const Templates = ({ closeTemplateModal }) => {
   ) : (
     <div className={classes.modalContent} style={{ minWidth: "600px" }}>
       <Grid sx={{ mb: 3, ml: 2, display: "flex" }}>
-        <div
-          onClick={() => handleChangeTab("method")}
-          className={
-            selectedTab === "method"
-              ? classes.selectedListObject
-              : classes.listObject
-          }
-          style={selectedTab === "method" ? tabActiveStyle : tabDeactiveStyle}
-        >
+        <Grid id="methodSampleTab" className={selectedTab === "method" ? classes.selectedListObject : classes.listObject} style={selectedTab === "method" ? tabActiveStyle : tabDeactiveStyle} onClick={() => handleChangeTab("method")}>
           {t("By training method")}
-        </div>
-        <div
-          onClick={() => handleChangeTab("business")}
-          className={
-            selectedTab === "business"
-              ? classes.selectedListObject
-              : classes.listObject
-          }
-          style={selectedTab === "business" ? tabActiveStyle : tabDeactiveStyle}
-        >
+        </Grid>
+        <Grid id="businessSampleTab" onClick={() => handleChangeTab("business")} className={selectedTab === "business" ? classes.selectedListObject : classes.listObject} style={selectedTab === "business" ? tabActiveStyle : tabDeactiveStyle} onClick={() => handleChangeTab("business")}>
           {t("By industrial group")}
-        </div>
-        <CloseIcon
-          className={classes.cancelNextPlan}
-          style={{ marginLeft: "auto" }}
-          onClick={closeTemplateModal}
-        />
+        </Grid>
+        <CloseIcon id="closeSampleModal" className={classes.cancelNextPlan} style={{ marginLeft: "auto" }} onClick={closeTemplateModal} />
       </Grid>
       <Grid sx={{ fontSize: ".85rem", ml: 1 }}>
-        <div>
-          {"* " +
-            t("The sample data is an example template to show only the structure of the file.")}
-        </div>
-        <div style={{ margin: "-3px 0 0 12px" }}>
-          {t(
-            "샘플 데이터를 데이터셋에 업로드할 경우, 서비스 조건에 맞게 데이터를 추가해 주세요."
-          )}
-        </div>
+        <div>{"* " + t("The sample data is an example template to show only the structure of the file.")}</div>
+        <div style={{ margin: "-3px 0 0 12px" }}>{t("샘플 데이터를 데이터셋에 업로드할 경우, 서비스 조건에 맞게 데이터를 추가해 주세요.")}</div>
       </Grid>
       {selectedTab === "method" ? (
         <List

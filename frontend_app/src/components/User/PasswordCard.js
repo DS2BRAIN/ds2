@@ -6,14 +6,7 @@ import { useSelector } from "react-redux";
 import * as api from "controller/api.js";
 import { fileurl } from "controller/api";
 
-import {
-  Box,
-  Container,
-  InputBase,
-  Link,
-  Snackbar,
-  Typography,
-} from "@material-ui/core";
+import { Box, Container, InputBase, Link, Snackbar, Typography } from "@material-ui/core";
 import { CircularProgress, Grid } from "@mui/material";
 
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
@@ -50,8 +43,7 @@ const PasswordCard = ({ type, props }) => {
           if (error) {
             if (!process.env.REACT_APP_DEPLOY) console.error(error);
           } else {
-            if (!process.env.REACT_APP_DEPLOY)
-              console.log("updateUser success", user);
+            if (!process.env.REACT_APP_DEPLOY) console.log("updateUser success", user);
           }
         }
       );
@@ -69,24 +61,12 @@ const PasswordCard = ({ type, props }) => {
       setSnackbarOption("error", t("Please re-enter your password."));
     } else if (password !== passwordCheck) {
       setSnackbarOption("error", t("Passwords do not match."));
-    } else if (
-      !/[A-Za-z0-9!@#$%^&+=]{8,}/.test(password) ||
-      !/[A-Za-z]/.test(password) ||
-      !/[0-9]/.test(password) ||
-      !/[!@#$%^&+=]/.test(password)
-    ) {
-      setSnackbarOption(
-        "error",
-        t(
-          "비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다."
-        )
-      );
+    } else if (!/[A-Za-z0-9!@#$%^&+=]{8,}/.test(password) || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&+=]/.test(password)) {
+      setSnackbarOption("error", t("비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다."));
     } else {
       let code = "";
       let query = props.location.search;
-      let parameters = query
-        .slice(query.indexOf("?") + 1, query.length)
-        .split("&");
+      let parameters = query.slice(query.indexOf("?") + 1, query.length).split("&");
       for (var i = 0; i < parameters.length; i++) {
         let parameter = parameters[i].split("=");
         let name = parameter[0];
@@ -102,29 +82,14 @@ const PasswordCard = ({ type, props }) => {
       api
         .resetPassword(code, password, passwordCheck)
         .then((res) => {
-          setSnackbarOption(
-            "success",
-            user.language == "ko" ? res.data.message : res.data.message_en
-          );
+          setSnackbarOption("success", user.language == "ko" ? res.data.message : res.data.message_en);
           props.history.push("/signout?passwordChange=true");
         })
         .catch((e) => {
           if (e.response && e.response.data.message) {
-            setSnackbarOption(
-              "error",
-              sendErrorMessage(
-                e.response.data.message,
-                e.response.data.message_en,
-                user.language
-              )
-            );
+            setSnackbarOption("error", sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language));
           } else {
-            setSnackbarOption(
-              "error",
-              t(
-                "죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
-              )
-            );
+            setSnackbarOption("error", t("죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."));
           }
           if (!process.env.REACT_APP_DEPLOY) console.log(e);
           setIsLoading(false);
@@ -169,12 +134,7 @@ const PasswordCard = ({ type, props }) => {
           if (res.status === 200) {
             onSetSnackbarOption("success", t(res.data.message));
           } else {
-            onSetSnackbarOption(
-              "success",
-              `${t(
-                "유저 이메일 정보와 일치할 경우 비밀번호 찾기 링크가 발송됩니다."
-              )} ${t("The e-mail may take up to 10 minutes to arrive in your inbox")}`
-            );
+            onSetSnackbarOption("success", `${t("유저 이메일 정보와 일치할 경우 비밀번호 찾기 링크가 발송됩니다.")} ${t("The e-mail may take up to 10 minutes to arrive in your inbox")}`);
           }
           setEmail("");
         })
@@ -183,21 +143,9 @@ const PasswordCard = ({ type, props }) => {
         })
         .catch((e) => {
           if (e.response && e.response.data.message) {
-            onSetSnackbarOption(
-              "error",
-              sendErrorMessage(
-                e.response.data.message,
-                e.response.data.message_en,
-                user.language
-              )
-            );
+            onSetSnackbarOption("error", sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language));
           } else {
-            onSetSnackbarOption(
-              "error",
-              t(
-                "죄송합니다, 일시적인 에러가 발생하여 메일전송에 실패하였습니다."
-              )
-            );
+            onSetSnackbarOption("error", t("죄송합니다, 일시적인 에러가 발생하여 메일전송에 실패하였습니다."));
           }
           setIsLoading(false);
           if (!process.env.REACT_APP_DEPLOY) console.log(e);
@@ -216,12 +164,7 @@ const PasswordCard = ({ type, props }) => {
 
   const toLoginPage = (
     <Grid style={{ textAlign: "center" }}>
-      <Link
-        id="goToSignIn"
-        href="../signin"
-        variant="body2"
-        style={{ color: "#F0F0F0", fontSize: "14px" }}
-      >
+      <Link id="goToSignIn" href="../signin" variant="body2" style={{ color: "#F0F0F0", fontSize: "14px" }}>
         {t("Login")}
       </Link>
     </Grid>
@@ -262,36 +205,14 @@ const PasswordCard = ({ type, props }) => {
             margin: id === "passwordCheck" ? "0 0 36px 0" : "36px 0",
           }}
         >
-          {id === "email" && (
-            <span style={{ fontSize: "12px" }}>
-              {t("Please check your mailbox after entering your email.")}
-            </span>
-          )}
-          <InputBase
-            required
-            fullWidth
-            id={id}
-            name={id}
-            autoComplete={id}
-            label={t(selec.label)}
-            placeholder={t(selec.label)}
-            type={selec.type}
-            autoFocus={selec.focus}
-            value={selec.value}
-            onChange={selec.func}
-            style={{ color: currentThemeColor.textWhite87 }}
-          />
+          {id === "email" && <span style={{ fontSize: "12px" }}>{t("Please check your mailbox after entering your email.")}</span>}
+          <InputBase required fullWidth id={id} name={id} autoComplete={id} label={t(selec.label)} placeholder={t(selec.label)} type={selec.type} autoFocus={selec.focus} value={selec.value} onChange={selec.func} style={{ color: currentThemeColor.textWhite87 }} />
         </div>
       );
     };
 
     return (
-      <form
-        onSubmit={type === "reset" ? resetPasswordSubmit : signInSubmit}
-        style={{ flexDirection: "column" }}
-        className={classes.form}
-        noValidate
-      >
+      <form onSubmit={type === "reset" ? resetPasswordSubmit : signInSubmit} style={{ flexDirection: "column" }} className={classes.form} noValidate>
         {type === "reset" ? (
           <>
             {commonInput("password")}
@@ -300,15 +221,7 @@ const PasswordCard = ({ type, props }) => {
         ) : (
           commonInput("email")
         )}
-        <Button
-          id="signInBtn"
-          type="submit"
-          fullWidth
-          shape="greenOutlined"
-          size="lg"
-          sx={{ mb: 2 }}
-          onClick={type === "reset" ? resetPasswordSubmit : signInSubmit}
-        >
+        <Button id="signInBtn" type="submit" fullWidth shape="greenOutlined" size="lg" sx={{ mb: 2 }} onClick={type === "reset" ? resetPasswordSubmit : signInSubmit}>
           {t(type === "reset" ? "비밀번호 재설정" : "비밀번호 찾기")}
         </Button>
         {toLoginPage}
@@ -333,12 +246,7 @@ const PasswordCard = ({ type, props }) => {
                 alignItems: "center",
               }}
             >
-              <img
-                src={logo}
-                alt={"logo"}
-                className={classes.logo}
-                style={{ width: "120px" }}
-              />
+              <img src={logo} alt={"logo"} className={classes.logo} style={{ width: "120px" }} />
               <Language />
             </div>
             {isLoading ? (
@@ -364,11 +272,7 @@ const PasswordCard = ({ type, props }) => {
         open={isSnackbarOpen}
         onClose={snackbarClose}
       >
-        <MySnackbar
-          variant={snackbarContent.variant}
-          className={classes.margin}
-          message={snackbarContent.message}
-        />
+        <MySnackbar variant={snackbarContent.variant} className={classes.margin} message={snackbarContent.message} />
       </Snackbar>
     </>
   );

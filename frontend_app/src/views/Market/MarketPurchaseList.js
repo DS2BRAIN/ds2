@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as api from "controller/api.js";
 import currentTheme from "assets/jss/custom.js";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-  askModalRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction, askModalRequestAction } from "redux/reducers/messages.js";
 import { getMeRequestAction } from "../../redux/reducers/user";
 import "assets/css/material-control.css";
 import Button from "components/CustomButtons/Button";
@@ -108,12 +104,9 @@ export default function MarketPurchaseList({ history }) {
         return value.substring(0, 10);
       case "nextPaymentDate":
         let expired_at = new Date(value);
-        expired_at =
-          (expired_at.getTime() + expired_at.getTimezoneOffset() * 60000) /
-          60000;
+        expired_at = (expired_at.getTime() + expired_at.getTimezoneOffset() * 60000) / 60000;
         let nowTime = new Date();
-        nowTime =
-          (nowTime.getTime() + nowTime.getTimezoneOffset() * 60000) / 60000;
+        nowTime = (nowTime.getTime() + nowTime.getTimezoneOffset() * 60000) / 60000;
         return expired_at > nowTime ? "결제 완료" : "미결제";
       case "status":
         return status[value];
@@ -152,23 +145,9 @@ export default function MarketPurchaseList({ history }) {
   const changeLang = () => {
     let tmp;
     if (user.language === "en") {
-      tmp = [
-        { value: "thumbnail", name: "미리보기" },
-        { value: "projectName", name: "프로젝트 이름" },
-        { value: "name_en", name: "종류" },
-        { value: "created_at", name: "신청한 날짜" },
-        { value: "nextPaymentDate", name: "결제 상황" },
-        { value: "status", name: "작업 상황" },
-      ];
+      tmp = [{ value: "thumbnail", name: "미리보기" }, { value: "projectName", name: "프로젝트 이름" }, { value: "name_en", name: "종류" }, { value: "created_at", name: "신청한 날짜" }, { value: "nextPaymentDate", name: "결제 상황" }, { value: "status", name: "작업 상황" }];
     } else {
-      tmp = [
-        { value: "thumbnail", name: "미리보기" },
-        { value: "projectName", name: "프로젝트 이름" },
-        { value: "name_kr", name: "종류" },
-        { value: "created_at", name: "신청한 날짜" },
-        { value: "nextPaymentDate", name: "결제 상황" },
-        { value: "status", name: "작업 상황" },
-      ];
+      tmp = [{ value: "thumbnail", name: "미리보기" }, { value: "projectName", name: "프로젝트 이름" }, { value: "name_kr", name: "종류" }, { value: "created_at", name: "신청한 날짜" }, { value: "nextPaymentDate", name: "결제 상황" }, { value: "status", name: "작업 상황" }];
     }
     setTableBodys(tmp);
   };
@@ -219,23 +198,16 @@ export default function MarketPurchaseList({ history }) {
     let key = `first_${purchase.service_type}_expiration_date`;
     let expired_at = new Date(user.me[key]).getTime() / 60000;
     let nowTime = new Date();
-    nowTime =
-      new Date(
-        nowTime.getTime() + nowTime.getTimezoneOffset() * 60000
-      ).getTime() / 60000;
+    nowTime = new Date(nowTime.getTime() + nowTime.getTimezoneOffset() * 60000).getTime() / 60000;
     if (user.me[key] == null) expired_at = nowTime - 1;
     if (nowTime < expired_at) {
-      history.push(
-        `/admin/market/${purchase.marketproject}/${purchase.service_type}`
-      );
+      history.push(`/admin/market/${purchase.marketproject}/${purchase.service_type}`);
     } else if (user.cardInfo?.cardName == null) {
       if (!IS_ENTERPRISE) {
         history.push(`/admin/setting/payment/?message=need`);
       }
     } else {
-      history.push(
-        `/admin/market/${purchase.marketproject}/${purchase.service_type}`
-      );
+      history.push(`/admin/market/${purchase.marketproject}/${purchase.service_type}`);
     }
 
     //이름으로 구분
@@ -282,8 +254,7 @@ export default function MarketPurchaseList({ history }) {
     Object.keys(selected.file_structure).map((structure) => {
       if (selected.file_structure[structure].indexOf("_") !== -1) {
         tempIsInputFileForm = true;
-      } else if (selected.file_structure[structure] === "boolean")
-        tempFileStructureDict[structure] = false;
+      } else if (selected.file_structure[structure] === "boolean") tempFileStructureDict[structure] = false;
       else tempFileStructureDict[structure] = null;
     });
     setPredictKeyValue(tempFileStructureDict);
@@ -335,11 +306,7 @@ export default function MarketPurchaseList({ history }) {
 
     Object.values(tempKeyValue).map((value) => {
       if (!tempNullDataExist && (value === null || value === "")) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("Please fill in all the data and proceed.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Please fill in all the data and proceed.")));
         tempNullDataExist = true;
       }
     });
@@ -360,11 +327,7 @@ export default function MarketPurchaseList({ history }) {
       .catch((err) => {
         console.log("err", err);
         setPredictResultLoading(false);
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("A temporary error has occurred. Please try again.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("A temporary error has occurred. Please try again.")));
       });
   };
 
@@ -384,21 +347,14 @@ export default function MarketPurchaseList({ history }) {
         const csvFile = new Blob([res.data], { type: "text/csv" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(csvFile);
-        link.download =
-          user.language === "ko"
-            ? `예측결과_${selectedPurchase.projectName}`
-            : `predictResult_${selectedPurchase.projectName}`;
+        link.download = user.language === "ko" ? `예측결과_${selectedPurchase.projectName}` : `predictResult_${selectedPurchase.projectName}`;
         setResultFileLink(link);
         setPredictResultLoading(false);
       })
       .catch((err) => {
         console.log("err", err);
         setPredictResultLoading(false);
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t("A temporary error has occurred. Please try again.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("A temporary error has occurred. Please try again.")));
       });
   };
 
@@ -432,11 +388,7 @@ export default function MarketPurchaseList({ history }) {
                 {header}
               </GridItem>
               <GridItem xs={6} style={{ padding: "0px" }}>
-                {isInputFileForm ? (
-                  <>{setUpDropzoneArea(tempSelected, header)}</>
-                ) : (
-                  <>{setUpInputArea(tempSelected, header)}</>
-                )}
+                {isInputFileForm ? <>{setUpDropzoneArea(tempSelected, header)}</> : <>{setUpInputArea(tempSelected, header)}</>}
               </GridItem>
             </div>
           );
@@ -469,11 +421,7 @@ export default function MarketPurchaseList({ history }) {
                 step: "0.01",
               }
             }
-            placeholder={
-              user.language === "ko"
-                ? tempFileHeader + " " + t("Enter the value.")
-                : tempFileHeader
-            }
+            placeholder={user.language === "ko" ? tempFileHeader + " " + t("Enter the value.") : tempFileHeader}
             style={{ marginTop: "-3px", width: "100%" }}
             onChange={(e) => {
               predictValueInput(e.target.value, header);
@@ -516,12 +464,7 @@ export default function MarketPurchaseList({ history }) {
               <span style={{ fontSize: "14px" }}>{editedFileName}</span>
             </Tooltip>
             <div>
-              <span
-                style={{ fontSize: "14px", cursor: "pointer" }}
-                onClick={(uploadedFile) =>
-                  deleteFiles(uploadedFile, fileOrderNum)
-                }
-              >
+              <span style={{ fontSize: "14px", cursor: "pointer" }} onClick={(uploadedFile) => deleteFiles(uploadedFile, fileOrderNum)}>
                 삭제
               </span>
             </div>
@@ -536,17 +479,7 @@ export default function MarketPurchaseList({ history }) {
               showPreviews={false}
               showPreviewsInDropzone={true}
               maxFileSize={2147483648}
-              dropzoneText={
-                isFileUploaded ? (
-                  <></>
-                ) : (
-                  <text style={{ fontSize: "12px" }}>
-                    {user.language === "ko"
-                      ? `${fileTypeArrToStr} 파일을 업로드해주세요.`
-                      : `${fileTypeArrToStr} file to upload`}
-                  </text>
-                )
-              }
+              dropzoneText={isFileUploaded ? <></> : <text style={{ fontSize: "12px" }}>{user.language === "ko" ? `${fileTypeArrToStr} 파일을 업로드해주세요.` : `${fileTypeArrToStr} file to upload`}</text>}
               filesLimit={1}
               // maxWidth={"xs"}
               // fullWidth={false}
@@ -593,12 +526,7 @@ export default function MarketPurchaseList({ history }) {
         </div>
       ) : (
         <>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            style={{ margin: "55px 0" }}
-          >
+          <Grid container justify="space-between" alignItems="center" style={{ margin: "55px 0" }}>
             <span className={classes.topTitle} style={{ margin: 0 }}>
               {t("Purchase Product List(Custom AI)")}
             </span>
@@ -608,7 +536,7 @@ export default function MarketPurchaseList({ history }) {
                 value={searchValue}
                 onChange={changeSearchValue}
                 multiline={false}
-                id="searchInput"
+                id="search_file_input"
                 style={{
                   width: "200px",
                   height: "32px",
@@ -625,13 +553,7 @@ export default function MarketPurchaseList({ history }) {
               <TableRow>
                 {tableHeads.map((tableHead, idx) => {
                   return (
-                    <TableCell
-                      id="mainHeader"
-                      key={idx}
-                      className={classes.tableHead}
-                      align="center"
-                      width={tableHead.width}
-                    >
+                    <TableCell id="mainHeader" key={idx} className={classes.tableHead} align="center" width={tableHead.width}>
                       <b>{t(tableHead.value)}</b>
                     </TableCell>
                   );
@@ -641,35 +563,15 @@ export default function MarketPurchaseList({ history }) {
             <TableBody>
               {marketPurchaseList.map((purchase, idx) => (
                 <TableRow key={purchase.id} className={classes.tableRow}>
-                  <TableCell
-                    key={idx}
-                    className={classes.tableRowCell}
-                    align="center"
-                  >
-                    <div className={classes.wordBreakDiv}>
-                      {totalLength - (idx + 10 * pageNum)}
-                    </div>
+                  <TableCell key={idx} className={classes.tableRowCell} align="center">
+                    <div className={classes.wordBreakDiv}>{totalLength - (idx + 10 * pageNum)}</div>
                   </TableCell>
                   {tableBodys.map((tableBody, idx) => {
                     return (
-                      <TableCell
-                        key={purchase.id}
-                        className={classes.tableRowCell}
-                        align="center"
-                      >
+                      <TableCell key={purchase.id} className={classes.tableRowCell} align="center">
                         <div className={classes.wordBreakDiv}>
-                          {tableBody.value == "thumbnail" && (
-                            <img
-                              src={purchase[tableBody.value]}
-                              style={{ width: "80px", height: "80px" }}
-                            />
-                          )}
-                          {t(
-                            renderTableRow(
-                              tableBody.value,
-                              purchase[tableBody.value]
-                            )
-                          )}
+                          {tableBody.value == "thumbnail" && <img src={purchase[tableBody.value]} style={{ width: "80px", height: "80px" }} />}
+                          {t(renderTableRow(tableBody.value, purchase[tableBody.value]))}
                         </div>
                       </TableCell>
                     );
@@ -677,11 +579,7 @@ export default function MarketPurchaseList({ history }) {
                   <TableCell className={classes.tableRowCell} align="center">
                     {purchase.service_type === "client_model" ? (
                       <Button
-                        className={
-                          purchase.status === 100
-                            ? classes.defaultGreenOutlineButton
-                            : classes.defaultDisabledButton
-                        }
+                        className={purchase.status === 100 ? classes.defaultGreenOutlineButton : classes.defaultDisabledButton}
                         onClick={() => {
                           openPredictModal(purchase);
                         }}
@@ -691,11 +589,7 @@ export default function MarketPurchaseList({ history }) {
                       </Button>
                     ) : (
                       <Button
-                        className={
-                          purchase.status === 100
-                            ? classes.defaultGreenOutlineButton
-                            : classes.defaultDisabledButton
-                        }
+                        className={purchase.status === 100 ? classes.defaultGreenOutlineButton : classes.defaultDisabledButton}
                         onClick={() => {
                           onClickButtonAction(purchase);
                         }}
@@ -732,33 +626,16 @@ export default function MarketPurchaseList({ history }) {
               onChangeRowsPerPage={changeRowsPerModelPage}
             />
           </div>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={isPredictModalOpen}
-            onClose={closePredictModal}
-            className={classes.modalContainer}
-          >
-            <div
-              className={classes.modalPredictContainer}
-              style={{ maxWidth: "1000px", maxHeight: "80%" }}
-            >
+          <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPredictModalOpen} onClose={closePredictModal} className={classes.modalContainer}>
+            <div className={classes.modalPredictContainer} style={{ maxWidth: "1000px", maxHeight: "80%" }}>
               <GridContainer>
                 <GridItem xs={11} style={{ padding: "0px" }}>
                   <div className={classes.modalTitleText}>
-                    <b>
-                      {selectedPurchase.name_en === "deploy"
-                        ? selectedPurchase.projectName
-                        : selectedPurchase.projectName + " " + t("Predict")}
-                    </b>
+                    <b>{selectedPurchase.name_en === "deploy" ? selectedPurchase.projectName : selectedPurchase.projectName + " " + t("Predict")}</b>
                   </div>
                 </GridItem>
                 <GridItem xs={1} style={{ padding: "0px" }}>
-                  <CloseIcon
-                    id="closePredictModalBtn"
-                    onClick={closePredictModal}
-                    style={{ float: "right", cursor: "pointer" }}
-                  />
+                  <CloseIcon id="closePredictModalBtn" onClick={closePredictModal} style={{ float: "right", cursor: "pointer" }} />
                 </GridItem>
               </GridContainer>
               <GridContainer
@@ -769,16 +646,11 @@ export default function MarketPurchaseList({ history }) {
                   overflowY: "auto",
                 }}
               >
-                <GridItem
-                  xs={isInputFileForm ? 8 : 5}
-                  style={{ paddingRight: "0px" }}
-                >
+                <GridItem xs={isInputFileForm ? 8 : 5} style={{ paddingRight: "0px" }}>
                   <div>
                     <b>{t("Input")}</b>
                   </div>
-                  <GridItem style={{ marginTop: "15px" }}>
-                    {predictModalInputSection()}
-                  </GridItem>
+                  <GridItem style={{ marginTop: "15px" }}>{predictModalInputSection()}</GridItem>
                 </GridItem>
                 <GridItem xs={1} style={{ padding: "0", marginRight: "-2rem" }}>
                   <div style={{ height: "40%" }}></div>
@@ -786,16 +658,11 @@ export default function MarketPurchaseList({ history }) {
                     <ArrowForwardIosIcon style={{ fontSize: "40px" }} />
                   </div>
                 </GridItem>
-                <GridItem
-                  xs={isInputFileForm ? 3 : 6}
-                  style={{ paddingLeft: "0" }}
-                >
+                <GridItem xs={isInputFileForm ? 3 : 6} style={{ paddingLeft: "0" }}>
                   <div>
                     <b>{t("Output")}</b>
                   </div>
-                  <GridItem
-                    style={{ marginTop: "15px", height: "78%", width: "108%" }}
-                  >
+                  <GridItem style={{ marginTop: "15px", height: "78%", width: "108%" }}>
                     {predictResultLoading ? (
                       <LinearProgress />
                     ) : (
@@ -818,8 +685,7 @@ export default function MarketPurchaseList({ history }) {
                           </>
                         ) : (
                           <>
-                            {predictResultJson &&
-                            Object.keys(predictResultJson)?.length ? (
+                            {predictResultJson && Object.keys(predictResultJson)?.length ? (
                               <JSONPretty
                                 id="predictResult_json"
                                 data={predictResultJson.data}
@@ -877,9 +743,7 @@ export default function MarketPurchaseList({ history }) {
                     className={classes.defaultGreenOutlineButton}
                     style={{ width: "100%", height: "35px" }}
                     onClick={() => {
-                      isInputFileForm
-                        ? startPredictWithFiles(selectedPurchase)
-                        : startPredict(selectedPurchase);
+                      isInputFileForm ? startPredictWithFiles(selectedPurchase) : startPredict(selectedPurchase);
                     }}
                   >
                     {t("Run")}

@@ -2,23 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import RedoIcon from "@material-ui/icons/Redo";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import * as api from "controller/api.js";
-import {
-  getAsynctaskAll,
-  getAsynctaskAllByMarketProjectId,
-} from "controller/api.js";
+import { getAsynctaskAll, getAsynctaskAllByMarketProjectId } from "controller/api.js";
 import Cookies from "helpers/Cookies";
 import Container from "@material-ui/core/Container";
 import currentTheme from "assets/jss/custom.js";
 import { useDispatch, useSelector } from "react-redux";
 import { getRecentProjectsRequestAction } from "redux/reducers/projects.js";
-import {
-  askProjectFromLabelRequestAction,
-  askExportCocoRequestAction,
-  askExportVocRequestAction,
-  openSuccessSnackbarRequestAction,
-  openErrorSnackbarRequestAction,
-  askMarketProjectDetailRequestAction,
-} from "redux/reducers/messages.js";
+import { askProjectFromLabelRequestAction, askExportCocoRequestAction, askExportVocRequestAction, openSuccessSnackbarRequestAction, openErrorSnackbarRequestAction, askMarketProjectDetailRequestAction } from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { currentThemeColor } from "assets/jss/custom";
 import { ReactTitle } from "react-meta-tags";
@@ -50,10 +40,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
   const [totalLength, setTotalLength] = useState(0);
   const [historyPage, setHistoryPage] = useState(1);
   const [isUnableToChangeName, setIsUnableToChangeName] = useState(true);
-  const [
-    isUnableToChangeDescription,
-    setIsUnableTochangeDescription,
-  ] = useState(true);
+  const [isUnableToChangeDescription, setIsUnableTochangeDescription] = useState(true);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [standardMovieTask, setStandardMovieTask] = useState([]);
   const [serviceType, setServiceType] = useState("");
@@ -103,9 +90,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
     api
       .deleteMarketProject(deleteFilesArr)
       .then((res) => {
-        dispatch(
-          openSuccessSnackbarRequestAction(t("The project has been deleted."))
-        );
+        dispatch(openSuccessSnackbarRequestAction(t("The project has been deleted.")));
         history.push("/admin/marketPurchaseList");
       })
       .catch((e) => {
@@ -129,34 +114,17 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
   };
 
   useEffect(() => {
-    if (
-      messages.requestAction === "putMarketProject" &&
-      messages.datas === null
-    ) {
-      if (
-        messages.message === "프로젝트 정보를 수정하시겠습니까?" ||
-        messages.message ===
-          "Are you sure you want to edit project information?"
-      ) {
+    if (messages.requestAction === "putMarketProject" && messages.datas === null) {
+      if (messages.message === "프로젝트 정보를 수정하시겠습니까?" || messages.message === "Are you sure you want to edit project information?") {
         setProjectName(projects.project.name);
         setProjectDescription(projects.project.description);
       }
     }
   }, [messages.datas]);
 
-  const tableHeads = [
-    { value: "No", width: "10%" },
-    { value: "content", width: "25%" },
-    { value: "date", width: "15%" },
-    { value: "status", width: "10%" },
-    { value: "division", width: "15%" },
-    { value: "action", width: "25%" },
-  ];
+  const tableHeads = [{ value: "No", width: "10%" }, { value: "content", width: "25%" }, { value: "date", width: "15%" }, { value: "status", width: "10%" }, { value: "division", width: "15%" }, { value: "action", width: "25%" }];
 
-  const tableBodys = [
-    { value: "taskType", name: "content" },
-    { value: "created_at", name: "date" },
-  ];
+  const tableBodys = [{ value: "taskType", name: "content" }, { value: "created_at", name: "date" }];
 
   const taskTypes = {
     exportCoco: "COCO파일 변환",
@@ -184,16 +152,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
 
   const buttonTask = Object.keys(taskTypes).slice(0, 6);
 
-  const buttonText = [
-    "파일 다운받기",
-    "파일 다운받기",
-    "파일 다운받기",
-    "파일 다운받기",
-    "파일 다운받기",
-    "라벨링 확인하기",
-    "데이터 확인하기",
-    "도움 요청하기",
-  ];
+  const buttonText = ["파일 다운받기", "파일 다운받기", "파일 다운받기", "파일 다운받기", "파일 다운받기", "라벨링 확인하기", "데이터 확인하기", "도움 요청하기"];
 
   const workapp = {
     object_detection: "물체인식",
@@ -246,9 +205,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
         id: projects.project?.id,
       })
         .then((res) => {
-          const standard = res.data.asynctasks.filter(
-            (task) => task.isStandardMovie
-          );
+          const standard = res.data.asynctasks.filter((task) => task.isStandardMovie);
 
           setAsynctasks(res.data.asynctasks);
           setStandardMovieTask(standard);
@@ -340,8 +297,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
             width: user.language === "ko" ? "130px" : "150px",
             fontSize: "13px",
             borderRadius: "50px",
-            border:
-              isRefreshAbuse === false ? "1px solid #F0F0F0" : "1px solid gray",
+            border: isRefreshAbuse === false ? "1px solid #F0F0F0" : "1px solid gray",
             color: isRefreshAbuse === false ? "#F0F0F0" : "gray",
             cursor: isRefreshAbuse === false ? "pointer" : "default",
           }}
@@ -349,11 +305,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
           {t("Refresh Video")}
           <AutorenewIcon
             id="notificationRefreshBtn"
-            className={
-              isRefreshAbuse === false
-                ? classes.refreshIconActive
-                : classes.refreshIconDefault
-            }
+            className={isRefreshAbuse === false ? classes.refreshIconActive : classes.refreshIconDefault}
             style={{
               width: "25px",
               height: "25px",
@@ -380,13 +332,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
             <TableRow>
               {tableHeads.map((tableHead, idx) => {
                 return (
-                  <TableCell
-                    id="mainHeader"
-                    key={idx}
-                    className={classes.tableHead}
-                    align="center"
-                    width={tableHead.width}
-                  >
+                  <TableCell id="mainHeader" key={idx} className={classes.tableHead} align="center" width={tableHead.width}>
                     <b>{t(tableHead.value)}</b>
                   </TableCell>
                 );
@@ -398,67 +344,23 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
               <>
                 {asynctasks.map((asynctask, idx) => (
                   <TableRow key={idx} className={classes.tableRow}>
-                    <TableCell
-                      key={idx}
-                      className={classes.tableRowCell}
-                      align="center"
-                    >
-                      <div className={classes.wordBreakDiv}>
-                        {totalLength - (idx + 5 * (historyPage - 1))}
-                      </div>
+                    <TableCell key={idx} className={classes.tableRowCell} align="center">
+                      <div className={classes.wordBreakDiv}>{totalLength - (idx + 5 * (historyPage - 1))}</div>
                     </TableCell>
                     {tableBodys.map((tableBody, idx) => {
                       return (
-                        <TableCell
-                          key={idx}
-                          className={classes.tableRowCell}
-                          align="center"
-                        >
-                          <div className={classes.wordBreakDiv}>
-                            {tableBody.value === "taskType" ? (
-                              <>
-                                {user.language === "ko" ? (
-                                  <>{asynctask.taskName}</>
-                                ) : (
-                                  <>
-                                    {asynctask.taskNameEn
-                                      ? asynctask.taskNameEn
-                                      : asynctask.taskName}
-                                  </>
-                                )}
-                              </>
-                            ) : (
-                              <>{asynctask[tableBody.value].substring(0, 10)}</>
-                            )}
-                          </div>
+                        <TableCell key={idx} className={classes.tableRowCell} align="center">
+                          <div className={classes.wordBreakDiv}>{tableBody.value === "taskType" ? <>{user.language === "ko" ? <>{asynctask.taskName}</> : <>{asynctask.taskNameEn ? asynctask.taskNameEn : asynctask.taskName}</>}</> : <>{asynctask[tableBody.value].substring(0, 10)}</>}</div>
                         </TableCell>
                       );
                     })}
-                    <TableCell
-                      key={idx}
-                      className={classes.tableRowCell}
-                      align="center"
-                    >
-                      <div className={classes.wordBreakDiv}>
-                        {status[asynctask.status]}
-                      </div>
+                    <TableCell key={idx} className={classes.tableRowCell} align="center">
+                      <div className={classes.wordBreakDiv}>{status[asynctask.status]}</div>
                     </TableCell>
-                    <TableCell
-                      key={idx}
-                      className={classes.tableRowCell}
-                      align="center"
-                    >
-                      <div className={classes.wordBreakDiv}>
-                        {asynctask.isStandardMovie == true
-                          ? t("Standard")
-                          : t("Comparison")}
-                      </div>
+                    <TableCell key={idx} className={classes.tableRowCell} align="center">
+                      <div className={classes.wordBreakDiv}>{asynctask.isStandardMovie == true ? t("Standard") : t("Comparison")}</div>
                     </TableCell>
-                    <TableCell
-                      key={idx}
-                      className={classes.tableRowCell}
-                      align="center"
-                    >
+                    <TableCell key={idx} className={classes.tableRowCell} align="center">
                       <div className={classes.wordBreakDiv}>
                         {buttonTask.indexOf(asynctask.taskType) > -1 ? (
                           <>
@@ -467,41 +369,17 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
                                 {asynctask.status === 100 && (
                                   <>
                                     {!asynctask.isStandardMovie && (
-                                      <Button
-                                        className={
-                                          classes.defaultGreenOutlineButton
-                                        }
-                                        onClick={() =>
-                                          goToAnalysisResultPage(idx)
-                                        }
-                                        style={{ margin: "6px 0" }}
-                                      >
+                                      <Button className={classes.defaultGreenOutlineButton} onClick={() => goToAnalysisResultPage(idx)} style={{ margin: "6px 0" }}>
                                         {t("Check the analyzed video")}
                                       </Button>
                                     )}
-                                    <Button
-                                      className={
-                                        classes.defaultGreenOutlineButton
-                                      }
-                                      onClick={() =>
-                                        onClickRunDownload(
-                                          asynctask.outputFilePath
-                                        )
-                                      }
-                                      style={{ margin: "6px 0" }}
-                                    >
+                                    <Button className={classes.defaultGreenOutlineButton} onClick={() => onClickRunDownload(asynctask.outputFilePath)} style={{ margin: "6px 0" }}>
                                       {t("Download")}
                                     </Button>
                                   </>
                                 )}
                                 {asynctask.status === 99 && (
-                                  <Button
-                                    className={
-                                      classes.defaultGreenOutlineButton
-                                    }
-                                    onClick={openChat}
-                                    style={{ margin: "6px 0" }}
-                                  >
+                                  <Button className={classes.defaultGreenOutlineButton} onClick={openChat} style={{ margin: "6px 0" }}>
                                     {t("Contact us")}
                                   </Button>
                                 )}
@@ -509,19 +387,8 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
                             ) : (
                               <>
                                 {asynctask.status === 99 && (
-                                  <Button
-                                    className={
-                                      classes.defaultGreenOutlineButton
-                                    }
-                                    onClick={() =>
-                                      onClickButtonAction(asynctask.taskType)
-                                    }
-                                  >
-                                    {t(
-                                      buttonText[
-                                        buttonTask.indexOf(asynctask.taskType)
-                                      ]
-                                    )}
+                                  <Button className={classes.defaultGreenOutlineButton} onClick={() => onClickButtonAction(asynctask.taskType)}>
+                                    {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
                                   </Button>
                                 )}
                               </>
@@ -543,12 +410,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
             marginTop: "15px",
           }}
         >
-          <Pagination
-            count={totalLength ? Math.ceil(totalLength / 5) : 0}
-            page={historyPage}
-            onChange={changePage}
-            classes={{ ul: classes.paginationNum }}
-          />
+          <Pagination count={totalLength ? Math.ceil(totalLength / 5) : 0} page={historyPage} onChange={changePage} classes={{ ul: classes.paginationNum }} />
         </div>
       </>
     );
@@ -563,18 +425,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
         </div>
       ) : (
         <>
-          <div style={{ marginTop: "50px" }}>
-            {history.location.search.includes("list=") ? (
-              <MarketMovieAnalysisResult
-                history={history}
-                asynctasks={asynctasks}
-                standardMovieTask={standardMovieTask}
-                serviceType={serviceType}
-              />
-            ) : (
-              renderProjectAsyncTaskHistory()
-            )}
-          </div>
+          <div style={{ marginTop: "50px" }}>{history.location.search.includes("list=") ? <MarketMovieAnalysisResult history={history} asynctasks={asynctasks} standardMovieTask={standardMovieTask} serviceType={serviceType} /> : renderProjectAsyncTaskHistory()}</div>
         </>
       )}
     </>
