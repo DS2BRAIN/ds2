@@ -497,7 +497,7 @@ export default function SignIn(props) {
               color: currentThemeColor.textWhite,
             }}
           >
-            {t("")},<br />
+            {t("All processes of building your customized AI")},<br />
           </div>
           <div
             style={{
@@ -506,7 +506,7 @@ export default function SignIn(props) {
               margin: "20px 0 50px",
             }}
           >
-            {t("DS2.ai는 Auto-Labeling부터 클라우드 배포에 이르기까지 맞춤형 AI를 구축하기 위한 모든 프로세스를 제공하는 인공지능 자동개발 플랫폼입니다.")}
+            {t("DS2.ai is the MLOps platform that serves all processes of building your customized AI from automatic annotation to cloud deployment.")}
           </div>
           <div className={classes.settingFontWhite87}>
             {/* <video
