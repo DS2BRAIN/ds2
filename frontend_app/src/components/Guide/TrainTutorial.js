@@ -66,9 +66,7 @@ const TrainTutorial = ({ history }) => {
             <img style={{ width: "100%" }} src={src} />
           </div>
           <div style={{ textAlign: "center", marginTop: 16 }}>
-            <b className={classes.mainCardTitle}>
-              {t(`${category.categoryName}`)}
-            </b>
+            <b className={classes.mainCardTitle}>{t(`${category.categoryName}`)}</b>
           </div>
           {selectedCategory === category.categoryName && (
             <div className={classes.mainIcons}>
@@ -76,11 +74,7 @@ const TrainTutorial = ({ history }) => {
                 if (project.isSample) {
                   return (
                     <>
-                      <div
-                        className={classes.iconTitles}
-                        id={`${category.categoryName}Icon`}
-                        onClick={() => goSamplePage(project.id)}
-                      >
+                      <div className={classes.iconTitles} id={`${category.categoryName}Icon`} onClick={() => goSamplePage(project.id)}>
                         <span
                           className={classes.iconText}
                           style={{
@@ -89,11 +83,7 @@ const TrainTutorial = ({ history }) => {
                         >
                           {t(`${project.projectName}`)}
                         </span>
-                        <ArrowForwardIosIcon
-                          id="sampleListIcon"
-                          size="xs"
-                          style={{ fontSize: "14px" }}
-                        />
+                        <ArrowForwardIosIcon id="sampleListIcon" size="xs" style={{ fontSize: "14px" }} />
                       </div>
                     </>
                   );
@@ -115,14 +105,8 @@ const TrainTutorial = ({ history }) => {
           </Grid>
 
           <div className={classes.subContent} style={{ fontSize: 16 }}>
-            <div style={{ marginBottom: "-4px" }}>
-              {t("For those who are new to Train,")}
-            </div>
-            <div>
-              {t(
-                "각 산업군별 학습을 통해 만들어진 인공,지능을 체험하고 방법을 익히실 수 있습니다."
-              )}
-            </div>
+            <div style={{ marginBottom: "-4px" }}>{t("For those who are new to Train,")}</div>
+            <div>{t("각 산업군별 학습을 통해 만들어진 인공,지능을 체험하고 방법을 익히실 수 있습니다.")}</div>
           </div>
         </Grid>
         <div

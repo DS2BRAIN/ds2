@@ -69,7 +69,7 @@ export default function Language(props) {
   return (
     <div id="languageSelector">
       <Select
-        id="languageSelectForm"
+        id="language_select_form"
         className={classes.colorBDhoverFF}
         labelId="langLabel"
         style={{

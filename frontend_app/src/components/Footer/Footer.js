@@ -8,10 +8,7 @@ import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "helpers/Cookies";
-import {
-  putUserRequestActionWithoutMessage,
-  changeUserLanguageRequestAction,
-} from "redux/reducers/user.js";
+import { putUserRequestActionWithoutMessage, changeUserLanguageRequestAction } from "redux/reducers/user.js";
 
 import Copyright from "components/Footer/Copyright";
 
@@ -34,12 +31,7 @@ export default function Footer({ footerHeight, containerWidth }) {
   const divider = <span style={{ margin: "0 16px" }}>|</span>;
 
   const section1 = () => {
-    const section1Arr = [
-      "주식회사 디에스랩글로벌",
-      "대표자 여승기",
-      "contact@dslab.global",
-      "1670-1728",
-    ];
+    const section1Arr = ["주식회사 디에스랩글로벌", "대표자 여승기", "contact@dslab.global", "1670-1728"];
 
     const handleLanguageBtns = () => {
       const handleLanguage = (targetLang) => {
@@ -79,11 +71,7 @@ export default function Footer({ footerHeight, containerWidth }) {
             }}
           >
             <span
-              className={
-                isKor
-                  ? "font13 weightBold"
-                  : "font13 weight400 noUnderlineHoverUnderline"
-              }
+              className={isKor ? "font13 weightBold" : "font13 weight400 noUnderlineHoverUnderline"}
               style={{
                 whiteSpace: "nowrap",
                 color: "var(--textWhite87)",
@@ -107,11 +95,7 @@ export default function Footer({ footerHeight, containerWidth }) {
             }}
           >
             <span
-              className={
-                isKor
-                  ? "font13 weight400 noUnderlineHoverUnderline"
-                  : "font13 weightBold"
-              }
+              className={isKor ? "font13 weight400 noUnderlineHoverUnderline" : "font13 weightBold"}
               style={{
                 whiteSpace: "nowrap",
                 color: "var(--textWhite87)",
@@ -125,9 +109,7 @@ export default function Footer({ footerHeight, containerWidth }) {
     };
 
     return (
-      <Grid
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
-      >
+      <Grid sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
         <Grid
           container
           justifyContent="flex-start"
@@ -152,11 +134,7 @@ export default function Footer({ footerHeight, containerWidth }) {
           </Grid>
           <Grid container>
             <Grid item>
-              <span style={{ marginRight: "4px" }}>
-                {t(
-                  "서울특별시 영등포구 의사당대로 83, 오투타워 5층 위워크 05-103호"
-                )}
-              </span>
+              <span style={{ marginRight: "4px" }}>{t("WeWork 05-103, 83 Uisadang-daero, Yeongdeungpo-gu, Seoul, Republic of Korea")}</span>
             </Grid>
           </Grid>
           <Grid container>
@@ -169,13 +147,7 @@ export default function Footer({ footerHeight, containerWidth }) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          container
-          flexDirection="column"
-          justifyContent="space-between"
-          width="auto"
-          sx={{ mr: 1.5 }}
-        >
+        <Grid container flexDirection="column" justifyContent="space-between" width="auto" sx={{ mr: 1.5 }}>
           {handleLanguageBtns()}
           <Button
             id="footer_priceguide_btn"
@@ -190,14 +162,7 @@ export default function Footer({ footerHeight, containerWidth }) {
               borderRadius: 4,
               boxSizing: "border-box",
             }}
-            onClick={() =>
-              window.open(
-                isKor
-                  ? "https://ko.ds2.ai//pricing_detail.html"
-                  : "https://ds2.ai/pricing_detail.html",
-                "_blank"
-              )
-            }
+            onClick={() => window.open(isKor ? "https://ko.ds2.ai//pricing_detail.html" : "https://ds2.ai/pricing_detail.html", "_blank")}
           >
             {t("Price Guide")}
           </Button>
@@ -212,12 +177,7 @@ export default function Footer({ footerHeight, containerWidth }) {
         className="noUnderlineHoverUnderline"
         style={{ cursor: "pointer", fontWeight: "bold" }}
         onClick={() => {
-          window.open(
-            !isKor
-              ? "https://ds2.ai/terms_of_services.html"
-              : "https://ko.ds2.ai//terms_of_services.html",
-            "_blank"
-          );
+          window.open(!isKor ? "https://ds2.ai/terms_of_services.html" : "https://ko.ds2.ai//terms_of_services.html", "_blank");
         }}
       >
         {t("Terms of Service")}
@@ -229,12 +189,7 @@ export default function Footer({ footerHeight, containerWidth }) {
         className="noUnderlineHoverUnderline"
         style={{ cursor: "pointer", fontWeight: "bold" }}
         onClick={() => {
-          window.open(
-            !isKor
-              ? "https://ds2.ai/privacy.html"
-              : "https://ko.ds2.ai//privacy.html",
-            "_blank"
-          );
+          window.open(!isKor ? "https://ds2.ai/privacy.html" : "https://ko.ds2.ai//privacy.html", "_blank");
         }}
       >
         {t("Privacy Policy")}
@@ -242,10 +197,7 @@ export default function Footer({ footerHeight, containerWidth }) {
     );
 
     return (
-      <Grid
-        container
-        sx={{ width: "auto", justifyContent: "flex-start", fontSize: "12px" }}
-      >
+      <Grid container sx={{ width: "auto", justifyContent: "flex-start", fontSize: "12px" }}>
         <Grid item>
           {terms}
           {divider}

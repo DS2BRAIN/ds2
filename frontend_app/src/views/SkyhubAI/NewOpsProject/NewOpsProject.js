@@ -4,10 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 //API
 import { getServerPricing } from "../../../controller/api";
 import * as api from "../../../controller/api";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 import { IS_ENTERPRISE } from "variables/common";
 
 //@material-ui
@@ -109,9 +106,7 @@ const NewOpsProject = (props) => {
   useEffect(() => {
     let deniedRegion;
     if (getQueryParams(document.location.search).regions !== undefined) {
-      deniedRegion = JSON.parse(
-        getQueryParams(document.location.search).regions
-      );
+      deniedRegion = JSON.parse(getQueryParams(document.location.search).regions);
     }
     let transAsync = async () => {
       let pricingData = await getServerPricing();
@@ -120,9 +115,7 @@ const NewOpsProject = (props) => {
         .map((a) => a[0]);
       if (getQueryParams(document.location.search).regions !== undefined) {
         pricingName.forEach((name) => {
-          pricingData.data[name] = pricingData.data[name].filter(
-            (r) => deniedRegion.indexOf(r.region) == -1
-          );
+          pricingData.data[name] = pricingData.data[name].filter((r) => deniedRegion.indexOf(r.region) == -1);
         });
       }
       //setCloudContinents(Object.entries(TEST_REGION).sort((a,b)=>b[1].length-a[1].length).map(a=>a[0]));
@@ -166,9 +159,7 @@ const NewOpsProject = (props) => {
       if (cloudRegion.display_name === undefined) {
         dispatch(openErrorSnackbarRequestAction(t("Select Region.")));
       } else if (cloudDetail === null) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Select Server Tier."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Select Server Tier.")));
       } else {
         setLoading(true);
         setWarning("");
@@ -187,9 +178,7 @@ const NewOpsProject = (props) => {
             serverType: cloudDetail?.serverType,
           })
           .then((res) => {
-            dispatch(
-              openSuccessSnackbarRequestAction(t("The inference server has been created."))
-            );
+            dispatch(openSuccessSnackbarRequestAction(t("The inference server has been created.")));
             setFinish(projectId);
             // window.setTimeout(()=>{
             //   props.history.push("/admin/skyhubai/"+projectId)
@@ -206,15 +195,7 @@ const NewOpsProject = (props) => {
             } else {
               dispatch(
                 openErrorSnackbarRequestAction(
-                  t(
-                    error?.response.data?.msg !== undefined
-                      ? error?.response?.data.msg
-                      : error.response.data.message !== undefined
-                      ? user.language === "ko"
-                        ? error.response.data.message
-                        : error.response.data.message_en
-                      : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다"
-                  )
+                  t(error?.response.data?.msg !== undefined ? error?.response?.data.msg : error.response.data.message !== undefined ? (user.language === "ko" ? error.response.data.message : error.response.data.message_en) : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다")
                 )
               );
             }
@@ -223,15 +204,11 @@ const NewOpsProject = (props) => {
       }
     } else {
       if (projectName === "") {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Input Your Project Name."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Input Your Project Name.")));
       } else if (cloudRegion === null) {
         dispatch(openErrorSnackbarRequestAction(t("Select Region.")));
       } else if (cloudDetail === null && !IS_ENTERPRISE) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Select Server Tier."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Select Server Tier.")));
       } else {
         setWarning("");
         //생성 API 호출부분
@@ -251,11 +228,7 @@ const NewOpsProject = (props) => {
             modelId: modelId,
           })
           .then((res) => {
-            dispatch(
-              openSuccessSnackbarRequestAction(
-                t("A new project has been created.")
-              )
-            );
+            dispatch(openSuccessSnackbarRequestAction(t("A new project has been created.")));
             setFinish(res.data.id);
             // window.setTimeout(()=>{
             //   props.history.push("/admin/skyhubai/"+res.data.id)
@@ -272,15 +245,7 @@ const NewOpsProject = (props) => {
             } else {
               dispatch(
                 openErrorSnackbarRequestAction(
-                  t(
-                    error?.response?.data?.msg !== undefined
-                      ? error.response.data.msg
-                      : error?.response?.data?.message !== undefined
-                      ? user.language === "ko"
-                        ? error.response.data.message
-                        : error.response.data.message_en
-                      : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다"
-                  )
+                  t(error?.response?.data?.msg !== undefined ? error.response.data.msg : error?.response?.data?.message !== undefined ? (user.language === "ko" ? error.response.data.message : error.response.data.message_en) : "오류가 발생했습니다. 잠시 후에 다시 시도해주시길 바랍니다")
                 )
               );
             }
@@ -298,43 +263,14 @@ const NewOpsProject = (props) => {
   return (
     <div>
       <div style={defaultStyles.div_title}>{t("Create a Inference Server")}</div>
-      <div style={defaultStyles.div_detail}>
-        {!IS_ENTERPRISE &&
-          t(
-            "가장 인기있는 몇 가지 옵션을 권장하지만 필요에 따라 서버를 자유롭게 맞춤 설정할 수 있습니다."
-          )}
-      </div>
+      <div style={defaultStyles.div_detail}>{!IS_ENTERPRISE && t("가장 인기있는 몇 가지 옵션을 권장하지만 필요에 따라 서버를 자유롭게 맞춤 설정할 수 있습니다.")}</div>
       {/* Cloud Provider & Region   :  Section_1 */}
       <div>
-        <Grid
-          container
-          item
-          xs={12}
-          justify="space-between"
-          alignItems="center"
-        >
-          <Grid
-            item
-            container
-            xs={5}
-            alignItems="center"
-            style={defaultStyles.Grid_menuTitle}
-          >
+        <Grid container item xs={12} justify="space-between" alignItems="center">
+          <Grid item container xs={5} alignItems="center" style={defaultStyles.Grid_menuTitle}>
             {!IS_ENTERPRISE && t("Cloud Provider & Region")}
           </Grid>
-          {cloudRegion && (
-            <Grid
-              item
-              container
-              justify="flex-end"
-              xs={6}
-              style={defaultStyles.Grid_selectedTitle}
-            >{`${
-              cloudRegion.display_name !== undefined
-                ? cloudRegion.display_name
-                : ""
-            }`}</Grid>
-          )}
+          {cloudRegion && <Grid item container justify="flex-end" xs={6} style={defaultStyles.Grid_selectedTitle}>{`${cloudRegion.display_name !== undefined ? cloudRegion.display_name : ""}`}</Grid>}
         </Grid>
         {cloudContinents !== null && (
           <Section_1
@@ -344,10 +280,7 @@ const NewOpsProject = (props) => {
             project={[projectName, setProjectName]}
             cloudRegion={[cloudRegion, setCloudRegion]}
             cloudContinents={[cloudContinents, setCloudContinents]}
-            cloudContinentsDetail={[
-              cloudContinentsDetail,
-              setCloudContinentsDetail,
-            ]}
+            cloudContinentsDetail={[cloudContinentsDetail, setCloudContinentsDetail]}
             projectId={projectId}
           />
         )}
@@ -357,100 +290,35 @@ const NewOpsProject = (props) => {
 
       {Object.keys(cloudRegion).length !== 0 && (
         <div style={{ marginTop: "20px" }}>
-          <Grid
-            container
-            item
-            xs={12}
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid
-              item
-              container
-              xs={3}
-              alignItems="center"
-              style={defaultStyles.Grid_menuTitle}
-            >
+          <Grid container item xs={12} justify="space-between" alignItems="center">
+            <Grid item container xs={3} alignItems="center" style={defaultStyles.Grid_menuTitle}>
               {t("Server Tier")}
             </Grid>
-            {cloudDetail && (
-              <Grid
-                item
-                container
-                justify="flex-end"
-                xs={9}
-                style={defaultStyles.Grid_selectedTitle}
-              >{`${cloudDetail.serverType}(${cloudDetail.memory} Memory, ${cloudDetail.storage} Storage, ${cloudDetail.vCPU} vCPU)`}</Grid>
-            )}
+            {cloudDetail && <Grid item container justify="flex-end" xs={9} style={defaultStyles.Grid_selectedTitle}>{`${cloudDetail.serverType}(${cloudDetail.memory} Memory, ${cloudDetail.storage} Storage, ${cloudDetail.vCPU} vCPU)`}</Grid>}
           </Grid>
           {cloudContinents !== null && cloudRegion !== null && (
-            <Section_2
-              setWarning={setWarning}
-              cloudDetail={[cloudDetail, setCloudDetail]}
-              cloudContinents={[cloudContinents, setCloudContinents]}
-              cloudContinentsDetail={[
-                cloudContinentsDetail,
-                setCloudContinentsDetail,
-              ]}
-              cloudRegion={[cloudRegion, setCloudRegion]}
-            />
+            <Section_2 setWarning={setWarning} cloudDetail={[cloudDetail, setCloudDetail]} cloudContinents={[cloudContinents, setCloudContinents]} cloudContinentsDetail={[cloudContinentsDetail, setCloudContinentsDetail]} cloudRegion={[cloudRegion, setCloudRegion]} />
           )}
         </div>
       )}
       {!IS_ENTERPRISE ? (
         <>
-          <Grid
-            container
-            item
-            xs={12}
-            alignItems="left"
-            style={{ marginTop: 15, marginBottom: 15 }}
-          >
-            {t(
-              "종량제입니다. 시간당 비용이 청구되며 언제든지 서버를 종료 할 수 있습니다."
-            )}
+          <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
+            {t("종량제입니다. 시간당 비용이 청구되며 언제든지 서버를 종료 할 수 있습니다.")}
             {t("Excludes variable data Transfer, backup, and taxes.")}
             {warning !== "" && (
-              <Grid
-                className={classes.Grid_warning}
-                container
-                item
-                xs={4}
-                justify="center"
-                alignItems="center"
-              >
+              <Grid className={classes.Grid_warning} container item xs={4} justify="center" alignItems="center">
                 {t(warning)}
               </Grid>
             )}
           </Grid>
 
-          <Grid
-            container
-            item
-            xs={12}
-            alignItems="left"
-            style={{ marginTop: 15, marginBottom: 15 }}
-          >
-            {t("Total Cost") +
-              ` : ${
-                cloudDetail !== null
-                  ? user.language == "ko"
-                    ? (cloudDetail?.pricePerHourSkyhubAi * 1200 - 0.5).toFixed(
-                        0
-                      )
-                    : (cloudDetail?.pricePerHourSkyhubAi - 0.005).toFixed(2)
-                  : 0
-              }${user.language == "ko" ? " KRW" : "$"}/hour`}
+          <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
+            {t("Total Cost") + ` : ${cloudDetail !== null ? (user.language == "ko" ? (cloudDetail?.pricePerHourSkyhubAi * 1200 - 0.5).toFixed(0) : (cloudDetail?.pricePerHourSkyhubAi - 0.005).toFixed(2)) : 0}${user.language == "ko" ? " KRW" : "$"}/hour`}
           </Grid>
         </>
       ) : null}
-      <Grid
-        container
-        item
-        xs={12}
-        alignItems="left"
-        style={{ marginTop: 15, marginBottom: 15 }}
-      >
+      <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
         <Button
           onClick={createProject}
           // onClick={() => {
@@ -461,11 +329,7 @@ const NewOpsProject = (props) => {
           //   );
           // }}
           disabled={loading}
-          className={
-            loading === false
-              ? classes.submitButton
-              : classes.submitButtonLoading
-          }
+          className={loading === false ? classes.submitButton : classes.submitButtonLoading}
         >
           {loading === false ? t("Create Server") : t("로딩중입니다.")}
         </Button>

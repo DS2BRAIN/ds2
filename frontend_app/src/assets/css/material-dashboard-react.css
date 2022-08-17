@@ -594,7 +594,7 @@ footer ul li a:hover {
 #projectModal svg {
   height: 50px !important;
 }
-#fileModal > div:first-child {
+#file_upload_modal > div:first-child {
   min-height: 260px;
   background: var(--background2) !important;
   border-radius: 20px !important;

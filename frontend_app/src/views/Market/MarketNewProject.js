@@ -3,21 +3,11 @@ import produce from "immer";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "../../redux/reducers/messages";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "../../redux/reducers/messages";
 import { dynamicSort } from "components/Function/globalFunc";
 import { getMeRequestAction } from "../../redux/reducers/user";
 import * as api from "../../controller/api";
-import {
-  Grid,
-  RadioGroup,
-  InputBase,
-  FormControl,
-  FormLabel,
-  Radio,
-} from "@material-ui/core";
+import { Grid, RadioGroup, InputBase, FormControl, FormLabel, Radio } from "@material-ui/core";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -114,11 +104,7 @@ const MarketNewProject = (props) => {
   const classes = currentTheme();
   const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState(["1", "8", "24"]);
-  const steps = [
-    "인공지능 개발 조건 설정",
-    "백테스트 조건 설정",
-    "프로젝트 생성",
-  ];
+  const steps = ["인공지능 개발 조건 설정", "백테스트 조건 설정", "프로젝트 생성"];
   const factorsObj = {
     financials: {
       name: "Financials",
@@ -176,8 +162,7 @@ const MarketNewProject = (props) => {
               checked: true,
             },
             netIncomeFromContinuingOperationNetMinorityInterest: {
-              name:
-                "Net Income from Continuing Operation Net Minority Interest",
+              name: "Net Income from Continuing Operation Net Minority Interest",
               checked: true,
             },
             totalUnusualItemsExcludingGoodwill: {
@@ -597,9 +582,7 @@ const MarketNewProject = (props) => {
   });
   const [factors, setFactors] = useState(factorsObj);
   const [backtestCnt, setBacktestCnt] = useState(1);
-  const [backtestSettingArr, setBacktestSettingArr] = useState([
-    initialBacktestCondition,
-  ]);
+  const [backtestSettingArr, setBacktestSettingArr] = useState([initialBacktestCondition]);
   const [trainingMethod, setTrainingMethod] = useState("normal_regression");
   const [stockType, setStockType] = useState("cryptos");
   const [startTime, setStartTime] = useState("2017-05-24T10:30");
@@ -619,42 +602,21 @@ const MarketNewProject = (props) => {
   const [indices, setIndices] = useState([]);
   const [commodities, setCommodities] = useState([]);
   const [currencies, setCurrencies] = useState([]);
-  const [
-    isFactorConditionDialogOpen,
-    setIsFactorConditionDialogOpen,
-  ] = useState(false);
+  const [isFactorConditionDialogOpen, setIsFactorConditionDialogOpen] = useState(false);
   const [factorConditionType, setFactorConditionType] = useState("number");
   const [industrySector, setIndustrySector] = useState("");
   const [isEditFactorCondition, setIsEditFactorCondition] = useState(false);
   const [industrySectorArr, setIndustrySectorArr] = useState([]);
-  const [
-    factorConditionMinPercentage,
-    setFactorConditionMinPercentage,
-  ] = useState(null);
-  const [
-    factorConditionMaxPercentage,
-    setFactorConditionMaxPercentage,
-  ] = useState(null);
+  const [factorConditionMinPercentage, setFactorConditionMinPercentage] = useState(null);
+  const [factorConditionMaxPercentage, setFactorConditionMaxPercentage] = useState(null);
   const [FCMinPercentageChecked, setFCMinPercentageChecked] = useState(false);
   const [FCMaxPercentageChecked, setFCMaxPercentageChecked] = useState(false);
   const [selectedFCTargetInfo, setSelectedFCTargetInfo] = useState(null);
-  const [
-    conditionHigherThanPercentage,
-    setConditionHigherThanPercentage,
-  ] = useState({});
-  const [
-    conditionLowerThanPercentage,
-    setConditionLowerThanPercentage,
-  ] = useState({});
+  const [conditionHigherThanPercentage, setConditionHigherThanPercentage] = useState({});
+  const [conditionLowerThanPercentage, setConditionLowerThanPercentage] = useState({});
   const [tickers, setTickers] = useState([]);
-  const [
-    conditionVolumeHigherThanPercentage,
-    setConditionVolumeHigherThanPercentage,
-  ] = useState(null);
-  const [
-    conditionVolumeLowerThanPercentage,
-    setConditionVolumeLowerThanPercentage,
-  ] = useState(null);
+  const [conditionVolumeHigherThanPercentage, setConditionVolumeHigherThanPercentage] = useState(null);
+  const [conditionVolumeLowerThanPercentage, setConditionVolumeLowerThanPercentage] = useState(null);
   const [tickersInfoArr, setTickersInfoArr] = useState(tickersArr);
   const [searchedTickerValue, setSearchedTickerValue] = useState("");
   const [searchedTickersInfoArr, setSearchedTickersInfoArr] = useState([]);
@@ -787,24 +749,15 @@ const MarketNewProject = (props) => {
   };
 
   const handleNext = () => {
-    if (
-      user.cardInfo == null ||
-      user.cardInfo.cardName == null ||
-      (user.cardInfo.cardType == "payple" && user.language !== "ko") ||
-      (user.cardInfo.cardType == "eximbay" && user.language !== "en")
-    ) {
+    if (user.cardInfo == null || user.cardInfo.cardName == null || (user.cardInfo.cardType == "payple" && user.language !== "ko") || (user.cardInfo.cardType == "eximbay" && user.language !== "en")) {
       if (process.env.REACT_APP_ENTERPRISE !== "true") {
         props.history.push(`/admin/setting/payment/?message=need`);
       }
     } else {
       if (projectNameValue == "") {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Please enter a project name."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Please enter a project name.")));
       } else if (!dataCategory) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Please enter your daily upload time."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Please enter your daily upload time.")));
       } else {
         setIsLoading(true);
         if (isFirst) {
@@ -817,19 +770,11 @@ const MarketNewProject = (props) => {
               planId: rawPlanData[dataCategory].id,
             })
             .then((res) => {
-              props.history.push(
-                `/admin/market/${res.data.id}/${res.data.service_type}`
-              );
+              props.history.push(`/admin/market/${res.data.id}/${res.data.service_type}`);
               dispatch(getMeRequestAction());
             })
             .catch((err) => {
-              dispatch(
-                openErrorSnackbarRequestAction(
-                  t(
-                    "죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요."
-                  )
-                )
-              );
+              dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
             })
             .finally(() => {
               setIsLoading(false);
@@ -838,8 +783,7 @@ const MarketNewProject = (props) => {
           api
             .postPurchaseMarketModel({
               isSelectedDiscount,
-              sale_amount_kr:
-                rawPlanData[dataCategory].sale_price_per_month * 1200,
+              sale_amount_kr: rawPlanData[dataCategory].sale_price_per_month * 1200,
               sale_amount_en: rawPlanData[dataCategory].sale_price_per_month,
               amount_kr: rawPlanData[dataCategory].price_per_month * 1200,
               amount_en: rawPlanData[dataCategory].price_per_month,
@@ -857,39 +801,21 @@ const MarketNewProject = (props) => {
                     planId: rawPlanData[dataCategory].id,
                   })
                   .then((res) => {
-                    props.history.push(
-                      `/admin/market/${res.data.id}/${res.data.service_type}`
-                    );
+                    props.history.push(`/admin/market/${res.data.id}/${res.data.service_type}`);
                     dispatch(getMeRequestAction());
                   })
                   .catch((err) => {
-                    dispatch(
-                      openErrorSnackbarRequestAction(
-                        t(
-                          "죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요."
-                        )
-                      )
-                    );
+                    dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
                   })
                   .finally(() => {
                     setIsLoading(false);
                   });
               } else {
-                dispatch(
-                  openErrorSnackbarRequestAction(
-                    t("We could not process your payment. Please try again.")
-                  )
-                );
+                dispatch(openErrorSnackbarRequestAction(t("We could not process your payment. Please try again.")));
               }
             })
             .catch((err) => {
-              dispatch(
-                openErrorSnackbarRequestAction(
-                  t(
-                    "죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요."
-                  )
-                )
-              );
+              dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
             })
             .finally(() => {
               setIsLoading(false);
@@ -902,9 +828,7 @@ const MarketNewProject = (props) => {
   const handleNextStep = () => {
     if (activeStep === 0) {
       if (projectNameValue == "") {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Please enter a project name."))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Please enter a project name.")));
       } else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
@@ -989,13 +913,7 @@ const MarketNewProject = (props) => {
     setActiveStep(0);
   };
 
-  const onChangeBacktestConditions = (
-    value,
-    target,
-    subTarget,
-    idx,
-    subIdx
-  ) => {
+  const onChangeBacktestConditions = (value, target, subTarget, idx, subIdx) => {
     const convertedTypeVal = target !== "period" ? parseInt(value) : value;
 
     if (subTarget) {
@@ -1027,28 +945,12 @@ const MarketNewProject = (props) => {
     }
   };
 
-  const renderNumberInput = (
-    value,
-    min,
-    max,
-    target,
-    subTarget,
-    idx,
-    subIdx
-  ) => {
+  const renderNumberInput = (value, min, max, target, subTarget, idx, subIdx) => {
     return (
       <TextField
         type="number"
         variant="standard"
-        onChange={(e) =>
-          onChangeBacktestConditions(
-            e.target.value,
-            target,
-            subTarget,
-            idx,
-            subIdx
-          )
-        }
+        onChange={(e) => onChangeBacktestConditions(e.target.value, target, subTarget, idx, subIdx)}
         // defaultValue={defaultValue}
         value={value}
         inputProps={{
@@ -1118,9 +1020,7 @@ const MarketNewProject = (props) => {
   };
 
   const onChangeFactorsCategoryChecked = (e, target) => {
-    const isChecked = e.target.checked
-      ? e.target.checked
-      : e.currentTarget.checked;
+    const isChecked = e.target.checked ? e.target.checked : e.currentTarget.checked;
     const targetData = factors[target].data;
 
     setIsCheckedFactorsCategory({
@@ -1149,9 +1049,7 @@ const MarketNewProject = (props) => {
   };
 
   const onChangeEachFactorChecked = (e, key, key2, key3) => {
-    const isChecked = e.target.checked
-      ? e.target.checked
-      : e.currentTarget.checked;
+    const isChecked = e.target.checked ? e.target.checked : e.currentTarget.checked;
 
     // 카테고리별 전체 토글 버튼 제어
     if (isChecked) {
@@ -1188,11 +1086,7 @@ const MarketNewProject = (props) => {
 
     setFactors(
       produce((draft) => {
-        const t = key3
-          ? draft[key].data[key2].data[key3]
-          : key2
-          ? draft[key].data[key2]
-          : draft[key];
+        const t = key3 ? draft[key].data[key2].data[key3] : key2 ? draft[key].data[key2] : draft[key];
 
         t.checked = isChecked;
       })
@@ -1202,15 +1096,8 @@ const MarketNewProject = (props) => {
   };
 
   const onChangeEachCheckBox = (e, i, type) => {
-    const isChecked = e.target.checked
-      ? e.target.checked
-      : e.currentTarget.checked;
-    const updater =
-      type === "currency"
-        ? setCurrencies
-        : type === "indice"
-        ? setIndices
-        : setCommodities;
+    const isChecked = e.target.checked ? e.target.checked : e.currentTarget.checked;
+    const updater = type === "currency" ? setCurrencies : type === "indice" ? setIndices : setCommodities;
 
     updater(
       produce((draft) => {
@@ -1221,11 +1108,7 @@ const MarketNewProject = (props) => {
 
   const handleFactorConditionDialogOpen = (targetInfo) => {
     const { key1, key2, key3 } = targetInfo;
-    const target = key3
-      ? factors[key1].data[key2].data[key3]
-      : key2
-      ? factors[key1].data[key2]
-      : factors[key1];
+    const target = key3 ? factors[key1].data[key2].data[key3] : key2 ? factors[key1].data[key2] : factors[key1];
 
     if (target.condition_higher_than_percentage !== undefined) {
       setFCMinPercentageChecked(true);
@@ -1274,38 +1157,20 @@ const MarketNewProject = (props) => {
   const registerFactorCondition = () => {
     const { key1, key2, key3 } = selectedFCTargetInfo;
     // const targetKey = key3 ? key3 : key2 ? key2 : key1;
-    const targetName = key3
-      ? factors[key1].data[key2].data[key3].name
-      : key2
-      ? factors[key1].data[key2].name
-      : factors[key1].name;
+    const targetName = key3 ? factors[key1].data[key2].data[key3].name : key2 ? factors[key1].data[key2].name : factors[key1].name;
 
     setFactors(
       produce((draft) => {
-        const t = key3
-          ? draft[key1].data[key2].data[key3]
-          : key2
-          ? draft[key1].data[key2]
-          : draft[key1];
+        const t = key3 ? draft[key1].data[key2].data[key3] : key2 ? draft[key1].data[key2] : draft[key1];
 
-        if (FCMinPercentageChecked)
-          t.condition_higher_than_percentage =
-            factorConditionMinPercentage === 0
-              ? 0
-              : factorConditionMinPercentage;
+        if (FCMinPercentageChecked) t.condition_higher_than_percentage = factorConditionMinPercentage === 0 ? 0 : factorConditionMinPercentage;
         else {
-          if (t.condition_higher_than_percentage !== undefined)
-            delete t.condition_higher_than_percentage;
+          if (t.condition_higher_than_percentage !== undefined) delete t.condition_higher_than_percentage;
         }
 
-        if (FCMaxPercentageChecked)
-          t.condition_lower_than_percentage =
-            factorConditionMaxPercentage === 0
-              ? 0
-              : factorConditionMaxPercentage;
+        if (FCMaxPercentageChecked) t.condition_lower_than_percentage = factorConditionMaxPercentage === 0 ? 0 : factorConditionMaxPercentage;
         else {
-          if (t.condition_lower_than_percentage !== undefined)
-            delete t.condition_lower_than_percentage;
+          if (t.condition_lower_than_percentage !== undefined) delete t.condition_lower_than_percentage;
         }
       })
     );
@@ -1313,10 +1178,7 @@ const MarketNewProject = (props) => {
     if (FCMinPercentageChecked)
       setConditionHigherThanPercentage({
         ...conditionHigherThanPercentage,
-        [targetName]:
-          factorConditionMinPercentage === 0
-            ? 0
-            : factorConditionMinPercentage / 100,
+        [targetName]: factorConditionMinPercentage === 0 ? 0 : factorConditionMinPercentage / 100,
       });
     else {
       if (conditionHigherThanPercentage[targetName] !== undefined)
@@ -1330,10 +1192,7 @@ const MarketNewProject = (props) => {
     if (FCMaxPercentageChecked)
       setConditionLowerThanPercentage({
         ...conditionLowerThanPercentage,
-        [targetName]:
-          factorConditionMaxPercentage === 0
-            ? 0
-            : factorConditionMaxPercentage / 100,
+        [targetName]: factorConditionMaxPercentage === 0 ? 0 : factorConditionMaxPercentage / 100,
       });
     else {
       if (conditionLowerThanPercentage[targetName] !== undefined)
@@ -1358,11 +1217,7 @@ const MarketNewProject = (props) => {
   };
 
   const renderEachFactorCondition = (key1, key2, key3) => {
-    const target = key3
-      ? factors[key1].data[key2].data[key3]
-      : key2
-      ? factors[key1].data[key2]
-      : factors[key1];
+    const target = key3 ? factors[key1].data[key2].data[key3] : key2 ? factors[key1].data[key2] : factors[key1];
     const minPerVal = target.condition_higher_than_percentage;
     const maxPerVal = target.condition_lower_than_percentage;
     const isExistMinPerVal = minPerVal !== undefined;
@@ -1415,11 +1270,7 @@ const MarketNewProject = (props) => {
 
     setSearchedTickersInfoArr(
       tickersInfoArr
-        .filter(
-          (v, i) =>
-            v.name.toLowerCase().includes(targetValue.toLowerCase()) ||
-            v.symbol.toLowerCase().includes(targetValue.toLowerCase())
-        )
+        .filter((v, i) => v.name.toLowerCase().includes(targetValue.toLowerCase()) || v.symbol.toLowerCase().includes(targetValue.toLowerCase()))
         // .sort((a, b) =>
         //   isMarketCapDesc
         //     ? b.marketCap - a.marketCap
@@ -1494,17 +1345,11 @@ const MarketNewProject = (props) => {
     if (activeThumb === 0) {
       const clamped = Math.min(newValue[0], 100 - minVolumeDistance);
 
-      setVolumeValue([
-        Math.floor(clamped),
-        Math.floor(clamped) + minVolumeDistance,
-      ]);
+      setVolumeValue([Math.floor(clamped), Math.floor(clamped) + minVolumeDistance]);
     } else {
       const clamped = Math.max(newValue[1], minVolumeDistance);
 
-      setVolumeValue([
-        Math.floor(clamped) - minVolumeDistance,
-        Math.floor(clamped),
-      ]);
+      setVolumeValue([Math.floor(clamped) - minVolumeDistance, Math.floor(clamped)]);
     }
   };
 
@@ -1529,44 +1374,17 @@ const MarketNewProject = (props) => {
           </Stepper>
         </div>
       )}
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="stretch"
-        style={{ marginTop: "20px" }}
-      >
+      <Grid container justifyContent="center" alignItems="stretch" style={{ marginTop: "20px" }}>
         {isModelReady && isPlanReady ? (
-          <Grid
-            xs={8}
-            item
-            container
-            justifyContent="center"
-            alignItems="stretch"
-            style={{ marginTop: "20px" }}
-          >
+          <Grid xs={8} item container justifyContent="center" alignItems="stretch" style={{ marginTop: "20px" }}>
             {activeStep !== 2 && (
-              <Grid
-                container
-                item
-                xs={12}
-                justifyContent="center"
-                style={{ marginBottom: "20px" }}
-              >
-                {user.language == "ko"
-                  ? `마켓 서비스: ${modelData.name_kr}`
-                  : `Market Service: ${modelData.name_en}`}
+              <Grid container item xs={12} justifyContent="center" style={{ marginBottom: "20px" }}>
+                {user.language == "ko" ? `마켓 서비스: ${modelData.name_kr}` : `Market Service: ${modelData.name_en}`}
               </Grid>
             )}
             <Grid container item xs={12}>
               {isLoading == true ? (
-                <Grid
-                  container
-                  justifyContent="center"
-                  alignItems="center"
-                  item
-                  xs={12}
-                  style={{ minHeight: "400px" }}
-                >
+                <Grid container justifyContent="center" alignItems="center" item xs={12} style={{ minHeight: "400px" }}>
                   <div className={classes.loading} style={{ height: "300px" }}>
                     {t("Loading")}
                     <CircularProgress />
@@ -1590,13 +1408,7 @@ const MarketNewProject = (props) => {
                     )}
                     {(!isQuantProject || activeStep === 0) && (
                       <>
-                        <Grid
-                          container
-                          item
-                          xs={12}
-                          justifyContent="center"
-                          style={{ marginBottom: "20px" }}
-                        >
+                        <Grid container item xs={12} justifyContent="center" style={{ marginBottom: "20px" }}>
                           <InputBase
                             className={classes.marketInput}
                             style={{
@@ -1613,13 +1425,7 @@ const MarketNewProject = (props) => {
                             id="projectNameInput"
                           />
                         </Grid>
-                        <Grid
-                          container
-                          item
-                          xs={12}
-                          justifyContent="center"
-                          style={{ marginBottom: "30px" }}
-                        >
+                        <Grid container item xs={12} justifyContent="center" style={{ marginBottom: "30px" }}>
                           <InputBase
                             className={classes.marketInput}
                             style={{
@@ -1668,23 +1474,9 @@ const MarketNewProject = (props) => {
                                   >
                                     {t("how to learn")}
                                   </FormLabel>
-                                  <RadioGroup
-                                    aria-label="training_method"
-                                    name="controlled-radio-buttons-group"
-                                    value={trainingMethod}
-                                    onChange={(e) =>
-                                      setTrainingMethod(e.target.value)
-                                    }
-                                    row
-                                    style={{ padding: "0 24px" }}
-                                  >
+                                  <RadioGroup aria-label="training_method" name="controlled-radio-buttons-group" value={trainingMethod} onChange={(e) => setTrainingMethod(e.target.value)} row style={{ padding: "0 24px" }}>
                                     {trainingMethodArr.map((v, i) => (
-                                      <FormControlLabel
-                                        value={v.value}
-                                        control={<Radio color="primary" />}
-                                        label={v.name}
-                                        disabled={i > 1}
-                                      />
+                                      <FormControlLabel value={v.value} control={<Radio color="primary" />} label={v.name} disabled={i > 1} />
                                     ))}
                                   </RadioGroup>
                                 </FormControl>
@@ -1703,33 +1495,16 @@ const MarketNewProject = (props) => {
                                   >
                                     {t("stock type")}
                                   </FormLabel>
-                                  <RadioGroup
-                                    aria-label="stock_type"
-                                    name="controlled-radio-buttons-group"
-                                    value={stockType}
-                                    onChange={(e) =>
-                                      setStockType(e.target.value)
-                                    }
-                                    row
-                                    style={{ padding: "0 24px" }}
-                                  >
+                                  <RadioGroup aria-label="stock_type" name="controlled-radio-buttons-group" value={stockType} onChange={(e) => setStockType(e.target.value)} row style={{ padding: "0 24px" }}>
                                     {stockTypeArr.map((v) => (
-                                      <FormControlLabel
-                                        value={v.value}
-                                        control={<Radio color="primary" />}
-                                        label={v.name}
-                                      />
+                                      <FormControlLabel value={v.value} control={<Radio color="primary" />} label={v.name} />
                                     ))}
                                   </RadioGroup>
                                 </FormControl>
                               </Grid>
                               <Grid item style={{ marginBottom: "24px" }}>
                                 <Grid container>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    style={{ marginBottom: "24px" }}
-                                  >
+                                  <Grid item xs={12} style={{ marginBottom: "24px" }}>
                                     <span
                                       style={{
                                         marginRight: "12px",
@@ -1742,17 +1517,9 @@ const MarketNewProject = (props) => {
                                       {t("period setting")}
                                     </span>
                                   </Grid>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    lg={5}
-                                    style={{ padding: "0 24px" }}
-                                  >
+                                  <Grid item xs={12} lg={5} style={{ padding: "0 24px" }}>
                                     <Grid container alignItems="center">
-                                      <Grid
-                                        item
-                                        style={{ marginRight: "45px" }}
-                                      >
+                                      <Grid item style={{ marginRight: "45px" }}>
                                         {t("starting point")} :
                                       </Grid>
                                       <Grid item>
@@ -1761,9 +1528,7 @@ const MarketNewProject = (props) => {
                                           variant="standard"
                                           type="datetime-local"
                                           // defaultValue="2017-05-24T10:30"
-                                          onChange={(e) =>
-                                            setStartTime(e.target.value)
-                                          }
+                                          onChange={(e) => setStartTime(e.target.value)}
                                           value={startTime}
                                           sx={{ width: 250 }}
                                           InputLabelProps={{
@@ -1778,17 +1543,9 @@ const MarketNewProject = (props) => {
                                       </Grid>
                                     </Grid>
                                   </Grid>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    lg={5}
-                                    style={{ padding: "0 24px" }}
-                                  >
+                                  <Grid item xs={12} lg={5} style={{ padding: "0 24px" }}>
                                     <Grid container alignItems="center">
-                                      <Grid
-                                        item
-                                        style={{ marginRight: "45px" }}
-                                      >
+                                      <Grid item style={{ marginRight: "45px" }}>
                                         {t("end point")} :
                                       </Grid>
                                       <Grid item>
@@ -1797,9 +1554,7 @@ const MarketNewProject = (props) => {
                                           variant="standard"
                                           type="datetime-local"
                                           // defaultValue="2017-05-24T10:30"
-                                          onChange={(e) =>
-                                            setEndTime(e.target.value)
-                                          }
+                                          onChange={(e) => setEndTime(e.target.value)}
                                           value={endTime}
                                           sx={{ width: 250 }}
                                           InputLabelProps={{
@@ -1835,9 +1590,7 @@ const MarketNewProject = (props) => {
                                     <TextField
                                       type="number"
                                       variant="standard"
-                                      onChange={(e) =>
-                                        setTimeMemory(e.target.value)
-                                      }
+                                      onChange={(e) => setTimeMemory(e.target.value)}
                                       value={timeMemory}
                                       inputProps={{
                                         style: {
@@ -1855,12 +1608,7 @@ const MarketNewProject = (props) => {
                                     />
                                   </Grid>
                                   <Grid item>
-                                    <Tooltip
-                                      title={t(
-                                        "얼마나 많은 과거 데이터를 함께 학습할건지 설정합니다."
-                                      )}
-                                      placement="right"
-                                    >
+                                    <Tooltip title={t("얼마나 많은 과거 데이터를 함께 학습할건지 설정합니다.")} placement="right">
                                       <HelpIcon className="cursorPointer" />
                                     </Tooltip>
                                   </Grid>
@@ -1909,30 +1657,13 @@ const MarketNewProject = (props) => {
                                     >
                                       <FormControlLabel
                                         value="direct"
-                                        control={
-                                          <Radio color="primary" size="small" />
-                                        }
-                                        label={
-                                          <span style={{ fontSize: "14px" }}>
-                                            {t("Custom")}
-                                          </span>
-                                        }
+                                        control={<Radio color="primary" size="small" />}
+                                        label={<span style={{ fontSize: "14px" }}>{t("Custom")}</span>}
                                         sx={{
                                           margin: "0 10px 0 0",
                                         }}
                                       />
-                                      <FormControlLabel
-                                        value="boundary"
-                                        control={
-                                          <Radio color="primary" size="small" />
-                                        }
-                                        label={
-                                          <span style={{ fontSize: "14px" }}>
-                                            {t("Boundary settings")}
-                                          </span>
-                                        }
-                                        sx={{ margin: 0 }}
-                                      />
+                                      <FormControlLabel value="boundary" control={<Radio color="primary" size="small" />} label={<span style={{ fontSize: "14px" }}>{t("Boundary settings")}</span>} sx={{ margin: 0 }} />
                                     </RadioGroup>
                                   </FormControl>
                                 </Grid>
@@ -1966,9 +1697,7 @@ const MarketNewProject = (props) => {
                                               >
                                                 <TextField
                                                   variant="standard"
-                                                  placeholder={t(
-                                                    "검색할 symbol 또는 기업명을 입력해주세요."
-                                                  )}
+                                                  placeholder={t("검색할 symbol 또는 기업명을 입력해주세요.")}
                                                   fullWidth
                                                   InputProps={{
                                                     style: {
@@ -1985,23 +1714,18 @@ const MarketNewProject = (props) => {
                                                   }}
                                                   style={{ paddingTop: "0" }}
                                                   value={searchedTickerValue}
-                                                  onChange={
-                                                    onChangeSearchTickerLists
-                                                  }
+                                                  onChange={onChangeSearchTickerLists}
                                                 />
                                                 {isDisplaySearchedLists && (
                                                   <>
                                                     <CancelIcon
                                                       fontSize="small"
-                                                      onClick={
-                                                        resetSearchedTickerValue
-                                                      }
+                                                      onClick={resetSearchedTickerValue}
                                                       style={{
                                                         position: "absolute",
                                                         top: "50%",
                                                         right: "-16px",
-                                                        transform:
-                                                          "translateY(-50%)",
+                                                        transform: "translateY(-50%)",
                                                         cursor: "pointer",
                                                         zIndex: 9999,
                                                       }}
@@ -2010,152 +1734,105 @@ const MarketNewProject = (props) => {
                                                       component="div"
                                                       style={{
                                                         position: "absolute",
-                                                        top:
-                                                          "calc(100% + 10px)",
+                                                        top: "calc(100% + 10px)",
                                                         left: "16px",
                                                         zIndex: 9999,
                                                       }}
                                                     >
                                                       <List
-                                                        className={
-                                                          classes.dashboardMain
-                                                        }
+                                                        className={classes.dashboardMain}
                                                         sx={{
                                                           width: "400px",
                                                           minHeight: 0,
                                                           maxHeight: "300px",
                                                           overflowY: "auto",
-                                                          paddingBottom:
-                                                            searchedTickersInfoArr.length >
-                                                            0
-                                                              ? "36px"
-                                                              : null,
+                                                          paddingBottom: searchedTickersInfoArr.length > 0 ? "36px" : null,
                                                         }}
                                                       >
                                                         {searchedTickersInfoArr && (
                                                           <>
-                                                            {searchedTickersInfoArr.length >
-                                                            0 ? (
+                                                            {searchedTickersInfoArr.length > 0 ? (
                                                               <>
                                                                 <Box
                                                                   component="div"
                                                                   style={{
-                                                                    textAlign:
-                                                                      "right",
+                                                                    textAlign: "right",
                                                                   }}
                                                                 >
                                                                   <Button
                                                                     variant="text"
-                                                                    endIcon={
-                                                                      isMarketCapDesc ? (
-                                                                        <KeyboardArrowUpIcon />
-                                                                      ) : (
-                                                                        <KeyboardArrowDownIcon />
-                                                                      )
-                                                                    }
+                                                                    endIcon={isMarketCapDesc ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                                                                     style={{
-                                                                      color:
-                                                                        "var(--textWhite87)",
-                                                                      marginRight:
-                                                                        "12px",
-                                                                      padding:
-                                                                        "0 8px",
+                                                                      color: "var(--textWhite87)",
+                                                                      marginRight: "12px",
+                                                                      padding: "0 8px",
                                                                     }}
-                                                                    onClick={
-                                                                      reverseMarketCapDesc
-                                                                    }
+                                                                    onClick={reverseMarketCapDesc}
                                                                   >
                                                                     {/* {t(
                                                                 isMarketCapDesc
                                                                   ? "Market Cap 기준 오름차순 정렬"
                                                                   : "Market Cap 기준 내림차순 정렬"
                                                               )} */}
-                                                                    {t(
-                                                                      isMarketCapDesc
-                                                                        ? "오름차순 정렬"
-                                                                        : "내림차순 정렬"
-                                                                    )}
+                                                                    {t(isMarketCapDesc ? "오름차순 정렬" : "내림차순 정렬")}
                                                                   </Button>
                                                                 </Box>
-                                                                {searchedTickersInfoArr.map(
-                                                                  (v) => {
-                                                                    const labelId = `checkbox-list-label-${v}`;
+                                                                {searchedTickersInfoArr.map((v) => {
+                                                                  const labelId = `checkbox-list-label-${v}`;
 
-                                                                    return (
-                                                                      <ListItem
-                                                                        key={
-                                                                          v.symbol
-                                                                        }
-                                                                        disablePadding
-                                                                        style={{
-                                                                          padding:
-                                                                            "2px 16px",
-                                                                        }}
-                                                                      >
-                                                                        <ListItemButton
-                                                                          onClick={() =>
-                                                                            handleToggleTickerChecked(
-                                                                              v.symbol
-                                                                            )
-                                                                          }
-                                                                          dense
+                                                                  return (
+                                                                    <ListItem
+                                                                      key={v.symbol}
+                                                                      disablePadding
+                                                                      style={{
+                                                                        padding: "2px 16px",
+                                                                      }}
+                                                                    >
+                                                                      <ListItemButton onClick={() => handleToggleTickerChecked(v.symbol)} dense>
+                                                                        <ListItemIcon
+                                                                          style={{
+                                                                            minWidth: "35px",
+                                                                          }}
                                                                         >
-                                                                          <ListItemIcon
+                                                                          <Checkbox
+                                                                            checked={v.checked}
+                                                                            disableRipple
+                                                                            inputProps={{
+                                                                              "aria-labelledby": labelId,
+                                                                            }}
+                                                                            size="small"
+                                                                          />
+                                                                        </ListItemIcon>
+                                                                        <ListItemText
+                                                                          id={labelId}
+                                                                          // primary={`${v.name} (${v.symbol})`}
+                                                                        >
+                                                                          <span
                                                                             style={{
-                                                                              minWidth:
-                                                                                "35px",
+                                                                              fontWeight: 600,
                                                                             }}
                                                                           >
-                                                                            <Checkbox
-                                                                              checked={
-                                                                                v.checked
-                                                                              }
-                                                                              disableRipple
-                                                                              inputProps={{
-                                                                                "aria-labelledby": labelId,
-                                                                              }}
-                                                                              size="small"
-                                                                            />
-                                                                          </ListItemIcon>
-                                                                          <ListItemText
-                                                                            id={
-                                                                              labelId
-                                                                            }
-                                                                            // primary={`${v.name} (${v.symbol})`}
-                                                                          >
-                                                                            <span
-                                                                              style={{
-                                                                                fontWeight: 600,
-                                                                              }}
-                                                                            >
-                                                                              {
-                                                                                v.symbol
-                                                                              }
-                                                                            </span>
-                                                                            <span>
-                                                                              {` (
+                                                                            {v.symbol}
+                                                                          </span>
+                                                                          <span>
+                                                                            {` (
                                                                           ${v.name}
                                                                           )`}
-                                                                            </span>
-                                                                          </ListItemText>
-                                                                        </ListItemButton>
-                                                                      </ListItem>
-                                                                    );
-                                                                  }
-                                                                )}
+                                                                          </span>
+                                                                        </ListItemText>
+                                                                      </ListItemButton>
+                                                                    </ListItem>
+                                                                  );
+                                                                })}
                                                               </>
                                                             ) : (
                                                               <span
                                                                 style={{
-                                                                  padding:
-                                                                    "10px 20px",
-                                                                  fontSize:
-                                                                    "14px",
+                                                                  padding: "10px 20px",
+                                                                  fontSize: "14px",
                                                                 }}
                                                               >
-                                                                {t(
-                                                                  "검색 결과가 없습니다."
-                                                                )}
+                                                                {t("검색 결과가 없습니다.")}
                                                               </span>
                                                             )}
                                                           </>
@@ -2173,11 +1850,7 @@ const MarketNewProject = (props) => {
                                                         width: "100vw",
                                                         height: "100vh",
                                                       }}
-                                                      onClick={() =>
-                                                        setIsDisplaySearchedLists(
-                                                          false
-                                                        )
-                                                      }
+                                                      onClick={() => setIsDisplaySearchedLists(false)}
                                                     />
                                                   </>
                                                 )}
@@ -2198,51 +1871,30 @@ const MarketNewProject = (props) => {
                                                 {t("Search options")}
                                               </span>
                                             </Grid> */}
-                                              <Grid
-                                                item
-                                                style={{ marginLeft: "24px" }}
-                                              >
-                                                <Tooltip
-                                                  title={t(
-                                                    "특정 ticker를 선택하지 않을 경우 전체 ticker로 반영됩니다."
-                                                  )}
-                                                  placement="right"
-                                                >
+                                              <Grid item style={{ marginLeft: "24px" }}>
+                                                <Tooltip title={t("특정 ticker를 선택하지 않을 경우 전체 ticker로 반영됩니다.")} placement="right">
                                                   <HelpIcon className="cursorPointer" />
                                                 </Tooltip>
                                               </Grid>
                                             </Grid>
                                           </Grid>
                                           {tickers.length > 0 && (
-                                            <Grid
-                                              item
-                                              style={{ margin: "16px" }}
-                                            >
-                                              <Stack
-                                                direction="row"
-                                                spacing={1}
-                                              >
+                                            <Grid item style={{ margin: "16px" }}>
+                                              <Stack direction="row" spacing={1}>
                                                 {tickers.map((v, i) => (
                                                   <Chip
                                                     key={v}
                                                     label={v}
-                                                    onDelete={() =>
-                                                      handleToggleTickerChecked(
-                                                        v
-                                                      )
-                                                    }
+                                                    onDelete={() => handleToggleTickerChecked(v)}
                                                     style={{
-                                                      backgroundColor:
-                                                        "var(--gradientColor1)",
-                                                      color:
-                                                        "var(--textWhite87)",
+                                                      backgroundColor: "var(--gradientColor1)",
+                                                      color: "var(--textWhite87)",
                                                       fontWeight: 600,
                                                     }}
                                                     deleteIcon={
                                                       <CancelIcon
                                                         sx={{
-                                                          fill:
-                                                            "var(--textWhite87)",
+                                                          fill: "var(--textWhite87)",
                                                         }}
                                                       />
                                                     }
@@ -2273,41 +1925,14 @@ const MarketNewProject = (props) => {
                                               Volume
                                             </Grid>
                                             <Grid item>
-                                              <span
-                                                style={{ fontSize: "14px" }}
-                                              >
-                                                {user.language === "ko"
-                                                  ? `볼륨이 ${
-                                                      volumeValue[0]
-                                                    }% 이하, ${
-                                                      volumeValue[1]
-                                                    }% 이상인 ticker 제외`
-                                                  : ``}
-                                              </span>
+                                              <span style={{ fontSize: "14px" }}>{user.language === "ko" ? `볼륨이 ${volumeValue[0]}% 이하, ${volumeValue[1]}% 이상인 ticker 제외` : ``}</span>
                                             </Grid>
                                           </Grid>
                                         </Grid>
                                         <Grid item>
-                                          <Grid
-                                            container
-                                            justifyContent="center"
-                                          >
+                                          <Grid container justifyContent="center">
                                             <Grid item xs={11}>
-                                              <Slider
-                                                getAriaLabel={() =>
-                                                  "Minimum distance shift"
-                                                }
-                                                value={volumeValue}
-                                                onChange={handleVolumeChange}
-                                                valueLabelDisplay="auto"
-                                                valueLabelFormat={(value) =>
-                                                  `${value}%`
-                                                }
-                                                disableSwap
-                                                min={0}
-                                                max={100}
-                                                step={0.0001}
-                                              />
+                                              <Slider getAriaLabel={() => "Minimum distance shift"} value={volumeValue} onChange={handleVolumeChange} valueLabelDisplay="auto" valueLabelFormat={(value) => `${value}%`} disableSwap min={0} max={100} step={0.0001} />
                                             </Grid>
                                           </Grid>
                                         </Grid>
@@ -2321,11 +1946,7 @@ const MarketNewProject = (props) => {
                                         }}
                                         component="div"
                                       >
-                                        <ListItemButton
-                                          onClick={() =>
-                                            setFactorsOpen(!factorsOpen)
-                                          }
-                                        >
+                                        <ListItemButton onClick={() => setFactorsOpen(!factorsOpen)}>
                                           <ListItemText
                                             primary={
                                               <span
@@ -2340,22 +1961,10 @@ const MarketNewProject = (props) => {
                                               </span>
                                             }
                                           />
-                                          {factorsOpen ? (
-                                            <ExpandLess />
-                                          ) : (
-                                            <ExpandMore />
-                                          )}
+                                          {factorsOpen ? <ExpandLess /> : <ExpandMore />}
                                         </ListItemButton>
-                                        <Collapse
-                                          in={factorsOpen}
-                                          timeout="auto"
-                                          unmountOnExit
-                                        >
-                                          <Grid
-                                            container
-                                            direction="column"
-                                            style={{ paddingLeft: "16px" }}
-                                          >
+                                        <Collapse in={factorsOpen} timeout="auto" unmountOnExit>
+                                          <Grid container direction="column" style={{ paddingLeft: "16px" }}>
                                             <Grid
                                               item
                                               style={{
@@ -2363,21 +1972,14 @@ const MarketNewProject = (props) => {
                                                 paddingLeft: "16px",
                                               }}
                                             >
-                                              <Grid
-                                                container
-                                                direction="column"
-                                              >
+                                              <Grid container direction="column">
                                                 <Grid item xs={12}>
-                                                  <Grid
-                                                    container
-                                                    alignItems="center"
-                                                  >
+                                                  <Grid container alignItems="center">
                                                     <span
                                                       style={{
                                                         marginRight: "12px",
                                                         fontSize: "18px",
-                                                        color:
-                                                          "var(--textWhite)",
+                                                        color: "var(--textWhite)",
                                                         fontWeight: 500,
                                                       }}
                                                     >
@@ -2386,22 +1988,12 @@ const MarketNewProject = (props) => {
                                                     <FormControlLabel
                                                       control={
                                                         <Switch
-                                                          checked={
-                                                            isCheckedFactorsCategory[
-                                                              "financials"
-                                                            ]
-                                                          }
+                                                          checked={isCheckedFactorsCategory["financials"]}
                                                           color="primary"
                                                           inputProps={{
-                                                            "aria-label":
-                                                              "primary checkbox",
+                                                            "aria-label": "primary checkbox",
                                                           }}
-                                                          onChange={(e) =>
-                                                            onChangeFactorsCategoryChecked(
-                                                              e,
-                                                              "financials"
-                                                            )
-                                                          }
+                                                          onChange={(e) => onChangeFactorsCategoryChecked(e, "financials")}
                                                         />
                                                       }
                                                       label=""
@@ -2418,123 +2010,41 @@ const MarketNewProject = (props) => {
                                                       }}
                                                       component="div"
                                                     >
-                                                      {Object.keys(
-                                                        factors["financials"]
-                                                          .data
-                                                      ).map((key) => (
+                                                      {Object.keys(factors["financials"].data).map((key) => (
                                                         <>
-                                                          <ListItemButton
-                                                            onClick={() =>
-                                                              handleListClick(
-                                                                "financials",
-                                                                key,
-                                                                listOpenObj[
-                                                                  "financials"
-                                                                ][key]
-                                                              )
-                                                            }
-                                                          >
-                                                            <ListItemText
-                                                              primary={
-                                                                factors[
-                                                                  "financials"
-                                                                ].data[key].name
-                                                              }
-                                                            />
-                                                            {listOpenObj[
-                                                              "financials"
-                                                            ][key] ? (
-                                                              <ExpandLess />
-                                                            ) : (
-                                                              <ExpandMore />
-                                                            )}
+                                                          <ListItemButton onClick={() => handleListClick("financials", key, listOpenObj["financials"][key])}>
+                                                            <ListItemText primary={factors["financials"].data[key].name} />
+                                                            {listOpenObj["financials"][key] ? <ExpandLess /> : <ExpandMore />}
                                                           </ListItemButton>
-                                                          <Collapse
-                                                            in={
-                                                              listOpenObj[
-                                                                "financials"
-                                                              ][key]
-                                                            }
-                                                            timeout="auto"
-                                                            unmountOnExit
-                                                          >
+                                                          <Collapse in={listOpenObj["financials"][key]} timeout="auto" unmountOnExit>
                                                             <Grid
                                                               container
                                                               style={{
-                                                                padding:
-                                                                  "6px 24px",
-                                                                maxHeight:
-                                                                  "300px",
-                                                                overflowY:
-                                                                  "auto",
+                                                                padding: "6px 24px",
+                                                                maxHeight: "300px",
+                                                                overflowY: "auto",
                                                               }}
                                                             >
-                                                              {Object.keys(
-                                                                factors[
-                                                                  "financials"
-                                                                ].data[key].data
-                                                              ).map((k, i) => (
-                                                                <Grid
-                                                                  key={k + i}
-                                                                  item
-                                                                  xs={12}
-                                                                  xl={6}
-                                                                >
-                                                                  <Grid
-                                                                    container
-                                                                    alignItems="baseline"
-                                                                    wrap="nowrap"
-                                                                  >
-                                                                    <Grid
-                                                                      item
-                                                                      xs={10}
-                                                                    >
+                                                              {Object.keys(factors["financials"].data[key].data).map((k, i) => (
+                                                                <Grid key={k + i} item xs={12} xl={6}>
+                                                                  <Grid container alignItems="baseline" wrap="nowrap">
+                                                                    <Grid item xs={10}>
                                                                       <FormControlLabel
                                                                         control={
                                                                           <Switch
-                                                                            checked={
-                                                                              factors[
-                                                                                "financials"
-                                                                              ]
-                                                                                .data[
-                                                                                key
-                                                                              ]
-                                                                                .data[
-                                                                                k
-                                                                              ]
-                                                                                .checked
-                                                                            }
+                                                                            checked={factors["financials"].data[key].data[k].checked}
                                                                             color="primary"
                                                                             inputProps={{
-                                                                              "aria-label":
-                                                                                "primary checkbox",
+                                                                              "aria-label": "primary checkbox",
                                                                             }}
-                                                                            onChange={(
-                                                                              e
-                                                                            ) => {
-                                                                              onChangeEachFactorChecked(
-                                                                                e,
-                                                                                "financials",
-                                                                                key,
-                                                                                k
-                                                                              );
+                                                                            onChange={(e) => {
+                                                                              onChangeEachFactorChecked(e, "financials", key, k);
                                                                             }}
                                                                           />
                                                                         }
-                                                                        label={
-                                                                          factors[
-                                                                            "financials"
-                                                                          ]
-                                                                            .data[
-                                                                            key
-                                                                          ]
-                                                                            .data[
-                                                                            k
-                                                                          ].name
-                                                                        }
+                                                                        label={factors["financials"].data[key].data[k].name}
                                                                         style={{
-                                                                          margin:
-                                                                            "6px 0",
+                                                                          margin: "6px 0",
                                                                         }}
                                                                       />
                                                                     </Grid>
@@ -2547,11 +2057,7 @@ const MarketNewProject = (props) => {
                                                                       }}
                                                                     /> */}
                                                                   </Grid>
-                                                                  {renderEachFactorCondition(
-                                                                    "financials",
-                                                                    key,
-                                                                    k
-                                                                  )}
+                                                                  {renderEachFactorCondition("financials", key, k)}
                                                                 </Grid>
                                                               ))}
                                                             </Grid>
@@ -2570,21 +2076,14 @@ const MarketNewProject = (props) => {
                                                 paddingLeft: "16px",
                                               }}
                                             >
-                                              <Grid
-                                                container
-                                                direction="column"
-                                              >
+                                              <Grid container direction="column">
                                                 <Grid item xs={12}>
-                                                  <Grid
-                                                    container
-                                                    alignItems="center"
-                                                  >
+                                                  <Grid container alignItems="center">
                                                     <span
                                                       style={{
                                                         marginRight: "12px",
                                                         fontSize: "18px",
-                                                        color:
-                                                          "var(--textWhite)",
+                                                        color: "var(--textWhite)",
                                                         fontWeight: 500,
                                                       }}
                                                     >
@@ -2593,22 +2092,12 @@ const MarketNewProject = (props) => {
                                                     <FormControlLabel
                                                       control={
                                                         <Switch
-                                                          checked={
-                                                            isCheckedFactorsCategory[
-                                                              "analysis"
-                                                            ]
-                                                          }
+                                                          checked={isCheckedFactorsCategory["analysis"]}
                                                           color="primary"
                                                           inputProps={{
-                                                            "aria-label":
-                                                              "primary checkbox",
+                                                            "aria-label": "primary checkbox",
                                                           }}
-                                                          onChange={(e) =>
-                                                            onChangeFactorsCategoryChecked(
-                                                              e,
-                                                              "analysis"
-                                                            )
-                                                          }
+                                                          onChange={(e) => onChangeFactorsCategoryChecked(e, "analysis")}
                                                         />
                                                       }
                                                       label=""
@@ -2625,123 +2114,41 @@ const MarketNewProject = (props) => {
                                                       }}
                                                       component="div"
                                                     >
-                                                      {Object.keys(
-                                                        factors["analysis"].data
-                                                      ).map((key, i) => (
+                                                      {Object.keys(factors["analysis"].data).map((key, i) => (
                                                         <div key={key + i}>
-                                                          <ListItemButton
-                                                            onClick={() =>
-                                                              handleListClick(
-                                                                "analysis",
-                                                                key,
-                                                                listOpenObj[
-                                                                  "analysis"
-                                                                ][key]
-                                                              )
-                                                            }
-                                                          >
-                                                            <ListItemText
-                                                              primary={
-                                                                factors[
-                                                                  "analysis"
-                                                                ].data[key].name
-                                                              }
-                                                            />
-                                                            {listOpenObj[
-                                                              "analysis"
-                                                            ][key] ? (
-                                                              <ExpandLess />
-                                                            ) : (
-                                                              <ExpandMore />
-                                                            )}
+                                                          <ListItemButton onClick={() => handleListClick("analysis", key, listOpenObj["analysis"][key])}>
+                                                            <ListItemText primary={factors["analysis"].data[key].name} />
+                                                            {listOpenObj["analysis"][key] ? <ExpandLess /> : <ExpandMore />}
                                                           </ListItemButton>
-                                                          <Collapse
-                                                            in={
-                                                              listOpenObj[
-                                                                "analysis"
-                                                              ][key]
-                                                            }
-                                                            timeout="auto"
-                                                            unmountOnExit
-                                                          >
+                                                          <Collapse in={listOpenObj["analysis"][key]} timeout="auto" unmountOnExit>
                                                             <Grid
                                                               container
                                                               style={{
-                                                                padding:
-                                                                  "6px 24px",
-                                                                maxHeight:
-                                                                  "300px",
-                                                                overflowY:
-                                                                  "auto",
+                                                                padding: "6px 24px",
+                                                                maxHeight: "300px",
+                                                                overflowY: "auto",
                                                               }}
                                                             >
-                                                              {Object.keys(
-                                                                factors[
-                                                                  "analysis"
-                                                                ].data[key].data
-                                                              ).map((k, i) => (
-                                                                <Grid
-                                                                  key={k + i}
-                                                                  item
-                                                                  xs={12}
-                                                                  lg={6}
-                                                                  xl={4}
-                                                                >
-                                                                  <Grid
-                                                                    container
-                                                                    alignItems="baseline"
-                                                                    wrap="nowrap"
-                                                                  >
-                                                                    <Grid
-                                                                      item
-                                                                      xs={10}
-                                                                    >
+                                                              {Object.keys(factors["analysis"].data[key].data).map((k, i) => (
+                                                                <Grid key={k + i} item xs={12} lg={6} xl={4}>
+                                                                  <Grid container alignItems="baseline" wrap="nowrap">
+                                                                    <Grid item xs={10}>
                                                                       <FormControlLabel
                                                                         control={
                                                                           <Switch
-                                                                            checked={
-                                                                              factors[
-                                                                                "analysis"
-                                                                              ]
-                                                                                .data[
-                                                                                key
-                                                                              ]
-                                                                                .data[
-                                                                                k
-                                                                              ]
-                                                                                .checked
-                                                                            }
+                                                                            checked={factors["analysis"].data[key].data[k].checked}
                                                                             color="primary"
                                                                             inputProps={{
-                                                                              "aria-label":
-                                                                                "primary checkbox",
+                                                                              "aria-label": "primary checkbox",
                                                                             }}
-                                                                            onChange={(
-                                                                              e
-                                                                            ) => {
-                                                                              onChangeEachFactorChecked(
-                                                                                e,
-                                                                                "analysis",
-                                                                                key,
-                                                                                k
-                                                                              );
+                                                                            onChange={(e) => {
+                                                                              onChangeEachFactorChecked(e, "analysis", key, k);
                                                                             }}
                                                                           />
                                                                         }
-                                                                        label={
-                                                                          factors[
-                                                                            "analysis"
-                                                                          ]
-                                                                            .data[
-                                                                            key
-                                                                          ]
-                                                                            .data[
-                                                                            k
-                                                                          ].name
-                                                                        }
+                                                                        label={factors["analysis"].data[key].data[k].name}
                                                                         style={{
-                                                                          margin:
-                                                                            "6px 0",
+                                                                          margin: "6px 0",
                                                                         }}
                                                                       />
                                                                     </Grid>
@@ -2754,11 +2161,7 @@ const MarketNewProject = (props) => {
                                                                       }}
                                                                     /> */}
                                                                   </Grid>
-                                                                  {renderEachFactorCondition(
-                                                                    "analysis",
-                                                                    key,
-                                                                    k
-                                                                  )}
+                                                                  {renderEachFactorCondition("analysis", key, k)}
                                                                 </Grid>
                                                               ))}
                                                             </Grid>
@@ -2777,23 +2180,16 @@ const MarketNewProject = (props) => {
                                                 paddingLeft: "16px",
                                               }}
                                             >
-                                              <Grid
-                                                container
-                                                direction="column"
-                                              >
+                                              <Grid container direction="column">
                                                 <Grid item xs={12}>
-                                                  <Grid
-                                                    container
-                                                    alignItems="center"
-                                                  >
+                                                  <Grid container alignItems="center">
                                                     <span
                                                       style={{
                                                         display: "Block",
                                                         marginRight: "12px",
                                                         marginBottom: "12px",
                                                         fontSize: "18px",
-                                                        color:
-                                                          "var(--textWhite)",
+                                                        color: "var(--textWhite)",
                                                         fontWeight: 500,
                                                       }}
                                                     >
@@ -2802,22 +2198,12 @@ const MarketNewProject = (props) => {
                                                     <FormControlLabel
                                                       control={
                                                         <Switch
-                                                          checked={
-                                                            isCheckedFactorsCategory[
-                                                              "holders"
-                                                            ]
-                                                          }
+                                                          checked={isCheckedFactorsCategory["holders"]}
                                                           color="primary"
                                                           inputProps={{
-                                                            "aria-label":
-                                                              "primary checkbox",
+                                                            "aria-label": "primary checkbox",
                                                           }}
-                                                          onChange={(e) =>
-                                                            onChangeFactorsCategoryChecked(
-                                                              e,
-                                                              "holders"
-                                                            )
-                                                          }
+                                                          onChange={(e) => onChangeFactorsCategoryChecked(e, "holders")}
                                                         />
                                                       }
                                                       label=""
@@ -2827,52 +2213,24 @@ const MarketNewProject = (props) => {
                                                 </Grid>
                                                 <Grid item xs>
                                                   <Grid container>
-                                                    {Object.keys(
-                                                      factors["holders"].data
-                                                    ).map((key, i) => (
-                                                      <Grid
-                                                        key={key + i}
-                                                        item
-                                                        xs={12}
-                                                        lg={6}
-                                                        xl={4}
-                                                      >
-                                                        <Grid
-                                                          container
-                                                          alignItems="baseline"
-                                                          wrap="nowrap"
-                                                        >
+                                                    {Object.keys(factors["holders"].data).map((key, i) => (
+                                                      <Grid key={key + i} item xs={12} lg={6} xl={4}>
+                                                        <Grid container alignItems="baseline" wrap="nowrap">
                                                           <Grid item xs={10}>
                                                             <FormControlLabel
                                                               control={
                                                                 <Switch
-                                                                  checked={
-                                                                    factors[
-                                                                      "holders"
-                                                                    ].data[key]
-                                                                      .checked
-                                                                  }
+                                                                  checked={factors["holders"].data[key].checked}
                                                                   color="primary"
                                                                   inputProps={{
-                                                                    "aria-label":
-                                                                      "primary checkbox",
+                                                                    "aria-label": "primary checkbox",
                                                                   }}
-                                                                  onChange={(
-                                                                    e
-                                                                  ) => {
-                                                                    onChangeEachFactorChecked(
-                                                                      e,
-                                                                      "holders",
-                                                                      key
-                                                                    );
+                                                                  onChange={(e) => {
+                                                                    onChangeEachFactorChecked(e, "holders", key);
                                                                   }}
                                                                 />
                                                               }
-                                                              label={
-                                                                factors[
-                                                                  "holders"
-                                                                ].data[key].name
-                                                              }
+                                                              label={factors["holders"].data[key].name}
                                                               style={{
                                                                 margin: "6px 0",
                                                               }}
@@ -2885,10 +2243,7 @@ const MarketNewProject = (props) => {
                                                             }}
                                                           /> */}
                                                         </Grid>
-                                                        {renderEachFactorCondition(
-                                                          "holders",
-                                                          key
-                                                        )}
+                                                        {renderEachFactorCondition("holders", key)}
                                                       </Grid>
                                                     ))}
                                                   </Grid>
@@ -2902,23 +2257,16 @@ const MarketNewProject = (props) => {
                                                 paddingLeft: "16px",
                                               }}
                                             >
-                                              <Grid
-                                                container
-                                                direction="column"
-                                              >
+                                              <Grid container direction="column">
                                                 <Grid item xs={12}>
-                                                  <Grid
-                                                    container
-                                                    alignItems="center"
-                                                  >
+                                                  <Grid container alignItems="center">
                                                     <span
                                                       style={{
                                                         display: "Block",
                                                         marginRight: "12px",
                                                         marginBottom: "12px",
                                                         fontSize: "18px",
-                                                        color:
-                                                          "var(--textWhite)",
+                                                        color: "var(--textWhite)",
                                                         fontWeight: 500,
                                                       }}
                                                     >
@@ -2927,22 +2275,12 @@ const MarketNewProject = (props) => {
                                                     <FormControlLabel
                                                       control={
                                                         <Switch
-                                                          checked={
-                                                            isCheckedFactorsCategory[
-                                                              "sustainability"
-                                                            ]
-                                                          }
+                                                          checked={isCheckedFactorsCategory["sustainability"]}
                                                           color="primary"
                                                           inputProps={{
-                                                            "aria-label":
-                                                              "primary checkbox",
+                                                            "aria-label": "primary checkbox",
                                                           }}
-                                                          onChange={(e) =>
-                                                            onChangeFactorsCategoryChecked(
-                                                              e,
-                                                              "sustainability"
-                                                            )
-                                                          }
+                                                          onChange={(e) => onChangeFactorsCategoryChecked(e, "sustainability")}
                                                         />
                                                       }
                                                       label=""
@@ -2952,53 +2290,24 @@ const MarketNewProject = (props) => {
                                                 </Grid>
                                                 <Grid item xs>
                                                   <Grid container>
-                                                    {Object.keys(
-                                                      factors["sustainability"]
-                                                        .data
-                                                    ).map((key, i) => (
-                                                      <Grid
-                                                        key={key + i}
-                                                        item
-                                                        xs={12}
-                                                        lg={6}
-                                                        xl={4}
-                                                      >
-                                                        <Grid
-                                                          container
-                                                          alignItems="baseline"
-                                                          wrap="nowrap"
-                                                        >
+                                                    {Object.keys(factors["sustainability"].data).map((key, i) => (
+                                                      <Grid key={key + i} item xs={12} lg={6} xl={4}>
+                                                        <Grid container alignItems="baseline" wrap="nowrap">
                                                           <Grid item xs={10}>
                                                             <FormControlLabel
                                                               control={
                                                                 <Switch
-                                                                  checked={
-                                                                    factors[
-                                                                      "sustainability"
-                                                                    ].data[key]
-                                                                      .checked
-                                                                  }
+                                                                  checked={factors["sustainability"].data[key].checked}
                                                                   color="primary"
                                                                   inputProps={{
-                                                                    "aria-label":
-                                                                      "primary checkbox",
+                                                                    "aria-label": "primary checkbox",
                                                                   }}
-                                                                  onChange={(
-                                                                    e
-                                                                  ) => {
-                                                                    onChangeEachFactorChecked(
-                                                                      e,
-                                                                      "sustainability",
-                                                                      key
-                                                                    );
+                                                                  onChange={(e) => {
+                                                                    onChangeEachFactorChecked(e, "sustainability", key);
                                                                   }}
                                                                 />
                                                               }
-                                                              label={
-                                                                factors[
-                                                                  "sustainability"
-                                                                ].data[key].name
-                                                              }
+                                                              label={factors["sustainability"].data[key].name}
                                                               style={{
                                                                 margin: "6px 0",
                                                               }}
@@ -3014,10 +2323,7 @@ const MarketNewProject = (props) => {
                                                             /> */}
                                                           </Grid>
                                                         </Grid>
-                                                        {renderEachFactorCondition(
-                                                          "sustainability",
-                                                          key
-                                                        )}
+                                                        {renderEachFactorCondition("sustainability", key)}
                                                       </Grid>
                                                     ))}
                                                   </Grid>
@@ -3036,11 +2342,7 @@ const MarketNewProject = (props) => {
                                         }}
                                         component="div"
                                       >
-                                        <ListItemButton
-                                          onClick={() =>
-                                            setIndicesOpen(!indicesOpen)
-                                          }
-                                        >
+                                        <ListItemButton onClick={() => setIndicesOpen(!indicesOpen)}>
                                           <ListItemText
                                             primary={
                                               <span
@@ -3055,51 +2357,15 @@ const MarketNewProject = (props) => {
                                               </span>
                                             }
                                           />
-                                          {indicesOpen ? (
-                                            <ExpandLess />
-                                          ) : (
-                                            <ExpandMore />
-                                          )}
+                                          {indicesOpen ? <ExpandLess /> : <ExpandMore />}
                                         </ListItemButton>
-                                        <Collapse
-                                          in={indicesOpen}
-                                          timeout="auto"
-                                          unmountOnExit
-                                        >
-                                          <Grid
-                                            container
-                                            direction="column"
-                                            style={{ paddingLeft: "16px" }}
-                                          >
-                                            <FormControl
-                                              component="fieldset"
-                                              variant="standard"
-                                            >
-                                              <Grid
-                                                container
-                                                style={{ padding: "0 36px" }}
-                                              >
+                                        <Collapse in={indicesOpen} timeout="auto" unmountOnExit>
+                                          <Grid container direction="column" style={{ paddingLeft: "16px" }}>
+                                            <FormControl component="fieldset" variant="standard">
+                                              <Grid container style={{ padding: "0 36px" }}>
                                                 {indices.map((v, i) => (
                                                   <Grid item xs={4} lg={2}>
-                                                    <FormControlLabel
-                                                      control={
-                                                        <Checkbox
-                                                          checked={v.checked}
-                                                          onChange={(e) =>
-                                                            onChangeEachCheckBox(
-                                                              e,
-                                                              i,
-                                                              "indice"
-                                                            )
-                                                          }
-                                                          value={v.name}
-                                                          sx={{ mr: 1 }}
-                                                        />
-                                                      }
-                                                      label={v.name}
-                                                      key={v.name}
-                                                      sx={{ mr: 4 }}
-                                                    />
+                                                    <FormControlLabel control={<Checkbox checked={v.checked} onChange={(e) => onChangeEachCheckBox(e, i, "indice")} value={v.name} sx={{ mr: 1 }} />} label={v.name} key={v.name} sx={{ mr: 4 }} />
                                                   </Grid>
                                                 ))}
                                               </Grid>
@@ -3116,11 +2382,7 @@ const MarketNewProject = (props) => {
                                         }}
                                         component="div"
                                       >
-                                        <ListItemButton
-                                          onClick={() =>
-                                            setCommoditiesOpen(!commoditiesOpen)
-                                          }
-                                        >
+                                        <ListItemButton onClick={() => setCommoditiesOpen(!commoditiesOpen)}>
                                           <ListItemText
                                             primary={
                                               <span
@@ -3135,51 +2397,15 @@ const MarketNewProject = (props) => {
                                               </span>
                                             }
                                           />
-                                          {commoditiesOpen ? (
-                                            <ExpandLess />
-                                          ) : (
-                                            <ExpandMore />
-                                          )}
+                                          {commoditiesOpen ? <ExpandLess /> : <ExpandMore />}
                                         </ListItemButton>
-                                        <Collapse
-                                          in={commoditiesOpen}
-                                          timeout="auto"
-                                          unmountOnExit
-                                        >
-                                          <Grid
-                                            container
-                                            direction="column"
-                                            style={{ paddingLeft: "16px" }}
-                                          >
-                                            <FormControl
-                                              component="fieldset"
-                                              variant="standard"
-                                            >
-                                              <Grid
-                                                container
-                                                style={{ padding: "0 36px" }}
-                                              >
+                                        <Collapse in={commoditiesOpen} timeout="auto" unmountOnExit>
+                                          <Grid container direction="column" style={{ paddingLeft: "16px" }}>
+                                            <FormControl component="fieldset" variant="standard">
+                                              <Grid container style={{ padding: "0 36px" }}>
                                                 {commodities.map((v, i) => (
                                                   <Grid item xs={4} md={2}>
-                                                    <FormControlLabel
-                                                      control={
-                                                        <Checkbox
-                                                          checked={v.checked}
-                                                          onChange={(e) =>
-                                                            onChangeEachCheckBox(
-                                                              e,
-                                                              i,
-                                                              "commodity"
-                                                            )
-                                                          }
-                                                          value={v.name}
-                                                          sx={{ mr: 1 }}
-                                                        />
-                                                      }
-                                                      label={v.name}
-                                                      key={v.name}
-                                                      sx={{ mr: 4 }}
-                                                    />
+                                                    <FormControlLabel control={<Checkbox checked={v.checked} onChange={(e) => onChangeEachCheckBox(e, i, "commodity")} value={v.name} sx={{ mr: 1 }} />} label={v.name} key={v.name} sx={{ mr: 4 }} />
                                                   </Grid>
                                                 ))}
                                               </Grid>
@@ -3190,10 +2416,7 @@ const MarketNewProject = (props) => {
                                     </Grid>
                                     <Grid item style={{ marginBottom: "24px" }}>
                                       <Grid container direction="column">
-                                        <FormControl
-                                          component="fieldset"
-                                          variant="standard"
-                                        >
+                                        <FormControl component="fieldset" variant="standard">
                                           <FormLabel
                                             component="legend"
                                             style={{
@@ -3206,30 +2429,9 @@ const MarketNewProject = (props) => {
                                           >
                                             Currency
                                           </FormLabel>
-                                          <FormGroup
-                                            style={{ paddingLeft: "36px" }}
-                                            row
-                                          >
+                                          <FormGroup style={{ paddingLeft: "36px" }} row>
                                             {currencies.map((v, i) => (
-                                              <FormControlLabel
-                                                control={
-                                                  <Checkbox
-                                                    checked={v.checked}
-                                                    onChange={(e) =>
-                                                      onChangeEachCheckBox(
-                                                        e,
-                                                        i,
-                                                        "currency"
-                                                      )
-                                                    }
-                                                    value={v.name}
-                                                    sx={{ mr: 1 }}
-                                                  />
-                                                }
-                                                label={v.name}
-                                                key={v.name}
-                                                sx={{ mr: 4 }}
-                                              />
+                                              <FormControlLabel control={<Checkbox checked={v.checked} onChange={(e) => onChangeEachCheckBox(e, i, "currency")} value={v.name} sx={{ mr: 1 }} />} label={v.name} key={v.name} sx={{ mr: 4 }} />
                                             ))}
                                           </FormGroup>
                                         </FormControl>
@@ -3256,25 +2458,9 @@ const MarketNewProject = (props) => {
                                         >
                                           {t("Set the time of stock forecasting")}
                                         </FormLabel>
-                                        <RadioGroup
-                                          aria-label="stock_type"
-                                          name="controlled-radio-buttons-group"
-                                          value={goal}
-                                          onChange={(e) =>
-                                            setGoal(e.target.value)
-                                          }
-                                          row
-                                          style={{ padding: "0 24px" }}
-                                        >
+                                        <RadioGroup aria-label="stock_type" name="controlled-radio-buttons-group" value={goal} onChange={(e) => setGoal(e.target.value)} row style={{ padding: "0 24px" }}>
                                           {goalsArr.map((v) => (
-                                            <FormControlLabel
-                                              value={v.value}
-                                              control={
-                                                <Radio color="primary" />
-                                              }
-                                              label={v.name}
-                                              key={v.value}
-                                            />
+                                            <FormControlLabel value={v.value} control={<Radio color="primary" />} label={v.name} key={v.value} />
                                           ))}
                                         </RadioGroup>
                                       </FormControl>
@@ -3301,9 +2487,7 @@ const MarketNewProject = (props) => {
                                   <Grid item>
                                     <Checkbox
                                       checked={isUsingMlops}
-                                      onChange={(e) =>
-                                        setIsUsingMlops(e.target.checked)
-                                      }
+                                      onChange={(e) => setIsUsingMlops(e.target.checked)}
                                       disabled
                                       sx={{
                                         "& .MuiSvgIcon-root": { fontSize: 28 },
@@ -3317,17 +2501,8 @@ const MarketNewProject = (props) => {
                         </Grid>
                       ) : activeStep === 1 ? (
                         <Grid container justifyContent="center">
-                          <Grid
-                            item
-                            xs={12}
-                            xl={10}
-                            style={{ marginBottom: "20px" }}
-                          >
-                            <Grid
-                              container
-                              justifyContent="space-between"
-                              alignItems="center"
-                            >
+                          <Grid item xs={12} xl={10} style={{ marginBottom: "20px" }}>
+                            <Grid container justifyContent="space-between" alignItems="center">
                               <Grid item>
                                 <span
                                   style={{
@@ -3341,7 +2516,7 @@ const MarketNewProject = (props) => {
                               </Grid>
                               <Grid item>
                                 <Button
-                                  id="startLabellingBtn"
+                                  id="start_labelling_btn"
                                   className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH32}`}
                                   onClick={addBacktestCondition}
                                   // disabled={isUnAbleToSeeStartBtn}
@@ -3353,12 +2528,7 @@ const MarketNewProject = (props) => {
                           </Grid>
                           {backtestSettingArr.map((v, i) => (
                             <>
-                              <Grid
-                                item
-                                xs={12}
-                                xl={10}
-                                style={{ margin: "0 12px 10px" }}
-                              >
+                              <Grid item xs={12} xl={10} style={{ margin: "0 12px 10px" }}>
                                 <Grid container alignItems="center">
                                   <span
                                     style={{
@@ -3371,7 +2541,7 @@ const MarketNewProject = (props) => {
                                   </span>
                                   {i > 0 && (
                                     <Button
-                                      id="startLabellingBtn"
+                                      id="start_labelling_btn"
                                       className={`${classes.defaultDeleteButton}`}
                                       // disabled={isUnAbleToSeeStartBtn}
                                       onClick={() => removeBacktestCondition(i)}
@@ -3403,11 +2573,7 @@ const MarketNewProject = (props) => {
                                 <Grid container spacing={2}>
                                   <Grid item xs={12}>
                                     <Grid container>
-                                      <Grid
-                                        item
-                                        xs={4}
-                                        style={{ marginRight: "16px" }}
-                                      >
+                                      <Grid item xs={4} style={{ marginRight: "16px" }}>
                                         <span>{t("period")}</span>
                                       </Grid>
                                       <Grid item xs>
@@ -3428,14 +2594,7 @@ const MarketNewProject = (props) => {
                                                   variant="standard"
                                                   type="datetime-local"
                                                   // defaultValue="2017-05-24T10:30"
-                                                  onChange={(e) =>
-                                                    onChangeBacktestConditions(
-                                                      e.target.value,
-                                                      "period",
-                                                      "start",
-                                                      i
-                                                    )
-                                                  }
+                                                  onChange={(e) => onChangeBacktestConditions(e.target.value, "period", "start", i)}
                                                   value={v.period.start}
                                                   sx={{ width: 250 }}
                                                   InputLabelProps={{
@@ -3466,14 +2625,7 @@ const MarketNewProject = (props) => {
                                                   variant="standard"
                                                   type="datetime-local"
                                                   // defaultValue="2017-05-24T10:30"
-                                                  onChange={(e) =>
-                                                    onChangeBacktestConditions(
-                                                      e.target.value,
-                                                      "period",
-                                                      "end",
-                                                      i
-                                                    )
-                                                  }
+                                                  onChange={(e) => onChangeBacktestConditions(e.target.value, "period", "end", i)}
                                                   value={v.period.end}
                                                   sx={{ width: 250 }}
                                                   InputLabelProps={{
@@ -3494,86 +2646,36 @@ const MarketNewProject = (props) => {
                                   </Grid>
                                   <Grid item xs={12}>
                                     <Grid container>
-                                      <Grid
-                                        item
-                                        xs={4}
-                                        style={{ marginRight: "16px" }}
-                                      >
-                                        <span>
-                                          {t("Number of items under management (up to 100)")}
-                                        </span>
+                                      <Grid item xs={4} style={{ marginRight: "16px" }}>
+                                        <span>{t("Number of items under management (up to 100)")}</span>
                                       </Grid>
                                       <Grid item xs>
-                                        {renderNumberInput(
-                                          v.stockItemCnt,
-                                          0,
-                                          100,
-                                          "stockItemCnt",
-                                          null,
-                                          i
-                                        )}{" "}
-                                        {t("")}
+                                        {renderNumberInput(v.stockItemCnt, 0, 100, "stockItemCnt", null, i)} {t("")}
                                       </Grid>
                                     </Grid>
                                   </Grid>
                                   <Grid item xs={12}>
                                     <Grid container>
-                                      <Grid
-                                        item
-                                        xs={4}
-                                        style={{ marginRight: "16px" }}
-                                      >
+                                      <Grid item xs={4} style={{ marginRight: "16px" }}>
                                         <span>{t("Buy Timing")}</span>
                                       </Grid>
                                       <Grid item xs>
-                                        {renderNumberInput(
-                                          v.timingOfBuying.time,
-                                          0,
-                                          24,
-                                          "timingOfBuying",
-                                          "time",
-                                          i
-                                        )}
+                                        {renderNumberInput(v.timingOfBuying.time, 0, 24, "timingOfBuying", "time", i)}
                                         {t("within time")}
-                                        {renderNumberInput(
-                                          v.timingOfBuying.amount,
-                                          0,
-                                          100,
-                                          "timingOfBuying",
-                                          "amount",
-                                          i
-                                        )}
+                                        {renderNumberInput(v.timingOfBuying.amount, 0, 100, "timingOfBuying", "amount", i)}
                                         {t("% Increase")}
                                       </Grid>
                                     </Grid>
                                   </Grid>
                                   <Grid item xs={12}>
                                     <Grid container>
-                                      <Grid
-                                        item
-                                        xs={4}
-                                        style={{ marginRight: "16px" }}
-                                      >
+                                      <Grid item xs={4} style={{ marginRight: "16px" }}>
                                         <span>{t("Sell Timing")}</span>
                                       </Grid>
                                       <Grid item xs>
-                                        {renderNumberInput(
-                                          v.timingOfSelling.time,
-                                          0,
-                                          24,
-                                          "timingOfSelling",
-                                          "time",
-                                          i
-                                        )}
+                                        {renderNumberInput(v.timingOfSelling.time, 0, 24, "timingOfSelling", "time", i)}
                                         {t("within time")}
-                                        {renderNumberInput(
-                                          v.timingOfSelling.amount,
-                                          0,
-                                          100,
-                                          "timingOfSelling",
-                                          "amount",
-                                          i
-                                        )}
+                                        {renderNumberInput(v.timingOfSelling.amount, 0, 100, "timingOfSelling", "amount", i)}
                                         {t("% drop")}
                                       </Grid>
                                     </Grid>
@@ -3596,7 +2698,7 @@ const MarketNewProject = (props) => {
                                               {t("Bond Selling Timing")}
                                             </span>
                                             <Button
-                                              id="startLabellingBtn"
+                                              id="start_labelling_btn"
                                               className={`${classes.defaultGreenOutlineButton}`}
                                               onClick={() =>
                                                 addHPMSellTimingCondition(i)
@@ -3696,7 +2798,7 @@ const MarketNewProject = (props) => {
                                               {t("Risk Management Timing")}
                                             </span>
                                             <Button
-                                              id="startLabellingBtn"
+                                              id="start_labelling_btn"
                                               className={`${classes.defaultGreenOutlineButton}`}
                                               onClick={() =>
                                                 addRiskTimingCondition(i)
@@ -3787,73 +2889,24 @@ const MarketNewProject = (props) => {
 
                                   <Grid item xs={12}>
                                     <Grid container>
-                                      <Grid
-                                        item
-                                        xs={4}
-                                        style={{ marginRight: "16px" }}
-                                      >
+                                      <Grid item xs={4} style={{ marginRight: "16px" }}>
                                         <span>{t("risk management")}</span>
                                       </Grid>
                                       <Grid item xs>
                                         <Grid container direction="column">
-                                          <Grid
-                                            item
-                                            style={{ marginBottom: "12px" }}
-                                          >
-                                            {renderNumberInput(
-                                              v.riskManagement.escape,
-                                              0,
-                                              100,
-                                              "riskManagement",
-                                              "escape",
-                                              i
-                                            )}
-                                            <span
-                                              style={{ paddingLeft: "10px" }}
-                                            >
-                                              {t(
-                                                "% 이상 내려갔을 경우 즉시 매도"
-                                              )}
-                                            </span>
+                                          <Grid item style={{ marginBottom: "12px" }}>
+                                            {renderNumberInput(v.riskManagement.escape, 0, 100, "riskManagement", "escape", i)}
+                                            <span style={{ paddingLeft: "10px" }}>{t("% 이상 내려갔을 경우 즉시 매도")}</span>
                                           </Grid>
-                                          <Grid
-                                            item
-                                            style={{ marginBottom: "12px" }}
-                                          >
-                                            {renderNumberInput(
-                                              v.riskManagement.frozenEscapeHour,
-                                              0,
-                                              24,
-                                              "riskManagement",
-                                              "frozenEscapeHour",
-                                              i
-                                            )}
-                                            <span
-                                              style={{ paddingLeft: "10px" }}
-                                            >
-                                              {t(
-                                                "시간 동안 변동없는 경우 매도"
-                                              )}
-                                            </span>
+                                          <Grid item style={{ marginBottom: "12px" }}>
+                                            {renderNumberInput(v.riskManagement.frozenEscapeHour, 0, 24, "riskManagement", "frozenEscapeHour", i)}
+                                            <span style={{ paddingLeft: "10px" }}>{t("시간 동안 변동없는 경우 매도")}</span>
                                           </Grid>
-                                          <Grid
-                                            item
-                                            style={{ marginBottom: "12px" }}
-                                          >
-                                            <span
-                                              style={{ paddingRight: "10px" }}
-                                            >
+                                          <Grid item style={{ marginBottom: "12px" }}>
+                                            <span style={{ paddingRight: "10px" }}>
                                               {t("Minimum holding time")} {" : "}
                                             </span>
-                                            {renderNumberInput(
-                                              v.riskManagement.holdHour,
-                                              0,
-                                              24,
-                                              "riskManagement",
-                                              "holdHour",
-                                              i
-                                            )}{" "}
-                                            {t("hour")}
+                                            {renderNumberInput(v.riskManagement.holdHour, 0, 24, "riskManagement", "holdHour", i)} {t("hour")}
                                           </Grid>
                                         </Grid>
                                       </Grid>
@@ -3865,14 +2918,8 @@ const MarketNewProject = (props) => {
                           ))}
                         </Grid>
                       ) : (
-                        <Grid
-                          container
-                          justifyContent="center"
-                          style={{ margin: "60px 0 80px" }}
-                        >
-                          <Grid item>
-                            {t("Quant project creation is complete.")}
-                          </Grid>
+                        <Grid container justifyContent="center" style={{ margin: "60px 0 80px" }}>
+                          <Grid item>{t("Quant project creation is complete.")}</Grid>
                         </Grid>
                       )}
                     </>
@@ -3887,24 +2934,10 @@ const MarketNewProject = (props) => {
                       }}
                     >
                       <FormControl component="fieldset">
-                        <FormLabel component="legend">
-                          {t("Maximum upload time per day")} &#42;
-                        </FormLabel>
-                        <RadioGroup
-                          aria-label="dataCategory"
-                          name="dataCategory"
-                          value={dataCategory}
-                          onChange={changeDataCategory}
-                          row
-                        >
+                        <FormLabel component="legend">{t("Maximum upload time per day")} &#42;</FormLabel>
+                        <RadioGroup aria-label="dataCategory" name="dataCategory" value={dataCategory} onChange={changeDataCategory} row>
                           {planData.map((plan) => (
-                            <FormControlLabel
-                              key={`${plan[0]}_hour_button`}
-                              id={`${plan[0]}_hour_button`}
-                              value={plan[0]}
-                              control={<Radio color="primary" />}
-                              label={`${plan[0]}${t("hour")}`}
-                            />
+                            <FormControlLabel key={`${plan[0]}_hour_button`} id={`${plan[0]}_hour_button`} value={plan[0]} control={<Radio color="primary" />} label={`${plan[0]}${t("hour")}`} />
                           ))}
                         </RadioGroup>
                       </FormControl>
@@ -3931,11 +2964,7 @@ const MarketNewProject = (props) => {
                             fontSize: "18px",
                           }}
                         >
-                          {`${t("Price")}: ${retailPrice.toLocaleString()}${
-                            user.language == "ko"
-                              ? `원/월 (최대 ${maxHour}시간, 시간당 ${perHourPrice}원)`
-                              : `$/Month (Max ${maxHour}hour, Price/hour $${perHourPrice})`
-                          }
+                          {`${t("Price")}: ${retailPrice.toLocaleString()}${user.language == "ko" ? `원/월 (최대 ${maxHour}시간, 시간당 ${perHourPrice}원)` : `$/Month (Max ${maxHour}hour, Price/hour $${perHourPrice})`}
                     `}
                         </Grid>
                         {isSelectedDiscount ? (
@@ -3961,27 +2990,14 @@ const MarketNewProject = (props) => {
                       <Grid container justifyContent="flex-end" spacing={2}>
                         <Grid item>
                           {activeStep < 2 && (
-                            <Button
-                              onClick={handleBack}
-                              className={theme.defaultF0F0OutlineButton}
-                            >
+                            <Button onClick={handleBack} className={theme.defaultF0F0OutlineButton}>
                               {activeStep === 0 ? t("Cancel") : t("뒤로가기")}
                             </Button>
                           )}
                         </Grid>
                         <Grid item>
-                          <Button
-                            className={theme.defaultF0F0OutlineButton}
-                            onClick={handleNextStep}
-                            style={
-                              activeStep === steps.length - 1
-                                ? { width: "200px" }
-                                : {}
-                            }
-                          >
-                            {activeStep === steps.length - 1
-                              ? t("Go to project list")
-                              : t("Next")}
+                          <Button className={theme.defaultF0F0OutlineButton} onClick={handleNextStep} style={activeStep === steps.length - 1 ? { width: "200px" } : {}}>
+                            {activeStep === steps.length - 1 ? t("Go to project list") : t("Next")}
                           </Button>
                         </Grid>
                       </Grid>
@@ -4003,45 +3019,27 @@ const MarketNewProject = (props) => {
                           <Button
                             id="create_project_button"
                             disabled={user.me == null}
-                            className={
-                              user.me == null
-                                ? classes.defaultDisabledButton
-                                : classes.defaultGreenOutlineButton
-                            }
+                            className={user.me == null ? classes.defaultDisabledButton : classes.defaultGreenOutlineButton}
                             onClick={handleNext}
                             style={{
-                              minWidth:
-                                user.language === "ko" ? "150px" : "180px",
+                              minWidth: user.language === "ko" ? "150px" : "180px",
                               height: "30px",
                             }}
                           >
-                            {user.me == null
-                              ? t("Loading")
-                              : isFirst
-                              ? t("2 weeks free trial")
-                              : t("Next")}
+                            {user.me == null ? t("Loading") : isFirst ? t("2 weeks free trial") : t("Next")}
                           </Button>
                         </Grid>
                         {isFirst ? (
-                          <Grid
-                            xs={12}
-                            container
-                            item
-                            justifyContent="flex-end"
-                          >
+                          <Grid xs={12} container item justifyContent="flex-end">
                             <p
                               style={{
-                                width:
-                                  user.language === "ko" ? "150px" : "220px",
+                                width: user.language === "ko" ? "150px" : "220px",
                                 fontSize: "12px",
                                 color: "var(--secondary1)",
                                 textAlign: "right",
                               }}
                             >
-                              {"* " +
-                                t(
-                                  "2주 무료 사용 후 자동으로 결제가 진행됩니다."
-                                )}
+                              {"* " + t("2주 무료 사용 후 자동으로 결제가 진행됩니다.")}
                             </p>
                           </Grid>
                         ) : (
@@ -4053,29 +3051,16 @@ const MarketNewProject = (props) => {
                 </Grid>
               )}
             </Grid>
-            <Dialog
-              open={isFactorConditionDialogOpen}
-              onClose={handleFactorConditionDialogClose}
-              style={{ minWidth: "360px" }}
-              maxWidth="xs"
-            >
-              <DialogTitle style={{ color: "var(--textWhite87)" }}>
-                {isEditFactorCondition === "edit"
-                  ? t("Modifying the setting conditions")
-                  : t("Setting conditions")}
-              </DialogTitle>
-              <DialogContent
-                style={{ color: "var(--textWhite87)", minWidth: "400px" }}
-              >
+            <Dialog open={isFactorConditionDialogOpen} onClose={handleFactorConditionDialogClose} style={{ minWidth: "360px" }} maxWidth="xs">
+              <DialogTitle style={{ color: "var(--textWhite87)" }}>{isEditFactorCondition === "edit" ? t("Modifying the setting conditions") : t("Setting conditions")}</DialogTitle>
+              <DialogContent style={{ color: "var(--textWhite87)", minWidth: "400px" }}>
                 {factorConditionType === "name" ? (
                   <form onSubmit={addIndustrySector}>
                     <TextField
                       autoFocus
                       fullWidth
                       variant="standard"
-                      placeholder={t(
-                        "산업군을 입력 후 엔터를 눌러 추가해주세요."
-                      )}
+                      placeholder={t("산업군을 입력 후 엔터를 눌러 추가해주세요.")}
                       value={industrySector}
                       onChange={onChangeIndustrySector}
                       inputProps={{
@@ -4088,33 +3073,14 @@ const MarketNewProject = (props) => {
                     />
                   </form>
                 ) : (
-                  <Grid
-                    container
-                    spacing={2}
-                    alignItems="center"
-                    direction="column"
-                  >
+                  <Grid container spacing={2} alignItems="center" direction="column">
                     <Grid item>
                       <Grid container alignItems="center">
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={FCMinPercentageChecked}
-                              onClick={() => onClickFCPercentageCheck("min")}
-                              sx={{ mr: 1 }}
-                            />
-                          }
-                          label={t("Set 'Minimum' Percentage")}
-                          style={{ marginBottom: 0 }}
-                        />
+                        <FormControlLabel control={<Checkbox checked={FCMinPercentageChecked} onClick={() => onClickFCPercentageCheck("min")} sx={{ mr: 1 }} />} label={t("Set 'Minimum' Percentage")} style={{ marginBottom: 0 }} />
                         <TextField
                           type="number"
                           variant="standard"
-                          onChange={(e) =>
-                            setFactorConditionMinPercentage(
-                              e.currentTarget.value
-                            )
-                          }
+                          onChange={(e) => setFactorConditionMinPercentage(e.currentTarget.value)}
                           value={factorConditionMinPercentage}
                           inputProps={{
                             style: {
@@ -4135,25 +3101,11 @@ const MarketNewProject = (props) => {
                     </Grid>
                     <Grid item>
                       <Grid container alignItems="center">
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={FCMaxPercentageChecked}
-                              onClick={() => onClickFCPercentageCheck("max")}
-                              sx={{ mr: 1 }}
-                            />
-                          }
-                          label={t("Set 'Max' Percentage")}
-                          style={{ marginBottom: 0 }}
-                        />
+                        <FormControlLabel control={<Checkbox checked={FCMaxPercentageChecked} onClick={() => onClickFCPercentageCheck("max")} sx={{ mr: 1 }} />} label={t("Set 'Max' Percentage")} style={{ marginBottom: 0 }} />
                         <TextField
                           type="number"
                           variant="standard"
-                          onChange={(e) =>
-                            setFactorConditionMaxPercentage(
-                              e.currentTarget.value
-                            )
-                          }
+                          onChange={(e) => setFactorConditionMaxPercentage(e.currentTarget.value)}
                           value={factorConditionMaxPercentage}
                           inputProps={{
                             style: {
@@ -4176,11 +3128,7 @@ const MarketNewProject = (props) => {
                 )}
               </DialogContent>
               {factorConditionType === "name" && (
-                <Grid
-                  container
-                  spacing={1}
-                  style={{ marginBottom: "20px", padding: "0 20px" }}
-                >
+                <Grid container spacing={1} style={{ marginBottom: "20px", padding: "0 20px" }}>
                   {industrySectorArr.map((v) => (
                     <Grid item key={v}>
                       <Chip
@@ -4200,10 +3148,7 @@ const MarketNewProject = (props) => {
                 </Grid>
               )}
               <DialogActions>
-                <Button
-                  onClick={handleFactorConditionDialogClose}
-                  style={{ color: "var(--textWhite87)" }}
-                >
+                <Button onClick={handleFactorConditionDialogClose} style={{ color: "var(--textWhite87)" }}>
                   {t("Cancel")}
                 </Button>
                 <Button
@@ -4223,14 +3168,7 @@ const MarketNewProject = (props) => {
             </Dialog>
           </Grid>
         ) : (
-          <Grid
-            item
-            container
-            xs={12}
-            justifyContent="center"
-            alignItems="center"
-            style={{ paddingTop: "150px" }}
-          >
+          <Grid item container xs={12} justifyContent="center" alignItems="center" style={{ paddingTop: "150px" }}>
             <CircularProgress />
           </Grid>
         )}

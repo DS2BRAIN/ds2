@@ -61,7 +61,11 @@ const NotiPopover = ({ history }) => {
       }
     };
     return (
-      <IconButton id="noticeIcon" color="inherit" onClick={handleNotiPopOpen}>
+      <IconButton
+        id="notice_icon_btn"
+        color="inherit"
+        onClick={handleNotiPopOpen}
+      >
         <Badge
           badgeContent={notis ? (notis.length >= 30 ? "30+" : notis.length) : 0}
           color="secondary"
@@ -254,7 +258,7 @@ const NotiPopover = ({ history }) => {
                 >
                   {task.status === 100 && isButton ? (
                     <Button
-                      id={`notification${task.id}_btn`}
+                      id={`notification_${task.id}_btn`}
                       shape="greenOutlined"
                       size="sm"
                       onClick={() => {
@@ -270,7 +274,7 @@ const NotiPopover = ({ history }) => {
                     </Button>
                   ) : (
                     <Button
-                      id={`notification${task.id}_btn`}
+                      id={`notification_${task.id}_btn`}
                       shape="greenOutlined"
                       size="sm"
                       onClick={() => {
@@ -323,7 +327,7 @@ const NotiPopover = ({ history }) => {
   };
 
   return (
-    <Grid sx={{ mt: 0.25 }}>
+    <Grid id="notification_popover" sx={{ mt: 0.25 }}>
       {partNotiIcon(user.asynctasks)}
       {partNotiPop(user.asynctasks)}
     </Grid>

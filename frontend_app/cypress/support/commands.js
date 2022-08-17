@@ -27,13 +27,13 @@
 import "cypress-file-upload";
 import axios from "axios";
 
-export const backendurl = "https://dslabaa.clickai.ai/";
+export const backendurl = "https://dslabaa.ds2ai.ai/";
 //const backendurl = 'http://dslabaa.clickai.ai:13002/';
-export const labelurl = "https://staginglabelapp.clickai.ai";
+export const labelurl = "https://staginglabelapp.ds2ai.ai";
 
 export const userInfo = {
   email: "front_test@dslab.global",
-  password: "Dstest1234!",
+  password: "",
 };
 
 Cypress.Commands.add("backendUrl", () => {
@@ -93,10 +93,7 @@ Cypress.Commands.add("setProjectStatus", () => {
   axios.get(backendurl.concat(`projects/?token=` + token)).then((res) => {
     const projects = res.data;
     projects.forEach((project) => {
-      if (project.status === 1)
-        cy.exec(
-          `python3 cypress/support/projectSetting.py ${token} ${project.id}`
-        );
+      if (project.status === 1) cy.exec(`python3 cypress/support/projectSetting.py ${token} ${project.id}`);
     });
   });
 });
@@ -113,14 +110,12 @@ Cypress.Commands.add("closeChennalTalk", () => {
 
 Cypress.Commands.add("en", () => {
   //영문 변환
-  cy.get("#languageSelectForm").click({ force: true });
-  cy.get('li[data-value="en"]').click({ force: true });
+  cy.get("#language_en_btn").click({ force: true });
 });
 
 Cypress.Commands.add("ko", () => {
   //한글 변환
-  cy.get("#languageSelectForm").click({ force: true });
-  cy.get('li[data-value="ko"]').click({ force: true });
+  cy.get("#language_ko_btn").click({ force: true });
 });
 
 // Cypress.Commands.add("login", (id, password) => {
@@ -130,15 +125,9 @@ Cypress.Commands.add("ko", () => {
 //   cy.get("#signInBtn").click();
 //   cy.wait(3000);
 //   cy.url().should("include", "/admin");
-//   cy.get("#languageSelectForm").click({ force: true });
+//   cy.get("#language_select_form").click({ force: true });
 //   cy.get('li[data-value="en"]').click({ force: true });
 // });
-
-Cypress.Commands.add("ko", () => {
-  //한글 변환
-  cy.get("#languageSelectForm").click({ force: true });
-  cy.get('li[data-value="ko"]').click({ force: true });
-});
 
 Cypress.Commands.add("login", () => {
   cy.visit("/signout");
@@ -175,15 +164,9 @@ Cypress.Commands.add("loginAsync", () => {
 
 Cypress.Commands.add("checkSampleData", () => {
   cy.get("#demo-simple-select-outlined").click();
-  cy.get("#client-snackbar").should(
-    "contain",
-    "샘플데이터는 값을 변경할 수 없습니다."
-  );
+  cy.get("#client-snackbar").should("contain", "샘플데이터는 값을 변경할 수 없습니다.");
   cy.contains("START").click();
-  cy.get("#client-snackbar").should(
-    "contain",
-    "샘플데이터를 사용하여 AI 모델링을 불러옵니다."
-  );
+  cy.get("#client-snackbar").should("contain", "샘플데이터를 사용하여 AI 모델링을 불러옵니다.");
   cy.wait(10000);
 
   cy.get(".detailBtn")
@@ -203,16 +186,14 @@ Cypress.Commands.add("checkSampleData", () => {
   cy.contains('"apptoken"').should("be.visible");
   cy.contains("xhr.send(data);").should("be.visible");
   cy.get("#pythonTab").click({ force: true });
-  cy.contains(
-    'response = requests.request("POST", url, data=json.dumps(payload), headers=headers)'
-  ).should("be.visible");
+  cy.contains('response = requests.request("POST", url, data=json.dumps(payload), headers=headers)').should("be.visible");
   cy.get("#wgetTab").click({ force: true });
   cy.contains("O predict_result.txt").should("be.visible");
   cy.get("#javaTab").click({ force: true });
   cy.contains("client.newCall(request).execute();").should("be.visible");
 
   cy.get("#shareAIApp").click();
-  cy.get("#closeModal").click();
+  cy.get("#close_modal_btn").click();
 
   cy.get("#model").click();
   cy.contains("분석하기")
@@ -247,11 +228,7 @@ Cypress.Commands.add("getLabelUrl", () => {
     })
     .then(() => {
       axios
-        .get(
-          backendurl.concat(
-            `listobjects/?token=${token}&sorting=create_at&tab=prepare&count=10&start=1&labelprojectId=${labelProjectId}`
-          )
-        )
+        .get(backendurl.concat(`listobjects/?token=${token}&sorting=create_at&tab=prepare&count=10&start=1&labelprojectId=${labelProjectId}`))
         .then((res) => {
           const file = res.data.file;
           labelFileId = file[0].id;
@@ -435,11 +412,11 @@ Cypress.Commands.add("enterUserInfo", () => {
   if (cy.url().userInvocationStack.indexOf("http://localhost:3000") != -1) {
     //로컬
     cy.login();
-    cy.get("#settingLink").click({ multiple: true, force: true });
+    cy.get("#setting_link").click({ multiple: true, force: true });
     cy.url().should("include", "/admin/setting/userinfo");
   } else {
     cy.login(userInfo.email, userInfo.password);
-    cy.get("#settingLink").click({ multiple: true, force: true });
+    cy.get("#setting_link").click({ multiple: true, force: true });
     cy.url().should("include", "/admin/setting/userinfo");
   }
 });
@@ -565,14 +542,14 @@ Cypress.Commands.add("enterMenuMarketPurchaseList", () => {
 
 Cypress.Commands.add("matchClassInfo", (name, color) => {
   // 클래스명, color값이 해당 정보의 값과 동일한가?
-  cy.get("#renameInput").contains(name);
+  cy.get("#labelclass_name_input").contains(name);
   cy.get(`input[value="${color}"]`).should("exist");
 });
 
 Cypress.Commands.add("modifyClassInfo", () => {
   // 클래스명 input에 값이 변경되는가?
-  cy.get("#renameInput").clear();
-  cy.get("#renameInput")
+  cy.get("#labelclass_name_input").clear();
+  cy.get("#labelclass_name_input")
     .type(`test class${new Date().getDate()}`)
     .contains(`test class${new Date().getDate()}`);
 
@@ -588,6 +565,99 @@ Cypress.Commands.add("deleteAllClassLists", () => {
   cy.get("[type='checkbox']")
     .first()
     .check();
-  cy.get("#deleteClassBtn").click();
+  cy.get("#delete_class_btn").click();
   cy.get("#yesBtn").click();
+});
+
+Cypress.Commands.add("checkENMode", () => {
+  cy.en().then(() => {
+    // 한국어로 되어 있는 것이 언어 설정 토글 버튼만인지 판별
+    cy.contains(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/).and(($el) => {
+      expect($el).to.contain("한국어");
+    });
+  });
+
+  cy.ko();
+});
+
+Cypress.Commands.add("deleteAllRemainingClasses", () => {
+  cy.url().then((url) => {
+    let jwt = "";
+    let labelClasses = [];
+    let projectId = "";
+
+    const urlArr = url.split("/");
+    projectId = urlArr[urlArr.length - 1];
+
+    cy.getCookie("jwt")
+      .should("exist")
+      .then((c) => {
+        jwt = c.value;
+        cy.intercept("GET", `/labelclasses/?token=${jwt}&labelproject_Id=${projectId}&page=1&count=10`).as("getLabelclasses");
+
+        // '클래스'탭 선택
+        cy.get("#class_tab").click();
+
+        // 요청 response 기다렸다가 라벨 클래스 저장
+        cy.wait("@getLabelclasses", { timeout: 10000 })
+          .then((interception) => {
+            labelClasses = interception.response.body.labelclass;
+          })
+          .and(() => {
+            // 등록된 클래스가 있으면 전체 삭제
+            if (labelClasses.length > 0) {
+              cy.get('th [type="checkbox"]').check();
+              cy.contains("선택 삭제").click();
+              cy.contains("예").click();
+            }
+          });
+      });
+  });
+});
+
+Cypress.Commands.add("checkLabelListByCondition", (type, value, expected) => {
+  let optionText = "";
+  const selector = type === "asignee" ? "#work_asignee_select_box" : "#status_select_box";
+
+  switch (value) {
+    case "null":
+      optionText = "없음";
+      break;
+    case "all":
+      optionText = "전체";
+
+      break;
+    case "prepare":
+      optionText = "시작전";
+
+      break;
+    case "working":
+      optionText = "진행중";
+
+      break;
+    case "ready":
+      optionText = "오토라벨링";
+
+      break;
+    case "review":
+      optionText = "검수중";
+
+      break;
+    case "reject":
+      optionText = "반려";
+
+      break;
+    case "done":
+      optionText = "완료";
+
+      break;
+
+    default:
+      break;
+  }
+
+  cy.get(selector).select(optionText);
+  cy.get(selector).should("have.value", value);
+
+  cy.contains("라벨링 데이터가 없습니다.").should(expected ? "not.exist" : "exist");
 });

@@ -9,15 +9,8 @@ import Tip from "components/Loading/Tip.js";
 import CloseIcon from "@material-ui/icons/Close";
 import InputBase from "@material-ui/core/InputBase";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  postLabelProjectRequestAction,
-  setLabelProjectStarted,
-} from "redux/reducers/labelprojects.js";
-import {
-  askModalRequestAction,
-  openErrorSnackbarRequestAction,
-  askStartLabelProjectReqeustAction,
-} from "redux/reducers/messages.js";
+import { postLabelProjectRequestAction, setLabelProjectStarted } from "redux/reducers/labelprojects.js";
+import { askModalRequestAction, openErrorSnackbarRequestAction, askStartLabelProjectReqeustAction } from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { currentThemeColor } from "assets/jss/custom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -65,14 +58,7 @@ const StartProject = ({ history }) => {
     const tmpFiles = [];
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > user.maximumFileSize) {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t(
-              `${user.maximumFileSize /
-                1073741824}GB 크기이상의 파일은 업로드 불가합니다.`
-            )
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t(`${user.maximumFileSize / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)));
       } else {
         const name = files[idx].name;
         if (idx < 100 && /\.(jpg|jpeg|png|zip)$/g.test(name.toLowerCase())) {
@@ -81,9 +67,7 @@ const StartProject = ({ history }) => {
       }
     }
     if (tmpFiles.length === 0) {
-      dispatch(
-        openErrorSnackbarRequestAction(t(" Please upload file again"))
-      );
+      dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
       setIsUploadLoading(false);
       return;
     }
@@ -110,9 +94,7 @@ const StartProject = ({ history }) => {
     <div className={classes.modalLoading}>
       {/* <Tip /> */}
       <LinearProgress />
-      <b style={{ alignSelf: "center" }}>
-        {t("Creating project. Please wait")}
-      </b>
+      <b style={{ alignSelf: "center" }}>{t("Creating project. Please wait")}</b>
     </div>
   ) : (
     <>
@@ -127,16 +109,11 @@ const StartProject = ({ history }) => {
               }}
             >
               <CircularProgress size={20} sx={{ mb: 2 }} />
-              <b className={classes.settingFontWhite6}>
-                {t("Uploading. Please wait a moment")}
-              </b>
+              <b className={classes.settingFontWhite6}>{t("Uploading. Please wait a moment")}</b>
             </div>
           ) : (
             <GridContainer>
-              <GridItem
-                xs={9}
-                style={{ display: "flex", alignItems: "center" }}
-              >
+              <GridItem xs={9} style={{ display: "flex", alignItems: "center" }}>
                 <span
                   style={{
                     marginRight: "10px",
@@ -164,21 +141,13 @@ const StartProject = ({ history }) => {
                         <div {...getRootProps({ className: "dropzoneArea" })}>
                           <input {...getInputProps()} />
                           <p className={classes.settingFontWhite6}>
-                            {t(
-                              "파일을 드래그하거나 박스를 클릭해서 업로드해주세요!"
-                            )}
+                            {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
                             <br />
-                            {t(
-                              "이미지 파일(png/jpg/jpeg) 혹은 이미지 압축파일(zip)만 업로드 가능합니다."
-                            )}
+                            {t("이미지 파일(png/jpg/jpeg) 혹은 이미지 압축파일(zip)만 업로드 가능합니다.")}
                             <br />
-                            {t(
-                              "이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요."
-                            )}
+                            {t("이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요.")}
                             <br />
-                            {t(
-                              "용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다."
-                            )}
+                            {t("용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다.")}
                           </p>
                           <CloudUploadIcon fontSize="large" />
                         </div>
@@ -196,19 +165,14 @@ const StartProject = ({ history }) => {
                                 }}
                               >
                                 <span>
-                                  {t("Upload file")} : {t("총")}{" "}
-                                  {uploadFile.length}
+                                  {t("Upload file")} : {t("총")} {uploadFile.length}
                                   {t("")}
                                 </span>
                               </p>
                               <ul>
                                 {uploadFile.map((file, idx) => {
                                   if (idx === 10) {
-                                    return (
-                                      <li style={{ listStyle: "none" }}>
-                                        .......
-                                      </li>
-                                    );
+                                    return <li style={{ listStyle: "none" }}>.......</li>;
                                   }
                                   if (idx >= 10) {
                                     return null;
@@ -260,7 +224,7 @@ const StartProject = ({ history }) => {
         <GridContainer>
           <GridItem xs={6}>
             <Button
-              id="closeModal"
+              id="close_modal_btn"
               style={{ width: "100%" }}
               className={classes.defaultOutlineButton}
               onClick={() => {
@@ -290,12 +254,7 @@ const StartProject = ({ history }) => {
             </GridItem>
           ) : (
             <GridItem xs={6}>
-              <Button
-                id="clickNext"
-                style={{ width: "100%" }}
-                className={classes.defaultDisabledButton}
-                disabled
-              >
+              <Button id="clickNext" style={{ width: "100%" }} className={classes.defaultDisabledButton} disabled>
                 {t("Next")}
               </Button>
             </GridItem>

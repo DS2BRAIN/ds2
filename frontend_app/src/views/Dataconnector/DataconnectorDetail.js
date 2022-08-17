@@ -6,10 +6,7 @@ import { fileurl } from "controller/api";
 import { useTranslation } from "react-i18next";
 import { getDataConnectorInfoRequestAction } from "redux/reducers/projects";
 import { addIdListForLabelProjectRequestAction } from "redux/reducers/projects.js";
-import {
-  openErrorSnackbarRequestAction,
-  openSuccessSnackbarRequestAction,
-} from "redux/reducers/messages.js";
+import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 
 import Grid from "@mui/material/Grid";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -45,9 +42,7 @@ const DataconnectorDetail = ({ history, match }) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState("preview");
-  const [dataConnectorId, setDataConnectorId] = useState(
-    Number(match.params.id)
-  );
+  const [dataConnectorId, setDataConnectorId] = useState(Number(match.params.id));
   const [connectorInfo, setConnectorInfo] = useState(null);
   const [sampleData, setSampleData] = useState(null);
   const [isStartLoading, setIsStartLoading] = useState({
@@ -63,8 +58,7 @@ const DataconnectorDetail = ({ history, match }) => {
 
   const onDownloadRawData = (filepathurl) => {
     let url = "";
-    if (process.env.REACT_APP_ENTERPRISE === "true")
-      url = fileurl + "static" + filepathurl;
+    if (process.env.REACT_APP_ENTERPRISE === "true") url = fileurl + "static" + filepathurl;
     else url = filepathurl;
 
     const link = document.createElement("a");
@@ -99,36 +93,18 @@ const DataconnectorDetail = ({ history, match }) => {
         isVerify: type === "verify",
       })
       .then((res) => {
-        dispatch(
-          openSuccessSnackbarRequestAction(
-            t("A new project has been created.")
-          )
-        );
+        dispatch(openSuccessSnackbarRequestAction(t("A new project has been created.")));
         history.push(`/admin/train/` + res.data.id);
       })
       .catch((error) => {
-        if (
-          process.env.REACT_APP_ENTERPRISE !== "true" &&
-          error.response &&
-          error.response.status === 402
-        ) {
+        if (process.env.REACT_APP_ENTERPRISE !== "true" && error.response && error.response.status === 402) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
         if (JSON.stringify(error).indexOf("507") > -1) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t("The total number of data exceeded.")
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("The total number of data exceeded.")));
         } else {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t(
-                "죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요."
-              )
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
         }
       })
       .finally(() => {
@@ -151,35 +127,11 @@ const DataconnectorDetail = ({ history, match }) => {
       >
         <Grid item>
           <Grid container>
-            <Grid
-              item
-              onClick={() => handleChangeTab("preview")}
-              id="preview_tab"
-              className={
-                selectedTab === "preview"
-                  ? classes.selectedTab
-                  : classes.notSelectedTab
-              }
-              style={{ fontSize: "14px" }}
-            >
+            <Grid item onClick={() => handleChangeTab("preview")} id="preview_tab" className={selectedTab === "preview" ? classes.selectedTab : classes.notSelectedTab} style={{ fontSize: "14px" }}>
               {t("Data preview")}
             </Grid>
-            {((connectorInfo.hasLabelData &&
-              connectorInfo.label_info &&
-              Object.keys(connectorInfo.label_info).length > 0) ||
-              (connectorInfo.data_indicator &&
-                connectorInfo.data_indicator.length > 0)) && (
-              <Grid
-                item
-                onClick={() => handleChangeTab("summary")}
-                id="summary_tab"
-                className={
-                  selectedTab === "summary"
-                    ? classes.selectedTab
-                    : classes.notSelectedTab
-                }
-                style={{ fontSize: "14px" }}
-              >
+            {((connectorInfo.hasLabelData && connectorInfo.label_info && Object.keys(connectorInfo.label_info).length > 0) || (connectorInfo.data_indicator && connectorInfo.data_indicator.length > 0)) && (
+              <Grid item onClick={() => handleChangeTab("summary")} id="summary_tab" className={selectedTab === "summary" ? classes.selectedTab : classes.notSelectedTab} style={{ fontSize: "14px" }}>
                 {t("Summary")}
               </Grid>
             )}
@@ -204,26 +156,10 @@ const DataconnectorDetail = ({ history, match }) => {
         <span>
           {connectorInfo.total_count && (
             <span style={{ fontSize: 15 }}>
-              {t("Total number of datas")} :{" "}
-              <b>{connectorInfo.total_count.toLocaleString()}</b>{" "}
-              {t(
-                connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV"
-                  ? "행"
-                  : "개"
-              )}
+              {t("Total number of datas")} : <b>{connectorInfo.total_count.toLocaleString()}</b> {t(connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" ? "" : "")}
             </span>
           )}
-          {selectedTab === "preview" && (
-            <span style={{ marginLeft: 8 }}>
-              [{" "}
-              {t(
-                connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV"
-                  ? "샘플 데이터(120개행 이내)로 보여집니다."
-                  : "샘플 데이터(20장 이내)로 보여집니다."
-              )}{" "}
-              ]
-            </span>
-          )}
+          {selectedTab === "preview" && <span style={{ marginLeft: 8 }}>[ {t(connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" ? "샘플 데이터(120개행 이내)로 보여집니다." : "샘플 데이터(20장 이내)로 보여집니다.")} ]</span>}
         </span>
         <Button
           aria-controls="customized-menu"
@@ -265,13 +201,8 @@ const DataconnectorDetail = ({ history, match }) => {
 
       setConnectorInfo(connector ? connector : {});
 
-      if (
-        connector &&
-        connector.dataconnectortype?.dataconnectortypeName === "CSV"
-      ) {
-        sampleDataRaw[connector.dataconnectorName] = JSON.parse(
-          connector.sampleData
-        );
+      if (connector && connector.dataconnectortype?.dataconnectortypeName === "CSV") {
+        sampleDataRaw[connector.dataconnectorName] = JSON.parse(connector.sampleData);
       }
       setSampleData(sampleDataRaw);
     }
@@ -283,10 +214,7 @@ const DataconnectorDetail = ({ history, match }) => {
   }, [projects.isDatasetLoading]);
 
   useEffect(() => {
-    if (
-      projects.idListForLabelProject.length &&
-      projects.categoryForLabelProject
-    ) {
+    if (projects.idListForLabelProject.length && projects.categoryForLabelProject) {
       history.push("/admin/newProject/?file=ready&detail=true");
     }
   }, [projects.idListForLabelProject]);
@@ -302,13 +230,7 @@ const DataconnectorDetail = ({ history, match }) => {
     <div>
       <Grid container justifyContent="flex-end" sx={{ px: 2, mt: 2.5 }}>
         <Grid item>
-          <Button
-            id="startLabellingBtn"
-            shape="greenOutlined"
-            disabled={isDisabledStartBtn}
-            sx={startBtnStyle}
-            onClick={startLabeling}
-          >
+          <Button id="start_labelling_btn" shape="greenOutlined" disabled={isDisabledStartBtn} sx={startBtnStyle} onClick={startLabeling}>
             <span>{t("Start labeling")}</span>
             {isStartLoading["labeling"] && (
               <CircularProgress
@@ -326,14 +248,8 @@ const DataconnectorDetail = ({ history, match }) => {
         {connectorInfo.hasLabelData && (
           <>
             <Grid item>
-              <Button
-                id="start_develop_btn"
-                shape="greenOutlined"
-                disabled={isDisabledStartBtn}
-                sx={startBtnStyle}
-                onClick={() => startProject(connectorInfo.id, "normal")}
-              >
-                <span>{t("Start AI Modeling")}</span>
+              <Button id="start_develop_btn" shape="greenOutlined" disabled={isDisabledStartBtn} sx={startBtnStyle} onClick={() => startProject(connectorInfo.id, "normal")}>
+                <span>{t("Start AI developing")}</span>
                 {isStartLoading["normal"] && (
                   <CircularProgress
                     size={15}
@@ -348,13 +264,7 @@ const DataconnectorDetail = ({ history, match }) => {
               </Button>
             </Grid>
             <Grid item>
-              <Button
-                id="start_verify_btn"
-                shape="greenOutlined"
-                disabled={isDisabledStartBtn}
-                sx={startBtnStyle}
-                onClick={() => startProject(connectorInfo.id, "verify")}
-              >
+              <Button id="start_verify_btn" shape="greenOutlined" disabled={isDisabledStartBtn} sx={startBtnStyle} onClick={() => startProject(connectorInfo.id, "verify")}>
                 <span>{t("Start AI Verification")}</span>
                 {isStartLoading["verify"] && (
                   <CircularProgress
@@ -380,15 +290,7 @@ const DataconnectorDetail = ({ history, match }) => {
       <Grid container sx={{ px: 2 }}>
         {renderSubDesc()}
 
-        {selectedTab === "preview" ? (
-          <DataconnectorPreview
-            connectorInfo={connectorInfo}
-            sampleData={sampleData}
-            isDataConnectorPage
-          />
-        ) : (
-          <DataconnectorSummary connectorInfo={connectorInfo} />
-        )}
+        {selectedTab === "preview" ? <DataconnectorPreview connectorInfo={connectorInfo} sampleData={sampleData} isDataConnectorPage /> : <DataconnectorSummary connectorInfo={connectorInfo} />}
       </Grid>
     </div>
   );

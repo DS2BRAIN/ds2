@@ -79,7 +79,7 @@ const DataModalPublicData = ({
     return (
       <Grid sx={{ p: 2.5, display: "flex", justifyContent: "flex-end" }}>
         <Button
-          id="startLabellingBtn"
+          id="start_labelling_btn"
           shape="greenOutlined"
           size="lg"
           onClick={startDownload}
