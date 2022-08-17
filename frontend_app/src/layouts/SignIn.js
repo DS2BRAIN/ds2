@@ -20,8 +20,6 @@ import checkHttps, { sendErrorMessage } from "components/Function/globalFunc.js"
 import Copyright from "components/Footer/Copyright";
 import Button from "components/CustomButtons/Button";
 
-const cliedId = "1033414311470-pjcodotllde5c91klbml7ecjs32kk3rl.apps.googleusercontent.com";
-
 export default function SignIn(props) {
   const classes = currentTheme();
   const dispatch = useDispatch();
@@ -50,7 +48,6 @@ export default function SignIn(props) {
   const { t, i18n } = useTranslation();
   const logo = fileurl + "asset/front/img/logo_transparent.png";
   const visualization = fileurl + "asset/front/img/visualization.gif";
-  const google = fileurl + "asset/front/img/google.png";
   const mainImage = fileurl + "asset/front/img/img_mainCircle.png";
   const date = new Date();
 
@@ -275,20 +272,6 @@ export default function SignIn(props) {
       }
     };
 
-    const onSuccessGoogle = async (response) => {
-      const {
-        googleId,
-        tokenId,
-        profileObj: { email, name },
-      } = response;
-      let User = {
-        id: email,
-        password: googleId + "!",
-        socialType: "google",
-      };
-      await tryLogin(User);
-    };
-
     return (
       <form onSubmit={signInSubmit} style={{ flexDirection: "column", padding: "0 32px" }} className={classes.form} noValidate>
         <div
@@ -408,28 +391,6 @@ export default function SignIn(props) {
         >
           <b>{t("Log in")}</b>
         </Button>
-        {/* <div className={classes.socialLogin}>
-          <GoogleLogin
-            clientId={cliedId}
-            render={(renderProps) => (
-              <div
-                onClick={renderProps.onClick}
-                className={classes.googleLogin}
-              >
-                <img
-                  className={classes.googleImgColor}
-                  src={google}
-                  alt={"google"}
-                />
-                <span>{t("Sign in with Google")}</span>
-              </div>
-            )}
-            buttonText={t("Sign in with Google")}
-            responseType={"id_token"}
-            onSuccess={onSuccessGoogle}
-            onFailure={onFailure}
-          />
-        </div> */}
 
         <Grid container justifyContent="center">
           {process.env.REACT_APP_ENTERPRISE !== "true" && (
