@@ -26,7 +26,7 @@ import Chip from "@mui/material/Chip";
 const Dataconnector = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, projects, messages } = useSelector(
     (state) => ({
       user: state.user,
@@ -253,16 +253,16 @@ const Dataconnector = ({ history }) => {
 
   const privateTableHeads = [
     { value: "No", width: "5%", type: "dataNum" },
-    { value: "데이터명", width: "50%", type: "dataconnectorName" },
-    { value: "데이터타입", width: "10%", type: "dataconnectortype" },
-    { value: "학습가능여부", width: "10%", type: "hasLabelData" },
-    { value: "생성일", width: "15%", type: "created_at" },
-    { value: "상태", width: "10%", type: "status" },
+    { value: "Data name", width: "50%", type: "dataconnectorName" },
+    { value: "Data type", width: "10%", type: "dataconnectortype" },
+    { value: "Training availability", width: "10%", type: "hasLabelData" },
+    { value: "Date created", width: "15%", type: "created_at" },
+    { value: "Status", width: "10%", type: "status" },
   ];
   const dataStatusToText = {
-    1: { name: "업로드 중", color: "var(--secondary1)" },
-    99: { name: "에러", color: "var(--error)" },
-    100: { name: "완료", color: "var(--primary1)" },
+    1: { name: "Uploading", color: "var(--secondary1)" },
+    99: { name: "Error", color: "var(--error)" },
+    100: { name: "Completed", color: "var(--primary1)" },
   };
   const privateDataTable = () => {
     const privateDataTableBody = (priDataArr) =>
@@ -303,7 +303,7 @@ const Dataconnector = ({ history }) => {
 
                 if (tmpType === "dataNum") tmpValue = dataNum;
                 else if (tmpType === "dataconnectortype") tmpValue = rawValue.dataconnectortypeName;
-                else if (tmpType === "hasLabelData") tmpValue = rawValue ? t("Possible") : t("불Possible");
+                else if (tmpType === "hasLabelData") tmpValue = rawValue ? t("Possible") : t("Impossible");
                 else if (tmpType === "created_at") tmpValue = rawValue?.substring(0, 10);
                 else if (tmpType === "status") {
                   isStatus = true;
@@ -356,7 +356,7 @@ const Dataconnector = ({ history }) => {
               >
                 <div className={classes.tableHeader}>
                   {sortDataValue === tableHead.type && (!isSortDesc ? <ArrowUpwardIcon id={`ascend_${tableHead.type}`} className="arrow_ascend" fontSize="small" /> : <ArrowDownwardIcon id={`descend_${tableHead.type}`} className="arrow_descend" fontSize="small" />)}
-                  <b>{t(tableHead.value)}</b>
+                  <b className="capitalize">{t(tableHead.value)}</b>
                 </div>
               </TableCell>
             ))}
@@ -370,27 +370,27 @@ const Dataconnector = ({ history }) => {
   const publicTableHeads = [
     { value: "No", width: "5%", type: "dataNum", align: "center" },
     {
-      value: "미리보기",
+      value: "Preview",
       width: "12.5%",
       type: "sampleImageData",
       align: "center",
     },
     {
-      value: "데이터명",
+      value: "Data name",
       width: "15%",
       type: "dataconnectorName",
       align: "center",
     },
-    { value: "요약", width: "37.5%", type: "description", align: "left" },
+    { value: "Summary", width: "37.5%", type: "description", align: "left" },
     {
-      value: "출처",
+      value: "Reference",
       width: "15%",
       type: "reference",
       subUrl: "referenceUrl",
       align: "left",
     },
     {
-      value: "라이센스",
+      value: "License",
       width: "15%",
       type: "license",
       subUrl: "licenseUrl",
@@ -554,7 +554,7 @@ const Dataconnector = ({ history }) => {
     if (isSearchedDataNotExist)
       return (
         <Grid id="divNoDataSearchAgain" className="emptyListTable">
-          {user.language === "ko" ? `"${searchedDataValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedDataValue}"`}
+          {i18n.language === "ko" ? `"${searchedDataValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedDataValue}"`}
         </Grid>
       );
     else if (isDataNotUploaded)
@@ -841,11 +841,11 @@ const Dataconnector = ({ history }) => {
         if (lenData) {
           if (cntNotComp === 0) {
             if (lenData > 1) {
-              if (cntOther === 0) tipText = "csv 파일은 한번에 1개의 파일만 라벨링 가능합니다.";
-              else tipText = "csv 파일을 선택할 경우, 다른 확장자의 파일과 함께 라벨링이 불가능합니다.";
+              if (cntOther === 0) tipText = "If you select a csv file, only 1 csv file is allowed to start labelling.";
+              else tipText = "If you select a csv file, labelling with files with other extensions is not possible.";
             }
-          } else tipText = "완료상태인 파일로만 라벨링 프로젝트를 만들 수 있습니다.";
-        } else tipText = "라벨링을 시작하기 위해서 데이터를 선택해주세요!";
+          } else tipText = "You can only create a labeling project from files that are complete.";
+        } else tipText = "Please select data to start labelling!";
         return tipText;
       };
 
@@ -871,7 +871,7 @@ const Dataconnector = ({ history }) => {
       let isAllCompLearnable = countNotCompSelected === 0 && countImpossLearnSelected === 0;
       let isSingleOrSame = selectedDataIdList.length === 1 || (selectedDataIdList.length > 1 && countNotCsvSelected === 0);
       let isTypeDev = type === "develop";
-      let btnActionText = isTypeDev ? "AI 개발 시작하기" : "AI 검증 시작하기";
+      let btnActionText = isTypeDev ? "Start AI developing" : "Start AI verification";
 
       const startProject = async (type) => {
         // var isError = false;
@@ -897,7 +897,7 @@ const Dataconnector = ({ history }) => {
               return;
             }
             if (JSON.stringify(error).indexOf("507") > -1) dispatch(openErrorSnackbarRequestAction(t("The total number of data exceeded.")));
-            else dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
+            else dispatch(openErrorSnackbarRequestAction(t("The project was not created due to a temporary error. Please try again.")));
             setIsProjectStartLoading(false);
           });
       };
@@ -920,11 +920,11 @@ const Dataconnector = ({ history }) => {
             </Button>
           );
         } else {
-          let tooltipText = countNotCsvSelected === 0 ? `AI ${isTypeDev ? "개발" : "검증"}을 시작하기 위해서 데이터를 선택해주세요!` : `csv 파일을 선택할 경우, 다른 확장자의 파일과 함께 ${isTypeDev ? "개발" : "검증"}이 불가능합니다.`;
+          let tooltipText = countNotCsvSelected === 0 ? `Please select data to start ${isTypeDev ? "developing" : "verifying"} your AI!` : `If you select a csv file, ${isTypeDev ? "developing" : "verifying"} with files with other extensions is not possible.`;
           return btnTooltipDisabled(tooltipText);
         }
       } else {
-        let tooltipText = countNotCompSelected === 0 ? `학습 가능한 파일로만 AI ${isTypeDev ? "" : "검증" + " "}프로젝트를 만들 수 있습니다.` : `완료상태인 파일로만 AI ${isTypeDev ? "" : "검증" + " "}프로젝트를 만들 수 있습니다.`;
+        let tooltipText = countNotCompSelected === 0 ? `You can only create a AI ${isTypeDev ? "" : "verification" + " "}project from files that are learnable.` : `You can only create a AI ${isTypeDev ? "" : "verification" + " "}project from files that are complete.`;
         return btnTooltipDisabled(tooltipText);
       }
     };
@@ -951,7 +951,7 @@ const Dataconnector = ({ history }) => {
 
       return (
         <>
-          <Tooltip title={<div style={{ fontSize: "12px" }}>{`${t("학습형태별 간단한 설명과 함께 예시 템플릿이 제공됩니다.")} / ${t("Example templates are provided for each industry group.")}`}</div>} placement="bottom">
+          <Tooltip title={<div style={{ fontSize: "12px" }}>{`${t("Example templates are provided with brief explanations for each training type.")} / ${t("Example templates are provided for each industry group.")}`}</div>} placement="bottom">
             <div>
               <Button id="sampleTemplateBtn" shape="greenOutlined" onClick={openTemplate} style={{ minWidth: 150 }}>
                 {t("Sample template")}
@@ -966,7 +966,7 @@ const Dataconnector = ({ history }) => {
     };
 
     const reloadButton = (
-      <Tooltip title={<div style={{ fontSize: "12px" }}>{user.language === "ko" ? t("Data List") + " " + t("새로고침") : t("Refresh") + " " + t("데이터 리스트")}</div>} placement="top">
+      <Tooltip title={<div style={{ fontSize: "12px" }}>{t("Refresh data list")}</div>} placement="top">
         <IconButton
           id="dataset_refresh_btn"
           sx={{ p: 0 }}
@@ -1019,7 +1019,7 @@ const Dataconnector = ({ history }) => {
               {publicDataTab}
             </Grid>
             <Grid item xs={4}>
-              {isSearchHiddenForRefresh ? null : <SearchInputBox tooltipText="데이터명을 입력해주세요." setSearchedValue={setSearchedDataValue} />}
+              {isSearchHiddenForRefresh ? null : <SearchInputBox tooltipText="Enter the data name." setSearchedValue={setSearchedDataValue} />}
             </Grid>
           </Grid>
           <Grid container alignItems="center" columnSpacing={1} sx={{ mb: 2, minWidth: "850px" }}>

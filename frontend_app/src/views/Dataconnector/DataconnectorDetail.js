@@ -249,7 +249,7 @@ const DataconnectorDetail = ({ history, match }) => {
           <>
             <Grid item>
               <Button id="start_develop_btn" shape="greenOutlined" disabled={isDisabledStartBtn} sx={startBtnStyle} onClick={() => startProject(connectorInfo.id, "normal")}>
-                <span>{t("Start AI Modeling")}</span>
+                <span>{t("Start AI developing")}</span>
                 {isStartLoading["normal"] && (
                   <CircularProgress
                     size={15}
