@@ -32,8 +32,8 @@ export const backendurl = "https://dslabaa.ds2ai.ai/";
 export const labelurl = "https://staginglabelapp.ds2ai.ai";
 
 export const userInfo = {
-  email: "front_test@dslab.global",
-  password: "",
+  email: Cypress.env("email"),
+  password: Cypress.env("password"),
 };
 
 Cypress.on("uncaught:exception", (err, runnable) => {
