@@ -411,7 +411,7 @@ const LabelClass = ({ history, isMarketProject }) => {
               }}
             >
               <Button id="delete_class_btn" aria-controls="customized-menu" aria-haspopup="true" shape="redOutlined" size="sm" disabled={!Object.values(projectCheckedValue).includes(true)} style={{ marginRight: "auto" }} onClick={deleteLabelClasses}>
-                {t("Delete Selection")}
+                {t("Delete selection")}
               </Button>
               <Pagination count={totalLength ? Math.ceil(totalLength / listCnt) : 0} page={page} onChange={onChangePage} classes={{ ul: classes.paginationNum }} style={{ marginRight: "auto" }} />
             </div>

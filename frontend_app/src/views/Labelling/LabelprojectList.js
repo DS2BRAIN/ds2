@@ -356,7 +356,7 @@ const LabelprojectList = ({ history }) => {
               }}
               onClick={onAskDeleteProjects}
             >
-              {t("Delete Selection")}
+              {t("Delete selection")}
             </Button>
           )}
           <TablePagination

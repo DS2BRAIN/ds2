@@ -507,7 +507,7 @@ const Dataconnector = ({ history }) => {
           }}
           onClick={deleteDataconnector}
         >
-          {t("Delete Selection")}
+          {t("Delete selection")}
         </Button>
       );
     };
