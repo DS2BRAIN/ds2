@@ -379,7 +379,7 @@ const AutoMLProject = ({ history, route }) => {
         )}
         <Grid container justifyContent="space-between" alignItems="center">
           <Button id="deleteProject" shape="redOutlined" size="sm" disabled={!Object.values(projectCheckedValue).includes(true)} onClick={deleteProject}>
-            {t("Delete Selection")}
+            {t("Delete selection")}
           </Button>
           <TablePagination
             rowsPerPageOptions={[10, 20, 50]}

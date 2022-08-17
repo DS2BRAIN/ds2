@@ -661,7 +661,7 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
         }}
       >
         <Button id="delete_data_btn" shape="redOutlined" size="sm" disabled={!Object.values(projectCheckedValue).includes(true)} onClick={onDeleteObjectLists}>
-          {t("Delete Selection")}
+          {t("Delete selection")}
         </Button>
         <TablePagination
           rowsPerPageOptions={[10, 20, 50]}
