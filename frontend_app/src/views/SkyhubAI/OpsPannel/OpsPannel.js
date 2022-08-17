@@ -597,7 +597,7 @@ const OpsPannel = (props) => {
       })
       .then(async (res) => {
         if (res.data) {
-          dispatch(openSuccessSnackbarRequestAction(t("서버 크기 변경이 진행됩니다. 변경이 완료될 때까지 시간이 소요될 수 있습니다.")));
+          dispatch(openSuccessSnackbarRequestAction(t("Server resizing is in progress. Changes may take a while to complete.")));
           getSyncTaskData();
         }
       })
@@ -758,7 +758,7 @@ const OpsPannel = (props) => {
                   else {
                     dispatch(
                       openErrorSnackbarRequestAction(
-                        `${t("프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다.")}
+                        `${t("Deleting a project is possible after a certain period of time has passed since creation.")}
                         `
                         // ${isEnableToChange(projects.project.created_at, true)}
                         // ${t("minutes left")}
@@ -876,20 +876,20 @@ const OpsPannel = (props) => {
                                     .deleteOpsProjects([props.match.params.id])
                                     .then((res) => {
                                       if (res?.data?.failList.length == 0) {
-                                        dispatch(openSuccessSnackbarRequestAction(t("Skyhub AI 프로젝트를 삭제하였습니다.")));
+                                        dispatch(openSuccessSnackbarRequestAction(t("The Skyhub AI project has been deleted.")));
                                         props.history.push("/admin/skyhubai/");
                                       } else {
                                         setIsDeleteProjectLoading(false);
                                         setDeleteProjectModal(false);
                                         setDeleteProjectText("");
-                                        dispatch(openErrorSnackbarRequestAction(t("Skyhub AI 프로젝트 삭제를 실패하였습니다.")));
+                                        dispatch(openErrorSnackbarRequestAction(t("Failed to delete Skyhub AI project.")));
                                       }
                                     })
                                     .catch((err) => {
                                       setIsDeleteProjectLoading(false);
                                       setDeleteProjectModal(false);
                                       setDeleteProjectText("");
-                                      dispatch(openErrorSnackbarRequestAction(t("Skyhub AI 프로젝트 삭제를 실패하였습니다.")));
+                                      dispatch(openErrorSnackbarRequestAction(t("Failed to delete Skyhub AI project.")));
                                     });
                                 }
                               }}
@@ -1091,7 +1091,7 @@ const OpsPannel = (props) => {
                     </Button>
                   </Grid>
                   <Grid container item xs={4} justifyContent="center" alignItems="center">
-                    <Tooltip title={t("예측하기를 통해 데이터 축적 후 이용 가능합니다")} placement="top">
+                    <Tooltip title={t("Available after data accumulation through forecasting")} placement="top">
                       <Button
                         className={inferenceCount == 0 || existProject !== -1 ? `${newClasses.sideButton} ${classes.defaultDisabledButton}` : `${newClasses.sideButton} ${classes.defaultF0F0OutlineButton}`}
                         //className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`}
@@ -1285,7 +1285,7 @@ const OpsPannel = (props) => {
                                       else {
                                         dispatch(
                                           openErrorSnackbarRequestAction(
-                                            `${t("서버 크기 변경은 일정 시간 이후 가능합니다.")}
+                                            `${t("Server size can be changed after a certain period of time.")}
                                         `
                                             // ${isEnableToChange(
                                             //   opsServerGroup.updated_at,
@@ -1312,7 +1312,7 @@ const OpsPannel = (props) => {
                                       } else {
                                         dispatch(
                                           openErrorSnackbarRequestAction(
-                                            `${t("서버 크기 변경은 일정 시간 이후 가능합니다.")}
+                                            `${t("Server size can be changed after a certain period of time.")}
                                         `
                                             // ${isEnableToChange(
                                             //   opsServerGroup.updated_at,
@@ -1356,7 +1356,7 @@ const OpsPannel = (props) => {
                                                 marginTop: "10px",
                                               }}
                                             >
-                                              {t("해당 서버 그룹를 삭제하겠습니까?")}
+                                              {t("Are you sure you want to delete that server group?")}
                                             </Grid>
                                             {deleteTextError == true && (
                                               <Grid
@@ -1371,7 +1371,7 @@ const OpsPannel = (props) => {
                                                   marginTop: "2px",
                                                 }}
                                               >
-                                                {t("'Delete'를 정확히 입력하세요.")}
+                                                {t("Enter 'Delete' correctly.")}
                                               </Grid>
                                             )}
                                             <Grid
@@ -1393,7 +1393,7 @@ const OpsPannel = (props) => {
                                                   className: newClasses.deleteModalText,
                                                 }}
                                                 variant="outlined"
-                                                placeholder={t("'Delete'를 정확히 입력하세요.")}
+                                                placeholder={t("Enter 'Delete' correctly.")}
                                               />
                                             </Grid>
                                             <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">
@@ -1430,12 +1430,12 @@ const OpsPannel = (props) => {
                                                             getAsyncTaskData(); //sync로 바꾸고 sync에 모달창 닫기 추가 필요
                                                             setDeleteTextError(false);
                                                             getAsyncTaskData();
-                                                            dispatch(openSuccessSnackbarRequestAction(t("서버그룹을 삭제하였습니다.")));
+                                                            dispatch(openSuccessSnackbarRequestAction(t("The server group has been deleted.")));
                                                           })
                                                           .catch(() => {
                                                             setDeleteLoading(false);
                                                             setDeleteTextError(false);
-                                                            dispatch(openErrorSnackbarRequestAction(t("서버그룹을 삭제하지 못했습니다.")));
+                                                            dispatch(openErrorSnackbarRequestAction(t("Failed to delete server group.")));
                                                             setIsOpenDeleteServerGroupModal(false);
                                                           });
                                                       } else {
@@ -1586,7 +1586,7 @@ const OpsPannel = (props) => {
                     <Button className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`} onClick={() => addRegion()}>
                       {t("Add Server Group")}
                     </Button>
-                    <Tooltip title={t("예측하기를 통해 데이터 축적 후 이용 가능합니다")} placement="top">
+                    <Tooltip title={t("Available after data accumulation through forecasting")} placement="top">
                       <Button
                         className={inferenceCount == 0 || existProject !== -1 ? `${newClasses.sideButton} ${classes.defaultDisabledButton}` : `${newClasses.sideButton} ${classes.defaultF0F0OutlineButton}`}
                         //className={`analyticsBtn ${classes.defaultF0F0OutlineButton} ${newClasses.sideButton}`}
@@ -1676,7 +1676,7 @@ const OpsPannel = (props) => {
                           fontSize: "15px",
                         }}
                       >
-                        {t("원하는 용량을 변경하여 Auto Scaling 그룹의 크기를 지정합니다.")}
+                        {t("You specify the size of your Auto Scaling group by changing the desired capacity.")}
                       </Grid>
                       <Grid
                         container
@@ -1700,7 +1700,7 @@ const OpsPannel = (props) => {
                           fontSize: "15px",
                         }}
                       >
-                        {t("최대용량의 한도를 0으로 설정시 그룹 사용이 중단됩니다.")}
+                        {t("If the maximum capacity limit is set to 0, group use will be stopped.")}
                       </Grid>
                       <Grid container item xs={11} direction="column" justifyContent="flex-start" alignItems="flex-start">
                         <Grid container item xs={11} direction="column" justifyContent="flex-start" alignItems="flex-start">
@@ -1716,7 +1716,7 @@ const OpsPannel = (props) => {
                             onChange={(e) => {
                               if (+e.target.value > 4) {
                                 setServerSizeSubmitLock(true);
-                                dispatch(openSuccessSnackbarRequestAction(t("5개 이상은 영업팀 문의를 통해 이용이 가능합니다.")));
+                                dispatch(openSuccessSnackbarRequestAction(t("More than 5 items are available through inquiries from the sales team.")));
                                 openChat();
                                 setStartServerSizeToChange(5);
                               } else {
@@ -1739,7 +1739,7 @@ const OpsPannel = (props) => {
                             onChange={(e) => {
                               if (+e.target.value > 4) {
                                 setServerSizeSubmitLock(true);
-                                dispatch(openSuccessSnackbarRequestAction(t("5개 이상은 영업팀 문의를 통해 이용이 가능합니다.")));
+                                dispatch(openSuccessSnackbarRequestAction(t("More than 5 items are available through inquiries from the sales team.")));
                                 openChat();
                                 setMinServerSizeToChange(5);
                               } else {
@@ -1762,7 +1762,7 @@ const OpsPannel = (props) => {
                             onChange={(e) => {
                               if (+e.target.value > 4) {
                                 setServerSizeSubmitLock(true);
-                                dispatch(openSuccessSnackbarRequestAction(t("5개 이상은 영업팀 문의를 통해 이용이 가능합니다.")));
+                                dispatch(openSuccessSnackbarRequestAction(t("More than 5 items are available through inquiries from the sales team.")));
                                 openChat();
                                 setMaxServerSizeToChange(5);
                               } else {
@@ -1811,7 +1811,7 @@ const OpsPannel = (props) => {
                           if (minServerSizeToChange <= startServerSizeToChange && startServerSizeToChange <= maxServerSizeToChange) {
                             if (isEnableToChange(seletedServerGroup.updated_at)) changeSize();
                             else {
-                              openErrorSnackbarRequestAction(t("최근에 변경된 서버입니다. 잠시후에 다시 시도해 주시기 바랍니다"));
+                              openErrorSnackbarRequestAction(t("This server has recently changed. Please try again later."));
                             }
                           } else {
                             dispatch(openErrorSnackbarRequestAction(t("Invalid input.")));
@@ -2036,7 +2036,7 @@ const OpsPannel = (props) => {
                     fontWeight: "400",
                   }}
                 >
-                  {t("링크 공유 시 소모되는 예측 카운트는 동일하게 적용되니 이용에 참고해주시길 바랍니다.")}
+                  {t("Please note that you will consume the same amount of prediction counting when you share link.")}
                 </div>
               </GridItem>
               <GridItem xs={9}></GridItem>

@@ -263,7 +263,7 @@ const NewOpsProject = (props) => {
   return (
     <div>
       <div style={defaultStyles.div_title}>{t("Create a Inference Server")}</div>
-      <div style={defaultStyles.div_detail}>{!IS_ENTERPRISE && t("가장 인기있는 몇 가지 옵션을 권장하지만 필요에 따라 서버를 자유롭게 맞춤 설정할 수 있습니다.")}</div>
+      <div style={defaultStyles.div_detail}>{!IS_ENTERPRISE && t("We've recommended some of our most popular options, but feel free to customize your server to your needs")}</div>
       {/* Cloud Provider & Region   :  Section_1 */}
       <div>
         <Grid container item xs={12} justify="space-between" alignItems="center">
@@ -304,7 +304,7 @@ const NewOpsProject = (props) => {
       {!IS_ENTERPRISE ? (
         <>
           <Grid container item xs={12} alignItems="left" style={{ marginTop: 15, marginBottom: 15 }}>
-            {t("종량제입니다. 시간당 비용이 청구되며 언제든지 서버를 종료 할 수 있습니다.")}
+            {t("Pay-as-you-go! You will be billed hourly and can terminate your server anytime.")}
             {t("Excludes variable data Transfer, backup, and taxes.")}
             {warning !== "" && (
               <Grid className={classes.Grid_warning} container item xs={4} justify="center" alignItems="center">

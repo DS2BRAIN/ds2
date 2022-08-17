@@ -305,7 +305,7 @@ const Labelling = ({ history }) => {
       await history.push(`/admin/labelling/${project.id}`);
       return;
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("완료 상태인 프로젝트만 조회 가능합니다.")));
+      dispatch(openErrorSnackbarRequestAction(t("Only projects in the completed status can be viewed.")));
       return;
     }
   };
@@ -463,7 +463,7 @@ const Labelling = ({ history }) => {
               }}
               onClick={onAskDeleteProjects}
             >
-              {t("선택 삭제")}
+              {t("Delete selection")}
             </Button>
           )}
           <TablePagination
@@ -507,7 +507,7 @@ const Labelling = ({ history }) => {
         })
       );
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("검색어를 입력해주세요.")));
+      dispatch(openErrorSnackbarRequestAction(t("Please enter a search term.")));
       return;
     }
   };
@@ -541,7 +541,7 @@ const Labelling = ({ history }) => {
 
   return (
     <>
-      <ReactTitle title={"DS2.ai - " + t("라벨링")} />
+      <ReactTitle title={"DS2.ai - " + t("Labeling")} />
       {introOn ? (
         <LabelIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} userLang={user.language} />
       ) : (
@@ -576,15 +576,15 @@ const Labelling = ({ history }) => {
               >
                 <div className={classes.bannerSubText}>{t("딥러닝 기반의 데이터 라벨링 자동화를 통해 시간과 비용을 절약해보세요.")}</div>
                 <Button className={classes.bannerButton} onClick={onOpenBannerChatbot}>
-                  {t("문의하기")}
+                  {t("Contact us")}
                 </Button>
               </div>
             </div>
           )}
           <GridItem xs={12}>
-            <div className={classes.topTitle}>{t("학습데이터 라벨링")}</div>
+            <div className={classes.topTitle}>{t("Training Data Labeling")}</div>
             <div className={classes.subTitleText} style={{ marginBottom: "20px" }}>
-              {t("딥러닝 기반의 인공지능 학습을 위한 라벨링 툴입니다.")}
+              {t("Labeling tool for deep learning-based AI training.")}
             </div>
           </GridItem>
           <div>
@@ -601,7 +601,7 @@ const Labelling = ({ history }) => {
               <GridContainer style={{ paddingTop: "24px" }}>
                 <GridItem xs={7} style={{ display: "flex", alignItems: "center" }}>
                   <Button id="addProjcetBtn" className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH35}`} onClick={onStartLabelProject}>
-                    {t("라벨링 시작하기")}
+                    {t("Start labeling")}
                   </Button>
                   {/* {user.me &&
                         !user.me?.isAiTrainer &&
@@ -621,15 +621,15 @@ const Labelling = ({ history }) => {
                             }}
                           >
                             <AddIcon id="askLabelIcon" />
-                            {t("라벨링 의뢰하기")}
+                            {t("Labeling request")}
                           </Button>
                         )} */}
                 </GridItem>
                 <GridItem xs={5}>
-                  <Tooltip title={<text style={{ fontSize: "12px" }}>{t("프로젝트명을 입력해주세요.")}</text>} placement="top">
+                  <Tooltip title={<text style={{ fontSize: "12px" }}>{t("Enter the project name")}</text>} placement="top">
                     <form onSubmit={(e) => onGetSearchedProject(e)} className={classes.form} style={{ justifyContent: "flex-end" }} noValidate id="labeling_search_form">
                       <Paper component="form" className={classes.searchBox} style={{ height: "40px", width: "15vw" }}>
-                        <InputBase className={classes.input} placeholder={t("검색")} value={searchedValue} onChange={onSearchProject} multiline={false} id="searchInput" style={{ fontSize: "16px", paddingLeft: "10px" }} />
+                        <InputBase className={classes.input} placeholder={t("Search")} value={searchedValue} onChange={onSearchProject} multiline={false} id="searchInput" style={{ fontSize: "16px", paddingLeft: "10px" }} />
                         {searchedValue && searchedValue.length > 0 && <CloseIcon id="searchIcon" onClick={onGetDefaultProject} className={classes.pointerCursor} />}
                       </Paper>
                       {searchedValue && searchedValue.length > 0 && <SearchIcon onClick={(e) => onGetSearchedProject(e)} className={classes.pointerCursor} />}
@@ -649,7 +649,7 @@ const Labelling = ({ history }) => {
                         height: "20vh",
                       }}
                     >
-                      {isShared ? t("공유받은 라벨프로젝트가 없습니다.") : user.me?.isAiTrainer ? t("의뢰중인 라벨링 프로젝트가 없습니다.") : t("진행중인 라벨링 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.")}
+                      {isShared ? t("No Shared Label projects") : user.me?.isAiTrainer ? t("의뢰중인 라벨링 프로젝트가 없습니다.") : t("진행중인 라벨링 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.")}
                     </div>
                   )}
                 </GridItem>
@@ -675,7 +675,7 @@ const Labelling = ({ history }) => {
               />
               <div className={classes.planModalTitle}>
                 <div id="gradientTitle" className={classes.planModalTitleFont}>
-                  {t("사용중인 플랜을 업그레이드 해보세요!")}
+                  {t("Upgrade your plan!")}
                 </div>
               </div>
               <Plans onOpenChatbot={onOpenChatbot} />
@@ -706,21 +706,21 @@ const Labelling = ({ history }) => {
                 <img style={{ width: "124px" }} src={logoBlue} alt={"logo"} className={classes.logo} />
                 <div style={{ padding: "30px 0" }}>
                   <div className={classes.upgradePlanModalTitle}>
-                    <div style={{ marginBottom: "10px" }}>{t("물체인식 자동 라벨링을")}</div>
+                    <div style={{ marginBottom: "10px" }}>{t("Experience object recognition automatic labeling.")}</div>
                     <div>{t("경험해보세요.")}</div>
                   </div>
                   <div className={classes.upgradePlanModalContent}>
                     <div style={{ marginBottom: "-8px" }}>{t("Active Learning이 접목된 자동 라벨링 기능을 활용하여")}</div>
                     <div>{t("물체인식에 소요되는 시간과 비용을 절약할 수 있습니다.")}</div>
                   </div>
-                  <div className={classes.upgradePlanSubTitle}>{t("해당 옵션은 Enterprise plan에서만 제공합니다.")}</div>
+                  <div className={classes.upgradePlanSubTitle}>{t("This option is only available on the Enterprise plan.")}</div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <Button style={{ width: "220px", height: "36px" }} className={classes.defaultHighlightButton} onClick={onOpenChatbot}>
-                    {t("Enterprise Plan 문의하기")}
+                    {t("Enterprise plan inquiry")}
                   </Button>
                   <a href="https://clickai.ai/pricing.html" target="_blank" className={classes.planPolicyBtn}>
-                    {t("CLICK AI 가격정책 알아보기")}
+                    {t("CLICK AI Pricing")}
                   </a>
                 </div>
               </div>

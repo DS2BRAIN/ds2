@@ -367,7 +367,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
               {projects.project.trainingMethod === "time_series_regression" ? (
                 <div style={{ marginLeft: "40px" }}>
                   <div>
-                    RMSE : {t("평균 제곱근 오차로써 연속값을 예측할때 사용되는 지표입니다. RMSE 값이 낮을수록 근접하게 예측합니다.")}{" "}
+                    RMSE : {t("This is an index used when predicting continuous values ​​(e.g., between 1 and 1000) as the root mean square error. The lower the RMSE value, the more accurate the prediction is.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/Root-mean-square_deviation"} target={"_blank"} style={{ fontSize: "1rem" }}>
                       ({t("See details")})
                     </a>
@@ -379,7 +379,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                     </a>
                   </div>
                   <div>
-                    MAE : {t("예측값과 실제값의 차이의 절대 값을 취하여 해당 평가 예측에 대한 오차를 측정합니다.")}{" "}
+                    MAE : {t("It is the difference between the predicted value and the actual value divided by the average variation.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/Mean_absolute_error"} target={"_blank"} style={{ fontSize: "1rem" }}>
                       ({t("See details")})
                     </a>
@@ -388,13 +388,13 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
               ) : projects.project.trainingMethod === "normal_regression" ? (
                 <div style={{ marginLeft: "40px" }}>
                   <div>
-                    R2 : {t("모델이 데이터를 얼마나 잘 설명하는지 나타내는 지표입니다. 0~1 값을 가질 수 있으며, 1에 가까울수록 모델이 데이터와 연관성이 높다고 할 수 있습니다.")}{" "}
+                    R2 : {t("It is an indicator of how well the model explains the data. It can have a value of 0 to 1, and the closer it is to 1, the higher the model is related to the data.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/Coefficient_of_determination"} target={"_blank"} style={{ fontSize: "1rem" }}>
                       ({t("See details")})
                     </a>
                   </div>
                   <div>
-                    MAE : {t("예측값과 실제값의 차이의 절대 값을 취하여 해당 평가 예측에 대한 오차를 측정합니다.")}{" "}
+                    MAE : {t("It is the difference between the predicted value and the actual value divided by the average variation.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/Mean_absolute_error"} target={"_blank"} style={{ fontSize: "1rem" }}>
                       ({t("See details")})
                     </a>
@@ -402,7 +402,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                 </div>
               ) : projects.project.trainingMethod === "cycle_gan" ? (
                 <div style={{ marginLeft: "40px" }}>
-                  <div>Total Loss : {t("이미지 생성(GAN) 에서의 Loss는 오토 파라미터의 구실을 하는 것이여서 이미지 유사도에 대한 평가지표가 되진 않습니다.")}</div>
+                  <div>Total Loss : {t("Loss in Image Generation (GAN) is an auto parameter, so it is not an evaluation index for image similarity.")}</div>
                   <div>
                     Error Rate : {t("Indicates the percentage of errors that occurred when sampling.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/Generalization_error"} target={"_blank"} style={{ fontSize: "1rem" }}>
@@ -410,7 +410,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                     </a>
                   </div>
                   <div>
-                    Dice : {t("실제 값과 예측 값의 유사성을 측정하기 위해 사용되는 샘플 계수입니다.")}{" "}
+                    Dice : {t("A sample coefficient used to measure the similarity between the actual and predicted values.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient"} target={"_blank"} style={{ fontSize: "1rem" }}>
                       ({t("See details")})
                     </a>
@@ -431,7 +431,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                     </a>
                   </div>
                   <div>
-                    Dice : {t("실제 값과 예측 값의 유사성을 측정하기 위해 사용되는 샘플 계수입니다.")}{" "}
+                    Dice : {t("A sample coefficient used to measure the similarity between the actual and predicted values.")}{" "}
                     <a href={"https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient"} target={"_blank"} style={{ fontSize: "1rem" }}>
                       ({t("See details")})
                     </a>
@@ -488,7 +488,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                 <YAxis />
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
-                Loss : {t("딥러닝 학습에 사용되는 손실 함수입니다. 학습이 진행 될수록 값이 낮아져야 좋은 모델이 생성됩니다.")}{" "}
+                Loss : {t("Loss function is used for deep learning. As learning progresses, the lower the values are the better model becomes.")}{" "}
                 <a href={"https://en.wikipedia.org/wiki/Loss_function"} target={"_blank"} style={{ fontSize: "1rem" }}>
                   ({t("See details")})
                 </a>
@@ -511,13 +511,13 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
                 <div>
-                  Precision : {t("예측 값이 참일 때 실제 값이 참인 비율입니다. 값이 1에 근접할 수록 좋은 모델이라고 볼 수 있습니다.")}{" "}
+                  Precision : {t("The ratio of the actual value being true when the predicted value is true. The closer the ratio is to 1, the better the model is.")}{" "}
                   <a href={"https://en.wikipedia.org/wiki/Precision_and_recall#Precision"} target={"_blank"} style={{ fontSize: "1rem" }}>
                     ({t("See details")})
                   </a>
                 </div>
                 <div>
-                  Recall : {t("실제 값이 참일 때 예측 값이 참인 비율입니다. 값이 1에 근접할 수록 좋은 모델이라고 볼 수 있습니다.")}{" "}
+                  Recall : {t("The ratio of the predicted value being true when the actual value is true. The closer the ratio is to 1, the better the model is.")}{" "}
                   <a href={"https://en.wikipedia.org/wiki/Precision_and_recall#Recall"} target={"_blank"} style={{ fontSize: "1rem" }}>
                     ({t("See details")})
                   </a>
@@ -541,13 +541,13 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
                 <div>
-                  Kappa_score : {t("모델 신뢰도를 측정하는데 사용되는 통계량입니다. 값이 1에 근접할 수록 모델의 신뢰도가 높습니다.")}{" "}
+                  Kappa_score : {t("This is the statistic used to measure model reliability. The closer the value is to 1, the more reliable the model is.")}{" "}
                   <a href={"https://en.wikipedia.org/wiki/Cohen%27s_kappa"} target={"_blank"} style={{ fontSize: "1rem" }}>
                     ({t("See details")})
                   </a>
                 </div>
                 <div>
-                  Matthews_corrcoef : {t("모델 신뢰도를 측정하는데 사용되는 통계량입니다. 값이 1에 근접할 수록 모델의 신뢰도가 높습니다.")}{" "}
+                  Matthews_corrcoef : {t("This is the statistic used to measure model reliability. The closer the value is to 1, the more reliable the model is.")}{" "}
                   <a href={"https://en.wikipedia.org/wiki/Matthews_correlation_coefficient"} target={"_blank"} style={{ fontSize: "1rem" }}>
                     ({t("See details")} )
                   </a>
@@ -571,13 +571,13 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
                 <div>
-                  AUROC : {t("FPR (False Positive Rate )에 대한 TPR (True Positive Rate) 을 플로팅하여 생성된 곡선의 면적 값을 계산합니다. 값이 1에 근접할 수록 모델의 신뢰도가 높습니다.")}{" "}
+                  AUROC : {t("Calculate the area value of the generated curve by plotting the True Positive Rate (TPR) against the False Positive Rate (FPR). The closer the value is to 1, the more reliable the model is.")}{" "}
                   <a href={"https://en.wikipedia.org/wiki/Receiver_operating_characteristic"} target={"_blank"} style={{ fontSize: "1rem" }}>
                     ({t("See details")})
                   </a>
                 </div>
                 <div>
-                  F_beta : {t("모델 신뢰도를 측정하는데 사용되는 통계량입니다. 값이 1에 근접할 수록 모델의 신뢰도가 높습니다.")}{" "}
+                  F_beta : {t("This is the statistic used to measure model reliability. The closer the value is to 1, the more reliable the model is.")}{" "}
                   <a href={"https://en.wikipedia.org/wiki/F1_score"} target={"_blank"} style={{ fontSize: "1rem" }}>
                     ({t("See details")})
                   </a>
@@ -663,7 +663,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                 {/* <YAxis domain={[0, 1]}/> */}
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
-                <div>Loss : {t("이미지 생성(GAN) 에서의 Loss는 오토 파라미터의 구실을 하는 것이여서 이미지 유사도에 대한 평가지표가 되진 않습니다.")}</div>
+                <div>Loss : {t("Loss in Image Generation (GAN) is an auto parameter, so it is not an evaluation index for image similarity.")}</div>
               </div>
             </div>
           </div>
@@ -682,7 +682,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                 {/* <YAxis domain={[0, 1]}/> */}
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
-                <div>Loss : {t("이미지 생성(GAN) 에서의 Loss는 오토 파라미터의 구실을 하는 것이여서 이미지 유사도에 대한 평가지표가 되진 않습니다.")}</div>
+                <div>Loss : {t("Loss in Image Generation (GAN) is an auto parameter, so it is not an evaluation index for image similarity.")}</div>
               </div>
             </div>
           </div>
@@ -701,7 +701,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                 {/* <YAxis domain={[0, 1]}/> */}
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
-                <div>Loss : {t("이미지 생성(GAN) 에서의 Loss는 오토 파라미터의 구실을 하는 것이여서 이미지 유사도에 대한 평가지표가 되진 않습니다.")}</div>
+                <div>Loss : {t("Loss in Image Generation (GAN) is an auto parameter, so it is not an evaluation index for image similarity.")}</div>
               </div>
             </div>
           </div>
@@ -720,7 +720,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                 {/* <YAxis domain={[0, 1]}/> */}
               </LineChart>
               <div style={{ marginLeft: "40px" }}>
-                <div>Loss : {t("이미지 생성(GAN) 에서의 Loss는 오토 파라미터의 구실을 하는 것이여서 이미지 유사도에 대한 평가지표가 되진 않습니다.")}</div>
+                <div>Loss : {t("Loss in Image Generation (GAN) is an auto parameter, so it is not an evaluation index for image similarity.")}</div>
               </div>
             </div>
           </div>

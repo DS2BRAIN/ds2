@@ -118,7 +118,7 @@ const EngineAILists = ({ history }) => {
         return;
       }
       if (completed < 40) {
-        if (completed >= 10) setLoadingMessage(t("모델 다운로드 중입니다. 모델 파일 크기에 따라 3~5 분 이상 소요될 수 있습니다."));
+        if (completed >= 10) setLoadingMessage(t("The model is downloading. This may take 3-5 minutes or longer depending on the size of the model file."));
         setTimeout(() => {
           setCompleted(tempCompleted);
         }, 3000);
@@ -177,7 +177,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
         }
       });
   };
@@ -206,7 +206,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
         }
       });
   };
@@ -230,7 +230,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 즐겨찾기 목록을 가져오는데 실패했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we can’t load your Favorites list. Please try again in a moment")));
         }
       });
   };
@@ -245,7 +245,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we can’t add it to your Favorites. Please try again in a moment")));
         }
       });
   };
@@ -382,7 +382,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 업로드하신 파일을 분석하지 못했습니다. 다른 파일을 업로드해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the file you uploaded. Please upload a different file")));
         }
         setApiLoading("");
       })
@@ -511,7 +511,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 업로드하신 파일을 분석하지 못했습니다. 다른 파일을 업로드해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the file you uploaded. Please upload a different file")));
         }
         setApiLoading("");
       })
@@ -544,7 +544,7 @@ const EngineAILists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 업로드하신 파일을 분석하지 못했습니다. 다른 파일을 업로드해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the file you uploaded. Please upload a different file")));
         }
         setApiLoading("");
       })
@@ -809,7 +809,7 @@ const EngineAILists = ({ history }) => {
                 showPreviewsInDropzone={false}
                 maxFileSize={2147483648}
                 dialogTitle={t("Upload text")}
-                dropzoneText={t("드래그 앤 드롭으로 텍스트(txt/csv) 파일을 업로드해주세요.")}
+                dropzoneText={t("Drag and drop the text (txt/csv) file to upload")}
                 filesLimit={1}
                 maxWidth={"xs"}
                 fullWidth={false}
@@ -851,7 +851,7 @@ const EngineAILists = ({ history }) => {
                 showPreviewsInDropzone={false}
                 maxFileSize={2147483648}
                 dialogTitle={t("Upload image")}
-                dropzoneText={t("드래그 앤 드롭으로 이미지 파일을 업로드해주세요.")}
+                dropzoneText={t(" Drag and drop the image file to upload")}
                 filesLimit={1}
                 maxWidth={"xs"}
                 fullWidth={false}
@@ -892,7 +892,7 @@ const EngineAILists = ({ history }) => {
                 showPreviewsInDropzone={false}
                 maxFileSize={2147483648}
                 dialogTitle={t("Upload audio")}
-                dropzoneText={t("드래그 앤 드롭으로 오디오 파일('mp4','mp3','wav','flac')을 업로드해주세요.")}
+                dropzoneText={t(" Drag and drop the audio ('mp4', 'mp3', 'wav', 'flac') file to upload")}
                 filesLimit={1}
                 maxWidth={"xs"}
                 fullWidth={false}
@@ -1148,7 +1148,7 @@ const EngineAILists = ({ history }) => {
                   showPreviewsInDropzone={false}
                   maxFileSize={2147483648}
                   dialogTitle={t("Upload image")}
-                  dropzoneText={t("드래그 앤 드롭으로 이미지 파일을 업로드해주세요.")}
+                  dropzoneText={t(" Drag and drop the image file to upload")}
                   filesLimit={1}
                   maxWidth={"xs"}
                   fullWidth={false}

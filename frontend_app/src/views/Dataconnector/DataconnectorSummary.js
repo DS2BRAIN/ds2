@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import currentTheme from "assets/jss/custom";
 import { useTranslation } from "react-i18next";
@@ -21,9 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const DataconnectorSummary = ({ connectorInfo }) => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const classes = currentTheme();
-  const { user } = useSelector((state) => ({ user: state.user }));
 
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const [selectedClsInfo, setSelectedClsInfo] = useState(null);
@@ -37,31 +34,27 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   };
 
   const onClickMoreBtn = (id) => {
-    const tmpInfo = connectorInfo.label_info.filter(
-      (v) => v.labelclass_id === id
-    );
+    const tmpInfo = connectorInfo.label_info.filter((v) => v.labelclass_id === id);
     setSelectedClsInfo(tmpInfo[0]);
     handleImgModalOpen();
   };
 
   let TABLE_HEADS = [
     { value: "no", name: "No", width: "5%" },
-    { value: "color", name: "Color", width: "10%" },
+    { value: "color", name: t("Color"), width: "10%" },
     { value: "class", name: t("Class"), width: "25%" },
-    { value: "box", name: t(""), width: "12%" },
-    { value: "polyline", name: t(""), width: "12%" },
-    { value: "polyline", name: t(""), width: "12%" },
+    { value: "box", name: t("Number of boxes"), width: "12%" },
+    { value: "polyline", name: t("Number of polylines"), width: "12%" },
+    { value: "polygon", name: t("Number of polygons"), width: "12%" },
     { value: "label_count", name: t("Number of Labeling"), width: "12%" },
-    { value: "ratio", name: t(""), width: "12%" },
+    { value: "ratio", name: t("Ratio"), width: "12%" },
   ];
 
   if (connectorInfo.trainingMethod === "image") {
-    TABLE_HEADS = TABLE_HEADS.filter(
-      (v, i) => !["color", "box", "polyline", "polygon"].includes(v.value)
-    );
+    TABLE_HEADS = TABLE_HEADS.filter((v) => !["color", "box", "polyline", "polygon"].includes(v.value));
     TABLE_HEADS.push({
       value: "sample_img",
-      name: t(""),
+      name: t("Labeling image"),
       width: "30%",
     });
   } else {
@@ -94,9 +87,7 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   ];
 
   if (connectorInfo.trainingMethod === "image") {
-    TABLE_BODYS = TABLE_BODYS.filter(
-      (v, i) => !["color", "box", "polyline", "polygon"].includes(v.name)
-    );
+    TABLE_BODYS = TABLE_BODYS.filter((v) => !["color", "box", "polyline", "polygon"].includes(v.name));
     TABLE_BODYS.push({ name: "images", type: "array" });
   } else {
     if (connectorInfo.dataconnectortype.dataconnectortypeName === "CSV") {
@@ -266,21 +257,12 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table
-          className={classes.table}
-          sx={{ minWidth: 650 }}
-          aria-label="simple table"
-        >
+        <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow sx={{ borderBottom: "2px solid var(--textWhite38)" }}>
-              {TABLE_HEADS.map((v, i) => {
+              {TABLE_HEADS.map((v) => {
                 return (
-                  <TableCell
-                    className={classes.tableHead}
-                    width={v.width}
-                    align="center"
-                    sx={{ color: "var(--textMediumGrey)" }}
-                  >
+                  <TableCell className={classes.tableHead} width={v.width} align="center" sx={{ color: "var(--textMediumGrey)" }}>
                     {v.name}
                   </TableCell>
                 );
@@ -325,16 +307,11 @@ const DataconnectorSummary = ({ connectorInfo }) => {
                   }}
                 >
                   <span>
-                    {t("Number of Labeling")} :{" "}
-                    {selectedClsInfo.count &&
-                      selectedClsInfo.count.toLocaleString()}
+                    {t("Number of Labeling")} : {selectedClsInfo.count && selectedClsInfo.count.toLocaleString()}
                   </span>
                   <span style={{ margin: "0 4px" }}>/</span>
                   <span>
-                    {t("")} :{" "}
-                    {selectedClsInfo.ratio &&
-                      Number(selectedClsInfo.ratio).toFixed(2)}
-                    %
+                    {t("Ratio of Total Labeling")} : {selectedClsInfo.ratio && Number(selectedClsInfo.ratio).toFixed(2)}%
                   </span>
                 </p>
               </Grid>

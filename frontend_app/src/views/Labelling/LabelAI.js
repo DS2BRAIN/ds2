@@ -189,7 +189,7 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
 
   const onOpenAutoLabellingForObjectDetect = (id, index) => {
     if (!has100LabelingPerLabelClasses()) {
-      dispatch(openErrorSnackbarRequestAction(t("오토 라벨링을 시작하기 위해서는 학습 데이터로 쓰일 라벨 클래스당 100개의 라벨이 필요합니다.")));
+      dispatch(openErrorSnackbarRequestAction(t("To start Auto Labeling, you need 100 labels per class for training data")));
       return;
     }
     // if(isAutoLabelingRunning){
@@ -339,7 +339,7 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
         if (e.response && e.response.data[1].message) {
           dispatch(openErrorSnackbarRequestAction(t(e.response.data[1].message)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
         }
       })
       .finally(() => {
@@ -376,7 +376,7 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
                 </div>
               </TableCell>
               <TableCell className={classes.tableHead} align="center" style={{ width: "10%", cursor: "pointer" }} onClick={() => onSetSortValue("accuracy")}>
-                <Tooltip title={<text style={{ fontSize: "11px" }}>{t("모델의 정확도를 나타냅니다. ACCURACY 값이 높을수록 정확하게 예측합니다.")}</text>} placement="top-end">
+                <Tooltip title={<text style={{ fontSize: "11px" }}>{t("Indicates the accuracy of the model. The higher the ACCURACY value, the more accurate the prediction is.")}</text>} placement="top-end">
                   <div className={classes.tableHeader}>
                     {sortValue === "accuracy" && (sortObj[sortValue] === "down" ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
                     <b>{t("Accuracy")}</b>
@@ -393,7 +393,7 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
                 </Tooltip>
               </TableCell>
               <TableCell className={classes.tableHead} align="center" style={{ width: "10%", cursor: "pointer" }} onClick={() => onSetSortValue("errorRate")}>
-                <Tooltip title={<text style={{ fontSize: "11px" }}>{t("샘플링을 할 때 생긴 오류의 비율을 나타냅니다. 값이 낮을수록 예측 오류가 나올 확률이 낮아집니다.")}</text>} placement="top-end">
+                <Tooltip title={<text style={{ fontSize: "11px" }}>{t("Indicates the percentage of errors that occurred when sampling. The lower the value, the lower the probability of an error.")}</text>} placement="top-end">
                   <div className={classes.tableHeader}>
                     {sortValue === "errorRate" && (sortObj[sortValue] === "down" ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
                     <b>Error Rate</b>
@@ -410,7 +410,7 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
                 </Tooltip>
               </TableCell>
               <TableCell className={classes.tableHead} align="center" style={{ width: "10%", cursor: "pointer" }} onClick={() => onSetSortValue("dice")}>
-                <Tooltip title={<text style={{ fontSize: "11px" }}>{t("실제 값과 예측 값의 유사성을 측정하기 위해 사용되는 샘플 계수입니다. DICE 값이 높을수록 유사성이 높습니다.")}</text>} placement="top-end">
+                <Tooltip title={<text style={{ fontSize: "11px" }}>{t("A sample coefficient used to measure the similarity between the actual and predicted value. The higher the value of the DICE, the higher the similarity.")}</text>} placement="top-end">
                   <div className={classes.tableHeader}>
                     {sortValue === "dice" && (sortObj[sortValue] === "down" ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
                     <b>Dice</b>
@@ -563,25 +563,25 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
                   </div>
                   <div>
                     <br />
-                    {t("오토라벨링은 준비, 1차, 2차, 3차로 순으로 진행되며, 단계가 올라갈 수록 정확도가 높아집니다.")}
+                    {t("Autolabeling proceeds in the order of preparation, 1st, 2nd, 3rd step, The higher the value, the higher the accuracy.")}
                     <br />
-                    {t("오토라벨링 준비단계는 오토라벨링 진행시 정확한 라벨링을 위하여 준비하는 단계로 생각할 수 있습니다.")}
+                    {t("The auto-labeling preparation stage can be thought of as a preparation stage for accurate labeling during auto-labeling.")}
                     <br />
-                    {t("2차 오토라벨링은 평균 정확도 80%이상, 3차 오토라벨링은 평균 정확도 90% 이상을 기대할 수 있습니다.")}
+                    {t("You can expect an average accuracy of 80% or more for the 2nd auto-labeling, and an average accuracy of 90% or more for the 3rd auto-labeling.")}
                     <br />
                     <br />
                     {t("** step by step")}
                     <br />
                     {t("Ready=Test the feasibility of 100 labeling data")}
                     <br />
-                    {t("1차= 100개 라벨링 데이터로 인공지능 개발 및 900개 라벨링 데이터 결과 확인 및 검수")}
+                    {t("1st = artificial intelligence development with 100 labeling data and 900 labeling data result confirmation and inspection")}
                     <br />
-                    {t("2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수")}
+                    {t("Secondary = artificial intelligence development with 1,000 labeling data and 9,000 labeling data result confirmation and verification")}
                     <br />
-                    {t("2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수")}
+                    {t("Secondary = artificial intelligence development with 1,000 labeling data and 9,000 labeling data result confirmation and verification")}
                     <br />
                     <br />
-                    {t("오토라벨링 결과를 검수하면 그의 10배 라벨링을 다시 오토라벨링을 통해 하실 수 있습니다. 진행하시겠습니까?")}
+                    {t("If you review the results of auto-labeling, you can do 10 times more auto-labeling projects at once. Would you like to proceed to review?")}
                   </div>
                   <div className={classes.buttonContainer}>
                     <GridItem xs={6}>

@@ -98,7 +98,7 @@ const FavoriteLists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 즐겨찾기 목록을 가져오는데 실패했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we can’t load your Favorites list. Please try again in a moment")));
         }
       });
   };
@@ -113,7 +113,7 @@ const FavoriteLists = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Sorry, we can’t add it to your Favorites. Please try again in a moment")));
         }
       });
   };
@@ -272,7 +272,7 @@ const FavoriteLists = ({ history }) => {
           justifyContent: "space-between",
         }}
       >
-        <div className={classes.subTitleText}>{t("즐겨찾는 인공지능에서 즐겨찾기한 모델리스트를 확인할 수 있습니다.")}</div>
+        <div className={classes.subTitleText}>{t("View your favorited models")}</div>
         <div>
           <Button id="sellAIModelBtn" className={classes.defaultOutlineButton} style={{ fontSize: user.language === "en" && "10px" }} onClick={() => openChat()}>
             {t("Sell AI (Contact Us)")}

@@ -141,13 +141,13 @@ const StartProject = ({ history }) => {
                         <div {...getRootProps({ className: "dropzoneArea" })}>
                           <input {...getInputProps()} />
                           <p className={classes.settingFontWhite6}>
-                            {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                            {t("Drag the file or click the box to upload it!")}
                             <br />
-                            {t("이미지 파일(png/jpg/jpeg) 혹은 이미지 압축파일(zip)만 업로드 가능합니다.")}
+                            {t("Only image files (png/jpg/jpeg) or image compression files (zip) can be uploaded")}
                             <br />
-                            {t("이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요.")}
+                            {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
                             <br />
-                            {t("용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다.")}
+                            {t("Uploading large-size files may take more than 5 minutes")}
                           </p>
                           <CloudUploadIcon fontSize="large" />
                         </div>

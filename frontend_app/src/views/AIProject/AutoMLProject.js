@@ -441,7 +441,7 @@ const AutoMLProject = ({ history, route }) => {
         </Grid>
         {process.env.REACT_APP_ENTERPRISE !== "true" && (
           <Grid item>
-            <Tooltip title={<span style={{ fontSize: "11px" }}>{t("학습을 처음 접하시는 분들은 샘플 데이터셋을 이용하여 각 산업군별 학습을 통해 만들어진 인공지능을 체험하고 방법을 익히실 수 있습니다.")}</span>} placement="top">
+            <Tooltip title={<span style={{ fontSize: "11px" }}>{t("For those who are new to Train, We have sample datasets for each industry to help you experience and learn more about our AI developing services")}</span>} placement="top">
               <div>
                 <Button id="sampleDataBtn" shape="whiteOutlined" onClick={openTemplate}>
                   {t("Sample Data")}

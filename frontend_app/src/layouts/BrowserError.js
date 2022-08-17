@@ -58,7 +58,7 @@ export default function BrowserError() {
             <img src={logo} alt={"logo"} className={classes.logo} style={{ width: "160px" }} />
             <Language />
           </div>
-          <div className={classes.description}>{t("CLICK AI 서비스는 PC 환경의 크롬(Chrome) 브라우저에서 이용할 수 있습니다.")}</div>
+          <div className={classes.description}>{t("CLICK AI platform is only available in the Chrome browser for PC users.")}</div>
           <div
             style={{
               width: "100%",

@@ -282,7 +282,7 @@ const Payment = ({ history }) => {
             color: "var(--secondary1)",
           }}
         >
-          * {t("서비스 언어 설정을 국문으로 할 경우 Payple, 영문으로 할 경우 EXIMBAY에서 카드 등록이 진행됩니다.")}
+          * {t("If the service language is set to Korean, the card registration is carried out in Payple, if it is in English, EXIMBAY.")}
         </Grid>
         <Grid
           container

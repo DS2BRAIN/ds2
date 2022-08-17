@@ -209,7 +209,7 @@ export default function NewProject({ history }) {
     } else if (activeStep === 1) {
       if (uploadFile && uploadFile.length > 0) {
         if (shouldUpdateFrame && !frameValue) {
-          dispatch(openErrorSnackbarRequestAction(t("동영상 파일을 업로드하기 위해서는 분당 프레임 수를 입력해야합니다.")));
+          dispatch(openErrorSnackbarRequestAction(t("You must enter frames per minute to upload a video file.")));
           return;
         }
         if (frameValue !== null && (frameValue < 1 || frameValue > 60)) {
@@ -253,9 +253,9 @@ export default function NewProject({ history }) {
     if (type === "object_detection" || type === "image") {
       return (
         <>
-          {t("이미지 파일(png/jpg/jpeg), 이미지 압축파일(zip), 동영상 파일(mp4)만 업로드 가능합니다.")}
+          {t("Only image files (png/jpg/jpeg), compressed image files (zip), and video files (mp4) can be uploaded.")}
           <br />
-          {t("이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요.")}
+          {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
         </>
       );
     } else {
@@ -438,7 +438,7 @@ export default function NewProject({ history }) {
                           )}
                           <br /> */}
                             <br />
-                            {t("용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다.")}
+                            {t("Uploading large-size files may take more than 5 minutes")}
                           </div>
                         </div>
                       )}

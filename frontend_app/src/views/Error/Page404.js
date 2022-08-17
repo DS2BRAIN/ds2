@@ -24,7 +24,7 @@ const Page404 = ({ history, isAdminPage }) => {
             <span>404 - Page not found</span>
           </Grid>
           <Grid item sx={{ fontSize: 16 }}>
-            <span style={{ wordBreak: "keep-all" }}>{t("죄송합니다. 찾으시는 페이지가 삭제되었거나 일시적으로 사용할 수 없습니다.")}</span>
+            <span style={{ wordBreak: "keep-all" }}>{t("Sorry. The page you are looking for has been removed or is temporarily unavailable.")}</span>
           </Grid>
           <Grid item sx={{ mt: 8 }}>
             <Button onClick={() => history.push("/")}>

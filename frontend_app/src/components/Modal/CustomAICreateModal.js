@@ -117,7 +117,7 @@ const CustomAICreateModal = ({ history, isCustomAIModalOpen, setIsCustomAIModalO
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
         }
       })
       .finally(() => {
@@ -250,7 +250,7 @@ const CustomAICreateModal = ({ history, isCustomAIModalOpen, setIsCustomAIModalO
           {labelprojects.projectDetail && labelprojects.projectDetail.workapp !== "normal_regression" && (
             <>
               <div style={{ fontWeight: 600 }}>{t("Choose the class to use")}</div>
-              <span className={classes.subHighlightText}>* {t("최소 10개 이상 라벨링 된 데이터를 가진 클래스만 선택 가능합니다.")}</span>
+              <span className={classes.subHighlightText}>* {t("Only classes with at least 10 labeled data can be selected.")}</span>
               <div style={{ maxHeight: 200, overflowY: "auto" }}>
                 <FormControl
                   component="fieldset"
@@ -295,7 +295,7 @@ const CustomAICreateModal = ({ history, isCustomAIModalOpen, setIsCustomAIModalO
           )}
 
           <Typography component="div" style={{ marginTop: "36px", fontSize: 16, fontWeight: 500 }}>
-            {t("현재까지 라벨링된 학습데이터를 기반으로 Custom AI 를 만듭니다. 만들어진 인공지능으로 오토라벨링을 진행할 수 있습니다.")}
+            {t("Create a custom AI based on the training data labeled so far. You can proceed with auto-labeling with the created AI.")}
           </Typography>
         </div>
 

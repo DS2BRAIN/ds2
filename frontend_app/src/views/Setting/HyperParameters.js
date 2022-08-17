@@ -115,7 +115,7 @@ const HyperParameters = ({ preferedMethod, algorithmInfo, setAlgorithmInfo, opti
           <Grid item sx={{ ml: "auto" }} xs={6} textAlign="center">
             <span>{t("Value")}</span>
             {option && option !== "auto" && preferedMethod !== "colab" && projectStatus === 0 && (
-              <Tooltip title={t("int, float 타입의 경우 콤마, 스페이스, 엔터키를 이용하여 다중값을 설정할 수 있습니다.")} placement="right">
+              <Tooltip title={t("For int and float types, multiple values can be set using comma, space, and enter key.")} placement="right">
                 <HelpOutlineIcon
                   fontSize="small"
                   sx={{

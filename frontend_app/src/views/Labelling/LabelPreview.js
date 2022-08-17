@@ -227,17 +227,17 @@ const LabelPreview = ({ history, selectedPreviewId, onClosePreviewModal, isMarke
       } else {
         if (!labelClasses || labelClasses.length === 0) {
           if (labelprojects.projectDetail && labelprojects.projectDetail.isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 그룹장을 통해 클래스를 등록하세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
             return;
           } else if (labelprojects.projectDetail && !labelprojects.projectDetail.isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("라벨리스트는 클래스를 최소 1개 이상 등록한 뒤 볼 수 있습니다.")));
+            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
             onSetSelectedPage("class");
 
             history.push(`/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`);
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 문의하기를 통해 문의해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
             return;
           }
         } else {
@@ -496,7 +496,7 @@ const LabelPreview = ({ history, selectedPreviewId, onClosePreviewModal, isMarke
               {t("Cancel")}
             </Button> */}
             {labelFileDetail.status === "ready" ? (
-              <Tooltip title={<span style={{ fontSize: "11px" }}>{t("오토라벨링 학습 중인 파일은 라벨링을 수정하실 수 없습니다.")}</span>} placement="top">
+              <Tooltip title={<span style={{ fontSize: "11px" }}>{t("You cannot edit the labeling of files that are training auto-labeling.")}</span>} placement="top">
                 <Button id="start_labelling_btn" className={classes.defaultDisabledButton} disabled fullWidth style={{ height: 32, fontWeight: 600 }}>
                   {t("EDIT LABEL")}
                 </Button>

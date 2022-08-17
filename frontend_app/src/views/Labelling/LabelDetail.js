@@ -453,7 +453,7 @@ const LabelDetail = ({ history, match }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, i18n?.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
         }
       })
       .finally(() => {
@@ -498,17 +498,17 @@ const LabelDetail = ({ history, match }) => {
       } else {
         if (!labelClasses || labelClasses.length === 0) {
           if (isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 그룹장을 통해 클래스를 등록하세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
             return;
           } else if (!isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("라벨리스트는 클래스를 최소 1개 이상 등록한 뒤 볼 수 있습니다.")));
+            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
             onSetSelectedPage("class");
             history.push(`/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`);
 
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 문의하기를 통해 문의해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
             return;
           }
           setSelectedClass({ id: -1, name: "" });
@@ -559,15 +559,15 @@ const LabelDetail = ({ history, match }) => {
       } else {
         if (!labelClasses || labelClasses.length === 0) {
           if (isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 그룹장을 통해 클래스를 등록하세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
             return;
           } else if (!isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("라벨리스트는 클래스를 최소 1개 이상 등록한 뒤 볼 수 있습니다.")));
+            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
             onSetSelectedPage("class");
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 문의하기를 통해 문의해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
             return;
           }
           setSelectedClass({ id: -1, name: "" });
@@ -787,7 +787,7 @@ const LabelDetail = ({ history, match }) => {
 
   const onSetChangeClassName = () => {
     if (!inputClassChangeValue.match(/^[a-zA-Z]+[a-zA-Z0-9_]*$/)) {
-      dispatch(openErrorSnackbarRequestAction(t("클래스명은 영문으로 시작하는 문자만 입력할 수 있습니다.(숫자,_ 포함 가능)")));
+      dispatch(openErrorSnackbarRequestAction(t("Class names can only contain characters that start with an English letter (numbers and _ can be included)")));
       return;
     }
 
@@ -1788,7 +1788,7 @@ const LabelDetail = ({ history, match }) => {
                                   justifyContent: "space-between",
                                 }}
                               >
-                                {labelClasses.length === 0 ? <div id="noClassInformText">{t("등록된 클래스가 없습니다. 클래스를 추가해주세요.")}</div> : <div></div>}
+                                {labelClasses.length === 0 ? <div id="noClassInformText">{t("There is no class registered. Please add class")}</div> : <div></div>}
                               </div>
                             </div>
                           </GridItem>

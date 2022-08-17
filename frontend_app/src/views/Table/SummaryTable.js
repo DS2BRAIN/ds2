@@ -556,7 +556,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
               <Button id="preCleansingAllBtn" shape="greenOutlined" disabled={Object.values(preprocessingCheckedValue).filter((infoValue) => infoValue === true).length === 0} onClick={onSetPreprocessingValue}>
                 {t("Preprocessing")}
               </Button>
-              <Tooltip title={<span style={{ fontSize: "12px" }}>{t("전처리는 데이터 클렌징, 정규화, 데이터 치환 총 세 종류가 있으며, 필요에 따라 선택하실 수 있습니다.")}</span>} placement="right">
+              <Tooltip title={<span style={{ fontSize: "12px" }}>{t("There are three kinds of preprocessing : data cleansing, normalization and replacement. You can choose as needed")}</span>} placement="right">
                 <HelpOutlineIcon style={{ marginLeft: "4px", cursor: "pointer" }} id="helpIcon" />
               </Tooltip>
             </div>
@@ -583,7 +583,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                               }}
                             >
                               {t("Training data usage")}
-                              <Tooltip title={<span style={{ fontSize: "11px" }}>{t("최종적으로 예측하고자 싶은 값을 선택합니다.")}</span>} placement="top">
+                              <Tooltip title={<span style={{ fontSize: "11px" }}>{t("Select the final value you want to predict.")}</span>} placement="top">
                                 <HelpOutlineIcon
                                   fontSize="small"
                                   style={{
@@ -624,7 +624,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                             }}
                           >
                             {t("Time series criteria")}
-                            <Tooltip title={<span style={{ fontSize: "11px" }}>{t("시계열 예측이란 시간의 흐름에 따라 변화하는 주어진 데이터를 학습시킴으로써 미래에 그 데이터가 어떤 값을 가질지 예측하는 인공지능 모델을 말합니다.")}</span>} placement="top">
+                            <Tooltip title={<span style={{ fontSize: "11px" }}>{t("Time series prediction is an AI model that predicts what value the data will have in the future by training given data that changes over time.")}</span>} placement="top">
                               <HelpOutlineIcon
                                 fontSize="small"
                                 style={{
@@ -740,7 +740,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                         {preprocessingInfoValue && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningClassification"]}
                         {preprocessingInfoValue && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && !preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningClassification"] ? "5" : ""}
                       </u>
-                      {t("개 미만인 유니크 값을 가지고 있는 행들을 삭제합니다.")}
+                      {t("Rows with less than () unique values will be deleted")}
                     </b>
                   )}
                 </GridItem>
@@ -761,7 +761,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                       label={
                         preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningRegression"]
                           ? t("Data cleansing")
-                          : t("데이터 클렌징 : 전체 표준분포의 n% 이상을 벗어나는 행들을 삭제합니다.")
+                          : t("Data Cleansing : Delete rows that exceed n% of the total standard distribution.")
                       }
                     />
                     {(preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && !preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningRegression"]) || Object.keys(preprocessingInfo).length === 0 ? (

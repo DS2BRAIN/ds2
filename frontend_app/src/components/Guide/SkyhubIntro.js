@@ -89,7 +89,7 @@ const SkyhubIntro = (props) => {
       <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
         {t("Maximize AI's Efficiency with Reasoning Cloud Servers")}
       </h4>
-      <p className={classes.P}>{t("서버 성능을 설정하거나, 지역 설정 등 인공지능 운영 환경에 최적화된 서버를 맞춤 구성하여 효율적으로 운영/관리할 수 있습니다.")}</p>
+      <p className={classes.P}>{t("You can configure server performance or customize servers optimized for AI operating environments such as regional settings to operate/manage them efficiently.")}</p>
       <p class="justify-content-center align-items-xl-center" style={{ fontSize: "12px" }}>
         * {t("Server configuration other than AWS can be accommodated via individual inquiries.")}
       </p>
@@ -110,7 +110,7 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Easy deployment of AI by a simple upload")}
         </h4>
-        <p className={classes.P}>{t("DS2.ai의 외부에서 별도 개발한 인공지능 또한 SKYHUB AI를 활용하여 배포하거나 관리할 수 있습니다.")}</p>
+        <p className={classes.P}>{t("Artificial intelligence developed outside of DS2.ai can also be deployed or managed using SKYHUB AI.")}</p>
       </div>
       <div class="text-center">
         <h6 className={classes.H6} style={{ marginBottom: "24px", color: "#525557" }}>
@@ -147,9 +147,9 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Advanced artificial intelligence through continuous training")}
         </h4>
-        <p class="justify-content-center align-items-xl-center">{t("인공지능의 운영을 통해 발생하는 데이터를 초기 학습 데이터에 추가하고 재학습하여 인공지능을 지속적으로 고도화할 수 있습니다.")}</p>
+        <p class="justify-content-center align-items-xl-center">{t("Through the operation of artificial intelligence, you can continuously advance artificial intelligence by adding data to the initial training data and retraining it.")}</p>
         <p class="justify-content-center align-items-xl-center" style={{ fontSize: "12px" }}>
-          * {t("인공지능 재학습을 위한 데이터 축적은 SKYHUB AI를 활용하는 경우에만 사용할 수 있습니다.")}
+          * {t("Data accumulation for AI training is only available with SKYHUB AI.")}
         </p>
       </div>
     </div>
@@ -227,7 +227,7 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Optimized server configuration for AI")}
         </h4>
-        <p class="justify-content-center align-items-xl-center">{t("운영 환경에 맞춰 CLICK AI 서버를 사용하거나, 최적화된 클라우드 서버를 직접 구성하여 인공지능을 배포하고 운영할 수 있습니다.")}</p>
+        <p class="justify-content-center align-items-xl-center">{t("Deploy and operate artificial intelligence by using a CLICK AI server for your environment or by configuring optimized cloud servers yourself.")}</p>
       </div>
     </div>
   );
@@ -246,7 +246,7 @@ const SkyhubIntro = (props) => {
         {t("Real-time monitoring of AI operating environments")}
       </h4>
       <p className={classes.P} style={{ marginBottom: "24px" }}>
-        {t("구축된 인공지능 파이프라인의 서버를 실시간으로 모니터링하고 이슈에 대해 신속하게 대응할 수 있습니다.")}
+        {t("Monitor the built artificial intelligence pipeline servers in real time and respond quickly to issues.")}
       </p>
     </div>
   );
@@ -302,7 +302,7 @@ const SkyhubIntro = (props) => {
         {t("Rapid AI deployment using APIs")}
       </h4>
       <p className={classes.P} style={{ marginBottom: "24px" }}>
-        {t("DS2.ai의 SKYHUB AI는 완성된 AI를 신속하게 배포하고 사용할 수 있도록 4가지 언어의 API를 자동 생성합니다.")}
+        {t("DS2.ai's SKYHUB AI automatically creates APIs in four programming languages for rapid deployment and use of complete AI.")}
       </p>
     </div>
   );
@@ -333,7 +333,7 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Easy deployment and sharing of service apps")}
         </h4>
-        <p className={classes.P}>{t("개발된 인공지능은 API만으로 바로 배포하고 서비스에 적용할 수 있습니다. 또한, 별도의 서비스 연동 없이 서비스앱 공유하기를 통해 URL만으로 인공지능을 웹서비스화할 수 있습니다.")}</p>
+        <p className={classes.P}>{t("The completed artificial intelligence model can be deployed and applied to services right away through API integration. In addition, using sharing service apps allows you to view the artificial intelligence results through the provided URL on the web without separate interworking services.")}</p>
       </div>
     </div>
   );
@@ -364,7 +364,7 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Introduction of edge system and support of artificial intelligence data hub")}
         </h4>
-        <p className={classes.P}>{t("DS2.ai로 개발한 인공지능을 엣지 디바이스에 탑재하고 SKYHUB AI와의 연동을 통해 엣지 디바이스의 추론 결과를 통합 환경에서 관리할 수 있습니다. 또한, 이를 바탕으로 인공지능 정확도 향상을 위한 재학습을 지원합니다.")}</p>
+        <p className={classes.P}>{t("Artificial intelligence developed with DS2.ai can be mounted on edge devices and the inference results can be managed on the integrated environment through SKYHUB AI. This allows the model to be re-trained to improve artificial intelligence accuracy.")}</p>
       </div>
     </div>
   );
@@ -395,7 +395,7 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("Supports sensor-based artificial intelligence hub for anomaly detection")}
         </h4>
-        <p className={classes.P}>{t("다양한 센서를 통해 수집되는 수치 데이터를 활용하여 인공지능을 개발하기 위한 허브를 구성하고 이상탐지 및 인공지능 기반의 다양한 추론 환경을 구성할 수 있습니다.")}</p>
+        <p className={classes.P}>{t("By utilizing numerical data collected through various sensors, you can configure a hub for developing artificial intelligence and configure various artificial intelligence-based inference environments such as anomaly detection.")}</p>
       </div>
     </div>
   );
@@ -412,7 +412,7 @@ const SkyhubIntro = (props) => {
         <h4 className={classes.H4} style={{ marginBottom: "16px" }}>
           {t("SDK support for convenient programming development")}
         </h4>
-        <p className={classes.P}>{t("DS2.ai의 MLOps를 위한 데이터 파이프라인을 Python 코드로 구축할 수 있습니다. SDK를 통해 데이터의 업로드부터 라벨링 생성, 인공지능 학습 및 배포까지 모든 기능을 사용할 수 있습니다.")}</p>
+        <p className={classes.P}>{t("Build a data pipeline for MLOps at DS2.ai with Python. SDK gives you access to all of the processes from uploading and labeling data, to training and deploying the artificial intelligence model.")}</p>
       </div>
     </div>
   );
@@ -438,7 +438,7 @@ const SkyhubIntro = (props) => {
                   color: "var(--bg)",
                 }}
               >
-                {t("SKYHUB AI는 인공지능의 배포 및 운영, 관리를 위한 통합 MLOps를 제공합니다. DS2.ai에서 개발한 인공지능 뿐만 아니라 자체 개발 혹은 운영 중인 인공지능 또한 SKYHUB AI로 관리할 수 있습니다.")}
+                {t("SKYHUB AI provides integrated MLOps for the deployment, operation, and management of AI models. Not only the models developed by DS2.ai, but also those previously developed or currently operating externally can be managed using SKYHUB AI.")}
                 <br />
               </p>
               <Button id="skyhubintro_top_start_btn" shape="blueContained" size="xl" onClick={closeIntro}>
@@ -457,7 +457,7 @@ const SkyhubIntro = (props) => {
                   {t("Optimal environment for using artificial intelligence")}
                 </h2>
                 <p class="text-center justify-content-center align-items-xl-center">
-                  {t("SKYHUB AI는 인공지능의 배포부터 운영/관리 및 고도화까지 제공하는 진정한 MLOps 서비스입니다.")}
+                  {t("SKYHUB AI offers a real MLOps service including AI deployment, operations/management and advancement.")}
                   <br />
                 </p>
               </div>

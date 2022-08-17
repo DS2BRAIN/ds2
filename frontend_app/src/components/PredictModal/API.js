@@ -189,7 +189,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         return;
       }
       if (completed < 40) {
-        if (completed >= 10 && projects.project.service_type && projects.project?.service_type.indexOf("_training") == -1 && projects.project?.service_type.indexOf("offline_") == -1) setLoadingMessage(t("모델 다운로드 중입니다. 모델 파일 크기에 따라 3~5 분 이상 소요될 수 있습니다."));
+        if (completed >= 10 && projects.project.service_type && projects.project?.service_type.indexOf("_training") == -1 && projects.project?.service_type.indexOf("offline_") == -1) setLoadingMessage(t("The model is downloading. This may take 3-5 minutes or longer depending on the size of the model file."));
         setTimeout(() => {
           setCompleted(tempCompleted);
         }, 3000);
@@ -272,7 +272,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             return;
           }
           if (e.response && e.response.status === 429) {
-            dispatch(openErrorSnackbarRequestAction(t("API 요청이 초과되어 자동로그아웃 되었으니, 다시 로그인해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
             setTimeout(() => {
               Cookies.deleteAllCookies();
               history.push("/signin/");
@@ -282,7 +282,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
           if (e.response && e.response.data.message) {
             dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
           } else {
-            dispatch(openErrorSnackbarRequestAction(t("업로드하신 영상을 분석하지 못했습니다. 다른 영상파일을 업로드해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded video. Please upload a different video file.")));
           }
           setApiLoading("");
           // } else {
@@ -346,7 +346,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               return;
             }
             if (e.response && e.response.status === 429) {
-              dispatch(openErrorSnackbarRequestAction(t("API 요청이 초과되어 자동로그아웃 되었으니, 다시 로그인해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
               setTimeout(() => {
                 Cookies.deleteAllCookies();
                 history.push("/signin/");
@@ -356,7 +356,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             if (e.response && e.response.data.message) {
               dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
             } else {
-              dispatch(openErrorSnackbarRequestAction(t("업로드하신 이미지를 분석하지 못했습니다. 다른 이미지 파일을 업로드해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded image. Please upload a different image file.")));
             }
             // setApiLoading("");
             // } else {
@@ -437,7 +437,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               return;
             }
             if (e.response && e.response.status === 429) {
-              dispatch(openErrorSnackbarRequestAction(t("API 요청이 초과되어 자동로그아웃 되었으니, 다시 로그인해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
               setTimeout(() => {
                 Cookies.deleteAllCookies();
                 history.push("/signin/");
@@ -447,7 +447,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             if (e.response && e.response.data.message) {
               dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
             } else {
-              dispatch(openErrorSnackbarRequestAction(t("업로드하신 이미지를 분석하지 못했습니다. 다른 이미지 파일을 업로드해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded image. Please upload a different image file.")));
             }
             // setApiLoading("");
             // } else {
@@ -529,7 +529,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               return;
             }
             if (e.response && e.response.status === 429) {
-              dispatch(openErrorSnackbarRequestAction(t("API 요청이 초과되어 자동로그아웃 되었으니, 다시 로그인해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
               setTimeout(() => {
                 Cookies.deleteAllCookies();
                 history.push("/signin/");
@@ -539,7 +539,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             if (e.response && e.response.data.message) {
               dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
             } else {
-              dispatch(openErrorSnackbarRequestAction(t("업로드하신 이미지를 분석하지 못했습니다. 다른 이미지 파일을 업로드해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded image. Please upload a different image file.")));
             }
             // setApiLoading("");
             // } else {
@@ -624,7 +624,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               return;
             }
             if (e.response && e.response.status === 429) {
-              dispatch(openErrorSnackbarRequestAction(t("API 요청이 초과되어 자동로그아웃 되었으니, 다시 로그인해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
               setTimeout(() => {
                 Cookies.deleteAllCookies();
                 history.push("/signin/");
@@ -634,7 +634,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             if (e.response && e.response.data.message) {
               dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
             } else {
-              dispatch(openErrorSnackbarRequestAction(t("업로드하신 이미지를 분석하지 못했습니다. 다른 이미지 파일을 업로드해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded image. Please upload a different image file.")));
             }
             // setApiLoading("");
             // } else {
@@ -756,7 +756,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             return;
           }
           if (e.response && e.response.status === 429) {
-            dispatch(openErrorSnackbarRequestAction(t("API 요청이 초과되어 자동로그아웃 되었으니, 다시 로그인해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
             setTimeout(() => {
               Cookies.deleteAllCookies();
               history.push("/signin/");
@@ -766,7 +766,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
           if (e.response && e.response.data.message) {
             dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
           } else {
-            dispatch(openErrorSnackbarRequestAction(t("입력값 오류로 인하여 예측에 실패하였습니다. 데이터를 재입력해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Prediction failed due to input value error. Please enter the data again.")));
           }
           // setApiLoading("");
           // } else {
@@ -974,7 +974,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
                       </TableCell>
                       <TableCell className={classes.tableRowCell} align="center">
                         <TextField
-                          placeholder={user.language === "ko" ? `${paramsType[param]} ${t("값을 입력해주세요.")}` : `${t("Enter the value.")} (${paramsType[param]})`}
+                          placeholder={user.language === "ko" ? `${paramsType[param]} ${t("Enter the value.")}` : `${t("Enter the value.")} (${paramsType[param]})`}
                           style={{
                             width: "50%",
                             wordBreak: "keep-all",
@@ -1301,7 +1301,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               {t("Select current frame")}
             </Button>
             <Grid style={{ fontSize: "8px" }} item container>
-              {projects.project?.service_type.indexOf("_training") !== -1 ? "*" + t("영상 시작점 기준으로 10분 길이에 해당되는 영상만 사용됩니다.") : "*" + t("영상 시작점 기준으로 30분 길이에 해당되는 영상만 사용됩니다.")}
+              {projects.project?.service_type.indexOf("_training") !== -1 ? "*" + t("Only images that are 10 minutes long from the starting point of the video are used.") : "*" + t("영상 시작점 기준으로 30분 길이에 해당되는 영상만 사용됩니다.")}
             </Grid>
             <Grid item container xs={12} justify="center">
               {isStandard && isStandardMovie == false && (
@@ -1516,7 +1516,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         return (
           <>
             <img style={{ width: "100%", maxHeight: "24em" }} src={xaiImage} id="resultImg" />
-            <p>* {t("빨간색은 부정(negative), 푸른색은 긍정(positive)으로 예측이 적용된 결과입니다.")}</p>
+            <p>* {t("In the prediction results red is negative and blue is positive")}</p>
           </>
         );
       else

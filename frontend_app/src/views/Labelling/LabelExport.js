@@ -192,7 +192,7 @@ const LabelExport = ({ history }) => {
         if (e.response && e.response.data.message) {
           dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
         }
       })
       .finally(() => {
@@ -210,7 +210,7 @@ const LabelExport = ({ history }) => {
       .postCocoDataset(requestInfo)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(openSuccessSnackbarRequestAction(t("COCO파일 변환이 시작되었습니다. 완료시 알림내역에서 다운로드 가능합니다.")));
+          dispatch(openSuccessSnackbarRequestAction(t("COCO file conversion has started. Upon completion, it can be downloaded from the Notifications.")));
         }
       })
       .catch((e) => {
@@ -238,7 +238,7 @@ const LabelExport = ({ history }) => {
       .postVocDataset(requestInfo)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(openSuccessSnackbarRequestAction(t("VOC파일 변환이 시작되었습니다. 완료시 알림내역에서 다운로드 가능합니다.")));
+          dispatch(openSuccessSnackbarRequestAction(t("VOC file conversion has started. Upon completion, it can be downloaded from the notifications.")));
         }
       })
       .catch((e) => {
@@ -265,7 +265,7 @@ const LabelExport = ({ history }) => {
       .postDataset(requestInfo)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(openSuccessSnackbarRequestAction(t("파일 변환이 시작되었습니다. 완료시 알림내역에서 다운로드 가능합니다.")));
+          dispatch(openSuccessSnackbarRequestAction(t("The file conversion has started. Upon completion, it can be downloaded from the notifications.")));
         }
       })
       .catch((e) => {
@@ -405,12 +405,12 @@ const LabelExport = ({ history }) => {
         <>
           <div>
             {renderExportData("coco")}
-            <div className={classes.text87}>{t("COCO 저장 버튼을 클릭하면 라벨링 정보를 JSON 파일로 저장할 수 있습니다.")}</div>
+            <div className={classes.text87}>{t("Click the Save COCO button to save the labeling information in a JSON format.")}</div>
           </div>
 
           <div style={{ marginTop: "30px" }}>
             {renderExportData("voc")}
-            <div className={classes.text87}>{t("VOC 저장 버튼을 클릭하면 라벨링 정보를 XML 파일로 저장할 수 있습니다.")}</div>
+            <div className={classes.text87}>{t("Click the Save VOC button to save the labeling information in a XML format.")}</div>
           </div>
         </>
       );

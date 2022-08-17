@@ -213,7 +213,7 @@ const Templates = ({ closeTemplateModal }) => {
       </Grid>
       <Grid sx={{ fontSize: ".85rem", ml: 1 }}>
         <div>{"* " + t("The sample data is an example template to show only the structure of the file.")}</div>
-        <div style={{ margin: "-3px 0 0 12px" }}>{t("샘플 데이터를 데이터셋에 업로드할 경우, 서비스 조건에 맞게 데이터를 추가해 주세요.")}</div>
+        <div style={{ margin: "-3px 0 0 12px" }}>{t("When uploading sample data to a dataset, please add data according to the service conditions.")}</div>
       </Grid>
       {selectedTab === "method" ? (
         <List

@@ -774,7 +774,7 @@ const MarketNewProject = (props) => {
               dispatch(getMeRequestAction());
             })
             .catch((err) => {
-              dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("The project was not created due to a temporary error. Please try again.")));
             })
             .finally(() => {
               setIsLoading(false);
@@ -805,7 +805,7 @@ const MarketNewProject = (props) => {
                     dispatch(getMeRequestAction());
                   })
                   .catch((err) => {
-                    dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
+                    dispatch(openErrorSnackbarRequestAction(t("The project was not created due to a temporary error. Please try again.")));
                   })
                   .finally(() => {
                     setIsLoading(false);
@@ -815,7 +815,7 @@ const MarketNewProject = (props) => {
               }
             })
             .catch((err) => {
-              dispatch(openErrorSnackbarRequestAction(t("죄송합니다, 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요.")));
+              dispatch(openErrorSnackbarRequestAction(t("The project was not created due to a temporary error. Please try again.")));
             })
             .finally(() => {
               setIsLoading(false);
@@ -3039,7 +3039,7 @@ const MarketNewProject = (props) => {
                                 textAlign: "right",
                               }}
                             >
-                              {"* " + t("2주 무료 사용 후 자동으로 결제가 진행됩니다.")}
+                              {"* " + t("Once 2 weeks trial expires, the payment will be automatically processed")}
                             </p>
                           </Grid>
                         ) : (

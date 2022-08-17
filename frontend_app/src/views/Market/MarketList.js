@@ -506,9 +506,9 @@ export default function MarketList({ history }) {
         <div>
           <div style={{ fontSize: "16px" }}>
             {t("Custom AI Application process")} {" : "}
-            {t("AI 생성을 위한 데이터 검토 > 진행 가능 여부 확인 > 설치 비용 입금 후 프로젝트 진행 > 생성된 AI 을 후불제에 맞춰 사용")}
+            {t("Data review for AI creation > Check availability > After the installation fee is paid, the project proceeds > Use the generated AI according to the deferred payment system")}
           </div>
-          <div style={{ fontSize: "14px" }}>{t("*학습데이터의 크기나 전처리여부에 따라서 금액이 변동될 수 있고, 자세한 사항은 컨설턴트를 통해 진행가능 여부 및 정확한 견적 안내가 가능합니다.")}</div>
+          <div style={{ fontSize: "14px" }}>{t("*The amount may change depending on the size of the training data or whether it is pre-processed, and for details, it is possible to guide the progress and accurate quotation through a consultant.")}</div>
         </div>
 
         {!isLoading && (
@@ -594,13 +594,13 @@ export default function MarketList({ history }) {
                             <div {...getRootProps({ className: "dropzoneArea" })}>
                               <input {...getInputProps()} />
                               <p className={classes.settingFontWhite6}>
-                                {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                                {t("Drag the file or click the box to upload it!")}
                                 <br />
                                 {t("이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다.")}
                                 <br />
-                                {t("이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요.")}
+                                {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
                                 <br />
-                                {t("용량이 큰 경우 업로드가 5분 이상 소요될 수 있습니다.")}
+                                {t("Uploading large-size files may take more than 5 minutes")}
                               </p>
                               <CloudUploadIcon fontSize="large" />
                             </div>

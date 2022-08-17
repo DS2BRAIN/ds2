@@ -787,12 +787,12 @@ const UserInfo = ({ history }) => {
             {user.isLoading ? (
               <div className={classes.loadingModal}>
                 <CircularProgress size={30} sx={{ mb: 2 }} />
-                {t("고객님의 메일로 링크를 보내드렸습니다. 메일발송까지 5-10분 정도 소요될 수 있습니다.")}
+                {t("The link has been sent to your e-mail. It may take 5-10 minutes to arrive in your inbox.")}
               </div>
             ) : (
               <>
                 <Grid sx={{ p: 2 }}>
-                  <div>{t("비밀번호 변경은 고객님의 메일로 발송된 링크를 통해 변경하실 수 있습니다.")}</div>
+                  <div>{t("You can change your password via the link sent to your e-mail.")}</div>
                   <div>{t("If you want to continue, please press the Submit button.")}</div>
                 </Grid>
                 <Grid container justifyContent="center">
@@ -844,14 +844,14 @@ const UserInfo = ({ history }) => {
                       >
                         {user.isWidthDrawDone ? (
                           <GridItem xs={12} style={{ marginBottom: "10px" }}>
-                            <div>{t("개인 정보 방침에 따라 회원 탈퇴 시 모든 데이터는 90일 보관 후 영구적으로 삭제됩니다.")}</div>
-                            <div>{t("10초뒤에 자동로그아웃됩니다. 그동안 서비스를 이용해주셔서 감사합니다.")}</div>
+                            <div>{t("According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination.")}</div>
+                            <div>{t("You will be automatically logged out in 10 seconds. Thank you for using our services.")}</div>
                           </GridItem>
                         ) : (
                           <>
                             <GridItem xs={12} style={{ marginBottom: "10px" }}>
-                              <div>{t("개인 정보 방침에 따라 회원 탈퇴 시 모든 데이터는 90일 보관 후 영구적으로 삭제됩니다.")}</div>
-                              <div>{t("회원탈퇴후 계정복구가 불가능합니다. 계속 진행하시려면 비밀번호를 입력해주세요.")}</div>
+                              <div>{t("According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination.")}</div>
+                              <div>{t("It is impossible to restore the account after your account is deleted. Please enter your password if you want to continue.")}</div>
                             </GridItem>
                             <GridItem xs={4}>{t("Current password")}</GridItem>
                             <GridItem xs={8}>

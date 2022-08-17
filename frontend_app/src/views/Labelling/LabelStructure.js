@@ -339,12 +339,12 @@ const LabelStructure = ({ history }) => {
       })
       .catch((e) => {
         console.log(e);
-        dispatch(openErrorSnackbarRequestAction(t("죄송합니다. 일시적인 오류 발생으로 라벨링 파일 정보를 불러오는데 실패하였습니다.")));
+        dispatch(openErrorSnackbarRequestAction(t("The labeling data was not loaded due to a temporary error.")));
       });
   };
 
   const onGoToSelectedPage = (id) => {
-    if (window.confirm(t("진행중이던 라벨링 정보는 초기화 됩니다. 선택하신 행으로 이동하시겠습니까?"))) {
+    if (window.confirm(t("Labeling information in progress is initialized. Are you sure you want to move to the selected row?"))) {
       setSelectedValueName("");
       setSelectedValueId(0);
       setFileStatus("");
@@ -475,7 +475,7 @@ const LabelStructure = ({ history }) => {
                 }
                 window.open(`${tempUrl}admin/setting/payment/?cardRequest=true`, "_blank");
               }
-              dispatch(openErrorSnackbarRequestAction(t("죄송합니다. 일시적인 오류 발생으로 라벨링 파일 정보를 불러오는데 실패하였습니다.")));
+              dispatch(openErrorSnackbarRequestAction(t("The labeling data was not loaded due to a temporary error.")));
               return isSavingSuccess;
             });
         }
@@ -798,7 +798,7 @@ const LabelStructure = ({ history }) => {
                       color: "red",
                     }}
                   >
-                    {t("* '반려'할 경우 기존의 라벨 데이터가 모두 삭제되며, 복구 불가능한 점 유의바랍니다.")}
+                    {t("* Please note that in case of 'reject', all existing label data is deleted and cannot be recovered.")}
                   </Grid>
                 </Grid>
               </Grid>

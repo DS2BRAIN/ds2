@@ -428,7 +428,7 @@ const History = (props) => {
                     else {
                       dispatch(
                         openErrorSnackbarRequestAction(
-                          `${t("프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다.")}
+                          `${t("Deleting a project is possible after a certain period of time has passed since creation.")}
                           `
                           // ${isEnableToChange(props.project.created_at, true)}
                           // ${t("minutes left")}
@@ -535,18 +535,18 @@ const History = (props) => {
                                       .then((res) => {
                                         if (res?.data?.failList.length == 0) {
                                           setDeleteProjectModal(false);
-                                          dispatch(openSuccessSnackbarRequestAction(t("Jupyter 프로젝트를 삭제하였습니다.") + (process.env.REACT_APP_ENTERPRISE ? " " + t("컴퓨터 재시작 시 적용됩니다.") : "")));
+                                          dispatch(openSuccessSnackbarRequestAction(t("The Jupyter project has been deleted.") + (process.env.REACT_APP_ENTERPRISE ? " " + t("컴퓨터 재시작 시 적용됩니다.") : "")));
                                           props.history.push("/admin/jupyterproject/");
                                         } else {
                                           setIsDeleteProjectLoading(false);
                                           setDeleteProjectModal(false);
-                                          dispatch(openErrorSnackbarRequestAction(t("Jupyter 프로젝트 삭제를 실패하였습니다.")));
+                                          dispatch(openErrorSnackbarRequestAction(t("Failed to delete Jupyter project.")));
                                         }
                                       })
                                       .catch((err) => {
                                         setIsDeleteProjectLoading(false);
                                         setDeleteProjectModal(false);
-                                        dispatch(openErrorSnackbarRequestAction(t("Jupyter 프로젝트 삭제를 실패하였습니다.")));
+                                        dispatch(openErrorSnackbarRequestAction(t("Failed to delete Jupyter project.")));
                                       });
                                   }
                                 }}
@@ -959,7 +959,7 @@ const History = (props) => {
                                           className: newClasses.deleteModalText,
                                         }}
                                         variant="outlined"
-                                        placeholder={t("'Delete'를 정확히 입력하세요.")}
+                                        placeholder={t("Enter 'Delete' correctly.")}
                                       />
                                     </Grid>
                                     <Grid container item xs={11} justifyContent="flex-start" alignItems="flex-start">

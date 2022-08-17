@@ -304,7 +304,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
         let nameDuplicateError = false;
         columnNameList.map((column) => (column === inputSelfText ? (nameDuplicateError = true) : null));
         if (nameDuplicateError) {
-          dispatch(openErrorSnackbarRequestAction(t("이미 동일한 이름의 칼럼명이 존재합니다. 새로운 칼럼명을 입력해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("A column name with the same name already exists. Please enter a new column name.")));
           return;
         }
 
@@ -339,7 +339,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     ) {
       if (process.env.REACT_APP_ENTERPRISE !== "true") {
         if (+user.me.remainDiskUsage + user.me.usageplan.storage + +user.me.additionalDiskUsage < user.me.usageplan.storage) {
-          dispatch(openErrorSnackbarRequestAction(`${t("누적 사용량이 초과하여 파일 업로드가 불가능합니다.")} ${"이용플랜을 업그레이드 후 다시 시도해주세요."}`));
+          dispatch(openErrorSnackbarRequestAction(`${t("The file cannot be uploaded because it exceeds the maximum total usage.")} ${"이용플랜을 업그레이드 후 다시 시도해주세요."}`));
           return;
         }
       }
@@ -524,7 +524,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
           if (type === "csv") {
             return t("Each column requires at least 10 rows of data.") + " " + t("(Only 1 upload is allowed)");
           } else if (type === "zip") {
-            return t("최소 10장 이상의 이미지가 있어야합니다. 압축된 이미지 파일은 PNG/JPG/JPEG/GIF 형식만 지원합니다. (1개만 업로드 가능)");
+            return t("You must have at least 10 images. Compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)");
           } else if (type === "video") {
             return t("Only MP4 and MOV files are supported. (Only 1 upload is allowed)");
           }
@@ -532,9 +532,9 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
           if (type === "csv") {
             return t("Each column requires at least 10 rows of data.") + " " + t("Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)");
           } else if (type === "zip") {
-            return t("최소 10장 이상의 이미지가 있어야합니다. 1GB 이하의 ZIP 파일만 업로드 가능하고, 압축된 이미지 파일은 PNG/JPG/JPEG/GIF 형식만 지원합니다. (1개만 업로드 가능)");
+            return t("You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)");
           } else if (type === "video") {
-            return t("5GB 이하의 MP4, MOV 파일만 지원합니다. (1개만 업로드 가능)");
+            return t("Only MP4 and MOV files under 5GB are supported. (Only 1 upload is allowed)");
           }
         }
       };
@@ -837,7 +837,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
               required
               id="frameValue"
               variant="outlined"
-              placeholder={t("1 ~ 600 사이의 분당 프레임 값을 입력해주세요(기본값: 60)")}
+              placeholder={t("Please enter a number of frames per minute between 1 and 600 (default: 60)")}
               fullWidth
               label={t("Frame Value")}
               name="frameValue"

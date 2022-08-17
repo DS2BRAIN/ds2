@@ -405,17 +405,17 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       } else {
         if (!labelClasses || labelClasses.length === 0) {
           if (labelprojects.projectDetail && labelprojects.projectDetail.isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 그룹장을 통해 클래스를 등록하세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
             return;
           } else if (labelprojects.projectDetail && !labelprojects.projectDetail.isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("라벨리스트는 클래스를 최소 1개 이상 등록한 뒤 볼 수 있습니다.")));
+            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
             onSetSelectedPage("class");
             history.push(`/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`);
 
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("등록된 클래스가 없어 라벨링을 진행할 수 없습니다. 문의하기를 통해 문의해주세요.")));
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
             return;
           }
         } else {
@@ -600,7 +600,7 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       return;
     }
     if (shouldUpdateFrame && !frameValue) {
-      dispatch(openErrorSnackbarRequestAction(t("동영상 파일을 업로드하기 위해서는 분당 프레임 수를 입력해야합니다.")));
+      dispatch(openErrorSnackbarRequestAction(t("You must enter frames per minute to upload a video file.")));
       return;
     }
     if (frameValue !== null && (frameValue < 1 || frameValue > 600)) {
@@ -1029,9 +1029,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     if (type === "object_detection" || type === "image") {
       return (
         <>
-          {t("이미지 파일(png/jpg/jpeg), 이미지 압축파일(zip), 동영상 파일(mp4)만 업로드 가능합니다.")}
+          {t("Only image files (png/jpg/jpeg), compressed image files (zip), and video files (mp4) can be uploaded.")}
           <br />
-          {t("이미지 파일은 100개까지 업로드가 가능하니, 파일개수가 초과하는 경우 압축해서 업로드해주세요.")}
+          {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
         </>
       );
     } else {
@@ -1226,7 +1226,7 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                     >
                       <input {...getInputProps()} />
                       <p className={classes.settingFontWhite6}>
-                        {t("파일을 드래그하거나 박스를 클릭해서 업로드해주세요!")}
+                        {t("Drag the file or click the box to upload it!")}
                         <br />
                         {dataTypeText(labelprojects.projectDetail.workapp)}
                       </p>
