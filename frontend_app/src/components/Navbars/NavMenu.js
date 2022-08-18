@@ -10,63 +10,55 @@ const NavMenu = ({ localPath }) => {
     {
       id: "data",
       path: "/dataconnector",
-      name: "데이터셋",
-      name_en: "Dataset",
+      name: "Dataset",
       layout: "/admin",
       condition: true,
     },
     {
       id: "label",
       path: "/labelling?page=1&sorting=created_at&desc=true&rows=10",
-      name: "라벨링",
-      name_en: "Labeling",
+      name: "Labeling",
       layout: "/admin",
       condition: true,
     },
     {
       id: "train",
       path: "/train",
-      name: "학습",
-      name_en: "Train",
+      name: "Train",
       layout: "/admin",
       condition: true,
     },
     {
       id: "skyhub",
       path: "/skyhubai",
-      name: "배포",
-      name_en: "Deploy",
+      name: "Deploy",
       layout: "/admin",
       condition: true,
     },
     {
       id: "verify",
       path: "/verifyproject",
-      name: "검증",
-      name_en: "Verify",
+      name: "Verify",
       layout: "/admin",
       condition: true,
     },
     {
       id: "market",
       path: "/marketList",
-      name: "AI 마켓",
-      name_en: "AI Market",
+      name: "AI Market",
       layout: "/admin",
       condition: true,
     },
     {
       id: "jupyter",
       path: "/jupyterproject",
-      name: "주피터",
-      name_en: "My Jupyters",
+      name: "Jupyter",
       layout: "/admin",
       condition: true,
     },
   ];
 
-  const navLinkClassName =
-    "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
+  const navLinkClassName = "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
   const navLinkActiveClassName = "navLinkActive";
 
   return (

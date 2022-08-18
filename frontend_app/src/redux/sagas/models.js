@@ -27,7 +27,7 @@ function* getModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
+        "죄송합니다. 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
       ),
     });
     yield put({
@@ -49,7 +49,7 @@ function* getOpsModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
+        "죄송합니다. 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
       ),
     });
     yield put({
@@ -71,7 +71,7 @@ function* getMarketModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
+        "죄송합니다. 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
       ),
     });
     yield put({

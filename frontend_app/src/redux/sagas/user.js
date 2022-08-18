@@ -241,7 +241,7 @@ function* postResetPassword(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류 발생으로 인하여 메일전송에 실패하였습니다."
+        "죄송합니다. 일시적인 오류 발생으로 인하여 메일전송에 실패하였습니다."
       ),
     });
     yield put({
@@ -268,7 +268,7 @@ function* postWidthdraw(action) {
           data: renderSnackbarMessage(
             "error",
             err.response,
-            "죄송합니다, 다시한번 시도해주세요."
+            "죄송합니다. 다시한번 시도해주세요."
           ),
         });
         yield put({
@@ -283,7 +283,7 @@ function* postWidthdraw(action) {
     } else {
       errorMessage = err.response.data.message
         ? err.response.data.message
-        : "죄송합니다, 다시 한번 시도해 주세요.";
+        : "죄송합니다. 다시 한번 시도해 주세요.";
     }
     yield put({
       type: REQUEST_ERROR_MESSAGE,
@@ -315,7 +315,7 @@ function* postCompanyLogo(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 로고 업로드에 실패하였습니다. 다시 시도해주세요."
+        "죄송합니다. 로고 업로드에 실패하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -343,7 +343,7 @@ function* deleteCompanyLogo(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 로고 삭제에 실패하였습니다. 다시 시도해주세요."
+        "죄송합니다. 로고 삭제에 실패하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -375,7 +375,7 @@ function* putUser(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적 오류로 인하여, 회원정보 변경에 실패하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적 오류로 인하여, 회원정보 변경에 실패하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -433,7 +433,7 @@ function* postCancelPlan(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류로 인하여 구독취소에 실패하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적인 오류로 인하여 구독취소에 실패하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -465,7 +465,7 @@ function* postCancelNextPlan() {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류로 인하여 이용플랜 취소에 실패하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적인 오류로 인하여 이용플랜 취소에 실패하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({

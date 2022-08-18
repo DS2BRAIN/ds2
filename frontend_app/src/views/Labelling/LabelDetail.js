@@ -1154,7 +1154,7 @@ const LabelDetail = ({ history, match }) => {
                 {workapp !== "normal_regression" && ((isObjectDetection && labelClassLen === 0) || (!isObjectDetection && labelClassLen < 2)) && (
                   <span style={{ display: "block", marginRight: "8px" }}>
                     {"- " + t("Please specify the label class.")}
-                    {!isObjectDetection && labelClassLen < 2 && `(${t("at least")} 2${t("")})`}
+                    {!isObjectDetection && labelClassLen < 2 && `(${t("at least")} 2)`}
                     <br />
                   </span>
                 )}
@@ -2119,7 +2119,7 @@ const LabelDetail = ({ history, match }) => {
                           name="custom"
                           checked={autoLabelingAiType === "custom"}
                           disabled={customAiModels?.length === 0 || (labelprojects.projectDetail?.workapp === "object_detection" && labelChart.review > 1)}
-                          label={`${t("")} : ${t("라벨링된 학습데이터를 기반으로 인공지능 생성하여 라벨링하기")}`}
+                          label={`Custom AI : ${t("Create and label AI based on labeled training data")}`}
                           control={<Radio color="primary" />}
                         />
                         {customAiModels?.length > 0 && (
@@ -2176,7 +2176,7 @@ const LabelDetail = ({ history, match }) => {
                                         marginRight: 4,
                                       }}
                                     />{" "}
-                                    <span className={classes.subHighlightText}>{`${t("important")}: ${t("라벨링된 데이터가 부족한 경우 General AI를 통해서만 오토라벨링이 가능합니다.")}`}</span>
+                                    <span className={classes.subHighlightText}>{`${t("important")}: ${t("In case of insufficient labeled data, auto-labeling is possible only through General AI.")}`}</span>
                                   </div>
                                 )}
                               </>
@@ -2190,7 +2190,7 @@ const LabelDetail = ({ history, match }) => {
                                       marginRight: 4,
                                     }}
                                   />{" "}
-                                  <span className={classes.subHighlightText}>{`${t("important")}: ${t("Custom AI 를 생성한 후 사용 가능합니다.")}`}</span>
+                                  <span className={classes.subHighlightText}>{`${t("important")}: ${t("Available after creating a Custom AI.")}`}</span>
                                 </div>
                                 <Button
                                   id="create_customai_btn"
@@ -2208,7 +2208,7 @@ const LabelDetail = ({ history, match }) => {
                         )}
                         {labelprojects.projectDetail?.workapp === "object_detection" && (
                           <>
-                            <FormControlLabel name="general" checked={autoLabelingAiType === "general"} label={`${t("")} : ${t("이미 생성된 Labeling AI의 인공지능으로 라벨링하기")}`} control={<Radio color="primary" />} style={{ marginTop: 24 }} />
+                            <FormControlLabel name="general" checked={autoLabelingAiType === "general"} label={`General AI : ${t("Labeling with AI of Labeling AI already created")}`} control={<Radio color="primary" />} style={{ marginTop: 24 }} />
                             <FormControl
                               component="fieldset"
                               className={classes.formControl}

@@ -46,27 +46,27 @@ const Setting = ({ history }) => {
   };
 
   const tabList = [
-    { id: "userinfo", name: "회원정보관리", condition: true },
+    { id: "userinfo", name: "Account info", condition: true },
     {
       id: "usagehistory",
-      name: "이용 내역",
+      name: "Use history",
       condition: !IS_ENTERPRISE,
     },
     {
       id: "payment",
-      name: "결제 관리",
+      name: "Payment management",
       condition: !IS_ENTERPRISE,
     },
-    { id: "share", name: "그룹 관리", condition: true },
-    { id: "notilist", name: "알림 내역", condition: true },
+    { id: "share", name: "Group management", condition: true },
+    { id: "notilist", name: "Notification history", condition: true },
     {
       id: "mylabel",
-      name: "나의 라벨링",
+      name: "Labeling",
       condition: user.me && user.me.isAiTrainer,
     },
     {
       id: "manage",
-      name: "관리자 모드",
+      name: "User management",
       condition: user.me && user.me.is_admin,
     },
   ];

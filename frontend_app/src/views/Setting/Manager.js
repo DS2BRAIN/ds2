@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-
-import * as api from "controller/api.js";
-import currentTheme from "assets/jss/custom.js";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
+
+import * as api from "controller/api.js";
 import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
   askModalRequestAction,
 } from "redux/reducers/messages.js";
+import currentTheme from "assets/jss/custom.js";
 import { checkIsValidKey } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
+import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
 
 import {
   Container,
@@ -30,18 +31,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import CachedIcon from "@material-ui/icons/Cached";
-import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
 
 const Manager = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
-  const { user, groups, messages } = useSelector(
+  const { user, messages } = useSelector(
     (state) => ({
       user: state.user,
-      groups: state.groups,
       messages: state.messages,
     }),
     []
@@ -65,36 +61,38 @@ const Manager = ({ history }) => {
   const [isSelectedUserModalOpen, setIsSelectedUserModalOpen] = useState(false);
   const [isSelectedUserDelete, setIsSelectedUserDelete] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
-  const [sendKeyLoading, setSendKeyLoading] = useState(false);
-  const [isKeyError, setIsKeyError] = useState(false);
-  const [keyInfo, setKeyInfo] = useState(null);
-  const [keyValue, setKeyValue] = useState(null);
 
   const tableHeads = [
-    { name: "No", value: "No", width: "5%", align: "center", sorting: false },
     {
-      name: "유저명",
+      name: "No.",
+      value: "number",
+      width: "5%",
+      align: "center",
+      sorting: false,
+    },
+    {
+      name: "User name",
       value: "name",
       width: "25%",
       align: "left",
       sorting: true,
     },
     {
-      name: "이메일",
+      name: "email",
       value: "email",
       width: "40%",
       align: "left",
       sorting: true,
     },
     {
-      name: "비밀번호 재설정",
+      name: "Edit password",
       value: "changePasswordBtn",
       width: "15%",
       align: "center",
       sorting: false,
     },
     {
-      name: "유저 삭제",
+      name: "Delete user",
       value: "deleteBtn",
       width: "15%",
       align: "center",
@@ -109,7 +107,7 @@ const Manager = ({ history }) => {
       type: "text",
       autoComplete: "name",
       func: setUserAdd,
-      label: "추가할 유저명을 입력해주세요.",
+      label: "Enter new user name.",
     },
     {
       id: "addUserEmailInput",
@@ -117,7 +115,7 @@ const Manager = ({ history }) => {
       type: "text",
       autoComplete: "email",
       func: setEmailAdd,
-      label: "추가할 유저 이메일을 입력해주세요.",
+      label: "Enter new user e-mail.",
     },
     {
       id: "addUserPasswordInput",
@@ -125,7 +123,7 @@ const Manager = ({ history }) => {
       type: "password",
       autoComplete: "new-password",
       func: setPasswordAdd,
-      label: "추가할 유저 비밀번호을 설정해주세요.",
+      label: "Enter new user password.",
     },
     {
       id: "addUserPasswordConfirmInput",
@@ -133,7 +131,7 @@ const Manager = ({ history }) => {
       type: "password",
       autoComplete: "new-password",
       func: setPasswordVerifyAdd,
-      label: "설정한 유저 비밀번호를 한번 더 입력해주세요.",
+      label: "Enter new user password again.",
     },
   ];
 
@@ -144,7 +142,7 @@ const Manager = ({ history }) => {
       type: "password",
       autoComplete: "new-password",
       func: setPasswordChange,
-      label: "변경할 비밀번호을 입력해주세요.",
+      label: "Please enter the password you want to change.",
     },
     {
       id: "changeUserPasswordConfirmInput",
@@ -152,7 +150,7 @@ const Manager = ({ history }) => {
       type: "password",
       autoComplete: "new-password",
       func: setPasswordVerifyChange,
-      label: "변경할 비밀번호를 한번 더 입력해주세요.",
+      label: "Please re-enter the password you want to change.",
     },
   ];
 
@@ -218,7 +216,7 @@ const Manager = ({ history }) => {
     if (passwordAdd !== passwordVerifyAdd) {
       dispatch(
         openErrorSnackbarRequestAction(
-          "입력하신 비밀번호와 비밀번호 확인이 일치하지 않습니다."
+          t("The password you entered and Confirm Password do not match.")
         )
       );
       return;
@@ -251,7 +249,7 @@ const Manager = ({ history }) => {
     if (passwordChange !== passwordVerifyChange) {
       dispatch(
         openErrorSnackbarRequestAction(
-          "입력하신 비밀번호와 비밀번호 확인이 일치하지 않습니다."
+          t("The password you entered and Confirm Password do not match.")
         )
       );
       return;
@@ -268,8 +266,8 @@ const Manager = ({ history }) => {
       .then((res) => {
         const isMyAccount = selectedUser.id === user.me.id;
         let text = isMyAccount
-          ? "비밀번호 변경이 완료되었습니다. 다시 로그인 해주세요."
-          : "비밀번호 변경이 완료되었습니다.";
+          ? "Password change is complete. Please log in again."
+          : "Password change is complete.";
 
         dispatch(openSuccessSnackbarRequestAction(t(text)));
 
@@ -342,9 +340,7 @@ const Manager = ({ history }) => {
                 className="tableRowCellCustom"
                 id="lastTableCell"
               >
-                <Grid sx={{ py: 20 }}>
-                  {t("Loading user list")}
-                </Grid>
+                <Grid sx={{ py: 20 }}>{t("Loading user list")}</Grid>
               </TableCell>
             </TableRow>
           ) : mapArr.length ? (
@@ -357,7 +353,7 @@ const Manager = ({ history }) => {
                     key={`user_${managedUser.id}`}
                   >
                     {tableHeads.map((tableHead) => {
-                      if (tableHead.value === "No")
+                      if (tableHead.value === "number")
                         return (
                           <TableCell
                             key={`No_${userlistNum}`}
@@ -399,7 +395,7 @@ const Manager = ({ history }) => {
                                   ) : null
                                 }
                               >
-                                {isDelete ? t("Delete") : t("재설정")}
+                                {isDelete ? t("Delete") : t("Edit")}
                               </Button>
                             )}
                           </TableCell>
@@ -464,7 +460,9 @@ const Manager = ({ history }) => {
               >
                 <Grid sx={{ py: 20 }}>
                   {searchValueToPost
-                    ? t("No user found containing the keyword you have searched for.")
+                    ? t(
+                        "No user found containing the keyword you have searched for."
+                      )
                     : t("No user to manage.")}
                 </Grid>
               </TableCell>
@@ -485,7 +483,7 @@ const Manager = ({ history }) => {
           alignItems: "center",
         }}
       >
-        <div>{t("")}</div>
+        <div>{"Users"}</div>
         <Button
           id="addUserBtn"
           shape="greenOutlined"
@@ -743,7 +741,7 @@ const Manager = ({ history }) => {
               )}
             </>
           ) : (
-            <Grid>{t("")}</Grid>
+            <Grid>{t("No user selected.")}</Grid>
           )}
         </Grid>
       </Modal>
