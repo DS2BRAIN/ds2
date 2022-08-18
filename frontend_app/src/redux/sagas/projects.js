@@ -277,7 +277,7 @@ function* deleteProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
+        "죄송합니다. 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
       ),
     });
     yield put({
@@ -403,7 +403,7 @@ function* deleteOpsProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 프로젝트 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 프로젝트 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -519,7 +519,7 @@ function* deleteJupyterProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 프로젝트 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 프로젝트 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -552,7 +552,7 @@ function* deleteDataConnectors(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 데이터커넥터 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 데이터커넥터 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -586,7 +586,7 @@ function* startProjectFunc(data) {
         data: renderSnackbarMessage(
           "error",
           err.response,
-          "죄송합니다, 데이터커넥터 등록후 프로젝트 생성중 오류가 발생하였습니다. 다시 시도해주세요."
+          "죄송합니다. 데이터커넥터 등록후 프로젝트 생성중 오류가 발생하였습니다. 다시 시도해주세요."
         ),
       });
       yield put({
@@ -624,7 +624,7 @@ function* postDataConnector(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 데이터커넥터 등록중 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 데이터커넥터 등록중 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -663,7 +663,7 @@ function* postConnectorWithAuthFile(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 데이터커넥터 등록중 오류가 발생하였습니다. 입력 정보를 확인해주세요."
+        "죄송합니다. 데이터커넥터 등록중 오류가 발생하였습니다. 입력 정보를 확인해주세요."
       ),
     });
     yield put({
@@ -706,7 +706,7 @@ function* postPurchaseModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류 발생으로 인하여 모델 사용권을 구매하지 못하였습니다."
+        "죄송합니다. 일시적인 오류 발생으로 인하여 모델 사용권을 구매하지 못하였습니다."
       ),
     });
     yield put({
@@ -786,7 +786,7 @@ function* postConnectorWithFile(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 데이터커넥터 등록중 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 데이터커넥터 등록중 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -811,7 +811,7 @@ function* getProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다."
+        "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다."
       ),
     });
     yield put({
@@ -836,7 +836,7 @@ function* getOpsProject(action) {
       data: "프로젝트 정보 갱신중",
       // data: err.response.data.message
       //   ? err.response.data.message
-      //   : "죄송합니다, 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다.",
+      //   : "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다.",
     });
     yield put({
       type: GET_PROJECT_FAILURE,
@@ -860,7 +860,7 @@ function* getMarketProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다."
+        "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다."
       ),
     });
     yield put({
@@ -886,7 +886,7 @@ function* getJupyterProject(action) {
       // type: REQUEST_ERROR_MESSAGE,
       // data: err.response.data.message
       //   ? err.response.data.message
-      //   : "죄송합니다, 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다.",
+      //   : "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다.",
     });
     yield put({
       type: GET_PROJECT_FAILURE,
@@ -1090,7 +1090,7 @@ function* postFavoriteModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요."
+        "죄송합니다. 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요."
       ),
     });
     yield put({
@@ -1123,7 +1123,7 @@ function* putProjectWebhooks(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -1155,7 +1155,7 @@ function* putProjectStatus(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -1186,7 +1186,7 @@ function* updateShareGroup(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({
@@ -1218,7 +1218,7 @@ function* putProjectServiceApp(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
       ),
     });
     yield put({

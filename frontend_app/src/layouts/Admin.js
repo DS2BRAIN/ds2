@@ -467,7 +467,7 @@ const Admin = ({ history, ...rest }) => {
           dispatch(
             openErrorSnackbarRequestAction(
               t(
-                "죄송합니다, 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+                "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
               )
             )
           );
@@ -587,7 +587,9 @@ const Admin = ({ history, ...rest }) => {
               </div>
               <div className={classes.upgradePlanModalContent}>
                 <div style={{ marginBottom: "-8px" }}>
-                  {t("Multiple AI models focused on accuracy and training speed")}
+                  {t(
+                    "Multiple AI models focused on accuracy and training speed"
+                  )}
                 </div>
                 <div>{t("You can develop using DS2.AI solution.")}</div>
               </div>
