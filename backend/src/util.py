@@ -772,8 +772,8 @@ class Util():
         result['endDate'] = datetime.datetime.strptime(result['endDate'], '%Y-%m-%d').date()
         today = datetime.datetime.now().date()
 
-        if get_mac() != result['mac']:
-            return False
+        # if get_mac() != result['mac']:
+        #     return False
 
         if today < result.get("startDate") or today > result.get("endDate"):
             return False
