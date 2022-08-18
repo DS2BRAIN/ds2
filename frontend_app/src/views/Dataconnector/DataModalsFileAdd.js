@@ -289,7 +289,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
       } else if (selectedRadio === "selectColumn") {
         labelDataPass = true;
         if (selectedColumn === null || selectedColumn === "") {
-          dispatch(openErrorSnackbarRequestAction(t("")));
+          dispatch(openErrorSnackbarRequestAction(t("Please select a result column.")));
           return;
         }
         predictColumnName = selectedColumn;

@@ -35,7 +35,7 @@ const Page404 = ({ history, isAdminPage }) => {
                   textDecoration: "underline",
                 }}
               >
-                {t("")}
+                {t("Go to main page")}
               </span>
             </Button>
           </Grid>

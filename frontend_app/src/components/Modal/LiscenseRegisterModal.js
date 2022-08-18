@@ -164,7 +164,7 @@ const LiscenseRegisterModal = () => {
                     required
                     fullWidth
                     name="enterpriseKey"
-                    placeholder={t("")}
+                    placeholder={"KEY"}
                     label={t("public KEY")}
                     type="password"
                     id="enterpriseKey"

@@ -24,7 +24,7 @@ const Plans = ({ onOpenChatbot }) => {
             className={classes.defaultDisabledButton}
             style={{ width: "132px" }}
           >
-            {t("")}
+            {"FREE"}
           </Button>
         </div>
         <GridContainer style={{ padding: "0 20px 20px 20px" }}>
@@ -78,7 +78,9 @@ const Plans = ({ onOpenChatbot }) => {
             xs={10}
             style={{ display: "flex", alignItems: "center", height: "20px" }}
           >
-            <span className={classes.checkedFont}>{t("Auto data linkage")}</span>
+            <span className={classes.checkedFont}>
+              {t("Auto data linkage")}
+            </span>
           </GridItem>
           <GridItem
             xs={2}
@@ -112,7 +114,9 @@ const Plans = ({ onOpenChatbot }) => {
             xs={10}
             style={{ display: "flex", alignItems: "center", height: "20px" }}
           >
-            <span className={classes.checkedFont}>{t("Data Analysis/prediction")}</span>
+            <span className={classes.checkedFont}>
+              {t("Data Analysis/prediction")}
+            </span>
           </GridItem>
           <GridItem
             xs={2}
@@ -252,7 +256,9 @@ const Plans = ({ onOpenChatbot }) => {
             xs={10}
             style={{ display: "flex", alignItems: "center", height: "20px" }}
           >
-            <span className={classes.uncheckedFont}>{t("No technical support")}</span>
+            <span className={classes.uncheckedFont}>
+              {t("No technical support")}
+            </span>
           </GridItem>
         </GridContainer>
       </div>
@@ -322,7 +328,9 @@ const Plans = ({ onOpenChatbot }) => {
             xs={10}
             style={{ display: "flex", alignItems: "center", height: "20px" }}
           >
-            <span className={classes.checkedFont}>{t("Auto data linkage")}</span>
+            <span className={classes.checkedFont}>
+              {t("Auto data linkage")}
+            </span>
           </GridItem>
           <GridItem
             xs={2}
@@ -356,7 +364,9 @@ const Plans = ({ onOpenChatbot }) => {
             xs={10}
             style={{ display: "flex", alignItems: "center", height: "20px" }}
           >
-            <span className={classes.checkedFont}>{t("Data Analysis/prediction")}</span>
+            <span className={classes.checkedFont}>
+              {t("Data Analysis/prediction")}
+            </span>
           </GridItem>
           <GridItem
             xs={2}

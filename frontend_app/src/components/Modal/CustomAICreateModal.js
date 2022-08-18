@@ -281,7 +281,7 @@ const CustomAICreateModal = ({ history, isCustomAIModalOpen, setIsCustomAIModalO
                               </span>
                               <span style={{ fontSize: 14 }}>
                                 {/* {` [ ${labelClass.completedLabelCount} / 10 ]`} */}
-                                {`[ ${labelClass.completedLabelCount ? labelClass.completedLabelCount.toLocaleString() : 0}${t("")} ]`}
+                                {`[ ${labelClass.completedLabelCount ? labelClass.completedLabelCount.toLocaleString() : 0} ]`}
                               </span>
                             </span>
                           }
