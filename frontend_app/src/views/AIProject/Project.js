@@ -1625,17 +1625,17 @@ const Project = ({ history }) => {
                           <TableRow>
                             <TableCell className={classes.tableHead} align="center" style={{ width: "16%" }}>
                               <div className={classes.tableHeader}>
-                                <b>{t("")}</b>
+                                <b>{""}</b>
                               </div>
                             </TableCell>
                             <TableCell className={classes.tableHead} align="center" style={{ width: "28%" }}>
                               <div className={classes.tableHeader}>
-                                <b>{t("")}</b>
+                                <b>{"Custom Training"}</b>
                               </div>
                             </TableCell>
                             <TableCell className={classes.tableHead} align="center" style={{ width: "28%" }}>
                               <div className={classes.tableHeader}>
-                                <b>{t("AutoML")}</b>
+                                <b>{"AutoML"}</b>
                               </div>
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
@@ -1692,7 +1692,7 @@ const Project = ({ history }) => {
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
                               <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                                {t("")}
+                                {"$ 2000"}
                               </TableCell>
                             )}
                           </TableRow>

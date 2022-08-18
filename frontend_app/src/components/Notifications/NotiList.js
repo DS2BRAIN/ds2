@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
@@ -157,7 +157,9 @@ const NotiList = ({ history }) => {
         <Tooltip
           title={
             <span style={{ fontSize: "12px" }}>
-              {t("When inquiring, please tell us the date of creation of the error and the name of the file.")}
+              {t(
+                "When inquiring, please tell us the date of creation of the error and the name of the file."
+              )}
             </span>
           }
           placement="bottom"
@@ -262,7 +264,7 @@ const NotiList = ({ history }) => {
             shape="greenOutlined"
             onClick={() => onClickToPayment()}
           >
-            {isDone ? t("To Payment History") : t("카드 수정하기")}
+            {isDone ? t("To payment history") : t("Modify payment")}
           </Button>
         )}
       </TableCell>
@@ -282,7 +284,7 @@ const NotiList = ({ history }) => {
         className={classes.settingTitle}
         sx={{ mt: 5, mb: 4 }}
       >
-        <Grid item>{t("")}</Grid>
+        <Grid item>{"Notifications"}</Grid>
         <Grid item>
           <div
             style={{
@@ -336,21 +338,27 @@ const NotiList = ({ history }) => {
                       style={{ width: "30%" }}
                       align="center"
                     >
-                      <b>{t("Notification content")}</b>
+                      <b style={{ color: "var(--textWhite87)" }}>
+                        {t("Notification content")}
+                      </b>
                     </TableCell>
                     <TableCell
                       className={classes.tableHead}
                       style={{ width: "15%" }}
                       align="center"
                     >
-                      <b>{t("Date created")}</b>
+                      <b style={{ color: "var(--textWhite87)" }}>
+                        {t("Date created")}
+                      </b>
                     </TableCell>
                     <TableCell
                       className={classes.tableHead}
                       style={{ width: "5%" }}
                       align="center"
                     >
-                      <b>{t("Read/Unread ")}</b>
+                      <b style={{ color: "var(--textWhite87)" }}>
+                        {t("Read/Unread")}
+                      </b>
                     </TableCell>
                     {/* <TableCell
                       className={classes.tableHead}
@@ -380,7 +388,7 @@ const NotiList = ({ history }) => {
                       style={{ width: "15%" }}
                       align="center"
                     >
-                      Action
+                      <b style={{ color: "var(--textWhite87)" }}>Action</b>
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -479,7 +487,9 @@ const NotiList = ({ history }) => {
               />
             </>
           ) : (
-            <div style={{ padding: "20px" }}>{t("No notifications history.")}</div>
+            <div style={{ padding: "20px" }}>
+              {t("No notifications history.")}
+            </div>
           )}
         </div>
       )}

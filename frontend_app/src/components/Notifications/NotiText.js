@@ -116,7 +116,7 @@ export const getNotificationText = (status, type, statText, lang) => {
       status === 1 || status === 0
         ? isKor
           ? "시작되었습니다."
-          : "has started."
+          : "has started"
         : status === 100
         ? isKor
           ? "완료되었습니다."
@@ -145,11 +145,15 @@ export const getNotificationText = (status, type, statText, lang) => {
             : "label project is being created and uploading data."
           : status === 100
           ? isKor
-            ? "라벨프로젝트가 생성 되었습니다."
+            ? "라벨프로젝트가 생성되었습니다."
             : "label project has been created."
           : "";
 
-    if (notiText === "") notiText = `${typeText} ${statusText}`;
+    if (notiText === "")
+      notiText =
+        !isKor && (status === 1 || status === 0)
+          ? `${statusText} ${typeText}`
+          : `${typeText} ${statusText}`;
   }
   if (type === "planPayment") {
     if (statText && statText["year"])

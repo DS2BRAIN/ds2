@@ -74,7 +74,9 @@ const LabelMember = ({ history }) => {
     }
     if (!selectedRole) {
       dispatch(
-        openErrorSnackbarRequestAction(t("Please select a group role to share."))
+        openErrorSnackbarRequestAction(
+          t("Please select a group role to share.")
+        )
       );
       return;
     }
@@ -272,7 +274,7 @@ const LabelMember = ({ history }) => {
                           size="sm"
                           onClick={() => deleteTeamMember(team.groupInfo.id)}
                         >
-                          {t("")}
+                          {t("Delete")}
                         </Button>
                       </div>
                     )}
