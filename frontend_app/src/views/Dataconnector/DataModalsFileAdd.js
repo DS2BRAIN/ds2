@@ -8,11 +8,9 @@ import { fileurl } from "controller/api";
 import { askModalRequestAction, openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 import { postConnectorWithFileRequestAction, stopProjectsLoadingRequestAction, deleteFilesForQuickStart } from "redux/reducers/projects.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button";
 
-import { Checkbox, FormControl, FormControlLabel, InputBase, InputLabel, RadioGroup, Radio, LinearProgress, Modal, Select, TextField } from "@material-ui/core";
+import { Checkbox, FormControl, FormControlLabel, InputBase, InputLabel, RadioGroup, Radio, LinearProgress, Modal, Select } from "@material-ui/core";
 import { CircularProgress, Grid, IconButton, Tooltip } from "@mui/material";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -174,13 +172,13 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
     if (dataAuthType === "video") {
       if (files[0].type.toLowerCase().indexOf(authType) === -1) {
-        dispatch(openErrorSnackbarRequestAction(t(`${authType} 파일을 업로드해주세요.`)));
+        dispatch(openErrorSnackbarRequestAction(t(`Upload ${authType} file`)));
         return;
       }
     } else {
       if (isAuthIncluded && filename.toLowerCase().indexOf(authType) === -1) {
         setCsvUploaded(false);
-        dispatch(openErrorSnackbarRequestAction(t(`${authType} 파일을 업로드해주세요.`)));
+        dispatch(openErrorSnackbarRequestAction(t(`Upload .${authType} file`)));
         return;
       } else if (authType.includes("csv") && filename.toLowerCase().indexOf(authType) !== -1) {
         setCsvUploaded(true);
@@ -339,7 +337,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     ) {
       if (process.env.REACT_APP_ENTERPRISE !== "true") {
         if (+user.me.remainDiskUsage + user.me.usageplan.storage + +user.me.additionalDiskUsage < user.me.usageplan.storage) {
-          dispatch(openErrorSnackbarRequestAction(`${t("The file cannot be uploaded because it exceeds the maximum total usage.")} ${"이용플랜을 업그레이드 후 다시 시도해주세요."}`));
+          dispatch(openErrorSnackbarRequestAction(`${t("The file cannot be uploaded because it exceeds the maximum total usage.")} ${t("Please try again after upgrading your plan.")}`));
           return;
         }
       }
@@ -512,7 +510,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
         }
       };
 
-      const handleOnError = (err, file, inputElem, reason) => {
+      const handleOnError = (err) => {
         const error = err;
         if (error) {
           console.log(error);
@@ -788,12 +786,12 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
         );
 
         return (
-          <GridItem style={{ width: "100%", padding: "0" }}>
+          <Grid>
             <RadioGroup disabled={!csvUploaded} aria-label="csv_set_option" onChange={handleHeaderRadio} value={selectedRadio}>
               {radioSelectColumn(Object.keys(columnNameList).length > 0)}
               {radioInputSelf()}
             </RadioGroup>
-          </GridItem>
+          </Grid>
         );
       };
 
@@ -907,7 +905,7 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
                 {t("Confirm")}
               </Button>
             ) : (
-              <Tooltip title={<span style={{ fontSize: "14px" }}>{files === null ? t("Please upload the file and proceed") : csvUploaded && selectedRadio === "" ? t("칼럼명을 지정해야 합니다. 데이터 설정을 진행해주세요.") : null}</span>} placement="top">
+              <Tooltip title={<span style={{ fontSize: "14px" }}>{files === null ? t("Please upload the file and proceed") : csvUploaded && selectedRadio === "" ? t("Please select column on data settings if you want to proceed.") : null}</span>} placement="top">
                 <div>
                   <Button id="nextDataconnectorModal" size="lg" disabled style={dataModalBtnStyle}>
                     {t("Confirm")}
