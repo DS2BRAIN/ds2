@@ -46,7 +46,7 @@ describe("Dataset1", () => {
     });
 
     // 라벨링 시작하기 버튼이 비활성화 되어 있는가? (클릭해도 아무런 반응이 없는가?)
-    cy.get("#startLabellingDisabledBtn").should("be.disabled");
+    cy.get("#start_labelling_disabled_btn").should("be.disabled");
     // AI 개발 시작하기 버튼에 마우스 커서를 올리면, "AI 개발을 시작하기 위해서 데이터를 선택해주세요!" 문구가 나타나는가?
     cy.get("#start_develop_btn").should("be.disabled");
   });
