@@ -55,7 +55,7 @@ export default function ResetPassword(props) {
 
   return (
     <div className={classes.signInContainer} style={{ height: "100vh" }}>
-      <ReactTitle title={"DS2.ai - " + t("Reset Password")} />
+      <ReactTitle title={"DS2.ai - " + t("Reset password")} />
       <PasswordCard type="reset" props={props} />
     </div>
   );

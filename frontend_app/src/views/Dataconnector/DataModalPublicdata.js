@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Grid, IconButton } from "@mui/material";
 import CloseIcon from "@material-ui/icons/Close";
 
-import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
 
 const DataModalPublicData = ({
@@ -12,7 +11,6 @@ const DataModalPublicData = ({
   selectedData,
   tableHeads,
 }) => {
-  const classes = currentTheme();
   const { t } = useTranslation();
 
   const startDownload = () => {

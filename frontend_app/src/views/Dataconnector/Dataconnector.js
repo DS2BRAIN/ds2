@@ -252,7 +252,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const privateTableHeads = [
-    { value: "No", width: "5%", type: "dataNum" },
+    { value: "No.", width: "5%", type: "dataNum" },
     { value: "Data name", width: "50%", type: "dataconnectorName" },
     { value: "Data type", width: "10%", type: "dataconnectortype" },
     { value: "Training availability", width: "10%", type: "hasLabelData" },
@@ -350,9 +350,9 @@ const Dataconnector = ({ history }) => {
                 align="center"
                 width={tableHead.width}
                 style={{
-                  cursor: tableHead.value !== "No" ? "pointer" : "default",
+                  cursor: tableHead.value !== "No." ? "pointer" : "default",
                 }}
-                onClick={() => tableHead.value !== "No" && onSetSortDataValue(tableHead.type)}
+                onClick={() => tableHead.value !== "No." && onSetSortDataValue(tableHead.type)}
               >
                 <div className={classes.tableHeader}>
                   {sortDataValue === tableHead.type && (!isSortDesc ? <ArrowUpwardIcon id={`ascend_${tableHead.type}`} className="arrow_ascend" fontSize="small" /> : <ArrowDownwardIcon id={`descend_${tableHead.type}`} className="arrow_descend" fontSize="small" />)}
@@ -368,7 +368,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const publicTableHeads = [
-    { value: "No", width: "5%", type: "dataNum", align: "center" },
+    { value: "No.", width: "5%", type: "dataNum", align: "center" },
     {
       value: "Preview",
       width: "12.5%",
