@@ -16,7 +16,11 @@ module.exports = defineConfig({
     baseUrl: "http://localhost:13000",
     supportFile: "cypress/support/e2e.js",
   },
-  viewportWidth: 1980,
+  viewportWidth: 1920,
   viewportHeight: 1080,
   chromeWebSecurity: false,
+  env: {
+    email: "front_test@dslab.global",
+    password: "",
+  },
 });
