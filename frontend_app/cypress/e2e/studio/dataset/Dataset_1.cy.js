@@ -252,7 +252,7 @@ describe("Dataset1", () => {
 
                 // "확인" 버튼을 클릭하면 "이미 동일한 이름의 칼럼명이 존재합니다. 새로운 칼럼명을 입력해주세요."라는 문구가 나타나는가?
                 cy.get("#startSaveFilesBtn")
-                  .click()
+                  .click({ force: true })
                   .then(() => {
                     cy.contains(
                       "이미 동일한 이름의 칼럼명이 존재합니다. 새로운 칼럼명을 입력해주세요."
@@ -264,7 +264,7 @@ describe("Dataset1", () => {
 
                 // "확인" 버튼을 클릭하면 "결과값 칼럼을 입력해주세요"라는 문구가 나타나는가?
                 cy.get("#startSaveFilesBtn")
-                  .click()
+                  .click({ force: true })
                   .then(() => {
                     cy.contains("결과값 칼럼을 입력해주세요");
                   });
@@ -341,7 +341,7 @@ describe("Dataset1", () => {
 
             // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
             cy.get("#startSaveFilesBtn")
-              .click()
+              .click({ force: true })
               .wait("@postDataWithFile")
               .then(() => {
                 cy.contains("데이터커넥터가 등록되었습니다");
@@ -449,7 +449,7 @@ describe("Dataset1", () => {
 
                 // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
                 cy.get("#startSaveFilesBtn")
-                  .click()
+                  .click({ force: true })
                   .wait("@postDataWithFile")
                   .then(() => {
                     cy.contains("데이터커넥터가 등록되었습니다");
@@ -539,7 +539,7 @@ describe("Dataset1", () => {
 
                 // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
                 cy.get("#startSaveFilesBtn")
-                  .click()
+                  .click({ force: true })
                   .wait("@postDataWithFile")
                   .then(() => {
                     cy.contains("데이터커넥터가 등록되었습니다");
@@ -712,7 +712,7 @@ describe("Dataset1", () => {
 
         // "확인" 버튼 클릭
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -785,7 +785,7 @@ describe("Dataset1", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -852,7 +852,7 @@ describe("Dataset1", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -922,7 +922,7 @@ describe("Dataset1", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");

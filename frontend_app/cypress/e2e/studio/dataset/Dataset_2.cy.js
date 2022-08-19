@@ -59,7 +59,7 @@ describe("Dataset2", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -130,7 +130,7 @@ describe("Dataset2", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -231,7 +231,7 @@ describe("Dataset2", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -299,7 +299,7 @@ describe("Dataset2", () => {
 
         // "확인" 버튼을 클릭하면 "데이터커넥터가 등록되었습니다"라는 문구와 함께 팝업창이 닫히는가?
         cy.get("#startSaveFilesBtn")
-          .click()
+          .click({ force: true })
           .wait("@postDataWithFile")
           .then(() => {
             cy.contains("데이터커넥터가 등록되었습니다");
@@ -664,7 +664,7 @@ describe("Dataset2", () => {
 
     // 데이터가 3개 선택된 상태에서 AI 개발 시작하기 버튼을 클릭하면 프로젝트 페이지로 이동하는가?
     cy.get("#start_develop_btn")
-      .click()
+      .click({ force: true })
       .wait("@postProjectFromDataConnectors")
       .wait(3000)
       .then(() => {
@@ -842,6 +842,10 @@ describe("Dataset2", () => {
           `postProjectFromDataConnectors`
         );
       });
+
+    cy.get("ul > li.MuiTablePagination-menuItem")
+      .eq(2)
+      .click();
 
     cy.get("#privateDataTable")
       .contains("insurance.csv")
