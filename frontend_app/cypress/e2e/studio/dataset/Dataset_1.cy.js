@@ -29,6 +29,7 @@ describe("Dataset1", () => {
 
   // 6 ~ 11
   it("check data title & data buttons", () => {
+    cy.ko();
     // 제목과 설명 문구 확인
     cy.contains("데이터 저장소").should("be.visible");
     cy.contains("데이터셋으로 인공지능 개발을 시작합니다.").should(
@@ -54,6 +55,7 @@ describe("Dataset1", () => {
   // 12 ~ 78
   // coverage: Templates.js
   it("test sample template", () => {
+    cy.ko();
     // 샘플 템플릿 버튼 클릭
     cy.get("#sampleTemplateBtn").click({ force: true });
     cy.contains("학습형태별").should("be.visible");
@@ -169,6 +171,7 @@ describe("Dataset1", () => {
   // 78 ~ 113
   // coverage: DataModalsFileAdd.js
   it("upload data file", () => {
+    cy.ko();
     // "데이터 추가하기" 버튼 클릭 -> 데이터 형식 선택 팝업이 나타나는가?
     cy.get("#add_dataset_btn:not([disabled])")
       .click({ force: true })
@@ -350,8 +353,13 @@ describe("Dataset1", () => {
   // 114 ~ 120
   // coverage: DataconnectorDetail.js (일부)
   it("check noshow_modified.csv file uploaded", () => {
+    cy.ko();
     // "내 데이터" 탭 클릭
     cy.get("#privateDataTab").click();
+
+    cy.get("ul > li.MuiTablePagination-menuItem")
+      .eq(2)
+      .click();
 
     // 데이터 테이블에서 데이터명이 "noshow_modified.csv"인 데이터가 보이는가?
     cy.get("#privateDataTable").should("contain.text", "noshow_modified.csv");
@@ -378,6 +386,7 @@ describe("Dataset1", () => {
 
   // 121 ~ 132
   it("upload insurance.csv", () => {
+    cy.ko();
     // "데이터 추가하기" 버튼 클릭
     cy.get("#add_dataset_btn:not([disabled])")
       .click({ force: true })
@@ -461,6 +470,7 @@ describe("Dataset1", () => {
 
   // 132 ~ 145
   it("upload yelp_modified.csv", () => {
+    cy.ko();
     // "내 데이터" 탭 클릭
     cy.get("#privateDataTab").click();
 
@@ -550,6 +560,7 @@ describe("Dataset1", () => {
 
   // 146 ~ 166
   it("upload pet.zip", () => {
+    cy.ko();
     // "데이터 추가하기" 버튼 클릭
     cy.get("#add_dataset_btn:not([disabled])")
       .click({ force: true })
