@@ -1094,8 +1094,15 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                             {t("Analyze")}
                           </div>
                         )} */}
-                    {metabase && <MetabaseButton id={id} type="model" metabase={metabase} initiateMetabase={initiateMetabase} isKor={user.language === "ko"} />}
-                    {/* {(project.option !== "colab" &&
+                      {metabase && (
+                        <MetabaseButton
+                          id={id}
+                          type="model"
+                          metabase={metabase}
+                          initiateMetabase={initiateMetabase}
+                        />
+                      )}
+                      {/* {(project.option !== "colab" &&
                         (downloadOff || project.isShared)) ||
                       process.env.REACT_APP_ENTERPRISE === "true" ? null : (
                         <Button
