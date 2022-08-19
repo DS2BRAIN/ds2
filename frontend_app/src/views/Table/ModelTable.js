@@ -338,15 +338,6 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
       // if (model.status !== 99) tempModels.push(model);
       if (!isModelHidden) tempModels.push(model);
     }
-    if (projects.project.trainingMethod === "object_detection") {
-      await Promise.all(
-        tempModels.map(async (tmpMod) => {
-          await api.getModelsInfoDetail(tmpMod.id).then((res) => {
-            return (tmpMod["ap_info"] = res.data.ap_info);
-          });
-        })
-      );
-    }
     setModelStatus(modelStatus);
     if (sortObj[sortValueRef.current] === "up") {
       if (sortValueRef.current === "name") {
