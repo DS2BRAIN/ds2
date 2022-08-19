@@ -188,7 +188,7 @@ describe("Dataset1", () => {
     cy.get("#CSV_container")
       .click()
       .then(() => {
-        cy.get("#nextDataModal_btn").click();
+        cy.get("#nextDataModal_btn").click({ force: true });
         // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
         cy.get("#modalDataconnectorContainer").should(
           "contain.text",
@@ -210,7 +210,7 @@ describe("Dataset1", () => {
     cy.get("#CSV_container")
       .click()
       .then(() => {
-        cy.get("#nextDataModal_btn").click();
+        cy.get("#nextDataModal_btn").click({ force: true });
 
         // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
         cy.get("#modalDataconnectorContainer").should(
@@ -388,7 +388,7 @@ describe("Dataset1", () => {
         cy.get("#CSV_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -474,7 +474,7 @@ describe("Dataset1", () => {
         cy.get("#CSV_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -565,7 +565,7 @@ describe("Dataset1", () => {
         cy.get("#CSV_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -594,7 +594,7 @@ describe("Dataset1", () => {
         cy.get("#ZIP_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -670,7 +670,7 @@ describe("Dataset1", () => {
         cy.get("#ZIP_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -730,7 +730,7 @@ describe("Dataset1", () => {
         cy.get("#CSV_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -803,7 +803,7 @@ describe("Dataset1", () => {
         cy.get("#CSV_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
@@ -873,7 +873,7 @@ describe("Dataset1", () => {
         cy.get("#CSV_container")
           .click()
           .then(() => {
-            cy.get("#nextDataModal_btn").click();
+            cy.get("#nextDataModal_btn").click({ force: true });
 
             // "데이터 추가하기 - 2. 데이터 업로드 및 설정" 제목 문구가 보이는 화면으로 이동되는가?
             cy.get("#modalDataconnectorContainer").should(
