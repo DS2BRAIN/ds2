@@ -200,7 +200,7 @@ describe("Dataset1", () => {
 
         // "이전" 버튼을 클릭하면 "데이터 추가하기 - 1. 데이터 형식 선택" 화면으로 돌아가는가?
         cy.get("#previousDataconnectorModal")
-          .click()
+          .click({ force: true })
           .then(() => {
             cy.get("#modalDataconnectorContainer").should(
               "contain.text",
@@ -357,6 +357,7 @@ describe("Dataset1", () => {
     // "내 데이터" 탭 클릭
     cy.get("#privateDataTab").click();
 
+    cy.get("#pagerow_select").click();
     cy.get("ul > li.MuiTablePagination-menuItem")
       .eq(2)
       .click();

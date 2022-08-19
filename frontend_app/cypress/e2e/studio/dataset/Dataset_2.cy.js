@@ -384,7 +384,7 @@ describe("Dataset2", () => {
           // 다음 페이지에 대한 데이터가 잘 보이는가?
           // 이전 페이지에 대한 데이터가 잘 보이는가?
           cy.get(`#datatable_${direction}page`)
-            .click()
+            .click({ force: true })
             .wait(`@getDataByPage${start}`, {
               timeout: 10000,
             });
@@ -843,6 +843,7 @@ describe("Dataset2", () => {
         );
       });
 
+    cy.get("#pagerow_select").click();
     cy.get("ul > li.MuiTablePagination-menuItem")
       .eq(2)
       .click();
