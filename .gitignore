@@ -215,3 +215,5 @@ backend/astoretest/
 backend/models/bpe.model
 
 backend/gan/
+
+backend/src/visualizing/
