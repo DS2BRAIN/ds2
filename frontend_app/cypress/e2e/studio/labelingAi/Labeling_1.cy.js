@@ -18,6 +18,9 @@ describe("Labeling AI 1)", () => {
         cy.get("#labelIntro_start_btn").click({ force: true });
       }
     });
+
+    cy.wait(3000);
+    cy.ko();
   });
 
   // #6 ~
@@ -180,98 +183,139 @@ describe("Labeling AI 1)", () => {
           .eq(7)
           .should("contain.text", "완료");
       });
+
+    //! reset condition
+    cy.visit("/admin/dataconnector");
+
+    cy.get("input[type='checkbox']")
+      .eq(1)
+      .check();
+    cy.get("#delete_data_btn")
+      .click()
+      .then(() => {
+        cy.get("#yes_btn").click();
+      });
+
+    //     cy.contains("tbody > tr > td", "cat_dog")
+    // .eq(0)
+    // .invoke("text")
+    // .then((text) => {
+    //   if (text === "cat_dog") {
+    //     cy.get("input[type='checkbox']")
+    //       .eq(1)
+    //       .check();
+    //     cy.get("#delete_data_btn")
+    //       .click()
+    //       .then(() => {
+    //         cy.get("#yes_btn").click();
+    //       });
+    //     }
+    //   });
   });
 
   // #31 ~
   it("labelproject dashboard tab", () => {
-    // 프로젝트 리스트에서 “test1” 프로젝트 클릭 -> 프로젝트 대시보드 화면이 나타나는가?
-    cy.contains("td", "test1")
-      .eq(0)
-      .dblclick({ force: true })
-      .then(() => {
-        cy.get("#dashboard_tab").should("be.visible");
-        // cy.url().should("include", "/admin/labelling/");
-      });
+    cy.visit("/admin/labelling/11942");
 
-    // 프로젝트 명 수정 버튼 클릭 -> 프로젝트명을 수정할 수 있는 입력창이 나타나는가?
-    cy.get("#change_name_btn")
-      .click({ force: true })
-      .then(() => {
-        cy.get("#label_project_name").should("not.have.attr", "disabled");
-      });
+    const sampleProjectName = "labeling_ai_1_sample_project";
+    const sampleProjectDesc = "Don't delete the project";
 
-    // 프로젝트 명을 "test2"로 수정 후 취소 버튼 클릭 -> 수정사항이 반영 되었는가?(실패 케이스)
-    cy.get("#label_project_name")
-      .clear({ force: true })
-      .type("test2", { force: true });
-    cy.get("#change_name_cancel_btn")
-      .click({ force: true })
-      .then(() => {
-        // test1으로 복구 되었는지 확인으로 대체
-        cy.get("#label_project_name").should("have.text", "test1");
-      });
+    cy.resetLabelprojectInfo(sampleProjectName, sampleProjectDesc).then(() => {
+      // 프로젝트 리스트에서 “test1” 프로젝트 클릭 -> 프로젝트 대시보드 화면이 나타나는가?
+      cy.contains("textarea", sampleProjectName)
+        .eq(0)
+        .dblclick({ force: true })
+        .then(() => {
+          cy.get("#dashboard_tab").should("be.visible");
+          // cy.url().should("include", "/admin/labelling/");
+        });
 
-    // 프로젝트 명을 "test2"로 수정 후 저장 버튼 클릭 -> “프로젝트명을 바꾸시겠습니까?” 라는 팝업창이 나타나는가?
-    cy.get("#label_project_name")
-      .clear({ force: true })
-      .type("test2", { force: true });
-    cy.get("#change_name_btn").click({ force: true });
-    cy.get("#change_name_confirm_btn")
-      .click({ force: true })
-      .then(() => {
-        cy.contains("프로젝트명을 바꾸시겠습니까?").should("be.visible");
-      });
+      // 프로젝트 명 수정 버튼 클릭 -> 프로젝트명을 수정할 수 있는 입력창이 나타나는가?
+      cy.get("#change_name_btn")
+        .click({ force: true })
+        .then(() => {
+          cy.get("#label_project_name").should("not.have.attr", "disabled");
+        });
 
-    // 팝업창에서 “예” 버튼 클릭 -> “프로젝트 정보가 정상적으로 변경되었습니다” 라는 팝업창이 나타나는가?
-    cy.get("#yes_btn")
-      .click({ force: true })
-      .then(() => {
-        cy.get("#client-snackbar").should(
-          "have.text",
-          "프로젝트 정보가 정상적으로 변경되었습니다."
-        );
-        cy.get("#label_project_name").should("have.text", "test2");
-      });
+      // 프로젝트 명을 "test2"로 수정 후 취소 버튼 클릭 -> 수정사항이 반영 되었는가?(실패 케이스)
+      cy.get("#label_project_name")
+        .clear({ force: true })
+        .type("test2", { force: true });
+      cy.get("#change_name_cancel_btn")
+        .click({ force: true })
+        .then(() => {
+          // test1으로 복구 되었는지 확인으로 대체
+          cy.get("#label_project_name").should("have.text", sampleProjectName);
+        });
 
-    // 프로젝트 설명 수정 버튼 클릭 -> 프로젝트명을 수정할 수 있는 입력창이 나타나는가?
-    cy.get("#change_detail_btn")
-      .click({ force: true })
-      .then(() => {
-        cy.get("#label_project_detail").should("not.have.attr", "disabled");
-      });
+      // 프로젝트 명을 "test2"로 수정 후 저장 버튼 클릭 -> “프로젝트명을 바꾸시겠습니까?” 라는 팝업창이 나타나는가?
+      cy.get("#label_project_name")
+        .clear({ force: true })
+        .type("test2", { force: true });
+      cy.get("#change_name_btn").click({ force: true });
+      cy.get("#change_name_confirm_btn")
+        .click({ force: true })
+        .then(() => {
+          cy.contains("프로젝트명을 바꾸시겠습니까?").should("be.visible");
+        });
 
-    // 프로젝트 설명을 "cat_dog2"로 수정 후 취소 버튼 클릭 -> 수정사항이 반영 되었는가?(실패 케이스)
-    cy.get("#label_project_detail")
-      .clear({ force: true })
-      .type("cat_dog2", { force: true });
-    cy.get("#change_detail_cancel_btn")
-      .click({ force: true })
-      .then(() => {
-        // cat_dog로 복구 되었는지 확인으로 대체
-        cy.get("#label_project_detail").should("have.text", "cat_dog");
-      });
+      // 팝업창에서 “예” 버튼 클릭 -> “프로젝트 정보가 정상적으로 변경되었습니다” 라는 팝업창이 나타나는가?
+      cy.get("#yes_btn")
+        .click({ force: true })
+        .then(() => {
+          cy.get("#client-snackbar").should(
+            "have.text",
+            "프로젝트 정보가 정상적으로 변경되었습니다."
+          );
+          cy.get("#label_project_name").should("have.text", "test2");
+        });
 
-    // 프로젝트 설명을 "cat_dog2"로 수정 후 저장 버튼 클릭 -> “프로젝트명을 바꾸시겠습니까?” 라는 팝업창이 나타나는가?
-    cy.get("#label_project_detail")
-      .clear({ force: true })
-      .type("cat_dog2", { force: true });
-    cy.get("#change_detail_btn").click({ force: true });
-    cy.get("#change_detail_confirm_btn")
-      .click({ force: true })
-      .then(() => {
-        cy.contains("프로젝트 설명을 바꾸시겠습니까?").should("be.visible");
-      });
+      // 프로젝트 설명 수정 버튼 클릭 -> 프로젝트명을 수정할 수 있는 입력창이 나타나는가?
+      cy.get("#change_detail_btn")
+        .click({ force: true })
+        .then(() => {
+          cy.get("#label_project_detail").should("not.have.attr", "disabled");
+        });
 
-    // 팝업창에서 “예” 버튼 클릭 -> “프로젝트 정보가 정상적으로 변경되었습니다” 라는 팝업창이 나타나는가?
-    cy.get("#yes_btn")
-      .click({ force: true })
-      .then(() => {
-        cy.get("#client-snackbar").should(
-          "have.text",
-          "프로젝트 정보가 정상적으로 변경되었습니다."
-        );
-        cy.get("#label_project_detail").should("have.text", "cat_dog2");
-      });
+      // 프로젝트 설명을 "cat_dog2"로 수정 후 취소 버튼 클릭 -> 수정사항이 반영 되었는가?(실패 케이스)
+      cy.get("#label_project_detail")
+        .clear({ force: true })
+        .type("cat_dog2", { force: true });
+      cy.get("#change_detail_cancel_btn")
+        .click({ force: true })
+        .then(() => {
+          // cat_dog로 복구 되었는지 확인으로 대체
+          cy.get("#label_project_detail").should(
+            "have.text",
+            sampleProjectDesc
+          );
+        });
+
+      // 프로젝트 설명을 "cat_dog2"로 수정 후 저장 버튼 클릭 -> “프로젝트명을 바꾸시겠습니까?” 라는 팝업창이 나타나는가?
+      cy.get("#label_project_detail")
+        .clear({ force: true })
+        .type("cat_dog2", { force: true });
+      cy.get("#change_detail_btn").click({ force: true });
+      cy.get("#change_detail_confirm_btn")
+        .click({ force: true })
+        .then(() => {
+          cy.contains("프로젝트 설명을 바꾸시겠습니까?").should("be.visible");
+        });
+
+      // 팝업창에서 “예” 버튼 클릭 -> “프로젝트 정보가 정상적으로 변경되었습니다” 라는 팝업창이 나타나는가?
+      cy.get("#yes_btn")
+        .click({ force: true })
+        .then(() => {
+          cy.get("#client-snackbar").should(
+            "have.text",
+            "프로젝트 정보가 정상적으로 변경되었습니다."
+          );
+          cy.get("#label_project_detail").should("have.text", "cat_dog2");
+        });
+
+      //! reset condition
+      cy.resetLabelprojectInfo(sampleProjectName, sampleProjectDesc);
+    });
   });
 
   // #42 ~
@@ -322,6 +366,8 @@ describe("Labeling AI 1)", () => {
             .then(() => {
               cy.get("#labelClass_modify_class_modal").should("be.visible");
             });
+
+          cy.get("body").click();
 
           // 클래스 명에 cat 입력 -> 클래스명에 작업에서 안내한 이름 입력이 가능한가?
           cy.get("#labelclass_name_input")
@@ -482,7 +528,7 @@ describe("Labeling AI 1)", () => {
                     cy.stub(win, "open").as("labelAppOpen");
                   });
 
-                  cy.get("#start_labeling_btn")
+                  cy.get("#start_labelling_btn")
                     .click({ force: true })
                     .then(() => {
                       cy.get("@labelAppOpen").should("be.called");
@@ -619,7 +665,7 @@ describe("Labeling AI 1)", () => {
   });
 
   // #149 ~
-  it.only("labelproject member tab", () => {
+  it.skip("labelproject member tab", () => {
     //! test project name : setting_tab_test_project_labeling_1
     cy.visit("/admin/labelling/11955");
 
@@ -955,18 +1001,17 @@ describe("Labeling AI 1)", () => {
           });
       });
 
-    //! 프로젝트 정보 원복
+    //! reset condition
+    cy.get("body").click();
+
     cy.get("#change_project_name_btn")
       .click({ force: true })
       .then(() => {
         cy.get("#project_name_input")
           .clear()
           .type("setting_tab_test_project_labeling_1");
-
         cy.get("body").click({ force: true });
-
         cy.get("#edit_project_info_btn").click({ force: true });
-
         cy.get("#yes_btn").click({ force: true });
       });
 
@@ -976,11 +1021,8 @@ describe("Labeling AI 1)", () => {
         cy.get("#project_desc_input")
           .clear()
           .type("Don't delete the project");
-
         cy.get("body").click({ force: true });
-
         cy.get("#edit_project_info_btn").click({ force: true });
-
         cy.get("#yes_btn").click({ force: true });
       });
   });
