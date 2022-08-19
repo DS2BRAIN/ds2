@@ -406,25 +406,7 @@ const AutoMLProject = ({ history, route }) => {
   };
 
   const partStartBtns = () => {
-    const onSetSelectedPage = (value) => {
-      dispatch(
-        getProjectsRequestAction({
-          sorting: sortingValue,
-          count: projectRowsPerPage,
-          page: 0,
-          tab: activeStep,
-          isDesc: isSortDesc,
-          isshared: value,
-        })
-      );
-      setIsShared(value);
-    };
-
     const openStartProject = () => {
-      // if(parseInt(user.me.cumulativeProjectCount) >= parseInt(user.me.usageplan.projects) + parseInt(user.me.remainProjectCount)){
-      //   dispatch(openErrorSnackbarRequestAction(`${t('You can’t add a new project. You’ve reached the maximum number of projects allowed for your account')} ${t('계속 진행하시려면 이용플랜을 변경해주세요.')}`));
-      //   return;
-      // }
       history.push("/admin/dataconnector");
     };
 
@@ -454,54 +436,65 @@ const AutoMLProject = ({ history, route }) => {
     );
   };
 
-  const projectUsageCount = () => (
-    <div className={classes.fullWidthAlignRightContainer}>
-      <div
-        style={{
-          width: "10%",
-          minWidth: "200px",
-          fontSize: "12px",
-        }}
-      >
-        <div style={{ display: "flex" }}>
-          <div>{t("Total projects")}</div>
-          <div id="projectCountText" style={{ marginLeft: "auto" }}>
-            <span id="projectCountText">
-              {(+user.me.cumulativeProjectCount).toLocaleString()} / {user.me.usageplan.planName === "trial" ? 0 : (+user.me.remainProjectCount + +user.me.usageplan.projects * (user.me.dynos ? +user.me.dynos : 1) + +user.me.additionalProjectCount).toLocaleString()} {t("")}
-            </span>
-          </div>
-        </div>
-        <LinearProgress variant="determinate" color="blue" value={(+user.me.cumulativeProjectCount / (user.me.usageplan.planName === "trial" ? 0 : +user.me.remainProjectCount + +user.me.usageplan.projects * (user.me.dynos ? +user.me.dynos : 1) + +user.me.additionalProjectCount)) * 100} />
-      </div>
-    </div>
-  );
-
   return (
     <div>
       {introOn ? (
-        <ProjectIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} />
+        <ProjectIntro
+          setIntroOn={setIntroOn}
+          setIntroOffClicked={setIntroOffClicked}
+          useTranslation={useTranslation}
+        />
       ) : (
         <>
           <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
           <Grid>
-            <div className={classes.topTitle}>{t(`인공지능 ${isVerify ? "검증" : "개발"}하기`)}</div>
-            <div className={classes.subTitleText}>{t(`새로운 프로젝트를 생성하여 AI모델을 통한 데이터 ${isVerify ? "검증" : "예측"}을 할 수 있습니다.`)}</div>
+            <div className={classes.topTitle}>
+              {t(`인공지능 ${isVerify ? "검증" : "개발"}하기`)}
+            </div>
+            <div className={classes.subTitleText}>
+              {t(
+                `새로운 프로젝트를 생성하여 AI모델을 통한 데이터 ${
+                  isVerify ? "검증" : "예측"
+                }을 할 수 있습니다.`
+              )}
+            </div>
           </Grid>
           <Grid sx={{ my: 8 }}>
-            <ProjectListStepper history={history} step={activeStep} page={route} />
+            <ProjectListStepper
+              history={history}
+              step={activeStep}
+              page={route}
+            />
           </Grid>
-          <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ mb: 2 }}
+          >
             <Grid item>{partStartBtns()}</Grid>
             <Grid item>
-              <SearchInputBox tooltipText="프로젝트명을 입력해주세요." setSearchedValue={setSearchedProjectValue} />
+              <SearchInputBox
+                tooltipText="프로젝트명을 입력해주세요."
+                setSearchedValue={setSearchedProjectValue}
+              />
             </Grid>
           </Grid>
-          {/* {user.me && projectUsageCount()}*/}
           <Grid>{showMyProject(projects.projects)}</Grid>
         </>
       )}
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isTemplateModalOpen} onClose={closeTemplateModal} className={classes.modalContainer}>
-        <Samples className={classes.predictModalContent} closeTemplateModal={closeTemplateModal} history={history} />
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isTemplateModalOpen}
+        onClose={closeTemplateModal}
+        className={classes.modalContainer}
+      >
+        <Samples
+          className={classes.predictModalContent}
+          closeTemplateModal={closeTemplateModal}
+          history={history}
+        />
       </Modal>
     </div>
   );
