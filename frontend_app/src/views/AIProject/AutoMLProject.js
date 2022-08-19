@@ -199,12 +199,12 @@ const AutoMLProject = ({ history, route }) => {
   const showMyProject = (projectArr) => {
     const tableHeads = [
       { value: "No", width: "5%", name: "" },
-      { value: "프로젝트명", width: "30%", name: "projectName" },
-      { value: "역할", width: "10%", name: "role" },
-      { value: "옵션", width: "7.5%", name: "option" },
-      { value: "학습방법", width: "17.5%", name: "trainingMethod" },
-      { value: "생성일", width: "15%", name: "created_at" },
-      { value: "진행상태", width: "15%", name: "status" },
+      { value: "Project name", width: "30%", name: "projectName" },
+      { value: "Role", width: "10%", name: "role" },
+      { value: "Option", width: "7.5%", name: "option" },
+      { value: "Training method", width: "17.5%", name: "trainingMethod" },
+      { value: "Date created", width: "15%", name: "created_at" },
+      { value: "Training status", width: "15%", name: "status" },
     ];
 
     const tableBodys = [
@@ -295,13 +295,13 @@ const AutoMLProject = ({ history, route }) => {
 
         let status = "";
         if (prj.status === 0) {
-          status = "준비완료";
+          status = "Ready";
         } else if (prj.status === 100) {
-          status = "학습완료";
+          status = "Completed";
         } else if (prj.status === 99 || prj.status === 9 || prj.status < 0) {
-          status = "에러";
+          status = "Error";
         } else {
-          status = "학습 중";
+          status = "In progress";
         }
 
         const project = [
@@ -320,13 +320,13 @@ const AutoMLProject = ({ history, route }) => {
 
       const onSetColor = (d) => {
         switch (d) {
-          case "준비완료":
+          case "Ready":
             return "#6B6B6B";
-          case "학습 중":
+          case "In progress":
             return "#1BC6B4";
-          case "에러":
+          case "Error":
             return "#BD2020";
-          case "학습완료":
+          case "Completed":
             return "#0A84FF";
         }
       };
