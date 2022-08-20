@@ -288,22 +288,22 @@ class DaemonAsyncTask():
 
                 print(f"updateModelFromColab updateResult : None")
                 realTrainingMethod = project['trainingMethod']
-                # try:
-                #     if project['trainingMethod'] not in 'image':
-                #         prescriptionAnalyticsInfo = self.analysingClass.prescriptionAnalytics(project, model, learn,
-                #                                                                               df,
-                #                                                                               num_cols, str_cols,
-                #                                                                               dep_var,
-                #                                                                               feature_importance_array,
-                #                                                                               yClass,
-                #                                                                               realTrainingMethod)
-                #         self.dbClass.updateModel(modelRaw.id, {
-                #             "prescriptionAnalyticsInfo": prescriptionAnalyticsInfo
-                #         })
-                # except:
-                #     print("fail3")
-                #     print(traceback.format_exc())
-                #     pass
+                try:
+                    if project['trainingMethod'] not in 'image':
+                        prescriptionAnalyticsInfo = self.analysingClass.prescriptionAnalytics(project, model, learn,
+                                                                                              df,
+                                                                                              num_cols, str_cols,
+                                                                                              dep_var,
+                                                                                              feature_importance_array,
+                                                                                              yClass,
+                                                                                              realTrainingMethod)
+                        self.dbClass.updateModel(modelRaw.id, {
+                            "prescriptionAnalyticsInfo": prescriptionAnalyticsInfo
+                        })
+                except:
+                    print("fail3")
+                    print(traceback.format_exc())
+                    pass
 
                 print(f"updateModelFromColab prescriptionAnalytics finished : None")
                 df = df.iloc[:math.ceil(round(len(df) * 0.8))].copy()
