@@ -96,12 +96,11 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
   return (
     <>
       {metabaseStatus === 0 || metabaseStatus === 100 ? (
-        <Button
+        <div
           id={`metabase_${type}_${
             metabaseStatus === 100 ? "check" : "start"
           }_btn`}
-          shape={type === "model" ? "blueOutlined" : "greenOutlined"}
-          size={type === "model" ? "sm" : "md"}
+          className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
           style={{
             fontWeight: metabaseStatus === 100 && "bold",
           }}
@@ -114,10 +113,10 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
           }}
         >
           {type === "data" && isKor ? "데이터 " : null}
-          {metabaseStatus === 100 ? t("Check analysis") : t("분석 시작")}
+          {metabaseStatus === 100 ? t("Check analysis") : t("Start Analysis")}
           {type === "data" && !isKor ? " data" : null}
           {type === "data" ? " (Prod.By METABASE)" : null}
-        </Button>
+        </div>
       ) : metabaseStatus === 1 || metabaseStatus === 99 ? (
         <Tooltip
           title={
@@ -130,12 +129,12 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
           placement="bottom"
         >
           <div>
-            <Button
+            <div
               id={`metabase_${type}_${
                 metabaseStatus === 1 ? "processing" : "start"
               }_btn`}
               disabled
-              size={type === "model" ? "sm" : "md"}
+              className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
             >
               {metabaseStatus === 1 ? (
                 <CircularProgress
@@ -149,10 +148,10 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
                 />
               ) : null}
               {type === "data" && isKor ? "데이터 " : null}
-              {metabaseStatus === 1 ? t("Analyzing") : t("분석 시작")}
+              {metabaseStatus === 1 ? t("Analyzing") : t("Start Analysis")}
               {type === "data" && !isKor ? " data" : null}
               {type === "data" ? " (Prod.By METABASE)" : null}
-            </Button>
+            </div>
           </div>
         </Tooltip>
       ) : null}

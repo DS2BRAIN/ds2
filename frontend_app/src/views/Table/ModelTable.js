@@ -1082,18 +1082,6 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
 
                 return (
                   <>
-                    {/* {((project.analyticsgraphs &&
-                          project.analyticsgraphs.length > 0) ||
-                          hasModelAnalytics) && (
-                          <div
-                            id="modeltable_analysis_btn"
-                            shape="blueOutlined"
-                            size="sm"
-                            onClick={() => openDetailPage("analytics", id)}
-                          >
-                            {t("Analyze")}
-                          </div>
-                        )} */}
                     {metabase && <MetabaseButton id={id} type="model" metabase={metabase} initiateMetabase={initiateMetabase} isKor={user.language === "ko"} />}
                     {/* {(project.option !== "colab" &&
                         (downloadOff || project.isShared)) ||
@@ -1112,9 +1100,9 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                         </Button>
                       )} */}
                     {(category !== "sample" || hasModelAnalytics) && !project.isShared && (
-                      <Button id="modeltable_deploy_btn" shape="blueOutlined" size="sm" sx={{ ml: 1 }} onClick={() => deploy(id)}>
+                      <div id="modeltable_deploy_btn" className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`} onClick={() => deploy(id)}>
                         {t("Deploy")}
-                      </Button>
+                      </div>
                     )}
                     {/* {(category !== "sample" || hasModelAnalytics) &&
                         !project.isShared &&
@@ -1152,6 +1140,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
               };
 
               return (
+                  <>
                 <div
                   style={{
                     display: "flex",
@@ -1165,6 +1154,25 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                   {secPredictBtns(projectTrainMethod, id)}
                   {secActionBtns(model.metabase, id)}
                 </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                    <Button
+                      id="modeltable_analysis_btn"
+                      // shape="blueOutlined"
+                      // className={`${classes.modelTab} predictBtn ${classes.modelTabButton}`}
+                      shape="greenContained"
+                      size="sm"
+                      onClick={() => openDetailPage("analytics", id, project.id)}
+                    >
+                      {t("Prescriptive Analyze")}
+                    </Button>
+                </div>
+                </>
               );
             };
 
