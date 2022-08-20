@@ -1085,8 +1085,15 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                             {t("Analyze")}
                           </div>
                         )} */}
-                    {metabase && <MetabaseButton id={id} type="model" metabase={metabase} initiateMetabase={initiateMetabase} isKor={user.language === "ko"} />}
-                    {/* {(project.option !== "colab" &&
+                      {metabase && (
+                        <MetabaseButton
+                          id={id}
+                          type="model"
+                          metabase={metabase}
+                          initiateMetabase={initiateMetabase}
+                        />
+                      )}
+                      {/* {(project.option !== "colab" &&
                         (downloadOff || project.isShared)) ||
                       process.env.REACT_APP_ENTERPRISE === "true" ? null : (
                         <Button
@@ -1361,18 +1368,26 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                         </div>
                         <GridContainer>
                           {[
-                            { id: "error", label: "에러", img: modelError },
+                            {
+                              id: "error",
+                              label: "Error",
+                              img: modelError,
+                            },
                             {
                               id: "processing",
-                              label: "학습 중",
+                              label: "In progress",
                               img: modelProcessing,
                             },
                             {
                               id: "pausing",
-                              label: "대기",
+                              label: "Waiting",
                               img: modelPause,
                             },
-                            { id: "done", label: "완료", img: modelDone },
+                            {
+                              id: "done",
+                              label: "Completed",
+                              img: modelDone,
+                            },
                           ].map((stat) => (
                             <GridItem xs={3} key={stat.id}>
                               <div className={classes.modelIconContainer}>

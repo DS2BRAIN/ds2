@@ -815,7 +815,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                   }
                   label={
                     preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["deidentifying"]
-                      ? `${t("Remove outliers")} 기준 수치 -`
+                      ? `${t("Remove outliers")} ${t("reference figure")} -`
                       : `${t("Remove outliers")} : ${t("Delete columns in which unique values account for n% or more of the total number of data.")}`
                   }
                 />
