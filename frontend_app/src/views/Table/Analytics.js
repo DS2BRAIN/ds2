@@ -31,7 +31,7 @@ const Analytics = React.memo(({}) => {
       }),
       []
     );
-    const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
     const [isLoading, setIsLoading] = useState(true);
     const [modelDetail, setModelDetail] = useState(null);
@@ -162,281 +162,38 @@ const Analytics = React.memo(({}) => {
                     maxWidth="false"
                     className={classes.mainCard}
                   >
+                      [{projects?.project?.valueForPredict.split("__")[0]}] {t("Goal Value")} :
+                      <Select
+                          defaultValue={0}
+                          onChange={valueInfoKeyChange}
+                        >
+                          {Object.keys(prescriptionAnalyticsInfo).map(
+                            (infoKey, index) => {
+                              return (
+                                <MenuItem value={index}>
+                                  {infoKey}
+                                </MenuItem>
+                              );
+                            }
+                          )}
+                        </Select>
                     <GridContainer>
                       <GridItem
-                        xs={9}
+                        xs={12}
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          margin: 50,
-                          padding: "50 !important",
+                          margin: 20,
+                          padding: 10,
                           borderStyle: "solid",
                           borderWidth: 1,
                           borderColor: "white",
                         }}
                       >
-                        {user.language === "ko" ? (
-                          <h4>
-                            중간값 기준으로
-                            {selectedPAvalue &&
-                              selectedPAvalue["top3"] &&
-                              Object.keys(
-                                selectedPAvalue["top3"]["maxUpEachCondition"]
-                              ).map((condition, index) => {
-                                var selectedCondition =
-                                  selectedPAvalue["top3"]["maxUpEachCondition"][
-                                    condition
-                                  ];
-                                if (isFloat(selectedCondition)) {
-                                  selectedCondition = parseFloat(
-                                    selectedCondition * 100 - 100
-                                  ).toFixed(2);
-                                }
+                          <div dangerouslySetInnerHTML={ {__html: i18n.language === "en" ? prescriptionAnalyticsInfo[selectedPAname]["sentence_en"] : prescriptionAnalyticsInfo[selectedPAname]["sentence_ko"]} }>
+                        </div>
 
-                                return (
-                                  <>
-                                    &nbsp;
-                                    <span className={classes.highlightBottom}>
-                                      {condition.split("__")[0]}
-                                    </span>{" "}
-                                    값이&nbsp;
-                                    <b>
-                                      {isFloat(selectedCondition)
-                                        ? Math.abs(selectedCondition)
-                                        : selectedCondition}
-                                    </b>
-                                    {index !==
-                                    Object.keys(
-                                      selectedPAvalue["top3"][
-                                        "maxUpEachCondition"
-                                      ]
-                                    ).length -
-                                      1
-                                      ? isFloat(selectedCondition)
-                                        ? selectedCondition > 0
-                                          ? "% 증가하고"
-                                          : "% 감소하고"
-                                        : " 값으로 선택 되고"
-                                      : isFloat(selectedCondition)
-                                      ? selectedCondition > 0
-                                        ? "% 증가하면"
-                                        : "% 감소하면"
-                                      : " 값으로 선택 되면"}
-                                    ,{" "}
-                                  </>
-                                );
-                              })}
-                            {projects.project.trainingMethod &&
-                            projects.project.trainingMethod.indexOf(
-                              "classification"
-                            ) > -1 ? (
-                              <>
-                                &nbsp;
-                                <br />
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>{" "}
-                                값이&nbsp;&nbsp;
-                                <Select
-                                  defaultValue={0}
-                                  onChange={valueInfoKeyChange}
-                                >
-                                  {Object.keys(prescriptionAnalyticsInfo).map(
-                                    (infoKey, index) => {
-                                      return (
-                                        <MenuItem value={index}>
-                                          {infoKey}
-                                        </MenuItem>
-                                      );
-                                    }
-                                  )}
-                                </Select>
-                                &nbsp;으로 될 확률이 &nbsp;
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                  %
-                                </b>
-                                &nbsp;
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? "증가"
-                                  : "감소"}
-                                합니다.
-                              </>
-                            ) : (
-                              <>
-                                &nbsp;
-                                <br />
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>{" "}
-                                값이 &nbsp;
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                </b>
-                                &nbsp;
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? "증가"
-                                  : "감소"}
-                                할 것으로 예측됩니다.
-                              </>
-                            )}
-                          </h4>
-                        ) : (
-                          <h4>
-                            On a median value basis, if
-                            {selectedPAvalue &&
-                              selectedPAvalue["top3"] &&
-                              Object.keys(
-                                selectedPAvalue["top3"]["maxUpEachCondition"]
-                              ).map((condition, index) => {
-                                var selectedCondition =
-                                  selectedPAvalue["top3"]["maxUpEachCondition"][
-                                    condition
-                                  ];
-                                if (isFloat(selectedCondition)) {
-                                  selectedCondition = parseFloat(
-                                    selectedCondition * 100 - 100
-                                  ).toFixed(2);
-                                }
-                                return (
-                                  <>
-                                    &nbsp;
-                                    <span className={classes.highlightBottom}>
-                                      {condition.split("__")[0]}
-                                    </span>{" "}
-                                    &nbsp;
-                                    {index !==
-                                    Object.keys(
-                                      selectedPAvalue["top3"][
-                                        "maxUpEachCondition"
-                                      ]
-                                    ).length -
-                                      1
-                                      ? isFloat(selectedCondition)
-                                        ? selectedCondition > 0
-                                          ? "increases"
-                                          : "decreases"
-                                        : " "
-                                      : isFloat(selectedCondition)
-                                      ? selectedCondition > 0
-                                        ? "increases"
-                                        : "decreases"
-                                      : "is chosen as a value"}
-                                    <b>
-                                      {" "}
-                                      to{" "}
-                                      {isFloat(selectedCondition)
-                                        ? Math.abs(selectedCondition)
-                                        : selectedCondition}
-                                      {isFloat(selectedCondition) ? "%" : ""}
-                                    </b>
-                                    ,{" "}
-                                  </>
-                                );
-                              })}
-                            {projects.project.trainingMethod &&
-                            projects.project.trainingMethod.indexOf(
-                              "classification"
-                            ) > -1 ? (
-                              <>
-                                &nbsp;
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>{" "}
-                                the posibility that the value to be&nbsp;&nbsp;
-                                <Select
-                                  defaultValue={0}
-                                  onChange={valueInfoKeyChange}
-                                >
-                                  {Object.keys(prescriptionAnalyticsInfo).map(
-                                    (infoKey, index) => {
-                                      return (
-                                        <MenuItem value={index}>
-                                          {infoKey}
-                                        </MenuItem>
-                                      );
-                                    }
-                                  )}
-                                </Select>
-                                &nbsp; &nbsp;will{" "}
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                  %
-                                </b>
-                                &nbsp;
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? "increase."
-                                  : "decrease."}
-                              </>
-                            ) : (
-                              <>
-                                &nbsp;
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>
-                                the value is &nbsp;expected to
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? " increase"
-                                  : " decrease"}
-                                &nbsp;
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                  %.
-                                </b>
-                              </>
-                            )}
-                          </h4>
-                        )}
                       </GridItem>
-                      {/*<GridItem xs={3} style={{display: 'flex', alignItems: 'center'}}>*/}
-                      {/*    <Button className={classes.defaultOutlineButton}*/}
-                      {/*    onClick={onGoToPredictPage}*/}
-                      {/*    >{t('Real-time prediction')}</Button>*/}
-                      {/*</GridItem>*/}
                     </GridContainer>
                   </Container>
                 )}
