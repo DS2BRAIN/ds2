@@ -257,7 +257,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "창을 닫으시겠습니까?",
+        message: "Do you want to close this window?",
         requestAction: "closeModal",
         shouldCloseModal: false,
       };
@@ -267,7 +267,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "앱코드를 재발급 하시겠습니까?",
+        message: "Would you like to reissue the app code?",
         requestAction: "postAppCode",
       };
     case ASK_PUT_MARKETPROJECT:
@@ -286,7 +286,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "로고를 삭제하시겠습니까?",
+        message: "Are you sure you want to delete the logo?",
         requestAction: "deleteCompanyLogo",
       };
     case ASK_CANCEL_PLAN:
@@ -295,7 +295,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "해당 플랜을 이번 달까지만 이용하시겠습니까?",
+        message: "Would you like to use this plan until the end of the current month?",
         requestAction: "cancelPlan",
       };
     case ASK_NEXTCANCEL_PLAN:
@@ -304,7 +304,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "다음달부터 적용될 플랜을 취소하시겠습니까?",
+        message: "Would you like to cancel your plan? You can use our services until the end of the current month after you cancel.",
         requestAction: "cancelNextPlan",
       };
 
@@ -326,7 +326,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "선택하신 라벨링프로젝트를 삭제하시겠습니까?",
+        message: "Are you sure you want to delete the selected labeling project?",
         requestAction: "deleteLabelProject",
         datas: action.data,
       };
@@ -346,10 +346,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message:
-          action.data.language === "en"
-            ? `Are you sure you want to delete classes? If you delete it, label information for that classes will be reset.`
-            : " 정말 삭제 하시겠습니까? 삭제하시면 선택하신 클래스에 대한 모든 라벨 정보가 초기화 됩니다.",
+        message: "Are you sure you want to delete this class? If you delete it, label information for that class will be reset.",
         requestAction: "deleteLabelClass",
         datas: { id: action.data.id, arr: action.data.arr },
       };
@@ -360,7 +357,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "라벨링 프로젝트로 개발하기를 시작하시겠습니까?",
+        message: "Do you want to start developing as a labeling project?",
         requestAction: "projectFromLabel",
         shouldRenderAction: false,
       };
@@ -370,7 +367,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "COCO 양식으로 export 하시겠습니까?",
+        message: "Would you like to export project as COCO form?",
         requestAction: "exportCoco",
         shouldRenderAction: false,
       };
@@ -380,7 +377,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "VOC 양식으로 export 하시겠습니까?",
+        message: "Would you like to export project as VOC form?",
         requestAction: "exportVoc",
         shouldRenderAction: false,
       };
@@ -390,7 +387,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "라벨링 정보를 파일로 export 하시겠습니까?",
+        message: "Export labeling information to a file?",
         requestAction: "exportData",
         shouldRenderAction: false,
       };
@@ -407,7 +404,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "선택하신 파일을 삭제 하시겠습니까?",
+        message: "Are you sure you want to delete the selected file?",
         requestAction: "deleteListObjects",
         datas: action.data,
       };
@@ -417,7 +414,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "선택하신 프로젝트를 삭제 하시겠습니까?",
+        message: "Are you sure you want to delete the selected project?",
         requestAction: "deleteProjects",
         datas: action.data,
       };
@@ -427,7 +424,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "선택하신 프로젝트를 삭제 하시겠습니까?",
+        message: "Are you sure you want to delete the selected project?",
         requestAction: "deleteOpsProjects",
         datas: action.data,
       };
@@ -437,7 +434,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "선택하신 프로젝트를 삭제 하시겠습니까?",
+        message: "Are you sure you want to delete the selected project?",
         requestAction: "deleteJupyterProjects",
         datas: action.data,
       };
@@ -447,8 +444,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message:
-          "선택하신 데이터커넥터를 삭제하면, 시작되지 않은 프로젝트도 같이 삭제됩니다. 계속 진행 하시겠습니까?",
+        message: "If you delete the selected data connector, any projects that haven’t started yet will be deleted as well. Do you want to continue?",
         requestAction: "deleteConnectors",
         datas: action.data,
       };
@@ -459,7 +455,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "프로젝트명을 바꾸시겠습니까?",
+        message: "Do you want to change the project name?",
         requestAction: "putProjectName",
         datas: action.data,
       };
@@ -469,7 +465,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "프로젝트 설명을 바꾸시겠습니까?",
+        message: "Do you want to edit the project description?",
         requestAction: "putProjectDescription",
         datas: action.data,
       };
@@ -500,8 +496,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message:
-          "작업하지 않은 작업은 초기화 됩니다. 메인화면으로 돌아가시겠습니까?",
+        message: "Incomplete tasks are initialized. Would you like to return to the main screen?",
         requestAction: "goToMainPage",
       };
     case GOTO_MAINPAGE_REQUEST:
@@ -530,7 +525,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "그룹초대에 수락하시겠습니까?",
+        message: "Do you want to accept the group invitation?",
         requestAction: "acceptGroup",
         datas: action.data,
       };
@@ -540,7 +535,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "그룹초대를 거절하시겠습니까?",
+        message: "Do you want to decline the group invitation?",
         requestAction: "refuseGroup",
         datas: action.data,
       };
@@ -550,7 +545,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "멤버를 삭제시키겠습니까?",
+        message: "Are you sure you want to delete the member?",
         requestAction: "deleteMember",
         datas: action.data,
       };
@@ -560,7 +555,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "해당 그룹을 삭제시키겠습니까?",
+        message: "Are you sure you want to delete this group?",
         requestAction: "deleteGroup",
         datas: action.data,
       };
@@ -570,7 +565,7 @@ const reducer = (state = initialState, action) => {
         isAskSnackbarOpen: true,
         isInformSnackbarOpen: false,
         category: "warning",
-        message: "해당 그룹을 탈퇴하시겠습니까?",
+        message: "Are you sure you want to leave this group?",
         requestAction: "leaveGroup",
         datas: action.data,
       };

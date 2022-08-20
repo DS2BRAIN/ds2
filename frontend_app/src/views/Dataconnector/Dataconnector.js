@@ -5,8 +5,16 @@ import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
 import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
-import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction, askDeleteConnectorRequestAction } from "redux/reducers/messages.js";
-import { getDataconnectortypeRequestAction, getDataconnectorsRequestAction, addIdListForLabelProjectRequestAction } from "redux/reducers/projects.js";
+import {
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+  askDeleteConnectorRequestAction,
+} from "redux/reducers/messages.js";
+import {
+  getDataconnectortypeRequestAction,
+  getDataconnectorsRequestAction,
+  addIdListForLabelProjectRequestAction,
+} from "redux/reducers/projects.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import "assets/css/material-control.css";
 import DataIntro from "components/Guide/DataIntro.js";
@@ -16,7 +24,17 @@ import Button from "components/CustomButtons/Button";
 import DataModalPublicData from "./DataModalPublicdata";
 import DataModalsFileAdd from "./DataModalsFileAdd";
 
-import { Checkbox, LinearProgress, Modal, Table, TableBody, TableCell, TableHead, TablePagination, TableRow } from "@material-ui/core";
+import {
+  Checkbox,
+  LinearProgress,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+} from "@material-ui/core";
 import { CircularProgress, Grid, IconButton, Tooltip } from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
@@ -48,7 +66,9 @@ const Dataconnector = ({ history }) => {
   const [isSortDesc, setIsSortDesc] = useState(true);
   const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isPublicData, setIsPublicData] = useState(false);
-  const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(false);
+  const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
+    false
+  );
 
   const [datasetList, setDatasetList] = useState([]);
   const [publicDatasetList, setPublicDatasetList] = useState([]);
@@ -60,7 +80,9 @@ const Dataconnector = ({ history }) => {
   const [countNotCsvSelected, setCountNotCsvSelected] = useState(0);
   const [countNotCompSelected, setCountNotCompSelected] = useState(0);
   const [countImpossLearnSelected, setCountImpossLearnSelected] = useState(0);
-  const [isAbleToUploadLabelFiles, setIsAbleToUploadLabelFiles] = useState(true);
+  const [isAbleToUploadLabelFiles, setIsAbleToUploadLabelFiles] = useState(
+    true
+  );
 
   const [isDatatypeModalOpen, setIsDatatypeModalOpen] = useState(false);
   const [isFileModalOpen, setIsFileModalOpen] = useState(false);
@@ -138,7 +160,13 @@ const Dataconnector = ({ history }) => {
   }, [projects.isDatasetLoading]);
 
   useEffect(() => {
-    if (isDatatypeModalOpen == false && isFileModalOpen == false && isTemplateModalOpen == false && isPublicDataModalOpen == false && (timeTick == -2 || isReloadAsync == true)) {
+    if (
+      isDatatypeModalOpen == false &&
+      isFileModalOpen == false &&
+      isTemplateModalOpen == false &&
+      isPublicDataModalOpen == false &&
+      (timeTick == -2 || isReloadAsync == true)
+    ) {
       getDataByDispatch();
       const state = history.location.state;
       if (state && state.dataconnectorModalOpen) {
@@ -179,7 +207,10 @@ const Dataconnector = ({ history }) => {
   }, [projects.isDatasetDeleted]);
 
   useEffect(() => {
-    if (projects.idListForLabelProject.length && projects.categoryForLabelProject) {
+    if (
+      projects.idListForLabelProject.length &&
+      projects.categoryForLabelProject
+    ) {
       history.push("/admin/newProject/?file=ready");
     }
   }, [projects.idListForLabelProject]);
@@ -218,7 +249,8 @@ const Dataconnector = ({ history }) => {
   }, [projects.dataconnectors]);
 
   useEffect(() => {
-    if (datasetList?.length && selectedDataIdList?.length) checkNewPageAllSelected(datasetList, selectedDataIdList);
+    if (datasetList?.length && selectedDataIdList?.length)
+      checkNewPageAllSelected(datasetList, selectedDataIdList);
   }, [datasetList, selectedDataIdList]);
 
   const getDataByDispatch = (valueChangeObject) => {
@@ -252,7 +284,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const privateTableHeads = [
-    { value: "No", width: "5%", type: "dataNum" },
+    { value: "No.", width: "5%", type: "dataNum" },
     { value: "Data name", width: "50%", type: "dataconnectorName" },
     { value: "Data type", width: "10%", type: "dataconnectortype" },
     { value: "Training availability", width: "10%", type: "hasLabelData" },
@@ -268,7 +300,9 @@ const Dataconnector = ({ history }) => {
     const privateDataTableBody = (priDataArr) =>
       priDataArr.map((data, idx) => {
         let dataId = data.id;
-        let dataNum = projects.connectorTotalLength - (datatableRowsPerPage * datatablePage + idx);
+        let dataNum =
+          projects.connectorTotalLength -
+          (datatableRowsPerPage * datatablePage + idx);
         let dataProgress = data.progress;
 
         if (idx < datatableRowsPerPage)
@@ -276,15 +310,30 @@ const Dataconnector = ({ history }) => {
             <TableRow
               key={`tablebodyrow_${idx}`}
               id={`tablebodyrow_${idx}`}
-              className={selectedDataIdList.includes(dataId) ? classes.tableFocused : classes.tableRow}
+              className={
+                selectedDataIdList.includes(dataId)
+                  ? classes.tableFocused
+                  : classes.tableRow
+              }
               onClick={() => {
-                if (dataProgress === 100) history.push(`/admin/dataconnector/${dataId}`);
+                if (dataProgress === 100)
+                  history.push(`/admin/dataconnector/${dataId}`);
                 else {
-                  dispatch(openErrorSnackbarRequestAction(t("Only data in the completed status can be viewed in detail.")));
+                  dispatch(
+                    openErrorSnackbarRequestAction(
+                      t(
+                        "Only data in the completed status can be viewed in detail."
+                      )
+                    )
+                  );
                 }
               }}
             >
-              <TableCell className={classes.tableRowCell} align="center" onClick={(e) => e.stopPropagation()}>
+              <TableCell
+                className={classes.tableRowCell}
+                align="center"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Checkbox
                   id={`dataconnector_chkbox_${idx}`}
                   value={dataId}
@@ -302,9 +351,12 @@ const Dataconnector = ({ history }) => {
                 let isProgressBar = false;
 
                 if (tmpType === "dataNum") tmpValue = dataNum;
-                else if (tmpType === "dataconnectortype") tmpValue = rawValue.dataconnectortypeName;
-                else if (tmpType === "hasLabelData") tmpValue = rawValue ? t("Possible") : t("Impossible");
-                else if (tmpType === "created_at") tmpValue = rawValue?.substring(0, 10);
+                else if (tmpType === "dataconnectortype")
+                  tmpValue = rawValue.dataconnectortypeName;
+                else if (tmpType === "hasLabelData")
+                  tmpValue = rawValue ? t("Possible") : t("Impossible");
+                else if (tmpType === "created_at")
+                  tmpValue = rawValue?.substring(0, 10);
                 else if (tmpType === "status") {
                   isStatus = true;
                   if (rawValue === 1) {
@@ -314,12 +366,24 @@ const Dataconnector = ({ history }) => {
                 } else tmpValue = rawValue;
 
                 return (
-                  <TableCell key={`datatablecell_page${datatablePage}row${idx}_${tmpType}`} id={`datatablecell_page${datatablePage}row${idx}_${tmpType}`} className={classes.tableRowCell} align="center">
+                  <TableCell
+                    key={`datatablecell_page${datatablePage}row${idx}_${tmpType}`}
+                    id={`datatablecell_page${datatablePage}row${idx}_${tmpType}`}
+                    className={classes.tableRowCell}
+                    align="center"
+                  >
                     {isStatus ? (
                       isProgressBar ? (
-                        <LinearProgress className={classes.linearProgressLightBackground} variant="determinate" value={dataProgress ? dataProgress : 0} />
+                        <LinearProgress
+                          className={classes.linearProgressLightBackground}
+                          variant="determinate"
+                          value={dataProgress ? dataProgress : 0}
+                        />
                       ) : (
-                        <span className="nowrap" style={{ color: dataStatusToText[tmpValue].color }}>
+                        <span
+                          className="nowrap"
+                          style={{ color: dataStatusToText[tmpValue].color }}
+                        >
                           {"⦁ " + t(dataStatusToText[tmpValue].name)}
                         </span>
                       )
@@ -336,11 +400,23 @@ const Dataconnector = ({ history }) => {
       });
 
     return (
-      <Table id="privateDataTable" className={classes.table} aria-label="simple table">
+      <Table
+        id="privateDataTable"
+        className={classes.table}
+        aria-label="simple table"
+      >
         <TableHead id="privateDataTableHead">
           <TableRow>
-            <TableCell className={classes.tableHead} align="center" style={{ width: "3%" }}>
-              <Checkbox value="all" checked={allSelected} onChange={onChangeSelectedAll} />
+            <TableCell
+              className={classes.tableHead}
+              align="center"
+              style={{ width: "3%" }}
+            >
+              <Checkbox
+                value="all"
+                checked={allSelected}
+                onChange={onChangeSelectedAll}
+              />
             </TableCell>
             {privateTableHeads.map((tableHead, idx) => (
               <TableCell
@@ -350,25 +426,43 @@ const Dataconnector = ({ history }) => {
                 align="center"
                 width={tableHead.width}
                 style={{
-                  cursor: tableHead.value !== "No" ? "pointer" : "default",
+                  cursor: tableHead.value !== "No." ? "pointer" : "default",
                 }}
-                onClick={() => tableHead.value !== "No" && onSetSortDataValue(tableHead.type)}
+                onClick={() =>
+                  tableHead.value !== "No." &&
+                  onSetSortDataValue(tableHead.type)
+                }
               >
                 <div className={classes.tableHeader}>
-                  {sortDataValue === tableHead.type && (!isSortDesc ? <ArrowUpwardIcon id={`ascend_${tableHead.type}`} className="arrow_ascend" fontSize="small" /> : <ArrowDownwardIcon id={`descend_${tableHead.type}`} className="arrow_descend" fontSize="small" />)}
+                  {sortDataValue === tableHead.type &&
+                    (!isSortDesc ? (
+                      <ArrowUpwardIcon
+                        id={`ascend_${tableHead.type}`}
+                        className="arrow_ascend"
+                        fontSize="small"
+                      />
+                    ) : (
+                      <ArrowDownwardIcon
+                        id={`descend_${tableHead.type}`}
+                        className="arrow_descend"
+                        fontSize="small"
+                      />
+                    ))}
                   <b className="capitalize">{t(tableHead.value)}</b>
                 </div>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody id="privateDataTableBody">{datasetList?.length ? privateDataTableBody(datasetList) : null}</TableBody>
+        <TableBody id="privateDataTableBody">
+          {datasetList?.length ? privateDataTableBody(datasetList) : null}
+        </TableBody>
       </Table>
     );
   };
 
   const publicTableHeads = [
-    { value: "No", width: "5%", type: "dataNum", align: "center" },
+    { value: "No.", width: "5%", type: "dataNum", align: "center" },
     {
       value: "Preview",
       width: "12.5%",
@@ -407,20 +501,38 @@ const Dataconnector = ({ history }) => {
 
       return pubDatasetList.map((data, idx) => {
         let dataId = data.id;
-        let dataNum = projects.connectorTotalLength - (datatableRowsPerPage * datatablePage + idx);
+        let dataNum =
+          projects.connectorTotalLength -
+          (datatableRowsPerPage * datatablePage + idx);
         let imgUrl = data.sampleImageUrl;
 
         return (
-          <TableRow key={idx} className={selectedDataIdList.includes(dataId) ? classes.tableFocused : classes.tableRow} onClick={() => openPublicDataModal(data)}>
+          <TableRow
+            key={idx}
+            className={
+              selectedDataIdList.includes(dataId)
+                ? classes.tableFocused
+                : classes.tableRow
+            }
+            onClick={() => openPublicDataModal(data)}
+          >
             {publicTableHeads.map((tableHead) => {
               let tmpType = tableHead.type;
               let tmpValue = "";
               let rawValue = data[tmpType];
-              if (tmpType === "description") tmpValue = rawValue?.length > 135 ? rawValue.substring(0, 136) + "..." : rawValue;
+              if (tmpType === "description")
+                tmpValue =
+                  rawValue?.length > 135
+                    ? rawValue.substring(0, 136) + "..."
+                    : rawValue;
               else tmpValue = rawValue;
 
               return (
-                <TableCell key={`publicDataHeaderCell_${tableHead.type}`} className={classes.tableRowCell} align={tableHead.align}>
+                <TableCell
+                  key={`publicDataHeaderCell_${tableHead.type}`}
+                  className={classes.tableRowCell}
+                  align={tableHead.align}
+                >
                   <div className="breakAll">
                     {tableHead.type === "dataNum" ? (
                       dataNum
@@ -437,7 +549,9 @@ const Dataconnector = ({ history }) => {
                       tmpValue
                     )}
                   </div>
-                  {tableHead.subUrl ? <small className="breakAll">{data[tableHead.subUrl]}</small> : null}
+                  {tableHead.subUrl ? (
+                    <small className="breakAll">{data[tableHead.subUrl]}</small>
+                  ) : null}
                 </TableCell>
               );
             })}
@@ -447,7 +561,11 @@ const Dataconnector = ({ history }) => {
     };
 
     return (
-      <Table id="publicDataTable" className={classes.table} aria-label="simple table">
+      <Table
+        id="publicDataTable"
+        className={classes.table}
+        aria-label="simple table"
+      >
         <TableHead>
           <TableRow>
             {publicTableHeads.map((tableHead, idx) => (
@@ -458,19 +576,34 @@ const Dataconnector = ({ history }) => {
                 align="center"
                 width={tableHead.width}
                 style={{
-                  cursor: tableHead.type === "dataconnectorName" ? "pointer" : "default",
+                  cursor:
+                    tableHead.type === "dataconnectorName"
+                      ? "pointer"
+                      : "default",
                 }}
-                onClick={() => tableHead.type === "dataconnectorName" && onSetSortDataValue(tableHead.type)}
+                onClick={() =>
+                  tableHead.type === "dataconnectorName" &&
+                  onSetSortDataValue(tableHead.type)
+                }
               >
                 <div className={classes.tableHeader} style={{ margin: "15px" }}>
-                  {sortDataValue === tableHead.type && (!isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                  {sortDataValue === tableHead.type &&
+                    (!isSortDesc ? (
+                      <ArrowUpwardIcon fontSize="small" />
+                    ) : (
+                      <ArrowDownwardIcon fontSize="small" />
+                    ))}
                   <b>{t(tableHead.value)}</b>
                 </div>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>{publicDatasetList?.length ? publicDataTableBody(publicDatasetList) : null}</TableBody>
+        <TableBody>
+          {publicDatasetList?.length
+            ? publicDataTableBody(publicDatasetList)
+            : null}
+        </TableBody>
       </Table>
     );
   };
@@ -497,7 +630,7 @@ const Dataconnector = ({ history }) => {
 
       return (
         <Button
-          id="deleteProject"
+          id="delete_data_btn"
           shape="redOutlined"
           size="sm"
           disabled={isDeleteButtonDisabled}
@@ -528,7 +661,9 @@ const Dataconnector = ({ history }) => {
         <TablePagination
           rowsPerPageOptions={[10, 20, 50]}
           component="div"
-          count={projects.connectorTotalLength ? projects.connectorTotalLength : 0}
+          count={
+            projects.connectorTotalLength ? projects.connectorTotalLength : 0
+          }
           rowsPerPage={datatableRowsPerPage}
           page={datatablePage}
           SelectProps={{ id: "pagerow_select" }}
@@ -548,13 +683,21 @@ const Dataconnector = ({ history }) => {
     };
 
     let dataconnectors = projects.dataconnectors;
-    let isSearchedDataNotExist = !isLoading && searchedDataValue && dataconnectors.length === 0;
-    let isDataNotUploaded = !isLoading && (!dataconnectors || (dataconnectors.length === 0 && datatablePage === 0));
-    let isDataLoading = isLoading || (projects.isDatasetLoading && timeTick == 0 && isReloadAsync == false);
+    let isSearchedDataNotExist =
+      !isLoading && searchedDataValue && dataconnectors.length === 0;
+    let isDataNotUploaded =
+      !isLoading &&
+      (!dataconnectors || (dataconnectors.length === 0 && datatablePage === 0));
+    let isDataLoading =
+      isLoading ||
+      (projects.isDatasetLoading && timeTick == 0 && isReloadAsync == false);
     if (isSearchedDataNotExist)
       return (
         <Grid id="divNoDataSearchAgain" className="emptyListTable">
-          {i18n.language === "ko" ? `"${searchedDataValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${searchedDataValue}"`}
+          {i18n.language === "ko"
+            ? `"${searchedDataValue}" ` +
+              "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
+            : `There were no results found for "${searchedDataValue}"`}
         </Grid>
       );
     else if (isDataNotUploaded)
@@ -568,7 +711,11 @@ const Dataconnector = ({ history }) => {
         <div
           id="div_tablesection"
           style={{
-            transform: `translateY(${Object.keys(selectedDataDict).length > 0 && !isPublicData ? "10px" : 0})`,
+            transform: `translateY(${
+              Object.keys(selectedDataDict).length > 0 && !isPublicData
+                ? "10px"
+                : 0
+            })`,
             transition: "all 0.2s",
           }}
         >
@@ -658,7 +805,8 @@ const Dataconnector = ({ history }) => {
     const selectedIdArr = Object.keys(selectedDict);
     if (selectedIdArr.length === 0) setIsAbleToUploadLabelFiles(false);
     else {
-      const firstDataType = selectedDict[selectedIdArr[0]].dataconnectortype.dataconnectortypeName;
+      const firstDataType =
+        selectedDict[selectedIdArr[0]].dataconnectortype.dataconnectortypeName;
 
       let flag = true;
       const shouldAlone = ["CSV", "MySQL", "Oracle", "MSSQL", "PostgreSQL"];
@@ -728,7 +876,11 @@ const Dataconnector = ({ history }) => {
                   key={`selectedDataTag_${id}`}
                   id={`selected_tag_${idx}`}
                   size="small"
-                  label={dataName.length > 20 ? dataName.substring(0, 21) + "..." : dataName}
+                  label={
+                    dataName.length > 20
+                      ? dataName.substring(0, 21) + "..."
+                      : dataName
+                  }
                   onDelete={() => {
                     onChangeSelectedData(data);
                   }}
@@ -766,7 +918,9 @@ const Dataconnector = ({ history }) => {
     <div
       id="privateDataTab"
       style={!isPublicData ? tabActiveStyle : tabDeactiveStyle}
-      className={!isPublicData ? classes.selectedListObject : classes.listObject}
+      className={
+        !isPublicData ? classes.selectedListObject : classes.listObject
+      }
       onClick={() => {
         if (isPublicData) switchData("private");
       }}
@@ -820,7 +974,8 @@ const Dataconnector = ({ history }) => {
     let idList = selectedDataIdList;
     let dataDict = selectedDataDict;
     let firstSelected = dataDict[idList[0]];
-    let firstSelectedType = firstSelected.dataconnectortype?.dataconnectortypeName;
+    let firstSelectedType =
+      firstSelected.dataconnectortype?.dataconnectortypeName;
     let firstSelectedCategory = firstSelected.trainingMethod;
 
     dispatch(
@@ -841,25 +996,58 @@ const Dataconnector = ({ history }) => {
         if (lenData) {
           if (cntNotComp === 0) {
             if (lenData > 1) {
-              if (cntOther === 0) tipText = "If you select a csv file, only 1 csv file is allowed to start labelling.";
-              else tipText = "If you select a csv file, labelling with files with other extensions is not possible.";
+              if (cntOther === 0)
+                tipText =
+                  "If you select a csv file, only 1 csv file is allowed to start labelling.";
+              else
+                tipText =
+                  "If you select a csv file, labelling with files with other extensions is not possible.";
             }
-          } else tipText = "You can only create a labeling project from files that are complete.";
+          } else
+            tipText =
+              "You can only create a labeling project from files that are complete.";
         } else tipText = "Please select data to start labelling!";
         return tipText;
       };
 
-      if (countNotCompSelected === 0 && ((lenSelectedData > 1 && isAbleToUploadLabelFiles) || lenSelectedData === 1))
+      if (
+        countNotCompSelected === 0 &&
+        ((lenSelectedData > 1 && isAbleToUploadLabelFiles) ||
+          lenSelectedData === 1)
+      )
         return (
-          <Button id="start_labelling_btn" shape="greenOutlined" disabled={isProjectStartLoading} style={{ minWidth: 150 }} onClick={startLabeling}>
+          <Button
+            id="start_labelling_btn"
+            shape="greenOutlined"
+            disabled={isProjectStartLoading}
+            style={{ minWidth: 150 }}
+            onClick={startLabeling}
+          >
             {t("Start labeling")}
           </Button>
         );
       else
         return (
-          <Tooltip title={<div style={{ fontSize: "12px" }}>{t(textLabellingTooltip(lenSelectedData, countNotCompSelected, countNotCsvSelected))}</div>} placement="bottom">
+          <Tooltip
+            title={
+              <div style={{ fontSize: "12px" }}>
+                {t(
+                  textLabellingTooltip(
+                    lenSelectedData,
+                    countNotCompSelected,
+                    countNotCsvSelected
+                  )
+                )}
+              </div>
+            }
+            placement="bottom"
+          >
             <div>
-              <Button id="start_labelling_disabled_btn" disabled style={{ minWidth: 150 }}>
+              <Button
+                id="start_labelling_disabled_btn"
+                disabled
+                style={{ minWidth: 150 }}
+              >
                 {t("Start labeling")}
               </Button>
             </div>
@@ -868,10 +1056,15 @@ const Dataconnector = ({ history }) => {
     };
 
     const btnProjectStart = (type) => {
-      let isAllCompLearnable = countNotCompSelected === 0 && countImpossLearnSelected === 0;
-      let isSingleOrSame = selectedDataIdList.length === 1 || (selectedDataIdList.length > 1 && countNotCsvSelected === 0);
+      let isAllCompLearnable =
+        countNotCompSelected === 0 && countImpossLearnSelected === 0;
+      let isSingleOrSame =
+        selectedDataIdList.length === 1 ||
+        (selectedDataIdList.length > 1 && countNotCsvSelected === 0);
       let isTypeDev = type === "develop";
-      let btnActionText = isTypeDev ? "Start AI developing" : "Start AI verification";
+      let btnActionText = isTypeDev
+        ? "Start AI developing"
+        : "Start AI verification";
 
       const startProject = async (type) => {
         // var isError = false;
@@ -887,23 +1080,47 @@ const Dataconnector = ({ history }) => {
           .postProjectFromDataconnectors(postProjectInfo)
           .then((res) => {
             setIsLoading(false);
-            dispatch(openSuccessSnackbarRequestAction(t("A new project has been created.")));
+            dispatch(
+              openSuccessSnackbarRequestAction(
+                t("A new project has been created.")
+              )
+            );
             if (type === "develop") history.push(`/admin/train/` + res.data.id);
-            else if (type === "verify") history.push(`/admin/verifyproject/` + res.data.id);
+            else if (type === "verify")
+              history.push(`/admin/verifyproject/` + res.data.id);
           })
           .catch((error) => {
-            if (process.env.REACT_APP_ENTERPRISE !== "true" && error.response && error.response.status === 402) {
+            if (
+              process.env.REACT_APP_ENTERPRISE !== "true" &&
+              error.response &&
+              error.response.status === 402
+            ) {
               window.location.href = "/admin/setting/payment/?cardRequest=true";
               return;
             }
-            if (JSON.stringify(error).indexOf("507") > -1) dispatch(openErrorSnackbarRequestAction(t("The total number of data exceeded.")));
-            else dispatch(openErrorSnackbarRequestAction(t("The project was not created due to a temporary error. Please try again.")));
+            if (JSON.stringify(error).indexOf("507") > -1)
+              dispatch(
+                openErrorSnackbarRequestAction(
+                  t("The total number of data exceeded.")
+                )
+              );
+            else
+              dispatch(
+                openErrorSnackbarRequestAction(
+                  t(
+                    "The project was not created due to a temporary error. Please try again."
+                  )
+                )
+              );
             setIsProjectStartLoading(false);
           });
       };
 
       const btnTooltipDisabled = (text) => (
-        <Tooltip title={<div style={{ fontSize: "12px" }}>{t(text)}</div>} placement="bottom">
+        <Tooltip
+          title={<div style={{ fontSize: "12px" }}>{t(text)}</div>}
+          placement="bottom"
+        >
           <div>
             <Button id={`start_${type}_btn`} disabled style={{ minWidth: 150 }}>
               {t(btnActionText)}
@@ -915,16 +1132,36 @@ const Dataconnector = ({ history }) => {
       if (isAllCompLearnable) {
         if (isSingleOrSame) {
           return (
-            <Button id={`start_${type}_btn`} shape="greenOutlined" disabled={isProjectStartLoading} style={{ minWidth: 150 }} onClick={() => startProject(type)}>
+            <Button
+              id={`start_${type}_btn`}
+              shape="greenOutlined"
+              disabled={isProjectStartLoading}
+              style={{ minWidth: 150 }}
+              onClick={() => startProject(type)}
+            >
               {t(btnActionText)}
             </Button>
           );
         } else {
-          let tooltipText = countNotCsvSelected === 0 ? `Please select data to start ${isTypeDev ? "developing" : "verifying"} your AI!` : `If you select a csv file, ${isTypeDev ? "developing" : "verifying"} with files with other extensions is not possible.`;
+          let tooltipText =
+            countNotCsvSelected === 0
+              ? `Please select data to start ${
+                  isTypeDev ? "developing" : "verifying"
+                } your AI!`
+              : `If you select a csv file, ${
+                  isTypeDev ? "developing" : "verifying"
+                } with files with other extensions is not possible.`;
           return btnTooltipDisabled(tooltipText);
         }
       } else {
-        let tooltipText = countNotCompSelected === 0 ? `You can only create a AI ${isTypeDev ? "" : "verification" + " "}project from files that are learnable.` : `You can only create a AI ${isTypeDev ? "" : "verification" + " "}project from files that are complete.`;
+        let tooltipText =
+          countNotCompSelected === 0
+            ? `You can only create a AI ${
+                isTypeDev ? "" : "verification" + " "
+              }project from files that are learnable.`
+            : `You can only create a AI ${
+                isTypeDev ? "" : "verification" + " "
+              }project from files that are complete.`;
         return btnTooltipDisabled(tooltipText);
       }
     };
@@ -937,7 +1174,13 @@ const Dataconnector = ({ history }) => {
       let dataconnectors = projects.dataconnectors;
       return (
         <>
-          <Button id="add_dataset_btn" shape="greenContained" disabled={!dataconnectors} style={{ minWidth: 150 }} onClick={openStartDataconnector}>
+          <Button
+            id="add_dataset_btn"
+            shape="greenContained"
+            disabled={!dataconnectors}
+            style={{ minWidth: 150 }}
+            onClick={openStartDataconnector}
+          >
             {t("Upload data")}
           </Button>
         </>
@@ -951,22 +1194,48 @@ const Dataconnector = ({ history }) => {
 
       return (
         <>
-          <Tooltip title={<div style={{ fontSize: "12px" }}>{`${t("Example templates are provided with brief explanations for each training type.")} / ${t("Example templates are provided for each industry group.")}`}</div>} placement="bottom">
+          <Tooltip
+            title={
+              <div style={{ fontSize: "12px" }}>{`${t(
+                "Example templates are provided with brief explanations for each training type."
+              )} / ${t(
+                "Example templates are provided for each industry group."
+              )}`}</div>
+            }
+            placement="bottom"
+          >
             <div>
-              <Button id="sampleTemplateBtn" shape="greenOutlined" onClick={openTemplate} style={{ minWidth: 150 }}>
+              <Button
+                id="sampleTemplateBtn"
+                shape="greenOutlined"
+                onClick={openTemplate}
+                style={{ minWidth: 150 }}
+              >
                 {t("Sample template")}
               </Button>
             </div>
           </Tooltip>
-          <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isTemplateModalOpen} onClose={closeTemplateModal} className={classes.modalContainer}>
-            <Templates className={classes.predictModalContent} closeTemplateModal={closeTemplateModal} />
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={isTemplateModalOpen}
+            onClose={closeTemplateModal}
+            className={classes.modalContainer}
+          >
+            <Templates
+              className={classes.predictModalContent}
+              closeTemplateModal={closeTemplateModal}
+            />
           </Modal>
         </>
       );
     };
 
     const reloadButton = (
-      <Tooltip title={<div style={{ fontSize: "12px" }}>{t("Refresh data list")}</div>} placement="top">
+      <Tooltip
+        title={<div style={{ fontSize: "12px" }}>{t("Refresh data list")}</div>}
+        placement="top"
+      >
         <IconButton
           id="dataset_refresh_btn"
           sx={{ p: 0 }}
@@ -983,7 +1252,9 @@ const Dataconnector = ({ history }) => {
         >
           <AutorenewIcon
             style={{
-              fill: isRefreshAbuse ? "var(--textMediumGrey)" : "var(--textWhite87)",
+              fill: isRefreshAbuse
+                ? "var(--textMediumGrey)"
+                : "var(--textWhite87)",
             }}
           />
         </IconButton>
@@ -1006,12 +1277,19 @@ const Dataconnector = ({ history }) => {
     <>
       <ReactTitle title={"DS2.ai - " + t("Dataset")} />
       {introOn ? (
-        <DataIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} userLang={user.language} />
+        <DataIntro
+          setIntroOn={setIntroOn}
+          setIntroOffClicked={setIntroOffClicked}
+          useTranslation={useTranslation}
+          userLang={user.language}
+        />
       ) : (
         <>
           <Grid sx={{ mb: 2 }}>
             <div className={classes.topTitle}>{t("Data Storage")}</div>
-            <div className={classes.subTitleText}>{t("Begin your AI model development with your own dataset.")}</div>
+            <div className={classes.subTitleText}>
+              {t("Begin your AI model development with your own dataset.")}
+            </div>
           </Grid>
           <Grid container sx={{ mb: 2 }}>
             <Grid item xs={8} className="flex itemsCenter">
@@ -1019,10 +1297,20 @@ const Dataconnector = ({ history }) => {
               {publicDataTab}
             </Grid>
             <Grid item xs={4}>
-              {isSearchHiddenForRefresh ? null : <SearchInputBox tooltipText="Enter the data name." setSearchedValue={setSearchedDataValue} />}
+              {isSearchHiddenForRefresh ? null : (
+                <SearchInputBox
+                  tooltipText="Enter the data name."
+                  setSearchedValue={setSearchedDataValue}
+                />
+              )}
             </Grid>
           </Grid>
-          <Grid container alignItems="center" columnSpacing={1} sx={{ mb: 2, minWidth: "850px" }}>
+          <Grid
+            container
+            alignItems="center"
+            columnSpacing={1}
+            sx={{ mb: 2, minWidth: "850px" }}
+          >
             {!isPublicData && partControlBtns()}
           </Grid>
           <Grid>
@@ -1040,9 +1328,18 @@ const Dataconnector = ({ history }) => {
         }}
         className={classes.modalContainer}
       >
-        <DataModalPublicData closePublicDataModal={closePublicDataModal} selectedData={selectedPublicData} tableHeads={publicTableHeads} />
+        <DataModalPublicData
+          closePublicDataModal={closePublicDataModal}
+          selectedData={selectedPublicData}
+          tableHeads={publicTableHeads}
+        />
       </Modal>
-      <DataModalsFileAdd isDatatypeModalOpen={isDatatypeModalOpen} setIsDatatypeModalOpen={setIsDatatypeModalOpen} isFileModalOpen={isFileModalOpen} setIsFileModalOpen={setIsFileModalOpen} />
+      <DataModalsFileAdd
+        isDatatypeModalOpen={isDatatypeModalOpen}
+        setIsDatatypeModalOpen={setIsDatatypeModalOpen}
+        isFileModalOpen={isFileModalOpen}
+        setIsFileModalOpen={setIsFileModalOpen}
+      />
     </>
   );
 };

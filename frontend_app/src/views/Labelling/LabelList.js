@@ -1250,7 +1250,6 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                           >
                             <span>
                               {t("Uploaded File")} : <span style={{ fontSize: 20, fontWeight: 600 }}>{uploadFile.length && uploadFile.length.toLocaleString()}</span>
-                              {t("")}
                             </span>
                           </p>
                           <ul

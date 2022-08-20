@@ -27,13 +27,13 @@
 import "cypress-file-upload";
 import axios from "axios";
 
-export const backendurl = "https://dslabaa.ds2ai.ai/";
+export const backendurl = "https://dslabaa.ds2.ai/";
 //const backendurl = 'http://dslabaa.clickai.ai:13002/';
 export const labelurl = "https://staginglabelapp.ds2ai.ai";
 
 export const userInfo = {
-  email: "front_test@dslab.global",
-  password: "",
+  email: Cypress.env("email"),
+  password: Cypress.env("password"),
 };
 
 Cypress.Commands.add("backendUrl", () => {
@@ -118,34 +118,33 @@ Cypress.Commands.add("ko", () => {
   cy.get("#language_ko_btn").click({ force: true });
 });
 
-// Cypress.Commands.add("login", (id, password) => {
-//   cy.visit("/signin");
-//   cy.get("#email").type(id);
-//   cy.get("#password").type(password);
-//   cy.get("#signInBtn").click();
-//   cy.wait(3000);
-//   cy.url().should("include", "/admin");
-//   cy.get("#language_select_form").click({ force: true });
-//   cy.get('li[data-value="en"]').click({ force: true });
-// });
-
 Cypress.Commands.add("login", () => {
   cy.visit("/signout");
-  //cy.visit("/signin");
+
   cy.clearCookies();
-  cy.get("form").within(() => {
-    cy.get("#email")
-      .type(userInfo.email)
-      .should("have.value", userInfo.email);
-    cy.get("#password")
-      .type(userInfo.password)
-      .should("have.value", userInfo.password);
-    cy.get("#signInBtn").click();
+
+  expect(userInfo.email, "set email").to.be.a("string").and.not.be.empty;
+
+  if (typeof userInfo.password !== "string" || !userInfo.password) {
+    throw new Error("Missing password value, set using CYPRESS_password=...");
+  }
+
+  cy.request({
+    method: "POST",
+    url: backendurl + "login/",
+    body: {
+      identifier: userInfo.email,
+      password: userInfo.password,
+    },
+  }).then((res) => {
+    cy.setCookie("jwt", res.body.jwt);
+    cy.setCookie("user", JSON.stringify(res.body.user));
+    cy.setCookie("apptoken", JSON.stringify(res.body.user.appTokenCode));
+
+    cy.visit("/admin");
+    cy.ko();
+    cy.wait(1000);
   });
-  //   cy.wait(3000);
-  cy.url().should("include", "/admin");
-  cy.ko();
-  cy.wait(1000);
 });
 
 Cypress.Commands.add("loginAsync", () => {
@@ -660,4 +659,20 @@ Cypress.Commands.add("checkLabelListByCondition", (type, value, expected) => {
   cy.get(selector).should("have.value", value);
 
   cy.contains("라벨링 데이터가 없습니다.").should(expected ? "not.exist" : "exist");
+});
+
+Cypress.Commands.add("resetLabelprojectInfo", (sampleProjectName, sampleProjectDesc) => {
+  cy.get("#label_project_name")
+    .clear({ force: true })
+    .type(sampleProjectName, { force: true });
+  cy.get("#change_name_btn").click({ force: true });
+  cy.get("#change_name_confirm_btn").click({ force: true });
+  cy.get("#yes_btn").click({ force: true });
+
+  cy.get("#label_project_detail")
+    .clear({ force: true })
+    .type(sampleProjectDesc, { force: true });
+  cy.get("#change_detail_btn").click({ force: true });
+  cy.get("#change_detail_confirm_btn").click({ force: true });
+  cy.get("#yes_btn").click({ force: true });
 });

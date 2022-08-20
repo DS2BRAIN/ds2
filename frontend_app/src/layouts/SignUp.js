@@ -135,10 +135,7 @@ export default function SignUp(props) {
       // 예외 체크
       setSnackbarOption("error", t("Please enter your e-mail address."));
     } else if (emailCheck(email) == false) {
-      setSnackbarOption(
-        "error",
-        t("The e-mail address is not valid")
-      );
+      setSnackbarOption("error", t("The e-mail address is not valid"));
     }
     // else if (email.match(emailRegExp) === null) {
     //   setSnackbarOption(
@@ -147,7 +144,10 @@ export default function SignUp(props) {
     //   );
     // }
     else if (!isAbleEmail) {
-      setSnackbarOption("error", t("Please check the duplicate email before proceeding."));
+      setSnackbarOption(
+        "error",
+        t("Please check the duplicate email before proceeding.")
+      );
     } else if (password === "") {
       setSnackbarOption("error", t("Please enter your password."));
     } else if (
@@ -165,9 +165,17 @@ export default function SignUp(props) {
     } else if (passwordCheck === "") {
       setSnackbarOption("error", t("Please re-enter your password."));
     } else if (password !== passwordCheck) {
-      setSnackbarOption("error", t("The password you entered is incorrect. Please re-enter your password."));
+      setSnackbarOption(
+        "error",
+        t(
+          "The password you entered is incorrect. Please re-enter your password."
+        )
+      );
     } else if (!acceptPolicy) {
-      setSnackbarOption("error", t("Please accept the Terms and Conditions if you want to proceed."));
+      setSnackbarOption(
+        "error",
+        t("Please accept the Terms and Conditions if you want to proceed.")
+      );
     } else if (!adultPolicy) {
       openChat();
       setSnackbarOption(
@@ -240,13 +248,18 @@ export default function SignUp(props) {
               "success",
               `${t("Thank you for creating an account")} ${t(
                 "이메일 인증 후 이용이 가능합니다."
-              )} ${t("The e-mail may take up to 10 minutes to arrive in your inbox")}`
+              )} ${t(
+                "The e-mail may take up to 10 minutes to arrive in your inbox"
+              )}`
             );
             setTimeout(() => {
               props.history.push("/signin/");
             }, 5000);
           } else {
-            setSnackbarOption("success", t("Thank you for creating an account"));
+            setSnackbarOption(
+              "success",
+              t("Thank you for creating an account")
+            );
             setTimeout(() => {
               props.history.push("/signin/");
             }, 5000);
@@ -264,10 +277,7 @@ export default function SignUp(props) {
               )
             );
           } else {
-            setSnackbarOption(
-              "error",
-              t("Please sign up again.")
-            );
+            setSnackbarOption("error", t("Please sign up again."));
           }
           setIsLoading(false);
         });
@@ -356,10 +366,7 @@ export default function SignUp(props) {
       return;
     }
     if (emailCheck(email) === false) {
-      setSnackbarOption(
-        "error",
-        t("The e-mail address is not valid")
-      );
+      setSnackbarOption("error", t("The e-mail address is not valid"));
       return;
     }
     // if (email.match(emailRegExp) === null) {
@@ -402,7 +409,10 @@ export default function SignUp(props) {
 
   const onSetNextStep = () => {
     if (!acceptPolicy) {
-      setSnackbarOption("error", t("Please accept the Terms and Conditions if you want to proceed."));
+      setSnackbarOption(
+        "error",
+        t("Please accept the Terms and Conditions if you want to proceed.")
+      );
       return;
     }
     setCanSeeLoginForm(true);
@@ -518,10 +528,7 @@ export default function SignUp(props) {
             );
           }
         } else {
-          setSnackbarOption(
-            "error",
-            t("Failed to log in. Please try again.")
-          );
+          setSnackbarOption("error", t("Failed to log in. Please try again."));
         }
       });
   };
@@ -750,7 +757,7 @@ export default function SignUp(props) {
                 />
               }
               style={{ marginRight: "8px" }}
-              label={t("")}
+              label={""}
             />
             <span>{t("All agree")}</span>
           </Grid>
@@ -774,7 +781,7 @@ export default function SignUp(props) {
                 />
               }
               style={{ marginRight: "8px" }}
-              label={t("")}
+              label={""}
             />
             <span
               style={{
@@ -816,7 +823,7 @@ export default function SignUp(props) {
                 cursor: "default",
               }}
             >
-              {t("")}
+              {t("I agree to the terms.")}
             </span>
           </Grid>
           <Grid
@@ -839,7 +846,7 @@ export default function SignUp(props) {
                 />
               }
               style={{ marginRight: "8px" }}
-              label={t("")}
+              label={""}
             />
             <span>{t("I am over the age of 18.")}</span>
           </Grid>
@@ -863,9 +870,11 @@ export default function SignUp(props) {
                 />
               }
               style={{ marginRight: "8px" }}
-              label={t("")}
+              label={""}
             />
-            <span>{t("Agree to receive and use marketing information (optional)")}</span>
+            <span>
+              {t("Agree to receive and use marketing information (optional)")}
+            </span>
           </Grid>
           <Grid
             style={{
@@ -886,7 +895,7 @@ export default function SignUp(props) {
                 />
               }
               style={{ marginRight: "8px" }}
-              label={t("")}
+              label={""}
             />
             <span>{t("Agree to collection of activity data")}</span>
           </Grid>
@@ -1015,7 +1024,9 @@ export default function SignUp(props) {
                           onChange={changeAcceptPolicy}
                         />
                       }
-                      label={t("I agree with terms of service and privacy policy")}
+                      label={t(
+                        "I agree with terms of service and privacy policy"
+                      )}
                     />
                   </Grid>
                   <Grid

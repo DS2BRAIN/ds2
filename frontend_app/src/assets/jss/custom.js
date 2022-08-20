@@ -506,6 +506,15 @@ const currentTheme = makeStyles((theme) => ({
     // minHeight: '600px',
     ...currentDefaultTheme.defaultModalContainer,
   },
+  modalPrescriptiveAnalyticsContent: {
+    width: "80%",
+    minWidth: "550px",
+    flexDirection: "column",
+    padding: "24px",
+    // height: '30%',
+    // minHeight: '600px',
+    ...currentDefaultTheme.defaultModalContainer,
+  },
   selectPlanModalContent: {
     // height: '30%',
     // minHeight: '600px',

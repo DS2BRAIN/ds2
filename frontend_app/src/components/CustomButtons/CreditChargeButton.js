@@ -16,7 +16,7 @@ import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
 
 const CreditChargeButton = ({ history, setIsLoading }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const classes = currentTheme();
   const { user, messages } = useSelector(
@@ -29,7 +29,7 @@ const CreditChargeButton = ({ history, setIsLoading }) => {
   const [secondCnt, setSecondCnt] = useState(0);
 
   const cntArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  let lang = user.language ? user.language : Cookies.getCookie("language");
+  let lang = i18n.language;
 
   useEffect(() => {
     if (messages.shouldCloseModal) {
@@ -303,7 +303,7 @@ const CreditChargeButton = ({ history, setIsLoading }) => {
                 >
                   <span id="totalCount">
                     {t("Total Quantity")} {firstCnt + secondCnt}
-                    {t("")}
+                    {lang === "ko" ? "개" : ""}
                   </span>
                 </div>
                 <span id="rawPrice">

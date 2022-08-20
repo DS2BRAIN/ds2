@@ -1198,7 +1198,7 @@ const EngineAILists = ({ history }) => {
   return (
     <div>
       <ReactTitle title="DS2.ai - EngineAI" />
-      <div className={classes.topTitle}>{t("")}</div>
+      <div className={classes.topTitle}>{"Engine AI"}</div>
       <div className={classes.subTitleText} style={{ marginBottom: "60px" }}>
         {t("You can use artificial intelligence right away without learning.")}
       </div>

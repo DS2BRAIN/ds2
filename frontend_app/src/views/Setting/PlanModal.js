@@ -109,7 +109,9 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
     if (name === "enterprise") {
       dispatch(
         openErrorSnackbarRequestAction(
-          t(" Please contact us in order to make changes to your Enterprise account")
+          t(
+            "Please contact us in order to make changes to your Enterprise account"
+          )
         )
       );
       return;
@@ -216,7 +218,7 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
     dispatch(
       openErrorSnackbarRequestAction(
         t(
-          "죄송합니다, 이용플랜 변경에 오류가 발생하였습니다. 고객센터로 문의 바랍니다."
+          "죄송합니다. 이용플랜 변경에 오류가 발생하였습니다. 고객센터로 문의 바랍니다."
         )
       )
     );
@@ -250,7 +252,7 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
   //         dispatch(
   //           openErrorSnackbarRequestAction(
   //             t(
-  //               "죄송합니다, 일시적인 오류로 인하여 이용플랜 변경에 실패하였습니다."
+  //               "죄송합니다. 일시적인 오류로 인하여 이용플랜 변경에 실패하였습니다."
   //             )
   //           )
   //         );
@@ -329,16 +331,22 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
               <div className="planTitle">{t("Number of projects")}</div>
               <div className="planTitle">{t("API provision")}</div>
               <div className="planTitle">{t("Model developing speed")}</div>
-              <div className="planTitle">{t("Simultaneous modeling number")}</div>
+              <div className="planTitle">
+                {t("Simultaneous modeling number")}
+              </div>
               <div className="planTitle">{t("Technical support")}</div>
               <div className="planTitle">
                 {t("API provision velocity (single prediction, Real-time)")}
               </div>
               <div className="planTitle">
-                {t("API provision velocity (collective prediction, asynchronous processing)")}
+                {t(
+                  "API provision velocity (collective prediction, asynchronous processing)"
+                )}
               </div>
               <div className="planTitle">{t("Datasets count limit")}</div>
-              <div className="planTitle">{t("Number of data concurrently used")}</div>
+              <div className="planTitle">
+                {t("Number of data concurrently used")}
+              </div>
               <div className="planTitle">{t("Number of Labeling")}</div>
               <div className="planTitle">{t("Shared user")}</div>
             </div>
@@ -483,9 +491,9 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
                       >
                         {plan.planName === "trial"
                           ? t("Switch to BASIC after 2 weeks of free trial")
-                          : `${t("per month")} ${plan.price.toLocaleString()}${t(
-                              "원"
-                            )}`}
+                          : `${t(
+                              "per month"
+                            )} ${plan.price.toLocaleString()}${t("원")}`}
                       </Button>
                     )}
                   </div>
@@ -496,11 +504,12 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
       </GridItem>
       <GridItem xs={12} style={{ margin: "10px" }}>
         <div className={classes.content}>
-          <span>** {t("Please contact us if you don't have enough storage space")}</span>
+          <span>
+            ** {t("Please contact us if you don't have enough storage space")}
+          </span>
           {!isFromSetting && (
             <span style={{ marginLeft: "40px" }}>
-              **{" "}
-              {t("Please choose your plan to go to the main page")}
+              ** {t("Please choose your plan to go to the main page")}
             </span>
           )}
         </div>

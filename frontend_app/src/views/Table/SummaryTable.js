@@ -735,7 +735,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                         value={preprocessingInfoValue && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningClassification"]}
                         type="number"
                       />{" "}
-                      {t("")} : {t("데이터 수")}{" "}
+                      : {t("데이터 수")}{" "}
                       <u>
                         {preprocessingInfoValue && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningClassification"]}
                         {preprocessingInfoValue && preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && !preprocessingInfoValue[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["cleaningClassification"] ? "5" : ""}
@@ -797,7 +797,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                           onClick={() => onClickpreprocessingInfoValueValue(selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1], "normalization")}
                         />
                       }
-                      label={t("")}
+                      label={`${t("Normalization")} : ${t("Normalizes the entire value.")}`}
                     />
                   </GridItem>
                 </>
@@ -815,8 +815,8 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                   }
                   label={
                     preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["deidentifying"]
-                      ? `${t("Remove outliers")} 기준 수치 -`
-                      : `${t("Remove outliers")} : ${t("유니크값이 전체 데이터 개수의 n% 이상을 차지하는 열을 삭제합니다.")}`
+                      ? `${t("Remove outliers")} ${t("reference figure")} -`
+                      : `${t("Remove outliers")} : ${t("Delete columns in which unique values account for n% or more of the total number of data.")}`
                   }
                 />
                 {(preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && !preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["deidentifying"]) || Object.keys(preprocessingInfo).length === 0 ? (
@@ -852,9 +852,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                     />
                   }
                   label={
-                    preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["fulfilling"]
-                      ? t("Data replacement")
-                      : `${t("Data replacement")} : ${t("비어있는 값을 n으로 채웁니다.")}`
+                    preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["fulfilling"] ? t("Data replacement") : `${t("Data replacement")} : ${t("Fill empty values with n.")}`
                   }
                 />
                 {(preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && !preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["fulfilling"]) || Object.keys(preprocessingInfo).length === 0 ? (
@@ -892,7 +890,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                   <GridItem xs={12} style={{ display: "inline", width: "100%" }}>
                     <FormControlLabel
                       control={<Checkbox name="checkedB" checked={preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]] && !preprocessingInfo[selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1]]["fulfilling"]} />}
-                      label={`${t("Data replacement")} : ${t("비어 있는 값이 있는 행들을 삭제합니다.")}`}
+                      label={`${t("Data replacement")} : ${t("Delete rows with empty values.")}`}
                     />
                   </GridItem>
                   {projects.project.trainingMethod && projects.project.trainingMethod.indexOf("time_series") > -1 && (
@@ -907,7 +905,7 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
                             onClick={() => onClickpreprocessingInfoValueValue(selectedRowForPreprocessing[selectedRowForPreprocessing.length - 1], "timeSeriesMean")}
                           />
                         }
-                        label={`${t("")} : ${t("시계열 통계값 변환시 합계값이 아닌 평균값으로 통계를 산출합니다.")}`}
+                        label={`${t("Time series average")} : ${t("When converting, time series statistics are calculated from the average value, not the sum value.")}`}
                       />
                     </GridItem>
                   )}

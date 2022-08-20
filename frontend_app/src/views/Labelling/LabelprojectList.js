@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+import { getLabelProjectsRequestAction, stopLabelProjectsLoadingRequestAction, setObjectlistsSearchedValue } from "redux/reducers/labelprojects.js";
+
 import currentTheme from "assets/jss/custom.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -14,7 +17,6 @@ import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import StartProject from "./StartProject.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getLabelProjectsRequestAction, stopLabelProjectsLoadingRequestAction, getAiTrainerLabelprojectRequestAction, setObjectlistsSearchedValue } from "redux/reducers/labelprojects.js";
 import { askModalRequestAction, askDeleteLabelProjectReqeustAction } from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";

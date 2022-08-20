@@ -9,7 +9,17 @@ import { getProjectsRequestAction } from "redux/reducers/projects";
 import currentTheme from "assets/jss/custom.js";
 import { TRAINING_METHOD, PREFERRED_OPTION } from "variables/train";
 
-import { Checkbox, LinearProgress, Modal, Table, TableBody, TableCell, TableHead, TableRow, TablePagination, Tooltip } from "@material-ui/core";
+import {
+  Checkbox,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Tooltip,
+} from "@material-ui/core";
 import { Grid } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
@@ -21,25 +31,19 @@ import ProjectListStepper from "components/Stepper/ProjectListStepper";
 import SearchInputBox from "components/Table/SearchInputBox";
 import Button from "components/CustomButtons/Button";
 
-function getSteps() {
-  return ["데이터 준비", "준비 완료", "인공지능 학습 중", "데이터 분석 / 예측"];
-}
-
 const AutoMLProject = ({ history, route }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { user, projects, messages } = useSelector(
+  const { user, projects } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
-      messages: state.messages,
     }),
     []
   );
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
@@ -51,21 +55,12 @@ const AutoMLProject = ({ history, route }) => {
   const [isSortDesc, setIsSortDesc] = useState(true);
   const [projectPage, setProjectPage] = useState(0);
   const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
-  const [selectedPage, setSelectedPage] = useState("myproject");
   const [isShared, setIsShared] = useState(false);
-  const steps = getSteps();
   const url = window.location.href;
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
   const [isVerify, setIsVerify] = useState(false);
-
-  useEffect(() => {
-    const state = history.location.state;
-    if (state && state.projectModalOpen) {
-      setIsModalOpen(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (route === "verifyproject") setIsVerify(true);
@@ -108,7 +103,7 @@ const AutoMLProject = ({ history, route }) => {
         setSearchedProjectValue("");
         setSortingValue("created_at");
         setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1]; // tab이 바뀜에 따라 projectRequest 해주기
+        const projectTab = url.split("?tab=")[1];
         if (projectTab) {
           setActiveStep(projectTab);
           setProjectPage(0);
@@ -151,7 +146,6 @@ const AutoMLProject = ({ history, route }) => {
   };
 
   const setProjectSettings = () => {
-    //프로젝트 체크박스 value 세팅
     setProjectCheckedValue({ all: false });
     for (let i = 0; i < projects.projects.length; i++) {
       const value = projects.projects[i].id;
@@ -205,15 +199,24 @@ const AutoMLProject = ({ history, route }) => {
   const showMyProject = (projectArr) => {
     const tableHeads = [
       { value: "No", width: "5%", name: "" },
-      { value: "프로젝트명", width: "30%", name: "projectName" },
-      { value: "역할", width: "10%", name: "role" },
-      { value: "옵션", width: "7.5%", name: "option" },
-      { value: "학습방법", width: "17.5%", name: "trainingMethod" },
-      { value: "생성일", width: "15%", name: "created_at" },
-      { value: "진행상태", width: "15%", name: "status" },
+      { value: "Project name", width: "30%", name: "projectName" },
+      { value: "Role", width: "10%", name: "role" },
+      { value: "Option", width: "7.5%", name: "option" },
+      { value: "Training method", width: "17.5%", name: "trainingMethod" },
+      { value: "Date created", width: "15%", name: "created_at" },
+      { value: "Training status", width: "15%", name: "status" },
     ];
 
-    const tableBodys = ["id", "no", tableHeads[1].name, tableHeads[2].name, tableHeads[3].name, tableHeads[4].name, tableHeads[5].name, tableHeads[6].name];
+    const tableBodys = [
+      "id",
+      "no",
+      tableHeads[1].name,
+      tableHeads[2].name,
+      tableHeads[3].name,
+      tableHeads[4].name,
+      tableHeads[5].name,
+      tableHeads[6].name,
+    ];
 
     const projectTableHead = () => {
       const onSetProjectCheckedValueAll = () => {
@@ -244,8 +247,16 @@ const AutoMLProject = ({ history, route }) => {
       return (
         <TableRow>
           {!isShared && (
-            <TableCell className={classes.tableHead} align="left" style={{ width: "5%" }}>
-              <Checkbox value="all" checked={projectCheckedValue["all"]} onChange={onSetProjectCheckedValueAll} />
+            <TableCell
+              className={classes.tableHead}
+              align="left"
+              style={{ width: "5%" }}
+            >
+              <Checkbox
+                value="all"
+                checked={projectCheckedValue["all"]}
+                onChange={onSetProjectCheckedValueAll}
+              />
             </TableCell>
           )}
           {tableHeads.map((tableHead, idx) => (
@@ -258,10 +269,17 @@ const AutoMLProject = ({ history, route }) => {
               style={{
                 cursor: tableHead.value !== "no" ? "pointer" : "default",
               }}
-              onClick={() => tableHead.value !== "no" && onSetSortValue(tableHead.name)}
+              onClick={() =>
+                tableHead.value !== "no" && onSetSortValue(tableHead.name)
+              }
             >
               <div className={classes.tableHeader}>
-                {sortingValue === tableHead.name && (!isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                {sortingValue === tableHead.name &&
+                  (!isSortDesc ? (
+                    <ArrowUpwardIcon fontSize="small" />
+                  ) : (
+                    <ArrowDownwardIcon fontSize="small" />
+                  ))}
                 <b>{t(tableHead.value)}</b>
               </div>
             </TableCell>
@@ -277,36 +295,46 @@ const AutoMLProject = ({ history, route }) => {
 
         let status = "";
         if (prj.status === 0) {
-          status = "준비완료";
+          status = "Ready";
         } else if (prj.status === 100) {
-          status = "학습완료";
+          status = "Completed";
         } else if (prj.status === 99 || prj.status === 9 || prj.status < 0) {
-          status = "에러";
+          status = "Error";
         } else {
-          status = "학습 중";
+          status = "In progress";
         }
 
-        const project = [prj.id, projects.totalLength - (projectRowsPerPage * projectPage + i), prj.projectName, prj.role, t(PREFERRED_OPTION[prj.option]), t(TRAINING_METHOD[prj.trainingMethod]), prj.created_at ? prj.created_at.substring(0, 10) : "", status];
+        const project = [
+          prj.id,
+          projects.totalLength - (projectRowsPerPage * projectPage + i),
+          prj.projectName,
+          prj.role,
+          t(PREFERRED_OPTION[prj.option]),
+          t(TRAINING_METHOD[prj.trainingMethod]),
+          prj.created_at ? prj.created_at.substring(0, 10) : "",
+          status,
+        ];
 
         datas.push(project);
       }
 
       const onSetColor = (d) => {
         switch (d) {
-          case "준비완료":
+          case "Ready":
             return "#6B6B6B";
-          case "학습 중":
+          case "In progress":
             return "#1BC6B4";
-          case "에러":
+          case "Error":
             return "#BD2020";
-          case "학습완료":
+          case "Completed":
             return "#0A84FF";
         }
       };
 
       const goProjectDetail = (id) => {
         if (route === "train") history.push(`/admin/train/${id}`);
-        if (route === "verifyproject") history.push(`/admin/verifyproject/${id}`);
+        if (route === "verifyproject")
+          history.push(`/admin/verifyproject/${id}`);
       };
 
       return datas.map((data, idx) => (
@@ -315,12 +343,18 @@ const AutoMLProject = ({ history, route }) => {
           key={idx}
           className={classes.tableRow}
           style={{
-            background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+            background:
+              idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
           }}
         >
           {!isShared && (
             <TableCell align="left" className={classes.tableRowCell}>
-              <Checkbox value={data[0]} checked={projectCheckedValue[data[0]] ? true : false} onChange={() => onSetProjectCheckedValue(data[0])} className={classes.tableCheckBox} />
+              <Checkbox
+                value={data[0]}
+                checked={projectCheckedValue[data[0]] ? true : false}
+                onChange={() => onSetProjectCheckedValue(data[0])}
+                className={classes.tableCheckBox}
+              />
             </TableCell>
           )}
           {data.map((d, i) => {
@@ -333,7 +367,12 @@ const AutoMLProject = ({ history, route }) => {
               }
 
               return (
-                <TableCell key={`tableCell_${i}_${d}`} className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(data[0])}>
+                <TableCell
+                  key={`tableCell_${i}_${d}`}
+                  className={classes.tableRowCell}
+                  align="center"
+                  onClick={() => goProjectDetail(data[0])}
+                >
                   <div
                     style={{
                       wordBreak: "break-all",
@@ -367,9 +406,14 @@ const AutoMLProject = ({ history, route }) => {
           <div className="emptyListTable">
             {searchedProjectValue
               ? user.language === "ko"
-                ? `"${searchedProjectValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
+                ? `"${searchedProjectValue}" ` +
+                  "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
                 : `There were no results found for "${searchedProjectValue}"`
-              : t(`진행중인 ${isVerify ? "검증" : "학습"} 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.`)}
+              : t(
+                  `진행중인 ${
+                    isVerify ? "검증" : "학습"
+                  } 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.`
+                )}
           </div>
         ) : (
           <Table className={classes.table} aria-label="simple table">
@@ -378,7 +422,13 @@ const AutoMLProject = ({ history, route }) => {
           </Table>
         )}
         <Grid container justifyContent="space-between" alignItems="center">
-          <Button id="deleteProject" shape="redOutlined" size="sm" disabled={!Object.values(projectCheckedValue).includes(true)} onClick={deleteProject}>
+          <Button
+            id="deleteProject"
+            shape="redOutlined"
+            size="sm"
+            disabled={!Object.values(projectCheckedValue).includes(true)}
+            onClick={deleteProject}
+          >
             {t("Delete selection")}
           </Button>
           <TablePagination
@@ -406,25 +456,7 @@ const AutoMLProject = ({ history, route }) => {
   };
 
   const partStartBtns = () => {
-    const onSetSelectedPage = (value) => {
-      dispatch(
-        getProjectsRequestAction({
-          sorting: sortingValue,
-          count: projectRowsPerPage,
-          page: 0,
-          tab: activeStep,
-          isDesc: isSortDesc,
-          isshared: value,
-        })
-      );
-      setIsShared(value);
-    };
-
     const openStartProject = () => {
-      // if(parseInt(user.me.cumulativeProjectCount) >= parseInt(user.me.usageplan.projects) + parseInt(user.me.remainProjectCount)){
-      //   dispatch(openErrorSnackbarRequestAction(`${t('You can’t add a new project. You’ve reached the maximum number of projects allowed for your account')} ${t('계속 진행하시려면 이용플랜을 변경해주세요.')}`));
-      //   return;
-      // }
       history.push("/admin/dataconnector");
     };
 
@@ -435,15 +467,32 @@ const AutoMLProject = ({ history, route }) => {
     return (
       <Grid container alignItems="center" columnSpacing={1}>
         <Grid item>
-          <Button id="startProjectBtn" shape="greenContained" onClick={openStartProject}>
+          <Button
+            id="startProjectBtn"
+            shape="greenContained"
+            onClick={openStartProject}
+          >
             {t("New Project")}
           </Button>
         </Grid>
         {process.env.REACT_APP_ENTERPRISE !== "true" && (
           <Grid item>
-            <Tooltip title={<span style={{ fontSize: "11px" }}>{t("For those who are new to Train, We have sample datasets for each industry to help you experience and learn more about our AI developing services")}</span>} placement="top">
+            <Tooltip
+              title={
+                <span style={{ fontSize: "11px" }}>
+                  {t(
+                    "For those who are new to Train, We have sample datasets for each industry to help you experience and learn more about our AI developing services"
+                  )}
+                </span>
+              }
+              placement="top"
+            >
               <div>
-                <Button id="sampleDataBtn" shape="whiteOutlined" onClick={openTemplate}>
+                <Button
+                  id="sampleDataBtn"
+                  shape="whiteOutlined"
+                  onClick={openTemplate}
+                >
                   {t("Sample Data")}
                 </Button>
               </div>
@@ -454,54 +503,65 @@ const AutoMLProject = ({ history, route }) => {
     );
   };
 
-  const projectUsageCount = () => (
-    <div className={classes.fullWidthAlignRightContainer}>
-      <div
-        style={{
-          width: "10%",
-          minWidth: "200px",
-          fontSize: "12px",
-        }}
-      >
-        <div style={{ display: "flex" }}>
-          <div>{t("Total projects")}</div>
-          <div id="projectCountText" style={{ marginLeft: "auto" }}>
-            <span id="projectCountText">
-              {(+user.me.cumulativeProjectCount).toLocaleString()} / {user.me.usageplan.planName === "trial" ? 0 : (+user.me.remainProjectCount + +user.me.usageplan.projects * (user.me.dynos ? +user.me.dynos : 1) + +user.me.additionalProjectCount).toLocaleString()} {t("")}
-            </span>
-          </div>
-        </div>
-        <LinearProgress variant="determinate" color="blue" value={(+user.me.cumulativeProjectCount / (user.me.usageplan.planName === "trial" ? 0 : +user.me.remainProjectCount + +user.me.usageplan.projects * (user.me.dynos ? +user.me.dynos : 1) + +user.me.additionalProjectCount)) * 100} />
-      </div>
-    </div>
-  );
-
   return (
     <div>
       {introOn ? (
-        <ProjectIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} />
+        <ProjectIntro
+          setIntroOn={setIntroOn}
+          setIntroOffClicked={setIntroOffClicked}
+          useTranslation={useTranslation}
+        />
       ) : (
         <>
           <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
           <Grid>
-            <div className={classes.topTitle}>{t(`인공지능 ${isVerify ? "검증" : "개발"}하기`)}</div>
-            <div className={classes.subTitleText}>{t(`새로운 프로젝트를 생성하여 AI모델을 통한 데이터 ${isVerify ? "검증" : "예측"}을 할 수 있습니다.`)}</div>
+            <div className={classes.topTitle}>
+              {t(`인공지능 ${isVerify ? "검증" : "개발"}하기`)}
+            </div>
+            <div className={classes.subTitleText}>
+              {t(
+                `새로운 프로젝트를 생성하여 AI모델을 통한 데이터 ${
+                  isVerify ? "검증" : "예측"
+                }을 할 수 있습니다.`
+              )}
+            </div>
           </Grid>
           <Grid sx={{ my: 8 }}>
-            <ProjectListStepper history={history} step={activeStep} page={route} />
+            <ProjectListStepper
+              history={history}
+              step={activeStep}
+              page={route}
+            />
           </Grid>
-          <Grid container alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ mb: 2 }}
+          >
             <Grid item>{partStartBtns()}</Grid>
             <Grid item>
-              <SearchInputBox tooltipText="프로젝트명을 입력해주세요." setSearchedValue={setSearchedProjectValue} />
+              <SearchInputBox
+                tooltipText="프로젝트명을 입력해주세요."
+                setSearchedValue={setSearchedProjectValue}
+              />
             </Grid>
           </Grid>
-          {/* {user.me && projectUsageCount()}*/}
           <Grid>{showMyProject(projects.projects)}</Grid>
         </>
       )}
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isTemplateModalOpen} onClose={closeTemplateModal} className={classes.modalContainer}>
-        <Samples className={classes.predictModalContent} closeTemplateModal={closeTemplateModal} history={history} />
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isTemplateModalOpen}
+        onClose={closeTemplateModal}
+        className={classes.modalContainer}
+      >
+        <Samples
+          className={classes.predictModalContent}
+          closeTemplateModal={closeTemplateModal}
+          history={history}
+        />
       </Modal>
     </div>
   );
