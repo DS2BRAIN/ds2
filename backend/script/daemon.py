@@ -938,25 +938,6 @@ class Daemon():
 
                     model_file_path = self.trainingClass.saveModel(project, model, learn, self.utilClass.bucket_name, modelName=modelName)
 
-                    print("prescriptionAnalytics normal")
-
-                    try:
-                        print("project['trainingMethod']")
-                        print(project['trainingMethod'])
-                        if project['trainingMethod'] not in 'image' and 'time' not in project['trainingMethod']:
-                            prescriptionAnalyticsInfo = self.trainingClass.prescriptionAnalytics(project, model, learn,
-                                                                                                  df, num_cols,
-                                                                                                  str_cols, dep_var,
-                                                                                                  feature_importance_array,
-                                                                                                  yClass,
-                                                                                                  realTrainingMethod)
-                            self.dbClass.updateModel(model['id'],
-                                                     {"prescriptionAnalyticsInfo": prescriptionAnalyticsInfo})
-                    except:
-                        print("fail3")
-                        print(traceback.format_exc())
-                        pass
-
                     self.dbClass.updateModel(model['id'], {
                         "status": 100,  # TODO : TEST 용
                         "statusText": "100 : 모델 학습이 완료되었습니다.",
@@ -982,6 +963,24 @@ class Daemon():
                             important_df = df_for_test[feature_importance_array].copy()
                             important_df[dep_var] = df_for_test[dep_var]
 
+                            print("prescriptionAnalytics normal")
+
+                            try:
+                                print("project['trainingMethod']")
+                                print(project['trainingMethod'])
+                                if project['trainingMethod'] not in 'image' and 'time' not in project['trainingMethod']:
+                                    prescriptionAnalyticsInfo = self.trainingClass.prescriptionAnalytics(project, model, learn,
+                                                                                                          df, num_cols,
+                                                                                                          str_cols, dep_var,
+                                                                                                          feature_importance_array,
+                                                                                                          yClass,
+                                                                                                          realTrainingMethod)
+                                    self.dbClass.updateModel(model['id'],
+                                                             {"prescriptionAnalyticsInfo": prescriptionAnalyticsInfo})
+                            except:
+                                print("fail3")
+                                print(traceback.format_exc())
+                                pass
 
                     try:
                         shutil.rmtree(f"./temp/model_analytics_images_{model['id']}")
