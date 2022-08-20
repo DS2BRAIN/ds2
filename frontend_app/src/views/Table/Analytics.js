@@ -17,9 +17,9 @@ import ModalPage from "components/PredictModal/ModalPage.js";
 import CircularProgress from "@mui/material/CircularProgress";
 import Select from "@material-ui/core/Select/Select";
 import CheckIcon from "@material-ui/icons/Check";
+import CloseIcon from "@material-ui/icons/Close";
 
-const Analytics = React.memo(
-  ({ valueForPredictName, csv, trainingColumnInfo, history }) => {
+const Analytics = React.memo(({}) => {
     const classes = currentTheme();
     const dispatch = useDispatch();
     const { user, projects, models, messages } = useSelector(
@@ -45,6 +45,7 @@ const Analytics = React.memo(
     const [selectedPAvalue, setSelectedPAvalue] = useState({});
     const [isModalOpen, setIsOpenModal] = useState(false);
     const [projectAnalyGraphArr, setProjectAnalyGraphArr] = useState([]);
+    const [valueForPredictName, setValueForPredictName] = useState("");
 
     useEffect(() => {
       if (models.chosenModel) {
@@ -141,75 +142,14 @@ const Analytics = React.memo(
         <CircularProgress />
       </div>
     ) : (
-      <div className={classes.detailContainer}>
-        <GridContainer>
-          <GridItem xs={8}>
-            <div style={{ fontSize: "20px", margin: "20px 0" }}>
-              {modelDetail.name.toUpperCase()}
-            </div>
-          </GridItem>
-          <GridItem
-            xs={4}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            {projectAnalyGraphArr && projectAnalyGraphArr.length > 0 && (
-              <div
-                onClick={handleChange}
-                id="project"
-                className={
-                  selectedPage === "project"
-                    ? classes.selectedTab + " " + classes.firstTab
-                    : classes.notSelectedTab + " " + classes.firstTab
-                }
-              >
-                {t("Overall analysis")}
-              </div>
-            )}
-            {((modelGraphs && modelGraphs.length > 0) ||
-              (prescriptionAnalyticsInfo &&
-                Object.keys(prescriptionAnalyticsInfo).length > 0)) && (
-              <div
-                onClick={handleChange}
-                id="model"
-                className={
-                  selectedPage === "model"
-                    ? classes.selectedTab + " " + classes.lastTab
-                    : classes.notSelectedTab + " " + classes.lastTab
-                }
-              >
-                {t("AI+ analysis")}
-              </div>
-            )}
-          </GridItem>
-        </GridContainer>
-        {selectedPage === "project" && projectAnalyGraphArr.length > 0 && (
-          <GridContainer>
-            {projectAnalyGraphArr.map((graph) => (
-              <GridItem
-                xs={12}
-                key={`graph_${graph.id}`}
-                style={{ marginBottom: "20px" }}
-              >
-                <div className={classes.analyticsGraphsContainer}>
-                  <img
-                    id={"png" + graph.id}
-                    src={
-                      IS_ENTERPRISE
-                        ? fileurl + "static/" + graph.filePath
-                        : graph.filePath
-                    }
-                    style={{ width: "100%" }}
-                    type="image/png"
-                  />
-                </div>
-              </GridItem>
-            ))}
-          </GridContainer>
-        )}
+      <div className={classes.modalPrescriptiveAnalyticsContent}>
+          <div className={classes.titleContainer}>
+            <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+              {t("Prescriptive Analytics Result")}
+            </span>
+            <CloseIcon className={classes.closeImg} onClick={closeModal} />
+          </div>
+
         {selectedPage === "model" &&
           ((modelGraphs && modelGraphs.length > 0) ||
             (prescriptionAnalyticsInfo &&
@@ -500,93 +440,8 @@ const Analytics = React.memo(
                     </GridContainer>
                   </Container>
                 )}
-              {featureImportance && featureImportance.length > 0 && (
-                <>
-                  <GridContainer style={{ marginBottom: "20px" }}>
-                    <GridItem
-                      xs={12}
-                      style={{
-                        marginBottom: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        color: currentThemeColor.textWhite87,
-                      }}
-                    >
-                      <CheckIcon style={{ marginRight: "8px" }} />
-                      <span style={{ fontSize: "18px" }}>
-                        {t("The top 5 highly relevant columns found by explainable AI")}
-                      </span>
-                    </GridItem>
-                    {featureImportance.map((data, idx) => {
-                      if (idx < 5) {
-                        const rgba = 1 - 0.2 * idx;
-                        return (
-                          <GridItem xs={6}>
-                            <Button className={classes.mainCard}>
-                              <GridItem xs={6}>
-                                <span className={classes.wordBreakDiv}>
-                                  {idx + 1}. {data.name}
-                                </span>
-                              </GridItem>
-                              <GridItem xs={6}>
-                                <div
-                                  style={{ justifyContent: "center" }}
-                                  className={classes.defaultF0F0OutlineButton}
-                                >
-                                  {data.value}%
-                                </div>
-                              </GridItem>
-                            </Button>
-                          </GridItem>
-                        );
-                      }
-                    })}
-                  </GridContainer>
-                  <hr
-                    className={classes.line}
-                    style={{ marginBottom: "20px" }}
-                  />
-                </>
-              )}
-              <GridContainer>
-                {modelGraphs &&
-                  modelGraphs.length > 0 &&
-                  modelGraphs.map((graph, idx) => (
-                    <GridItem xs={12} style={{ marginBottom: "20px" }}>
-                      <div className={classes.analyticsGraphsContainer}>
-                        <img
-                          id={"png" + graph.id}
-                          src={
-                            IS_ENTERPRISE
-                              ? fileurl + "static/" + graph.filePath
-                              : graph.filePath
-                          }
-                          style={{ width: "100%" }}
-                          type="image/png"
-                        />
-                      </div>
-                    </GridItem>
-                  ))}
-              </GridContainer>
             </>
           )}
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={isModalOpen}
-          onClose={closeModal}
-          className={classes.modalContainer}
-        >
-          <ModalPage
-            closeModal={closeModal}
-            chosenItem="api"
-            isMarket={false}
-            opsId={null}
-            csv={csv}
-            trainingColumnInfo={trainingColumnInfo}
-            history={history}
-          />
-        </Modal>
       </div>
     );
   }

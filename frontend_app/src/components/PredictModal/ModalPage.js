@@ -219,8 +219,9 @@ const ModalPage = React.memo(({ isStandard, closeModal, chosenItem, isMarket, op
 
   const renderItem = () => {
     let category = "";
-    if (chosenItem === "predict") category = "일괄예측";
-    if (chosenItem === "autolabelling") category = "오토라벨링";
+    if (chosenItem === "predict") category = "Collective Prediction";
+    if (chosenItem === "autolabelling") category = "Auto Labeling";
+    if (chosenItem === "prescriptiveAnalyze") category = "Prescriptive Analyze";
 
     if (chosenItem === "predict" || chosenItem === "autolabelling") {
       if (completed > 0 && isAPILoading) {
@@ -246,7 +247,7 @@ const ModalPage = React.memo(({ isStandard, closeModal, chosenItem, isMarket, op
               <div className={classes.predictContainer}>
                 <div style={{ fontSize: "20px", margin: "20px 0" }}>
                   <div>
-                    {t(`${category}이 시작되었습니다.`)}
+                    {t(`${category} has started.`)}
                     <br />
                     {t("You’ll be notified in the notification window when it is completed")}
                   </div>

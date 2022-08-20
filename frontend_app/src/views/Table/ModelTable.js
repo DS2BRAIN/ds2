@@ -30,6 +30,7 @@ import SalesModal from "../SkyhubAI/SalesModal";
 import MetabaseButton from "components/CustomButtons/MetabaseButton";
 import Button from "components/CustomButtons/Button";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
+import Analytics from "./Analytics";
 
 let sortObj = {
   name: "down",
@@ -89,6 +90,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
   const [modelPage, setModelPage] = useState(0);
   const [rowsPerModelPage, setRowsPerModelPage] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPrescriptiveAnalyticsModalOpen, setIsPrescriptiveAnalyticsModalOpen] = useState(false);
   const [chosenModel, setChosenModel] = useState(null);
   const [chosenItem, setChosenItem] = useState(null);
 
@@ -251,6 +253,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
       setIsModalOpen(false);
       // setIsAutoLabelingModalOpen(false);
       setOpenWebhooksModal(false);
+      setIsPrescriptiveAnalyticsModalOpen(false);
     }
   }, [messages.shouldCloseModal]);
 
@@ -559,6 +562,12 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
 
   const onClickForFavorite = (isTrue, id) => {
     dispatch(postFavoriteModelRequestAction({ id: id, isFavorite: isTrue }));
+  };
+
+  const openPrescriptiveAnalyticsModal = async (id, item) => {
+    await dispatch(getModelRequestAction(id));
+    setIsPrescriptiveAnalyticsModalOpen(true);
+    setChosenItem(item);
   };
 
   // const onOpenAutoLabellingForObjectDetect = (id) => {
@@ -1165,7 +1174,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                       id="modeltable_analysis_btn"
                       shape="greenContained"
                       size="sm"
-                      onClick={() => openDetailPage("analytics", id, project.id)}
+                      onClick={() => openPrescriptiveAnalyticsModal(id)}
                     >
                       {t("Prescriptive Analyze")}
                     </Button>
@@ -1267,6 +1276,11 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
   const closeModal = () => {
     dispatch(askModalRequestAction());
   };
+
+  const closePrescriptiveAnalyticsModal = () => {
+    dispatch(askModalRequestAction());
+  };
+
   const closeTooltipModalOpen = () => {
     setIsTooltipModalOpen(false);
   };
@@ -1553,6 +1567,9 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
       </div>
       <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isModalOpen} onClose={closeModal} className={classes.modalContainer}>
         <ModalPage closeModal={closeModal} chosenItem={chosenItem} isMarket={false} opsId={null} csv={csv} trainingColumnInfo={trainingColumnInfo} history={history} />
+      </Modal>
+      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPrescriptiveAnalyticsModalOpen} onClose={closePrescriptiveAnalyticsModal} className={classes.modalContainer}>
+        <Analytics />
       </Modal>
       <Modal
         aria-labelledby="simple-modal-title"
