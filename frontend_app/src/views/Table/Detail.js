@@ -19,6 +19,7 @@ import InputBase from "@material-ui/core/InputBase";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@material-ui/core/Modal";
 import CloseIcon from "@material-ui/icons/Close";
+import CheckIcon from "@material-ui/icons/Check";
 
 const Detail = React.memo(({ datacolumns }) => {
   const classes = currentTheme();
@@ -49,6 +50,7 @@ const Detail = React.memo(({ datacolumns }) => {
   const [resultJson, setResultJson] = useState("");
   const [colorPickerModal, setColorPickerModal] = useState(false);
   const [jsonEditMode, setJsonEditMode] = useState(false);
+  const [featureImportance, setFeatureImportance] = useState([]);
 
   useEffect(() => {
     if (models.model) {
@@ -103,6 +105,7 @@ const Detail = React.memo(({ datacolumns }) => {
         setResultJson(yClassString);
       }
       setModelDetail(data);
+      getFeatureImportance(data);
       setLanguage();
     }
   }, [models.model]);
@@ -327,6 +330,33 @@ const Detail = React.memo(({ datacolumns }) => {
       setBackgroundColor(obj.hex);
     }
   };
+
+  const getFeatureImportance = (modelDetail) => {
+      try {
+        const featureData = [];
+        let feature = modelDetail.featureImportance.replace(/NaN/g, '"NaN"');
+        feature = JSON.parse(feature);
+        let sum = 0;
+        const cols = feature.cols;
+        const imp = feature.imp;
+        imp.forEach((impOne, idx) => {
+          if (typeof impOne === "number") {
+            sum += Math.abs(impOne);
+            const percentage = ((impOne * 100) / sum).toFixed(2);
+            featureData.push({
+              name: cols[idx],
+              value: parseFloat(percentage),
+            });
+          }
+        });
+        featureData.sort((prev, next) => {
+          return next["value"] - prev["value"];
+        });
+        setFeatureImportance(featureData);
+      } catch {
+        setFeatureImportance(null);
+      }
+    };
 
   const renderStatistics = () => {
     if (modelDetail.cmStatistics !== null) {
@@ -620,6 +650,17 @@ const Detail = React.memo(({ datacolumns }) => {
                 Records
               </div>
             )}
+            {featureImportance && featureImportance.length > 0 && (
+              <div
+                id="featureImportanceTab"
+                onClick={() => {
+                  setChosenChart("featureImportance");
+                }}
+                className={chosenChart === "featureImportance" ? classes.selectedListObject : classes.listObject}
+              >
+                Feature Importance
+              </div>
+            )}
             <div
               id="apiTab"
               onClick={() => {
@@ -793,6 +834,57 @@ const Detail = React.memo(({ datacolumns }) => {
                     </div>
                   </GridItem>
                 </GridContainer>
+              </>
+            )}
+            {chosenChart === "featureImportance" && (
+              <>
+                <GridContainer style={{ height: "40px" }}></GridContainer>
+                <>
+                  <GridContainer style={{ marginBottom: "20px" }}>
+                    <GridItem
+                      xs={12}
+                      style={{
+                        marginBottom: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        color: currentThemeColor.textWhite87,
+                      }}
+                    >
+                      <CheckIcon style={{ marginRight: "8px" }} />
+                      <span style={{ fontSize: "18px" }}>
+                        {t("The top 5 highly relevant columns found by explainable AI")}
+                      </span>
+                    </GridItem>
+                    {featureImportance.map((data, idx) => {
+                      if (idx < 5) {
+                        const rgba = 1 - 0.2 * idx;
+                        return (
+                          <GridItem xs={6}>
+                            <Button className={classes.mainCard}>
+                              <GridItem xs={6}>
+                                <span className={classes.wordBreakDiv}>
+                                  {idx + 1}. {data.name}
+                                </span>
+                              </GridItem>
+                              <GridItem xs={6}>
+                                <div
+                                  style={{ justifyContent: "center" }}
+                                  className={classes.defaultF0F0OutlineButton}
+                                >
+                                  {data.value}%
+                                </div>
+                              </GridItem>
+                            </Button>
+                          </GridItem>
+                        );
+                      }
+                    })}
+                  </GridContainer>
+                  <hr
+                    className={classes.line}
+                    style={{ marginBottom: "20px" }}
+                  />
+                </>
               </>
             )}
             {chosenChart === "statistics" && renderStatistics()}
