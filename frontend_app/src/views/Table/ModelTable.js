@@ -1154,7 +1154,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                   {secPredictBtns(projectTrainMethod, id)}
                   {secActionBtns(model.metabase, id)}
                 </div>
-                <div
+                    {model?.prescriptionAnalyticsInfo && <div
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -1163,15 +1163,14 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                 >
                     <Button
                       id="modeltable_analysis_btn"
-                      // shape="blueOutlined"
-                      // className={`${classes.modelTab} predictBtn ${classes.modelTabButton}`}
                       shape="greenContained"
                       size="sm"
                       onClick={() => openDetailPage("analytics", id, project.id)}
                     >
                       {t("Prescriptive Analyze")}
                     </Button>
-                </div>
+                </div>}
+
                 </>
               );
             };
