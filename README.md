@@ -70,7 +70,7 @@ After selecting the desired learning method, click the Start button on the right
 
 Once the optimal model has been selected, prescriptive analysis can be run to gain insights from sentences built around explainable AI (XAI).
 
-![Prescriptive Analytics](https://ds2.ai/_next/image?url=https%3A%2F%2Fsuper-static-assets.s3.amazonaws.com%2F01b4bb1e-20c4-4c5e-bb41-eed5f093e740%2Fimages%2F2dbf8360-1202-476f-a412-8652fe24eded.gif&w=3840&q=80)
+![Prescriptive Analytics](https://user-images.githubusercontent.com/60835181/185800119-a2a48213-12aa-4e7a-a834-765c14613fb7.png)
 
 
 ### Deploy AI models
