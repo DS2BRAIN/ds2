@@ -42,7 +42,8 @@ wget https://assetdslab.s3.ap-southeast-1.amazonaws.com/ds2_install.sh
 
 Supports training data labeling tools needed to create artificial intelligence models. 
 After clicking Labeling on the top menu, upload the dataset, and you can start labeling by selecting the desired function between manual labeling and auto-labeling tool.
-[![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
+
+![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
 
 
 ### Training AI models
@@ -63,6 +64,13 @@ After selecting the desired learning method, click the Start button on the right
 
 * Feature Importance
 ![Feature Importance](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FOi0m7F87Hvk4fz4sSNoI%2Ffeature_importance(1).png?alt=media&token=a8418d6c-1f51-46f6-b70c-e1e5eb25e940)
+
+
+### Run prescriptive analytics
+
+Once the optimal model has been selected, prescriptive analysis can be run to gain insights from sentences built around explainable AI (XAI).
+
+![Prescriptive Analytics](https://ds2.ai/_next/image?url=https%3A%2F%2Fsuper-static-assets.s3.amazonaws.com%2F01b4bb1e-20c4-4c5e-bb41-eed5f093e740%2Fimages%2F2dbf8360-1202-476f-a412-8652fe24eded.gif&w=3840&q=80)
 
 
 ### Deploy AI models
