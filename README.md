@@ -26,9 +26,7 @@ DS2.ai is the MLOps platform that serves all processes of building your customiz
 ---
 ### Install
 
-```
-
-[Extended documentation for DS2](https://docs.ds2.ai/)
+[Extended documentation for DS2](https://ds2.ai/docs)
 
 
 ### Start labeling data
