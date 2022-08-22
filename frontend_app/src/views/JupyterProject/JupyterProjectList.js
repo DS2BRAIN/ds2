@@ -128,7 +128,7 @@ const Project = ({ history }) => {
         setSearchedValue("");
         setSortingValue("created_at");
         setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1]; // tab이 바뀜에 따라 projectRequest 해주기
+        const projectTab = url.split("?tab=")[1];
         if (projectTab) {
           setActiveStep(projectTab);
           setIsProjectRequested(true);
@@ -256,12 +256,12 @@ const Project = ({ history }) => {
   };
 
   const tableHeads = [
-    { value: "No", width: "10%", name: "" },
-    { value: "프로젝트명", width: "40%", name: "projectName" },
-    //{ value: "역할", width: "10%", name: "role" },
+    { value: "No.", width: "10%", name: "" },
+    { value: "Project name", width: "40%", name: "projectName" },
+    //{ value: "Role", width: "10%", name: "role" },
     { value: "", width: "10%", name: "" },
-    { value: "생성일", width: "20%", name: "created_at" },
-    // { value: "진행상태", width: "20%", name: "status" },
+    { value: "Date created", width: "20%", name: "created_at" },
+    // { value: "Status", width: "20%", name: "status" },
   ];
 
   const tableBodys = ["projectName", "role", "created_at", "status"];
