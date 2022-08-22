@@ -10,7 +10,6 @@ import {
 } from "redux/reducers/labelprojects";
 import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
 import {
-  askModalRequestAction,
   askDeleteLabelProjectReqeustAction,
   openErrorSnackbarRequestAction,
 } from "redux/reducers/messages";
@@ -20,11 +19,9 @@ import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer";
 import SearchInputBox from "components/Table/SearchInputBox";
 import LabelIntro from "components/Guide/LabelIntro";
-import StartProject from "./StartProject";
 
 import {
   Checkbox,
-  Modal,
   Table,
   TableBody,
   TableCell,
@@ -69,7 +66,6 @@ const LabelprojectList = ({ history }) => {
     initialRowsValue
   );
   const [searchedValue, setSearchedValue] = useState("");
-  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [sortingValue, setSortingValue] = useState(initialSortingValue);
   const [isSortDesc, setIsSortDesc] = useState(initialDescValue);
   const [isPagingChanged, setIsPagingChanged] = useState(false);
@@ -137,7 +133,6 @@ const LabelprojectList = ({ history }) => {
 
   useEffect(() => {
     if (messages.shouldCloseModal) {
-      setIsProjectModalOpen(false);
       dispatch(stopLabelProjectsLoadingRequestAction());
     }
   }, [messages.shouldCloseModal]);
@@ -577,17 +572,6 @@ const LabelprojectList = ({ history }) => {
               )}
             </GridContainer>
           </div>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={isProjectModalOpen}
-            onClose={() => {
-              dispatch(askModalRequestAction());
-            }}
-            className={classes.modalContainer}
-          >
-            <StartProject history={history} />
-          </Modal>
         </>
       )}
     </>
