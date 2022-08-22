@@ -166,7 +166,9 @@ const ProjectListStepper = ({ history, step, page }) => {
         >
           <div>4</div>
         </div>
-        <div className={classes.stepperTextStyle}>{t("Data Analysis/Prediction")}</div>
+        <div className={classes.stepperTextStyle}>
+          {t("Data Analysis/Prediction")}
+        </div>
       </div>
     </div>
   );
