@@ -35,12 +35,7 @@ const DataVerificationTable = React.memo(
 
     const [isLoading, setIsLoading] = useState(true);
 
-
-    return <div className={classes.detailContainer}>
-
-        여기에 작성 시작하기
-
-      </div>
+    return <div className={classes.detailContainer}>여기에 작성 시작하기</div>;
   }
 );
 
