@@ -34,7 +34,10 @@ import TextField from "@material-ui/core/TextField";
 import Pagination from "@material-ui/lab/Pagination";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { getMarketModelRequestAction, getModelRequestAction } from "../../redux/reducers/models";
+import {
+  getMarketModelRequestAction,
+  getModelRequestAction,
+} from "../../redux/reducers/models";
 import ModalPage from "components/PredictModal/ModalPage";
 import { getMarketProjectRequestAction } from "../../redux/reducers/projects";
 import TablePagination from "@material-ui/core/TablePagination";
@@ -67,7 +70,10 @@ export default function MarketList({ history }) {
 
   const [requestAITitle, setRequestAITitle] = useState("");
   const [requestMarketModelId, setRequestMarketModelId] = useState(null);
-  const [isRequestIndustryAIModalOpen, setIsRequestIndustryAIModalOpen] = useState(false);
+  const [
+    isRequestIndustryAIModalOpen,
+    setIsRequestIndustryAIModalOpen,
+  ] = useState(false);
   const [requestContent, setRequestContent] = useState("");
   const [requestPhoneNumber, setRequestPhoneNumber] = useState("");
 
@@ -206,7 +212,11 @@ export default function MarketList({ history }) {
         setIsLoading(false);
       })
       .catch((e) => {
-        dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("A temporary error has occured. Please try again.")
+          )
+        );
       });
   };
 
@@ -239,7 +249,12 @@ export default function MarketList({ history }) {
             <TableHead style={{ borderTop: "1px solid #F0F0F0" }}>
               <TableRow>
                 {tableHeads.map((tableHead, idx) => (
-                  <TableCell key={idx} className={classes.tableHeadMarketList} align="center" width={tableHead.width}>
+                  <TableCell
+                    key={idx}
+                    className={classes.tableHeadMarketList}
+                    align="center"
+                    width={tableHead.width}
+                  >
                     {t(tableHead.label)}
                   </TableCell>
                 ))}
@@ -254,23 +269,36 @@ export default function MarketList({ history }) {
                       className={classes.tableRowCell}
                       align="center"
                       onClick={() => {
-                        goNewPage(tableBody.value, isKor ? marketModel.url : marketModel.url_en);
+                        goNewPage(
+                          tableBody.value,
+                          isKor ? marketModel.url : marketModel.url_en
+                        );
                       }}
                       style={{
-                        cursor: !tableBody.value.includes("name_") ? "default" : "pointer",
-                        padding: tableBody.value === "thumbnail" && "0 !important",
+                        cursor: !tableBody.value.includes("name_")
+                          ? "default"
+                          : "pointer",
+                        padding:
+                          tableBody.value === "thumbnail" && "0 !important",
                       }}
                     >
                       <div
                         className={classes.wordBreakDiv}
                         style={{
-                          textDecoration: tableBody.value.includes("name_") && "underline",
-                          textUnderlinePosition: tableBody.value.includes("name_") && "under",
-                          cursor: tableBody.value.includes("name_") ? "pointer" : "default",
+                          textDecoration:
+                            tableBody.value.includes("name_") && "underline",
+                          textUnderlinePosition:
+                            tableBody.value.includes("name_") && "under",
+                          cursor: tableBody.value.includes("name_")
+                            ? "pointer"
+                            : "default",
                         }}
                       >
                         {tableBody.value === "thumbnail" ? (
-                          <img src={marketModel[tableBody.value]} style={{ width: "80px", height: "80px" }} />
+                          <img
+                            src={marketModel[tableBody.value]}
+                            style={{ width: "80px", height: "80px" }}
+                          />
                         ) : (
                           <>
                             {tableBody.value === "type" ? (
@@ -281,10 +309,23 @@ export default function MarketList({ history }) {
                                   padding: "4px 8px",
                                 }}
                               >
-                                {marketModel.service_type ? "Service" : marketModel[tableBody.value] === "Quickstart" ? "Quick Start" : "Custom AI"}
+                                {marketModel.service_type
+                                  ? "Service"
+                                  : marketModel[tableBody.value] ===
+                                    "Quickstart"
+                                  ? "Quick Start"
+                                  : "Custom AI"}
                               </span>
                             ) : (
-                              <>{tableBody.value === "category" ? t(marketModel[tableBody.value]) : isKor ? marketModel[tableBody.value] : marketModel[`${tableBody.value.split("_")[0]}_en`]}</>
+                              <>
+                                {tableBody.value === "category"
+                                  ? t(marketModel[tableBody.value])
+                                  : isKor
+                                  ? marketModel[tableBody.value]
+                                  : marketModel[
+                                      `${tableBody.value.split("_")[0]}_en`
+                                    ]}
+                              </>
                             )}
                             {tableBody.value === "price" ? t("KRW") : ""}
                           </>
@@ -304,10 +345,19 @@ export default function MarketList({ history }) {
                   <TableCell className={classes.tableRowCell} align="center">
                     <Button
                       id={`${idx}_start_button`}
-                      className={(classes.wordBreakDiv, classes.defaultHighlightButton)}
+                      className={
+                        (classes.wordBreakDiv, classes.defaultHighlightButton)
+                      }
                       onClick={() => {
-                        if (marketModel["service_type"] && marketModel["service_type"].indexOf("offline_") !== -1) {
-                          dispatch(openSuccessSnackbarRequestAction(t("please contact the sales team.")));
+                        if (
+                          marketModel["service_type"] &&
+                          marketModel["service_type"].indexOf("offline_") !== -1
+                        ) {
+                          dispatch(
+                            openSuccessSnackbarRequestAction(
+                              t("please contact the sales team.")
+                            )
+                          );
                           openChat();
                         } else {
                           onClickButtonAction(marketModel);
@@ -317,9 +367,12 @@ export default function MarketList({ history }) {
                         width: "auto",
                         borderRadius: "12px",
                         border: "1px solid transparent",
-                        backgroundImage: "linear-gradient(94.02deg, #0A84FF 1.34%, #1BC6B4 98.21%)",
+                        backgroundImage:
+                          "linear-gradient(94.02deg, #0A84FF 1.34%, #1BC6B4 98.21%)",
                         backgroundOrigin: "border-box",
-                        boxShadow: marketModel["type"] !== "Quickstart" && "2px 1000px 1px #161616 inset",
+                        boxShadow:
+                          marketModel["type"] !== "Quickstart" &&
+                          "2px 1000px 1px #161616 inset",
                       }}
                     >
                       {marketModel["service_type"] ? (
@@ -330,7 +383,8 @@ export default function MarketList({ history }) {
                         <span
                           id="requestBtn"
                           style={{
-                            background: "linear-gradient(94.02deg, #0A84FF 1.34%, #1BC6B4 98.21%)",
+                            background:
+                              "linear-gradient(94.02deg, #0A84FF 1.34%, #1BC6B4 98.21%)",
                             webkitBackgroundClip: "text",
                             webkitTextFillColor: "transparent",
                           }}
@@ -381,7 +435,9 @@ export default function MarketList({ history }) {
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
       await setIsPredictModalOpen(true);
     } else {
-      await setRequestAITitle(isKor ? marketModel.name_kr : marketModel.name_en);
+      await setRequestAITitle(
+        isKor ? marketModel.name_kr : marketModel.name_en
+      );
       await setRequestMarketModelId(marketModel.id); //id => model
       await setIsRequestIndustryAIModalOpen(true);
     }
@@ -392,10 +448,25 @@ export default function MarketList({ history }) {
     const tmpFiles = [];
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > user.maximumFileSize) {
-        dispatch(openErrorSnackbarRequestAction(`${isKor ? user.maximumFileSize / 1073741824 + "GB 크기이상의 파일은 업로드 불가합니다." : `Files larger than ${user.maximumFileSize / 1073741824}GB cannot be uploaded`}`));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${
+              isKor
+                ? user.maximumFileSize / 1073741824 +
+                  "GB 크기이상의 파일은 업로드 불가합니다."
+                : `Files larger than ${user.maximumFileSize /
+                    1073741824}GB cannot be uploaded`
+            }`
+          )
+        );
       } else {
         const name = files[idx].name;
-        if (idx < 100 && /\.(jpg|jpeg|png|zip|csv|mp4|quicktime|mov)$/g.test(name.toLowerCase())) {
+        if (
+          idx < 100 &&
+          /\.(jpg|jpeg|png|zip|csv|mp4|quicktime|mov)$/g.test(
+            name.toLowerCase()
+          )
+        ) {
           tmpFiles.push(files[idx]);
         }
       }
@@ -407,7 +478,9 @@ export default function MarketList({ history }) {
     }
     setUploadFile(tmpFiles);
     setIsUploadLoading(false);
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been uploaded")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been uploaded"))
+    );
   };
 
   const deleteUploadedFile = (files) => {
@@ -456,24 +529,43 @@ export default function MarketList({ history }) {
       return;
     }
     if (!requestPhoneNumber) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter your mobile number.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your mobile number."))
+      );
       return;
     }
     if (regExp.test(requestPhoneNumber) === false) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter your mobile number in the correct format.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please enter your mobile number in the correct format.")
+        )
+      );
       return;
     }
     setIsRequestIndustryAIModalOpen(false);
     setIsLoading(true);
     api
-      .requestMarketModel(uploadFile, requestMarketModelId, requestPhoneNumber, requestContent)
+      .requestMarketModel(
+        uploadFile,
+        requestMarketModelId,
+        requestPhoneNumber,
+        requestContent
+      )
       .then((res) => {
         setIsLoading(false);
-        dispatch(openSuccessSnackbarRequestAction(`${t(requestAITitle)} ${t("AI application has been completed.")}`));
+        dispatch(
+          openSuccessSnackbarRequestAction(
+            `${t(requestAITitle)} ${t("AI application has been completed.")}`
+          )
+        );
       })
       .catch((e) => {
         setIsLoading(false);
-        dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("A temporary error has occured. Please try again.")
+          )
+        );
       });
     return;
   };
@@ -492,9 +584,15 @@ export default function MarketList({ history }) {
         <div>
           <div style={{ fontSize: "16px" }}>
             {t("Custom AI Application process")} {" : "}
-            {t("Data review for AI creation > Check availability > After the installation fee is paid, the project proceeds > Use the generated AI according to the deferred payment system")}
+            {t(
+              "Data review for AI creation > Check availability > After the installation fee is paid, the project proceeds > Use the generated AI according to the deferred payment system"
+            )}
           </div>
-          <div style={{ fontSize: "14px" }}>{t("*The amount may change depending on the size of the training data or whether it is pre-processed, and for details, it is possible to guide the progress and accurate quotation through a consultant.")}</div>
+          <div style={{ fontSize: "14px" }}>
+            {t(
+              "*The amount may change depending on the size of the training data or whether it is pre-processed, and for details, it is possible to guide the progress and accurate quotation through a consultant."
+            )}
+          </div>
         </div>
 
         {!isLoading && (
@@ -520,7 +618,9 @@ export default function MarketList({ history }) {
               value={category}
               onChange={changeCategory}
             >
-              <MenuItem value={"Select Category"}>{t("Select Category")}</MenuItem>
+              <MenuItem value={"Select Category"}>
+                {t("Select Category")}
+              </MenuItem>
               <MenuItem value={"All"}>{t("All")}</MenuItem>
               {categories.map((category) => (
                 <MenuItem value={category}>{t(category)}</MenuItem>
@@ -539,10 +639,19 @@ export default function MarketList({ history }) {
         ) : marketModels.length > 0 ? (
           renderMarketProjects()
         ) : (
-          <div style={{ margin: "auto" }}> {t("There is no product list.")} </div>
+          <div style={{ margin: "auto" }}>
+            {" "}
+            {t("There is no product list.")}{" "}
+          </div>
         )}
 
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isRequestIndustryAIModalOpen} onClose={closeIsRequestIndustryAIModal} className={classes.modalContainer}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isRequestIndustryAIModalOpen}
+          onClose={closeIsRequestIndustryAIModal}
+          className={classes.modalContainer}
+        >
           <div
             style={{
               width: "800px",
@@ -577,16 +686,26 @@ export default function MarketList({ history }) {
                       {({ getRootProps, getInputProps }) => (
                         <>
                           {(!uploadFile || uploadFile.length === 0) && (
-                            <div {...getRootProps({ className: "dropzoneArea" })}>
+                            <div
+                              {...getRootProps({ className: "dropzoneArea" })}
+                            >
                               <input {...getInputProps()} />
                               <p className={classes.settingFontWhite6}>
-                                {t("Drag the file or click the box to upload it!")}
+                                {t(
+                                  "Drag the file or click the box to upload it!"
+                                )}
                                 <br />
-                                {t("You can only upload image files (png/jpg/jpeg), csv files, image compression files (zip).")}
+                                {t(
+                                  "You can only upload image files (png/jpg/jpeg), csv files, image compression files (zip)."
+                                )}
                                 <br />
-                                {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
+                                {t(
+                                  " You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
+                                )}
                                 <br />
-                                {t("Uploading large-size files may take more than 5 minutes")}
+                                {t(
+                                  "Uploading large-size files may take more than 5 minutes"
+                                )}
                               </p>
                               <CloudUploadIcon fontSize="large" />
                             </div>
@@ -606,27 +725,35 @@ export default function MarketList({ history }) {
                                     }}
                                   >
                                     <span>
-                                      {t("Upload file")} : {t("총")} {uploadFile.length}
+                                      {t("Upload file")} : {t("총")}{" "}
+                                      {uploadFile.length}
                                       {t("")}
                                     </span>
                                   </p>
                                   <ul>
                                     {uploadFile.map((file, idx) => {
                                       if (idx === 10) {
-                                        return <li style={{ listStyle: "none" }}>.......</li>;
+                                        return (
+                                          <li style={{ listStyle: "none" }}>
+                                            .......
+                                          </li>
+                                        );
                                       }
                                       if (idx >= 10) {
                                         return null;
                                       }
                                       return (
                                         <li key={file.name}>
-                                          <div className={classes.alignCenterDiv}>
+                                          <div
+                                            className={classes.alignCenterDiv}
+                                          >
                                             <div
                                               style={{
                                                 overflow: "hidden",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",
-                                                color: currentThemeColor.textWhite6,
+                                                color:
+                                                  currentThemeColor.textWhite6,
                                               }}
                                             >
                                               {file.name}
@@ -665,7 +792,8 @@ export default function MarketList({ history }) {
                     <label
                       for="requestContent"
                       style={{
-                        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                        fontFamily:
+                          "'Roboto', 'Helvetica', 'Arial', sans-serif",
                         fontSize: "18px",
                         display: "block",
                         marginBottom: "10px",
@@ -675,7 +803,9 @@ export default function MarketList({ history }) {
                     </label>
                     <TextField
                       id="requestContent"
-                      placeholder={t("Ex. Among the applied label classes, car and pannel refer to cars and pedestrians, respectively.\nIf there is a part that is cut or overlapped when labeling, please label it with a full shot even if it overlaps with other objects.")}
+                      placeholder={t(
+                        "Ex. Among the applied label classes, car and pannel refer to cars and pedestrians, respectively.\nIf there is a part that is cut or overlapped when labeling, please label it with a full shot even if it overlaps with other objects."
+                      )}
                       style={{
                         wordBreak: "keep-all",
                         padding: "16px 26px",
@@ -694,7 +824,8 @@ export default function MarketList({ history }) {
                     <label
                       for="requestPhoneNumber"
                       style={{
-                        fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                        fontFamily:
+                          "'Roboto', 'Helvetica', 'Arial', sans-serif",
                         fontSize: "18px",
                         display: "block",
                         marginBottom: "10px",
@@ -717,10 +848,19 @@ export default function MarketList({ history }) {
                     />
                   </div>
                   <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button id="requestModalCancelBtn" className={classes.defaultGreenOutlineButton} onClick={closeIsRequestIndustryAIModal} style={{ marginRight: "10px" }}>
+                    <Button
+                      id="requestModalCancelBtn"
+                      className={classes.defaultGreenOutlineButton}
+                      onClick={closeIsRequestIndustryAIModal}
+                      style={{ marginRight: "10px" }}
+                    >
                       {t("Cancel")}
                     </Button>
-                    <Button id="requestModalRequestBtn" onClick={postRequestMarketModelAI} className={classes.defaultGreenOutlineButton}>
+                    <Button
+                      id="requestModalRequestBtn"
+                      onClick={postRequestMarketModelAI}
+                      className={classes.defaultGreenOutlineButton}
+                    >
                       {t("Apply")}
                     </Button>
                   </div>
@@ -729,8 +869,26 @@ export default function MarketList({ history }) {
             )}
           </div>
         </Modal>
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPredictModalOpen} onClose={closeModal} className={classes.modalContainer}>
-          <ModalPage closeModal={closeModal} chosenItem={model?.externalAiType?.indexOf("image") === -1 ? "api" : "apiImage"} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={{}} history={history} />
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isPredictModalOpen}
+          onClose={closeModal}
+          className={classes.modalContainer}
+        >
+          <ModalPage
+            closeModal={closeModal}
+            chosenItem={
+              model?.externalAiType?.indexOf("image") === -1
+                ? "api"
+                : "apiImage"
+            }
+            isMarket={true}
+            opsId={null}
+            csv={{}}
+            trainingColumnInfo={{}}
+            history={history}
+          />
         </Modal>
       </div>
     </>
