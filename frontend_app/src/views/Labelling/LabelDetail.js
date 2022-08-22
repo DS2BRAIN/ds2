@@ -1520,13 +1520,13 @@ const LabelDetail = ({ history, match }) => {
       id: "start_labelling",
       name: "prepare",
       onClickFunc: openStartProject,
-      label: "수동 라벨링 시작",
+      label: "Start manual labeling",
     },
     {
       id: "review_labelling",
       name: "review",
       onClickFunc: openInspectProject,
-      label: "라벨링 검수하기",
+      label: "Review labeling",
     },
   ];
 
@@ -1735,7 +1735,7 @@ const LabelDetail = ({ history, match }) => {
                         : classes.listObject
                     }
                   >
-                    {isShared ? t("My class") : t("클래스")}
+                    {isShared ? t("My class") : t("Class")}
                   </Grid>
                 )}
                 <Grid
@@ -2144,7 +2144,7 @@ const LabelDetail = ({ history, match }) => {
                       className={classes.dashbordTitle}
                       style={{ marginBottom: 4 }}
                     >
-                      {isShared ? t("My status") : t("상태")}
+                      {isShared ? t("My status") : t("Status")}
                     </Typography>
                     <Typography component="div" className={classes.content}>
                       {labelChart && renderStatusChart()}
@@ -2169,7 +2169,7 @@ const LabelDetail = ({ history, match }) => {
                             className={classes.dashbordTitle}
                             gutterBottom
                           >
-                            {isShared ? t("My class") : t("클래스")}
+                            {isShared ? t("My class") : t("Class")}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -2686,8 +2686,8 @@ const LabelDetail = ({ history, match }) => {
             <Grid item xs={12} sx={{ mb: 0.5, wordBreak: "keep-all" }}>
               {t(
                 isNewCustomAI
-                  ? "이미 생성된 CUSTOM AI 모델이 존재하여 Best Custom AI 선택 대기중입니다."
-                  : "CUSTOM AI를 만드는 중입니다."
+                  ? "A previously created CUSTOM AI model exists and is waiting for Best Custom AI selection."
+                  : "Creating CUSTOM AI."
               )}
             </Grid>
             <Grid>{t("Do you want to restart?")}</Grid>
@@ -3095,7 +3095,7 @@ const LabelDetail = ({ history, match }) => {
                   >
                     <AnnouncementIcon fontSize="small" /> {t("important")}:{" "}
                     {t(
-                      "Custom AI의 경우 오토라벨링 개수가 라벨링 시작전 이미지 장수와 오토라벨링 횟수에 한해 제한됩니다."
+                      "In the case of Custom AI, the number of auto-labeling is limited only to the number of images and auto-labeling before labeling starts."
                     )}
                   </Typography>
                 )}

@@ -78,7 +78,7 @@ const LabelList = ({
     }),
     []
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
@@ -116,13 +116,13 @@ const LabelList = ({
   }, [labelprojects.isLoading]);
 
   const statusValue = {
-    prepare: "시작전",
-    working: "진행중",
-    review: "검수중",
-    ready: "오토라벨링중",
-    reject: "반려",
-    done: "완료",
-    all: "전체",
+    prepare: "In queue",
+    working: "In process",
+    review: "Under review",
+    ready: "Autolabeling",
+    reject: "Reject",
+    done: "Completed",
+    all: "All",
   };
 
   const routes = {
@@ -143,7 +143,6 @@ const LabelList = ({
 
   useEffect(() => {
     setShouldUpdateFrame(false);
-    // 첫렌더링시 미리보기 모달창 닫아주기
     dispatch(setIsPreviewClosed());
   }, []);
 
@@ -186,7 +185,6 @@ const LabelList = ({
   }, [labelprojects.projectDetail]);
 
   useEffect(() => {
-    // objectLists 바뀔때마다 초기값 세팅
     (async () => {
       if (labelprojects.objectLists) {
         if (
@@ -229,7 +227,6 @@ const LabelList = ({
   }, [labelprojects.isPostSuccess]);
 
   useEffect(() => {
-    // 파일 업로드 모달창 닫아질때마다 초기값 세팅
     if (messages.shouldCloseModal) {
       setIsFileUploading(false);
       setCompleted(0);
@@ -665,7 +662,15 @@ const LabelList = ({
       if (files[idx].size > maximum) {
         dispatch(
           openErrorSnackbarRequestAction(
-            t(`${maximum / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)
+            t(
+              `${
+                i18n.language === "ko"
+                  ? maximum / 1073741824 +
+                    "GB 크기이상의 파일은 업로드 불가합니다."
+                  : `Files larger than ${maximum /
+                      1073741824}GB cannot be uploaded`
+              }`
+            )
           )
         );
       } else {
@@ -846,11 +851,9 @@ const LabelList = ({
       </div>
     );
 
-    if (labelprojects.projectDetail.workapp) {
-      if (
-        labelprojects.projectDetail.workapp === "object_detection" ||
-        labelprojects.projectDetail.workapp === "image"
-      ) {
+    let tmpWorkapp = labelprojects.projectDetail.workapp;
+    if (tmpWorkapp) {
+      if (tmpWorkapp === "object_detection" || tmpWorkapp === "image") {
         return (
           <>
             <div
@@ -1661,7 +1664,7 @@ const LabelList = ({
                 value={completed}
               />
               <p className={classes.settingFontWhite6}>
-                {t("Uploading")} {completed}% {t("완료")}...{" "}
+                {t("Uploading")} {completed}% {t("Completed")}...{" "}
               </p>
             </div>
           </div>
