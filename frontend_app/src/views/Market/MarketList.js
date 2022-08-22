@@ -80,33 +80,34 @@ export default function MarketList({ history }) {
   const [isPredictModalOpen, setIsPredictModalOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [rowsPerModelPage, setRowsPerModelPage] = useState(10);
-  const [isKor, setIsKor] = useState(false);
+
+  const isKor = i18n.language === "ko";
 
   const tableHeads = [
-    { value: "카테고리", width: "15%" },
-    { value: "미리보기", width: "7.5%" },
-    { value: "제목", width: "20%" },
-    { value: "입력 데이터 내용", width: "20%" },
-    { value: "출력 데이터 내용", width: "20%" },
-    // { value: "가격", width: "11%" },
-    { value: "유형", width: "10%" },
-    { value: "Action", width: "7.5%" },
+    { label: "Category", width: "15%" },
+    { label: "Preview", width: "7.5%" },
+    { label: "Title", width: "20%" },
+    { label: "Input data content", width: "20%" },
+    { label: "Output data content", width: "20%" },
+    // { label: "Price", width: "11%" },
+    { label: "Type", width: "10%" },
+    { label: "Action", width: "7.5%" },
   ];
 
   const tableBodys = [
-    { value: "category", name: "카테고리" },
-    { value: "thumbnail", name: "미리보기" },
-    { value: isKor ? "name_kr" : "name_en", name: "제목" },
+    { value: "category", label: "Category" },
+    { value: "thumbnail", label: "Preview" },
+    { value: isKor ? "name_kr" : "name_en", label: "Title" },
     {
       value: isKor ? "inputData_kr" : "inputData_en",
-      name: "입력 데이터 내용",
+      label: "Input data content",
     },
     {
       value: isKor ? "outputData_kr" : "outputData_en",
-      name: "출력 데이터 내용",
+      label: "Output data content",
     },
-    // { value: "price", name: "가격" },
-    { value: "type", name: "유형" },
+    // { value: "price", label: "Price" },
+    { value: "type", label: "Type" },
   ];
 
   useEffect(() => {
@@ -125,13 +126,6 @@ export default function MarketList({ history }) {
       category: "전체",
     });
   }, []);
-
-  useEffect(() => {
-    if (i18n?.language) {
-      if (i18n.language === "ko") setIsKor(true);
-      else if (i18n.language === "en") setIsKor(false);
-    }
-  }, [i18n?.language]);
 
   useEffect(() => {
     if (!isRequestIndustryAIModalOpen) {
@@ -181,7 +175,7 @@ export default function MarketList({ history }) {
 
   const changeCategory = (e) => {
     const selectedCategory = e.target.value;
-    if (selectedCategory === "카테고리 선택") {
+    if (selectedCategory === "Select Category") {
       setCategory(selectedCategory);
       return;
     }
@@ -197,7 +191,7 @@ export default function MarketList({ history }) {
   };
 
   const goNewPage = (val, url) => {
-    if (val === "name_kr" || val === "name_en") {
+    if (val.includes("name_")) {
       window.open(url, "_blank");
       return;
     }
@@ -222,7 +216,7 @@ export default function MarketList({ history }) {
     getMarketModelsRequest({
       start: page + 1,
       count: rowsPerModelPage,
-      category: category === "카테고리 선택" ? "전체" : category,
+      category: category === "Select Category" ? "All" : category,
     });
   };
 
@@ -233,7 +227,7 @@ export default function MarketList({ history }) {
     getMarketModelsRequest({
       start: 1,
       count: event.target.value,
-      category: category === "카테고리 선택" ? "전체" : category,
+      category: category === "Select Category" ? "All" : category,
     });
   };
 
@@ -244,66 +238,59 @@ export default function MarketList({ history }) {
           <Table className={classes.table} aria-label="simple table">
             <TableHead style={{ borderTop: "1px solid #F0F0F0" }}>
               <TableRow>
-                {tableHeads.map((tableHead, idx) => {
-                  return (
-                    <TableCell key={idx} className={classes.tableHeadMarketList} align="center" width={tableHead.width}>
-                      {t(tableHead.value)}
-                    </TableCell>
-                  );
-                })}
+                {tableHeads.map((tableHead, idx) => (
+                  <TableCell key={idx} className={classes.tableHeadMarketList} align="center" width={tableHead.width}>
+                    {t(tableHead.label)}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody id="marketTable">
               {marketModels.map((marketModel, idx) => (
                 <TableRow key={idx} className={classes.tableRow}>
-                  {tableBodys.map((tableBody, idx) => {
-                    return (
-                      <TableCell
-                        key={marketModel.id}
-                        className={classes.tableRowCell}
-                        align="center"
-                        onClick={() => {
-                          goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
-                        }}
+                  {tableBodys.map((tableBody) => (
+                    <TableCell
+                      key={marketModel.id}
+                      className={classes.tableRowCell}
+                      align="center"
+                      onClick={() => {
+                        goNewPage(tableBody.value, isKor ? marketModel.url : marketModel.url_en);
+                      }}
+                      style={{
+                        cursor: !tableBody.value.includes("name_") ? "default" : "pointer",
+                        padding: tableBody.value === "thumbnail" && "0 !important",
+                      }}
+                    >
+                      <div
+                        className={classes.wordBreakDiv}
                         style={{
-                          cursor: tableBody.value !== "name_kr" && tableBody.value !== "name_en" ? "default" : "pointer",
-                          padding: tableBody.value === "thumbnail" && "0 !important",
+                          textDecoration: tableBody.value.includes("name_") && "underline",
+                          textUnderlinePosition: tableBody.value.includes("name_") && "under",
+                          cursor: tableBody.value.includes("name_") ? "pointer" : "default",
                         }}
                       >
-                        <div
-                          className={classes.wordBreakDiv}
-                          style={{
-                            textDecoration: (tableBody.value === "name_kr" || tableBody.value === "name_en") && "underline",
-                            textUnderlinePosition: (tableBody.value === "name_kr" || tableBody.value === "name_en") && "under",
-                            cursor: tableBody.value === "name_kr" || tableBody.value === "name_en" ? "pointer" : "default",
-                          }}
-                        >
+                        {tableBody.value === "thumbnail" ? (
+                          <img src={marketModel[tableBody.value]} style={{ width: "80px", height: "80px" }} />
+                        ) : (
                           <>
-                            {tableBody.value === "thumbnail" ? (
-                              <>
-                                <img src={marketModel[tableBody.value]} style={{ width: "80px", height: "80px" }} />
-                              </>
+                            {tableBody.value === "type" ? (
+                              <span
+                                style={{
+                                  border: "1px solid #B5C4E1",
+                                  borderRadius: "28px",
+                                  padding: "4px 8px",
+                                }}
+                              >
+                                {marketModel.service_type ? "Service" : marketModel[tableBody.value] === "Quickstart" ? "Quick Start" : "Custom AI"}
+                              </span>
                             ) : (
-                              <>
-                                {tableBody.value === "type" ? (
-                                  <span
-                                    style={{
-                                      border: "1px solid #B5C4E1",
-                                      borderRadius: "28px",
-                                      padding: "4px 8px",
-                                    }}
-                                  >
-                                    {marketModel.service_type ? <>Service</> : marketModel[tableBody.value] === "Quickstart" ? <>Quick Start</> : <>Custom AI</>}
-                                  </span>
-                                ) : (
-                                  <>{tableBody.value == "category" ? t(marketModel[tableBody.value]) : user.language == "ko" ? marketModel[tableBody.value] : marketModel[`${tableBody.value.split("_")[0]}_en`]}</>
-                                )}
-                                {tableBody.value === "price" ? t("KRW") : ""}
-                              </>
+                              <>{tableBody.value === "category" ? t(marketModel[tableBody.value]) : isKor ? marketModel[tableBody.value] : marketModel[`${tableBody.value.split("_")[0]}_en`]}</>
                             )}
+                            {tableBody.value === "price" ? t("KRW") : ""}
                           </>
-                        </div>
-                        {/* {tableBody.value === "section" && (
+                        )}
+                      </div>
+                      {/* {tableBody.value === "section" && (
                         <Button
                           onClick={() => {
                             window.open(marketModel.url, "_blank");
@@ -312,9 +299,8 @@ export default function MarketList({ history }) {
                           상세보기
                         </Button>
                       )} */}
-                      </TableCell>
-                    );
-                  })}
+                    </TableCell>
+                  ))}
                   <TableCell className={classes.tableRowCell} align="center">
                     <Button
                       id={`${idx}_start_button`}
@@ -406,7 +392,7 @@ export default function MarketList({ history }) {
     const tmpFiles = [];
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > user.maximumFileSize) {
-        dispatch(openErrorSnackbarRequestAction(`${t(user.maximumFileSize / 1073741824 + "GB 크기이상의 파일은 업로드 불가합니다.")}`));
+        dispatch(openErrorSnackbarRequestAction(`${isKor ? user.maximumFileSize / 1073741824 + "GB 크기이상의 파일은 업로드 불가합니다." : `Files larger than ${user.maximumFileSize / 1073741824}GB cannot be uploaded`}`));
       } else {
         const name = files[idx].name;
         if (idx < 100 && /\.(jpg|jpeg|png|zip|csv|mp4|quicktime|mov)$/g.test(name.toLowerCase())) {
@@ -596,7 +582,7 @@ export default function MarketList({ history }) {
                               <p className={classes.settingFontWhite6}>
                                 {t("Drag the file or click the box to upload it!")}
                                 <br />
-                                {t("이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다.")}
+                                {t("You can only upload image files (png/jpg/jpeg), csv files, image compression files (zip).")}
                                 <br />
                                 {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
                                 <br />
@@ -689,7 +675,7 @@ export default function MarketList({ history }) {
                     </label>
                     <TextField
                       id="requestContent"
-                      placeholder={t("ex. 신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이있다면 다른물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다.")}
+                      placeholder={t("Ex. Among the applied label classes, car and pannel refer to cars and pedestrians, respectively.\nIf there is a part that is cut or overlapped when labeling, please label it with a full shot even if it overlaps with other objects.")}
                       style={{
                         wordBreak: "keep-all",
                         padding: "16px 26px",
@@ -732,7 +718,7 @@ export default function MarketList({ history }) {
                   </div>
                   <div style={{ display: "flex", justifyContent: "flex-end" }}>
                     <Button id="requestModalCancelBtn" className={classes.defaultGreenOutlineButton} onClick={closeIsRequestIndustryAIModal} style={{ marginRight: "10px" }}>
-                      {t("cancel")}
+                      {t("Cancel")}
                     </Button>
                     <Button id="requestModalRequestBtn" onClick={postRequestMarketModelAI} className={classes.defaultGreenOutlineButton}>
                       {t("Apply")}
