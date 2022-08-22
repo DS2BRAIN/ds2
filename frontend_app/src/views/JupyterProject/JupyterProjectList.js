@@ -38,10 +38,6 @@ import { CircularProgress, Grid } from "@mui/material";
 import SearchInputBox from "components/Table/SearchInputBox";
 import Button from "components/CustomButtons/Button";
 
-function getSteps() {
-  return ["데이터 준비", "준비 완료", "인공지능 학습 중", "데이터 분석 / 예측"];
-}
-
 const Project = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
@@ -68,37 +64,21 @@ const Project = ({ history }) => {
   const [isSortDesc, setIsSortDesc] = useState(true);
   const [projectPage, setProjectPage] = useState(0);
   const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
-  const [selectedPage, setSelectedPage] = useState("myproject");
   const [isShared, setIsShared] = useState(false);
   const [isLoadModelModalOpen, setIsLoadModelModalOpen] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [previewText, setPreviewText] = useState(null);
   const [files, setFiles] = useState(null);
   const [progress, setProgress] = useState(0);
-  const steps = getSteps();
   const url = window.location.href;
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
   const [projectCountLimit, setProjectCountLimit] = useState(
     process.env.REACT_APP_ENTERPRISE ? 99999999999 : 5
-  ); // 프로젝트 개수 제한 n개까지 가능
-  const [isSearchValSubmitted, setIsSearchValSubmitted] = useState(false);
+  );
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   const logoBlue = fileurl + "asset/front/img/logo_title.png";
-
-  // const [tableData, setTableData] = useState([[]]);  => 어뷰징 코드
-  // const [timeTick, setTimeTick] = useState(0);
-
-  // useEffect(() => {
-  //   let timer = setTimeout(() => {
-  //     setTimeTick(timeTick + 1);
-  //   }, 6000);
-  // }, [timeTick]);
-
-  // useEffect(() => {
-  //   setTableData(showMyProject());
-  // }, [projects, timeTick, projectCheckedValue,user.language]);
 
   useEffect(() => {
     const state = history.location.state;
@@ -195,19 +175,7 @@ const Project = ({ history }) => {
     dispatch(getJupyterProjectsRequestAction(payloadJson));
   };
 
-  const isEnableToChange = (time, option = null) => {
-    let updatedAt = new Date(time).getTime() / 60000;
-    let nowTime = new Date();
-    nowTime =
-      new Date(
-        nowTime.getTime() + nowTime.getTimezoneOffset() * 60000
-      ).getTime() / 60000;
-    if (option == null) return nowTime - updatedAt > 10;
-    else return 10 - Math.floor(nowTime - updatedAt);
-  };
-
   const setProjectSettings = () => {
-    //프로젝트 체크박스 value 세팅
     setProjectCheckedValue({ all: false });
     for (let i = 0; i < projects.jupyterProjects.length; i++) {
       const value = projects.jupyterProjects[i].id;
@@ -219,18 +187,7 @@ const Project = ({ history }) => {
   };
 
   const openStartProject = () => {
-    // if(parseInt(user.me.cumulativeProjectCount) >= parseInt(user.me.usageplan.projects) + parseInt(user.me.remainProjectCount)){
-    //   dispatch(openErrorSnackbarRequestAction(`${t('You can’t add a new project. You’ve reached the maximum number of projects allowed for your account')} ${t('계속 진행하시려면 이용플랜을 변경해주세요.')}`));
-    //   return;
-    // }
     history.push("/admin/newjupyterproject/");
-    // if (user.cardInfo?.cardName && user.cardInfo?.created) {
-    //   history.push("/admin/newjupyterproject/");
-    // } else {
-    //   // history.push("/admin/newjupyterproject/");
-    //   history.push("/admin/setting/payment/?cardRequest=true");
-    //   return;
-    // }
   };
 
   const goProjectDetail = (id) => {
@@ -239,7 +196,6 @@ const Project = ({ history }) => {
 
   const onSetProjectCheckedValue = (data) => {
     const value = data[0];
-    //if (isEnableToChange(data[4])) {
     setProjectCheckedValue((prevState) => {
       return {
         ...prevState,
@@ -247,38 +203,6 @@ const Project = ({ history }) => {
         [value]: !projectCheckedValue[value],
       };
     });
-    // } else {
-    //   dispatch(
-    //     openErrorSnackbarRequestAction(
-    //       `${t("")}
-    //       ${isEnableToChange(data[4], true)}
-    //       ${t("minutes left")}
-    //       `
-    //     )
-    //   );
-    // }
-  };
-
-  const onSetProjectCheckedValueAll = () => {
-    const result = projectCheckedValue["all"] ? false : true;
-    const tmpObject = { all: result };
-    //let isAllEnabled = true;
-    for (let i = 0; i < projects.jupyterProjects.length; i++) {
-      //if (isEnableToChange(projects.jupyterProjects[i].created_at)) {
-      const id = projects.jupyterProjects[i].id;
-      tmpObject[id] = result;
-      //} else {
-      // isAllEnabled = false;
-      //}
-    }
-    // if (isAllEnabled == false && result == true) {
-    //   dispatch(
-    //     openSuccessSnackbarRequestAction(
-    //       t("Projects created less than 10 minutes ago are excluded from selection.")
-    //     )
-    //   );
-    // }
-    setProjectCheckedValue(tmpObject);
   };
 
   const deleteProject = async () => {
@@ -392,7 +316,6 @@ const Project = ({ history }) => {
           ? projects.jupyterProjects[i].created_at
           : "",
         (status = ""),
-        //isEnableToChange(prj.created_at, 1),
       ];
       datas.push(project);
     }
@@ -430,13 +353,7 @@ const Project = ({ history }) => {
                       className={classes.tableHead}
                       align="left"
                       style={{ width: "5%" }}
-                    >
-                      {/* <Checkbox
-                        value="all"
-                        checked={projectCheckedValue["all"]}
-                        onChange={onSetProjectCheckedValueAll}
-                      /> */}
-                    </TableCell>
+                    ></TableCell>
                   )}
                   {tableHeads.map((tableHead, idx) => {
                     return (
@@ -605,182 +522,8 @@ const Project = ({ history }) => {
     }
   };
 
-  const openTemplate = () => {
-    setIsTemplateModalOpen(true);
-  };
-
   const closeTemplateModal = () => {
     setIsTemplateModalOpen(false);
-  };
-
-  const onSetActiveStep = (idx) => {
-    switch (idx) {
-      case 0:
-        history.push("/admin/dataconnector");
-        return;
-      case 1:
-        history.push("/admin/project/?tab=ready");
-        return;
-      case 2:
-        history.push("/admin/project/?tab=developing");
-        return;
-      case 3:
-        history.push("/admin/project/?tab=done");
-        return;
-      default:
-        return;
-    }
-  };
-
-  const renderStepper = () => {
-    let activeStepNum = -1;
-    switch (activeStep) {
-      case "ready":
-        activeStepNum = 1;
-        break;
-      case "developing":
-        activeStepNum = 2;
-        break;
-      case "done":
-        activeStepNum = 3;
-        break;
-      default:
-        break;
-    }
-
-    return (
-      <div className={classes.defaultContainer}>
-        <div
-          className={
-            activeStepNum === 0 || activeStepNum === -1
-              ? classes.stepperActivedContainer
-              : classes.stepperDeactivatedContainer
-          }
-        >
-          <div
-            onClick={() => {
-              onSetActiveStep(0);
-            }}
-            className={
-              activeStepNum === 0 || activeStepNum === -1
-                ? classes.stepperBlueActivatedDiv
-                : classes.stepperBlueOpacityDiv
-            }
-          >
-            <div>1</div>
-          </div>
-          <div style={{ fontSize: "10px" }}>{t("Data Preparation")}</div>
-        </div>
-
-        <div
-          className={
-            activeStepNum === -1
-              ? classes.stepperActivatedGreenLine
-              : activeStepNum < 1
-              ? classes.stepperDeactivatedLine
-              : classes.stepperOpacityGreenLine
-          }
-        ></div>
-
-        <div
-          className={
-            activeStepNum === 1 || activeStepNum === -1
-              ? classes.stepperActivedContainer
-              : classes.stepperDeactivatedContainer
-          }
-        >
-          <div
-            onClick={() => {
-              onSetActiveStep(1);
-            }}
-            className={
-              activeStepNum === 1 || activeStepNum === -1
-                ? classes.stepperGreenActivatedDiv
-                : activeStepNum < 1
-                ? classes.stepperDeactivatedDiv
-                : classes.stepperGreenOpacityDiv
-            }
-          >
-            <div>2</div>
-          </div>
-          <div style={{ fontSize: "10px" }}>{t("Data Selection")}</div>
-        </div>
-
-        <div
-          className={
-            activeStepNum === -1
-              ? classes.stepperActivatedBlueLine
-              : activeStepNum < 2
-              ? classes.stepperDeactivatedLine
-              : classes.stepperOpacityBlueLine
-          }
-        ></div>
-
-        <div
-          className={
-            activeStepNum === 2 || activeStepNum === -1
-              ? classes.stepperActivedContainer
-              : classes.stepperDeactivatedContainer
-          }
-        >
-          <div
-            onClick={() => {
-              onSetActiveStep(2);
-            }}
-            className={
-              activeStepNum === 2 || activeStepNum === -1
-                ? classes.stepperBlueActivatedDiv
-                : activeStepNum < 2
-                ? classes.stepperDeactivatedDiv
-                : classes.stepperBlueOpacityDiv
-            }
-          >
-            <div>3</div>
-          </div>
-          <div style={{ fontSize: "10px" }}>{t("In progress")}</div>
-        </div>
-
-        <div
-          className={
-            activeStepNum === -1
-              ? classes.stepperActivatedGreenLine
-              : activeStepNum < 3
-              ? classes.stepperDeactivatedLine
-              : classes.stepperOpacityGreenLine
-          }
-        ></div>
-
-        <div
-          className={
-            activeStepNum === 3 || activeStepNum === -1
-              ? classes.stepperActivedContainer
-              : classes.stepperDeactivatedContainer
-          }
-        >
-          <div
-            onClick={() => {
-              onSetActiveStep(3);
-            }}
-            className={
-              activeStepNum === 3 || activeStepNum === -1
-                ? classes.stepperGreenActivatedDiv
-                : classes.stepperDeactivatedDiv
-            }
-          >
-            <div>4</div>
-          </div>
-          <div style={{ fontSize: "10px" }}>
-            {t("Data Analysis/Prediction")}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const onSetSelectedPage = (value) => {
-    setProjectPage(0);
-    setIsShared(value);
-    setIsProjectRequested(true);
   };
 
   const closeLoadModelModal = () => {
@@ -927,65 +670,6 @@ const Project = ({ history }) => {
                   setSearchedValue={setSearchedValue}
                 />
               </GridItem>
-              {/* <GridItem
-                  xs={12}
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: "30px",
-                  }}
-                >
-                  {user.me && (
-                    <div className={classes.fullWidthAlignRightContainer}>
-                      <div
-                        style={{
-                          width: "10%",
-                          minWidth: "200px",
-                          fontSize: "12px",
-                        }}
-                      >
-                        <div style={{ display: "flex" }}>
-                          <div>{t("Total projects")}</div>
-                          <div
-                            id="projectCountText"
-                            style={{ marginLeft: "auto" }}
-                          >
-                            <span id="projectCountText">
-                              {(+user.me
-                                .cumulativeProjectCount).toLocaleString()}{" "}
-                              /{" "}
-                              {user.me.usageplan.planName === "trial"
-                                ? 0
-                                : (
-                                    +user.me.remainProjectCount +
-                                    +user.me.usageplan.projects *
-                                      (user.me.dynos
-                                        ? +user.me.dynos
-                                        : 1) +
-                                    +user.me.additionalProjectCount
-                                  ).toLocaleString()}{" "}
-                              {t("")}
-                            </span>
-                          </div>
-                        </div>
-                        <LinearProgress
-                          variant="determinate"
-                          color="blue"
-                          value={
-                            (+user.me.cumulativeProjectCount /
-                              (user.me.usageplan.planName === "trial"
-                                ? 0
-                                : +user.me.remainProjectCount +
-                                  +user.me.usageplan.projects *
-                                    (user.me.dynos ? +user.me.dynos : 1) +
-                                  +user.me.additionalProjectCount)) *
-                            100
-                          }
-                        />
-                      </div>
-                    </div>
-                  )}
-                </GridItem> */}
             </GridContainer>
             <GridContainer>
               {projects.isLoading || projects.jupyterProjects == null ? (
@@ -997,7 +681,6 @@ const Project = ({ history }) => {
               ) : (
                 <GridItem xs={12} sm={12} md={12}>
                   {showMyProject()}
-                  {/*tableData*/}
                 </GridItem>
               )}
             </GridContainer>
@@ -1026,7 +709,6 @@ const Project = ({ history }) => {
       >
         {isLoading ? (
           <div className={classes.modalLoading}>
-            {/* <Tip /> */}
             <LinearProgress variant="determinate" value={progress} />
             <b style={{ alignSelf: "center" }}>{t("Please wait a moment.")}</b>
           </div>
@@ -1184,11 +866,7 @@ const Project = ({ history }) => {
                 <GridContainer style={{ width: "100%" }}>
                   <>
                     <GridItem xs={3}></GridItem>
-                    <GridItem xs={3}>
-                      {/* <Button id='closeLoadModelModal' className={classes.defaultOutlineButton} onClick={closeLoadModelModal}>
-                        {t('Cancel')}
-                      </Button> */}
-                    </GridItem>
+                    <GridItem xs={3}></GridItem>
                     <GridItem xs={3}>
                       <Button
                         id="closeLoadModelModal"
