@@ -123,8 +123,6 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
   const [defaultStatKeys, setDefaultStatKeys] = useState([]);
   const [cmStatKeys, setCmStatKeys] = useState([]);
   const [substituteHead, setSubsituteHead] = useState({});
-  const [isErrorMessageModalOpen, setIsErrorMessageModalOpen] = useState(false);
-  const [selectedErrorModel, setSelectedErrorModel] = useState({});
   const [isSseInitiated, setIsSseInitiated] = useState(false);
 
   const sortValueRef = useRef(sortValue);
@@ -965,18 +963,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
               );
             };
 
-            const bodyCellStatus99 = (model) => {
-              const openErrorMessageModal = () => {
-                setSelectedErrorModel(model);
-                setIsErrorMessageModalOpen(true);
-              };
 
-              return (
-                <Button id="check_errorlog_btn" shape="blueOutlined" size="sm" onClick={openErrorMessageModal}>
-                  {t("Check error log")}
-                </Button>
-              );
-            };
 
             const bodyCellStatus100 = (project) => {
               const openDetailPage = (page, modelId, projectId) => {
@@ -1199,7 +1186,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
                 {bodyCellsBase(model, modelSSEDict, page * rows + idx + 1)}
                 {bodyCellsDataObj(model, data)}
                 <TableCell className="tableRowCell" id="modelTable" align="center">
-                  {model.status === 99 && bodyCellStatus99(model)}
+                  {model.status === 99 && "-"}
                   {model.status === 100 && project && bodyCellStatus100(project)}
                 </TableCell>
               </TableRow>
@@ -1297,12 +1284,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
   const closeWebhooksModal = () => {
     setOpenWebhooksModal(false);
   };
-  const closeErrorMessageModal = () => {
-    setIsErrorMessageModalOpen(false);
-    setTimeout(() => {
-      setSelectedErrorModel({});
-    }, 300);
-  };
+
 
   const getResult = (response) => {
     if (!process.env.REACT_APP_DEPLOY) console.log(response);
@@ -1862,35 +1844,7 @@ const ModelTable = React.memo(({ category, csv, trainingColumnInfo, history, pro
         <ModalTooltip tooltipCategory={tooltipCategory} closeTooltipModalOpen={closeTooltipModalOpen} />
       </Modal>
       <SalesModal isSalesModalOpen={isSalesModalOpen} setIsSalesModalOpen={setIsSalesModalOpen} api_type="AI" model_id={projects.project?.id} />
-      <Modal open={isErrorMessageModalOpen} onClose={closeErrorMessageModal} className={classes.modalContainer}>
-        <Grid
-          sx={{
-            py: 3.5,
-            px: 4,
-            width: "80%",
-            maxWidth: "1200px",
-            maxHeight: "800px",
-            overflowY: "auto",
-            background: "var(--background2)",
-            borderRadius: "4px",
-          }}
-        >
-          <Grid
-            sx={{
-              mb: 1,
-              ml: 0.5,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <p style={{ fontSize: "20px", fontWeight: "bold", color: "white" }}>{selectedErrorModel.name}</p>
-            <CloseIcon style={{ cursor: "pointer" }} onClick={closeErrorMessageModal} />
-          </Grid>
-          <Grid sx={{ ml: 2 }}>
-            <pre style={{ color: "white" }}>{selectedErrorModel?.statusText}</pre>
-          </Grid>
-        </Grid>
-      </Modal>
+
     </div>
   );
 });
