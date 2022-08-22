@@ -63,7 +63,7 @@ export default function MarketList({ history }) {
   const regExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [category, setCategory] = useState("카테고리 선택");
+  const [category, setCategory] = useState("Select category");
   const [marketModels, setMarketModels] = useState([]);
   const [totalLength, setTotalLength] = useState(0);
   const [pageNum, setPageNum] = useState(1);
@@ -181,7 +181,7 @@ export default function MarketList({ history }) {
 
   const changeCategory = (e) => {
     const selectedCategory = e.target.value;
-    if (selectedCategory === "Select Category") {
+    if (selectedCategory === "Select category") {
       setCategory(selectedCategory);
       return;
     }
@@ -226,7 +226,7 @@ export default function MarketList({ history }) {
     getMarketModelsRequest({
       start: page + 1,
       count: rowsPerModelPage,
-      category: category === "Select Category" ? "All" : category,
+      category: category === "Select category" ? "All" : category,
     });
   };
 
@@ -237,7 +237,7 @@ export default function MarketList({ history }) {
     getMarketModelsRequest({
       start: 1,
       count: event.target.value,
-      category: category === "Select Category" ? "All" : category,
+      category: category === "Select category" ? "All" : category,
     });
   };
 
@@ -618,10 +618,10 @@ export default function MarketList({ history }) {
               value={category}
               onChange={changeCategory}
             >
-              <MenuItem value={"Select Category"}>
-                {t("Select Category")}
+              <MenuItem value={"Select category"}>
+                {t("Select category")}
               </MenuItem>
-              <MenuItem value={"All"}>{t("All")}</MenuItem>
+              <MenuItem value={"전체"}>{t("All")}</MenuItem>
               {categories.map((category) => (
                 <MenuItem value={category}>{t(category)}</MenuItem>
               ))}
