@@ -14,7 +14,6 @@ import {
   askDeleteLabelProjectReqeustAction,
   openErrorSnackbarRequestAction,
 } from "redux/reducers/messages";
-import { fileurl } from "controller/api";
 import currentTheme from "assets/jss/custom";
 import { openChat } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
@@ -56,7 +55,6 @@ const LabelprojectList = ({ history }) => {
   let currentUrl = window.location.href;
 
   const { t } = useTranslation();
-  const logoBlue = fileurl + "asset/front/img/logo_title.png";
   const initialPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
   const initialSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
   const initialDescValue =
@@ -79,7 +77,6 @@ const LabelprojectList = ({ history }) => {
   const [isSortDesc, setIsSortDesc] = useState(initialDescValue);
   const [isPagingChanged, setIsPagingChanged] = useState(false);
   const [isShared, setIsShared] = useState(false);
-  const [isUpgradePlanModalOpen, setIsUpgradePlanModalOpen] = useState(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
@@ -177,7 +174,6 @@ const LabelprojectList = ({ history }) => {
   };
 
   const onOpenChatbot = () => {
-    setIsUpgradePlanModalOpen(false);
     openChat();
   };
 
@@ -624,89 +620,6 @@ const LabelprojectList = ({ history }) => {
             className={classes.modalContainer}
           >
             <StartProject history={history} />
-          </Modal>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={isUpgradePlanModalOpen}
-            onClose={() => {
-              setIsUpgradePlanModalOpen(false);
-            }}
-            className={classes.modalContainer}
-          >
-            <div className={classes.planAlertModalContent}>
-              <div style={{ padding: "26px 30px 12px 40px", width: "60%" }}>
-                <img
-                  style={{ width: "124px" }}
-                  src={logoBlue}
-                  alt={"logo"}
-                  className={classes.logo}
-                />
-                <div style={{ padding: "30px 0" }}>
-                  <div className={classes.upgradePlanModalTitle}>
-                    <div style={{ marginBottom: "10px" }}>
-                      {t("Experience object recognition automatic labeling.")}
-                    </div>
-                    <div>{t("")}</div>
-                  </div>
-                  <div className={classes.upgradePlanModalContent}>
-                    <div style={{ marginBottom: "-8px" }}>
-                      {t(
-                        "Active Learning이 접목된 자동 라벨링 기능을 활용하여"
-                      )}
-                    </div>
-                    <div>
-                      {t(
-                        "물체인식에 소요되는 시간과 비용을 절약할 수 있습니다."
-                      )}
-                    </div>
-                  </div>
-                  <div className={classes.upgradePlanSubTitle}>
-                    {t("This option is only available on the Enterprise plan.")}
-                  </div>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <Button
-                    shape="blueContained"
-                    size="lg"
-                    onClick={onOpenChatbot}
-                  >
-                    {t("Enterprise plan inquiry")}
-                  </Button>
-                  <a
-                    href="https://clickai.ai/pricing.html"
-                    target="_blank"
-                    className={classes.planPolicyBtn}
-                  >
-                    {t("CLICK AI Pricing")}
-                  </a>
-                </div>
-              </div>
-              <div>
-                <div style={{ height: "10%" }}>
-                  <CloseIcon
-                    className={classes.closeImg}
-                    id="planModalCloseBtn"
-                    style={{ margin: "8px" }}
-                    onClick={() => {
-                      setIsUpgradePlanModalOpen(false);
-                    }}
-                  />
-                </div>
-                <div style={{ display: "flex", height: "80%" }}>
-                  <video
-                    style={{ width: "380px", borderRadius: "10px" }}
-                    autoPlay
-                    loop
-                  >
-                    <source
-                      src={fileurl + "asset/ecosystem/etc.mov"}
-                      type="video/mp4"
-                    />
-                  </video>
-                </div>
-              </div>
-            </div>
           </Modal>
         </>
       )}
