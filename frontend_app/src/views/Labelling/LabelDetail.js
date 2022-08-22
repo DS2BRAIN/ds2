@@ -807,12 +807,12 @@ const LabelDetail = ({ history, match }) => {
 
   const renderStatusChart = () => {
     const dataList = [
-      { name: "시작전", value: labelChart.prepare, color: "#585c61" },
-      { name: "진행중", value: labelChart.working, color: "#41D4D7" },
-      { name: "오토라벨링", value: labelChart.ready, color: "#6610f2" },
-      { name: "검수중", value: labelChart.review, color: "#5DFDCB" },
-      { name: "반려", value: labelChart.reject, color: "#ff6c00" },
-      { name: "완료", value: labelChart.done, color: "#1A70E8" },
+      { name: "In queue", value: labelChart.prepare, color: "#585c61" },
+      { name: "In process", value: labelChart.working, color: "#41D4D7" },
+      { name: "Autolabeling", value: labelChart.ready, color: "#6610f2" },
+      { name: "Under review", value: labelChart.review, color: "#5DFDCB" },
+      { name: "Reject", value: labelChart.reject, color: "#ff6c00" },
+      { name: "Completed", value: labelChart.done, color: "#1A70E8" },
     ];
 
     const CustomTooltip = ({ active, payload }) => {

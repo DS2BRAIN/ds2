@@ -71,10 +71,13 @@ const LabelClass = ({ history, isMarketProject }) => {
   const { t } = useTranslation();
 
   const TABLE_HEADS = [
-    { value: "No", width: "5%" },
-    { value: "색상", width: "10%" },
-    { value: isMarketProject ? "구역 클래스 이름" : "클래스명", width: "45%" },
-    { value: isMarketProject ? "구역 개수" : "라벨링 개수", width: "20%" },
+    { value: "No.", width: "5%" },
+    { value: "Color", width: "10%" },
+    { value: isMarketProject ? "Zone class name" : "Class name", width: "45%" },
+    {
+      value: isMarketProject ? "Number of zones" : "Number of Labeling",
+      width: "20%",
+    },
     { value: "", width: "10%" },
   ];
 
@@ -394,8 +397,8 @@ const LabelClass = ({ history, isMarketProject }) => {
                   <NoClassText
                     text={t(
                       isLoading
-                        ? "클래스 정보를 불러오는 중입니다. 잠시만 기다려주세요."
-                        : "등록된 클래스가 없습니다. 클래스를 추가해주세요."
+                        ? "Loading class information. Please wait."
+                        : "There is no class registered. Please add class"
                     )}
                   />
                 ) : (
@@ -580,7 +583,7 @@ const LabelClass = ({ history, isMarketProject }) => {
               >
                 <GridItem xs={7} style={{ marginBottom: "10px" }}>
                   <b>
-                    {isMarketProject ? t("Zone class name") : t("클래스명")} :{" "}
+                    {isMarketProject ? t("Zone class name") : t("Class name")} :{" "}
                   </b>
 
                   <InputBase
