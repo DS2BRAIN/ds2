@@ -452,8 +452,8 @@ NOT_EXISTENT_EXTERNALAI_KEY = HTTP_500_INTERNAL_SERVER_ERROR, {
 NOT_VALID_EMAIL = HTTP_500_INTERNAL_SERVER_ERROR, {
             "statusCode": 500,
             "error": "Bad Request",
-            "message": "유효하지 않은 이메일입니다.",
-            "message_en": "Invalid email."
+            "message": "이메일이 존재하지 않습니다.",
+            "message_en": "This email does not exist."
 }
 
 MISMATCH_PASSWORD_ERROR = HTTP_500_INTERNAL_SERVER_ERROR, {

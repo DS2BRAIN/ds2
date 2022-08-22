@@ -26,6 +26,15 @@ DS2.ai is the MLOps platform that serves all processes of building your customiz
 ---
 ### Install
 
+Proceed with the installation as follows:
+
+```bash
+
+wget https://assetdslab.s3.ap-southeast-1.amazonaws.com/ds2_install.sh
+. ds2_install.sh 
+
+```
+
 [Extended documentation for DS2](https://docs.ds2.ai/)
 
 
