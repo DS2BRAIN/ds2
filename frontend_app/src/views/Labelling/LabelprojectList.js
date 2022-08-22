@@ -1,44 +1,46 @@
 import React, { useEffect, useState } from "react";
+import { ReactTitle } from "react-meta-tags";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import {
   getLabelProjectsRequestAction,
   stopLabelProjectsLoadingRequestAction,
   setObjectlistsSearchedValue,
-} from "redux/reducers/labelprojects.js";
-
-import currentTheme from "assets/jss/custom.js";
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import TablePagination from "@material-ui/core/TablePagination";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Checkbox from "@material-ui/core/Checkbox";
-import Modal from "@material-ui/core/Modal";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import StartProject from "./StartProject.js";
-import { useDispatch, useSelector } from "react-redux";
+} from "redux/reducers/labelprojects";
+import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
 import {
   askModalRequestAction,
   askDeleteLabelProjectReqeustAction,
-} from "redux/reducers/messages.js";
-import { useTranslation } from "react-i18next";
-import CloseIcon from "@material-ui/icons/Close";
-import Plans from "components/Plans/Plans.js";
-import Tooltip from "@material-ui/core/Tooltip";
-import { ReactTitle } from "react-meta-tags";
-import LabelIntro from "components/Guide/LabelIntro";
-import { putUserRequestActionWithoutMessage } from "../../redux/reducers/user";
-import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
+  openErrorSnackbarRequestAction,
+} from "redux/reducers/messages";
 import { fileurl } from "controller/api";
-import { CircularProgress } from "@mui/material";
-import SearchInputBox from "components/Table/SearchInputBox.js";
+import currentTheme from "assets/jss/custom";
+import { openChat } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
+import GridItem from "components/Grid/GridItem";
+import GridContainer from "components/Grid/GridContainer";
+import SearchInputBox from "components/Table/SearchInputBox";
+import Plans from "components/Plans/Plans";
+import LabelIntro from "components/Guide/LabelIntro";
+import StartProject from "./StartProject";
+
+import {
+  Checkbox,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Tooltip,
+} from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import { openChat } from "components/Function/globalFunc.js";
+import CloseIcon from "@material-ui/icons/Close";
 
 const LabelprojectList = ({ history }) => {
   const classes = currentTheme();
@@ -284,12 +286,12 @@ const LabelprojectList = ({ history }) => {
 
   const tableHeads = [
     { value: "No", width: "10%", name: "" },
-    { value: "프로젝트명", width: "25%", name: "name" },
-    { value: "역할", width: "10%", name: "role" },
-    { value: "종류", width: "15%", name: "workapp" },
-    { value: "생성일", width: "15%", name: "created_at" },
-    { value: "업데이트일", width: "15%", name: "updated_at" },
-    { value: "상태", width: "10%", name: "status" },
+    { value: "Project name", width: "25%", name: "name" },
+    { value: "Role", width: "10%", name: "role" },
+    { value: "Type", width: "15%", name: "workapp" },
+    { value: "Date created", width: "15%", name: "created_at" },
+    { value: "Date updated", width: "15%", name: "updated_at" },
+    { value: "Status", width: "10%", name: "status" },
   ];
 
   const tableBodys = [
@@ -302,9 +304,9 @@ const LabelprojectList = ({ history }) => {
   ];
 
   const statusText = {
-    1: "생성중",
-    99: "에러",
-    100: "완료",
+    1: "Creating",
+    99: "Error",
+    100: "Completed",
   };
 
   const renderProjectTable = () => {
