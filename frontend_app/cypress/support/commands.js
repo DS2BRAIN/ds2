@@ -660,3 +660,19 @@ Cypress.Commands.add("checkLabelListByCondition", (type, value, expected) => {
 
   cy.contains("라벨링 데이터가 없습니다.").should(expected ? "not.exist" : "exist");
 });
+
+Cypress.Commands.add("resetLabelprojectInfo", (sampleProjectName, sampleProjectDesc) => {
+  cy.get("#label_project_name")
+    .clear({ force: true })
+    .type(sampleProjectName, { force: true });
+  cy.get("#change_name_btn").click({ force: true });
+  cy.get("#change_name_confirm_btn").click({ force: true });
+  cy.get("#yes_btn").click({ force: true });
+
+  cy.get("#label_project_detail")
+    .clear({ force: true })
+    .type(sampleProjectDesc, { force: true });
+  cy.get("#change_detail_btn").click({ force: true });
+  cy.get("#change_detail_confirm_btn").click({ force: true });
+  cy.get("#yes_btn").click({ force: true });
+});

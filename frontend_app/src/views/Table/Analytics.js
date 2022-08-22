@@ -17,9 +17,9 @@ import ModalPage from "components/PredictModal/ModalPage.js";
 import CircularProgress from "@mui/material/CircularProgress";
 import Select from "@material-ui/core/Select/Select";
 import CheckIcon from "@material-ui/icons/Check";
+import CloseIcon from "@material-ui/icons/Close";
 
-const Analytics = React.memo(
-  ({ valueForPredictName, csv, trainingColumnInfo, history }) => {
+const Analytics = React.memo(({}) => {
     const classes = currentTheme();
     const dispatch = useDispatch();
     const { user, projects, models, messages } = useSelector(
@@ -31,7 +31,7 @@ const Analytics = React.memo(
       }),
       []
     );
-    const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
     const [isLoading, setIsLoading] = useState(true);
     const [modelDetail, setModelDetail] = useState(null);
@@ -45,6 +45,7 @@ const Analytics = React.memo(
     const [selectedPAvalue, setSelectedPAvalue] = useState({});
     const [isModalOpen, setIsOpenModal] = useState(false);
     const [projectAnalyGraphArr, setProjectAnalyGraphArr] = useState([]);
+    const [valueForPredictName, setValueForPredictName] = useState("");
 
     useEffect(() => {
       if (models.chosenModel) {
@@ -141,75 +142,14 @@ const Analytics = React.memo(
         <CircularProgress />
       </div>
     ) : (
-      <div className={classes.detailContainer}>
-        <GridContainer>
-          <GridItem xs={8}>
-            <div style={{ fontSize: "20px", margin: "20px 0" }}>
-              {modelDetail.name.toUpperCase()}
-            </div>
-          </GridItem>
-          <GridItem
-            xs={4}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            {projectAnalyGraphArr && projectAnalyGraphArr.length > 0 && (
-              <div
-                onClick={handleChange}
-                id="project"
-                className={
-                  selectedPage === "project"
-                    ? classes.selectedTab + " " + classes.firstTab
-                    : classes.notSelectedTab + " " + classes.firstTab
-                }
-              >
-                {t("Overall analysis")}
-              </div>
-            )}
-            {((modelGraphs && modelGraphs.length > 0) ||
-              (prescriptionAnalyticsInfo &&
-                Object.keys(prescriptionAnalyticsInfo).length > 0)) && (
-              <div
-                onClick={handleChange}
-                id="model"
-                className={
-                  selectedPage === "model"
-                    ? classes.selectedTab + " " + classes.lastTab
-                    : classes.notSelectedTab + " " + classes.lastTab
-                }
-              >
-                {t("AI+ analysis")}
-              </div>
-            )}
-          </GridItem>
-        </GridContainer>
-        {selectedPage === "project" && projectAnalyGraphArr.length > 0 && (
-          <GridContainer>
-            {projectAnalyGraphArr.map((graph) => (
-              <GridItem
-                xs={12}
-                key={`graph_${graph.id}`}
-                style={{ marginBottom: "20px" }}
-              >
-                <div className={classes.analyticsGraphsContainer}>
-                  <img
-                    id={"png" + graph.id}
-                    src={
-                      IS_ENTERPRISE
-                        ? fileurl + "static/" + graph.filePath
-                        : graph.filePath
-                    }
-                    style={{ width: "100%" }}
-                    type="image/png"
-                  />
-                </div>
-              </GridItem>
-            ))}
-          </GridContainer>
-        )}
+      <div className={classes.modalPrescriptiveAnalyticsContent}>
+          <div className={classes.titleContainer}>
+            <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+              {t("Prescriptive Analytics Result")}
+            </span>
+            <CloseIcon className={classes.closeImg} onClick={closeModal} />
+          </div>
+
         {selectedPage === "model" &&
           ((modelGraphs && modelGraphs.length > 0) ||
             (prescriptionAnalyticsInfo &&
@@ -222,371 +162,43 @@ const Analytics = React.memo(
                     maxWidth="false"
                     className={classes.mainCard}
                   >
+                      [{projects?.project?.valueForPredict.split("__")[0]}] {t("Goal Value")} :
+                      <Select
+                          defaultValue={0}
+                          onChange={valueInfoKeyChange}
+                        >
+                          {Object.keys(prescriptionAnalyticsInfo).map(
+                            (infoKey, index) => {
+                              return (
+                                <MenuItem value={index}>
+                                  {infoKey}
+                                </MenuItem>
+                              );
+                            }
+                          )}
+                        </Select>
                     <GridContainer>
                       <GridItem
-                        xs={9}
+                        xs={12}
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          margin: 50,
-                          padding: "50 !important",
+                          margin: 20,
+                          padding: 10,
                           borderStyle: "solid",
                           borderWidth: 1,
                           borderColor: "white",
                         }}
                       >
-                        {user.language === "ko" ? (
-                          <h4>
-                            중간값 기준으로
-                            {selectedPAvalue &&
-                              selectedPAvalue["top3"] &&
-                              Object.keys(
-                                selectedPAvalue["top3"]["maxUpEachCondition"]
-                              ).map((condition, index) => {
-                                var selectedCondition =
-                                  selectedPAvalue["top3"]["maxUpEachCondition"][
-                                    condition
-                                  ];
-                                if (isFloat(selectedCondition)) {
-                                  selectedCondition = parseFloat(
-                                    selectedCondition * 100 - 100
-                                  ).toFixed(2);
-                                }
+                          <div dangerouslySetInnerHTML={ {__html: i18n.language === "en" ? prescriptionAnalyticsInfo[selectedPAname]["sentence_en"] : prescriptionAnalyticsInfo[selectedPAname]["sentence_ko"]} }>
+                        </div>
 
-                                return (
-                                  <>
-                                    &nbsp;
-                                    <span className={classes.highlightBottom}>
-                                      {condition.split("__")[0]}
-                                    </span>{" "}
-                                    값이&nbsp;
-                                    <b>
-                                      {isFloat(selectedCondition)
-                                        ? Math.abs(selectedCondition)
-                                        : selectedCondition}
-                                    </b>
-                                    {index !==
-                                    Object.keys(
-                                      selectedPAvalue["top3"][
-                                        "maxUpEachCondition"
-                                      ]
-                                    ).length -
-                                      1
-                                      ? isFloat(selectedCondition)
-                                        ? selectedCondition > 0
-                                          ? "% 증가하고"
-                                          : "% 감소하고"
-                                        : " 값으로 선택 되고"
-                                      : isFloat(selectedCondition)
-                                      ? selectedCondition > 0
-                                        ? "% 증가하면"
-                                        : "% 감소하면"
-                                      : " 값으로 선택 되면"}
-                                    ,{" "}
-                                  </>
-                                );
-                              })}
-                            {projects.project.trainingMethod &&
-                            projects.project.trainingMethod.indexOf(
-                              "classification"
-                            ) > -1 ? (
-                              <>
-                                &nbsp;
-                                <br />
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>{" "}
-                                값이&nbsp;&nbsp;
-                                <Select
-                                  defaultValue={0}
-                                  onChange={valueInfoKeyChange}
-                                >
-                                  {Object.keys(prescriptionAnalyticsInfo).map(
-                                    (infoKey, index) => {
-                                      return (
-                                        <MenuItem value={index}>
-                                          {infoKey}
-                                        </MenuItem>
-                                      );
-                                    }
-                                  )}
-                                </Select>
-                                &nbsp;으로 될 확률이 &nbsp;
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                  %
-                                </b>
-                                &nbsp;
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? "증가"
-                                  : "감소"}
-                                합니다.
-                              </>
-                            ) : (
-                              <>
-                                &nbsp;
-                                <br />
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>{" "}
-                                값이 &nbsp;
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                </b>
-                                &nbsp;
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? "증가"
-                                  : "감소"}
-                                할 것으로 예측됩니다.
-                              </>
-                            )}
-                          </h4>
-                        ) : (
-                          <h4>
-                            On a median value basis, if
-                            {selectedPAvalue &&
-                              selectedPAvalue["top3"] &&
-                              Object.keys(
-                                selectedPAvalue["top3"]["maxUpEachCondition"]
-                              ).map((condition, index) => {
-                                var selectedCondition =
-                                  selectedPAvalue["top3"]["maxUpEachCondition"][
-                                    condition
-                                  ];
-                                if (isFloat(selectedCondition)) {
-                                  selectedCondition = parseFloat(
-                                    selectedCondition * 100 - 100
-                                  ).toFixed(2);
-                                }
-                                return (
-                                  <>
-                                    &nbsp;
-                                    <span className={classes.highlightBottom}>
-                                      {condition.split("__")[0]}
-                                    </span>{" "}
-                                    &nbsp;
-                                    {index !==
-                                    Object.keys(
-                                      selectedPAvalue["top3"][
-                                        "maxUpEachCondition"
-                                      ]
-                                    ).length -
-                                      1
-                                      ? isFloat(selectedCondition)
-                                        ? selectedCondition > 0
-                                          ? "increases"
-                                          : "decreases"
-                                        : " "
-                                      : isFloat(selectedCondition)
-                                      ? selectedCondition > 0
-                                        ? "increases"
-                                        : "decreases"
-                                      : "is chosen as a value"}
-                                    <b>
-                                      {" "}
-                                      to{" "}
-                                      {isFloat(selectedCondition)
-                                        ? Math.abs(selectedCondition)
-                                        : selectedCondition}
-                                      {isFloat(selectedCondition) ? "%" : ""}
-                                    </b>
-                                    ,{" "}
-                                  </>
-                                );
-                              })}
-                            {projects.project.trainingMethod &&
-                            projects.project.trainingMethod.indexOf(
-                              "classification"
-                            ) > -1 ? (
-                              <>
-                                &nbsp;
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>{" "}
-                                the posibility that the value to be&nbsp;&nbsp;
-                                <Select
-                                  defaultValue={0}
-                                  onChange={valueInfoKeyChange}
-                                >
-                                  {Object.keys(prescriptionAnalyticsInfo).map(
-                                    (infoKey, index) => {
-                                      return (
-                                        <MenuItem value={index}>
-                                          {infoKey}
-                                        </MenuItem>
-                                      );
-                                    }
-                                  )}
-                                </Select>
-                                &nbsp; &nbsp;will{" "}
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                  %
-                                </b>
-                                &nbsp;
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? "increase."
-                                  : "decrease."}
-                              </>
-                            ) : (
-                              <>
-                                &nbsp;
-                                <br />
-                                <span className={classes.highlightBottom}>
-                                  {valueForPredictName}
-                                </span>
-                                the value is &nbsp;expected to
-                                {selectedPAname &&
-                                selectedPAvalue["top3"] &&
-                                selectedPAvalue["top3"][
-                                  "maxUpPredictionValueDiff"
-                                ] > 0
-                                  ? " increase"
-                                  : " decrease"}
-                                &nbsp;
-                                <b>
-                                  {selectedPAname &&
-                                    selectedPAvalue["top3"] &&
-                                    Math.round(
-                                      selectedPAvalue["top3"][
-                                        "maxUpPredictionValueDiff"
-                                      ] * 10000
-                                    ) / 100}
-                                  %.
-                                </b>
-                              </>
-                            )}
-                          </h4>
-                        )}
                       </GridItem>
-                      {/*<GridItem xs={3} style={{display: 'flex', alignItems: 'center'}}>*/}
-                      {/*    <Button className={classes.defaultOutlineButton}*/}
-                      {/*    onClick={onGoToPredictPage}*/}
-                      {/*    >{t('Real-time prediction')}</Button>*/}
-                      {/*</GridItem>*/}
                     </GridContainer>
                   </Container>
                 )}
-              {featureImportance && featureImportance.length > 0 && (
-                <>
-                  <GridContainer style={{ marginBottom: "20px" }}>
-                    <GridItem
-                      xs={12}
-                      style={{
-                        marginBottom: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        color: currentThemeColor.textWhite87,
-                      }}
-                    >
-                      <CheckIcon style={{ marginRight: "8px" }} />
-                      <span style={{ fontSize: "18px" }}>
-                        {t("The top 5 highly relevant columns found by explainable AI")}
-                      </span>
-                    </GridItem>
-                    {featureImportance.map((data, idx) => {
-                      if (idx < 5) {
-                        const rgba = 1 - 0.2 * idx;
-                        return (
-                          <GridItem xs={6}>
-                            <Button className={classes.mainCard}>
-                              <GridItem xs={6}>
-                                <span className={classes.wordBreakDiv}>
-                                  {idx + 1}. {data.name}
-                                </span>
-                              </GridItem>
-                              <GridItem xs={6}>
-                                <div
-                                  style={{ justifyContent: "center" }}
-                                  className={classes.defaultF0F0OutlineButton}
-                                >
-                                  {data.value}%
-                                </div>
-                              </GridItem>
-                            </Button>
-                          </GridItem>
-                        );
-                      }
-                    })}
-                  </GridContainer>
-                  <hr
-                    className={classes.line}
-                    style={{ marginBottom: "20px" }}
-                  />
-                </>
-              )}
-              <GridContainer>
-                {modelGraphs &&
-                  modelGraphs.length > 0 &&
-                  modelGraphs.map((graph, idx) => (
-                    <GridItem xs={12} style={{ marginBottom: "20px" }}>
-                      <div className={classes.analyticsGraphsContainer}>
-                        <img
-                          id={"png" + graph.id}
-                          src={
-                            IS_ENTERPRISE
-                              ? fileurl + "static/" + graph.filePath
-                              : graph.filePath
-                          }
-                          style={{ width: "100%" }}
-                          type="image/png"
-                        />
-                      </div>
-                    </GridItem>
-                  ))}
-              </GridContainer>
             </>
           )}
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={isModalOpen}
-          onClose={closeModal}
-          className={classes.modalContainer}
-        >
-          <ModalPage
-            closeModal={closeModal}
-            chosenItem="api"
-            isMarket={false}
-            opsId={null}
-            csv={csv}
-            trainingColumnInfo={trainingColumnInfo}
-            history={history}
-          />
-        </Modal>
       </div>
     );
   }

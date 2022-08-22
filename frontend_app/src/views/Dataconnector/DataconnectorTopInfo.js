@@ -64,11 +64,7 @@ const DataconnectorTopInfo = ({ connectorInfo }) => {
           {connectorInfo.dataconnectortype?.dataconnectortypeName === "CSV" &&
             urlDataId > 0 && (
               <Grid item sx={{ my: 1.5 }}>
-                <MetabaseButton
-                  id={urlDataId}
-                  type="data"
-                  isKor={user.language === "ko"}
-                />
+                <MetabaseButton id={urlDataId} type="data" />
               </Grid>
             )}
         </Grid>

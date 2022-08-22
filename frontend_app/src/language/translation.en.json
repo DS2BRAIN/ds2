@@ -109,6 +109,7 @@
   "Notification content": "Notification content",
   "Status": "Status",
   "Date created": "Date created",
+  "Training status": "Training status",
   "Read/Unread": "Read/Unread",
   "Shortcut": "Shortcut",
   "Download": "Download",
@@ -257,6 +258,7 @@
   "Cannot find an incomplete label file": "Cannot find an incomplete label file",
   "In queue": "In queue",
   "In process": "In process",
+  "Waiting": "Waiting",
   "Review": "Review",
   "Auto-Labeling (Pending)": "Auto-Labeling (Pending)",
   "Completed": "Completed",
@@ -623,7 +625,7 @@
   "This operation may take more than 10 seconds. Please wait.": "This operation may take more than 10 seconds. Please wait.",
   "Sorry. A temporary error occurred while downloading the report. please try again.": "Sorry. A temporary error occurred while downloading the report. please try again.",
   "Return to project list": "Return to project list",
-  "Training Method": "Training Method",
+  "Training method": "Training method",
   "Structured Data Automatic Classification": "Structured Data Automatic Classification",
   "Structured Data Category Classification": "Structured Data Category Classification",
   "Structured Data Regression": "Structured Data Regression",
@@ -1063,7 +1065,7 @@
   "Project usage exceeded. Please change the option to Colab&Jupyter to proceed.": "Project usage exceeded. Please change the option to Colab&Jupyter to proceed.",
   "My label project": "My label project",
   "Pending": "Pending",
-  "In Progress": "In Progress",
+  "In progress": "In progress",
   "Waiting to learn": "Waiting to learn",
   "Autolabeling": "Autolabeling",
   "Reject": "Reject",
@@ -2300,5 +2302,6 @@
   "Quant project creation is complete.": "Quant project creation is complete.",
   "Modifying the setting conditions": "Modifying the setting conditions",
   "Set 'Minimum' Percentage": "Set 'Minimum' Percentage",
-  "Set 'Max' Percentage": "Set 'Max' Percentage"
+  "Set 'Max' Percentage": "Set 'Max' Percentage",
+  "Start Analysis": "Start Analysis"
 }

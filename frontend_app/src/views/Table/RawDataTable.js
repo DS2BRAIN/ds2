@@ -173,11 +173,7 @@ const RawDataTable = ({ sampleData, sampleDataId, isDataConnectorPage }) => {
               DOWNLOAD
             </Button>
             {selectedDataId && (
-              <MetabaseButton
-                id={selectedDataId}
-                type="data"
-                isKor={user.language === "ko"}
-              />
+              <MetabaseButton id={selectedDataId} type="data" />
             )}
           </>
         )}

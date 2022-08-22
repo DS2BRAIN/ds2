@@ -15,12 +15,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import Cookies from "helpers/Cookies";
-import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
+import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
 
-const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
+const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
   const classes = currentTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isKor = i18n.language === "ko";
 
   const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
   const [selectedMetabase, setSelectedMetabase] = useState({});
@@ -96,12 +97,11 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
   return (
     <>
       {metabaseStatus === 0 || metabaseStatus === 100 ? (
-        <Button
+        <div
           id={`metabase_${type}_${
             metabaseStatus === 100 ? "check" : "start"
           }_btn`}
-          shape={type === "model" ? "blueOutlined" : "greenOutlined"}
-          size={type === "model" ? "sm" : "md"}
+          className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
           style={{
             fontWeight: metabaseStatus === 100 && "bold",
           }}
@@ -114,10 +114,10 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
           }}
         >
           {type === "data" && isKor ? "데이터 " : null}
-          {metabaseStatus === 100 ? t("Check analysis") : t("분석 시작")}
-          {type === "data" && !isKor ? " data" : null}
+          {metabaseStatus === 100 ? t("Check analysis") : t("Start analysis")}
+          {type === "data" && !isKor ? " on data" : null}
           {type === "data" ? " (Prod.By METABASE)" : null}
-        </Button>
+        </div>
       ) : metabaseStatus === 1 || metabaseStatus === 99 ? (
         <Tooltip
           title={
@@ -130,12 +130,12 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
           placement="bottom"
         >
           <div>
-            <Button
+            <div
               id={`metabase_${type}_${
                 metabaseStatus === 1 ? "processing" : "start"
               }_btn`}
               disabled
-              size={type === "model" ? "sm" : "md"}
+              className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
             >
               {metabaseStatus === 1 ? (
                 <CircularProgress
@@ -149,10 +149,14 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase, isKor }) => {
                 />
               ) : null}
               {type === "data" && isKor ? "데이터 " : null}
-              {metabaseStatus === 1 ? t("Analyzing") : t("분석 시작")}
-              {type === "data" && !isKor ? " data" : null}
+              {metabaseStatus === 1 ? t("Analyzing") : t("Start analysis")}
+              {type === "data" && !isKor
+                ? metabaseStatus === 1
+                  ? " data"
+                  : " on data"
+                : null}
               {type === "data" ? " (Prod.By METABASE)" : null}
-            </Button>
+            </div>
           </div>
         </Tooltip>
       ) : null}
