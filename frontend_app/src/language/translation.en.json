@@ -1906,7 +1906,7 @@
   "Credit": "Credit",
   "Model license purchased.": "Model license purchased.",
   "Model license purchase failed due to a temporary error.": "Model license purchase failed due to a temporary error.",
-  "creating": "creating",
+  "Creating": "Creating",
   "Select the data column to use": "Select the data column to use",
   "Starting with the first 10 manual labeling, Improve your LABELING AI model performance by repeating the inspection/correction and re-training Auto-Labeling outputs.": "Starting with the first 10 manual labeling, Improve your LABELING AI model performance by repeating the inspection/correction and re-training Auto-Labeling outputs.",
   "From the time you uploaded the data, you can check your developed AI model on a cloud training server with in only 3 days.": "From the time you uploaded the data, you can check your developed AI model on a cloud training server with in only 3 days.",

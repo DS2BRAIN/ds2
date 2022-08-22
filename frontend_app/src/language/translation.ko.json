@@ -1915,7 +1915,7 @@
   "Credit": "크레딧",
   "Model license purchased.": "모델 사용권을 구매하였습니다.",
   "Model license purchase failed due to a temporary error.": "죄송합니다. 일시적인 오류 발생으로 인하여 모델 사용권을 구매하지 못하였습니다.",
-  "creating": "생성중",
+  "Creating": "생성중",
   "Select the data column to use": "사용할 데이터 컬럼 선택하기",
   "Starting with the first 10 manual labeling, Improve your LABELING AI model performance by repeating the inspection/correction and re-training Auto-Labeling outputs.": "최초 10개의 수동 라벨링 학습을 시작으로 Auto-Labeling 결과물의 검수/보정 및 재학습을 반복적으로 진행하여 LABELING AI의 성능을 더욱 높혀보세요!",
   "From the time you uploaded the data, you can check your developed AI model on a cloud training server with in only 3 days.": "데이터 업로드 이후 3일 이내에 클라우드 학습서버에서 개발된 인공지능 모델을 확인하실 수 있습니다.",

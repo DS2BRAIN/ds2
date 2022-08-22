@@ -326,33 +326,31 @@ const LabelprojectList = ({ history }) => {
                   onChange={onSetProjectCheckedValueAll}
                 />
               </TableCell>
-              {tableHeads.map((tableHead, idx) => {
-                return (
-                  <TableCell
-                    id="mainHeader"
-                    key={idx}
-                    className={classes.tableHead}
-                    align="center"
-                    width={tableHead.width}
-                    style={{
-                      cursor: tableHead.value !== "No" ? "pointer" : "default",
-                    }}
-                    onClick={() =>
-                      tableHead.value !== "No" && onSetSortValue(tableHead.name)
-                    }
-                  >
-                    <div className={classes.tableHeader}>
-                      {sortingValue === tableHead.name &&
-                        (!isSortDesc ? (
-                          <ArrowUpwardIcon fontSize="small" />
-                        ) : (
-                          <ArrowDownwardIcon fontSize="small" />
-                        ))}
-                      <b>{t(tableHead.value)}</b>
-                    </div>
-                  </TableCell>
-                );
-              })}
+              {tableHeads.map((tableHead, idx) => (
+                <TableCell
+                  id="mainHeader"
+                  key={idx}
+                  className={classes.tableHead}
+                  align="center"
+                  width={tableHead.width}
+                  style={{
+                    cursor: tableHead.value !== "No" ? "pointer" : "default",
+                  }}
+                  onClick={() =>
+                    tableHead.value !== "No" && onSetSortValue(tableHead.name)
+                  }
+                >
+                  <div className={classes.tableHeader}>
+                    {sortingValue === tableHead.name &&
+                      (!isSortDesc ? (
+                        <ArrowUpwardIcon fontSize="small" />
+                      ) : (
+                        <ArrowDownwardIcon fontSize="small" />
+                      ))}
+                    <b>{t(tableHead.value)}</b>
+                  </div>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -524,8 +522,8 @@ const LabelprojectList = ({ history }) => {
                   title={
                     <div style={{ fontSize: "12px" }}>
                       {user.language === "ko"
-                        ? t("Project list") + " " + t("새로고침")
-                        : t("Refresh") + " " + t("프로젝트 리스트")}
+                        ? t("Project list") + " " + t("Refresh")
+                        : t("Refresh") + " " + t("Project list")}
                     </div>
                   }
                   placement="top"
@@ -555,7 +553,7 @@ const LabelprojectList = ({ history }) => {
               </GridItem>
               <GridItem xs={5}>
                 <SearchInputBox
-                  tooltipText="프로젝트명을 입력해주세요."
+                  tooltipText={t("Enter the project name")}
                   setSearchedValue={setSearchedValue}
                 />
               </GridItem>
