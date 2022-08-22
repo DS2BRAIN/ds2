@@ -15,12 +15,10 @@ import {
   openErrorSnackbarRequestAction,
 } from "redux/reducers/messages";
 import currentTheme from "assets/jss/custom";
-import { openChat } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer";
 import SearchInputBox from "components/Table/SearchInputBox";
-import Plans from "components/Plans/Plans";
 import LabelIntro from "components/Guide/LabelIntro";
 import StartProject from "./StartProject";
 
@@ -39,7 +37,6 @@ import { CircularProgress } from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import CloseIcon from "@material-ui/icons/Close";
 
 const LabelprojectList = ({ history }) => {
   const classes = currentTheme();
@@ -77,7 +74,6 @@ const LabelprojectList = ({ history }) => {
   const [isSortDesc, setIsSortDesc] = useState(initialDescValue);
   const [isPagingChanged, setIsPagingChanged] = useState(false);
   const [isShared, setIsShared] = useState(false);
-  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
@@ -171,10 +167,6 @@ const LabelprojectList = ({ history }) => {
         isshared: isShared,
       })
     );
-  };
-
-  const onOpenChatbot = () => {
-    openChat();
   };
 
   const setProjectSettings = () => {
@@ -585,31 +577,6 @@ const LabelprojectList = ({ history }) => {
               )}
             </GridContainer>
           </div>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={isPlanModalOpen}
-            onClose={() => {
-              setIsPlanModalOpen(false);
-            }}
-            className={classes.modalContainer}
-          >
-            <div className={classes.planModalContent}>
-              <CloseIcon
-                className={classes.closeImg}
-                style={{ margin: "8px" }}
-                onClick={() => {
-                  setIsPlanModalOpen(false);
-                }}
-              />
-              <div className={classes.planModalTitle}>
-                <div id="gradientTitle" className={classes.planModalTitleFont}>
-                  {t("Upgrade your plan!")}
-                </div>
-              </div>
-              <Plans onOpenChatbot={onOpenChatbot} />
-            </div>
-          </Modal>
           <Modal
             aria-labelledby="simple-modal-title"
             aria-describedby="simple-modal-description"
