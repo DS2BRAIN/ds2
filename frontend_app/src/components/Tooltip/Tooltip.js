@@ -61,7 +61,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
               {t("Preferred Method")}
             </div>
             <div style={{ marginBottom: "20px" }}>
-              <b>{t("Generate Code")}</b>
+              <b>{t("Generate code")}</b>
               <div>{t("Generate ready-to-run deep learning development code in Jupyter environment.")}</div>
             </div>
             <div style={{ marginBottom: "20px" }}>

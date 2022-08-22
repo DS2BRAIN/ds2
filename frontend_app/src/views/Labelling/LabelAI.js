@@ -465,7 +465,7 @@ const LabelAI = ({ history, isFromAutoLabelBtn }) => {
                     {model.status === 9 && t("Pending")}
                     {model.status === 100 && t("Completed")}
                     {model.status === 99 && t("Error")}
-                    {model.status === 1 && t("In Progress") + `(${model.progress}%)`}
+                    {model.status === 1 && t("In progress") + `(${model.progress}%)`}
                   </TableCell>
                   <TableCell className={classes.tableRowCell} id="modelTable" align="center">
                     {model.accuracy ? `${(model.accuracy * 100).toFixed(4)}%` : ""}

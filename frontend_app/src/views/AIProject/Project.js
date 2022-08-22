@@ -498,7 +498,7 @@ const Project = ({ history }) => {
   //     ) {
   //       status = t("Error");
   //     } else {
-  //       status = t("In Progress");
+  //       status = t("In progress");
   //     }
   //     const prj = projects.projects[i];
   //     const project = [
@@ -683,7 +683,7 @@ const Project = ({ history }) => {
   //                     }
   //                     if (
   //                       typeof d === "string" &&
-  //                       d.indexOf(t("In Progress")) > -1
+  //                       d.indexOf(t("In progress")) > -1
   //                     ) {
   //                       statusColor = "#1BC6B4";
   //                       isStatus = true;
@@ -884,7 +884,7 @@ const Project = ({ history }) => {
   //         >
   //           <div>3</div>
   //         </div>
-  //         <div style={{ fontSize: "10px" }}>{t("In Progress")}</div>
+  //         <div style={{ fontSize: "10px" }}>{t("In progress")}</div>
   //       </div>
 
   //       <div
@@ -1089,7 +1089,7 @@ const Project = ({ history }) => {
         } else if (projects.recentJupyterProjects[i].status === 99 || projects.recentJupyterProjects[i].status === 9 || projects.recentJupyterProjects[i].status < 0) {
           status = t("Error");
         } else {
-          status = t("In Progress");
+          status = t("In progress");
         }
         const prj = projects.recentJupyterProjects[i];
         const project = [prj.id, prj.projectName, projects.recentJupyterProjects[i].created_at ? projects.recentJupyterProjects[i].created_at.substring(0, 10) : "", status];
@@ -1136,7 +1136,7 @@ const Project = ({ history }) => {
                     statusColor = "#6B6B6B";
                     isStatus = true;
                   }
-                  if (typeof d === "string" && d.indexOf(t("In Progress")) > -1) {
+                  if (typeof d === "string" && d.indexOf(t("In progress")) > -1) {
                     statusColor = "#1BC6B4";
                     isStatus = true;
                   }

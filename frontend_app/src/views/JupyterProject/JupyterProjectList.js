@@ -338,7 +338,7 @@ const Project = ({ history }) => {
     const optionObj = {
       speed: t("Speed"),
       accuracy: t("Accuracy"),
-      colab: t("Generate Code"),
+      colab: t("Generate code"),
     };
     const methodObj = {
       normal: t("General"),
@@ -363,7 +363,7 @@ const Project = ({ history }) => {
       } else if (projects.jupyterProjects[i].status === 99 || projects.jupyterProjects[i].status === 9 || projects.jupyterProjects[i].status < 0) {
         status = t("Error");
       } else {
-        status = t("In Progress");
+        status = t("In progress");
       }
       const prj = projects.jupyterProjects[i];
       const project = [
@@ -452,7 +452,7 @@ const Project = ({ history }) => {
                           statusColor = "#6B6B6B";
                           isStatus = true;
                         }
-                        if (typeof d === "string" && d.indexOf(t("In Progress")) > -1) {
+                        if (typeof d === "string" && d.indexOf(t("In progress")) > -1) {
                           statusColor = "#1BC6B4";
                           isStatus = true;
                         }
@@ -598,7 +598,7 @@ const Project = ({ history }) => {
           >
             <div>3</div>
           </div>
-          <div style={{ fontSize: "10px" }}>{t("In Progress")}</div>
+          <div style={{ fontSize: "10px" }}>{t("In progress")}</div>
         </div>
 
         <div className={activeStepNum === -1 ? classes.stepperActivatedGreenLine : activeStepNum < 3 ? classes.stepperDeactivatedLine : classes.stepperOpacityGreenLine}></div>
@@ -731,7 +731,7 @@ const Project = ({ history }) => {
                 </Button>
               </GridItem>
               <GridItem xs={4}>
-                <SearchInputBox tooltipText="프로젝트명을 입력해주세요." setSearchedValue={setSearchedValue} />
+                <SearchInputBox tooltipText={t("Enter the project name")} setSearchedValue={setSearchedValue} />
               </GridItem>
               {/* <GridItem
                   xs={12}
