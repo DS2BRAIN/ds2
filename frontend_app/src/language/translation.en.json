@@ -2112,6 +2112,7 @@
   "Algorithm": "Algorithm",
   "Training Instance Option": "Training Instance Option",
   "Training GPU Option": "Training GPU Option",
+  "Object detection needs gpu.": "Object detection needs gpu.",
   "Algorithm Option": "Algorithm Option",
   "Once 2 weeks trial expires, the payment will be automatically processed": "Once 2 weeks trial expires, the payment will be automatically processed",
   "There is no label data in zip file.": "There is no label data in zip file.",

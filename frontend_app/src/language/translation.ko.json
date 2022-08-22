@@ -2108,6 +2108,7 @@
   "Algorithm": "알고리즘",
   "Training Instance Option": "학습 인스턴스 설정",
   "Training GPU Option": "학습 GPU 설정",
+  "Object detection needs gpu.": "물체인식은 gpu가 필요합니다.",
   "Algorithm Option": "알고리즘 설정",
   "Once 2 weeks trial expires, the payment will be automatically processed": "2주 무료 사용 후 자동으로 결제가 진행됩니다.",
   "There is no label data in zip file.": "압축파일 내 라벨링 데이터가 존재하지 않습니다.",
