@@ -9,8 +9,7 @@ const NavMenu = ({ localPath }) => {
   const routes = [
     {
       id: "data",
-      path:
-        "/dataconnector?page=1&sorting=created_at&desc=true&rows=10&public=false",
+      path: "/dataconnector",
       name: "Dataset",
       layout: "/admin",
       condition: true,

@@ -55,7 +55,17 @@ const Dataconnector = ({ history }) => {
     []
   );
 
-  const pagiInfoDict = listPagination(window.location);
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
+
+  const pagiInfoDict = listPagination(urlLoc);
+  const datatablePage = pagiInfoDict.page;
+  const datatableRowsPerPage = pagiInfoDict.rows;
+  const sortDataValue = pagiInfoDict.sorting;
+  const isSortDesc = pagiInfoDict.desc;
+  const isPublicData = pagiInfoDict.public;
 
   const [isLoading, setIsLoading] = useState(true);
   const [isProjectStartLoading, setIsProjectStartLoading] = useState(false);
@@ -63,14 +73,9 @@ const Dataconnector = ({ history }) => {
   const [introOffClicked, setIntroOffClicked] = useState(false);
 
   const [isDataRequested, setIsDataRequested] = useState(false);
-  const [datatablePage, setDatatablePage] = useState(pagiInfoDict.page);
-  const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(
-    pagiInfoDict.rows
+  const [searchedDataValue, setSearchedDataValue] = useState(
+    pagiInfoDict.search
   );
-  const [sortDataValue, setSortDataValue] = useState(pagiInfoDict.sorting);
-  const [isSortDesc, setIsSortDesc] = useState(pagiInfoDict.desc);
-  const [searchedDataValue, setSearchedDataValue] = useState("");
-  const [isPublicData, setIsPublicData] = useState(pagiInfoDict.public);
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
     false
   );
@@ -113,17 +118,17 @@ const Dataconnector = ({ history }) => {
   }, [isDataRequested]);
 
   useEffect(() => {
-    setIsDataRequested(true);
-  }, [isPublicData]);
+    getDataByDispatch();
+  }, [urlSearch]);
 
   useEffect(() => {
     if (isSearchHiddenForRefresh) setIsSearchHiddenForRefresh(false);
   }, [isSearchHiddenForRefresh]);
 
   useEffect(() => {
-    setDatatablePage(0);
-    setIsLoading(true);
-    setIsDataRequested(true);
+    urlSearchParams.set("page", 1);
+    urlSearchParams.set("search", searchedDataValue);
+    handleSearchParams(urlSearchParams);
   }, [searchedDataValue]);
 
   useEffect(() => {
@@ -230,10 +235,10 @@ const Dataconnector = ({ history }) => {
     if (projects.isDatasetPosted) {
       setSearchedDataValue("");
       setIsSearchHiddenForRefresh(true);
-      setSortDataValue("created_at");
-      setDatatablePage(0);
-      setIsSortDesc(true);
-      setIsDataRequested(true);
+      urlSearchParams.set("page", 1);
+      urlSearchParams.set("sorting", "created_at");
+      urlSearchParams.set("desc", true);
+      handleSearchParams(urlSearchParams);
     }
   }, [projects.isDatasetPosted]);
 
@@ -245,7 +250,8 @@ const Dataconnector = ({ history }) => {
         else setDatasetList(reduxDataset);
       } else {
         if (datatablePage) {
-          setDatatablePage(datatablePage - 1);
+          urlSearchParams(datatablePage);
+          handleSearchParams(urlSearchParams);
           setTimeTick(-2);
         }
       }
@@ -276,6 +282,10 @@ const Dataconnector = ({ history }) => {
     }
 
     dispatch(getDataconnectorsRequestAction(payloadJson));
+  };
+
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
   };
 
   const checkNewPageAllSelected = (dataset, selIdList) => {
@@ -652,14 +662,14 @@ const Dataconnector = ({ history }) => {
 
     const dataTablePagination = () => {
       const handleDataconnectorChangePage = (event, newPage) => {
-        setDatatablePage(newPage);
-        setIsDataRequested(true);
+        urlSearchParams.set("page", newPage + 1);
+        handleSearchParams(urlSearchParams);
       };
 
       const handleChangeDatatableRowsPerPage = (event) => {
-        setDatatableRowsPerPage(+event.target.value);
-        setDatatablePage(0);
-        setIsDataRequested(true);
+        urlSearchParams.set("page", 1);
+        urlSearchParams.set("rows", event.target.value);
+        handleSearchParams(urlSearchParams);
       };
 
       return (
@@ -951,28 +961,28 @@ const Dataconnector = ({ history }) => {
     setSelectedDataIdList([]);
     setAllSelected(false);
     setIsSearchHiddenForRefresh(true);
-    setDatatablePage(0);
-    setDatatableRowsPerPage(10);
     setSearchedDataValue("");
-    setSortDataValue("created_at");
+    urlSearchParams.set("page", 1);
+    urlSearchParams.set("rows", 10);
+    urlSearchParams.set("sorting", "created_at");
 
     if (data === "private") {
-      setIsPublicData(false);
+      urlSearchParams.set("public", false);
     } else if (data === "public") {
-      setIsPublicData(true);
+      urlSearchParams.set("public", true);
     }
+    handleSearchParams(urlSearchParams);
   };
 
   const onSetSortDataValue = (value) => {
     if (value === sortDataValue) {
-      let tempIsSortDesc = isSortDesc;
-      setIsSortDesc(!tempIsSortDesc);
+      urlSearchParams.set("desc", !isSortDesc);
     } else {
-      setSortDataValue(value);
-      setIsSortDesc(true);
+      urlSearchParams.set("sorting", value);
+      urlSearchParams.set("desc", true);
     }
-    setDatatablePage(0);
-    setIsDataRequested(true);
+    urlSearchParams.set("page", 1);
+    handleSearchParams(urlSearchParams);
   };
 
   const startLabeling = () => {

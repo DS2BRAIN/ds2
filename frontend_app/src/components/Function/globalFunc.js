@@ -260,18 +260,20 @@ export const checkIsValidKey = async (user, dispatch, t) => {
 
 export const listPagination = (location) => {
   let pagiDict = {};
-  let urlSearch = new URLSearchParams(location);
-  let isDataset = location.pathname?.includes("dataconnector");
+  let urlSearch = new URLSearchParams(location.search);
+  let isDataset = location.pathname.includes("dataconnector");
 
   let paramPage = urlSearch.get("page");
   let paramSorting = urlSearch.get("sorting");
   let paramDesc = urlSearch.get("desc");
   let paramRows = urlSearch.get("rows");
+  let paramSearch = urlSearch.get("search");
   let paramPublic = isDataset ? urlSearch.get("public") : null;
   pagiDict["page"] = paramPage ? paramPage - 1 : 0;
   pagiDict["sorting"] = paramSorting ? paramSorting : "created_at";
   pagiDict["desc"] = paramDesc ? (paramDesc === "true" ? true : false) : true;
   pagiDict["rows"] = paramRows ? paramRows : 10;
+  if (paramSearch) pagiDict["search"] = paramSearch;
   if (isDataset)
     pagiDict["public"] = paramPublic
       ? paramPublic === "true"
