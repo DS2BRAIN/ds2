@@ -5,16 +5,40 @@ import { CSVReader, readRemoteFile } from "react-papaparse";
 import Dropzone from "react-dropzone";
 
 import { fileurl } from "controller/api";
-import { askModalRequestAction, openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
-import { postConnectorWithFileRequestAction, stopProjectsLoadingRequestAction, deleteFilesForQuickStart } from "redux/reducers/projects.js";
+import {
+  askModalRequestAction,
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+} from "redux/reducers/messages.js";
+import {
+  postConnectorWithFileRequestAction,
+  stopProjectsLoadingRequestAction,
+  deleteFilesForQuickStart,
+} from "redux/reducers/projects.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
 
-import { Checkbox, FormControl, FormControlLabel, InputBase, InputLabel, RadioGroup, Radio, LinearProgress, Modal, Select } from "@material-ui/core";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputBase,
+  InputLabel,
+  RadioGroup,
+  Radio,
+  LinearProgress,
+  Modal,
+  Select,
+} from "@material-ui/core";
 import { CircularProgress, Grid, IconButton, Tooltip } from "@mui/material";
 import CloseIcon from "@material-ui/icons/Close";
 
-const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileModalOpen, setIsFileModalOpen }) => {
+const DataModalFileAdd = ({
+  isDatatypeModalOpen,
+  setIsDatatypeModalOpen,
+  isFileModalOpen,
+  setIsFileModalOpen,
+}) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -134,7 +158,11 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
     const url = window.location.href;
     if (Object.keys(datatypeDict).length > 0) {
-      if (url.indexOf("?quickStart=ready") !== -1 && projects.filesForQuickStart && projects.categoryForQuickStart) {
+      if (
+        url.indexOf("?quickStart=ready") !== -1 &&
+        projects.filesForQuickStart &&
+        projects.categoryForQuickStart
+      ) {
         const category = projects.categoryForQuickStart;
 
         setDataAuthType(AuthTypeForCategory[category]);
@@ -151,7 +179,13 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
   useEffect(() => {
     const url = window.location.href;
-    if (url.indexOf("?quickStart=ready") !== -1 && projects.filesForQuickStart && projects.categoryForQuickStart && dataAuthType && datatypeCheckedId) {
+    if (
+      url.indexOf("?quickStart=ready") !== -1 &&
+      projects.filesForQuickStart &&
+      projects.categoryForQuickStart &&
+      dataAuthType &&
+      datatypeCheckedId
+    ) {
       setIsFileModalOpen(true);
       dropFiles(projects.filesForQuickStart);
       dispatch(deleteFilesForQuickStart());
@@ -168,7 +202,12 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     }
     let filename = files[0].name;
     let authType = datatypeDict[datatypeCheckedId].authType.toLowerCase();
-    let isAuthIncluded = authType.includes("zip") || authType.includes("csv") || authType.includes("video") || authType.includes("mp4") || authType.includes("mov");
+    let isAuthIncluded =
+      authType.includes("zip") ||
+      authType.includes("csv") ||
+      authType.includes("video") ||
+      authType.includes("mp4") ||
+      authType.includes("mov");
 
     if (dataAuthType === "video") {
       if (files[0].type.toLowerCase().indexOf(authType) === -1) {
@@ -180,7 +219,10 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
         setCsvUploaded(false);
         dispatch(openErrorSnackbarRequestAction(t(`Upload .${authType} file`)));
         return;
-      } else if (authType.includes("csv") && filename.toLowerCase().indexOf(authType) !== -1) {
+      } else if (
+        authType.includes("csv") &&
+        filename.toLowerCase().indexOf(authType) !== -1
+      ) {
         setCsvUploaded(true);
       }
     }
@@ -197,7 +239,9 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     setIsPreviewLoading(true);
     setFiles(files);
     getfileSize(files);
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been uploaded")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been uploaded"))
+    );
     setPreviewText(filename);
   };
 
@@ -214,7 +258,14 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     let checkedTypeAuth = datatypeDict[datatypeCheckedId].authType;
 
     if (checkedTypeInfo) {
-      if (checkedTypeAuth && (checkedTypeAuth.includes("csv") || checkedTypeAuth.includes("zip") || checkedTypeAuth.includes("video") || checkedTypeAuth.includes("mp4") || checkedTypeAuth.includes("mov"))) {
+      if (
+        checkedTypeAuth &&
+        (checkedTypeAuth.includes("csv") ||
+          checkedTypeAuth.includes("zip") ||
+          checkedTypeAuth.includes("video") ||
+          checkedTypeAuth.includes("mp4") ||
+          checkedTypeAuth.includes("mov"))
+      ) {
         handleChangeTab();
         setIsDatatypeModalOpen(false);
         setIsFileModalOpen(true);
@@ -264,7 +315,9 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
   const deleteFiles = () => {
     resetDataAddSettings();
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been deleted")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been deleted"))
+    );
   };
 
   const deleteEmptyColumn = (columnList) => {
@@ -284,25 +337,41 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     let predictColumnName = "";
     if (dataAuthType === "csv") {
       if (selectedRadio === null || selectedRadio === "") {
-        dispatch(openErrorSnackbarRequestAction(t("Please select column on data settings if you want to proceed.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("Please select column on data settings if you want to proceed.")
+          )
+        );
         return;
       } else if (selectedRadio === "selectColumn") {
         labelDataPass = true;
         if (selectedColumn === null || selectedColumn === "") {
-          dispatch(openErrorSnackbarRequestAction(t("Please select a result column.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please select a result column."))
+          );
           return;
         }
         predictColumnName = selectedColumn;
       } else if (selectedRadio === "inputSelf") {
         labelDataPass = false;
         if (inputSelfText === null || inputSelfText === "") {
-          dispatch(openErrorSnackbarRequestAction(t("Please enter the result column.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please enter the result column."))
+          );
           return;
         }
         let nameDuplicateError = false;
-        columnNameList.map((column) => (column === inputSelfText ? (nameDuplicateError = true) : null));
+        columnNameList.map((column) =>
+          column === inputSelfText ? (nameDuplicateError = true) : null
+        );
         if (nameDuplicateError) {
-          dispatch(openErrorSnackbarRequestAction(t("A column name with the same name already exists. Please enter a new column name.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "A column name with the same name already exists. Please enter a new column name."
+              )
+            )
+          );
           return;
         }
 
@@ -311,7 +380,11 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     } else if (dataAuthType === "zip") {
       labelDataPass = hasLabelData;
     } else if (datatypeCheckedId === 7 && frameValue === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("The number of frames must be between 1 and 600")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("The number of frames must be between 1 and 600")
+        )
+      );
       return;
     }
 
@@ -336,8 +409,19 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
       files
     ) {
       if (process.env.REACT_APP_ENTERPRISE !== "true") {
-        if (+user.me.remainDiskUsage + user.me.usageplan.storage + +user.me.additionalDiskUsage < user.me.usageplan.storage) {
-          dispatch(openErrorSnackbarRequestAction(`${t("The file cannot be uploaded because it exceeds the maximum total usage.")} ${t("Please try again after upgrading your plan.")}`));
+        if (
+          +user.me.remainDiskUsage +
+            user.me.usageplan.storage +
+            +user.me.additionalDiskUsage <
+          user.me.usageplan.storage
+        ) {
+          dispatch(
+            openErrorSnackbarRequestAction(
+              `${t(
+                "The file cannot be uploaded because it exceeds the maximum total usage."
+              )} ${t("Please try again after upgrading your plan.")}`
+            )
+          );
           return;
         }
       }
@@ -375,7 +459,9 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
           );
         }
 
-        let sleepTime = datatypeDict[datatypeCheckedId].authType.indexOf("csv") ? 2000 : 5000;
+        let sleepTime = datatypeDict[datatypeCheckedId].authType.indexOf("csv")
+          ? 2000
+          : 5000;
         let oldProgress = progress;
         setProgress(oldProgress + (100 - oldProgress) / 5);
         await sleep(sleepTime);
@@ -422,10 +508,14 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
                   className={classes.dataconnectorTile}
                   id={tile.dataconnectortypeName + "_container"}
                   style={{
-                    border: datatypeCheckedValue[tile.id] ? "1px solid " + currentThemeColor.secondary1 : "1px solid " + currentThemeColor.background2,
+                    border: datatypeCheckedValue[tile.id]
+                      ? "1px solid " + currentThemeColor.secondary1
+                      : "1px solid " + currentThemeColor.background2,
                     cursor: "pointer",
                   }}
-                  onClick={() => onSetDatatypeCheckedValue(tile.id, tile.authType)}
+                  onClick={() =>
+                    onSetDatatypeCheckedValue(tile.id, tile.authType)
+                  }
                 >
                   <img
                     style={{
@@ -433,10 +523,19 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
                       height: "80px",
                       borderRadius: "4px",
                     }}
-                    src={process.env.REACT_APP_ENTERPRISE ? fileurl + tile.logoUrl : tile.logoUrl}
+                    src={
+                      process.env.REACT_APP_ENTERPRISE
+                        ? fileurl + tile.logoUrl
+                        : tile.logoUrl
+                    }
                     alt={tile.dataconnectortypeName}
                   />
-                  <Grid container justifyContent="center" alignItems="center" style={{ height: "56px", color: "var(--textWhite87)" }}>
+                  <Grid
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    style={{ height: "56px", color: "var(--textWhite87)" }}
+                  >
                     {t(tile.dataconnectortypeName)}
                   </Grid>
                 </div>
@@ -447,13 +546,22 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     };
 
     return (
-      <Grid id="modalDataconnectorContainer" className="dataModalContainer" justifyContent="space-between" sx={{ flexDirection: "column" }}>
+      <Grid
+        id="modalDataconnectorContainer"
+        className="dataModalContainer"
+        justifyContent="space-between"
+        sx={{ flexDirection: "column" }}
+      >
         <Grid>
           <Grid container justifyContent="space-between" sx={{ p: 2 }}>
             <div className={classes.modalTitleText}>
               <b>{t("Add data - 1. Select data type")}</b>
             </div>
-            <IconButton id="deleteLabelIcon" sx={{ p: 0 }} onClick={closeDataconnectorModal}>
+            <IconButton
+              id="deleteLabelIcon"
+              sx={{ p: 0 }}
+              onClick={closeDataconnectorModal}
+            >
               <CloseIcon />
             </IconButton>
           </Grid>
@@ -462,11 +570,22 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
         <Grid container justifyContent="flex-end">
           <Grid sx={{ p: 2.5, mr: 1.5 }}>
             {isAbleToSeeNextBtn ? (
-              <Button id="nextDataModal_btn" shape="greenOutlined" size="lg" style={dataModalBtnStyle} onClick={nextDataconnectorModal}>
+              <Button
+                id="nextDataModal_btn"
+                shape="greenOutlined"
+                size="lg"
+                style={dataModalBtnStyle}
+                onClick={nextDataconnectorModal}
+              >
                 {t("Next")}
               </Button>
             ) : (
-              <Button id="disabled_nextDataModal_btn" disabled size="lg" style={dataModalBtnStyle}>
+              <Button
+                id="disabled_nextDataModal_btn"
+                disabled
+                size="lg"
+                style={dataModalBtnStyle}
+              >
                 {t("Next")}
               </Button>
             )}
@@ -520,26 +639,51 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
       const dataTypeText = (type) => {
         if (process.env.REACT_APP_ENTERPRISE === "true") {
           if (type === "csv") {
-            return t("Each column requires at least 10 rows of data.") + " " + t("(Only 1 upload is allowed)");
+            return (
+              t("Each column requires at least 10 rows of data.") +
+              " " +
+              t("(Only 1 upload is allowed)")
+            );
           } else if (type === "zip") {
-            return t("You must have at least 10 images. Compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)");
+            return t(
+              "You must have at least 10 images. Compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)"
+            );
           } else if (type === "video") {
-            return t("Only MP4 and MOV files are supported. (Only 1 upload is allowed)");
+            return t(
+              "Only MP4 and MOV files are supported. (Only 1 upload is allowed)"
+            );
           }
         } else {
           if (type === "csv") {
-            return t("Each column requires at least 10 rows of data.") + " " + t("Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)");
+            return (
+              t("Each column requires at least 10 rows of data.") +
+              " " +
+              t(
+                "Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)"
+              )
+            );
           } else if (type === "zip") {
-            return t("You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)");
+            return t(
+              "You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)"
+            );
           } else if (type === "video") {
-            return t("Only MP4 and MOV files under 5GB are supported. (Only 1 upload is allowed)");
+            return t(
+              "Only MP4 and MOV files under 5GB are supported. (Only 1 upload is allowed)"
+            );
           }
         }
       };
 
       return isCsv ? (
         <div className="dropzoneContainerSolidSquareBorder">
-          <CSVReader isReset={resetCsv} noDrag={csvUploaded} noClick={csvUploaded} noProgressBar={csvUploaded} onFileLoad={handleReadCSV} onError={handleOnError}>
+          <CSVReader
+            isReset={resetCsv}
+            noDrag={csvUploaded}
+            noClick={csvUploaded}
+            noProgressBar={csvUploaded}
+            onFileLoad={handleReadCSV}
+            onError={handleOnError}
+          >
             <p
               className={classes.dropzoneText}
               style={{
@@ -696,11 +840,24 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
         const radioSelectColumn = (isColumnNameExist) => (
           <>
-            <FormControlLabel id="selectColumnRadio" value="selectColumn" label={t("Select result column")} disabled={!isColumnNameExist} control={<Radio color="primary" />} style={{ marginTop: "-10px" }} />
-            <FormControl variant="outlined" style={{ margin: "-10px 0 10px 0" }}>
+            <FormControlLabel
+              id="selectColumnRadio"
+              value="selectColumn"
+              label={t("Select result column")}
+              disabled={!isColumnNameExist}
+              control={<Radio color="primary" />}
+              style={{ marginTop: "-10px" }}
+            />
+            <FormControl
+              variant="outlined"
+              style={{ margin: "-10px 0 10px 0" }}
+            >
               {csvUploaded && selectedRadio === "selectColumn" ? (
                 <>
-                  <InputLabel htmlFor="outlined-column-native-simple" style={{ color: "#D0D0D0", marginBottom: "10px" }}>
+                  <InputLabel
+                    htmlFor="outlined-column-native-simple"
+                    style={{ color: "#D0D0D0", marginBottom: "10px" }}
+                  >
                     {t("Item")}
                   </InputLabel>
                   <Select
@@ -733,10 +890,17 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
                 </>
               ) : (
                 <>
-                  <InputLabel htmlFor="outlined-column-native-simple" style={{ color: "darkgray", padding: "0" }}>
+                  <InputLabel
+                    htmlFor="outlined-column-native-simple"
+                    style={{ color: "darkgray", padding: "0" }}
+                  >
                     {t("Item")}
                   </InputLabel>
-                  <Select className="selectColumn" disabled label={t("Item")}></Select>
+                  <Select
+                    className="selectColumn"
+                    disabled
+                    label={t("Item")}
+                  ></Select>
                 </>
               )}
             </FormControl>
@@ -745,8 +909,18 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
         const radioInputSelf = () => (
           <>
-            <FormControlLabel id="inputColumnRadio" value="inputSelf" label={t("Direct column name input")} disabled={!csvUploaded} control={<Radio color="primary" />} />
-            <form noValidate autoComplete="off" style={{ color: "#D0D0D0", margin: "-10px 0 -10px 0" }}>
+            <FormControlLabel
+              id="inputColumnRadio"
+              value="inputSelf"
+              label={t("Direct column name input")}
+              disabled={!csvUploaded}
+              control={<Radio color="primary" />}
+            />
+            <form
+              noValidate
+              autoComplete="off"
+              style={{ color: "#D0D0D0", margin: "-10px 0 -10px 0" }}
+            >
               {csvUploaded && selectedRadio === "inputSelf" ? (
                 <input
                   id="input_self"
@@ -787,7 +961,12 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
         return (
           <Grid>
-            <RadioGroup disabled={!csvUploaded} aria-label="csv_set_option" onChange={handleHeaderRadio} value={selectedRadio}>
+            <RadioGroup
+              disabled={!csvUploaded}
+              aria-label="csv_set_option"
+              onChange={handleHeaderRadio}
+              value={selectedRadio}
+            >
               {radioSelectColumn(Object.keys(columnNameList).length > 0)}
               {radioInputSelf()}
             </RadioGroup>
@@ -804,7 +983,16 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
               color: currentThemeColor.textWhite87,
               fontSize: "14px",
             }}
-            control={<Checkbox id="label_data_chkbox" value={hasLabelData} checked={hasLabelData} onChange={() => setHasLabelData(!hasLabelData)} color="primary" style={{ marginRight: "10px" }} />}
+            control={
+              <Checkbox
+                id="label_data_chkbox"
+                value={hasLabelData}
+                checked={hasLabelData}
+                onChange={() => setHasLabelData(!hasLabelData)}
+                color="primary"
+                style={{ marginRight: "10px" }}
+              />
+            }
             label={t("Include labeling data in compressed file")}
           />
         </>
@@ -828,14 +1016,19 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
         return (
           <>
-            <InputLabel id="frameValue_label" style={{ margin: "10px 0 15px 0", color: "white" }}>
+            <InputLabel
+              id="frameValue_label"
+              style={{ margin: "10px 0 15px 0", color: "white" }}
+            >
               {t("Frame Value")}
             </InputLabel>
             <InputBase
               required
               id="frameValue"
               variant="outlined"
-              placeholder={t("Please enter a number of frames per minute between 1 and 600 (default: 60)")}
+              placeholder={t(
+                "Please enter a number of frames per minute between 1 and 600 (default: 60)"
+              )}
               fullWidth
               label={t("Frame Value")}
               name="frameValue"
@@ -859,13 +1052,22 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
     };
 
     return (
-      <Grid id="modalDataconnectorContainer" className="dataModalContainer" justifyContent="space-between" sx={{ flexDirection: "column" }}>
+      <Grid
+        id="modalDataconnectorContainer"
+        className="dataModalContainer"
+        justifyContent="space-between"
+        sx={{ flexDirection: "column" }}
+      >
         <div>
           <Grid container justifyContent="space-between" sx={{ p: 2.5 }}>
             <div className={classes.modalTitleText}>
               <b>{t("Adding data - 2. Uploading and setting data")}</b>
             </div>
-            <IconButton id="closeDataUploadModal" onClick={closeFileModal} sx={{ p: 0 }}>
+            <IconButton
+              id="closeDataUploadModal"
+              onClick={closeFileModal}
+              sx={{ p: 0 }}
+            >
               <CloseIcon />
             </IconButton>
           </Grid>
@@ -879,10 +1081,15 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
               {isPreviewLoading ? (
                 <div>
                   <CircularProgress size={20} />
-                  <b className={classes.text87}>{t("Uploading file. Please wait a moment.")}</b>
+                  <b className={classes.text87}>
+                    {t("Uploading file. Please wait a moment.")}
+                  </b>
                 </div>
               ) : files ? null : (
-                secFileUploadZone(datatypeDict[datatypeCheckedId] && datatypeDict[datatypeCheckedId].authType === "csv")
+                secFileUploadZone(
+                  datatypeDict[datatypeCheckedId] &&
+                    datatypeDict[datatypeCheckedId].authType === "csv"
+                )
               )}
             </Grid>
             <Grid sx={{ px: 2, py: 3, borderBottom: "1px solid #D0D0D0" }}>
@@ -897,17 +1104,48 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
         </div>
         <Grid container justifyContent="flex-end" sx={{ p: 2.5 }}>
           <Grid className="flex" sx={{ mr: 2.5 }}>
-            <Button id="previousDataconnectorModal" shape="whiteOutlined" size="lg" sx={{ mr: 2 }} style={dataModalBtnStyle} onClick={prevDataconnectorModal}>
+            <Button
+              id="previousDataconnectorModal"
+              shape="whiteOutlined"
+              size="lg"
+              sx={{ mr: 2 }}
+              style={dataModalBtnStyle}
+              onClick={prevDataconnectorModal}
+            >
               {t("Previous")}
             </Button>
             {isAbleToSeeEnterBtn ? (
-              <Button id="startSaveFilesBtn" shape="greenOutlined" size="lg" style={dataModalBtnStyle} onClick={saveFiles}>
+              <Button
+                id="startSaveFilesBtn"
+                shape="greenOutlined"
+                size="lg"
+                style={dataModalBtnStyle}
+                onClick={saveFiles}
+              >
                 {t("Confirm")}
               </Button>
             ) : (
-              <Tooltip title={<span style={{ fontSize: "14px" }}>{files === null ? t("Please upload the file and proceed") : csvUploaded && selectedRadio === "" ? t("Please select column on data settings if you want to proceed.") : null}</span>} placement="top">
+              <Tooltip
+                title={
+                  <span style={{ fontSize: "14px" }}>
+                    {files === null
+                      ? t("Please upload the file and proceed")
+                      : csvUploaded && selectedRadio === ""
+                      ? t(
+                          "Please select column on data settings if you want to proceed."
+                        )
+                      : null}
+                  </span>
+                }
+                placement="top"
+              >
                 <div>
-                  <Button id="nextDataconnectorModal" size="lg" disabled style={dataModalBtnStyle}>
+                  <Button
+                    id="nextDataconnectorModal"
+                    size="lg"
+                    disabled
+                    style={dataModalBtnStyle}
+                  >
                     {t("Confirm")}
                   </Button>
                 </div>
@@ -921,7 +1159,13 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
 
   return (
     <>
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isDatatypeModalOpen} onClose={closeDataconnectorModal} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isDatatypeModalOpen}
+        onClose={closeDataconnectorModal}
+        className={classes.modalContainer}
+      >
         {projects.isDatasetLoading ? (
           <div className={classes.modalLoading}>
             <LinearProgress />
@@ -931,7 +1175,13 @@ const DataModalFileAdd = ({ isDatatypeModalOpen, setIsDatatypeModalOpen, isFileM
           modalDataconnector()
         )}
       </Modal>
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isFileModalOpen} onClose={closeFileModal} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isFileModalOpen}
+        onClose={closeFileModal}
+        className={classes.modalContainer}
+      >
         {projects.isDatasetLoading ? (
           <div className={classes.modalLoading}>
             <LinearProgress variant="determinate" value={progress} />
