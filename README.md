@@ -47,8 +47,9 @@ Prescriptive analytics not only predicts what the future will look like, but als
 ### DS2 provides high-precision prescriptive analytics based on an automated machine learning pipeline.
 
 A deep learning model for executing prescriptive analysis can increase its accuracy as it advances over time, and prescriptive analysis made with such increased accuracy will have higher accuracy. DS2 automatically installs a machine learning pipeline through the Active Learning process to [Learn - Analyze - Deploy - Collect] - [Relearn - Analyze - Deploy - Collect] - … Let us help you do it without much effort.
-
-<img width="50%" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130479-584d0aa4-65fb-48ae-88dc-09ba9346256d.png">
+<p align="center">
+    <img width="50%" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130479-584d0aa4-65fb-48ae-88dc-09ba9346256d.png">
+</p>
 
 ### 1. Training AI models
 
