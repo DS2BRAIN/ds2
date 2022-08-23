@@ -55,7 +55,7 @@ const Dataconnector = ({ history }) => {
     []
   );
 
-  const pagiInfoDict = listPagination(window.location.search);
+  const pagiInfoDict = listPagination(window.location);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isProjectStartLoading, setIsProjectStartLoading] = useState(false);
@@ -70,7 +70,7 @@ const Dataconnector = ({ history }) => {
   const [sortDataValue, setSortDataValue] = useState(pagiInfoDict.sorting);
   const [isSortDesc, setIsSortDesc] = useState(pagiInfoDict.desc);
   const [searchedDataValue, setSearchedDataValue] = useState("");
-  const [isPublicData, setIsPublicData] = useState(false);
+  const [isPublicData, setIsPublicData] = useState(pagiInfoDict.public);
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
     false
   );
