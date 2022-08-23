@@ -244,7 +244,7 @@ const NotiList = ({ history }) => {
             {isLabel && t("to Labeling projects")}
             {isPredict && taskType === "runAll" && t("Download")}
             {isPredict && taskType === "runMovie" && t("Download")}
-            {isDownload && t("Download File")}
+            {isDownload && t("Download file")}
           </Button>
         )}
         {isDone &&

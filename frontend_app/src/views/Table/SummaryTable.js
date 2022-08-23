@@ -294,7 +294,7 @@ const SummaryTable = React.memo(
       if (projects.project.statusText === "중단") {
         dispatch(
           openErrorSnackbarRequestAction(
-            t(" You can’t make changes to a suspended project")
+            t("You can’t make changes to suspended projects")
           )
         );
         return;
@@ -303,7 +303,7 @@ const SummaryTable = React.memo(
         dispatch(
           openErrorSnackbarRequestAction(
             t(
-              " Values ​​you want to analyze/predict cannot be used as training data."
+              "Values ​​you want to analyze/predict cannot be used as training data."
             )
           )
         );

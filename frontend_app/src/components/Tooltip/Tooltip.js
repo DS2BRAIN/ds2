@@ -80,7 +80,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
         return (
           <>
             <div className={classes.title} style={{ marginBottom: "20px" }}>
-              {t("Preferred Method")}
+              {t("Preferred method")}
             </div>
             <div style={{ marginBottom: "20px" }}>
               <b>{t("Generate code")}</b>

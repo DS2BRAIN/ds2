@@ -311,17 +311,6 @@ const Process = (props) => {
         setIsLoading(false);
       })();
 
-      // if (
-      //   projects.project.status > 0 &&
-      //   projects.project.status < 100 &&
-      //   projects.project.status !== 99
-      // ) {
-      //   interval = setInterval(intervalAction, 100000);
-      // }
-      // return () => {
-      //   clearInterval(interval);
-      // };
-
       if (projects.project.id) {
         function getProjectStatus(event) {
           const response = JSON.parse(event.data);
@@ -1205,7 +1194,7 @@ const Process = (props) => {
               if (isEmpty) {
                 dispatch(
                   openErrorSnackbarRequestAction(
-                    "모든 파라미터 값을 입력해주세요."
+                    "Please enter all parameter values."
                   )
                 );
 
@@ -1233,7 +1222,7 @@ const Process = (props) => {
               // min, max, split 값이 모두 입력되지 않은 경우
               dispatch(
                 openErrorSnackbarRequestAction(
-                  "모든 파라미터 값을 입력해주세요."
+                  "Please enter all parameter values."
                 )
               );
 
@@ -1255,7 +1244,7 @@ const Process = (props) => {
               if (valueToPost.length === 0) {
                 dispatch(
                   openErrorSnackbarRequestAction(
-                    "모든 파라미터 값을 입력해주세요."
+                    "Please enter all parameter values."
                   )
                 );
 
@@ -1266,7 +1255,7 @@ const Process = (props) => {
                     // 빈 값이 하나라도 들어온 경우
                     dispatch(
                       openErrorSnackbarRequestAction(
-                        "모든 파라미터 값을 입력해주세요."
+                        "Please enter all parameter values."
                       )
                     );
 
@@ -1294,7 +1283,7 @@ const Process = (props) => {
                 // 빈 값이 들어온 경우
                 dispatch(
                   openErrorSnackbarRequestAction(
-                    "모든 파라미터 값을 입력해주세요."
+                    "Please enter all parameter values."
                   )
                 );
 
@@ -1378,7 +1367,7 @@ const Process = (props) => {
                 if (hasRange && rangeMin >= rangeMax) {
                   dispatch(
                     openErrorSnackbarRequestAction(
-                      "최대값을 최소값보다 크게 설정해주세요."
+                      "Please set the maximum value larger than the minimum value."
                     )
                   );
 
@@ -1595,7 +1584,7 @@ const Process = (props) => {
       dispatch(
         openErrorSnackbarRequestAction(
           t(
-            "'선호하는 방식'을 선택해주세요. AutoML 옵션의 경우 라이센스 구매 후 이용 가능합니다."
+            "Please select 'Preferred method'. AutoML options are available after purchasing a license."
           )
         )
       );
@@ -1749,7 +1738,7 @@ const Process = (props) => {
           `${t(
             "The number of unique values ​​of strings that can be used in tabular data is limited to 250."
           )} ${t(
-            "계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요."
+            "To continue, uncheck 'Training data usage' for columns with more than 250 unique values."
           )}`
         )
       );
@@ -1769,7 +1758,7 @@ const Process = (props) => {
         if (!colabInfo[value]) {
           dispatch(
             openErrorSnackbarRequestAction(
-              "올바른 파라미터를 채운 후 실행해주세요."
+              "Please fill in correct parameter and proceed."
             )
           );
           return;
@@ -1823,7 +1812,7 @@ const Process = (props) => {
           dispatch(
             openErrorSnackbarRequestAction(
               t(
-                "모델 생성은 최대 300개 까지 가능합니다. 파라미터들의 설정값 개수를 확인해주세요."
+                "Model creation is possible up to 300. Please check the number of set values ​​of parameters."
               )
             )
           );
@@ -1954,7 +1943,8 @@ const Process = (props) => {
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message: "선택하신 옵션으로 프로젝트 모델링을 시작하시겠습니까?",
+          message:
+            "Would you like to start modeling your project with the selected options?",
           project: projectInfo,
         })
       );
@@ -2004,11 +1994,11 @@ const Process = (props) => {
       projects.project.statusText === "중단" &&
       ((projects.project.option && projects.project.option !== "custom") ||
         (projects.project.option === "custom" &&
-          ["학습 인스턴스", "선호하는 방식"].includes(value)))
+          ["Training instance", "Preferred method"].includes(value)))
     ) {
       dispatch(
         openErrorSnackbarRequestAction(
-          t(`중단되었던 프로젝트는 ${value}을 변경할 수 없습니다.`)
+          t("You can’t make changes to suspended projects")
         )
       );
       return;
@@ -2798,7 +2788,7 @@ const Process = (props) => {
         <FormControl
           component="fieldset"
           onClick={() => {
-            onCheckedValueAlarm("분석단위");
+            onCheckedValueAlarm("Analyze unit");
           }}
           disabled={isProjectStopped}
         >
@@ -2809,7 +2799,7 @@ const Process = (props) => {
               color: currentTheme.text1 + " !important",
             }}
           >
-            {t("Analyze Unit")}
+            {t("Analyze unit")}
           </FormLabel>
           <RadioGroup
             row
@@ -2865,7 +2855,7 @@ const Process = (props) => {
         <p style={{ fontSize: "14px", color: "#F0F0F0" }}>
           {t("Caution")} :{" "}
           {t(
-            "데이터들의 데이터 보유에 따라 분석 기간은 자동으로 조정될 수 있고, 분석 기준에 맞춰 통계값으로 가공됩니다."
+            "According to the retention of the data, the analysis period can be automatically adjusted and processed into statistics based on the analysis criteria."
           )}
         </p>
       </>
@@ -2921,8 +2911,8 @@ const Process = (props) => {
         <FormControl
           className={classes.formControl}
           onClick={() => {
-            if (type === "instance") onCheckedValueAlarm("학습 인스턴스");
-            // if (type === "gpu") onCheckedValueAlarm("학습 GPU");
+            if (type === "instance") onCheckedValueAlarm("Training instance");
+            // if (type === "gpu") onCheckedValueAlarm("Training GPU");
           }}
         >
           {type === "instance" && (
@@ -3009,13 +2999,18 @@ const Process = (props) => {
   };
 
   useEffect(() => {
-    if (messages.message === "프로젝트가 성공적으로 중단되었습니다.")
+    if (
+      messages.message === "The project has been successfully suspended." ||
+      messages.message === "프로젝트가 성공적으로 중단되었습니다."
+    )
       setAlgorithmInfo(INITIAL_ALGORITHM_INFO);
   }, [messages.message]);
 
   return (
     <div style={{ marginTop: "30px" }}>
-      <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
+      <ReactTitle
+        title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")}
+      />
       {isLoading || !projects || projects.isLoading || !user.me ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />
@@ -3335,7 +3330,7 @@ const Process = (props) => {
                         </GridItem>
                         <GridItem xs={12} style={{ marginTop: "16px" }}>
                           <p className={classes.text87size16}>
-                            {t("Preferred Method")}
+                            {t("Preferred method")}
                             {handleHelpIconTip("option")}
                           </p>
                           <FormControl
@@ -3495,7 +3490,7 @@ const Process = (props) => {
                                 className={classes.formControl}
                                 onClick={() => {
                                   onCheckedValueAlarm(
-                                    "유저 정보 (유저 ID 칼럼)"
+                                    "User Info (User ID column)"
                                   );
                                 }}
                               >
@@ -3549,7 +3544,7 @@ const Process = (props) => {
                                 className={classes.formControl}
                                 onClick={() => {
                                   onCheckedValueAlarm(
-                                    "아이템 정보 (아이템 ID 칼럼)"
+                                    "Item information (Item ID column)"
                                   );
                                 }}
                               >

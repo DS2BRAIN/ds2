@@ -356,7 +356,7 @@ const Sample = React.memo((props) => {
                   </GridItem>
                   <GridItem xs={12} lg={10} style={{ marginBottom: 20 }}>
                     <p className={classes.text87size16}>
-                      {t("Preferred Method")}
+                      {t("Preferred method")}
                       {handleHelpIconTip("option")}
                     </p>
                     <FormControl
