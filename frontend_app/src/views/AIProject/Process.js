@@ -194,9 +194,14 @@ const Process = (props) => {
   }, []);
 
   useEffect(() => {
-    if (hasStructuredData) setTrainMethod("normal");
-    else if (hasImageLabelData) setTrainMethod("image");
-  }, [hasStructuredData, hasImageLabelData]);
+    let tmpTrain = projects?.project?.trainingMethod;
+    if (tmpTrain) {
+      setTrainMethod(tmpTrain);
+    } else {
+      if (hasStructuredData) setTrainMethod("normal");
+      else if (hasImageLabelData) setTrainMethod("image");
+    }
+  }, [hasStructuredData, hasImageLabelData, projects?.project?.trainingMethod]);
 
   useEffect(() => {
     if (projects?.project?.available_gpu_list?.length) {
@@ -1034,6 +1039,7 @@ const Process = (props) => {
       );
       return;
     }
+
     let hasNoError = true;
     if (value === "object_detection" || value === "cycle_gan") {
       if (value === "cycle_gan") {
@@ -1592,6 +1598,16 @@ const Process = (props) => {
     }
 
     if (
+      trainMethod === "object_detection" &&
+      (!isDeviceAllSelected && selectedDeviceArr.length === 0)
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(t("Object detection needs gpu."))
+      );
+      return;
+    }
+
+    if (
       project?.available_gpu_list?.length > 0 &&
       trainMethod === "object_detection" &&
       !isDeviceAllSelected &&
@@ -1883,7 +1899,6 @@ const Process = (props) => {
       ];
     }
 
-    console.log(projectInfo);
     if (
       valueForPredictInfo["unique"] > 250 &&
       (project.trainingMethod === "text" ||
@@ -3258,8 +3273,7 @@ const Process = (props) => {
                                 projects.project.status !== 0 ||
                                 projects.project?.option === "labeling"
                               }
-                              value={projects.project.trainingMethod}
-                              defaultValue={trainMethod}
+                              value={trainMethod}
                               onChange={methodChange}
                             >
                               {hasStructuredData && (
