@@ -198,7 +198,7 @@ const AutoMLProject = ({ history, route }) => {
 
   const showMyProject = (projectArr) => {
     const tableHeads = [
-      { value: "No", width: "5%", name: "" },
+      { value: "No.", width: "5%", name: "" },
       { value: "Project name", width: "30%", name: "projectName" },
       { value: "Role", width: "10%", name: "role" },
       { value: "Option", width: "7.5%", name: "option" },
@@ -410,9 +410,9 @@ const AutoMLProject = ({ history, route }) => {
                   "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
                 : `There were no results found for "${searchedProjectValue}"`
               : t(
-                  `진행중인 ${
-                    isVerify ? "검증" : "학습"
-                  } 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.`
+                  `There is no ${
+                    isVerify ? "verification" : "train"
+                  } project in process. Please create a new project`
                 )}
           </div>
         ) : (
@@ -513,16 +513,18 @@ const AutoMLProject = ({ history, route }) => {
         />
       ) : (
         <>
-          <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
+          <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verify" : "Train")} />
           <Grid>
             <div className={classes.topTitle}>
-              {t(`인공지능 ${isVerify ? "검증" : "개발"}하기`)}
+              {t(`AI ${isVerify ? "verification" : "development"}`)}
             </div>
             <div className={classes.subTitleText}>
               {t(
-                `새로운 프로젝트를 생성하여 AI모델을 통한 데이터 ${
-                  isVerify ? "검증" : "예측"
-                }을 할 수 있습니다.`
+                `Create new projects and ${
+                  isVerify ? "verify" : "train"
+                } your own AI models. Analyze your data and make ${
+                  isVerify ? "verification" : "prediction"
+                }.`
               )}
             </div>
           </Grid>
@@ -542,7 +544,7 @@ const AutoMLProject = ({ history, route }) => {
             <Grid item>{partStartBtns()}</Grid>
             <Grid item>
               <SearchInputBox
-                tooltipText="프로젝트명을 입력해주세요."
+                tooltipText={t("Enter the project name")}
                 setSearchedValue={setSearchedProjectValue}
               />
             </Grid>

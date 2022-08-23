@@ -18,8 +18,17 @@ import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import StartProject from "./StartProject.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getLabelProjectsRequestAction, stopLabelProjectsLoadingRequestAction, getAiTrainerLabelprojectRequestAction, labelprojectResetRequestAction, setObjectlistsSearchedValue } from "redux/reducers/labelprojects.js";
-import { askModalRequestAction, askDeleteLabelProjectReqeustAction } from "redux/reducers/messages.js";
+import {
+  getLabelProjectsRequestAction,
+  stopLabelProjectsLoadingRequestAction,
+  getAiTrainerLabelprojectRequestAction,
+  labelprojectResetRequestAction,
+  setObjectlistsSearchedValue,
+} from "redux/reducers/labelprojects.js";
+import {
+  askModalRequestAction,
+  askDeleteLabelProjectReqeustAction,
+} from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
 import AddIcon from "@material-ui/icons/Add";
@@ -49,14 +58,17 @@ const Labelling = ({ history }) => {
   let currentUrl = window.location.href;
   const initialPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
   const initialSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-  const initialDescValue = currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
+  const initialDescValue =
+    currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
   const initialRowsValue = currentUrl.split("&rows=")[1].split("&")[0];
   const [isLoading, setIsLoading] = useState(true);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
   const [projectPage, setProjectPage] = useState(initialPage);
-  const [projectRowsPerPage, setProjectRowsPerPage] = useState(initialRowsValue);
+  const [projectRowsPerPage, setProjectRowsPerPage] = useState(
+    initialRowsValue
+  );
   const [searchedValue, setSearchedValue] = useState("");
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [sortingValue, setSortingValue] = useState(initialSortingValue);
@@ -74,14 +86,18 @@ const Labelling = ({ history }) => {
   const logoBlue = fileurl + "asset/front/img/logo_title.png";
   const labelApp = fileurl + "asset/front/img/labelling/Labelingtool.png";
   const autoLabeling = fileurl + "asset/front/img/labelling/AutoLabeling.svg";
-  const smartcrowdsourcing = fileurl + "asset/front/img/labelling/Smartcrowdsourcing.svg";
-  const twopointbounding = fileurl + "asset/front/img/labelling/2-pointbounding.svg";
+  const smartcrowdsourcing =
+    fileurl + "asset/front/img/labelling/Smartcrowdsourcing.svg";
+  const twopointbounding =
+    fileurl + "asset/front/img/labelling/2-pointbounding.svg";
   const labelExport = fileurl + "asset/front/img/labelling/LabelingExport.png";
 
   useEffect(() => {
-    const selectedPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
+    const selectedPage =
+      parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
     const selectedSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-    const selectedDescValue = currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
+    const selectedDescValue =
+      currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
     const selectedRowsValue = currentUrl.split("&rows=")[1].split("&")[0];
 
     setProjectPage(selectedPage);
@@ -227,7 +243,11 @@ const Labelling = ({ history }) => {
 
   const onSetSortValue = async (value) => {
     let tempIsSortDesc = value === sortingValue ? !isSortDesc : true;
-    const changedUrl = value === sortingValue ? `labelling?page=${projectPage + 1}&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}` : `labelling?page=1&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`;
+    const changedUrl =
+      value === sortingValue
+        ? `labelling?page=${projectPage +
+            1}&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`
+        : `labelling?page=1&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`;
 
     await setIsLoading(true);
 
@@ -265,7 +285,10 @@ const Labelling = ({ history }) => {
 
   const handleProjectChangePage = (event, newPage) => {
     setIsLoading(true);
-    history.push(`?page=${newPage + 1}&sorting=${sortingValue}&desc=${isSortDesc}&rows=${projectRowsPerPage}`);
+    history.push(
+      `?page=${newPage +
+        1}&sorting=${sortingValue}&desc=${isSortDesc}&rows=${projectRowsPerPage}`
+    );
     currentUrl = window.location.href;
     setProjectPage(newPage);
     dispatch(
@@ -281,7 +304,8 @@ const Labelling = ({ history }) => {
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    const changedUrl = `labelling?page=1&sorting=${sortingValue}&desc=${isSortDesc}&rows=${+event.target.value}`;
+    const changedUrl = `labelling?page=1&sorting=${sortingValue}&desc=${isSortDesc}&rows=${+event
+      .target.value}`;
 
     setIsLoading(true);
     setProjectRowsPerPage(+event.target.value);
@@ -305,7 +329,11 @@ const Labelling = ({ history }) => {
       await history.push(`/admin/labelling/${project.id}`);
       return;
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("Only projects in the completed status can be viewed.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Only projects in the completed status can be viewed.")
+        )
+      );
       return;
     }
   };
@@ -319,7 +347,8 @@ const Labelling = ({ history }) => {
   const onAskDeleteProjects = () => {
     const deleteFilesArr = [];
     for (let file in projectCheckedValue) {
-      if (file !== "all" && projectCheckedValue[file]) deleteFilesArr.push(file);
+      if (file !== "all" && projectCheckedValue[file])
+        deleteFilesArr.push(file);
     }
     dispatch(
       askDeleteLabelProjectReqeustAction({
@@ -372,7 +401,14 @@ const Labelling = ({ history }) => {
     { value: "업데이트일", width: "15%", name: "updated_at" },
   ];
 
-  const tableBodys = ["name", "status", "role", "workapp", "created_at", "updated_at"];
+  const tableBodys = [
+    "name",
+    "status",
+    "role",
+    "workapp",
+    "created_at",
+    "updated_at",
+  ];
 
   const statusText = {
     1: "생성중",
@@ -387,8 +423,16 @@ const Labelling = ({ history }) => {
           <TableHead>
             <TableRow>
               {user.me && !user.me?.isAiTrainer && !isShared && (
-                <TableCell className={classes.tableHead} align="center" style={{ width: "10" }}>
-                  <Checkbox value="all" checked={projectCheckedValue["all"]} onChange={onSetProjectCheckedValueAll} />
+                <TableCell
+                  className={classes.tableHead}
+                  align="center"
+                  style={{ width: "10" }}
+                >
+                  <Checkbox
+                    value="all"
+                    checked={projectCheckedValue["all"]}
+                    onChange={onSetProjectCheckedValueAll}
+                  />
                 </TableCell>
               )}
               {tableHeads.map((tableHead, idx) => {
@@ -402,10 +446,17 @@ const Labelling = ({ history }) => {
                     style={{
                       cursor: tableHead.value !== "No" ? "pointer" : "default",
                     }}
-                    onClick={() => tableHead.value !== "No" && onSetSortValue(tableHead.name)}
+                    onClick={() =>
+                      tableHead.value !== "No" && onSetSortValue(tableHead.name)
+                    }
                   >
                     <div className={classes.tableHeader}>
-                      {sortingValue === tableHead.name && (!isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                      {sortingValue === tableHead.name &&
+                        (!isSortDesc ? (
+                          <ArrowUpwardIcon fontSize="small" />
+                        ) : (
+                          <ArrowDownwardIcon fontSize="small" />
+                        ))}
                       <b>{t(tableHead.value)}</b>
                     </div>
                   </TableCell>
@@ -419,22 +470,52 @@ const Labelling = ({ history }) => {
                 key={idx}
                 className={classes.tableRow}
                 style={{
-                  background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                  background:
+                    idx % 2 === 0
+                      ? currentTheme.tableRow1
+                      : currentTheme.tableRow2,
                 }}
               >
                 {user.me && !user.me?.isAiTrainer && !isShared && (
                   <TableCell className={classes.tableRowCell} align="center">
-                    <Checkbox value={project.id} checked={projectCheckedValue[project.id] ? true : false} onChange={() => onSetProjectCheckedValue(project.id)} />
+                    <Checkbox
+                      value={project.id}
+                      checked={projectCheckedValue[project.id] ? true : false}
+                      onChange={() => onSetProjectCheckedValue(project.id)}
+                    />
                   </TableCell>
                 )}
-                <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(project)}>
+                <TableCell
+                  className={classes.tableRowCell}
+                  align="center"
+                  onClick={() => goProjectDetail(project)}
+                >
                   {idx + projectRowsPerPage * projectPage + 1}
                 </TableCell>
                 {tableBodys.map((tableBody, idx) => {
                   return (
-                    <TableCell key={idx} className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(project)}>
-                      <div style={{ wordBreak: "break-all" }} id="labeling_project_list">
-                        {tableBody === "created_at" || tableBody === "updated_at" ? <>{project[tableBody]?.substring(0, 10)}</> : <>{tableBody === "status" ? <>{t(statusText[project[tableBody]])}</> : <>{t(project[tableBody])}</>}</>}
+                    <TableCell
+                      key={idx}
+                      className={classes.tableRowCell}
+                      align="center"
+                      onClick={() => goProjectDetail(project)}
+                    >
+                      <div
+                        style={{ wordBreak: "break-all" }}
+                        id="labeling_project_list"
+                      >
+                        {tableBody === "created_at" ||
+                        tableBody === "updated_at" ? (
+                          <>{project[tableBody]?.substring(0, 10)}</>
+                        ) : (
+                          <>
+                            {tableBody === "status" ? (
+                              <>{t(statusText[project[tableBody]])}</>
+                            ) : (
+                              <>{t(project[tableBody])}</>
+                            )}
+                          </>
+                        )}
                       </div>
                     </TableCell>
                   );
@@ -455,7 +536,11 @@ const Labelling = ({ history }) => {
             <Button
               id="deleteProject"
               disabled={!Object.values(projectCheckedValue).includes(true)}
-              className={Object.values(projectCheckedValue).includes(true) ? classes.defaultDeleteButton : classes.defaultDisabledButton}
+              className={
+                Object.values(projectCheckedValue).includes(true)
+                  ? classes.defaultDeleteButton
+                  : classes.defaultDisabledButton
+              }
               style={{
                 width: user.language === "ko" ? "5rem" : "10rem",
                 marginTop: ".2rem",
@@ -507,7 +592,9 @@ const Labelling = ({ history }) => {
         })
       );
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter a search term.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter a search term."))
+      );
       return;
     }
   };
@@ -543,7 +630,12 @@ const Labelling = ({ history }) => {
     <>
       <ReactTitle title={"DS2.ai - " + t("Labeling")} />
       {introOn ? (
-        <LabelIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} userLang={user.language} />
+        <LabelIntro
+          setIntroOn={setIntroOn}
+          setIntroOffClicked={setIntroOffClicked}
+          useTranslation={useTranslation}
+          userLang={user.language}
+        />
       ) : (
         <>
           {isBannerOpen && (
@@ -556,7 +648,8 @@ const Labelling = ({ history }) => {
                 top: "20px",
                 left: 0,
                 padding: "46px 62px",
-                background: "linear-gradient(90deg, #2F3236 0%, #566376 48.72%, #2F3236 100%)",
+                background:
+                  "linear-gradient(90deg, #2F3236 0%, #566376 48.72%, #2F3236 100%)",
               }}
             >
               <CloseIcon
@@ -566,7 +659,9 @@ const Labelling = ({ history }) => {
                 }}
                 className={classes.pointerCursor}
               />
-              <div className={classes.bannerTitleText}>CLICK AI AUTO LABELING</div>
+              <div className={classes.bannerTitleText}>
+                CLICK AI AUTO LABELING
+              </div>
               <div
                 style={{
                   display: "flex",
@@ -574,16 +669,28 @@ const Labelling = ({ history }) => {
                   justifyContent: "space-between",
                 }}
               >
-                <div className={classes.bannerSubText}>{t("딥러닝 기반의 데이터 라벨링 자동화를 통해 시간과 비용을 절약해보세요.")}</div>
-                <Button className={classes.bannerButton} onClick={onOpenBannerChatbot}>
+                <div className={classes.bannerSubText}>
+                  {t(
+                    "딥러닝 기반의 데이터 라벨링 자동화를 통해 시간과 비용을 절약해보세요."
+                  )}
+                </div>
+                <Button
+                  className={classes.bannerButton}
+                  onClick={onOpenBannerChatbot}
+                >
                   {t("Contact us")}
                 </Button>
               </div>
             </div>
           )}
           <GridItem xs={12}>
-            <div className={classes.topTitle}>{t("Training Data Labeling")}</div>
-            <div className={classes.subTitleText} style={{ marginBottom: "20px" }}>
+            <div className={classes.topTitle}>
+              {t("Training Data Labeling")}
+            </div>
+            <div
+              className={classes.subTitleText}
+              style={{ marginBottom: "20px" }}
+            >
               {t("Labeling tool for deep learning-based AI training.")}
             </div>
           </GridItem>
@@ -599,8 +706,15 @@ const Labelling = ({ history }) => {
               </div>
             ) : (
               <GridContainer style={{ paddingTop: "24px" }}>
-                <GridItem xs={7} style={{ display: "flex", alignItems: "center" }}>
-                  <Button id="addProjcetBtn" className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH35}`} onClick={onStartLabelProject}>
+                <GridItem
+                  xs={7}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <Button
+                    id="addProjcetBtn"
+                    className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH35}`}
+                    onClick={onStartLabelProject}
+                  >
                     {t("Start labeling")}
                   </Button>
                   {/* {user.me &&
@@ -626,18 +740,55 @@ const Labelling = ({ history }) => {
                         )} */}
                 </GridItem>
                 <GridItem xs={5}>
-                  <Tooltip title={<text style={{ fontSize: "12px" }}>{t("Enter the project name")}</text>} placement="top">
-                    <form onSubmit={(e) => onGetSearchedProject(e)} className={classes.form} style={{ justifyContent: "flex-end" }} noValidate id="labeling_search_form">
-                      <Paper component="form" className={classes.searchBox} style={{ height: "40px", width: "15vw" }}>
-                        <InputBase className={classes.input} placeholder={t("Search")} value={searchedValue} onChange={onSearchProject} multiline={false} id="searchInput" style={{ fontSize: "16px", paddingLeft: "10px" }} />
-                        {searchedValue && searchedValue.length > 0 && <CloseIcon id="searchIcon" onClick={onGetDefaultProject} className={classes.pointerCursor} />}
+                  <Tooltip
+                    title={
+                      <text style={{ fontSize: "12px" }}>
+                        {t("Enter the project name")}
+                      </text>
+                    }
+                    placement="top"
+                  >
+                    <form
+                      onSubmit={(e) => onGetSearchedProject(e)}
+                      className={classes.form}
+                      style={{ justifyContent: "flex-end" }}
+                      noValidate
+                      id="labeling_search_form"
+                    >
+                      <Paper
+                        component="form"
+                        className={classes.searchBox}
+                        style={{ height: "40px", width: "15vw" }}
+                      >
+                        <InputBase
+                          className={classes.input}
+                          placeholder={t("Search")}
+                          value={searchedValue}
+                          onChange={onSearchProject}
+                          multiline={false}
+                          id="searchInput"
+                          style={{ fontSize: "16px", paddingLeft: "10px" }}
+                        />
+                        {searchedValue && searchedValue.length > 0 && (
+                          <CloseIcon
+                            id="searchIcon"
+                            onClick={onGetDefaultProject}
+                            className={classes.pointerCursor}
+                          />
+                        )}
                       </Paper>
-                      {searchedValue && searchedValue.length > 0 && <SearchIcon onClick={(e) => onGetSearchedProject(e)} className={classes.pointerCursor} />}
+                      {searchedValue && searchedValue.length > 0 && (
+                        <SearchIcon
+                          onClick={(e) => onGetSearchedProject(e)}
+                          className={classes.pointerCursor}
+                        />
+                      )}
                     </form>
                   </Tooltip>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12} style={{ marginTop: "26px" }}>
-                  {labelprojects.totalLength && labelprojects.totalLength !== 0 ? (
+                  {labelprojects.totalLength &&
+                  labelprojects.totalLength !== 0 ? (
                     renderProjectTable()
                   ) : (
                     <div
@@ -649,7 +800,13 @@ const Labelling = ({ history }) => {
                         height: "20vh",
                       }}
                     >
-                      {isShared ? t("No Shared Label projects") : user.me?.isAiTrainer ? t("의뢰중인 라벨링 프로젝트가 없습니다.") : t("진행중인 라벨링 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요.")}
+                      {isShared
+                        ? t("No Shared Label projects")
+                        : user.me?.isAiTrainer
+                        ? t("의뢰중인 라벨링 프로젝트가 없습니다.")
+                        : t(
+                            "진행중인 라벨링 프로젝트가 없습니다. 새로운 프로젝트를 생성해주세요."
+                          )}
                     </div>
                   )}
                 </GridItem>
@@ -703,23 +860,48 @@ const Labelling = ({ history }) => {
           >
             <div className={classes.planAlertModalContent}>
               <div style={{ padding: "26px 30px 12px 40px", width: "60%" }}>
-                <img style={{ width: "124px" }} src={logoBlue} alt={"logo"} className={classes.logo} />
+                <img
+                  style={{ width: "124px" }}
+                  src={logoBlue}
+                  alt={"logo"}
+                  className={classes.logo}
+                />
                 <div style={{ padding: "30px 0" }}>
                   <div className={classes.upgradePlanModalTitle}>
-                    <div style={{ marginBottom: "10px" }}>{t("Experience object recognition automatic labeling.")}</div>
+                    <div style={{ marginBottom: "10px" }}>
+                      {t("Experience object recognition automatic labeling.")}
+                    </div>
                     <div>{t("경험해보세요.")}</div>
                   </div>
                   <div className={classes.upgradePlanModalContent}>
-                    <div style={{ marginBottom: "-8px" }}>{t("Active Learning이 접목된 자동 라벨링 기능을 활용하여")}</div>
-                    <div>{t("물체인식에 소요되는 시간과 비용을 절약할 수 있습니다.")}</div>
+                    <div style={{ marginBottom: "-8px" }}>
+                      {t(
+                        "Active Learning이 접목된 자동 라벨링 기능을 활용하여"
+                      )}
+                    </div>
+                    <div>
+                      {t(
+                        "물체인식에 소요되는 시간과 비용을 절약할 수 있습니다."
+                      )}
+                    </div>
                   </div>
-                  <div className={classes.upgradePlanSubTitle}>{t("This option is only available on the Enterprise plan.")}</div>
+                  <div className={classes.upgradePlanSubTitle}>
+                    {t("This option is only available on the Enterprise plan.")}
+                  </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <Button style={{ width: "220px", height: "36px" }} className={classes.defaultHighlightButton} onClick={onOpenChatbot}>
+                  <Button
+                    style={{ width: "220px", height: "36px" }}
+                    className={classes.defaultHighlightButton}
+                    onClick={onOpenChatbot}
+                  >
                     {t("Enterprise plan inquiry")}
                   </Button>
-                  <a href="https://clickai.ai/pricing.html" target="_blank" className={classes.planPolicyBtn}>
+                  <a
+                    href="https://clickai.ai/pricing.html"
+                    target="_blank"
+                    className={classes.planPolicyBtn}
+                  >
                     {t("CLICK AI Pricing")}
                   </a>
                 </div>
@@ -736,8 +918,15 @@ const Labelling = ({ history }) => {
                   />
                 </div>
                 <div style={{ display: "flex", height: "80%" }}>
-                  <video style={{ width: "380px", borderRadius: "10px" }} autoPlay loop>
-                    <source src={fileurl + "asset/ecosystem/etc.mov"} type="video/mp4" />
+                  <video
+                    style={{ width: "380px", borderRadius: "10px" }}
+                    autoPlay
+                    loop
+                  >
+                    <source
+                      src={fileurl + "asset/ecosystem/etc.mov"}
+                      type="video/mp4"
+                    />
                   </video>
                 </div>
               </div>
