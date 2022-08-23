@@ -162,7 +162,5 @@ This project exists thanks to all the people who contribute.
 
 Please read the [contribution guidelines](https://github.com/DS2BRAIN/ds2/blob/main/CONTRIBUTING.md) before submitting a pull request.
 
-<p align="center">
-    <img width="25%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186133830-22521078-6d9c-48e8-a45f-d78674b43b59.png">
-</p>
+<img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186133830-22521078-6d9c-48e8-a45f-d78674b43b59.png">
 
