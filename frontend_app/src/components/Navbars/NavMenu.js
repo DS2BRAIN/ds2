@@ -9,7 +9,7 @@ const NavMenu = ({ localPath }) => {
   const routes = [
     {
       id: "data",
-      path: "/dataconnector",
+      path: "/dataconnector?page=1&sorting=created_at&desc=true&rows=10",
       name: "Dataset",
       layout: "/admin",
       condition: true,
@@ -23,42 +23,43 @@ const NavMenu = ({ localPath }) => {
     },
     {
       id: "train",
-      path: "/train",
+      path: "/train?page=1&sorting=created_at&desc=true&rows=10",
       name: "Train",
       layout: "/admin",
       condition: true,
     },
     {
       id: "skyhub",
-      path: "/skyhubai",
+      path: "/skyhubai?page=1&sorting=created_at&desc=true&rows=10",
       name: "Deploy",
       layout: "/admin",
       condition: true,
     },
     {
       id: "verify",
-      path: "/verifyproject",
+      path: "/verifyproject?page=1&sorting=created_at&desc=true&rows=10",
       name: "Verify",
       layout: "/admin",
       condition: true,
     },
     {
       id: "market",
-      path: "/marketList",
+      path: "/marketList?page=1&sorting=created_at&desc=true&rows=10",
       name: "AI Market",
       layout: "/admin",
       condition: true,
     },
     {
       id: "jupyter",
-      path: "/jupyterproject",
+      path: "/jupyterproject?page=1&sorting=created_at&desc=true&rows=10",
       name: "Jupyter",
       layout: "/admin",
       condition: true,
     },
   ];
 
-  const navLinkClassName = "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
+  const navLinkClassName =
+    "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
   const navLinkActiveClassName = "navLinkActive";
 
   return (
