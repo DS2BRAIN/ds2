@@ -7,7 +7,7 @@ Hello 👋 Introduce the entire process of customized AI development, the DS2.ai
 
 <img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130068-115e8f3e-058c-46f8-9d0c-740a5e176927.png">
 
-DS2.ai is the MLOps platform that serves all processes of building your customized AI from automatic annotation, model training and deployment.
+DS2 is a data science platform that automates machine learning pipelines and prescriptive analytics.
 
  - Manual & Auto Annotation Tools (Tableur, Text, Image, Recommeder system)
 
@@ -37,14 +37,14 @@ Prescriptive analytics not only predicts what the future will look like, but als
 
 ![image](https://user-images.githubusercontent.com/60835181/186130362-0e931552-8105-44a7-8cdd-fa49eb08e129.png)
 
+
 ### DS2 provides high-precision prescriptive analytics based on an automated machine learning pipeline.
 
 A deep learning model for executing prescriptive analysis can increase its accuracy as it advances over time, and prescriptive analysis made with such increased accuracy will have higher accuracy. DS2 automatically installs a machine learning pipeline through the Active Learning process to [Learn - Analyze - Deploy - Collect] - [Relearn - Analyze - Deploy - Collect] - … Let us help you do it without much effort.
 
-![image](https://user-images.githubusercontent.com/60835181/186130479-584d0aa4-65fb-48ae-88dc-09ba9346256d.png | width=200)
+<img width="50%" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130479-584d0aa4-65fb-48ae-88dc-09ba9346256d.png">
 
-
-### Training AI models
+### 1. Training AI models
 
 After labeling is complete, artificial intelligence can be developed using the learning data. Click the “Start AI Development” button on the dataset or labeling project screen to enter the setting screen for AI development. 
 On the setting screen, three types of development environments are supported.
@@ -64,14 +64,14 @@ After selecting the desired learning method, click the Start button on the right
 ![Feature Importance](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FOi0m7F87Hvk4fz4sSNoI%2Ffeature_importance(1).png?alt=media&token=a8418d6c-1f51-46f6-b70c-e1e5eb25e940)
 
 
-### Run prescriptive analytics
+### 2. Run prescriptive analytics
 
 Once the optimal model has been selected, prescriptive analysis can be run to gain insights from sentences built around explainable AI (XAI).
 
 ![Prescriptive Analytics](https://user-images.githubusercontent.com/60835181/185800119-a2a48213-12aa-4e7a-a834-765c14613fb7.png)
 
 
-### Deploy AI models
+### 3. Deploy AI models
 
 You can use the Deploy Model function by completing training through DS2.ai or uploading a model you have already created to DS2.ai. (The ability to upload models directly supports Pytorch and Tensorflow2 models.)
 
@@ -85,7 +85,7 @@ After the model is deployed, the input and output values used for prediction are
 ![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FxLiSO1F6CFFId6rjd6Hg%2FScreenshot%20from%202022-08-14%2011-28-30.png?alt=media&token=59d7eb64-36a5-42f2-8968-a4238a66225d)
 
 
-### Annotation for re-learning
+### 4. Annotation for re-learning
 
 Supports training data labeling tools needed to create artificial intelligence models. 
 After clicking Labeling on the top menu, upload the dataset, and you can start labeling by selecting the desired function between manual labeling and auto-labeling tool.
