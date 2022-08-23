@@ -17,6 +17,7 @@ import {
 } from "redux/reducers/projects.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import "assets/css/material-control.css";
+import { listPagination } from "components/Function/globalFunc";
 import DataIntro from "components/Guide/DataIntro.js";
 import Templates from "components/Templates/Templates.js";
 import SearchInputBox from "components/Table/SearchInputBox";
@@ -54,15 +55,7 @@ const Dataconnector = ({ history }) => {
     []
   );
 
-  const urlSearch = new URLSearchParams(window.location.search);
-  const paramPage = urlSearch.get("page");
-  const paramSorting = urlSearch.get("sorting");
-  const paramDesc = urlSearch.get("desc");
-  const paramRows = urlSearch.get("rows");
-  const initPage = paramPage ? paramPage - 1 : 0;
-  const initSorting = paramSorting ? paramSorting : "created_at";
-  const initDesc = paramDesc ? (paramDesc === "true" ? true : false) : true;
-  const initRows = paramRows ? paramRows : 10;
+  const pagiInfoDict = listPagination(window.location.search);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isProjectStartLoading, setIsProjectStartLoading] = useState(false);
@@ -70,10 +63,12 @@ const Dataconnector = ({ history }) => {
   const [introOffClicked, setIntroOffClicked] = useState(false);
 
   const [isDataRequested, setIsDataRequested] = useState(false);
-  const [datatablePage, setDatatablePage] = useState(initPage);
-  const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(initRows);
-  const [sortDataValue, setSortDataValue] = useState(initSorting);
-  const [isSortDesc, setIsSortDesc] = useState(initDesc);
+  const [datatablePage, setDatatablePage] = useState(pagiInfoDict.page);
+  const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(
+    pagiInfoDict.rows
+  );
+  const [sortDataValue, setSortDataValue] = useState(pagiInfoDict.sorting);
+  const [isSortDesc, setIsSortDesc] = useState(pagiInfoDict.desc);
   const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isPublicData, setIsPublicData] = useState(false);
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(

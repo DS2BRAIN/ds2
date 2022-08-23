@@ -257,3 +257,19 @@ export const checkIsValidKey = async (user, dispatch, t) => {
       });
   }
 };
+
+export const listPagination = (location) => {
+  let pagiDict = {};
+  let urlSearch = new URLSearchParams(location);
+
+  let paramPage = urlSearch.get("page");
+  let paramSorting = urlSearch.get("sorting");
+  let paramDesc = urlSearch.get("desc");
+  let paramRows = urlSearch.get("rows");
+  pagiDict["page"] = paramPage ? paramPage - 1 : 0;
+  pagiDict["sorting"] = paramSorting ? paramSorting : "created_at";
+  pagiDict["desc"] = paramDesc ? (paramDesc === "true" ? true : false) : true;
+  pagiDict["rows"] = paramRows ? paramRows : 10;
+
+  return pagiDict;
+};
