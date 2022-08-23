@@ -28,7 +28,7 @@ DS2 is a data science platform that automates machine learning pipelines and pre
 
 ### Install
 
-[Extended documentation for DS2](https://ds2.ai/docs)
+[Extended documentation for DS2](https://docs.ds2.ai)
 
 
 ---
