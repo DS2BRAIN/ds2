@@ -143,7 +143,6 @@ const Process = (props) => {
   const [hasMissingValue, setHasMissingValue] = useState(false);
   const [valueForPredictName, setValueForPredictName] = useState("");
   const [trainingValueForStart, setTrainingValueForStart] = useState(null);
-  const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
   const [colabInfo, setColabInfo] = useState({
     epoch: 2,
     learningRate: 0.01,
@@ -173,8 +172,6 @@ const Process = (props) => {
   const [instanceType, setInstanceType] = useState("");
   const [algorithmType, setAlgorithmType] = useState(INITIAL_ALGORITHM_TYPE);
   const [isAnyModelFinished, setIsAnyModelFinished] = useState(false);
-  const [timeTickAsync, setTimeTickAsync] = useState(0);
-  const [timeTickAsyncCount, setTimeTickAsyncCount] = useState(0);
   const [isDownloadReportLoading, setIsDownloadReportLoading] = useState(false);
   const [algorithmInfo, setAlgorithmInfo] = useState(INITIAL_ALGORITHM_INFO);
   const [isRequiredHyperParameters, setIsRequiredHyperParameters] = useState(
@@ -187,7 +184,6 @@ const Process = (props) => {
   const [isModelPageAccessible, setIsModelPageAccessible] = useState(false);
 
   const path = window.location.pathname;
-  const modelPause = fileurl + "asset/front/img/modelIcon/Delay_white@300x.png";
 
   useEffect(() => {
     const url = window.location.href;
@@ -224,33 +220,6 @@ const Process = (props) => {
     setDate(dateString);
     projects.project = null;
   }, []);
-
-  // useEffect(() => {
-  //   if (timeTickAsync == 0) {
-  //     let timer = setTimeout(() => {
-  //       setTimeTickAsync(1);
-  //     }, 15000);
-  //   } else if (timeTickAsync == 1) {
-  //     setTimeTickAsync(0);
-  //     setTimeTickAsyncCount(timeTickAsyncCount + 1);
-  //   }
-  // }, [timeTickAsync]);
-
-  // useEffect(() => {
-  //   if (projects?.project) {
-  //     if (timeTickAsyncCount <= 20) {
-  //       intervalAction();
-  //     } else if (timeTickAsyncCount <= 240) {
-  //       if (timeTickAsyncCount % 4 == 0) {
-  //         intervalAction();
-  //       }
-  //     } else {
-  //       if (timeTickAsyncCount % 120 == 0) {
-  //         intervalAction();
-  //       }
-  //     }
-  //   }
-  // }, [timeTickAsyncCount]);
 
   useEffect(() => {
     if (
@@ -2127,7 +2096,7 @@ const Process = (props) => {
   };
 
   const onSetAskStopProject = () => {
-    let stopMessage = "프로세스를 중단하시겠습니까?";
+    let stopMessage = "Do you want to stop the process?";
     // if (projects.project.models && projects.project.models.length > 0) {
     //   stopMessage =
     //     "모델 학습이 시작된 경우, 프로젝트를 중단하여도 학습된 시간만큼의 크레딧이 차감됩니다. 프로세스를 중단하시겠습니까?";
