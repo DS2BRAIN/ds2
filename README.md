@@ -23,12 +23,15 @@ DS2 is a data science platform that automates machine learning pipelines and pre
  
  - API & Python SDK Support
  
- 
+
 ---
+
 ### Install
 
 [Extended documentation for DS2](https://ds2.ai/docs)
 
+
+---
 
 ### Why Prescriptive Analysis?
 
@@ -39,6 +42,7 @@ Prescriptive analytics not only predicts what the future will look like, but als
 
 ![image](https://user-images.githubusercontent.com/60835181/186130362-0e931552-8105-44a7-8cdd-fa49eb08e129.png)
 
+---
 
 ### DS2 provides high-precision prescriptive analytics based on an automated machine learning pipeline.
 
@@ -143,10 +147,13 @@ ds2 = ds2ai.DS2("Your App code")
 ```
 After the code is executed, the ability to predict or deploy the job situation and the trained model is available in ds2.ai as-is. For more information on how to use, refer to "SDK | PYTHON" in the left menu.
 
+---
+
 ### License
 
 Each file included in this repository is licensed under the [Apache License 2.0](https://github.com/DS2BRAIN/ds2/blob/main/LICENSE) BY License.
 
+---
 
 ### Contributing
 
