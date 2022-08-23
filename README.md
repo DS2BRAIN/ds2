@@ -2,7 +2,7 @@
 
 ---
 
-Hello 👋 Introduce the entire process of customized AI development, the DS2.ai solution.
+Hello 👋 Introduce the Data-Centric MLOps based data science platform, the DS2.ai solution.
 
 
 <img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130068-115e8f3e-058c-46f8-9d0c-740a5e176927.png">
