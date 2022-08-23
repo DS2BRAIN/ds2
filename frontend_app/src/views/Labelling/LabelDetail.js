@@ -18,7 +18,14 @@ import {
   setObjectlistsIsDesc,
   setObjectlistsSortingValue,
 } from "redux/reducers/labelprojects.js";
-import { askModalRequestAction, openSuccessSnackbarRequestAction, openErrorSnackbarRequestAction, askLabelProjectDetailRequestAction, askDeleteLabelClassRequestAction, openModalRequestAction } from "redux/reducers/messages.js";
+import {
+  askModalRequestAction,
+  openSuccessSnackbarRequestAction,
+  openErrorSnackbarRequestAction,
+  askLabelProjectDetailRequestAction,
+  askDeleteLabelClassRequestAction,
+  openModalRequestAction,
+} from "redux/reducers/messages.js";
 import * as api from "controller/labelApi.js";
 import Cookies from "helpers/Cookies";
 import currentTheme from "assets/jss/custom.js";
@@ -26,8 +33,17 @@ import { currentThemeColor } from "assets/jss/custom.js";
 import { getAsynctaskAll } from "controller/api.js";
 import { fileurl } from "controller/api";
 import { IS_ENTERPRISE } from "variables/common";
-import { LABELAPP_ROUTES, GENERAL_AI_GROUPS, GENERAL_AI_MODELS, WORKAGE_TABLE_HEADER, WORKAGE_TABLE_BODY } from "variables/labeling";
-import { getLabelAppUrl, sendErrorMessage } from "components/Function/globalFunc.js";
+import {
+  LABELAPP_ROUTES,
+  GENERAL_AI_GROUPS,
+  GENERAL_AI_MODELS,
+  WORKAGE_TABLE_HEADER,
+  WORKAGE_TABLE_BODY,
+} from "variables/labeling";
+import {
+  getLabelAppUrl,
+  sendErrorMessage,
+} from "components/Function/globalFunc.js";
 import { getNotificationText } from "components/Notifications/NotiText";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -43,7 +59,22 @@ import BestCustomAISelectModal from "../../components/Modal/BestCustomAISelectMo
 import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
 import Button from "components/CustomButtons/Button";
 
-import { Checkbox, FormControl, FormControlLabel, InputBase, Modal, Radio, RadioGroup, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@material-ui/core";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  InputBase,
+  Modal,
+  Radio,
+  RadioGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import { CircularProgress, Grid, Tooltip } from "@mui/material";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
@@ -106,18 +137,27 @@ const LabelDetail = ({ history, match }) => {
   const [isCustomAiLoading, setIsCustomAiLoading] = useState(false);
   const [isSampleModelModalOpen, setIsSampleModelModalOpen] = useState(false);
   const [customAiModels, setCustomAiModels] = useState([]);
-  const [creatingCustomAiProjectId, setCreatingCustomAiProjectId] = useState(null);
+  const [creatingCustomAiProjectId, setCreatingCustomAiProjectId] = useState(
+    null
+  );
   const [customAiProjectIdStatus, setCustomAiProjectIdStatus] = useState(-1);
   const [isAbleToChangeAmount, setIsAbleToChangeAmount] = useState(false);
   const [selectedUpdateDict, setSelectedUpdateDict] = useState([]);
-  const [requestLabelingModalOpen, setRequestLabelingModalOpen] = useState(false);
-  const [requestInspectingModalOpen, setRequestInspectingModalOpen] = useState(false);
+  const [requestLabelingModalOpen, setRequestLabelingModalOpen] = useState(
+    false
+  );
+  const [requestInspectingModalOpen, setRequestInspectingModalOpen] = useState(
+    false
+  );
   const [noticeHistory, setNoticeHistory] = useState([]);
   const [labelProjectId, setLabelProjectId] = useState(null);
   const [timeTickAsync, setTimeTickAsync] = useState(0);
   const [timeTickAsyncCount, setTimeTickAsyncCount] = useState(0);
   const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
-  const [isAutoLabelingButtonLoading, setIsAutoLabelingButtonLoading] = useState(false);
+  const [
+    isAutoLabelingButtonLoading,
+    setIsAutoLabelingButtonLoading,
+  ] = useState(false);
   const [isSendingAPI, setIsSendingAPI] = useState(false);
   const [totalPointCount, setTotalPointCount] = useState(0);
   const [clientIp, setClientIp] = useState("");
@@ -136,17 +176,23 @@ const LabelDetail = ({ history, match }) => {
   if (process.env.REACT_APP_DEPLOY) {
     fileDownloadUrl = fileurl + "static/";
   } else {
-    fileDownloadUrl = IS_ENTERPRISE ? fileurl + "static" : "https://astoredslab.s3.ap-northeast-2.amazonaws.com/";
+    fileDownloadUrl = IS_ENTERPRISE
+      ? fileurl + "static"
+      : "https://astoredslab.s3.ap-northeast-2.amazonaws.com/";
   }
 
   useEffect(() => {
     const qs = history.location.search;
 
-    if (qs.includes("class_required=true") && selectedPage !== "class") history.push(`/admin/labelling/${labelProjectId}`);
+    if (qs.includes("class_required=true") && selectedPage !== "class")
+      history.push(`/admin/labelling/${labelProjectId}`);
   }, [selectedPage]);
 
   useEffect(() => {
-    if (labelProjectId && parseInt(labelProjectId) !== labelprojects.projectDetail?.id) {
+    if (
+      labelProjectId &&
+      parseInt(labelProjectId) !== labelprojects.projectDetail?.id
+    ) {
       setIsLoading(true);
       dispatch(getLabelProjectRequestAction(labelProjectId));
     }
@@ -288,17 +334,23 @@ const LabelDetail = ({ history, match }) => {
 
   useEffect(() => {
     if (labelprojects.projectDetail) {
-      const isDesc = Boolean(labelChart.review) || (labelprojects.projectDetail.workapp !== "object_detection" && labelprojects.projectDetail.workapp !== "image");
+      const isDesc =
+        Boolean(labelChart.review) ||
+        (labelprojects.projectDetail.workapp !== "object_detection" &&
+          labelprojects.projectDetail.workapp !== "image");
       dispatch(setObjectlistsIsDesc(isDesc));
       dispatch(setObjectlistsSortingValue(labelChart.review ? "status" : "id"));
       setCustomAiModels(labelprojects.projectDetail.customAiModels);
-      setCreatingCustomAiProjectId(labelprojects.projectDetail.creatingCustomAiProjectId);
+      setCreatingCustomAiProjectId(
+        labelprojects.projectDetail.creatingCustomAiProjectId
+      );
       setNextProjectName(labelprojects.projectDetail.name);
       setNextProjectDetail(labelprojects.projectDetail.description);
       setLabelChart(labelprojects.projectDetail.chart);
       const labelclassesData = labelprojects.projectDetail.labelclasses;
       setTotalLabelClasses(labelclassesData);
-      const classesLength = labelclassesData.length > 4 ? 5 : labelclassesData.length;
+      const classesLength =
+        labelclassesData.length > 4 ? 5 : labelclassesData.length;
       let tmpClass = [];
       for (let i = 0; i < classesLength; i++) {
         tmpClass = [...tmpClass, labelclassesData[i]];
@@ -315,7 +367,13 @@ const LabelDetail = ({ history, match }) => {
       // let shouldUpdate = false;
       let shouldUpdate = true;
       autolabelingprojects.forEach((project) => {
-        if (project.status !== 99 && project.status !== 9 && project.status !== 100 && project.status !== 0) shouldUpdate = true;
+        if (
+          project.status !== 99 &&
+          project.status !== 9 &&
+          project.status !== 100 &&
+          project.status !== 0
+        )
+          shouldUpdate = true;
       });
       if (!shouldUpdate) {
         //dispatch(resetLabelProjectAsync());
@@ -328,8 +386,10 @@ const LabelDetail = ({ history, match }) => {
       const labelClassDictRaw = {};
       for (let idx = 0; idx < totalLabelClasses.length; idx++) {
         const name = totalLabelClasses[idx].name;
-        labelClassDictRaw[totalLabelClasses[idx].id] = totalLabelClasses[idx].completedLabelCount;
-        if (tempClasses.indexOf(name) === -1) tempClasses.push(totalLabelClasses[idx]);
+        labelClassDictRaw[totalLabelClasses[idx].id] =
+          totalLabelClasses[idx].completedLabelCount;
+        if (tempClasses.indexOf(name) === -1)
+          tempClasses.push(totalLabelClasses[idx]);
       }
       setLabelClassDict(labelClassDictRaw);
       // setLabelClasses(tempClasses);
@@ -402,12 +462,20 @@ const LabelDetail = ({ history, match }) => {
     });
 
     if (autoLabelingAiType === "general" && tmpArray.length < 1) {
-      dispatch(openErrorSnackbarRequestAction(t("Please select one or more classes")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please select one or more classes"))
+      );
       return;
     }
 
     if (labelChart.prepare > 100 && autoLabelingAmount < 100) {
-      dispatch(openErrorSnackbarRequestAction(t(`최소 100장 이상 최대 ${labelChart.prepare}장으로 오토라벨링을 해야 합니다.`)));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            `최소 100장 이상 최대 ${labelChart.prepare}장으로 오토라벨링을 해야 합니다.`
+          )
+        )
+      );
       return;
     }
     let customAIStageValue = customAIStage;
@@ -433,7 +501,13 @@ const LabelDetail = ({ history, match }) => {
         setShouldUpdate(true); //점검
         setIsAutoLabelingLoading(true);
 
-        dispatch(openSuccessSnackbarRequestAction(t("Auto-labeling will start now. We’ll e-mail you when auto-labeling is complete")));
+        dispatch(
+          openSuccessSnackbarRequestAction(
+            t(
+              "Auto-labeling will start now. We’ll e-mail you when auto-labeling is complete"
+            )
+          )
+        );
         dispatch(getLabelProjectRequestAction(labelProjectId));
       })
       .catch((e) => {
@@ -443,7 +517,11 @@ const LabelDetail = ({ history, match }) => {
           return;
         }
         if (e.response && e.response.status === 401) {
-          dispatch(openErrorSnackbarRequestAction(t("You have been logged out automatically, please log in again")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("You have been logged out automatically, please log in again")
+            )
+          );
           setTimeout(() => {
             Cookies.deleteAllCookies();
             history.push("/signin/");
@@ -451,9 +529,23 @@ const LabelDetail = ({ history, match }) => {
           return;
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, i18n?.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                i18n?.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "An error occurred during the developing process. Please try again in a moment"
+              )
+            )
+          );
         }
       })
       .finally(() => {
@@ -494,28 +586,61 @@ const LabelDetail = ({ history, match }) => {
 
     if (category) {
       if (category === "normal_regression") {
-        window.open(`${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${labelprojects.projectDetail.id}/${labelprojects.projectDetail.s3UrlID["prepare"]}/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`, "_blank");
+        window.open(
+          `${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${
+            labelprojects.projectDetail.id
+          }/${
+            labelprojects.projectDetail.s3UrlID["prepare"]
+          }/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`,
+          "_blank"
+        );
       } else {
         if (!labelClasses || labelClasses.length === 0) {
           if (isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "Labeling cannot proceed because there is no registered class. Register a class through the group leader."
+                )
+              )
+            );
             return;
           } else if (!isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "You can view the label list after registering at least one label class"
+                )
+              )
+            );
             onSetSelectedPage("class");
-            history.push(`/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`);
+            history.push(
+              `/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`
+            );
 
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "Labeling cannot proceed because there is no registered class. Please contact us for further information."
+                )
+              )
+            );
             return;
           }
           setSelectedClass({ id: -1, name: "" });
           setColor(generateRandomHexColor());
           setInputClassChangeValue("");
           setIsClassModalOpen(true);
-          dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "You can view the label list after registering at least one label class"
+              )
+            )
+          );
           onSetSelectedPage("class");
           return;
         }
@@ -539,9 +664,21 @@ const LabelDetail = ({ history, match }) => {
         // return;
         // }
         if (category === "object_detection") {
-          window.open(`${tempLabellingUrl}${labelprojects.projectDetail.id}/${labelprojects.projectDetail.s3UrlID["prepare"]}/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`, "_blank");
+          window.open(
+            `${tempLabellingUrl}${labelprojects.projectDetail.id}/${
+              labelprojects.projectDetail.s3UrlID["prepare"]
+            }/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`,
+            "_blank"
+          );
         } else {
-          window.open(`${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${labelprojects.projectDetail.id}/${labelprojects.projectDetail.s3UrlID["prepare"]}/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`, "_blank");
+          window.open(
+            `${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${
+              labelprojects.projectDetail.id
+            }/${
+              labelprojects.projectDetail.s3UrlID["prepare"]
+            }/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`,
+            "_blank"
+          );
         }
       }
     }
@@ -555,26 +692,57 @@ const LabelDetail = ({ history, match }) => {
 
     if (category) {
       if (category === "normal_regression") {
-        window.open(`${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${labelprojects.projectDetail.id}/${labelprojects.projectDetail.s3UrlID["review"]}/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`, "_blank");
+        window.open(
+          `${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${
+            labelprojects.projectDetail.id
+          }/${
+            labelprojects.projectDetail.s3UrlID["review"]
+          }/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`,
+          "_blank"
+        );
       } else {
         if (!labelClasses || labelClasses.length === 0) {
           if (isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "Labeling cannot proceed because there is no registered class. Register a class through the group leader."
+                )
+              )
+            );
             return;
           } else if (!isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "You can view the label list after registering at least one label class"
+                )
+              )
+            );
             onSetSelectedPage("class");
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "Labeling cannot proceed because there is no registered class. Please contact us for further information."
+                )
+              )
+            );
             return;
           }
           setSelectedClass({ id: -1, name: "" });
           setColor(generateRandomHexColor());
           setInputClassChangeValue("");
           setIsClassModalOpen(true);
-          dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "You can view the label list after registering at least one label class"
+              )
+            )
+          );
           onSetSelectedPage("class");
           return;
         }
@@ -600,16 +768,30 @@ const LabelDetail = ({ history, match }) => {
 
         // }
         if (category === "object_detection") {
-          window.open(`${tempLabellingUrl}${labelprojects.projectDetail.id}/${labelprojects.projectDetail.s3UrlID["review"]}/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`, "_blank");
+          window.open(
+            `${tempLabellingUrl}${labelprojects.projectDetail.id}/${
+              labelprojects.projectDetail.s3UrlID["review"]
+            }/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`,
+            "_blank"
+          );
         } else {
-          window.open(`${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${labelprojects.projectDetail.id}/${labelprojects.projectDetail.s3UrlID["review"]}/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`, "_blank");
+          window.open(
+            `${tempLabellingUrl}admin/${LABELAPP_ROUTES[category]}/${
+              labelprojects.projectDetail.id
+            }/${
+              labelprojects.projectDetail.s3UrlID["review"]
+            }/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`,
+            "_blank"
+          );
         }
       }
     }
   };
 
   const goBackToProjectLists = () => {
-    history.push("/admin/labelling?page=1&sorting=created_at&desc=true&rows=10");
+    history.push(
+      "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
+    );
   };
 
   const has100LabelingPerLabelClasses = () => {
@@ -650,7 +832,9 @@ const LabelDetail = ({ history, match }) => {
                 color: "var(--textWhite87)",
               }}
             >
-              {`${t(payload[0].name)} : ${payload[0].value ? payload[0].value.toLocaleString() : 0}`}
+              {`${t(payload[0].name)} : ${
+                payload[0].value ? payload[0].value.toLocaleString() : 0
+              }`}
             </span>
           </div>
         );
@@ -670,19 +854,35 @@ const LabelDetail = ({ history, match }) => {
         }}
       >
         <PieChart width={180} height={180}>
-          <Pie dataKey="value" data={dataList} innerRadius={50} outerRadius={80} startAngle={90} endAngle={-450}>
+          <Pie
+            dataKey="value"
+            data={dataList}
+            innerRadius={50}
+            outerRadius={80}
+            startAngle={90}
+            endAngle={-450}
+          >
             {dataList.map((entry, index) => (
-              <Cell key={entry.name} className={classes.pieAnimation} fill={entry.color} />
+              <Cell
+                key={entry.name}
+                className={classes.pieAnimation}
+                fill={entry.color}
+              />
             ))}
           </Pie>
-          <RechartsTooltip content={<CustomTooltip />} position={{ x: "-50%", y: "50%" }} />
+          <RechartsTooltip
+            content={<CustomTooltip />}
+            position={{ x: "-50%", y: "50%" }}
+          />
         </PieChart>
 
         <div style={{ width: "40%" }} className={classes.settingFontWhite87}>
           {dataList.map((data) => {
             return (
               <div key={data.name + data.value} style={{ display: "flex" }}>
-                <div style={{ minWidth: "64px", width: "50%" }}>{t(data.name)}</div>
+                <div style={{ minWidth: "64px", width: "50%" }}>
+                  {t(data.name)}
+                </div>
                 {`: ${data.value ? data.value.toLocaleString() : 0}`}
               </div>
             );
@@ -740,10 +940,19 @@ const LabelDetail = ({ history, match }) => {
     await setIsUnableToChangeName(true);
   };
   useEffect(() => {
-    if (messages.requestAction === "putLabelProject" && messages.datas === null) {
-      if (messages.message === "프로젝트명을 바꾸시겠습니까?" || messages.message === "Do you want to change the project name?") {
+    if (
+      messages.requestAction === "putLabelProject" &&
+      messages.datas === null
+    ) {
+      if (
+        messages.message === "프로젝트명을 바꾸시겠습니까?" ||
+        messages.message === "Do you want to change the project name?"
+      ) {
         setNextProjectName(labelprojects.projectDetail?.name);
-      } else if (messages.message === "프로젝트 설명을 바꾸시겠습니까?" || messages.message === "Do you want to edit the project description?") {
+      } else if (
+        messages.message === "프로젝트 설명을 바꾸시겠습니까?" ||
+        messages.message === "Do you want to edit the project description?"
+      ) {
         setNextProjectDetail(labelprojects.projectDetail?.description);
       }
     }
@@ -759,7 +968,11 @@ const LabelDetail = ({ history, match }) => {
   };
   const onChangeDetailInput = (e) => {
     if (e.target.value.length > 500) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter a description of less than 500 characters.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please enter a description of less than 500 characters.")
+        )
+      );
       return;
     }
     setNextProjectDetail(e.target.value);
@@ -787,7 +1000,13 @@ const LabelDetail = ({ history, match }) => {
 
   const onSetChangeClassName = () => {
     if (!inputClassChangeValue.match(/^[a-zA-Z]+[a-zA-Z0-9_]*$/)) {
-      dispatch(openErrorSnackbarRequestAction(t("Class names can only contain characters that start with an English letter (numbers and _ can be included)")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "Class names can only contain characters that start with an English letter (numbers and _ can be included)"
+          )
+        )
+      );
       return;
     }
 
@@ -795,7 +1014,9 @@ const LabelDetail = ({ history, match }) => {
 
     totalLabelClasses.forEach((each) => {
       if (each.id !== selectedClass.id && inputClassChangeValue === each.name) {
-        dispatch(openErrorSnackbarRequestAction(t("Class name already exists")));
+        dispatch(
+          openErrorSnackbarRequestAction(t("Class name already exists"))
+        );
         hasSameClassName = true;
         return;
       }
@@ -831,12 +1052,17 @@ const LabelDetail = ({ history, match }) => {
     }
   };
 
-  const generateRandomHexColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  const generateRandomHexColor = () =>
+    `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
   const autoLabelingModalClose = () => {
     setIsAutoLabelingModalOpen(false);
     if (isAutoLabelingLoading) {
-      dispatch(openErrorSnackbarRequestAction(t("Auto labeling is in progress. Please wait.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Auto labeling is in progress. Please wait.")
+        )
+      );
       return;
     }
   };
@@ -928,7 +1154,10 @@ const LabelDetail = ({ history, match }) => {
     setGeneralAIType(generalAiModelName);
     setModelId(null);
 
-    if (generalAiModelName === "facepoint" || generalAiModelName === "keypoint") {
+    if (
+      generalAiModelName === "facepoint" ||
+      generalAiModelName === "keypoint"
+    ) {
       onChangeAutoLabelingType(generalAiModelName);
     } else {
       onChangeAutoLabelingType("box");
@@ -990,10 +1219,17 @@ const LabelDetail = ({ history, match }) => {
   };
 
   const reloadButton = (
-    <Tooltip title={<span style={{ fontSize: "12px" }}>{t("refresh project")}</span>} placement="top">
+    <Tooltip
+      title={<span style={{ fontSize: "12px" }}>{t("refresh project")}</span>}
+      placement="top"
+    >
       <AutorenewIcon
         id="projectRefreshBtn"
-        className={!isRefreshAbuse ? classes.refreshIconActive : classes.refreshIconDefault}
+        className={
+          !isRefreshAbuse
+            ? classes.refreshIconActive
+            : classes.refreshIconDefault
+        }
         onClick={() => {
           dispatch(setIsProjectRefreshed(true));
         }}
@@ -1020,7 +1256,9 @@ const LabelDetail = ({ history, match }) => {
   };
 
   const selectDeleteClasses = (e) => {
-    selectedDeleteDict[e.target.value] = Number(!selectedDeleteDict[e.target.value]);
+    selectedDeleteDict[e.target.value] = Number(
+      !selectedDeleteDict[e.target.value]
+    );
   };
 
   const deleteLabelClasses = () => {
@@ -1090,7 +1328,10 @@ const LabelDetail = ({ history, match }) => {
     }
   };
 
-  const tableBodys = [{ value: "taskType", name: "content" }, { value: "created_at", name: "date" }];
+  const tableBodys = [
+    { value: "taskType", name: "content" },
+    { value: "created_at", name: "date" },
+  ];
   const classCondition = [0, 9, 99, 100];
   const disabledCondition = [1, 10, 11, 21, 31, 61];
   const customAiStatusTypes = {
@@ -1109,7 +1350,12 @@ const LabelDetail = ({ history, match }) => {
     let labelClassLen = labelClasses.length;
     const workapp = labelprojects.projectDetail?.workapp;
 
-    if (classCondition.indexOf(autoLabeingProjects[autoLabeingProjects.length - 1]?.status) > -1) isLastStatusExist = true;
+    if (
+      classCondition.indexOf(
+        autoLabeingProjects[autoLabeingProjects.length - 1]?.status
+      ) > -1
+    )
+      isLastStatusExist = true;
     if (autoLabeingProjects.length === 0) isLabelProjectNotExist = true;
 
     // 최소 10개 이상의 라벨링된 데이터가 존재해야 커스텀ai 개발 시작 가능
@@ -1122,7 +1368,9 @@ const LabelDetail = ({ history, match }) => {
     if (
       (isLastStatusExist || isLabelProjectNotExist) &&
       isLabelChartDoneMoreTen &&
-      (workapp === "normal_regression" || (isObjectDetection && labelClassLen > 0) || labelClassLen > 1) // 클래스 지정은 normal_regression 이 아닌 타입 중 물체인식은 최소 1개, 그 외는 분류이므로 최소 2개 필요
+      (workapp === "normal_regression" ||
+        (isObjectDetection && labelClassLen > 0) ||
+        labelClassLen > 1) // 클래스 지정은 normal_regression 이 아닌 타입 중 물체인식은 최소 1개, 그 외는 분류이므로 최소 2개 필요
     )
       isAbledToStartCustomAI = true;
 
@@ -1140,7 +1388,9 @@ const LabelDetail = ({ history, match }) => {
             else setIsCustomAIModalOpen(true);
           }}
         >
-          {isCustomAiLoading || creatingCustomAiProjectId ? t("Create New CUSTOM AI") : t("Create CUSTOM AI")}
+          {isCustomAiLoading || creatingCustomAiProjectId
+            ? t("Create New CUSTOM AI")
+            : t("Create CUSTOM AI")}
         </Button>
       );
     else
@@ -1148,16 +1398,22 @@ const LabelDetail = ({ history, match }) => {
         <Tooltip
           title={
             isAbleToAutoLabeling && isAutoLabelingLoading ? (
-              <span>{t("Custom AI cannot be created during autolabeling.")}</span>
+              <span>
+                {t("Custom AI cannot be created during autolabeling.")}
+              </span>
             ) : (
               <>
-                {workapp !== "normal_regression" && ((isObjectDetection && labelClassLen === 0) || (!isObjectDetection && labelClassLen < 2)) && (
-                  <span style={{ display: "block", marginRight: "8px" }}>
-                    {"- " + t("Please specify the label class.")}
-                    {!isObjectDetection && labelClassLen < 2 && `(${t("at least")} 2)`}
-                    <br />
-                  </span>
-                )}
+                {workapp !== "normal_regression" &&
+                  ((isObjectDetection && labelClassLen === 0) ||
+                    (!isObjectDetection && labelClassLen < 2)) && (
+                    <span style={{ display: "block", marginRight: "8px" }}>
+                      {"- " + t("Please specify the label class.")}
+                      {!isObjectDetection &&
+                        labelClassLen < 2 &&
+                        `(${t("at least")} 2)`}
+                      <br />
+                    </span>
+                  )}
                 {!isLabelChartDoneMoreTen && (
                   <span style={{ display: "block", marginRight: "8px" }}>
                     {"- " + t("More than 10 completed data is required.")}
@@ -1186,20 +1442,37 @@ const LabelDetail = ({ history, match }) => {
   const setAutoLabelingDisabledText = () => {
     const tooltipTexts = [];
 
-    if (autolabelingState.hasNoAutoLabelingData) tooltipTexts.push("'시작전' 또는 '진행중' 데이터 없음");
+    if (autolabelingState.hasNoAutoLabelingData)
+      tooltipTexts.push("'시작전' 또는 '진행중' 데이터 없음");
 
     if (autolabelingState.hasReviewData) tooltipTexts.push("데이터 검수 필요");
 
-    if (autolabelingState.isRequiredCustomAIModel) tooltipTexts.push("Custom AI 생성 필요");
+    if (autolabelingState.isRequiredCustomAIModel)
+      tooltipTexts.push("Custom AI 생성 필요");
 
-    if (disabledCondition.indexOf(autoLabeingProjects[autoLabeingProjects.length - 1]?.status) > -1) tooltipTexts.push("진행중인 오토라벨링이 있어서 오토라벨링을 새로 시작할 수 없습니다.");
+    if (
+      disabledCondition.indexOf(
+        autoLabeingProjects[autoLabeingProjects.length - 1]?.status
+      ) > -1
+    )
+      tooltipTexts.push(
+        "진행중인 오토라벨링이 있어서 오토라벨링을 새로 시작할 수 없습니다."
+      );
 
     return tooltipTexts;
   };
 
   const startAutoLabelingBtn = () => {
     const isDisabledToAutoLabeling =
-      disabledCondition.indexOf(autoLabeingProjects[autoLabeingProjects.length - 1]?.status) > -1 || labelChart.prepare < 1 || labelChart.review > 0 || Object.keys(autolabelingState).filter((key) => key !== "canOnlyUseGeneralAI" && autolabelingState[key] === true).length > 0;
+      disabledCondition.indexOf(
+        autoLabeingProjects[autoLabeingProjects.length - 1]?.status
+      ) > -1 ||
+      labelChart.prepare < 1 ||
+      labelChart.review > 0 ||
+      Object.keys(autolabelingState).filter(
+        (key) =>
+          key !== "canOnlyUseGeneralAI" && autolabelingState[key] === true
+      ).length > 0;
     const tooltipTexts = setAutoLabelingDisabledText();
 
     return (
@@ -1216,7 +1489,11 @@ const LabelDetail = ({ history, match }) => {
           placement="bottom"
         >
           <div>
-            <Button id="start_autolabeling_disabled_btn" disabled style={{ marginLeft: 15 }}>
+            <Button
+              id="start_autolabeling_disabled_btn"
+              disabled
+              style={{ marginLeft: 15 }}
+            >
               {t("Start auto-labeling")}
             </Button>
           </div>
@@ -1243,26 +1520,37 @@ const LabelDetail = ({ history, match }) => {
       id: "start_labelling",
       name: "prepare",
       onClickFunc: openStartProject,
-      label: "수동 라벨링 시작",
+      label: "Start manual labeling",
     },
     {
       id: "review_labelling",
       name: "review",
       onClickFunc: openInspectProject,
-      label: "라벨링 검수하기",
+      label: "Review labeling",
     },
   ];
 
   useEffect(() => {
     const project = labelprojects.projectDetail;
-    const customAIDisabled = disabledCondition.indexOf(autoLabeingProjects[autoLabeingProjects.length - 1]?.status) > -1 || labelChart.done < 10 || project?.workapp === "voice";
+    const customAIDisabled =
+      disabledCondition.indexOf(
+        autoLabeingProjects[autoLabeingProjects.length - 1]?.status
+      ) > -1 ||
+      labelChart.done < 10 ||
+      project?.workapp === "voice";
 
     setBtnDisabled({ ...btnDisabled, customAI: customAIDisabled });
 
-    const hasNoAutoLabelingData = labelChart.prepare === 0 && labelChart.working === 0;
+    const hasNoAutoLabelingData =
+      labelChart.prepare === 0 && labelChart.working === 0;
     const hasReviewData = labelChart.review > 0;
-    const canOnlyUseGeneralAI = (hasNoAutoLabelingData || (!isCustomAiLoading && !creatingCustomAiProjectId)) && project?.workapp === "object_detection";
-    const isRequiredCustomAIModel = project?.customAiModels?.length === 0 && project?.workapp !== "object_detection";
+    const canOnlyUseGeneralAI =
+      (hasNoAutoLabelingData ||
+        (!isCustomAiLoading && !creatingCustomAiProjectId)) &&
+      project?.workapp === "object_detection";
+    const isRequiredCustomAIModel =
+      project?.customAiModels?.length === 0 &&
+      project?.workapp !== "object_detection";
 
     setAutolabelingState({
       hasNoAutoLabelingData,
@@ -1270,11 +1558,18 @@ const LabelDetail = ({ history, match }) => {
       canOnlyUseGeneralAI,
       isRequiredCustomAIModel,
     });
-  }, [autoLabeingProjects, labelChart, labelprojects.projectDetail, isCustomAiLoading, creatingCustomAiProjectId]);
+  }, [
+    autoLabeingProjects,
+    labelChart,
+    labelprojects.projectDetail,
+    isCustomAiLoading,
+    creatingCustomAiProjectId,
+  ]);
 
   useEffect(() => {
     if (labelprojects.isProjectRefreshed) {
-      if (selectedPage === "overview") dispatch(getLabelProjectRequestAction(labelProjectId));
+      if (selectedPage === "overview")
+        dispatch(getLabelProjectRequestAction(labelProjectId));
 
       dispatch(setIsProjectRefreshed(false));
     }
@@ -1293,11 +1588,19 @@ const LabelDetail = ({ history, match }) => {
     <div>
       <ReactTitle title={"DS2.ai - " + t("Labeling")} />
       <div>
-        {(((labelprojects.isLoading || isLoading) && !labelprojects.isAsyncRequested && !labelprojects.isPreviewOpened) || labelprojects.isWorkappLoading == true || labelprojects.isLabelLoading == true || labelprojects.projectDetail == null) &&
-        (!labelprojects.isLabelClassDeleteLoading && !labelprojects.isLabelClassAddLoading) ? (
+        {(((labelprojects.isLoading || isLoading) &&
+          !labelprojects.isAsyncRequested &&
+          !labelprojects.isPreviewOpened) ||
+          labelprojects.isWorkappLoading == true ||
+          labelprojects.isLabelLoading == true ||
+          labelprojects.projectDetail == null) &&
+        (!labelprojects.isLabelClassDeleteLoading &&
+          !labelprojects.isLabelClassAddLoading) ? (
           <div className={classes.smallLoading}>
             <CircularProgress size={50} sx={{ mb: 3.5 }} />
-            <div style={{ fontSize: 15 }}>{t("Loading project. Please wait.")}</div>
+            <div style={{ fontSize: 15 }}>
+              {t("Loading project. Please wait.")}
+            </div>
           </div>
         ) : (
           <div>
@@ -1367,7 +1670,10 @@ const LabelDetail = ({ history, match }) => {
                       key={btnComp.id}
                       id={`${btnComp.id}_btn`}
                       shape="greenOutlined"
-                      disabled={!labelprojects.projectDetail?.s3UrlID || !labelprojects.projectDetail?.s3UrlID[btnComp.name]}
+                      disabled={
+                        !labelprojects.projectDetail?.s3UrlID ||
+                        !labelprojects.projectDetail?.s3UrlID[btnComp.name]
+                      }
                       style={{
                         minWidth: "160px",
                         marginRight: "10px",
@@ -1378,32 +1684,95 @@ const LabelDetail = ({ history, match }) => {
                     </Button>
                   ))}
                   {reloadButton}
-                  {createCustomAIBtn(creatingCustomAiProjectId && customAiStatusTypes["error"].indexOf(customAiProjectIdStatus) === -1 && "add")}
+                  {createCustomAIBtn(
+                    creatingCustomAiProjectId &&
+                      customAiStatusTypes["error"].indexOf(
+                        customAiProjectIdStatus
+                      ) === -1 &&
+                      "add"
+                  )}
                 </Grid>
               </Grid>
             </Grid>
-            <div className={classes.titleContainer} style={{ width: "100%", marginBottom: "36px" }}>
+            <div
+              className={classes.titleContainer}
+              style={{ width: "100%", marginBottom: "36px" }}
+            >
               <Grid container className={classes.pageList} wrap="nowrap">
-                <Grid item onClick={() => onSetSelectedPage("overview")} id="dashboard_tab" className={selectedPage === "overview" ? classes.selectedListObject : classes.listObject}>
+                <Grid
+                  item
+                  onClick={() => onSetSelectedPage("overview")}
+                  id="dashboard_tab"
+                  className={
+                    selectedPage === "overview"
+                      ? classes.selectedListObject
+                      : classes.listObject
+                  }
+                >
                   {t("Dashboard")}
                 </Grid>
-                <Grid item onClick={() => onSetSelectedPage("list")} id="data_list_tab" className={selectedPage === "list" ? classes.selectedListObject : classes.listObject}>
+                <Grid
+                  item
+                  onClick={() => onSetSelectedPage("list")}
+                  id="data_list_tab"
+                  className={
+                    selectedPage === "list"
+                      ? classes.selectedListObject
+                      : classes.listObject
+                  }
+                >
                   {t("Data List")}
                 </Grid>
-                {labelprojects.projectDetail?.workapp !== "normal_regression" && (
-                  <Grid item onClick={() => onSetSelectedPage("class")} id="class_tab" className={selectedPage === "class" ? classes.selectedListObject : classes.listObject}>
-                    {isShared ? t("My class") : t("클래스")}
+                {labelprojects.projectDetail?.workapp !==
+                  "normal_regression" && (
+                  <Grid
+                    item
+                    onClick={() => onSetSelectedPage("class")}
+                    id="class_tab"
+                    className={
+                      selectedPage === "class"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
+                  >
+                    {isShared ? t("My class") : t("Class")}
                   </Grid>
                 )}
-                <Grid item onClick={() => onSetSelectedPage("member")} id="member_tab" className={selectedPage === "member" ? classes.selectedListObject : classes.listObject}>
+                <Grid
+                  item
+                  onClick={() => onSetSelectedPage("member")}
+                  id="member_tab"
+                  className={
+                    selectedPage === "member"
+                      ? classes.selectedListObject
+                      : classes.listObject
+                  }
+                >
                   {t("Members")}
                 </Grid>
                 {user.me && !user.me.isAiTrainer && !isShared && (
                   <>
-                    <Grid onClick={() => onSetSelectedPage("export")} id="export_tab" className={selectedPage === "export" ? classes.selectedListObject : classes.listObject}>
+                    <Grid
+                      onClick={() => onSetSelectedPage("export")}
+                      id="export_tab"
+                      className={
+                        selectedPage === "export"
+                          ? classes.selectedListObject
+                          : classes.listObject
+                      }
+                    >
                       {t("Export")}
                     </Grid>
-                    <Grid item onClick={() => onSetSelectedPage("setting")} id="setting_tab" className={selectedPage === "setting" ? classes.selectedListObject : classes.listObject}>
+                    <Grid
+                      item
+                      onClick={() => onSetSelectedPage("setting")}
+                      id="setting_tab"
+                      className={
+                        selectedPage === "setting"
+                          ? classes.selectedListObject
+                          : classes.listObject
+                      }
+                    >
                       {t("Settings")}
                     </Grid>
                   </>
@@ -1488,8 +1857,15 @@ const LabelDetail = ({ history, match }) => {
               <GridContainer>
                 {/* {(isAbleToAutoLabeling || isAutoLabelingLoading) && ( */}
                 <GridItem xs={12} lg={12} style={{ padding: "0 5px" }}>
-                  <div className={classes.dashboardMain} style={{ minHeight: 0 }}>
-                    <GridContainer justifyContent="space-between" alignItems="center" style={{ paddingTop: 0 }}>
+                  <div
+                    className={classes.dashboardMain}
+                    style={{ minHeight: 0 }}
+                  >
+                    <GridContainer
+                      justifyContent="space-between"
+                      alignItems="center"
+                      style={{ paddingTop: 0 }}
+                    >
                       <GridItem
                         style={{
                           textAlign: "left",
@@ -1531,13 +1907,23 @@ const LabelDetail = ({ history, match }) => {
                           justifyContent: "center",
                         }}
                       >
-                        {creatingCustomAiProjectId && customAiStatusTypes["error"].indexOf(customAiProjectIdStatus) === -1
+                        {creatingCustomAiProjectId &&
+                        customAiStatusTypes["error"].indexOf(
+                          customAiProjectIdStatus
+                        ) === -1
                           ? customAiProjectIdStatus === 100 &&
-                            labelprojects.projectDetail?.workapp === "object_detection" && (
+                            labelprojects.projectDetail?.workapp ===
+                              "object_detection" && (
                               <Button
                                 id="select_bestcustomai_btn"
                                 shape="greenOutlined"
-                                disabled={disabledCondition.indexOf(autoLabeingProjects[autoLabeingProjects.length - 1]?.status) > -1 || labelChart.done < 1}
+                                disabled={
+                                  disabledCondition.indexOf(
+                                    autoLabeingProjects[
+                                      autoLabeingProjects.length - 1
+                                    ]?.status
+                                  ) > -1 || labelChart.done < 1
+                                }
                                 onClick={() => {
                                   setIsSampleModelModalOpen(true);
                                 }}
@@ -1554,10 +1940,18 @@ const LabelDetail = ({ history, match }) => {
 
                 <GridItem xs={12} md={6} style={{ padding: "0 5px" }}>
                   <div className={classes.dashboardMain}>
-                    <Typography component="div" className={classes.dashbordTitle} gutterBottom>
+                    <Typography
+                      component="div"
+                      className={classes.dashbordTitle}
+                      gutterBottom
+                    >
                       {t("Project Information")}
                     </Typography>
-                    <Typography component="div" className={classes.content} style={{ padding: "0 16px" }}>
+                    <Typography
+                      component="div"
+                      className={classes.content}
+                      style={{ padding: "0 16px" }}
+                    >
                       <Grid container>
                         <Grid container alignItems="center" sx={{ mb: 2 }}>
                           <Grid item xs={4} className={classes.mainCardTitle}>
@@ -1581,7 +1975,12 @@ const LabelDetail = ({ history, match }) => {
                               disabled={isUnableToChangeName}
                               // autoFocus={true}
                               onChange={onChangeNameInput}
-                              onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
+                              onFocus={(e) =>
+                                e.currentTarget.setSelectionRange(
+                                  e.currentTarget.value.length,
+                                  e.currentTarget.value.length
+                                )
+                              }
                               multiline={true}
                               inputRef={titleRef}
                             />
@@ -1591,7 +1990,12 @@ const LabelDetail = ({ history, match }) => {
                               !user.me.isAiTrainer &&
                               !isShared &&
                               (isUnableToChangeName ? (
-                                <Button id="change_name_btn" shape="blue" size="xs" onClick={onLetAbleToChangeName}>
+                                <Button
+                                  id="change_name_btn"
+                                  shape="blue"
+                                  size="xs"
+                                  onClick={onLetAbleToChangeName}
+                                >
                                   {t("Edit")}
                                 </Button>
                               ) : (
@@ -1600,10 +2004,20 @@ const LabelDetail = ({ history, match }) => {
                                     display: "flex",
                                   }}
                                 >
-                                  <Button id="change_name_confirm_btn" shape="blue" size="xs" onClick={saveProjectName}>
+                                  <Button
+                                    id="change_name_confirm_btn"
+                                    shape="blue"
+                                    size="xs"
+                                    onClick={saveProjectName}
+                                  >
                                     {t("Save")}
                                   </Button>
-                                  <Button id="change_name_cancel_btn" shape="blue" size="xs" onClick={onCancelChangeName}>
+                                  <Button
+                                    id="change_name_cancel_btn"
+                                    shape="blue"
+                                    size="xs"
+                                    onClick={onCancelChangeName}
+                                  >
                                     {t("Cancel")}
                                   </Button>
                                 </div>
@@ -1630,9 +2044,19 @@ const LabelDetail = ({ history, match }) => {
                               disabled={isUnableToChangeDetail}
                               // autoFocus={true}
                               onChange={onChangeDetailInput}
-                              onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
+                              onFocus={(e) =>
+                                e.currentTarget.setSelectionRange(
+                                  e.currentTarget.value.length,
+                                  e.currentTarget.value.length
+                                )
+                              }
                               multiline={true}
-                              placeholder={user.me && !user.me.isAiTrainer && !isShared && t("Please enter a description.")}
+                              placeholder={
+                                user.me &&
+                                !user.me.isAiTrainer &&
+                                !isShared &&
+                                t("Please enter a description.")
+                              }
                               inputRef={detailRef}
                             />
                           </Grid>
@@ -1641,7 +2065,12 @@ const LabelDetail = ({ history, match }) => {
                               !user.me.isAiTrainer &&
                               !isShared &&
                               (isUnableToChangeDetail ? (
-                                <Button id="change_detail_btn" shape="blue" size="xs" onClick={onLetAbleToChangeDetail}>
+                                <Button
+                                  id="change_detail_btn"
+                                  shape="blue"
+                                  size="xs"
+                                  onClick={onLetAbleToChangeDetail}
+                                >
                                   {t("Edit")}
                                 </Button>
                               ) : (
@@ -1650,10 +2079,20 @@ const LabelDetail = ({ history, match }) => {
                                     display: "flex",
                                   }}
                                 >
-                                  <Button id="change_detail_confirm_btn" shape="blue" size="xs" onClick={saveProjectDetail}>
+                                  <Button
+                                    id="change_detail_confirm_btn"
+                                    shape="blue"
+                                    size="xs"
+                                    onClick={saveProjectDetail}
+                                  >
                                     {t("Save")}
                                   </Button>
-                                  <Button id="change_detail_cancel_btn" shape="blue" size="xs" onClick={onCancelChangeDetail}>
+                                  <Button
+                                    id="change_detail_cancel_btn"
+                                    shape="blue"
+                                    size="xs"
+                                    onClick={onCancelChangeDetail}
+                                  >
                                     {t("Cancel")}
                                   </Button>
                                 </div>
@@ -1665,8 +2104,15 @@ const LabelDetail = ({ history, match }) => {
                             {t("Date created")}
                           </Grid>
                           <Grid item xs>
-                            <div id="labelProjectCreatedDate" className={classes.settingFontWhite87}>
-                              {labelprojects.projectDetail && labelprojects.projectDetail.created_at.substring(0, 10)}
+                            <div
+                              id="labelProjectCreatedDate"
+                              className={classes.settingFontWhite87}
+                            >
+                              {labelprojects.projectDetail &&
+                                labelprojects.projectDetail.created_at.substring(
+                                  0,
+                                  10
+                                )}
                             </div>
                           </Grid>
                         </Grid>
@@ -1675,8 +2121,15 @@ const LabelDetail = ({ history, match }) => {
                             {t("Date updated")}
                           </Grid>
                           <Grid item xs>
-                            <div id="labelProjectUpdatedDate" className={classes.settingFontWhite87}>
-                              {labelprojects.projectDetail && labelprojects.projectDetail.updated_at.substring(0, 10)}
+                            <div
+                              id="labelProjectUpdatedDate"
+                              className={classes.settingFontWhite87}
+                            >
+                              {labelprojects.projectDetail &&
+                                labelprojects.projectDetail.updated_at.substring(
+                                  0,
+                                  10
+                                )}
                             </div>
                           </Grid>
                         </Grid>
@@ -1686,21 +2139,37 @@ const LabelDetail = ({ history, match }) => {
                 </GridItem>
                 <GridItem xs={12} md={6} style={{ padding: "0 5px" }}>
                   <div className={classes.dashboardMain}>
-                    <Typography component="div" className={classes.dashbordTitle} style={{ marginBottom: 4 }}>
-                      {isShared ? t("My status") : t("상태")}
+                    <Typography
+                      component="div"
+                      className={classes.dashbordTitle}
+                      style={{ marginBottom: 4 }}
+                    >
+                      {isShared ? t("My status") : t("Status")}
                     </Typography>
                     <Typography component="div" className={classes.content}>
                       {labelChart && renderStatusChart()}
                     </Typography>
                   </div>
                 </GridItem>
-                {labelprojects.projectDetail?.workapp !== "normal_regression" && (
-                  <GridItem xs={12} md={isShared ? 12 : 6} style={{ padding: "0 5px" }}>
+                {labelprojects.projectDetail?.workapp !==
+                  "normal_regression" && (
+                  <GridItem
+                    xs={12}
+                    md={isShared ? 12 : 6}
+                    style={{ padding: "0 5px" }}
+                  >
                     <div className={classes.dashboardMain}>
-                      <Grid container style={{ justifyContent: "space-between" }}>
+                      <Grid
+                        container
+                        style={{ justifyContent: "space-between" }}
+                      >
                         <Grid item>
-                          <Typography component="div" className={classes.dashbordTitle} gutterBottom>
-                            {isShared ? t("My class") : t("클래스")}
+                          <Typography
+                            component="div"
+                            className={classes.dashbordTitle}
+                            gutterBottom
+                          >
+                            {isShared ? t("My class") : t("Class")}
                           </Typography>
                         </Grid>
                         <Grid item>
@@ -1724,9 +2193,16 @@ const LabelDetail = ({ history, match }) => {
                               {labelClasses &&
                                 labelClasses.map((label, idx) => {
                                   if (label) {
-                                    const labelCount = label.completedLabelCount || label.completedLabelCount === 0 ? `${label.completedLabelCount.toLocaleString()}` : "";
+                                    const labelCount =
+                                      label.completedLabelCount ||
+                                      label.completedLabelCount === 0
+                                        ? `${label.completedLabelCount.toLocaleString()}`
+                                        : "";
                                     return (
-                                      <Grid container key={label.name + label.id}>
+                                      <Grid
+                                        container
+                                        key={label.name + label.id}
+                                      >
                                         <Grid item xs={6}>
                                           <div
                                             style={{
@@ -1738,13 +2214,17 @@ const LabelDetail = ({ history, match }) => {
                                               style={{
                                                 width: "10px",
                                                 height: "10px",
-                                                border: "1px solid var(--textWhite87)",
+                                                border:
+                                                  "1px solid var(--textWhite87)",
                                                 borderRadius: "50%",
                                                 marginRight: "8px",
                                                 background: label.color,
                                               }}
                                             ></div>
-                                            <div className="className" style={{ wordBreak: "break-all" }}>
+                                            <div
+                                              className="className"
+                                              style={{ wordBreak: "break-all" }}
+                                            >
                                               {label.name}
                                             </div>
                                           </div>
@@ -1760,23 +2240,35 @@ const LabelDetail = ({ history, match }) => {
                                             justifyContent: "flex-end",
                                           }}
                                         >
-                                          {user.me && !user.me.isAiTrainer && !isShared && (
-                                            <>
-                                              {isUpdateLabelClasses && (
-                                                <Button
-                                                  id={`modify_labelclass${label.id}_btn`}
-                                                  shape="blue"
-                                                  size="xs"
-                                                  onClick={() => {
-                                                    onChangeClasses(label);
-                                                  }}
-                                                >
-                                                  {t("Edit")}
-                                                </Button>
-                                              )}
-                                              {isDeleteLabelClasses && <input type="checkbox" id="deleteClasses" name="deleteClasses" value={label.id} onChange={selectDeleteClasses} />}
-                                            </>
-                                          )}
+                                          {user.me &&
+                                            !user.me.isAiTrainer &&
+                                            !isShared && (
+                                              <>
+                                                {isUpdateLabelClasses && (
+                                                  <Button
+                                                    id={`modify_labelclass${label.id}_btn`}
+                                                    shape="blue"
+                                                    size="xs"
+                                                    onClick={() => {
+                                                      onChangeClasses(label);
+                                                    }}
+                                                  >
+                                                    {t("Edit")}
+                                                  </Button>
+                                                )}
+                                                {isDeleteLabelClasses && (
+                                                  <input
+                                                    type="checkbox"
+                                                    id="deleteClasses"
+                                                    name="deleteClasses"
+                                                    value={label.id}
+                                                    onChange={
+                                                      selectDeleteClasses
+                                                    }
+                                                  />
+                                                )}
+                                              </>
+                                            )}
                                         </Grid>
                                       </Grid>
                                     );
@@ -1788,7 +2280,15 @@ const LabelDetail = ({ history, match }) => {
                                   justifyContent: "space-between",
                                 }}
                               >
-                                {labelClasses.length === 0 ? <div id="noClassInformText">{t("There is no class registered. Please add class")}</div> : <div></div>}
+                                {labelClasses.length === 0 ? (
+                                  <div id="noClassInformText">
+                                    {t(
+                                      "There is no class registered. Please add class"
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div></div>
+                                )}
                               </div>
                             </div>
                           </GridItem>
@@ -1797,7 +2297,15 @@ const LabelDetail = ({ history, match }) => {
                     </div>
                   </GridItem>
                 )}
-                <GridItem xs={12} md={labelprojects.projectDetail?.workapp === "normal_regression" ? 12 : 6} style={{ padding: "0 5px" }}>
+                <GridItem
+                  xs={12}
+                  md={
+                    labelprojects.projectDetail?.workapp === "normal_regression"
+                      ? 12
+                      : 6
+                  }
+                  style={{ padding: "0 5px" }}
+                >
                   {user.me && (user.me.isAiTrainer || isShared) ? null : (
                     // <div className={classes.dashboardMain}>
                     //   <Typography component="div"
@@ -1817,16 +2325,29 @@ const LabelDetail = ({ history, match }) => {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Typography component="div" className={classes.dashbordTitle} gutterBottom>
+                        <Typography
+                          component="div"
+                          className={classes.dashbordTitle}
+                          gutterBottom
+                        >
                           {t("Notification history")}
                         </Typography>
                         <Grid item>
-                          <Button id="more_labelnotifications_btn" shape="blue" size="sm" onClick={() => onSetSelectedPage("setting")}>
+                          <Button
+                            id="more_labelnotifications_btn"
+                            shape="blue"
+                            size="sm"
+                            onClick={() => onSetSelectedPage("setting")}
+                          >
                             {t("More")}
                           </Button>
                         </Grid>
                       </div>
-                      <Typography component="div" className={classes.content} style={{ padding: "0 16px" }}>
+                      <Typography
+                        component="div"
+                        className={classes.content}
+                        style={{ padding: "0 16px" }}
+                      >
                         {noticeHistory &&
                           noticeHistory.map((asynctask, idx) => (
                             <div
@@ -1863,10 +2384,22 @@ const LabelDetail = ({ history, match }) => {
                                         >
                                           &middot;
                                         </span>
-                                        {asynctask.taskName + " " + getNotificationText(asynctask.status, asynctask.taskType, asynctask.statusText, i18n?.language)}
+                                        {asynctask.taskName +
+                                          " " +
+                                          getNotificationText(
+                                            asynctask.status,
+                                            asynctask.taskType,
+                                            asynctask.statusText,
+                                            i18n?.language
+                                          )}
                                       </>
                                     ) : (
-                                      <>{asynctask[tableBody.value].substring(0, 10)}</>
+                                      <>
+                                        {asynctask[tableBody.value].substring(
+                                          0,
+                                          10
+                                        )}
+                                      </>
                                     )}
                                   </div>
                                 );
@@ -1877,75 +2410,131 @@ const LabelDetail = ({ history, match }) => {
                     </div>
                   )}
                 </GridItem>
-                {labelprojects.projectDetail?.workage?.length > 0 && labelprojects.projectDetail.workapp === "object_detection" && (
-                  <GridItem xs={12} style={{ padding: "0 5px" }}>
-                    <div className={classes.dashboardMain}>
-                      <Typography component="div" className={classes.dashbordTitle} gutterBottom>
-                        {t("Work Status by Member")}
-                      </Typography>
-                      <Typography component="div" className={classes.content}>
-                        <GridContainer className={classes.textContainer}>
-                          <Table className={classes.table} style={{ margin: "10px" }} aria-label="simple table">
-                            <TableHead>
-                              <TableRow>
-                                {WORKAGE_TABLE_HEADER.map((v, i) => {
-                                  return (
-                                    <TableCell key={v.title + i} className={classes.tableHead} style={{ width: v.width }} align="center">
-                                      <b>{t(v.title)}</b>
-                                    </TableCell>
-                                  );
-                                })}
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              {labelprojects.projectDetail.workage.map((workage, idx) => (
-                                <TableRow
-                                  key={workage.workAssinee}
-                                  className={classes.tableRow}
-                                  style={{
-                                    background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
-                                  }}
-                                >
-                                  {WORKAGE_TABLE_BODY.map((v, i) => {
-                                    let value = workage[v] ? workage[v].toLocaleString() : v === "workAssinee" ? "" : 0;
-
-                                    if (v === "idx") value = idx + 1;
-                                    if (v === "totalCount") value = (workage.boxCount + workage.polygonCount + workage.magicCount).toLocaleString();
-
+                {labelprojects.projectDetail?.workage?.length > 0 &&
+                  labelprojects.projectDetail.workapp ===
+                    "object_detection" && (
+                    <GridItem xs={12} style={{ padding: "0 5px" }}>
+                      <div className={classes.dashboardMain}>
+                        <Typography
+                          component="div"
+                          className={classes.dashbordTitle}
+                          gutterBottom
+                        >
+                          {t("Work Status by Member")}
+                        </Typography>
+                        <Typography component="div" className={classes.content}>
+                          <GridContainer className={classes.textContainer}>
+                            <Table
+                              className={classes.table}
+                              style={{ margin: "10px" }}
+                              aria-label="simple table"
+                            >
+                              <TableHead>
+                                <TableRow>
+                                  {WORKAGE_TABLE_HEADER.map((v, i) => {
                                     return (
-                                      <TableCell key={v} className={classes.tableRowCell} align="center">
-                                        {value}
+                                      <TableCell
+                                        key={v.title + i}
+                                        className={classes.tableHead}
+                                        style={{ width: v.width }}
+                                        align="center"
+                                      >
+                                        <b>{t(v.title)}</b>
                                       </TableCell>
                                     );
                                   })}
                                 </TableRow>
-                              ))}
-                              <TableRow
-                                className={classes.tableRow}
-                                style={{
-                                  background: labelprojects.projectDetail.workage % 2 !== 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
-                                }}
-                              >
-                                <TableCell className={classes.tableRowCell} align="left" colSpan={2} style={{ textIndent: "5px" }}>
-                                  Total Point
-                                </TableCell>
-                                <TableCell className={classes.tableRowCell} colSpan={4} />
-                                <TableCell className={classes.tableRowCell} align="center">
-                                  {totalPointCount ? totalPointCount.toLocaleString() : 0}
-                                </TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </GridContainer>
-                      </Typography>
-                    </div>
-                  </GridItem>
-                )}
+                              </TableHead>
+                              <TableBody>
+                                {labelprojects.projectDetail.workage.map(
+                                  (workage, idx) => (
+                                    <TableRow
+                                      key={workage.workAssinee}
+                                      className={classes.tableRow}
+                                      style={{
+                                        background:
+                                          idx % 2 === 0
+                                            ? currentTheme.tableRow1
+                                            : currentTheme.tableRow2,
+                                      }}
+                                    >
+                                      {WORKAGE_TABLE_BODY.map((v, i) => {
+                                        let value = workage[v]
+                                          ? workage[v].toLocaleString()
+                                          : v === "workAssinee"
+                                          ? ""
+                                          : 0;
+
+                                        if (v === "idx") value = idx + 1;
+                                        if (v === "totalCount")
+                                          value = (
+                                            workage.boxCount +
+                                            workage.polygonCount +
+                                            workage.magicCount
+                                          ).toLocaleString();
+
+                                        return (
+                                          <TableCell
+                                            key={v}
+                                            className={classes.tableRowCell}
+                                            align="center"
+                                          >
+                                            {value}
+                                          </TableCell>
+                                        );
+                                      })}
+                                    </TableRow>
+                                  )
+                                )}
+                                <TableRow
+                                  className={classes.tableRow}
+                                  style={{
+                                    background:
+                                      labelprojects.projectDetail.workage %
+                                        2 !==
+                                      0
+                                        ? currentTheme.tableRow1
+                                        : currentTheme.tableRow2,
+                                  }}
+                                >
+                                  <TableCell
+                                    className={classes.tableRowCell}
+                                    align="left"
+                                    colSpan={2}
+                                    style={{ textIndent: "5px" }}
+                                  >
+                                    Total Point
+                                  </TableCell>
+                                  <TableCell
+                                    className={classes.tableRowCell}
+                                    colSpan={4}
+                                  />
+                                  <TableCell
+                                    className={classes.tableRowCell}
+                                    align="center"
+                                  >
+                                    {totalPointCount
+                                      ? totalPointCount.toLocaleString()
+                                      : 0}
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </GridContainer>
+                        </Typography>
+                      </div>
+                    </GridItem>
+                  )}
               </GridContainer>
             )}
             {selectedPage === "list" && (
               <GridItem xs={12}>
-                <LabelList history={history} onSetSelectedPage={onSetSelectedPage} labelProjectId={labelProjectId} labelChart={labelChart} />
+                <LabelList
+                  history={history}
+                  onSetSelectedPage={onSetSelectedPage}
+                  labelProjectId={labelProjectId}
+                  labelChart={labelChart}
+                />
               </GridItem>
             )}
             {selectedPage === "export" && (
@@ -1955,12 +2544,18 @@ const LabelDetail = ({ history, match }) => {
             )}
             {selectedPage === "labelai" && (
               <GridItem xs={12}>
-                <LabelAI history={history} isFromAutoLabelBtn={isFromAutoLabelBtn} />
+                <LabelAI
+                  history={history}
+                  isFromAutoLabelBtn={isFromAutoLabelBtn}
+                />
               </GridItem>
             )}
             {selectedPage === "setting" && (
               <GridItem xs={12}>
-                <LabelSetting history={history} onSetSelectedPage={onSetSelectedPage} />
+                <LabelSetting
+                  history={history}
+                  onSetSelectedPage={onSetSelectedPage}
+                />
               </GridItem>
             )}
             {selectedPage === "class" && (
@@ -1986,13 +2581,28 @@ const LabelDetail = ({ history, match }) => {
         }}
         className={classes.modalContainer}
       >
-        <div className={classes.defaultModalContent} style={{ width: "30%", minWidth: "500px" }}>
+        <div
+          className={classes.defaultModalContent}
+          style={{ width: "30%", minWidth: "500px" }}
+        >
           <GridContainer>
             <GridItem xs={6}>
               <b>{t("Class name")} : </b>
-              <InputBase className={classes.input} autoFocus value={inputClassChangeValue} onChange={changeInputNameChangeValue} placeholder={t("Please enter the class name")} multiline={true} maxRows={5} id="labelclass_name_input" />
+              <InputBase
+                className={classes.input}
+                autoFocus
+                value={inputClassChangeValue}
+                onChange={changeInputNameChangeValue}
+                placeholder={t("Please enter the class name")}
+                multiline={true}
+                maxRows={5}
+                id="labelclass_name_input"
+              />
             </GridItem>
-            <GridItem xs={6} style={{ display: "flex", flexDirection: "column" }}>
+            <GridItem
+              xs={6}
+              style={{ display: "flex", flexDirection: "column" }}
+            >
               <div style={{ display: "flex", paddingBottom: "20px" }}>
                 <b>{t("Class color")} : </b>
                 <div
@@ -2005,7 +2615,11 @@ const LabelDetail = ({ history, match }) => {
                 ></div>
               </div>
               <div style={{ height: "250px" }}>
-                <ChromePicker color={color} onChangeComplete={onChangeColor} disableAlpha={true} />
+                <ChromePicker
+                  color={color}
+                  onChangeComplete={onChangeColor}
+                  disableAlpha={true}
+                />
               </div>
             </GridItem>
             <GridItem xs={12}>
@@ -2023,7 +2637,13 @@ const LabelDetail = ({ history, match }) => {
                   </Button>
                 </GridItem>
                 <GridItem xs={6}>
-                  <Button id="next_labelclassmodal_btn" shape="greenOutlined" disabled={!inputClassChangeValue} style={{ width: "100%" }} onClick={onSetChangeClassName}>
+                  <Button
+                    id="next_labelclassmodal_btn"
+                    shape="greenOutlined"
+                    disabled={!inputClassChangeValue}
+                    style={{ width: "100%" }}
+                    onClick={onSetChangeClassName}
+                  >
                     {t("Next")}
                   </Button>
                 </GridItem>
@@ -2048,7 +2668,13 @@ const LabelDetail = ({ history, match }) => {
         setCreatingCustomAiProjectId={setCreatingCustomAiProjectId}
       />
 
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isAddCustomAIModalOpen} onClose={addCustomAIModalClose} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isAddCustomAIModalOpen}
+        onClose={addCustomAIModalClose}
+        className={classes.modalContainer}
+      >
         <Grid
           sx={{ py: 3, px: 4 }}
           style={{
@@ -2058,11 +2684,19 @@ const LabelDetail = ({ history, match }) => {
         >
           <Grid container maxWidth={240} sx={{ mb: 3, fontSize: 16 }}>
             <Grid item xs={12} sx={{ mb: 0.5, wordBreak: "keep-all" }}>
-              {t(isNewCustomAI ? "이미 생성된 CUSTOM AI 모델이 존재하여 Best Custom AI 선택 대기중입니다." : "CUSTOM AI를 만드는 중입니다.")}
+              {t(
+                isNewCustomAI
+                  ? "A previously created CUSTOM AI model exists and is waiting for Best Custom AI selection."
+                  : "Creating CUSTOM AI."
+              )}
             </Grid>
             <Grid>{t("Do you want to restart?")}</Grid>
           </Grid>
-          <Grid container justifyContent="space-between" sx={{ fontWeight: 600 }}>
+          <Grid
+            container
+            justifyContent="space-between"
+            sx={{ fontWeight: 600 }}
+          >
             <Grid item xs={5.5}>
               <Button
                 id="restart_customai_btn"
@@ -2077,7 +2711,12 @@ const LabelDetail = ({ history, match }) => {
               </Button>
             </Grid>
             <Grid item xs={5.5}>
-              <Button id="close_restartcustomaimodal_btn" shape="whiteOutlinedSquare" style={{ width: "100%" }} onClick={addCustomAIModalClose}>
+              <Button
+                id="close_restartcustomaimodal_btn"
+                shape="whiteOutlinedSquare"
+                style={{ width: "100%" }}
+                onClick={addCustomAIModalClose}
+              >
                 <span style={{ color: "var(--textWhite87)" }}>{t("No")}</span>
               </Button>
             </Grid>
@@ -2085,7 +2724,13 @@ const LabelDetail = ({ history, match }) => {
         </Grid>
       </Modal>
 
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isAutoLabelingModalOpen} onClose={!isAutoLabelingButtonLoading && autoLabelingModalClose} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isAutoLabelingModalOpen}
+        onClose={!isAutoLabelingButtonLoading && autoLabelingModalClose}
+        className={classes.modalContainer}
+      >
         <div className={classes.autoLabelingContent}>
           {isAutoLabelingLoading ? (
             <div
@@ -2111,15 +2756,35 @@ const LabelDetail = ({ history, match }) => {
               >
                 {labelprojects.projectDetail && (
                   <>
-                    <div style={{ fontWeight: 600, margin: "16px 0" }}>{t("Select AI Type [Required]")}</div>
-                    <FormControl component="fieldset" style={{ margin: "16px 20px 24px", display: "flex" }}>
+                    <div style={{ fontWeight: 600, margin: "16px 0" }}>
+                      {t("Select AI Type [Required]")}
+                    </div>
+                    <FormControl
+                      component="fieldset"
+                      style={{ margin: "16px 20px 24px", display: "flex" }}
+                    >
                       {/*<FormLabel component="legend" style={{paddingTop: '20px', color:currentTheme.text1 + ' !important'}}>{t('Analyze Unit')}</FormLabel>*/}
-                      <RadioGroup row aria-label="position" name="position" defaultValue={customAiModels?.length > 0 ? "custom" : null} onChange={onChangeAutoLabelingAiType}>
+                      <RadioGroup
+                        row
+                        aria-label="position"
+                        name="position"
+                        defaultValue={
+                          customAiModels?.length > 0 ? "custom" : null
+                        }
+                        onChange={onChangeAutoLabelingAiType}
+                      >
                         <FormControlLabel
                           name="custom"
                           checked={autoLabelingAiType === "custom"}
-                          disabled={customAiModels?.length === 0 || (labelprojects.projectDetail?.workapp === "object_detection" && labelChart.review > 1)}
-                          label={`Custom AI : ${t("Create and label AI based on labeled training data")}`}
+                          disabled={
+                            customAiModels?.length === 0 ||
+                            (labelprojects.projectDetail?.workapp ===
+                              "object_detection" &&
+                              labelChart.review > 1)
+                          }
+                          label={`Custom AI : ${t(
+                            "Create and label AI based on labeled training data"
+                          )}`}
                           control={<Radio color="primary" />}
                         />
                         {customAiModels?.length > 0 && (
@@ -2131,7 +2796,13 @@ const LabelDetail = ({ history, match }) => {
                               marginLeft: 30,
                             }}
                           >
-                            <RadioGroup row aria-label="position" checked={autoLabelingAiType === "custom"} name="position" onChange={onChangeCustomAIModel}>
+                            <RadioGroup
+                              row
+                              aria-label="position"
+                              checked={autoLabelingAiType === "custom"}
+                              name="position"
+                              onChange={onChangeCustomAIModel}
+                            >
                               {customAiModels?.length > 0 &&
                                 customAiModels.map((customAiModel, idx) => {
                                   return (
@@ -2143,9 +2814,15 @@ const LabelDetail = ({ history, match }) => {
                                         label={
                                           <>
                                             <span>model{idx + 1}: </span>
-                                            {customAiModel.class?.map((customAiModelClass) => {
-                                              return <span>{customAiModelClass} </span>;
-                                            })}
+                                            {customAiModel.class?.map(
+                                              (customAiModelClass) => {
+                                                return (
+                                                  <span>
+                                                    {customAiModelClass}{" "}
+                                                  </span>
+                                                );
+                                              }
+                                            )}
                                           </>
                                         }
                                         control={<Radio color="primary" />}
@@ -2167,7 +2844,8 @@ const LabelDetail = ({ history, match }) => {
                           >
                             {btnDisabled.customAI ? (
                               <>
-                                {labelprojects.projectDetail?.workapp === "object_detection" && (
+                                {labelprojects.projectDetail?.workapp ===
+                                  "object_detection" && (
                                   <div style={{ marginRight: 12 }}>
                                     <AnnouncementIcon
                                       fontSize="small"
@@ -2176,7 +2854,11 @@ const LabelDetail = ({ history, match }) => {
                                         marginRight: 4,
                                       }}
                                     />{" "}
-                                    <span className={classes.subHighlightText}>{`${t("important")}: ${t("In case of insufficient labeled data, auto-labeling is possible only through General AI.")}`}</span>
+                                    <span
+                                      className={classes.subHighlightText}
+                                    >{`${t("important")}: ${t(
+                                      "In case of insufficient labeled data, auto-labeling is possible only through General AI."
+                                    )}`}</span>
                                   </div>
                                 )}
                               </>
@@ -2190,7 +2872,11 @@ const LabelDetail = ({ history, match }) => {
                                       marginRight: 4,
                                     }}
                                   />{" "}
-                                  <span className={classes.subHighlightText}>{`${t("important")}: ${t("Available after creating a Custom AI.")}`}</span>
+                                  <span
+                                    className={classes.subHighlightText}
+                                  >{`${t("important")}: ${t(
+                                    "Available after creating a Custom AI."
+                                  )}`}</span>
                                 </div>
                                 <Button
                                   id="create_customai_btn"
@@ -2206,9 +2892,18 @@ const LabelDetail = ({ history, match }) => {
                             )}
                           </Typography>
                         )}
-                        {labelprojects.projectDetail?.workapp === "object_detection" && (
+                        {labelprojects.projectDetail?.workapp ===
+                          "object_detection" && (
                           <>
-                            <FormControlLabel name="general" checked={autoLabelingAiType === "general"} label={`General AI : ${t("Labeling with AI of Labeling AI already created")}`} control={<Radio color="primary" />} style={{ marginTop: 24 }} />
+                            <FormControlLabel
+                              name="general"
+                              checked={autoLabelingAiType === "general"}
+                              label={`General AI : ${t(
+                                "Labeling with AI of Labeling AI already created"
+                              )}`}
+                              control={<Radio color="primary" />}
+                              style={{ marginTop: 24 }}
+                            />
                             <FormControl
                               component="fieldset"
                               className={classes.formControl}
@@ -2228,7 +2923,14 @@ const LabelDetail = ({ history, match }) => {
                                 }}
                               >
                                 {GENERAL_AI_GROUPS.map((group, idx) => {
-                                  return <FormControlLabel name={group.name} checked={generalAIType === group.name} label={t(`${group.label}`)} control={<Radio color="primary" />} />;
+                                  return (
+                                    <FormControlLabel
+                                      name={group.name}
+                                      checked={generalAIType === group.name}
+                                      label={t(`${group.label}`)}
+                                      control={<Radio color="primary" />}
+                                    />
+                                  );
                                 })}
                               </RadioGroup>
                             </FormControl>
@@ -2239,36 +2941,83 @@ const LabelDetail = ({ history, match }) => {
                     {autoLabelingAiType === "general" && (
                       <>
                         <Grid item xs={12}>
-                          <span style={{ fontWeight: 600, marginRight: 8 }}>{t("Choose a class")}</span>
-                          <span className={classes.subHighlightText}>*{t("at least 1 required")}</span>
+                          <span style={{ fontWeight: 600, marginRight: 8 }}>
+                            {t("Choose a class")}
+                          </span>
+                          <span className={classes.subHighlightText}>
+                            *{t("at least 1 required")}
+                          </span>
                         </Grid>
-                        <FormControl component="fieldset" className={classes.formControl} style={{ margin: "16px 8px 24px", display: "inline" }}>
+                        <FormControl
+                          component="fieldset"
+                          className={classes.formControl}
+                          style={{ margin: "16px 8px 24px", display: "inline" }}
+                        >
                           {generalAIClasses.map((generalAIClass) => {
-                            return <FormControlLabel control={<Checkbox onClick={() => handleGeneralAIClassChecked(generalAIClass)} checked={generalAIClassChecked[generalAIClass]} value={generalAIClass} style={{ marginRight: 4 }} />} label={generalAIClass} style={{ margin: 10, minWidth: "15%" }} />;
+                            return (
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    onClick={() =>
+                                      handleGeneralAIClassChecked(
+                                        generalAIClass
+                                      )
+                                    }
+                                    checked={
+                                      generalAIClassChecked[generalAIClass]
+                                    }
+                                    value={generalAIClass}
+                                    style={{ marginRight: 4 }}
+                                  />
+                                }
+                                label={generalAIClass}
+                                style={{ margin: 10, minWidth: "15%" }}
+                              />
+                            );
                           })}
                         </FormControl>
 
-                        {generalAIType !== "facepoint" && generalAIType !== "keypoint" && (
-                          <>
-                            <Grid item xs={12} style={{ fontWeight: 600 }}>
-                              {t("Select Autolabeling Type")}
-                            </Grid>
-                            <FormControl component="fieldset" style={{ margin: "20px 20px 0" }}>
-                              {/*<FormLabel component="legend" style={{paddingTop: '20px', color:currentTheme.text1 + ' !important'}}>{t('Analyze Unit')}</FormLabel>*/}
-                              <RadioGroup row aria-label="position" name="position" defaultValue="box" onChange={(e) => onChangeAutoLabelingType(e.target.value)}>
-                                <FormControlLabel value="box" label={t("General (Box)")} control={<Radio color="primary" />} />
-                                <FormControlLabel value="polygon" label={t("Polygon")} control={<Radio color="primary" />} />
-                                {/* {generalAIType === "road" && (
+                        {generalAIType !== "facepoint" &&
+                          generalAIType !== "keypoint" && (
+                            <>
+                              <Grid item xs={12} style={{ fontWeight: 600 }}>
+                                {t("Select Autolabeling Type")}
+                              </Grid>
+                              <FormControl
+                                component="fieldset"
+                                style={{ margin: "20px 20px 0" }}
+                              >
+                                {/*<FormLabel component="legend" style={{paddingTop: '20px', color:currentTheme.text1 + ' !important'}}>{t('Analyze Unit')}</FormLabel>*/}
+                                <RadioGroup
+                                  row
+                                  aria-label="position"
+                                  name="position"
+                                  defaultValue="box"
+                                  onChange={(e) =>
+                                    onChangeAutoLabelingType(e.target.value)
+                                  }
+                                >
+                                  <FormControlLabel
+                                    value="box"
+                                    label={t("General (Box)")}
+                                    control={<Radio color="primary" />}
+                                  />
+                                  <FormControlLabel
+                                    value="polygon"
+                                    label={t("Polygon")}
+                                    control={<Radio color="primary" />}
+                                  />
+                                  {/* {generalAIType === "road" && (
                                     <FormControlLabel
                                       value="sementic"
                                       label={t("Sementic")}
                                       control={<Radio color="primary" />}
                                     />
                                   )} */}
-                              </RadioGroup>
-                            </FormControl>
-                          </>
-                        )}
+                                </RadioGroup>
+                              </FormControl>
+                            </>
+                          )}
                       </>
                     )}
                     {/* {labelprojects.projectDetail &&
@@ -2302,8 +3051,14 @@ const LabelDetail = ({ history, match }) => {
                   </>
                 )}
 
-                <Grid container alignItems="center" style={{ margin: "24px 0" }}>
-                  <span style={{ fontWeight: 600 }}>{t("Number of AutoLabeling")}</span>
+                <Grid
+                  container
+                  alignItems="center"
+                  style={{ margin: "24px 0" }}
+                >
+                  <span style={{ fontWeight: 600 }}>
+                    {t("Number of AutoLabeling")}
+                  </span>
                   <span> : </span>
                   {isAbleToChangeAmount ? (
                     <TextField
@@ -2317,22 +3072,42 @@ const LabelDetail = ({ history, match }) => {
                       }}
                       inputRef={labelingCountRef}
                       fullWidth={true}
-                      disabled={!isAbleToChangeAmount || autoLabelingAiType == ""}
+                      disabled={
+                        !isAbleToChangeAmount || autoLabelingAiType == ""
+                      }
                       defaultValue={autoLabelingAmount}
                       onChange={onChangeAutoLabelingAmount}
                     />
                   ) : (
-                    <span style={{ fontWeight: 600 }}>{autoLabelingAmount ? autoLabelingAmount.toLocaleString() : 0}</span>
+                    <span style={{ fontWeight: 600 }}>
+                      {autoLabelingAmount
+                        ? autoLabelingAmount.toLocaleString()
+                        : 0}
+                    </span>
                   )}
                 </Grid>
 
                 {autoLabelingAiType === "custom" && (
-                  <Typography component="div" style={{ margin: "24px", marginLeft: 30, fontSize: 15 }} variant={"body2"}>
-                    <AnnouncementIcon fontSize="small" /> {t("important")}: {t("Custom AI의 경우 오토라벨링 개수가 라벨링 시작전 이미지 장수와 오토라벨링 횟수에 한해 제한됩니다.")}
+                  <Typography
+                    component="div"
+                    style={{ margin: "24px", marginLeft: 30, fontSize: 15 }}
+                    variant={"body2"}
+                  >
+                    <AnnouncementIcon fontSize="small" /> {t("important")}:{" "}
+                    {t(
+                      "In the case of Custom AI, the number of auto-labeling is limited only to the number of images and auto-labeling before labeling starts."
+                    )}
                   </Typography>
                 )}
               </div>
-              <Grid container justifyContent="space-between" alignItems="center" width="100%" style={{ margin: "16px 0 24px" }} columnSpacing={2}>
+              <Grid
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                width="100%"
+                style={{ margin: "16px 0 24px" }}
+                columnSpacing={2}
+              >
                 <Grid item xs={6} style={{ padding: 0 }}>
                   <Button
                     id="close_startautolabelingmodal_btn"
@@ -2346,9 +3121,20 @@ const LabelDetail = ({ history, match }) => {
                   </Button>
                 </Grid>
                 <Grid item xs={6}>
-                  {(labelprojects.projectDetail && labelprojects.projectDetail.workapp !== "object_detection") || autoLabelingAiType ? (
+                  {(labelprojects.projectDetail &&
+                    labelprojects.projectDetail.workapp !==
+                      "object_detection") ||
+                  autoLabelingAiType ? (
                     <>
-                      <Button id="start_autolabeling_btn" shape="greenContained" disabled={!autoLabelingAiType || isAutoLabelingButtonLoading} style={{ width: "100%" }} onClick={startAutoLabeling}>
+                      <Button
+                        id="start_autolabeling_btn"
+                        shape="greenContained"
+                        disabled={
+                          !autoLabelingAiType || isAutoLabelingButtonLoading
+                        }
+                        style={{ width: "100%" }}
+                        onClick={startAutoLabeling}
+                      >
                         <span> {t("Start auto-labeling")} </span>
                         {isAutoLabelingButtonLoading && (
                           <CircularProgress
@@ -2365,9 +3151,20 @@ const LabelDetail = ({ history, match }) => {
                     </>
                   ) : (
                     <>
-                      <Tooltip title={<span style={{ fontSize: "11px" }}>{t("Please select an AI type.")}</span>}>
+                      <Tooltip
+                        title={
+                          <span style={{ fontSize: "11px" }}>
+                            {t("Please select an AI type.")}
+                          </span>
+                        }
+                      >
                         <div>
-                          <Button id="start_autolabeling_disabled_btn" shape="Contained" disabled style={{ width: "100%" }}>
+                          <Button
+                            id="start_autolabeling_disabled_btn"
+                            shape="Contained"
+                            disabled
+                            style={{ width: "100%" }}
+                          >
                             {t("Start auto-labeling")}
                           </Button>
                         </div>
