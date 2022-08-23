@@ -54,16 +54,26 @@ const Dataconnector = ({ history }) => {
     []
   );
 
+  const urlSearch = new URLSearchParams(window.location.search);
+  const paramPage = urlSearch.get("page");
+  const paramSorting = urlSearch.get("sorting");
+  const paramDesc = urlSearch.get("desc");
+  const paramRows = urlSearch.get("rows");
+  const initPage = paramPage ? paramPage - 1 : 0;
+  const initSorting = paramSorting ? paramSorting : "created_at";
+  const initDesc = paramDesc ? (paramDesc === "true" ? true : false) : true;
+  const initRows = paramRows ? paramRows : 10;
+
   const [isLoading, setIsLoading] = useState(true);
   const [isProjectStartLoading, setIsProjectStartLoading] = useState(false);
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
 
   const [isDataRequested, setIsDataRequested] = useState(false);
-  const [datatablePage, setDatatablePage] = useState(0);
-  const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(10);
-  const [sortDataValue, setSortDataValue] = useState("created_at");
-  const [isSortDesc, setIsSortDesc] = useState(true);
+  const [datatablePage, setDatatablePage] = useState(initPage);
+  const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(initRows);
+  const [sortDataValue, setSortDataValue] = useState(initSorting);
+  const [isSortDesc, setIsSortDesc] = useState(initDesc);
   const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isPublicData, setIsPublicData] = useState(false);
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
