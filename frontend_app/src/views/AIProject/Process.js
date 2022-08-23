@@ -651,28 +651,28 @@ const Process = (props) => {
   // };
 
   const onSetSampleData = () => {
-    if (!projects.project) return;
+    const project = projects.project;
+    if (!project) return;
 
     let sampleDataRaw = {};
     let sampleDataIdDict = {};
-    let detailText =
-      projects.project.description !== null ? projects.project.description : "";
-    setNextProjectName(projects.project.projectName);
+    let detailText = project.description !== null ? project.description : "";
+    setNextProjectName(project.projectName);
     setNextProjectDetail(detailText);
-    projects.project.timeSeriesColumnInfo &&
-      setTimeSeriesColumnInfo(projects.project.timeSeriesColumnInfo);
-    projects.project.preprocessingInfo &&
-      setPreprocessingInfo(projects.project.preprocessingInfo);
-    projects.project.preprocessingInfoValue &&
-      setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
+    project.timeSeriesColumnInfo &&
+      setTimeSeriesColumnInfo(project.timeSeriesColumnInfo);
+    project.preprocessingInfo &&
+      setPreprocessingInfo(project.preprocessingInfo);
+    project.preprocessingInfoValue &&
+      setPreprocessingInfoValue(project.preprocessingInfoValue);
 
-    if (projects.project.joinInfo) {
-      setjoinInfo(projects.project.joinInfo);
+    if (project.joinInfo) {
+      setjoinInfo(project.joinInfo);
       var subConnectorsRaw = [];
-      projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector) => {
+      project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector) => {
           var isMainConnector = true;
-          Object.keys(projects.project.joinInfo).map((joinInfoValue) => {
+          Object.keys(project.joinInfo).map((joinInfoValue) => {
             if (+connector.id === +joinInfoValue) {
               isMainConnector = false;
               subConnectorsRaw.push(connector);
@@ -684,16 +684,16 @@ const Process = (props) => {
         });
       setSubConnectors(subConnectorsRaw);
     } else if (
-      projects.project.dataconnectorsList &&
-      projects.project.dataconnectorsList.length > 1
+      project.dataconnectorsList &&
+      project.dataconnectorsList.length > 1
     ) {
       var subConnectorsRaw = [];
       var joinInfoRaw = {};
       var mainConnectorRaw = {};
 
-      projects.project &&
-        projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector, idx) => {
+      project &&
+        project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector, idx) => {
           if (idx === 0) {
             setMainConnector(connector);
             mainConnectorRaw = connector;
@@ -714,29 +714,29 @@ const Process = (props) => {
       setSubConnectors(subConnectorsRaw);
       setjoinInfo(joinInfoRaw);
     } else if (
-      projects.project.dataconnectorsList &&
-      projects.project.dataconnectorsList.length === 1
+      project.dataconnectorsList &&
+      project.dataconnectorsList.length === 1
     ) {
       setSubConnectors([]);
       setjoinInfo([]);
     }
 
-    projects.project.analyticsStandard &&
-      setAnalyticsStandard(projects.project.analyticsStandard);
+    project.analyticsStandard &&
+      setAnalyticsStandard(project.analyticsStandard);
 
     const state = props.history.location.state;
     if (state) {
       state.modelid && dispatch(setChosenModelRequestAction(state.modelid));
       state.page && setSelectedPage(state.page);
     } else {
-      if (projects.project.status === 0 && !isAnyModelFinished) {
-        if (projects.project.trainingMethod === "cycle_gan") {
+      if (project.status === 0 && !isAnyModelFinished) {
+        if (project.trainingMethod === "cycle_gan") {
           setSelectedPage("rawdata");
         } else {
           setSelectedPage("summary");
         }
       }
-      let models = projects.project.models;
+      let models = project.models;
       let tempFinished = false;
       if (models)
         for (let idx = 0; idx < models.length; idx++) {
@@ -748,9 +748,9 @@ const Process = (props) => {
       setIsAnyModelFinished(tempFinished);
 
       if (
-        [9, 99].indexOf(projects.project.status) > -1 ||
-        (projects.project.status > 0 &&
-          [9, 99].indexOf(projects.project.status) === -1 &&
+        [9, 99].indexOf(project.status) > -1 ||
+        (project.status > 0 &&
+          [9, 99].indexOf(project.status) === -1 &&
           models?.length > 0) ||
         tempFinished
       ) {
@@ -759,8 +759,8 @@ const Process = (props) => {
       }
     }
 
-    if (projects.project.startTimeSeriesDatetime) {
-      var startTimeSeriesDatetimeSplit = projects.project.startTimeSeriesDatetime.split(
+    if (project.startTimeSeriesDatetime) {
+      var startTimeSeriesDatetimeSplit = project.startTimeSeriesDatetime.split(
         " "
       );
       onChangeStartTimeSeriesDatetime(
@@ -773,10 +773,8 @@ const Process = (props) => {
         )
       );
     }
-    if (projects.project.endTimeSeriesDatetime) {
-      var endTimeSeriesDatetimeSplit = projects.project.endTimeSeriesDatetime.split(
-        " "
-      );
+    if (project.endTimeSeriesDatetime) {
+      var endTimeSeriesDatetimeSplit = project.endTimeSeriesDatetime.split(" ");
       onChangeEndTimeSeriesDatetime(
         new Date(
           Date.parse(
@@ -786,17 +784,17 @@ const Process = (props) => {
       );
     }
 
-    if (projects.project.trainingColumnInfo) {
+    if (project.trainingColumnInfo) {
       var trainingColumnInfoRaw = {};
-      Object.keys(projects.project.trainingColumnInfo).map((columnInfo) => {
-        if (projects.project.trainingColumnInfo[columnInfo]) {
+      Object.keys(project.trainingColumnInfo).map((columnInfo) => {
+        if (project.trainingColumnInfo[columnInfo]) {
           trainingColumnInfoRaw[columnInfo] = true;
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
-    } else if (projects.project.fileStructure) {
+    } else if (project.fileStructure) {
       var trainingColumnInfoRaw = {};
-      JSON.parse(projects.project.fileStructure).map((columnInfo) => {
+      JSON.parse(project.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
           trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(
             columnInfo.use
@@ -811,13 +809,13 @@ const Process = (props) => {
     var datacolumnsRaw = [];
 
     var fileSizeRaw = 0;
-    if (projects.project.sampleData) {
-      sampleDataRaw["전체"] = projects.project.sampleData;
+    if (project.sampleData) {
+      sampleDataRaw["전체"] = project.sampleData;
     }
 
     var isImageLabelData = false;
-    projects.project.dataconnectorsList &&
-      projects.project.dataconnectorsList.map((dataconnector) => {
+    project.dataconnectorsList &&
+      project.dataconnectorsList.map((dataconnector) => {
         if (dataconnector.hasTextData) {
           setHasStructureData(true);
           setHasTimeSeriesData(true);
@@ -840,20 +838,17 @@ const Process = (props) => {
         sampleDataIdDict[dataconnector.dataconnectorName] = dataconnector.id;
         if (dataconnector.fileSize) fileSizeRaw += dataconnector.fileSize;
       });
-    if (projects.project.hasImageData) {
+    if (project.hasImageData) {
       setHasStructureData(false);
       setHasTimeSeriesData(false);
       setHasImageLabelData(true);
     }
-    if (projects.project.hasTextData) {
+    if (project.hasTextData) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
     }
-    if (
-      !projects.project.dataconnectorsList &&
-      projects.project.hasTimeSeriesData
-    ) {
+    if (!project.dataconnectorsList && project.hasTimeSeriesData) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
@@ -863,17 +858,17 @@ const Process = (props) => {
     setSampleDataId(sampleDataIdDict);
     if (
       !(datacolumnsRaw && datacolumnsRaw.length > 0) &&
-      projects.project.fileStructure
+      project.fileStructure
     ) {
-      datacolumnsRaw = JSON.parse(projects.project.fileStructure);
+      datacolumnsRaw = JSON.parse(project.fileStructure);
     }
     setdatacolumns(datacolumnsRaw);
     datacolumnsRaw.forEach((datacolumn) => {
       if (datacolumn.miss > 0) setHasMissingValue(true);
     });
 
-    if (projects.project.trainingMethod) {
-      if (projects.project.trainingMethod.indexOf("time_series") > -1) {
+    if (project.trainingMethod) {
+      if (project.trainingMethod.indexOf("time_series") > -1) {
         //dispatch(putTrainingMethodRequestAction('time_series'))
         setHasTimeSeriesData(true);
         setHasImageLabelData(false);
@@ -881,10 +876,7 @@ const Process = (props) => {
     } else {
       if (isImageLabelData) {
         dispatch(putTrainingMethodRequestAction("image"));
-      } else if (
-        projects.project.hasImageData &&
-        !projects.project.hasTextData
-      ) {
+      } else if (project.hasImageData && !project.hasTextData) {
         dispatch(putTrainingMethodRequestAction("image"));
       } else {
         dispatch(putTrainingMethodRequestAction("normal"));
@@ -893,8 +885,8 @@ const Process = (props) => {
 
     let total = 0;
     let done = 0;
-    projects.project.models &&
-      projects.project.models.forEach((model) => {
+    project.models &&
+      project.models.forEach((model) => {
         total++;
         if (model.status === 100) done++;
       });
@@ -902,9 +894,7 @@ const Process = (props) => {
       ? parseInt((done / total) * 100)
       : 0;
     setModelPercentage(
-      projects.project.status === 9 || projects.project.status === 99
-        ? -1
-        : percentage
+      project.status === 9 || project.status === 99 ? -1 : percentage
     );
   };
 
