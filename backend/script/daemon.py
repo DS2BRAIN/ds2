@@ -1026,9 +1026,13 @@ class Daemon():
                 durationTime = endTime - startTime
                 self.dbClass.updateModel(model['id'], {
                     "finished_at": endTime,
-                    "status": status,
                     "duration": durationTime.seconds,
                 })
+
+                if model['status'] != 99:
+                    self.dbClass.updateModel(model['id'], {
+                        "status": status,
+                    })
                 user = self.dbClass.getOneUserById(project['user'], raw=True)
                 user.trainingSecondCount = user.trainingSecondCount + durationTime.seconds
                 if self.utilClass.configOption != "enterprise":
