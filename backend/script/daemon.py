@@ -1083,6 +1083,12 @@ class Daemon():
                 except:
                     pass
 
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
             project_status = self.finishProject(project)
             if project_status is None:
                 break

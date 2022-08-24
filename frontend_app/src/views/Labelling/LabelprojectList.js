@@ -1,39 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { ReactTitle } from "react-meta-tags";
-import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
 
-import {
-  getLabelProjectsRequestAction,
-  stopLabelProjectsLoadingRequestAction,
-  setObjectlistsSearchedValue,
-} from "redux/reducers/labelprojects";
-import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
-import {
-  askDeleteLabelProjectReqeustAction,
-  openErrorSnackbarRequestAction,
-} from "redux/reducers/messages";
-import currentTheme from "assets/jss/custom";
-import Button from "components/CustomButtons/Button";
-import GridItem from "components/Grid/GridItem";
-import GridContainer from "components/Grid/GridContainer";
-import SearchInputBox from "components/Table/SearchInputBox";
-import LabelIntro from "components/Guide/LabelIntro";
+import { getLabelProjectsRequestAction, stopLabelProjectsLoadingRequestAction, setObjectlistsSearchedValue } from "redux/reducers/labelprojects.js";
 
-import {
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TablePagination,
-  Tooltip,
-} from "@material-ui/core";
-import { CircularProgress } from "@mui/material";
+import currentTheme from "assets/jss/custom.js";
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
+import TablePagination from "@material-ui/core/TablePagination";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Checkbox from "@material-ui/core/Checkbox";
+import Modal from "@material-ui/core/Modal";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import StartProject from "./StartProject.js";
+import { useDispatch, useSelector } from "react-redux";
+import { askModalRequestAction, askDeleteLabelProjectReqeustAction } from "redux/reducers/messages.js";
+import { useTranslation } from "react-i18next";
+import CloseIcon from "@material-ui/icons/Close";
+import Plans from "components/Plans/Plans.js";
+import Tooltip from "@material-ui/core/Tooltip";
+import { ReactTitle } from "react-meta-tags";
+import LabelIntro from "components/Guide/LabelIntro";
+import { putUserRequestActionWithoutMessage } from "../../redux/reducers/user";
+import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
+import { fileurl } from "controller/api";
+import { CircularProgress } from "@mui/material";
+import SearchInputBox from "components/Table/SearchInputBox.js";
+import Button from "components/CustomButtons/Button";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { openChat } from "components/Function/globalFunc.js";
 
 const LabelprojectList = ({ history }) => {
   const classes = currentTheme();
@@ -49,40 +47,35 @@ const LabelprojectList = ({ history }) => {
   let currentUrl = window.location.href;
 
   const { t } = useTranslation();
+  const logoBlue = fileurl + "asset/front/img/logo_title.png";
   const initialPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
   const initialSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-  const initialDescValue =
-    currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
-  const initialRowsValue = parseInt(
-    currentUrl.split("&rows=")[1].split("&")[0]
-  );
+  const initialDescValue = currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
+  const initialRowsValue = parseInt(currentUrl.split("&rows=")[1].split("&")[0]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
   const [projectPage, setProjectPage] = useState(initialPage);
-  const [projectRowsPerPage, setProjectRowsPerPage] = useState(
-    initialRowsValue
-  );
+  const [projectRowsPerPage, setProjectRowsPerPage] = useState(initialRowsValue);
   const [searchedValue, setSearchedValue] = useState("");
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [sortingValue, setSortingValue] = useState(initialSortingValue);
   const [isSortDesc, setIsSortDesc] = useState(initialDescValue);
   const [isPagingChanged, setIsPagingChanged] = useState(false);
   const [isShared, setIsShared] = useState(false);
+  const [isUpgradePlanModalOpen, setIsUpgradePlanModalOpen] = useState(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   useEffect(() => {
-    const selectedPage =
-      parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
+    const selectedPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
     const selectedSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-    const selectedDescValue =
-      currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
-    const selectedRowsValue = parseInt(
-      currentUrl.split("&rows=")[1].split("&")[0]
-    );
+    const selectedDescValue = currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
+    const selectedRowsValue = parseInt(currentUrl.split("&rows=")[1].split("&")[0]);
 
     setProjectPage(selectedPage);
     setSortingValue(selectedSortingValue);
@@ -133,6 +126,7 @@ const LabelprojectList = ({ history }) => {
 
   useEffect(() => {
     if (messages.shouldCloseModal) {
+      setIsProjectModalOpen(false);
       dispatch(stopLabelProjectsLoadingRequestAction());
     }
   }, [messages.shouldCloseModal]);
@@ -164,6 +158,11 @@ const LabelprojectList = ({ history }) => {
     );
   };
 
+  const onOpenChatbot = () => {
+    setIsUpgradePlanModalOpen(false);
+    openChat();
+  };
+
   const setProjectSettings = () => {
     setProjectCheckedValue({ all: false });
     for (let i = 0; i < labelprojects.projects.length; i++) {
@@ -190,11 +189,7 @@ const LabelprojectList = ({ history }) => {
 
   const onSetSortValue = async (value) => {
     let tempIsSortDesc = value === sortingValue ? !isSortDesc : true;
-    const changedUrl =
-      value === sortingValue
-        ? `labelling?page=${projectPage +
-            1}&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`
-        : `labelling?page=1&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`;
+    const changedUrl = value === sortingValue ? `labelling?page=${projectPage + 1}&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}` : `labelling?page=1&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`;
     setIsLoading(true);
 
     if (value === sortingValue) {
@@ -214,18 +209,14 @@ const LabelprojectList = ({ history }) => {
 
   const handleProjectChangePage = (event, newPage) => {
     setIsLoading(true);
-    history.push(
-      `?page=${newPage +
-        1}&sorting=${sortingValue}&desc=${isSortDesc}&rows=${projectRowsPerPage}`
-    );
+    history.push(`?page=${newPage + 1}&sorting=${sortingValue}&desc=${isSortDesc}&rows=${projectRowsPerPage}`);
     currentUrl = window.location.href;
     setProjectPage(newPage);
     setIsProjectRequested(true);
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    const changedUrl = `labelling?page=1&sorting=${sortingValue}&desc=${isSortDesc}&rows=${+event
-      .target.value}`;
+    const changedUrl = `labelling?page=1&sorting=${sortingValue}&desc=${isSortDesc}&rows=${+event.target.value}`;
     setIsLoading(true);
     setProjectRowsPerPage(+event.target.value);
     setProjectPage(0);
@@ -238,11 +229,7 @@ const LabelprojectList = ({ history }) => {
       await history.push(`/admin/labelling/${project.id}`);
       return;
     } else {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("Only projects in the completed status can be viewed.")
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("Only projects in the completed status can be viewed.")));
       return;
     }
   };
@@ -250,8 +237,7 @@ const LabelprojectList = ({ history }) => {
   const onAskDeleteProjects = () => {
     const deleteFilesArr = [];
     for (let file in projectCheckedValue) {
-      if (file !== "all" && projectCheckedValue[file])
-        deleteFilesArr.push(file);
+      if (file !== "all" && projectCheckedValue[file]) deleteFilesArr.push(file);
     }
     dispatch(
       askDeleteLabelProjectReqeustAction({
@@ -269,27 +255,20 @@ const LabelprojectList = ({ history }) => {
 
   const tableHeads = [
     { value: "No", width: "10%", name: "" },
-    { value: "Project name", width: "25%", name: "name" },
-    { value: "Role", width: "10%", name: "role" },
-    { value: "Type", width: "15%", name: "workapp" },
-    { value: "Date created", width: "15%", name: "created_at" },
-    { value: "Date updated", width: "15%", name: "updated_at" },
-    { value: "Status", width: "10%", name: "status" },
+    { value: "프로젝트명", width: "25%", name: "name" },
+    { value: "역할", width: "10%", name: "role" },
+    { value: "종류", width: "15%", name: "workapp" },
+    { value: "생성일", width: "15%", name: "created_at" },
+    { value: "업데이트일", width: "15%", name: "updated_at" },
+    { value: "상태", width: "10%", name: "status" },
   ];
 
-  const tableBodys = [
-    "name",
-    "role",
-    "workapp",
-    "created_at",
-    "updated_at",
-    "status",
-  ];
+  const tableBodys = ["name", "role", "workapp", "created_at", "updated_at", "status"];
 
   const statusText = {
-    1: "Creating",
-    99: "Error",
-    100: "Completed",
+    1: "생성중",
+    99: "에러",
+    100: "완료",
   };
 
   const renderProjectTable = () => {
@@ -298,42 +277,29 @@ const LabelprojectList = ({ history }) => {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell
-                className={classes.tableHead}
-                align="center"
-                style={{ width: "10" }}
-              >
-                <Checkbox
-                  value="all"
-                  checked={projectCheckedValue["all"]}
-                  onChange={onSetProjectCheckedValueAll}
-                />
+              <TableCell className={classes.tableHead} align="center" style={{ width: "10" }}>
+                <Checkbox value="all" checked={projectCheckedValue["all"]} onChange={onSetProjectCheckedValueAll} />
               </TableCell>
-              {tableHeads.map((tableHead, idx) => (
-                <TableCell
-                  id="mainHeader"
-                  key={idx}
-                  className={classes.tableHead}
-                  align="center"
-                  width={tableHead.width}
-                  style={{
-                    cursor: tableHead.value !== "No" ? "pointer" : "default",
-                  }}
-                  onClick={() =>
-                    tableHead.value !== "No" && onSetSortValue(tableHead.name)
-                  }
-                >
-                  <div className={classes.tableHeader}>
-                    {sortingValue === tableHead.name &&
-                      (!isSortDesc ? (
-                        <ArrowUpwardIcon fontSize="small" />
-                      ) : (
-                        <ArrowDownwardIcon fontSize="small" />
-                      ))}
-                    <b>{t(tableHead.value)}</b>
-                  </div>
-                </TableCell>
-              ))}
+              {tableHeads.map((tableHead, idx) => {
+                return (
+                  <TableCell
+                    id="mainHeader"
+                    key={idx}
+                    className={classes.tableHead}
+                    align="center"
+                    width={tableHead.width}
+                    style={{
+                      cursor: tableHead.value !== "No" ? "pointer" : "default",
+                    }}
+                    onClick={() => tableHead.value !== "No" && onSetSortValue(tableHead.name)}
+                  >
+                    <div className={classes.tableHeader}>
+                      {sortingValue === tableHead.name && (!isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                      <b>{t(tableHead.value)}</b>
+                    </div>
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -342,61 +308,26 @@ const LabelprojectList = ({ history }) => {
                 key={idx}
                 className={classes.tableRow}
                 style={{
-                  background:
-                    idx % 2 === 0
-                      ? currentTheme.tableRow1
-                      : currentTheme.tableRow2,
+                  background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
                 }}
               >
                 <TableCell className={classes.tableRowCell} align="center">
-                  <Checkbox
-                    value={project.id}
-                    checked={projectCheckedValue[project.id] ? true : false}
-                    onChange={() => onSetProjectCheckedValue(project.id)}
-                  />
+                  <Checkbox value={project.id} checked={projectCheckedValue[project.id] ? true : false} onChange={() => onSetProjectCheckedValue(project.id)} />
                 </TableCell>
-                <TableCell
-                  className={classes.tableRowCell}
-                  align="center"
-                  onClick={() => goProjectDetail(project)}
-                >
-                  {labelprojects.totalLength -
-                    (projectRowsPerPage * projectPage + idx)}
+                <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(project)}>
+                  {labelprojects.totalLength - (projectRowsPerPage * projectPage + idx)}
                 </TableCell>
                 {tableBodys.map((tableBody, idx) => (
-                  <TableCell
-                    key={idx}
-                    className={classes.tableRowCell}
-                    align="center"
-                    onClick={() => goProjectDetail(project)}
-                  >
-                    <div
-                      id="labeling_project_list"
-                      style={{ wordBreak: "break-all" }}
-                    >
-                      {tableBody === "created_at" ||
-                      tableBody === "updated_at" ? (
+                  <TableCell key={idx} className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(project)}>
+                    <div id="labeling_project_list" style={{ wordBreak: "break-all" }}>
+                      {tableBody === "created_at" || tableBody === "updated_at" ? (
                         project[tableBody] ? (
                           project[tableBody]?.substring(0, 10)
                         ) : (
                           "-"
                         )
                       ) : tableBody === "status" ? (
-                        <span
-                          style={
-                            project[tableBody] === 1
-                              ? { color: "#1BC6B4" }
-                              : project[tableBody] === 99
-                              ? { color: "#BD2020" }
-                              : project[tableBody] === 100
-                              ? { color: "#0A84FF" }
-                              : null
-                          }
-                        >
-                          {statusText[project[tableBody]]
-                            ? "⦁ " + t(statusText[project[tableBody]])
-                            : "-"}
-                        </span>
+                        <span style={project[tableBody] === 1 ? { color: "#1BC6B4" } : project[tableBody] === 99 ? { color: "#BD2020" } : project[tableBody] === 100 ? { color: "#0A84FF" } : null}>{statusText[project[tableBody]] ? "⦁ " + t(statusText[project[tableBody]]) : "-"}</span>
                       ) : (
                         t(project[tableBody] ? project[tableBody] : "-")
                       )}
@@ -467,57 +398,26 @@ const LabelprojectList = ({ history }) => {
     <>
       <ReactTitle title={"DS2.ai - " + t("Labeling")} />
       {introOn ? (
-        <LabelIntro
-          setIntroOn={setIntroOn}
-          setIntroOffClicked={setIntroOffClicked}
-          useTranslation={useTranslation}
-          userLang={user.language}
-        />
+        <LabelIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} userLang={user.language} />
       ) : (
         <>
           <GridItem xs={12}>
-            <div className={classes.topTitle}>
-              {t("Training Data Labeling")}
-            </div>
-            <div
-              className={classes.subTitleText}
-              style={{ marginBottom: "20px" }}
-            >
+            <div className={classes.topTitle}>{t("Training Data Labeling")}</div>
+            <div className={classes.subTitleText} style={{ marginBottom: "20px" }}>
               {t("Labeling tool for deep learning-based AI training.")}
             </div>
           </GridItem>
           <div>
             <GridContainer style={{ paddingTop: "24px", alignItems: "center" }}>
-              <GridItem
-                xs={7}
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <Button
-                  id="add_project_btn"
-                  shape="greenOutlined"
-                  style={{ height: 32 }}
-                  onClick={onStartLabelProject}
-                >
+              <GridItem xs={7} style={{ display: "flex", alignItems: "center" }}>
+                <Button id="add_project_btn" shape="greenOutlined" style={{ height: 32 }} onClick={onStartLabelProject}>
                   {t("Start labeling")}
                 </Button>
 
-                <Tooltip
-                  title={
-                    <div style={{ fontSize: "12px" }}>
-                      {user.language === "ko"
-                        ? t("Project list") + " " + t("Refresh")
-                        : t("Refresh") + " " + t("Project list")}
-                    </div>
-                  }
-                  placement="top"
-                >
+                <Tooltip title={<div style={{ fontSize: "12px" }}>{user.language === "ko" ? t("Project list") + " " + t("새로고침") : t("Refresh") + " " + t("프로젝트 리스트")}</div>} placement="top">
                   <AutorenewIcon
                     id="label_project_refresh_btn"
-                    className={
-                      isLoading === false
-                        ? classes.refreshIconActive
-                        : classes.refreshIconDefault
-                    }
+                    className={isLoading === false ? classes.refreshIconActive : classes.refreshIconDefault}
                     style={{
                       width: "30px",
                       height: "30px",
@@ -535,10 +435,7 @@ const LabelprojectList = ({ history }) => {
                 </Tooltip>
               </GridItem>
               <GridItem xs={5}>
-                <SearchInputBox
-                  tooltipText={t("Enter the project name")}
-                  setSearchedValue={setSearchedValue}
-                />
+                <SearchInputBox tooltipText="프로젝트명을 입력해주세요." setSearchedValue={setSearchedValue} />
               </GridItem>
               {isLoading ? (
                 <div className="emptyListTable">
@@ -546,32 +443,112 @@ const LabelprojectList = ({ history }) => {
                 </div>
               ) : (
                 <GridItem xs={12} sm={12} md={12} style={{ marginTop: "26px" }}>
-                  {labelprojects.totalLength &&
-                  labelprojects.totalLength !== 0 ? (
+                  {labelprojects.totalLength && labelprojects.totalLength !== 0 ? (
                     renderProjectTable()
                   ) : (
-                    <div
-                      id="labeling_no_project_text"
-                      className="emptyListTable"
-                    >
+                    <div id="labeling_no_project_text" className="emptyListTable">
                       {isShared
                         ? t("No Shared Label projects")
                         : user.me?.isAiTrainer
                         ? t("There is no labeling project under request.")
                         : searchedValue
                         ? user.language === "ko"
-                          ? `"${searchedValue}" ` +
-                            "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
+                          ? `"${searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
                           : `There were no results found for "${searchedValue}"`
-                        : t(
-                            "There is no labeling project in process. Please create a new project"
-                          )}
+                        : t("There is no labeling project in process. Please create a new project")}
                     </div>
                   )}
                 </GridItem>
               )}
             </GridContainer>
           </div>
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={isPlanModalOpen}
+            onClose={() => {
+              setIsPlanModalOpen(false);
+            }}
+            className={classes.modalContainer}
+          >
+            <div className={classes.planModalContent}>
+              <CloseIcon
+                className={classes.closeImg}
+                style={{ margin: "8px" }}
+                onClick={() => {
+                  setIsPlanModalOpen(false);
+                }}
+              />
+              <div className={classes.planModalTitle}>
+                <div id="gradientTitle" className={classes.planModalTitleFont}>
+                  {t("Upgrade your plan!")}
+                </div>
+              </div>
+              <Plans onOpenChatbot={onOpenChatbot} />
+            </div>
+          </Modal>
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={isProjectModalOpen}
+            onClose={() => {
+              dispatch(askModalRequestAction());
+            }}
+            className={classes.modalContainer}
+          >
+            <StartProject history={history} />
+          </Modal>
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={isUpgradePlanModalOpen}
+            onClose={() => {
+              setIsUpgradePlanModalOpen(false);
+            }}
+            className={classes.modalContainer}
+          >
+            <div className={classes.planAlertModalContent}>
+              <div style={{ padding: "26px 30px 12px 40px", width: "60%" }}>
+                <img style={{ width: "124px" }} src={logoBlue} alt={"logo"} className={classes.logo} />
+                <div style={{ padding: "30px 0" }}>
+                  <div className={classes.upgradePlanModalTitle}>
+                    <div style={{ marginBottom: "10px" }}>{t("Experience object recognition automatic labeling.")}</div>
+                    <div>{t("")}</div>
+                  </div>
+                  <div className={classes.upgradePlanModalContent}>
+                    <div style={{ marginBottom: "-8px" }}>{t("Active Learning이 접목된 자동 라벨링 기능을 활용하여")}</div>
+                    <div>{t("물체인식에 소요되는 시간과 비용을 절약할 수 있습니다.")}</div>
+                  </div>
+                  <div className={classes.upgradePlanSubTitle}>{t("This option is only available on the Enterprise plan.")}</div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <Button shape="blueContained" size="lg" onClick={onOpenChatbot}>
+                    {t("Enterprise plan inquiry")}
+                  </Button>
+                  <a href="https://clickai.ai/pricing.html" target="_blank" className={classes.planPolicyBtn}>
+                    {t("CLICK AI Pricing")}
+                  </a>
+                </div>
+              </div>
+              <div>
+                <div style={{ height: "10%" }}>
+                  <CloseIcon
+                    className={classes.closeImg}
+                    id="planModalCloseBtn"
+                    style={{ margin: "8px" }}
+                    onClick={() => {
+                      setIsUpgradePlanModalOpen(false);
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", height: "80%" }}>
+                  <video style={{ width: "380px", borderRadius: "10px" }} autoPlay loop>
+                    <source src={fileurl + "asset/ecosystem/etc.mov"} type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </Modal>
         </>
       )}
     </>

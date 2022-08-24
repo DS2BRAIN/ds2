@@ -133,7 +133,7 @@ const ProjectListStepper = ({ history, step, page }) => {
         >
           <div>3</div>
         </div>
-        <div className={classes.stepperTextStyle}>{t("In progress")}</div>
+        <div className={classes.stepperTextStyle}>{t("In Progress")}</div>
       </div>
 
       <div
@@ -166,9 +166,7 @@ const ProjectListStepper = ({ history, step, page }) => {
         >
           <div>4</div>
         </div>
-        <div className={classes.stepperTextStyle}>
-          {t("Data Analysis/Prediction")}
-        </div>
+        <div className={classes.stepperTextStyle}>{t("Data Analysis/Prediction")}</div>
       </div>
     </div>
   );
