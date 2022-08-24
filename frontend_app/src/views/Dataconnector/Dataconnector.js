@@ -244,9 +244,9 @@ const Dataconnector = ({ history }) => {
       setSearchedDataValue("");
       setIsSearchHiddenForRefresh(true);
       let urlSP = urlSearchParams;
-      urlSP.set("page", 1);
-      urlSP.set("sorting", "created_at");
-      urlSP.set("desc", true);
+      if (urlSP.has("page")) urlSP.set("page", 1);
+      if (urlSP.has("sorting")) urlSP.set("sorting", "created_at");
+      if (urlSP.has("desc")) urlSP.set("desc", true);
       handleSearchParams(urlSP);
     }
   }, [projects.isDatasetPosted]);
@@ -259,7 +259,7 @@ const Dataconnector = ({ history }) => {
         else setDatasetList(reduxDataset);
       } else {
         if (datatablePage) {
-          urlSearchParams(datatablePage);
+          urlSearchParams.set("page", 1);
           handleSearchParams(urlSearchParams);
           setTimeTick(-2);
         }
@@ -987,14 +987,15 @@ const Dataconnector = ({ history }) => {
   };
 
   const onSetSortDataValue = (value) => {
+    let urlSP = urlSearchParams;
     if (value === sortDataValue) {
-      urlSearchParams.set("desc", !isSortDesc);
+      urlSP.set("desc", !isSortDesc);
     } else {
-      urlSearchParams.set("sorting", value);
-      urlSearchParams.set("desc", true);
+      urlSP.set("sorting", value);
+      urlSP.set("desc", true);
     }
-    urlSearchParams.set("page", 1);
-    handleSearchParams(urlSearchParams);
+    if (urlSP.has("page")) urlSP.set("page", 1);
+    handleSearchParams(urlSP);
   };
 
   const startLabeling = () => {
