@@ -665,10 +665,7 @@ const Project = ({ history }) => {
                 </Button>
               </GridItem>
               <GridItem xs={4}>
-                <SearchInputBox
-                  tooltipText={t("Enter the project name")}
-                  setSearchedValue={setSearchedValue}
-                />
+                <SearchInputBox setSearchedValue={setSearchedValue} />
               </GridItem>
             </GridContainer>
             <GridContainer>

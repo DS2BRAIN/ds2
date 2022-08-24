@@ -543,10 +543,7 @@ const AutoMLProject = ({ history, route }) => {
           >
             <Grid item>{partStartBtns()}</Grid>
             <Grid item>
-              <SearchInputBox
-                tooltipText={t("Enter the project name")}
-                setSearchedValue={setSearchedProjectValue}
-              />
+              <SearchInputBox setSearchedValue={setSearchedProjectValue} />
             </Grid>
           </Grid>
           <Grid>{showMyProject(projects.projects)}</Grid>

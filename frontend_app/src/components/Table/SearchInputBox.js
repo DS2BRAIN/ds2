@@ -10,10 +10,13 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import currentTheme from "assets/jss/custom.js";
 
-const SearchInputBox = ({ tooltipText, setSearchedValue }) => {
+const SearchInputBox = ({ setSearchedValue }) => {
   const { t } = useTranslation();
   const classes = currentTheme();
   const dispatch = useDispatch();
+
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
 
   const [searchingValue, setSearchingValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
@@ -31,7 +34,9 @@ const SearchInputBox = ({ tooltipText, setSearchedValue }) => {
       setIsSearched(true);
       setSearchedValue(searchingValue);
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter a search term.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter a search term."))
+      );
       return;
     }
   };
@@ -53,7 +58,13 @@ const SearchInputBox = ({ tooltipText, setSearchedValue }) => {
   return (
     <Tooltip
       id="search_tooltip"
-      title={<div style={{ fontSize: "12px" }}>{t(tooltipText)}</div>}
+      title={
+        <div style={{ fontSize: "12px" }}>
+          {urlPath.includes("/dataconnector")
+            ? t("Enter the data name.")
+            : t("Enter the project name")}
+        </div>
+      }
       placement="top"
     >
       <form

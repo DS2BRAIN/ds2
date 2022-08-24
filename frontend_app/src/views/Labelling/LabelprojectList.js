@@ -535,10 +535,7 @@ const LabelprojectList = ({ history }) => {
                 </Tooltip>
               </GridItem>
               <GridItem xs={5}>
-                <SearchInputBox
-                  tooltipText={t("Enter the project name")}
-                  setSearchedValue={setSearchedValue}
-                />
+                <SearchInputBox setSearchedValue={setSearchedValue} />
               </GridItem>
               {isLoading ? (
                 <div className="emptyListTable">

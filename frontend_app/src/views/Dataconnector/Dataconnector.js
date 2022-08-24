@@ -1326,10 +1326,7 @@ const Dataconnector = ({ history }) => {
             </Grid>
             <Grid item xs={4}>
               {isSearchHiddenForRefresh ? null : (
-                <SearchInputBox
-                  tooltipText="Enter the data name."
-                  setSearchedValue={setSearchedDataValue}
-                />
+                <SearchInputBox setSearchedValue={setSearchedDataValue} />
               )}
             </Grid>
           </Grid>
