@@ -353,7 +353,7 @@ class Util():
         self.eximbay_mid = aistore_configs.get('eximbay_mid')
         self.enterprise_key = "enterprise_key_dev"
         self.metabase_port = "13009"
-        self.metabase_url = f'http://0.0.0.0:{self.metabase_port}'
+        self.metabase_url = f'http://localhost:{self.metabase_port}'
         self.metabase_database_name = util_configs.get('metabase_database_name', '')
         self.metabase_admin_email = util_configs.get('metabase_admin_email', '')
         self.metabase_admin_password = util_configs.get('metabase_admin_password', '')
