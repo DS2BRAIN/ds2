@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
@@ -11,12 +12,15 @@ import SearchIcon from "@material-ui/icons/Search";
 import currentTheme from "assets/jss/custom.js";
 
 const SearchInputBox = ({ setSearchedValue }) => {
+  const history = useHistory();
   const { t } = useTranslation();
   const classes = currentTheme();
   const dispatch = useDispatch();
 
   const urlLoc = window.location;
   const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
 
   const [searchingValue, setSearchingValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
@@ -32,7 +36,7 @@ const SearchInputBox = ({ setSearchedValue }) => {
 
     if (searchingValue && searchingValue.length > 0) {
       setIsSearched(true);
-      setSearchedValue(searchingValue);
+      onSetSearchOutput(searchingValue);
     } else {
       dispatch(
         openErrorSnackbarRequestAction(t("Please enter a search term."))
@@ -50,9 +54,23 @@ const SearchInputBox = ({ setSearchedValue }) => {
   const onGetDefault = () => {
     if (isSearched) {
       setIsSearched(false);
-      setSearchedValue("");
+      onSetSearchOutput("");
     }
     setSearchingValue("");
+  };
+
+  const onSetSearchOutput = (value) => {
+    if (urlPath.includes("/dataconnector")) {
+      let urlSP = urlSearchParams;
+      if (value === "") {
+        if (urlSP.has("search")) urlSP.delete("search");
+      } else {
+        urlSP.set("search", value);
+      }
+      history.push(urlPath + "?" + urlSP);
+    } else {
+      setSearchedValue(value);
+    }
   };
 
   return (

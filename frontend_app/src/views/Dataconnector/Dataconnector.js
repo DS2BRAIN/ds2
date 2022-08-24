@@ -112,10 +112,11 @@ const Dataconnector = ({ history }) => {
     setDatatableRowsPerPage(pagiInfoDict.rows);
     setSortDataValue(pagiInfoDict.sorting);
     setIsSortDesc(pagiInfoDict.desc);
+    setSearchedDataValue(pagiInfoDict.search);
     setIsPublicData(pagiInfoDict.public);
 
     setIsDataRequested(true);
-  }, [window.location.search]);
+  }, [urlSearch]);
 
   useEffect(() => {
     if (isDataRequested) {
@@ -131,7 +132,7 @@ const Dataconnector = ({ history }) => {
   useEffect(() => {
     let urlSP = urlSearchParams;
     let searchVal = searchedDataValue;
-    if (datatablePage > 0) urlSP.set("page", 1);
+    if (datatablePage > 0) urlSP.delete("page");
     else if (urlSP.has("page")) urlSP.delete("page");
     if (searchVal) {
       urlSP.set("search", searchVal);
@@ -241,12 +242,12 @@ const Dataconnector = ({ history }) => {
 
   useEffect(() => {
     if (projects.isDatasetPosted) {
-      setSearchedDataValue("");
       setIsSearchHiddenForRefresh(true);
       let urlSP = urlSearchParams;
-      if (urlSP.has("page")) urlSP.set("page", 1);
-      if (urlSP.has("sorting")) urlSP.set("sorting", "created_at");
-      if (urlSP.has("desc")) urlSP.set("desc", true);
+      if (urlSP.has("page")) urlSP.delete("page");
+      if (urlSP.has("sorting")) urlSP.delete("sorting");
+      if (urlSP.has("desc")) urlSP.delete("desc");
+      if (urlSP.has("search")) urlSP.delete("search");
       handleSearchParams(urlSP);
     }
   }, [projects.isDatasetPosted]);
@@ -676,7 +677,7 @@ const Dataconnector = ({ history }) => {
       };
 
       const handleChangeDatatableRowsPerPage = (event) => {
-        urlSearchParams.set("page", 1);
+        urlSearchParams.delete("page");
         urlSearchParams.set("rows", event.target.value);
         handleSearchParams(urlSearchParams);
       };
@@ -970,16 +971,15 @@ const Dataconnector = ({ history }) => {
     setSelectedDataIdList([]);
     setAllSelected(false);
     setIsSearchHiddenForRefresh(true);
-    setSearchedDataValue("");
 
     let urlSP = urlSearchParams;
-    if (urlSP.has("page")) urlSP.set("page", 1);
-    if (urlSP.has("rows")) urlSP.set("rows", 10);
-    if (urlSP.has("sorting")) urlSP.set("sorting", "created_at");
+    if (urlSP.has("page")) urlSP.delete("page");
+    if (urlSP.has("rows")) urlSP.delete("rows");
+    if (urlSP.has("sorting")) urlSP.delete("sorting");
     if (urlSP.has("search")) urlSP.delete("search");
 
     if (data === "private") {
-      urlSP.set("public", false);
+      urlSP.delete("public");
     } else if (data === "public") {
       urlSP.set("public", true);
     }
@@ -992,9 +992,9 @@ const Dataconnector = ({ history }) => {
       urlSP.set("desc", !isSortDesc);
     } else {
       urlSP.set("sorting", value);
-      urlSP.set("desc", true);
+      urlSP.delete("desc");
     }
-    if (urlSP.has("page")) urlSP.set("page", 1);
+    if (urlSP.has("page")) urlSP.delete("page");
     handleSearchParams(urlSP);
   };
 
@@ -1325,9 +1325,7 @@ const Dataconnector = ({ history }) => {
               {publicDataTab}
             </Grid>
             <Grid item xs={4}>
-              {isSearchHiddenForRefresh ? null : (
-                <SearchInputBox setSearchedValue={setSearchedDataValue} />
-              )}
+              {isSearchHiddenForRefresh ? null : <SearchInputBox />}
             </Grid>
           </Grid>
           <Grid
