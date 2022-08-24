@@ -273,7 +273,8 @@ export const listPagination = (location) => {
   pagiDict["sorting"] = paramSorting ? paramSorting : "created_at";
   pagiDict["desc"] = paramDesc ? (paramDesc === "true" ? true : false) : true;
   pagiDict["rows"] = paramRows ? paramRows : 10;
-  if (paramSearch) pagiDict["search"] = paramSearch;
+  if (paramSearch && paramSearch !== "undefined")
+    pagiDict["search"] = paramSearch;
   if (isDataset)
     pagiDict["public"] = paramPublic
       ? paramPublic === "true"

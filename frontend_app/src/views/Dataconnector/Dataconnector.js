@@ -60,22 +60,18 @@ const Dataconnector = ({ history }) => {
   const urlSearch = urlLoc.search;
   const urlSearchParams = new URLSearchParams(urlSearch);
 
-  const pagiInfoDict = listPagination(urlLoc);
-  const datatablePage = pagiInfoDict.page;
-  const datatableRowsPerPage = pagiInfoDict.rows;
-  const sortDataValue = pagiInfoDict.sorting;
-  const isSortDesc = pagiInfoDict.desc;
-  const isPublicData = pagiInfoDict.public;
-
   const [isLoading, setIsLoading] = useState(true);
   const [isProjectStartLoading, setIsProjectStartLoading] = useState(false);
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
 
   const [isDataRequested, setIsDataRequested] = useState(false);
-  const [searchedDataValue, setSearchedDataValue] = useState(
-    pagiInfoDict.search
-  );
+  const [datatablePage, setDatatablePage] = useState(0);
+  const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(10);
+  const [sortDataValue, setSortDataValue] = useState("created_at");
+  const [isSortDesc, setIsSortDesc] = useState(true);
+  const [isPublicData, setIsPublicData] = useState(false);
+  const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
     false
   );
@@ -111,6 +107,17 @@ const Dataconnector = ({ history }) => {
   }, []);
 
   useEffect(() => {
+    const pagiInfoDict = listPagination(urlLoc);
+    setDatatablePage(pagiInfoDict.page);
+    setDatatableRowsPerPage(pagiInfoDict.rows);
+    setSortDataValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setIsPublicData(pagiInfoDict.public);
+
+    setIsDataRequested(true);
+  }, [window.location.search]);
+
+  useEffect(() => {
     if (isDataRequested) {
       getDataByDispatch();
       setIsDataRequested(false);
@@ -118,17 +125,18 @@ const Dataconnector = ({ history }) => {
   }, [isDataRequested]);
 
   useEffect(() => {
-    getDataByDispatch();
-  }, [urlSearch]);
-
-  useEffect(() => {
     if (isSearchHiddenForRefresh) setIsSearchHiddenForRefresh(false);
   }, [isSearchHiddenForRefresh]);
 
   useEffect(() => {
-    urlSearchParams.set("page", 1);
-    urlSearchParams.set("search", searchedDataValue);
-    handleSearchParams(urlSearchParams);
+    let urlSP = urlSearchParams;
+    let searchVal = searchedDataValue;
+    if (datatablePage > 0) urlSP.set("page", 1);
+    else if (urlSP.has("page")) urlSP.delete("page");
+    if (searchVal) {
+      urlSP.set("search", searchVal);
+    } else if (urlSP.has("search")) urlSP.delete("search");
+    handleSearchParams(urlSP);
   }, [searchedDataValue]);
 
   useEffect(() => {
@@ -235,10 +243,11 @@ const Dataconnector = ({ history }) => {
     if (projects.isDatasetPosted) {
       setSearchedDataValue("");
       setIsSearchHiddenForRefresh(true);
-      urlSearchParams.set("page", 1);
-      urlSearchParams.set("sorting", "created_at");
-      urlSearchParams.set("desc", true);
-      handleSearchParams(urlSearchParams);
+      let urlSP = urlSearchParams;
+      urlSP.set("page", 1);
+      urlSP.set("sorting", "created_at");
+      urlSP.set("desc", true);
+      handleSearchParams(urlSP);
     }
   }, [projects.isDatasetPosted]);
 
@@ -962,16 +971,19 @@ const Dataconnector = ({ history }) => {
     setAllSelected(false);
     setIsSearchHiddenForRefresh(true);
     setSearchedDataValue("");
-    urlSearchParams.set("page", 1);
-    urlSearchParams.set("rows", 10);
-    urlSearchParams.set("sorting", "created_at");
+
+    let urlSP = urlSearchParams;
+    if (urlSP.has("page")) urlSP.set("page", 1);
+    if (urlSP.has("rows")) urlSP.set("rows", 10);
+    if (urlSP.has("sorting")) urlSP.set("sorting", "created_at");
+    if (urlSP.has("search")) urlSP.delete("search");
 
     if (data === "private") {
-      urlSearchParams.set("public", false);
+      urlSP.set("public", false);
     } else if (data === "public") {
-      urlSearchParams.set("public", true);
+      urlSP.set("public", true);
     }
-    handleSearchParams(urlSearchParams);
+    handleSearchParams(urlSP);
   };
 
   const onSetSortDataValue = (value) => {
