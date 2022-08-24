@@ -1033,6 +1033,11 @@ class Daemon():
                     self.dbClass.updateModel(model['id'], {
                         "status": status,
                     })
+                else:
+                    self.dbClass.updateModel(model['id'], {
+                        "status": 99,
+                    })
+                    
                 user = self.dbClass.getOneUserById(project['user'], raw=True)
                 user.trainingSecondCount = user.trainingSecondCount + durationTime.seconds
                 if self.utilClass.configOption != "enterprise":
