@@ -260,27 +260,20 @@ export const checkIsValidKey = async (user, dispatch, t) => {
 
 export const listPagination = (location) => {
   let pagiDict = {};
-  let urlSearch = new URLSearchParams(location.search);
-  let isDataset = location.pathname.includes("dataconnector");
+  const urlSP = new URLSearchParams(location.search);
 
-  let paramPage = urlSearch.get("page");
-  let paramSorting = urlSearch.get("sorting");
-  let paramDesc = urlSearch.get("desc");
-  let paramRows = urlSearch.get("rows");
-  let paramSearch = urlSearch.get("search");
-  let paramPublic = isDataset ? urlSearch.get("public") : null;
-  pagiDict["page"] = paramPage ? paramPage - 1 : 0;
+  let paramPage = urlSP.get("page");
+  let paramSorting = urlSP.get("sorting");
+  let paramDesc = urlSP.get("desc");
+  let paramRows = urlSP.get("rows");
+  let paramSearch = urlSP.get("search");
+  let paramPublic = urlSP.get("public");
+  pagiDict["page"] = paramPage ? parseInt(paramPage) - 1 : 0;
   pagiDict["sorting"] = paramSorting ? paramSorting : "created_at";
-  pagiDict["desc"] = paramDesc ? (paramDesc === "true" ? true : false) : true;
-  pagiDict["rows"] = paramRows ? paramRows : 10;
-  if (paramSearch && paramSearch !== "undefined")
-    pagiDict["search"] = paramSearch;
-  if (isDataset)
-    pagiDict["public"] = paramPublic
-      ? paramPublic === "true"
-        ? true
-        : false
-      : false;
+  pagiDict["desc"] = paramDesc === "false" ? false : true;
+  pagiDict["rows"] = paramRows ? parseInt(paramRows) : 10;
+  pagiDict["search"] = paramSearch ? paramSearch : "";
+  pagiDict["public"] = paramPublic === "true" ? true : false;
 
   return pagiDict;
 };

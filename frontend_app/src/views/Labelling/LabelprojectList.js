@@ -76,8 +76,8 @@ const LabelprojectList = ({ history }) => {
 
   useEffect(() => {
     const pagiInfoDict = listPagination(urlLoc);
-    setProjectPage(parseInt(pagiInfoDict.page));
-    setProjectRowsPerPage(parseInt(pagiInfoDict.rows));
+    setProjectPage(pagiInfoDict.page);
+    setProjectRowsPerPage(pagiInfoDict.rows);
     setSortingValue(pagiInfoDict.sorting);
     setIsSortDesc(pagiInfoDict.desc);
     setSearchedValue(pagiInfoDict.search);
