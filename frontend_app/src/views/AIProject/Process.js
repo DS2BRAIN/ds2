@@ -875,9 +875,16 @@ const Process = (props) => {
       return;
     }
 
-    if (IS_ENTERPRISE && ["speed", "accuracy", "labeling"].indexOf(value) > -1) {
-      checkIsValidKey(user, dispatch, t).then(() => {
-        if (!user.isValidUser || projects.project.status !== 0) return;
+    if (
+      IS_ENTERPRISE &&
+      ["speed", "accuracy", "labeling"].indexOf(value) > -1
+    ) {
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        )
+          return;
 
         if (user.me && user.me.usageplan && user.me.usageplan.planName === "trial") {
           dispatch(setPlanModalOpenRequestAction());
