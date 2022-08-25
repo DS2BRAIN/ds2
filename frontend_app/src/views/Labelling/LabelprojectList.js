@@ -49,25 +49,16 @@ const LabelprojectList = ({ history }) => {
   let currentUrl = window.location.href;
 
   const { t } = useTranslation();
-  const initialPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
-  const initialSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-  const initialDescValue =
-    currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
-  const initialRowsValue = parseInt(
-    currentUrl.split("&rows=")[1].split("&")[0]
-  );
 
   const [isLoading, setIsLoading] = useState(true);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
-  const [projectPage, setProjectPage] = useState(initialPage);
-  const [projectRowsPerPage, setProjectRowsPerPage] = useState(
-    initialRowsValue
-  );
+  const [projectPage, setProjectPage] = useState(0);
+  const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
   const [searchedValue, setSearchedValue] = useState("");
-  const [sortingValue, setSortingValue] = useState(initialSortingValue);
-  const [isSortDesc, setIsSortDesc] = useState(initialDescValue);
+  const [sortingValue, setSortingValue] = useState("created_at");
+  const [isSortDesc, setIsSortDesc] = useState(true);
   const [isPagingChanged, setIsPagingChanged] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [introOn, setIntroOn] = useState(false);
