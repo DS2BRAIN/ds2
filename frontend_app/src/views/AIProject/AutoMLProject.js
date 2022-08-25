@@ -8,6 +8,11 @@ import { askDeleteProjectsReqeustAction } from "redux/reducers/messages";
 import { getProjectsRequestAction } from "redux/reducers/projects";
 import currentTheme from "assets/jss/custom.js";
 import { TRAINING_METHOD, PREFERRED_OPTION } from "variables/train";
+import ProjectIntro from "components/Guide/ProjectIntro";
+import Samples from "components/Templates/Samples.js";
+import ProjectListStepper from "components/Stepper/ProjectListStepper";
+import SearchInputBox from "components/Table/SearchInputBox";
+import Button from "components/CustomButtons/Button";
 
 import {
   Checkbox,
@@ -25,12 +30,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
-import ProjectIntro from "components/Guide/ProjectIntro";
-import Samples from "components/Templates/Samples.js";
-import ProjectListStepper from "components/Stepper/ProjectListStepper";
-import SearchInputBox from "components/Table/SearchInputBox";
-import Button from "components/CustomButtons/Button";
-
 const AutoMLProject = ({ history, route }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
@@ -44,23 +43,26 @@ const AutoMLProject = ({ history, route }) => {
   );
 
   const [isLoading, setIsLoading] = useState(true);
+  const [introOn, setIntroOn] = useState(false);
+  const [introOffClicked, setIntroOffClicked] = useState(false);
+  const [isCategoryClicked, setIsCategoryClicked] = useState(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
+
+  const [activeStep, setActiveStep] = useState("all");
+  const [projectPage, setProjectPage] = useState(0);
+  const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
+  const [sortingValue, setSortingValue] = useState("created_at");
+  const [isSortDesc, setIsSortDesc] = useState(true);
+  const [searchedProjectValue, setSearchedProjectValue] = useState("");
+  const [isShared, setIsShared] = useState(false);
+
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
-  const [isCategoryClicked, setIsCategoryClicked] = useState(false);
-  const [searchedProjectValue, setSearchedProjectValue] = useState("");
-  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
-  const [sortingValue, setSortingValue] = useState("created_at");
-  const [isSortDesc, setIsSortDesc] = useState(true);
-  const [projectPage, setProjectPage] = useState(0);
-  const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
-  const [isShared, setIsShared] = useState(false);
-  const url = window.location.href;
-  const [introOn, setIntroOn] = useState(false);
-  const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
-  const [isVerify, setIsVerify] = useState(false);
+
+  const url = window.location.href;
 
   useEffect(() => {
     if (route === "verifyproject") setIsVerify(true);
@@ -521,9 +523,9 @@ const AutoMLProject = ({ history, route }) => {
             <div className={classes.subTitleText}>
               {t(
                 `Create new projects and ${
-                  isVerify ? "verify" : "train"
+                  isVerify ? "verify" : "develop"
                 } your own AI models. Analyze your data and make ${
-                  isVerify ? "verification" : "prediction"
+                  isVerify ? "verifications" : "predictions"
                 }.`
               )}
             </div>
