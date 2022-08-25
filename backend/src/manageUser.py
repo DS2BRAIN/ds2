@@ -679,10 +679,10 @@ class ManageUser:
         })
 
         # if languageCode == 'ko':
-        #     filePath = "./src/email/password_reset.html"
+        #     filePath = "./src/emailContent/password_reset.html"
         #     titleName = '[DS2.ai] 비밀번호 초기화'
         # else:
-        #     filePath = "./src/email/password_reset_en.html"
+        #     filePath = "./src/emailContent/password_reset_en.html"
         #     titleName = '[DS2.ai] Reset Password'
         #
         # with open(filePath, "r") as r:
