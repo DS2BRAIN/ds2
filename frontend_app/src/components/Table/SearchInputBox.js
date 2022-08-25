@@ -33,16 +33,8 @@ const SearchInputBox = ({ setSearchedValue }) => {
 
   const onSubmitSearch = (e) => {
     e.preventDefault();
-
-    if (searchingValue && searchingValue.length > 0) {
-      setIsSearched(true);
-      onSetSearchOutput(searchingValue);
-    } else {
-      dispatch(
-        openErrorSnackbarRequestAction(t("Please enter a search term."))
-      );
-      return;
-    }
+    setIsSearched(true);
+    onSetSearchOutput(searchingValue);
   };
 
   const onChangeSearch = async (e) => {
@@ -63,7 +55,8 @@ const SearchInputBox = ({ setSearchedValue }) => {
     if (urlPath.includes("/dataconnector")) {
       let urlSP = urlSearchParams;
       if (value === "") {
-        if (urlSP.has("search")) urlSP.delete("search");
+        urlSP.delete("search");
+        if (urlSP.has("page")) urlSP.delete("page");
       } else {
         urlSP.set("search", value);
       }

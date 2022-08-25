@@ -132,11 +132,10 @@ const Dataconnector = ({ history }) => {
   useEffect(() => {
     let urlSP = urlSearchParams;
     let searchVal = searchedDataValue;
-    if (datatablePage > 0) urlSP.delete("page");
-    else if (urlSP.has("page")) urlSP.delete("page");
     if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
       urlSP.set("search", searchVal);
-    } else if (urlSP.has("search")) urlSP.delete("search");
+    }
     handleSearchParams(urlSP);
   }, [searchedDataValue]);
 
