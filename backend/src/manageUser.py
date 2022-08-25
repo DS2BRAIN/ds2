@@ -175,9 +175,12 @@ class ManageUser:
             self.register_metabase_user(userInfo, raw_password)
         except:
             self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
-        if userInfo['isAgreedBehaviorStatistics']:
+        try:
             self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
                                             appLog=True, is_agreed_behavior_statistics=True)
+        except:
+            pass
+        
         return HTTP_201_CREATED, userInfo
 
     def register_metabase_user(self, user: dict, raw_password: str):

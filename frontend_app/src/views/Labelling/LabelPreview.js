@@ -11,10 +11,7 @@ import Cookies from "helpers/Cookies";
 import currentTheme from "assets/jss/custom.js";
 import GridItem from "../../components/Grid/GridItem.js";
 import GridContainer from "../../components/Grid/GridContainer.js";
-import {
-  sendErrorMessage,
-  getLabelAppUrl,
-} from "components/Function/globalFunc.js";
+import { sendErrorMessage, getLabelAppUrl } from "components/Function/globalFunc.js";
 import { LABEL_FILE_STATUS } from "variables/labeling.js";
 import { IS_DEPLOY, IS_ENTERPRISE } from "variables/common.js";
 
@@ -24,14 +21,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "components/CustomButtons/Button";
 
-const LabelPreview = ({
-  history,
-  selectedPreviewId,
-  onClosePreviewModal,
-  isMarketProject,
-  isDetailAnalysis,
-  onSetSelectedPage,
-}) => {
+const LabelPreview = ({ history, selectedPreviewId, onClosePreviewModal, isMarketProject, isDetailAnalysis, onSetSelectedPage }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { user, labelprojects, messages } = useSelector(
@@ -73,12 +63,8 @@ const LabelPreview = ({
 
       const labels = labelFileDetail.labels;
       const labelClasses = labelprojects.projectDetail.labelclasses;
-      const width = document.getElementById("previewImage").width
-        ? document.getElementById("previewImage").width
-        : (labelFileDetail.height * width) / labelFileDetail.height;
-      const height = document.getElementById("previewImage").height
-        ? document.getElementById("previewImage").height
-        : (labelFileDetail.height * width) / labelFileDetail.width;
+      const width = document.getElementById("previewImage").width ? document.getElementById("previewImage").width : (labelFileDetail.height * width) / labelFileDetail.height;
+      const height = document.getElementById("previewImage").height ? document.getElementById("previewImage").height : (labelFileDetail.height * width) / labelFileDetail.width;
 
       let c = ref.current;
 
@@ -105,10 +91,7 @@ const LabelPreview = ({
                 ctx.beginPath();
                 ctx.moveTo(label.x * width, label.y * height);
                 ctx.lineTo((label.x + label.w) * width, label.y * height);
-                ctx.lineTo(
-                  (label.x + label.w) * width,
-                  (label.y + label.h) * height
-                );
+                ctx.lineTo((label.x + label.w) * width, (label.y + label.h) * height);
                 ctx.lineTo(label.x * width, (label.y + label.h) * height);
                 ctx.lineTo(label.x * width, label.y * height);
                 ctx.stroke();
@@ -180,29 +163,15 @@ const LabelPreview = ({
     (async () => {
       const previewImgEl = document.getElementById("previewImage");
 
-      if (
-        !isPreviewModalLoading &&
-        labelFileDetail?.s3key &&
-        previewImgEl &&
-        labelprojects.projectDetail
-      ) {
+      if (!isPreviewModalLoading && labelFileDetail?.s3key && previewImgEl && labelprojects.projectDetail) {
         await getPath();
       }
     })();
-  }, [
-    isPreviewModalLoading,
-    labelFileDetail,
-    imageRef,
-    labelprojects.projectDetail?.labelclasses,
-  ]);
+  }, [isPreviewModalLoading, labelFileDetail, imageRef, labelprojects.projectDetail?.labelclasses]);
 
   const getPreviewData = async () => {
     await api
-      .getLabelFile(
-        selectedPreviewId,
-        labelprojects.projectDetail.id,
-        labelprojects.projectDetail.workapp
-      )
+      .getLabelFile(selectedPreviewId, labelprojects.projectDetail.id, labelprojects.projectDetail.workapp)
       .then((res) => {
         const fileDetail = res.data;
         setLabelFileDetail(fileDetail);
@@ -210,17 +179,7 @@ const LabelPreview = ({
         setIsPreviewModalLoading(false);
       })
       .catch((err) => {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            err.response?.data.message
-              ? sendErrorMessage(
-                  err.response?.data.message,
-                  err.response?.data.message_en,
-                  user.language
-                )
-              : t("A temporary error has occurred.")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(err.response?.data.message ? sendErrorMessage(err.response?.data.message, err.response?.data.message_en, user.language) : t("A temporary error has occurred.")));
         onClosePreviewModal();
       });
   };
@@ -243,25 +202,11 @@ const LabelPreview = ({
   const goToLabellingPageFromPreview = (id, status, workAssignee, ownerId) => {
     const labelStatus = status === "working" ? "prepare" : status;
     if (status === "ready") {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t(
-            "You cannot edit the labeling of files that are training auto-labeling."
-          )
-        )
-      );
+      dispatch(openErrorSnackbarRequestAction(t("You cannot edit the labeling of files that are training auto-labeling.")));
       return;
     }
-    if (
-      (status === "done" || status === "working") &&
-      (workAssignee !== user.me.email && user.me.id != ownerId) &&
-      labelprojects.role !== "subadmin"
-    ) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          t("You cannot label a file started by another user.")
-        )
-      );
+    if ((status === "done" || status === "working") && (workAssignee !== user.me.email && user.me.id != ownerId) && labelprojects.role !== "subadmin") {
+      dispatch(openErrorSnackbarRequestAction(t("You cannot label a file started by another user.")));
       return;
     }
     if (!status || status.length === 0) {
@@ -278,69 +223,28 @@ const LabelPreview = ({
 
     if (category) {
       if (category === "normal_regression") {
-        window.open(
-          `${tempLabellingUrl}admin/${routes[category]}/${
-            labelprojects.projectDetail.id
-          }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
-          "_blank"
-        );
+        window.open(`${tempLabellingUrl}admin/${routes[category]}/${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`, "_blank");
       } else {
         if (!labelClasses || labelClasses.length === 0) {
-          if (
-            labelprojects.projectDetail &&
-            labelprojects.projectDetail.isShared
-          ) {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                t(
-                  "Labeling cannot proceed because there is no registered class. Register a class through the group leader."
-                )
-              )
-            );
+          if (labelprojects.projectDetail && labelprojects.projectDetail.isShared) {
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
             return;
-          } else if (
-            labelprojects.projectDetail &&
-            !labelprojects.projectDetail.isShared
-          ) {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                t(
-                  "You can view the label list after registering at least one label class"
-                )
-              )
-            );
+          } else if (labelprojects.projectDetail && !labelprojects.projectDetail.isShared) {
+            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
             onSetSelectedPage("class");
 
-            history.push(
-              `/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`
-            );
+            history.push(`/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`);
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(
-              openErrorSnackbarRequestAction(
-                t(
-                  "Labeling cannot proceed because there is no registered class. Please contact us for further information."
-                )
-              )
-            );
+            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
             return;
           }
         } else {
           if (category !== "object_detection") {
-            window.open(
-              `${tempLabellingUrl}admin/${routes[category]}/${
-                labelprojects.projectDetail.id
-              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
-              "_blank"
-            );
+            window.open(`${tempLabellingUrl}admin/${routes[category]}/${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`, "_blank");
           } else {
-            window.open(
-              `${tempLabellingUrl}${
-                labelprojects.projectDetail.id
-              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
-              "_blank"
-            );
+            window.open(`${tempLabellingUrl}${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`, "_blank");
           }
         }
       }
@@ -351,55 +255,20 @@ const LabelPreview = ({
     <>
       {!isDetailAnalysis ? (
         <GridContainer style={{ height: "100%", justifyContent: "center" }}>
-          <GridItem
-            xs={12}
-            style={{ marginBottom: "20px", textAlign: "center" }}
-          >
-            <span style={{ fontSize: "20px" }}>
-              {labelFileDetail.originalFileName}
-            </span>
+          <GridItem xs={12} style={{ marginBottom: "20px", textAlign: "center" }}>
+            <span style={{ fontSize: "20px" }}>{labelFileDetail.originalFileName}</span>
           </GridItem>
           <GridItem xs={8} style={{ height: "90%" }}>
             <div className={classes.imageCard} id="imageCard">
-              <img
-                src={getS3key(labelFileDetail.s3key)}
-                id="previewImage"
-                ref={imageRef}
-                style={{ width: "100%", left: 0, top: 0 }}
-              />
-              {(labelprojects.projectDetail?.labelclasses ||
-                labelprojects.projectDetail.labelclasses.length > 0) && (
-                <canvas
-                  ref={ref}
-                  className={classes.labelCanvas}
-                  id="labelCanvas"
-                  style={{ width: "100%" }}
-                ></canvas>
-              )}
+              <img src={getS3key(labelFileDetail.s3key)} id="previewImage" ref={imageRef} style={{ width: "100%", left: 0, top: 0 }} />
+              {(labelprojects.projectDetail?.labelclasses || labelprojects.projectDetail.labelclasses.length > 0) && <canvas ref={ref} className={classes.labelCanvas} id="labelCanvas" style={{ width: "100%" }}></canvas>}
             </div>
           </GridItem>
         </GridContainer>
       ) : (
-        <div
-          className={classes.imageCard}
-          id="imageCard"
-          style={{ overflow: "visible" }}
-        >
-          <img
-            src={getS3key(labelFileDetail.s3key)}
-            id="previewImage"
-            ref={imageRef}
-            style={{ width: "calc(100% + 30px)", left: 0, top: 0 }}
-          />
-          {(labelprojects.projectDetail?.labelclasses ||
-            labelprojects.projectDetail.labelclasses.length > 0) && (
-            <canvas
-              ref={ref}
-              className={classes.labelCanvas}
-              id="labelCanvas"
-              style={{ width: "calc(100% + 30px)" }}
-            ></canvas>
-          )}
+        <div className={classes.imageCard} id="imageCard" style={{ overflow: "visible" }}>
+          <img src={getS3key(labelFileDetail.s3key)} id="previewImage" ref={imageRef} style={{ width: "calc(100% + 30px)", left: 0, top: 0 }} />
+          {(labelprojects.projectDetail?.labelclasses || labelprojects.projectDetail.labelclasses.length > 0) && <canvas ref={ref} className={classes.labelCanvas} id="labelCanvas" style={{ width: "calc(100% + 30px)" }}></canvas>}
         </div>
       )}
     </>
@@ -430,10 +299,7 @@ const LabelPreview = ({
 
     labelClasses.forEach((labelClass) => {
       labels.forEach((tempLabel) => {
-        if (
-          labelClass.id === tempLabel.labelclass &&
-          tempClassName.indexOf(labelClass.name) === -1
-        ) {
+        if (labelClass.id === tempLabel.labelclass && tempClassName.indexOf(labelClass.name) === -1) {
           tempClassName.push(labelClass.name);
           tempClasses.push(labelClass);
         }
@@ -441,13 +307,8 @@ const LabelPreview = ({
     });
 
     return (
-      <Typography
-        className={classes.mapContent}
-        style={{ maxHeight: 100, overflowY: "auto" }}
-      >
-        {labelprojects.projectDetail &&
-        labelprojects.projectDetail.workapp &&
-        labelprojects.projectDetail.workapp === "object_detection" ? (
+      <Typography className={classes.mapContent} style={{ maxHeight: 100, overflowY: "auto" }}>
+        {labelprojects.projectDetail && labelprojects.projectDetail.workapp && labelprojects.projectDetail.workapp === "object_detection" ? (
           <>
             {tempClasses.length > 0 ? (
               tempClasses.map((item) => {
@@ -465,15 +326,11 @@ const LabelPreview = ({
                 );
               })
             ) : (
-              <span style={{ color: "var(--textWhite87)", fontSize: 15 }}>
-                {t("None")}
-              </span>
+              <span style={{ color: "var(--textWhite87)", fontSize: 15 }}>{t("None")}</span>
             )}
           </>
         ) : (
-          <>
-            {labelData && <span className={classes.content}>{labelData}</span>}
-          </>
+          <>{labelData && <span className={classes.content}>{labelData}</span>}</>
         )}
       </Typography>
     );
@@ -514,9 +371,7 @@ const LabelPreview = ({
                 whiteSpace: "nowrap",
               }}
             >
-              <span style={{ fontSize: "24px", fontWeight: 600 }}>
-                {labelFileDetail.originalFileName}
-              </span>
+              <span style={{ fontSize: "24px", fontWeight: 600 }}>{labelFileDetail.originalFileName}</span>
             </Grid>
             <Grid item>
               <CloseIcon
@@ -553,14 +408,7 @@ const LabelPreview = ({
                 top: 0,
               }}
             />
-            {(labelprojects.projectDetail?.labelclasses ||
-              labelprojects.projectDetail.labelclasses.length > 0) && (
-              <canvas
-                ref={ref}
-                className={classes.labelCanvas}
-                id="labelCanvas"
-              ></canvas>
-            )}
+            {(labelprojects.projectDetail?.labelclasses || labelprojects.projectDetail.labelclasses.length > 0) && <canvas ref={ref} className={classes.labelCanvas} id="labelCanvas"></canvas>}
           </div>
         </Grid>
         <Grid
@@ -586,32 +434,16 @@ const LabelPreview = ({
             >
               FILE INFOMATION
             </div>
-            <Grid
-              container
-              className={classes.mainCard}
-              alignItems="center"
-              style={{ marginBottom: "20px", padding: "0 12px" }}
-            >
+            <Grid container className={classes.mainCard} alignItems="center" style={{ marginBottom: "20px", padding: "0 12px" }}>
               <Grid item xs={4}>
-                <Typography
-                  className={classes.content}
-                  style={{ fontWeight: 600, marginRight: 16 }}
-                >
+                <Typography className={classes.content} style={{ fontWeight: 600, marginRight: 16 }}>
                   {t("Class")}
                 </Typography>
               </Grid>
               {renderClasses()}
             </Grid>
-            <Grid
-              container
-              className={classes.mainCard}
-              style={{ padding: "0 12px" }}
-            >
-              <Typography
-                className={classes.content}
-                gutterBottom
-                style={{ fontWeight: 600 }}
-              >
+            <Grid container className={classes.mainCard} style={{ padding: "0 12px" }}>
+              <Typography className={classes.content} gutterBottom style={{ fontWeight: 600 }}>
                 {t("Details")}
               </Typography>
               <Grid container className={classes.text87}>
@@ -620,36 +452,20 @@ const LabelPreview = ({
                     {t("Type")}
                   </Grid>
                   <Grid item xs={8} className={classes.text}>
-                    <div id="classType">
-                      {labelFileDetail?.fileType === "object_detection"
-                        ? t("Object Detection")
-                        : t("Image Classification")}
-                    </div>
+                    <div id="classType">{labelFileDetail?.fileType === "object_detection" ? t("Object Detection") : t("Image Classification")}</div>
                   </Grid>
                   <Grid item xs={4} className={classes.text}>
                     {t("Status")}
                   </Grid>
                   <Grid item xs={8} className={classes.text}>
-                    <div id="classStatus">
-                      {LABEL_FILE_STATUS[labelFileDetail.status]
-                        ? t(LABEL_FILE_STATUS[labelFileDetail.status])
-                        : "-"}
-                    </div>
+                    <div id="classStatus">{LABEL_FILE_STATUS[labelFileDetail.status] ? t(LABEL_FILE_STATUS[labelFileDetail.status]) : "-"}</div>
                   </Grid>
                   <Grid item xs={4} className={classes.text}>
                     {t("Assignee ")}
                   </Grid>
                   <Grid item xs={8} className={classes.text}>
-                    <div
-                      id="classStatus"
-                      className={classes.ellipsisText}
-                      style={{ wordBreak: "break-all" }}
-                    >
-                      {labelFileDetail?.workAssignee
-                        ? labelFileDetail.workAssignee
-                        : labelFileDetail?.last_updated_by === "auto"
-                        ? "Auto Labeling"
-                        : "-"}
+                    <div id="classStatus" className={classes.ellipsisText} style={{ wordBreak: "break-all" }}>
+                      {labelFileDetail?.workAssignee ? labelFileDetail.workAssignee : labelFileDetail?.last_updated_by === "auto" ? "Auto Labeling" : "-"}
                     </div>
                   </Grid>
                   <Grid item xs={4} className={classes.text}>
@@ -657,9 +473,7 @@ const LabelPreview = ({
                   </Grid>
                   <Grid item xs={8} className={classes.text}>
                     <div id="classStatus" style={{ wordBreak: "break-all" }}>
-                      {labelFileDetail?.reviewer
-                        ? labelFileDetail.reviewer
-                        : "-"}
+                      {labelFileDetail?.reviewer ? labelFileDetail.reviewer : "-"}
                     </div>
                   </Grid>
                 </Grid>
@@ -682,52 +496,22 @@ const LabelPreview = ({
               {t("Cancel")}
             </Button> */}
             {labelFileDetail.status === "ready" ? (
-              <Tooltip
-                title={
-                  <span style={{ fontSize: "11px" }}>
-                    {t(
-                      "You cannot edit the labeling of files that are training auto-labeling."
-                    )}
-                  </span>
-                }
-                placement="top"
-              >
-                <Button
-                  id="start_labelling_btn"
-                  className={classes.defaultDisabledButton}
-                  disabled
-                  fullWidth
-                  style={{ height: 32, fontWeight: 600 }}
-                >
+              <Tooltip title={<span style={{ fontSize: "11px" }}>{t("You cannot edit the labeling of files that are training auto-labeling.")}</span>} placement="top">
+                <Button id="start_labelling_btn" className={classes.defaultDisabledButton} disabled fullWidth style={{ height: 32, fontWeight: 600 }}>
                   {t("EDIT LABEL")}
                 </Button>
               </Tooltip>
             ) : (
               <Button
-                id={
-                  labelFileDetail.status === "prepare" ||
-                  labelFileDetail.status === "working"
-                    ? "start_labelling_btn"
-                    : "inspect_label_btn"
-                }
+                id={labelFileDetail.status === "prepare" || labelFileDetail.status === "working" ? "start_labelling_btn" : "inspect_label_btn"}
                 fullWidth
                 className={classes.defaultGreenContainedButton}
                 onClick={() => {
-                  goToLabellingPageFromPreview(
-                    selectedPreviewId,
-                    labelFileDetail.status,
-                    labelFileDetail.workAssignee,
-                    labelFileDetail.user
-                  );
+                  goToLabellingPageFromPreview(selectedPreviewId, labelFileDetail.status, labelFileDetail.workAssignee, labelFileDetail.user);
                 }}
                 style={{ height: 32, fontWeight: 600 }}
               >
-                {labelFileDetail.status === "prepare" ||
-                labelFileDetail.status === "working" ? (
-                  <>{t("EDIT LABEL")}</>
-                ) : (
-                  <>{t("INSPECT LABEL")}</>
-                )}
+                {labelFileDetail.status === "prepare" || labelFileDetail.status === "working" ? <>{t("EDIT LABEL")}</> : <>{t("INSPECT LABEL")}</>}
               </Button>
             )}
           </div>

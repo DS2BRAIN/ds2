@@ -776,6 +776,14 @@ class Daemon():
 
         models = self.dbClass.getModelsNotStartedByProjectId(project["id"])
         for modelRaw in models:
+
+            print("empty_cache()")
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
             model = model_to_dict(modelRaw)
             if not self.instancesUser:
                 self.instancesUser = self.dbClass.createInstanceUser(self.instanceName, project['user'],ps_id=self.utilClass.ps_id) \
@@ -1018,9 +1026,18 @@ class Daemon():
                 durationTime = endTime - startTime
                 self.dbClass.updateModel(model['id'], {
                     "finished_at": endTime,
-                    "status": status,
                     "duration": durationTime.seconds,
                 })
+
+                if model['status'] != 99:
+                    self.dbClass.updateModel(model['id'], {
+                        "status": status,
+                    })
+                else:
+                    self.dbClass.updateModel(model['id'], {
+                        "status": 99,
+                    })
+                    
                 user = self.dbClass.getOneUserById(project['user'], raw=True)
                 user.trainingSecondCount = user.trainingSecondCount + durationTime.seconds
                 if self.utilClass.configOption != "enterprise":
@@ -1082,6 +1099,12 @@ class Daemon():
                     shutil.rmtree(f"./models/{model['id']}/")
                 except:
                     pass
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
 
             project_status = self.finishProject(project)
             if project_status is None:

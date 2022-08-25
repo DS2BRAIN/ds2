@@ -11,11 +11,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabelProjectRequestAction } from "redux/reducers/labelprojects.js";
-import {
-  askModalRequestAction,
-  openErrorSnackbarRequestAction,
-  askStartLabelProjectReqeustAction,
-} from "redux/reducers/messages.js";
+import { askModalRequestAction, openErrorSnackbarRequestAction, askStartLabelProjectReqeustAction } from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { currentThemeColor } from "assets/jss/custom";
 import { Grid } from "@material-ui/core";
@@ -55,10 +51,7 @@ const RequestLabeling = (props) => {
     let tmp = [];
 
     labelClasses.map((labelClass) => {
-      tmp = [
-        ...tmp,
-        { id: labelClass.id, name: labelClass.name, selected: false },
-      ];
+      tmp = [...tmp, { id: labelClass.id, name: labelClass.name, selected: false }];
     });
     setLabelingClasses(tmp);
     setIsLoading(false);
@@ -89,13 +82,9 @@ const RequestLabeling = (props) => {
           },
         ];
         if (event.target.checked) {
-          setSelectedClassesCnt(
-            (prevSelectedClassesCnt) => prevSelectedClassesCnt + 1
-          );
+          setSelectedClassesCnt((prevSelectedClassesCnt) => prevSelectedClassesCnt + 1);
         } else {
-          setSelectedClassesCnt(
-            (prevSelectedClassesCnt) => prevSelectedClassesCnt - 1
-          );
+          setSelectedClassesCnt((prevSelectedClassesCnt) => prevSelectedClassesCnt - 1);
         }
       } else {
         tmp = [
@@ -164,19 +153,11 @@ const RequestLabeling = (props) => {
           }
         });
         if (flag === false) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t("Please select at least one class.")
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("Please select at least one class.")));
           return;
         }
         if (regExp.test(requestPhoneNumber) === false) {
-          dispatch(
-            openErrorSnackbarRequestAction(
-              t("Please enter your mobile number.")
-            )
-          );
+          dispatch(openErrorSnackbarRequestAction(t("Please enter your mobile number.")));
           return;
         }
 
@@ -238,14 +219,8 @@ const RequestLabeling = (props) => {
             {step === 0 && (
               <>
                 <div>
-                  <FormControl
-                    component="fieldset"
-                    style={{ width: "100%", marginBottom: "24px" }}
-                  >
-                    <FormLabel
-                      component="legend"
-                      style={{ marginBottom: "10px" }}
-                    >
+                  <FormControl component="fieldset" style={{ width: "100%", marginBottom: "24px" }}>
+                    <FormLabel component="legend" style={{ marginBottom: "10px" }}>
                       클래스 선택하기(1개 이상)*
                     </FormLabel>
                     <FormGroup
@@ -258,46 +233,19 @@ const RequestLabeling = (props) => {
                       }}
                     >
                       {labelingClasses.map((labelingClass) => {
-                        return (
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={labelingClass.selected}
-                                onChange={selectLabelingClasses}
-                                name={labelingClass.name}
-                                id={labelingClass.id}
-                                style={{ marginRight: "4px" }}
-                              />
-                            }
-                            label={labelingClass.name}
-                            style={{ margin: "0", padding: "4px 8px" }}
-                          />
-                        );
+                        return <FormControlLabel control={<Checkbox checked={labelingClass.selected} onChange={selectLabelingClasses} name={labelingClass.name} id={labelingClass.id} style={{ marginRight: "4px" }} />} label={labelingClass.name} style={{ margin: "0", padding: "4px 8px" }} />;
                       })}
                     </FormGroup>
                   </FormControl>
                 </div>
                 <div>
-                  <FormControl
-                    component="fieldset"
-                    style={{ marginBottom: "10px" }}
-                  >
+                  <FormControl component="fieldset" style={{ marginBottom: "10px" }}>
                     <FormLabel component="legend" style={{ marginBottom: "0" }}>
                       수동 라벨링 종류 선택하기*
                     </FormLabel>
-                    <RadioGroup
-                      aria-label="labelingType"
-                      name="labelingType"
-                      value={labelingType}
-                      onChange={changeLabelingType}
-                      row
-                    >
+                    <RadioGroup aria-label="labelingType" name="labelingType" value={labelingType} onChange={changeLabelingType} row>
                       {Object.keys(labelingTypes).map((key) => (
-                        <FormControlLabel
-                          value={labelingTypes[key].name}
-                          label={labelingTypes[key].name}
-                          control={<Radio color="primary" />}
-                        />
+                        <FormControlLabel value={labelingTypes[key].name} label={labelingTypes[key].name} control={<Radio color="primary" />} />
                       ))}
                     </RadioGroup>
                   </FormControl>
@@ -318,9 +266,7 @@ const RequestLabeling = (props) => {
                     autoFocus
                     value={requestLabelingContent}
                     onChange={changeRequestLabelingContent}
-                    placeholder={t(
-                      "ex.신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이 있다면 다른 물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다."
-                    )}
+                    placeholder={t("ex.신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이 있다면 다른 물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다.")}
                     id="requestLabelingContent"
                     style={{
                       display: "block",
@@ -403,12 +349,7 @@ const RequestLabeling = (props) => {
                             총 결제예상금액: {10 * selectedClassesCnt * 100}원
                           </Grid>
                           <Grid item xs={12}>
-                            <b
-                              style={{ fontWeight: "normal", fontSize: "14px" }}
-                            >
-                              *예상금액은 참고용 가격으로 컨설팅 이후 변경될 수
-                              있습니다.
-                            </b>
+                            <b style={{ fontWeight: "normal", fontSize: "14px" }}>*예상금액은 참고용 가격으로 컨설팅 이후 변경될 수 있습니다.</b>
                           </Grid>
                         </Grid>
                       </Grid>
@@ -474,18 +415,12 @@ const RequestLabeling = (props) => {
           <footer style={{ marginTop: "24px" }}>
             <Grid container justify="flex-end" alignItems="center" spacing={1}>
               <Grid item>
-                <Button
-                  onClick={cancelRequestLabeling}
-                  className={classes.defaultGreyOutlineButton}
-                >
+                <Button onClick={cancelRequestLabeling} className={classes.defaultGreyOutlineButton}>
                   {step === 0 ? "취소" : "뒤로가기"}
                 </Button>
               </Grid>
               <Grid item>
-                <Button
-                  onClick={requestNextStep}
-                  className={classes.defaultGreyOutlineButton}
-                >
+                <Button onClick={requestNextStep} className={classes.defaultGreyOutlineButton}>
                   {step === 0 ? "다음" : "의뢰요청"}
                 </Button>
               </Grid>
@@ -493,21 +428,12 @@ const RequestLabeling = (props) => {
           </footer>
         </div>
       ) : (
-        <Grid
-          container
-          className={classes.defaultModalContent}
-          justify="space-between"
-          alignItems="center"
-          direction="column"
-        >
+        <Grid container className={classes.defaultModalContent} justify="space-between" alignItems="center" direction="column">
           <Grid item style={{ padding: "80px 0" }}>
             수동라벨링 의뢰가 완료되었습니다. 확인 후 빠르게 연락드리겠습니다.{" "}
           </Grid>
           <Grid item style={{ alignSelf: "flex-end" }}>
-            <Button
-              onClick={cancelRequestLabeling}
-              className={classes.defaultGreyOutlineButton}
-            >
+            <Button onClick={cancelRequestLabeling} className={classes.defaultGreyOutlineButton}>
               닫기
             </Button>
           </Grid>
