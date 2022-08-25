@@ -101,7 +101,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
     //       openSuccessSnackbarRequestAction(t("The project has been deleted."))
     //     );
     //     history.push(
-    //       "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
+    //       "/admin/labelling"
     //     );
     //   })
     //   .catch((e) => {
@@ -234,9 +234,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
   useEffect(() => {
     if (labelprojects.isDeleteLabelprojectsSuccess) {
-      history.push(
-        "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
-      );
+      history.push("/admin/labelling");
     }
   }, [labelprojects.isDeleteLabelprojectsSuccess]);
 

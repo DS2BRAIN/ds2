@@ -65,26 +65,26 @@ const LabelprojectList = ({ history }) => {
   const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
-  useEffect(() => {
-    const selectedPage =
-      parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
-    const selectedSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-    const selectedDescValue =
-      currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
-    const selectedRowsValue = parseInt(
-      currentUrl.split("&rows=")[1].split("&")[0]
-    );
+  // useEffect(() => {
+  //   const selectedPage =
+  //     parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
+  //   const selectedSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
+  //   const selectedDescValue =
+  //     currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
+  //   const selectedRowsValue = parseInt(
+  //     currentUrl.split("&rows=")[1].split("&")[0]
+  //   );
 
-    setProjectPage(selectedPage);
-    setSortingValue(selectedSortingValue);
-    setIsSortDesc(selectedDescValue);
-    setProjectRowsPerPage(selectedRowsValue);
+  //   setProjectPage(selectedPage);
+  //   setSortingValue(selectedSortingValue);
+  //   setIsSortDesc(selectedDescValue);
+  //   setProjectRowsPerPage(selectedRowsValue);
 
-    if (selectedPage === 0 && selectedPage !== projectPage) {
-      setIsLoading(true);
-      onGetDefaultProject();
-    }
-  }, [currentUrl]);
+  //   if (selectedPage === 0 && selectedPage !== projectPage) {
+  //     setIsLoading(true);
+  //     onGetDefaultProject();
+  //   }
+  // }, [currentUrl]);
 
   useEffect(() => {
     getProjectByDispatch();

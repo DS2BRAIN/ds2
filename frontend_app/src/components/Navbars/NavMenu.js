@@ -16,7 +16,7 @@ const NavMenu = ({ localPath }) => {
     },
     {
       id: "label",
-      path: "/labelling?page=1&sorting=created_at&desc=true&rows=10",
+      path: "/labelling",
       name: "Labeling",
       layout: "/admin",
       condition: true,

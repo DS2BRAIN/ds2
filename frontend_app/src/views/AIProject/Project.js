@@ -356,9 +356,7 @@ const Project = ({ history }) => {
   };
 
   const onGotoLabelingPage = () => {
-    history.push(
-      "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
-    );
+    history.push("/admin/labelling");
   };
 
   const goCustomTraining = () => {

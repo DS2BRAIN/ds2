@@ -231,7 +231,7 @@ export default function NewProject({ history }) {
         dispatch(openErrorSnackbarRequestAction(t("Upload file")));
       }
     } else {
-      history.push(`/admin/labelling?page=1&sorting=created_at&desc=true&rows=10`);
+      history.push(`/admin/labelling`);
       // history.push(`/admin/labelling/${newProjectId}`);
     }
   };

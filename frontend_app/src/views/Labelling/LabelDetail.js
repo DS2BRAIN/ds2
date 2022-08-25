@@ -789,9 +789,7 @@ const LabelDetail = ({ history, match }) => {
   };
 
   const goBackToProjectLists = () => {
-    history.push(
-      "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
-    );
+    history.push("/admin/labelling");
   };
 
   const has100LabelingPerLabelClasses = () => {
