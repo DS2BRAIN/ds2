@@ -52,7 +52,7 @@ const SearchInputBox = ({ setSearchedValue }) => {
   };
 
   const onSetSearchOutput = (value) => {
-    if (urlPath.includes("/dataconnector")) {
+    if (urlPath.includes("/dataconnector") || urlPath.includes("/labelling")) {
       let urlSP = urlSearchParams;
       if (value === "") {
         urlSP.delete("search");
