@@ -25,6 +25,10 @@ const ProjectListStepper = ({ step, page }) => {
   }
 
   const onSetActiveStep = (idx) => {
+    if (activeStepNum === idx) {
+      history.push(`/admin/${page}`);
+      return;
+    }
     switch (idx) {
       case 0:
         history.push("/admin/dataconnector");

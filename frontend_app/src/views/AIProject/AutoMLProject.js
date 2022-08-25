@@ -8,6 +8,7 @@ import { askDeleteProjectsReqeustAction } from "redux/reducers/messages";
 import { getProjectsRequestAction } from "redux/reducers/projects";
 import currentTheme from "assets/jss/custom.js";
 import { TRAINING_METHOD, PREFERRED_OPTION } from "variables/train";
+import { listPagination } from "components/Function/globalFunc";
 import ProjectIntro from "components/Guide/ProjectIntro";
 import Samples from "components/Templates/Samples.js";
 import ProjectListStepper from "components/Stepper/ProjectListStepper";
@@ -63,6 +64,10 @@ const AutoMLProject = ({ history, route }) => {
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   const url = window.location.href;
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
 
   useEffect(() => {
     if (route === "verifyproject") setIsVerify(true);
@@ -76,6 +81,18 @@ const AutoMLProject = ({ history, route }) => {
       setIntroOn(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    const pagiInfoDict = listPagination(urlLoc);
+    setActiveStep(pagiInfoDict.tab);
+    setProjectPage(pagiInfoDict.page);
+    setProjectRowsPerPage(pagiInfoDict.rows);
+    setSortingValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setSearchedProjectValue(pagiInfoDict.search);
+
+    setIsProjectRequested(true);
+  }, [urlSearch]);
 
   useEffect(() => {
     if (introOffClicked) {
@@ -99,32 +116,17 @@ const AutoMLProject = ({ history, route }) => {
   }, [projects.projects]);
 
   useEffect(() => {
-    if (url) {
-      (async () => {
-        setIsLoading(true);
-        setSearchedProjectValue("");
-        setSortingValue("created_at");
-        setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1];
-        if (projectTab) {
-          setActiveStep(projectTab);
-          setProjectPage(0);
-          setIsProjectRequested(true);
-        } else {
-          setActiveStep("all");
-          setIsProjectRequested(true);
-        }
-      })();
-    }
-  }, [url]);
-
-  useEffect(() => {
     if (isCategoryClicked) setIsCategoryClicked(false);
   }, [isCategoryClicked]);
 
   useEffect(() => {
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    let urlSP = urlSearchParams;
+    let searchVal = searchedProjectValue;
+    if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
+      urlSP.set("search", searchVal);
+    }
+    handleSearchParams(urlSP);
   }, [searchedProjectValue]);
 
   useEffect(() => {
@@ -145,6 +147,10 @@ const AutoMLProject = ({ history, route }) => {
     };
     if (isVerify) payloadJson["isVerify"] = true;
     dispatch(getProjectsRequestAction(payloadJson));
+  };
+
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
   };
 
   const setProjectSettings = () => {
@@ -188,14 +194,14 @@ const AutoMLProject = ({ history, route }) => {
   };
 
   const handleProjectChangePage = (event, newPage) => {
-    setProjectPage(newPage);
-    setIsProjectRequested(true);
+    urlSearchParams.set("page", newPage + 1);
+    handleSearchParams(urlSearchParams);
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    setProjectRowsPerPage(+event.target.value);
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    urlSearchParams.delete("page");
+    urlSearchParams.set("rows", event.target.value);
+    handleSearchParams(urlSearchParams);
   };
 
   const showMyProject = (projectArr) => {
@@ -232,18 +238,15 @@ const AutoMLProject = ({ history, route }) => {
       };
 
       const onSetSortValue = async (value) => {
+        let urlSP = urlSearchParams;
         if (value === sortingValue) {
-          let tempIsSortDesc = isSortDesc;
-          setSortingValue(value);
-          setProjectPage(0);
-          setIsSortDesc(!tempIsSortDesc);
-          setIsProjectRequested(true);
+          urlSP.set("desc", !isSortDesc);
         } else {
-          setIsSortDesc(true);
-          setSortingValue(value);
-          setProjectPage(0);
-          setIsProjectRequested(true);
+          urlSP.set("sorting", value);
+          urlSP.delete("desc");
         }
+        if (urlSP.has("page")) urlSP.delete("page");
+        handleSearchParams(urlSP);
       };
 
       return (
