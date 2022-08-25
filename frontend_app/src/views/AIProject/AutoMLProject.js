@@ -531,11 +531,7 @@ const AutoMLProject = ({ history, route }) => {
             </div>
           </Grid>
           <Grid sx={{ my: 8 }}>
-            <ProjectListStepper
-              history={history}
-              step={activeStep}
-              page={route}
-            />
+            <ProjectListStepper step={activeStep} page={route} />
           </Grid>
           <Grid
             container

@@ -1,9 +1,11 @@
 import React from "react";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import currentTheme from "assets/jss/custom.js";
 
-const ProjectListStepper = ({ history, step, page }) => {
+const ProjectListStepper = ({ step, page }) => {
+  const history = useHistory();
   const classes = currentTheme();
   const { t } = useTranslation();
 
