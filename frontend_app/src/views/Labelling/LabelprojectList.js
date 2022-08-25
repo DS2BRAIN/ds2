@@ -290,10 +290,10 @@ const LabelprojectList = ({ history }) => {
                   align="center"
                   width={tableHead.width}
                   style={{
-                    cursor: tableHead.value !== "No" ? "pointer" : "default",
+                    cursor: tableHead.value !== "No." ? "pointer" : "default",
                   }}
                   onClick={() =>
-                    tableHead.value !== "No" && onSetSortValue(tableHead.name)
+                    tableHead.value !== "No." && onSetSortValue(tableHead.name)
                   }
                 >
                   <div className={classes.tableHeader}>

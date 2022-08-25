@@ -269,10 +269,15 @@ const AutoMLProject = ({ history, route }) => {
               align="center"
               width={tableHead.width}
               style={{
-                cursor: tableHead.value !== "no" ? "pointer" : "default",
+                cursor: !(
+                  tableHead.value === "No." || tableHead.value === "Role"
+                )
+                  ? "pointer"
+                  : "default",
               }}
               onClick={() =>
-                tableHead.value !== "no" && onSetSortValue(tableHead.name)
+                !(tableHead.value === "No." || tableHead.value === "Role") &&
+                onSetSortValue(tableHead.name)
               }
             >
               <div className={classes.tableHeader}>
