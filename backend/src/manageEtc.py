@@ -267,7 +267,7 @@ class ManageEtc:
 
             os.makedirs(f'{self.utilClass.save_path}/{user["id"]}', exist_ok=True)
 
-            with open('src/email/report.html', 'r') as f:
+            with open('src/emailContent/report.html', 'r') as f:
                 content = f.read().replace("%%tabledata%%", training_data_info_table).replace("%%project_name%%", project[
                     'projectName']).replace("%%modeldata%%", model_table).replace("%%modelchart%%", image_content).replace(
                     "%%labeldata%%", label_table).replace('%%user_name%%', user_name).replace('%%training_method%%',
