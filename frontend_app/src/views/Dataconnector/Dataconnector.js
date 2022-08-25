@@ -108,8 +108,8 @@ const Dataconnector = ({ history }) => {
 
   useEffect(() => {
     const pagiInfoDict = listPagination(urlLoc);
-    setDatatablePage(pagiInfoDict.page);
-    setDatatableRowsPerPage(pagiInfoDict.rows);
+    setDatatablePage(parseInt(pagiInfoDict.page));
+    setDatatableRowsPerPage(parseInt(pagiInfoDict.rows));
     setSortDataValue(pagiInfoDict.sorting);
     setIsSortDesc(pagiInfoDict.desc);
     setSearchedDataValue(pagiInfoDict.search);
