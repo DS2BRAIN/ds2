@@ -100,32 +100,33 @@ class enterpriseBoto():
         print('file_route')
         print(file_route)
 
-        try:
-            shutil.copyfile(f"{s3_route}", file_route)
-        except:
-            print(traceback.format_exc())
-            pass
+        if not os.path.exists(file_route):
+            try:
+                shutil.copyfile(f"{s3_route}", file_route)
+            except:
+                print(traceback.format_exc())
+                pass
 
-        try:
-            shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
-        except:
-            print(traceback.format_exc())
-            pass
+            try:
+                shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
+            except:
+                print(traceback.format_exc())
+                pass
         try:
 
             filePath = f"{os.getcwd()}/../aimaker-backend-deploy/data/{file_route.split('/')[-1]}"
-            if not os.path.exists(filePath):
+            if not os.path.exists(filePath) and os.path.exists(f"{os.getcwd()}/../aimaker-backend-deploy/"):
                 shutil.copyfile(f"{os.getcwd()}/{file_route}", filePath)
 
             filePath = f"{os.getcwd()}/../aimaker-daemon-deploy/data/{file_route.split('/')[-1]}"
-            if not os.path.exists(filePath):
+            if not os.path.exists(filePath) and os.path.exists(f"{os.getcwd()}/../aimaker-daemon-deploy/"):
                 shutil.copyfile(f"{os.getcwd()}/{file_route}", filePath)
 
             if len(file_route.split('/')) > 0:
                 file_route = file_route.split('/')[-1]
 
             filePath = f"{os.getcwd()}/../aimaker-daemon-deploy/models/{file_route}"
-            if os.path.exists(filePath):
+            if os.path.exists(filePath) and not os.path.exists(f"{self.save_path}/{file_route}") and os.path.exists(f"{os.getcwd()}/../aimaker-daemon-deploy/"):
                 shutil.copyfile(filePath, f"{self.save_path}/{file_route}")
 
         except:
