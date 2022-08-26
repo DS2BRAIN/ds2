@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
-import { askLabelProjectDetailRequestAction, askDeleteLabelProjectReqeustAction } from "redux/reducers/messages.js";
+import {
+  askLabelProjectDetailRequestAction,
+  askDeleteLabelProjectReqeustAction,
+} from "redux/reducers/messages.js";
 import { setIsProjectRefreshed } from "redux/reducers/labelprojects";
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
 import * as api from "controller/api.js";
@@ -11,7 +14,15 @@ import { linkDownloadUrl, openChat } from "components/Function/globalFunc";
 import { getNotificationText } from "components/Notifications/NotiText";
 import Button from "components/CustomButtons/Button";
 
-import { Grid, InputBase, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import {
+  Grid,
+  InputBase,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -150,9 +161,17 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   //   }
   // }, [messages.datas]);
 
-  const tableHeads = [{ value: "No", width: "10%" }, { value: "content", width: "40%" }, { value: "date", width: "25%" }, { value: "action", width: "25%" }];
+  const tableHeads = [
+    { value: "No", width: "10%" },
+    { value: "content", width: "40%" },
+    { value: "date", width: "25%" },
+    { value: "action", width: "25%" },
+  ];
 
-  const tableBodys = [{ value: "taskType", name: "content" }, { value: "created_at", name: "date" }];
+  const tableBodys = [
+    { value: "taskType", name: "content" },
+    { value: "created_at", name: "date" },
+  ];
 
   const taskTypes = {
     exportCoco: "COCO파일 변환",
@@ -547,8 +566,12 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         </div>
       ) : (
         <>
-          <div style={{ marginTop: "30px" }}>{renderProjectUpdateOrDelete()}</div>
-          <div style={{ marginTop: "50px", width: "75%" }}>{renderProjectAsyncTaskHistory()}</div>
+          <div style={{ marginTop: "30px" }}>
+            {renderProjectUpdateOrDelete()}
+          </div>
+          <div style={{ marginTop: "50px", width: "75%" }}>
+            {renderProjectAsyncTaskHistory()}
+          </div>
         </>
       )}
     </>
