@@ -574,6 +574,13 @@ EXCEED_TODAY_PLAYBOOK_LIMIT = HTTP_500_INTERNAL_SERVER_ERROR, {
     "message_en": "Exceeded 100 usage per day."
 }
 
+NO_SUPPORT_FOR_OPENSOURCE = HTTP_500_INTERNAL_SERVER_ERROR, {
+    "statusCode": 500,
+    "error": "Bad Request",
+    "message": "오픈소스에서 제공하지 않는 기능입니다.",
+    "message_en": "This function is not supported for open-source."
+}
+
 class ErrorResponseList:
     def verifyError(self, message):
         return HTTP_400_BAD_REQUEST, {

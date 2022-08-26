@@ -34,15 +34,14 @@ class DaemonAsyncTask():
         self.testMode = False
         self.predictClass = None
         self.processingLabelingClass = None
-        self.processingClass = None
+        from src.managePredict import ManagePredict
+        self.predictClass = ManagePredict()
         self.analysingClass = None
 
         if os.path.exists('./src/training/predict.py'):
             from src.training.processingLabeling import ProcessingLabeling
             from src.training.processing import Processing
             from src.training.analysing import Analysing
-            from src.training.predict import Predict
-            self.predictClass = Predict()
             self.processingLabelingClass = ProcessingLabeling()
             self.processingClass = Processing()
             self.analysingClass = Analysing()
