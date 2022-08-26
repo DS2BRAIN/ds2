@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
-import {
-  askLabelProjectDetailRequestAction,
-  askDeleteLabelProjectReqeustAction,
-} from "redux/reducers/messages.js";
+import { askLabelProjectDetailRequestAction, askDeleteLabelProjectReqeustAction } from "redux/reducers/messages.js";
 import { setIsProjectRefreshed } from "redux/reducers/labelprojects";
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
 import * as api from "controller/api.js";
@@ -14,15 +11,7 @@ import { linkDownloadUrl, openChat } from "components/Function/globalFunc";
 import { getNotificationText } from "components/Notifications/NotiText";
 import Button from "components/CustomButtons/Button";
 
-import {
-  Grid,
-  InputBase,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
+import { Grid, InputBase, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -60,10 +49,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   const [totalLength, setTotalLength] = useState(0);
   const [historyPage, setHistoryPage] = useState(1);
   const [isUnableToChangeName, setIsUnableToChangeName] = useState(true);
-  const [
-    isUnableToChangeDescription,
-    setIsUnableTochangeDescription,
-  ] = useState(true);
+  const [isUnableToChangeDescription, setIsUnableTochangeDescription] = useState(true);
   const [hasReviewProcess, setHasReviewProcess] = useState(false);
 
   const changeProjectName = (e) => {
@@ -164,17 +150,9 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   //   }
   // }, [messages.datas]);
 
-  const tableHeads = [
-    { value: "No", width: "10%" },
-    { value: "content", width: "40%" },
-    { value: "date", width: "25%" },
-    { value: "action", width: "25%" },
-  ];
+  const tableHeads = [{ value: "No", width: "10%" }, { value: "content", width: "40%" }, { value: "date", width: "25%" }, { value: "action", width: "25%" }];
 
-  const tableBodys = [
-    { value: "taskType", name: "content" },
-    { value: "created_at", name: "date" },
-  ];
+  const tableBodys = [{ value: "taskType", name: "content" }, { value: "created_at", name: "date" }];
 
   const taskTypes = {
     exportCoco: "COCO파일 변환",
@@ -195,14 +173,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
   const buttonTask = Object.keys(taskTypes).slice(0, 6);
 
-  const buttonText = [
-    "Download file",
-    "Download file",
-    "Download file",
-    "Check labeling",
-    "Check data",
-    "Ask for help",
-  ];
+  const buttonText = ["Download file", "Download file", "Download file", "Check labeling", "Check data", "Ask for help"];
 
   const workapp = {
     object_detection: "Object Detection",
@@ -234,9 +205,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
   useEffect(() => {
     if (labelprojects.isDeleteLabelprojectsSuccess) {
-      history.push(
-        "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
-      );
+      history.push("/admin/labelling?page=1&sorting=created_at&desc=true&rows=10");
     }
   }, [labelprojects.isDeleteLabelprojectsSuccess]);
 
@@ -363,22 +332,13 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
               width: "calc(100% - 160px)",
             }}
             disabled={isUnableToChangeName}
-            onFocus={(e) =>
-              e.currentTarget.setSelectionRange(
-                e.currentTarget.value.length,
-                e.currentTarget.value.length
-              )
-            }
+            onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
             onBlur={() => setIsUnableToChangeName(true)}
             inputRef={nameRef}
             onClick={onLetAbleToChangeName}
           />
           {isUnableToChangeName && (
-            <IconButton
-              id="change_project_name_btn"
-              style={{ width: "15px", padding: "0" }}
-              onClick={onLetAbleToChangeName}
-            >
+            <IconButton id="change_project_name_btn" style={{ width: "15px", padding: "0" }} onClick={onLetAbleToChangeName}>
               <Create />
             </IconButton>
           )}
@@ -421,12 +381,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
               width: "calc(100% - 160px)",
             }}
             disabled={isUnableToChangeDescription}
-            onFocus={(e) =>
-              e.currentTarget.setSelectionRange(
-                e.currentTarget.value.length,
-                e.currentTarget.value.length
-              )
-            }
+            onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
             onBlur={() => setIsUnableTochangeDescription(true)}
             inputRef={descriptionRef}
             multiline={true}
@@ -434,11 +389,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
             onClick={onLetAbleToChangeDetail}
           />
           {isUnableToChangeDescription && (
-            <IconButton
-              id="change_project_desc_btn"
-              style={{ width: "15px", padding: "0" }}
-              onClick={onLetAbleToChangeDetail}
-            >
+            <IconButton id="change_project_desc_btn" style={{ width: "15px", padding: "0" }} onClick={onLetAbleToChangeDetail}>
               <Create />
             </IconButton>
           )}
@@ -465,11 +416,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
           >
             {t("Category")}
           </div>
-          <span
-            style={{ fontSize: "16px", color: currentThemeColor.textWhite6 }}
-          >
-            {t(workapp[projectCategory])}
-          </span>
+          <span style={{ fontSize: "16px", color: currentThemeColor.textWhite6 }}>{t(workapp[projectCategory])}</span>
           {/* <FormControlLabel
               value={projectCategory}
               label={t(workapp[projectCategory])}
@@ -482,31 +429,10 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
       <Grid item xs={9}>
         <div style={{ margin: "0 0 10px 5px", textAlign: "right" }}>
-          <FormControlLabel
-            control={
-              <Switch
-                id="inspection_switch_btn"
-                checked={hasReviewProcess}
-                onChange={changeHasReviewProcess}
-              />
-            }
-            label={
-              <span style={{ fontSize: 16, fontWeight: 600 }}>{`${t(
-                "Inspection progress"
-              )}`}</span>
-            }
-            style={{ margin: 0 }}
-          />
+          <FormControlLabel control={<Switch id="inspection_switch_btn" checked={hasReviewProcess} onChange={changeHasReviewProcess} />} label={<span style={{ fontSize: 16, fontWeight: 600 }}>{`${t("Inspection progress")}`}</span>} style={{ margin: 0 }} />
 
-          <Tooltip
-            title={t(
-              "It is decided whether to proceed with the inspection of the manual labeling case."
-            )}
-          >
-            <HelpOutlineOutlinedIcon
-              fontSize="small"
-              sx={{ fill: "var(--primary)", marginLeft: "4px" }}
-            />
+          <Tooltip title={t("It is decided whether to proceed with the inspection of the manual labeling case.")}>
+            <HelpOutlineOutlinedIcon fontSize="small" sx={{ fill: "var(--primary)", marginLeft: "4px" }} />
           </Tooltip>
         </div>
       </Grid>
@@ -521,18 +447,10 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
             justifyContent: "space-between",
           }}
         >
-          <Button
-            id="delete_project_btn"
-            shape="redOutlined"
-            onClick={() => deleteProject(labelprojects.projectDetail.id)}
-          >
+          <Button id="delete_project_btn" shape="redOutlined" onClick={() => deleteProject(labelprojects.projectDetail.id)}>
             {t("Delete Project")}
           </Button>
-          <Button
-            id="edit_project_info_btn"
-            shape="whiteOutlined"
-            onClick={() => updateProject(labelprojects.projectDetail.id)}
-          >
+          <Button id="edit_project_info_btn" shape="whiteOutlined" onClick={() => updateProject(labelprojects.projectDetail.id)}>
             {t("Edit")}
           </Button>
         </div>
@@ -549,13 +467,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         <TableHead>
           <TableRow>
             {tableHeads.map((tableHead, idx) => (
-              <TableCell
-                id="mainHeader"
-                key={idx}
-                className={classes.tableHead}
-                align="center"
-                width={tableHead.width}
-              >
+              <TableCell id="mainHeader" key={idx} className={classes.tableHead} align="center" width={tableHead.width}>
                 <b>{t(tableHead.value)}</b>
               </TableCell>
             ))}
@@ -564,40 +476,16 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         <TableBody>
           {asynctasks &&
             asynctasks.map((asynctask, idx) => (
-              <TableRow
-                key={asynctask.created_at + idx}
-                className={classes.tableRow}
-              >
+              <TableRow key={asynctask.created_at + idx} className={classes.tableRow}>
                 <TableCell className={classes.tableRowCell} align="center">
-                  <div className={classes.wordBreakDiv}>
-                    {totalLength - (idx + 5 * (historyPage - 1))}
-                  </div>
+                  <div className={classes.wordBreakDiv}>{totalLength - (idx + 5 * (historyPage - 1))}</div>
                 </TableCell>
                 {tableBodys.map((tableBody) => (
-                  <TableCell
-                    key={tableBody.value}
-                    className={classes.tableRowCell}
-                    align={tableBody.name === "content" ? "left" : "center"}
-                  >
-                    <div>
-                      {tableBody.value === "taskType"
-                        ? asynctask.taskName +
-                          " " +
-                          getNotificationText(
-                            asynctask.status,
-                            asynctask.taskType,
-                            asynctask.statusText,
-                            i18n?.language
-                          )
-                        : asynctask[tableBody.value].substring(0, 10)}
-                    </div>
+                  <TableCell key={tableBody.value} className={classes.tableRowCell} align={tableBody.name === "content" ? "left" : "center"}>
+                    <div>{tableBody.value === "taskType" ? asynctask.taskName + " " + getNotificationText(asynctask.status, asynctask.taskType, asynctask.statusText, i18n?.language) : asynctask[tableBody.value].substring(0, 10)}</div>
                   </TableCell>
                 ))}
-                <TableCell
-                  key={idx}
-                  className={classes.tableRowCell}
-                  align="center"
-                >
+                <TableCell key={idx} className={classes.tableRowCell} align="center">
                   <div className={classes.wordBreakDiv}>
                     {buttonTask.indexOf(asynctask.taskType) > -1 ? (
                       buttonTask.indexOf(asynctask.taskType) < 4 ? (
@@ -606,35 +494,16 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
                             <Button
                               shape="greenOutlined"
                               onClick={() => {
-                                onClickButtonAction(
-                                  asynctask.taskType,
-                                  asynctask.outputFilePath
-                                );
+                                onClickButtonAction(asynctask.taskType, asynctask.outputFilePath);
                               }}
                             >
-                              {t(
-                                buttonText[
-                                  buttonTask.indexOf(asynctask.taskType)
-                                ]
-                              )}
+                              {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
                             </Button>
                           )}
                           {asynctask.status === 99 && (
-                            <Tooltip
-                              title={
-                                <span style={{ fontSize: "12px" }}>
-                                  {t(
-                                    "When inquiring, please tell us the date of creation of the error and the name of the file."
-                                  )}
-                                </span>
-                              }
-                              placement="bottom"
-                            >
+                            <Tooltip title={<span style={{ fontSize: "12px" }}>{t("When inquiring, please tell us the date of creation of the error and the name of the file.")}</span>} placement="bottom">
                               <div>
-                                <Button
-                                  shape="greenOutlined"
-                                  onClick={() => openChat()}
-                                >
+                                <Button shape="greenOutlined" onClick={() => openChat()}>
                                   {t("Contact us")}
                                 </Button>
                               </div>
@@ -643,15 +512,8 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
                         </>
                       ) : (
                         asynctask.status === 99 && (
-                          <Button
-                            shape="greenOutlined"
-                            onClick={() =>
-                              onClickButtonAction(asynctask.taskType)
-                            }
-                          >
-                            {t(
-                              buttonText[buttonTask.indexOf(asynctask.taskType)]
-                            )}
+                          <Button shape="greenOutlined" onClick={() => onClickButtonAction(asynctask.taskType)}>
+                            {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
                           </Button>
                         )
                       )
@@ -671,12 +533,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
           marginTop: "15px",
         }}
       >
-        <Pagination
-          count={totalLength ? Math.ceil(totalLength / 5) : 0}
-          page={historyPage}
-          onChange={changePage}
-          classes={{ ul: classes.paginationNum }}
-        />
+        <Pagination count={totalLength ? Math.ceil(totalLength / 5) : 0} page={historyPage} onChange={changePage} classes={{ ul: classes.paginationNum }} />
       </div>
     </>
   );
@@ -690,12 +547,8 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         </div>
       ) : (
         <>
-          <div style={{ marginTop: "30px" }}>
-            {renderProjectUpdateOrDelete()}
-          </div>
-          <div style={{ marginTop: "50px", width: "75%" }}>
-            {renderProjectAsyncTaskHistory()}
-          </div>
+          <div style={{ marginTop: "30px" }}>{renderProjectUpdateOrDelete()}</div>
+          <div style={{ marginTop: "50px", width: "75%" }}>{renderProjectAsyncTaskHistory()}</div>
         </>
       )}
     </>
