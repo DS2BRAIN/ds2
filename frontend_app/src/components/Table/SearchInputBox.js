@@ -11,7 +11,7 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import currentTheme from "assets/jss/custom.js";
 
-const SearchInputBox = ({ setSearchedValue }) => {
+const SearchInputBox = () => {
   const history = useHistory();
   const { t } = useTranslation();
   const classes = currentTheme();
@@ -51,24 +51,14 @@ const SearchInputBox = ({ setSearchedValue }) => {
   };
 
   const onSetSearchOutput = (value) => {
-    if (
-      urlPath.includes("/dataconnector") ||
-      urlPath.includes("/labelling") ||
-      urlPath.includes("/train") ||
-      urlPath.includes("/verify") ||
-      urlPath.includes("/jupyterproject")
-    ) {
-      let urlSP = urlSearchParams;
-      if (value === "") {
-        urlSP.delete("search");
-        if (urlSP.has("page")) urlSP.delete("page");
-      } else {
-        urlSP.set("search", value);
-      }
-      history.push(urlPath + "?" + urlSP);
+    let urlSP = urlSearchParams;
+    if (value === "") {
+      urlSP.delete("search");
+      if (urlSP.has("page")) urlSP.delete("page");
     } else {
-      setSearchedValue(value);
+      urlSP.set("search", value);
     }
+    history.push(urlPath + "?" + urlSP);
   };
 
   return (
