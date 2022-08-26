@@ -34,7 +34,7 @@ from tensorflow.python.saved_model import tag_constants
 import math
 
 import torch
-from transformers import TrOCRProcessor, VisionEncoderDecoderModel
+from transformers import TrOCRProcessor, VisionEncoderDecoderModel, ViTFeatureExtractor, AutoTokenizer
 
 if "1.4.0" not in torch.__version__ and 'Darwin' not in platform.system():
     from detectron2.data.catalog import Metadata
@@ -306,8 +306,8 @@ class PredictImage:
 
         if not self.models.get("OCR"):
             self.models["OCR"] = {
-                "processor" : TrOCRProcessor.from_pretrained('microsoft/trocr-base-printed'),
-                "model" : VisionEncoderDecoderModel.from_pretrained('microsoft/trocr-base-printed')
+                "processor": TrOCRProcessor.from_pretrained('microsoft/trocr-base-printed'),
+                "model": VisionEncoderDecoderModel.from_pretrained('microsoft/trocr-base-printed')
             }
 
         pixel_values = self.models["OCR"]["processor"](images=image, return_tensors="pt").pixel_values
@@ -317,7 +317,33 @@ class PredictImage:
         if info:
             ocrResultRaw = json.dumps({"result": generated_text}, default=self.convert, ensure_ascii=False)
             return HTTP_200_OK, ocrResultRaw
-        return image
+        return
+
+    def get_image_to_text(self, file, image, info=False):
+
+        if not self.models.get("image_to_text"):
+            self.models["image_to_text"] = {
+                "feature_extractor": ViTFeatureExtractor.from_pretrained("nlpconnect/vit-gpt2-image-captioning"),
+                "tokenizer": AutoTokenizer.from_pretrained("nlpconnect/vit-gpt2-image-captioning"),
+                "model_image_to_text": VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+            }
+
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.models["image_to_text"]["model_image_to_text"].to(device)
+
+        max_length = 16
+        num_beams = 4
+        gen_kwargs = {"max_length": max_length, "num_beams": num_beams}
+
+        pixel_values = self.models["image_to_text"]["feature_extractor"](images=[image],
+                                                                         return_tensors="pt").pixel_values
+        pixel_values = pixel_values.to(device)
+        output_ids = self.models["image_to_text"]["model_image_to_text"].generate(pixel_values, **gen_kwargs)
+        preds = self.models["image_to_text"]["tokenizer"].batch_decode(output_ids, skip_special_tokens=True)
+        generated_text = [pred.strip() for pred in preds]
+
+        result = json.dumps({"predict_value": generated_text}, default=self.convert, ensure_ascii=False)
+        return result
 
     def getFaceLandmark(self, image, info=False, predictor=None):
         if not predictor:

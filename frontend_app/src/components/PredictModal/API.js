@@ -173,7 +173,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     setParamsType(tempTypes);
 
     let trainMethod = projects.project.trainingMethod;
-    if (trainMethod === "image" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
+    if (trainMethod.indexOf("image") > -1  || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
       api.getSampleDataByModelId(models.chosenModel).then((res) => {
         if (res.data) {
           setRandomFiles(res.data);
@@ -790,7 +790,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
 
     let trainMethod = projects.project?.trainingMethod;
     if (chosenItem === "apiVideo") caseItemApiVideo();
-    if (trainMethod === "image") caseTrainMethodImage();
+    if (trainMethod.indexOf("image") > -1) caseTrainMethodImage();
     else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") caseTrainMethodObjectCycle();
     else caseTrainMethodEtc();
   };
@@ -876,7 +876,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
 
   const resetImage = () => {
     let trainMethod = projects.project.trainingMethod;
-    if (trainMethod === "image" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
+    if (trainMethod.indexOf("image") > -1 || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
       setIsPredictImageInfoDone(false);
       setIsPredictImageDone(false);
       setFiles(null);

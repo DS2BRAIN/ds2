@@ -422,10 +422,17 @@ class ManagePredict:
                     outputImage = self.predict_image_class.getOCR(file, im, info)
                     if info:
                         return HTTP_200_OK, outputImage
+                    else:
+                        return HTTP_200_OK, StreamingResponse(io.BytesIO(image.tobytes()), media_type="image/jpg",
+                                                              background=background_tasks)
                 elif model['objectDetectionModel'] == "faceLandmark":
                     outputImage = self.predict_image_class.getFaceLandmark(im, info, predictor=self.predictor)
                     if info:
                         return HTTP_200_OK, outputImage
+
+            if 'image_to_text' in trainingMethod:
+                result = self.predict_image_class.get_image_to_text(file, im, info)
+                return HTTP_200_OK, result
 
             if self.predict_class:
                 return self.predict_class.runImage(modelId, file, filename, appToken, userId,
