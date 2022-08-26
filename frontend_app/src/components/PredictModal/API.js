@@ -711,7 +711,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             setObjectJson(responseJson);
           }
           Object.keys(responseJson).map((key) => {
-            if (key.indexOf("__예측값") > -1) {
+            if (key.indexOf("__predict_value") > -1) {
               var predictedValueRaw = String(responseJson[key]);
               let tempMaxValue = 0;
               responseJson["예측값정보"] &&
