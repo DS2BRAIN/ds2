@@ -33,7 +33,7 @@ import pandas as pd
 from src.processing import Processing
 from src.service.predictImage import PredictImage
 from src.util import Util
-
+from transformers import pipeline
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -277,7 +277,10 @@ class ManagePredict:
             a = pd.DataFrame([parameter])
             result = None
 
-            result = self.predictRow(a, model, modelPath)
+            if isMarket:
+                result = self.predict_for_market(a, model, modelPath)
+            else:
+                result = self.predictRow(a, model, modelPath)
 
 
             if opsId:
@@ -773,6 +776,15 @@ class ManagePredict:
             return self.predict_class.predictRow(a, model, modelPath, learn=learn)
         else:
             return NO_SUPPORT_FOR_OPENSOURCE
+
+    def predict_for_market(self, a, model, modelPath, learn=None):
+
+        if 'text_summarization' in model['project']['trainingMethod']:
+            if not self.quickMarketModels.get("summarizer"):
+                self.quickMarketModels["summarizer"] = pipeline("summarization", model="facebook/bart-large-cnn")
+            result = self.quickMarketModels["summarizer"](a["article"][0], max_length=int(a["max_length"][0]),
+                                                 min_length=int(a["min_length"][0]), do_sample=False)[0]["summary_text"]
+            return {"summary_text__predict_value": result}
 
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:
