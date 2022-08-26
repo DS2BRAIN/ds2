@@ -307,16 +307,16 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             setResponse(response);
             var responseJson = response;
             Object.keys(responseJson).map((key) => {
-              if (key === "예측값") {
+              if (key === "predict_value") {
                 var predictedValueRaw = responseJson[key];
-                responseJson["예측값정보"] &&
-                  responseJson["예측값정보"].map((info) => {
+                responseJson["predict_value_info"] &&
+                  responseJson["predict_value_info"].map((info) => {
                     if (info["name"] === predictedValueRaw) {
                       predictedValueRaw += ` (${info["value"]}%)`;
                     }
                   });
                 setPredictedValue(predictedValueRaw);
-              } else if (key.indexOf("예측값정보") > -1) {
+              } else if (key.indexOf("predict_value_info") > -1) {
                 setPredictedInfo(responseJson[key]);
               } else if (key.indexOf("이상값") > -1) {
                 setOutliarInfo(responseJson[key]);
@@ -384,16 +384,16 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             setResponse(response);
             var responseJson = response;
             Object.keys(responseJson).map((key) => {
-              if (key === "예측값") {
+              if (key === "predict_value") {
                 var predictedValueRaw = responseJson[key];
-                responseJson["예측값정보"] &&
-                  responseJson["예측값정보"].map((info) => {
+                responseJson["predict_value_info"] &&
+                  responseJson["predict_value_info"].map((info) => {
                     if (info["name"] === predictedValueRaw) {
                       predictedValueRaw += ` (${info["value"]}%)`;
                     }
                   });
                 setPredictedValue(predictedValueRaw);
-              } else if (key.indexOf("예측값정보") > -1) {
+              } else if (key.indexOf("predict_value_info") > -1) {
                 setPredictedInfo(responseJson[key]);
               } else if (key.indexOf("이상값") > -1) {
                 setOutliarInfo(responseJson[key]);
@@ -720,15 +720,15 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             if (key.indexOf("__predict_value") > -1) {
               var predictedValueRaw = String(responseJson[key]);
               let tempMaxValue = 0;
-              responseJson["예측값정보"] &&
-                responseJson["예측값정보"].map((info) => {
+              responseJson["predict_value_info"] &&
+                responseJson["predict_value_info"].map((info) => {
                   if (info["value"] > tempMaxValue) {
                     tempMaxValue = info["value"];
                     predictedValueRaw = info["name"] + ` (${info["value"]}%)`;
                   }
                 });
               setPredictedValue(predictedValueRaw);
-            } else if (key.indexOf("예측값정보") > -1) {
+            } else if (key.indexOf("predict_value_info") > -1) {
               setPredictedInfo(responseJson[key]);
             } else if (key.indexOf("이상값") > -1) {
               setOutliarInfo(responseJson[key]);
