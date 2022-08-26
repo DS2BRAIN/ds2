@@ -571,23 +571,12 @@ const Project = ({ history }) => {
           <Grid container justifyContent="space-between" alignItems="center">
             <Button
               id="deleteProject"
-              style={{ width: "80px" }}
               disabled={!Object.values(projectCheckedValue).includes(true)}
-              className={
-                Object.values(projectCheckedValue).includes(true)
-                  ? classes.defaultDeleteButton
-                  : classes.defaultDisabledButton
-              }
+              shape="redOutlined"
+              size="sm"
               onClick={deleteProject}
             >
-              <CloseIcon
-                id={
-                  Object.values(projectCheckedValue).includes(true)
-                    ? "deleteActivateBtn"
-                    : "deleteLabelIcon"
-                }
-              />
-              {t("Delete")}
+              {t("Delete selection")}
             </Button>
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
