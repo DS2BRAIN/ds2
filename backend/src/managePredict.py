@@ -33,7 +33,8 @@ import pandas as pd
 from src.processing import Processing
 from src.service.predictImage import PredictImage
 from src.util import Util
-from transformers import pipeline
+from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+from transformers import pipeline, set_seed
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -785,6 +786,21 @@ class ManagePredict:
             result = self.quickMarketModels["summarizer"](a["article"][0], max_length=int(a["max_length"][0]),
                                                  min_length=int(a["min_length"][0]), do_sample=False)[0]["summary_text"]
             return {"summary_text__predict_value": result}
+
+        if 'translation' in model['project']['trainingMethod']:
+            if not self.quickMarketModels.get("translation"):
+                self.quickMarketModels["translation"] = {
+                    "model": M2M100ForConditionalGeneration.from_pretrained(model_name if model_name else "facebook/m2m100_1.2B"),
+                    "tokenizer": M2M100Tokenizer.from_pretrained(model_name if model_name else "facebook/m2m100_1.2B")
+                }
+
+            self.quickMarketModels["translation"]["tokenizer"].src_lang = a["from"][0]
+            encoded_hi = self.quickMarketModels["translation"]["tokenizer"](a["text"][0], return_tensors="pt")
+            generated_tokens = self.quickMarketModels["translation"]["model"].generate(**encoded_hi,
+                       forced_bos_token_id=self.quickMarketModels["translation"]["tokenizer"].get_lang_id(a["to"][0]))
+            result = self.quickMarketModels["translation"]["tokenizer"].batch_decode(generated_tokens,
+                                                                                     skip_special_tokens=True)
+            return {"translated_text__predict_value": result}
 
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:
