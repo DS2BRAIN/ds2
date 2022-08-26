@@ -263,11 +263,11 @@ export default function MarketList({ history }) {
                         key={marketModel.id}
                         className={classes.tableRowCell}
                         align="center"
-                        onClick={() => {
-                          goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
-                        }}
+                        // onClick={() => {
+                        //   goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
+                        // }}
                         style={{
-                          cursor: tableBody.value !== "name_kr" && tableBody.value !== "name_en" ? "default" : "pointer",
+                          cursor: "default",
                           padding: tableBody.value === "thumbnail" && "0 !important",
                         }}
                       >
@@ -276,7 +276,7 @@ export default function MarketList({ history }) {
                           style={{
                             textDecoration: (tableBody.value === "name_kr" || tableBody.value === "name_en") && "underline",
                             textUnderlinePosition: (tableBody.value === "name_kr" || tableBody.value === "name_en") && "under",
-                            cursor: tableBody.value === "name_kr" || tableBody.value === "name_en" ? "pointer" : "default",
+                            cursor: "default",
                           }}
                         >
                           <>
