@@ -224,9 +224,8 @@ export function getOpsProjects(projectsInfo) {
   const token = Cookies.getCookie("jwt");
   let projectsUrl = `opsprojects/?token=${token}&sorting=${
     projectsInfo.sorting
-  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}&tab=${
-    projectsInfo.tab
-  }`;
+  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}`;
+  if (projectsInfo.tab) projectsUrl += `&tab=${projectsInfo.tab}`;
   if (projectsInfo.isDesc) projectsUrl += "&desc=true";
   if (projectsInfo.searching && projectsInfo.searching !== "")
     projectsUrl += `&searching=${encodeURIComponent(projectsInfo.searching)}`;
