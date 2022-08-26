@@ -190,7 +190,6 @@ const AutoMLProject = ({ history, route }) => {
         sortInfo: sortInfoJson,
       })
     );
-    setSearchedProjectValue("");
   };
 
   const handleProjectChangePage = (event, newPage) => {
@@ -549,7 +548,7 @@ const AutoMLProject = ({ history, route }) => {
           >
             <Grid item>{partStartBtns()}</Grid>
             <Grid item>
-              <SearchInputBox setSearchedValue={setSearchedProjectValue} />
+              <SearchInputBox />
             </Grid>
           </Grid>
           <Grid>{showMyProject(projects.projects)}</Grid>

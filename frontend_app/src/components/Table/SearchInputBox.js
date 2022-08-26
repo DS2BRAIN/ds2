@@ -15,7 +15,6 @@ const SearchInputBox = ({ setSearchedValue }) => {
   const history = useHistory();
   const { t } = useTranslation();
   const classes = currentTheme();
-  const dispatch = useDispatch();
 
   const urlLoc = window.location;
   const urlPath = urlLoc.pathname;
@@ -52,7 +51,13 @@ const SearchInputBox = ({ setSearchedValue }) => {
   };
 
   const onSetSearchOutput = (value) => {
-    if (urlPath.includes("/dataconnector") || urlPath.includes("/labelling")) {
+    if (
+      urlPath.includes("/dataconnector") ||
+      urlPath.includes("/labelling") ||
+      urlPath.includes("/train") ||
+      urlPath.includes("/verify") ||
+      urlPath.includes("/jupyterproject")
+    ) {
       let urlSP = urlSearchParams;
       if (value === "") {
         urlSP.delete("search");

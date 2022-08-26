@@ -20,6 +20,7 @@ import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
 import * as api from "controller/api";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import { IS_ENTERPRISE } from "variables/common";
+import { listPagination } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -62,17 +63,21 @@ const Project = ({ history }) => {
   );
 
   const [isLoading, setIsLoading] = useState(false);
+  const [introOn, setIntroOn] = useState(false);
+  const [introOffClicked, setIntroOffClicked] = useState(false);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
   const [isCategoryClicked, setIsCategoryClicked] = useState(false);
-  const [searchedValue, setSearchedValue] = useState("");
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [sortingValue, setSortingValue] = useState("created_at");
-  const [isSortDesc, setIsSortDesc] = useState(true);
+
   const [projectPage, setProjectPage] = useState(0);
   const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
+  const [sortingValue, setSortingValue] = useState("created_at");
+  const [searchedValue, setSearchedValue] = useState("");
+  const [isSortDesc, setIsSortDesc] = useState(true);
   const [isShared, setIsShared] = useState(false);
+
   const [isLoadModelModalOpen, setIsLoadModelModalOpen] = useState(false);
   const [isOpenStartModalOpen, setIsOpenStartModalOpen] = useState(false);
   const [openFileModal, setOpenFileModal] = useState(false);
@@ -85,8 +90,6 @@ const Project = ({ history }) => {
   const [uploadFile, setUploadFile] = useState(null);
   const [isUploadFileChanged, setIsUploadFileChanged] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
-  const [introOn, setIntroOn] = useState(false);
-  const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isFilesUploadLoading, setIsFilesUploadLoading] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
@@ -133,8 +136,24 @@ const Project = ({ history }) => {
   }, [projects.projects]);
 
   useEffect(() => {
-    setProjectPage(0);
+    const pagiInfoDict = listPagination(urlLoc);
+    setProjectPage(pagiInfoDict.page);
+    setProjectRowsPerPage(pagiInfoDict.rows);
+    setSortingValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setSearchedValue(pagiInfoDict.search);
+
     setIsProjectRequested(true);
+  }, [urlSearch]);
+
+  useEffect(() => {
+    let urlSP = urlSearchParams;
+    let searchVal = searchedValue;
+    if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
+      urlSP.set("search", searchVal);
+    }
+    handleSearchParams(urlSP);
   }, [searchedValue]);
 
   useEffect(() => {
@@ -153,6 +172,10 @@ const Project = ({ history }) => {
       searching: searchedValue,
     };
     dispatch(getOpsProjectsRequestAction(payloadJson));
+  };
+
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
   };
 
   useEffect(() => {
@@ -306,35 +329,29 @@ const Project = ({ history }) => {
         },
       })
     );
-    setSearchedValue("");
   };
 
   const handleProjectChangePage = (event, newPage) => {
-    setIsLoading(true);
-    setProjectPage(newPage);
-    setIsProjectRequested(true);
+    urlSearchParams.set("page", newPage + 1);
+    handleSearchParams(urlSearchParams);
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    setIsLoading(true);
-    setProjectRowsPerPage(+event.target.value);
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    urlSearchParams.delete("page");
+    urlSearchParams.set("rows", event.target.value);
+    handleSearchParams(urlSearchParams);
   };
 
   const onSetSortValue = async (value) => {
-    setIsLoading(true);
+    let urlSP = urlSearchParams;
     if (value === sortingValue) {
-      let tempIsSortDesc = isSortDesc;
-      setIsSortDesc(!tempIsSortDesc);
-      setProjectPage(0);
-      setIsProjectRequested(true);
+      urlSP.set("desc", !isSortDesc);
     } else {
-      setIsSortDesc(true);
-      setSortingValue(value);
-      setProjectPage(0);
-      setIsProjectRequested(true);
+      urlSP.set("sorting", value);
+      urlSP.delete("desc");
     }
+    if (urlSP.has("page")) urlSP.delete("page");
+    handleSearchParams(urlSP);
   };
 
   const showMyProject = () => {
@@ -429,7 +446,7 @@ const Project = ({ history }) => {
                     align="center"
                   >
                     <b style={{ color: currentThemeColor.textMediumGrey }}>
-                      No
+                      No.
                     </b>
                   </TableCell>
                   <TableCell
@@ -575,7 +592,7 @@ const Project = ({ history }) => {
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
               component="div"
-              count={projects.totalLength}
+              count={projects.totalLength["all"]}
               rowsPerPage={projectRowsPerPage}
               page={projectPage}
               backIconButtonProps={{
@@ -750,7 +767,7 @@ const Project = ({ history }) => {
               </Button>
             </GridItem>
             <GridItem xs={4}>
-              <SearchInputBox setSearchedValue={setSearchedValue} />
+              <SearchInputBox />
             </GridItem>
           </GridContainer>
           <GridContainer>

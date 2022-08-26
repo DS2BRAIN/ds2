@@ -237,7 +237,6 @@ const LabelprojectList = ({ history }) => {
         },
       })
     );
-    setSearchedValue("");
   };
 
   const tableHeads = [
@@ -501,7 +500,7 @@ const LabelprojectList = ({ history }) => {
                 </Tooltip>
               </GridItem>
               <GridItem xs={5}>
-                <SearchInputBox setSearchedValue={setSearchedValue} />
+                <SearchInputBox />
               </GridItem>
               {isLoading ? (
                 <div className="emptyListTable">
