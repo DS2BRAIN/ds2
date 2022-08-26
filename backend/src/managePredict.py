@@ -812,6 +812,15 @@ class ManagePredict:
                 generated_text.append(result["generated_text"])
             return {"generated_text__predict_value": generated_text}
 
+        if 'fill_mask' in model['project']['trainingMethod']:
+            if not self.quickMarketModels.get("fill_mask"):
+                self.quickMarketModels["fill_mask"] = pipeline('fill-mask', model=model_name if model_name else 'bert-base-uncased')
+            results = self.quickMarketModels["fill_mask"](a["text"][0])
+            generated_text = []
+            for result in results:
+                generated_text.append(result["sequence"])
+            return {"generated_text__predict_value": generated_text}
+
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:
             try:
