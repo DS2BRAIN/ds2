@@ -37,6 +37,7 @@ import { fileurl } from "controller/api";
 import { CircularProgress, Grid } from "@mui/material";
 import SearchInputBox from "components/Table/SearchInputBox";
 import Button from "components/CustomButtons/Button";
+import { IS_ENTERPRISE } from "variables/common";
 
 const Project = ({ history }) => {
   const classes = currentTheme();
@@ -59,7 +60,6 @@ const Project = ({ history }) => {
   const [isCategoryClicked, setIsCategoryClicked] = useState(false);
   const [searchedValue, setSearchedValue] = useState("");
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
   const [sortingValue, setSortingValue] = useState("created_at");
   const [isSortDesc, setIsSortDesc] = useState(true);
   const [projectPage, setProjectPage] = useState(0);
@@ -73,12 +73,10 @@ const Project = ({ history }) => {
   const url = window.location.href;
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
-  const [projectCountLimit, setProjectCountLimit] = useState(
-    process.env.REACT_APP_ENTERPRISE ? 99999999999 : 5
-  );
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   const logoBlue = fileurl + "asset/front/img/logo_title.png";
+  const projectCountLimit = IS_ENTERPRISE ? 999999999 : 5;
 
   useEffect(() => {
     const state = history.location.state;
@@ -122,25 +120,6 @@ const Project = ({ history }) => {
   }, [projects.jupyterProjects]);
 
   useEffect(() => {
-    if (url) {
-      (async () => {
-        await setIsLoading(true);
-        setSearchedValue("");
-        setSortingValue("created_at");
-        setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1];
-        if (projectTab) {
-          setActiveStep(projectTab);
-          setIsProjectRequested(true);
-        } else {
-          setActiveStep("all");
-          setIsProjectRequested(true);
-        }
-      })();
-    }
-  }, [url]);
-
-  useEffect(() => {
     if (messages.shouldCloseModal) {
       setIsLoading(false);
     }
@@ -167,7 +146,6 @@ const Project = ({ history }) => {
       sorting: sortingValue,
       count: projectRowsPerPage,
       start: projectPage,
-      tab: activeStep,
       isDesc: isSortDesc,
       searching: searchedValue,
       isshared: isShared,
@@ -219,7 +197,6 @@ const Project = ({ history }) => {
           sorting: sortingValue,
           count: projectRowsPerPage,
           start: projectPage,
-          tab: activeStep,
           isDesc: isSortDesc,
         },
       })
@@ -388,11 +365,7 @@ const Project = ({ history }) => {
                     className={classes.tableHead}
                     align="center"
                     style={{ width: "10%" }}
-                  >
-                    {/* <div className={classes.tableHeader}>
-                      <b>{t("Delete Abusing")}</b>
-                    </div> */}
-                  </TableCell>
+                  ></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -499,11 +472,7 @@ const Project = ({ history }) => {
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
               component="div"
-              count={
-                projects.jupyterTotalLength
-                  ? projects.jupyterTotalLength[activeStep]
-                  : 0
-              }
+              count={projects.jupyterTotalLength["all"]}
               rowsPerPage={projectRowsPerPage}
               page={projectPage}
               backIconButtonProps={{
