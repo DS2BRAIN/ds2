@@ -2311,5 +2311,8 @@
   "Quant project creation is complete.": "퀀트 프로젝트 생성이 완료되었습니다.",
   "Modifying the setting conditions": "설정 조건 수정하기",
   "Set 'Minimum' Percentage": "'최소' Percentage 설정",
-  "Set 'Max' Percentage": "'최대' Percentage 설정"
+  "Set 'Max' Percentage": "'최대' Percentage 설정",
+  "Only image files (png/jpg/jpeg), csv files, and compressed image files (zip) can be uploaded.": "이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다.",
+  "Activate Model": "모델 활성화",
+  "Size": "용량"
 }

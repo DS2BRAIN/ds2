@@ -2303,5 +2303,8 @@
   "Modifying the setting conditions": "Modifying the setting conditions",
   "Set 'Minimum' Percentage": "Set 'Minimum' Percentage",
   "Set 'Max' Percentage": "Set 'Max' Percentage",
-  "Start Analysis": "Start Analysis"
+  "Start Analysis": "Start Analysis",
+  "Only image files (png/jpg/jpeg), csv files, and compressed image files (zip) can be uploaded.": "Only image files (png/jpg/jpeg), csv files, and compressed image files (zip) can be uploaded.",
+  "Activate Model": "Activate Model",
+  "Size": "Size"
 }
