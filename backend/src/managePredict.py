@@ -802,6 +802,16 @@ class ManagePredict:
                                                                                      skip_special_tokens=True)
             return {"translated_text__predict_value": result}
 
+        if 'gpt' in model['project']['trainingMethod']:
+            if not self.quickMarketModels.get("gpt"):
+                self.quickMarketModels["gpt"] = pipeline('text-generation', model=model_name if model_name else 'gpt2')
+            set_seed(42)
+            generated_text = []
+            results = self.quickMarketModels["gpt"](a["text"][0], max_length=a["max_length"][0], num_return_sequences=a["num_return_sequences"][0])
+            for result in results:
+                generated_text.append(result["generated_text"])
+            return {"generated_text__predict_value": generated_text}
+
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:
             try:
