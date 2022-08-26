@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-
-import * as api from "../../controller/api";
-import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { ReactTitle } from "react-meta-tags";
+import Dropzone from "react-dropzone";
+
 import {
   askDeleteOpsProjectsReqeustAction,
   askModalRequestAction,
@@ -14,35 +15,37 @@ import {
   setObjectlistsSearchedValue,
 } from "redux/reducers/labelprojects.js";
 import { getOpsProjectsRequestAction } from "redux/reducers/projects";
-import { putUserRequestActionWithoutMessage } from "../../redux/reducers/user";
+import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
+
+import * as api from "controller/api";
+import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import { IS_ENTERPRISE } from "variables/common";
 import Button from "components/CustomButtons/Button";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import SearchInputBox from "components/Table/SearchInputBox";
 import SkyhubIntro from "components/Guide/SkyhubIntro";
+import Samples from "components/Templates/Samples.js";
 
-import { useTranslation } from "react-i18next";
-import { ReactTitle } from "react-meta-tags";
-import Dropzone from "react-dropzone";
-import TablePagination from "@material-ui/core/TablePagination";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Checkbox from "@material-ui/core/Checkbox";
-import Modal from "@material-ui/core/Modal";
-import LinearProgress from "@material-ui/core/LinearProgress";
+import {
+  Checkbox,
+  LinearProgress,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Tooltip,
+} from "@material-ui/core";
+import { CircularProgress, Grid } from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import Samples from "components/Templates/Samples.js";
 import CloseIcon from "@material-ui/icons/Close";
-import Tooltip from "@material-ui/core/Tooltip";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { CircularProgress, Grid } from "@mui/material";
 
 const Project = ({ history }) => {
   const classes = currentTheme();
