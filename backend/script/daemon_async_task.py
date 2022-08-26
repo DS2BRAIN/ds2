@@ -210,7 +210,7 @@ class DaemonAsyncTask():
                     localFile = r.read()
             user = self.dbClass.getOneUserById(task.user, raw=True)
 
-            if "train" in task.taskType or 'customAi' in task.taskType:
+            if "train" in task.taskType or 'customAi' in task.taskType or 'verify' in task.taskType:
                 self.daemonClass.run(project_id=task.project)
             if "runAll" in task.taskType:
                 code, response = self.machine_learning_class.predict_all(user.appTokenCode, user.id, localFile, localFilePath, task.model, None, return_type="file")
@@ -424,7 +424,7 @@ class DaemonAsyncTask():
             pass
         if task.status != 100:
             task.status = 99
-        if task.taskType in ("train", "customAi"):
+        if task.taskType in ("train", "customAi", "verify"):
             task.status = task_before_status
 
         endTime = datetime.now()

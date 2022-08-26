@@ -201,20 +201,19 @@ export const openChat = () => {
   }
 };
 
-export const checkIsValidKey = async (user, dispatch, t) => {
+export async function checkIsValidKey(user, dispatch, t) {
   if (IS_ENTERPRISE) {
     if (user.isGetKeyStatusLoading) return;
 
-    dispatch(setIsGetKeyStatusLoadingRequestAction(true));
+    await dispatch(setIsGetKeyStatusLoadingRequestAction(true));
 
     let isValidUser = true;
     let keyInfo = null;
 
-    api
+    await api
       .getKeyStatus()
       .then((res) => {
         keyInfo = res.data;
-
         if (!keyInfo || !keyInfo.is_valid) {
           dispatch(
             openErrorSnackbarRequestAction(
@@ -223,7 +222,6 @@ export const checkIsValidKey = async (user, dispatch, t) => {
           );
 
           isValidUser = false;
-          return;
         }
 
         if (keyInfo.is_opensource) {
@@ -234,7 +232,6 @@ export const checkIsValidKey = async (user, dispatch, t) => {
           );
 
           isValidUser = false;
-          return;
         }
       })
       .catch((err) => {
@@ -247,13 +244,12 @@ export const checkIsValidKey = async (user, dispatch, t) => {
         dispatch(openErrorSnackbarRequestAction(errMsg));
 
         isValidUser = false;
-        return;
       })
       .finally(() => {
         dispatch(setIsValidUserRequestAction(isValidUser));
         dispatch(setIsGetKeyStatusLoadingRequestAction(false));
-
-        return isValidUser;
       });
+
+    return isValidUser;
   }
-};
+}

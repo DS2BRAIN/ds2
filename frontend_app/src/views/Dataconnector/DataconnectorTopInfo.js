@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import {
-  convertToLocalDateStr,
-  setMemoryUnit,
-} from "../../components/Function/globalFunc.js";
+import { convertToLocalDateStr, setMemoryUnit } from "../../components/Function/globalFunc.js";
 
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
@@ -143,9 +140,7 @@ const DataconnectorTopInfo = ({ connectorInfo }) => {
                   <Select
                     className="no-background-color"
                     value={selectedProject}
-                    label={t(
-                      "Go to the Click AI project associated with your data"
-                    )}
+                    label={t("Go to the Click AI project associated with your data")}
                     onChange={handleChangeSelectedProject}
                     SelectDisplayProps={{
                       style: {
@@ -190,7 +185,9 @@ const DataconnectorTopInfo = ({ connectorInfo }) => {
               minHeight={48}
             >
               <Grid item sx={{ mb: 1 }}>
-                <span style={{ fontSize: 15 }}>{t("Label project list")}</span>
+                <span style={{ fontSize: 15 }}>
+                  {t("Label project list")}
+                </span>
               </Grid>
               <Grid item minWidth={300}>
                 <FormControl variant="outlined" fullWidth>
@@ -213,9 +210,7 @@ const DataconnectorTopInfo = ({ connectorInfo }) => {
                   <Select
                     className="no-background-color"
                     value={selectedLabelproject}
-                    label={t(
-                      "Go to the label project associated with your data"
-                    )}
+                    label={t("Go to the label project associated with your data")}
                     onChange={handleChangeSelectedLabelproject}
                     SelectDisplayProps={{
                       style: {

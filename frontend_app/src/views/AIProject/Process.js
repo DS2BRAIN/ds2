@@ -152,14 +152,9 @@ const Process = (props) => {
   }, []);
 
   useEffect(() => {
-    let tmpTrain = projects?.project?.trainingMethod;
-    if (tmpTrain) {
-      setTrainMethod(tmpTrain);
-    } else {
-      if (hasStructuredData) setTrainMethod("normal");
-      else if (hasImageLabelData) setTrainMethod("image");
-    }
-  }, [hasStructuredData, hasImageLabelData, projects?.project?.trainingMethod]);
+    if (hasStructuredData) setTrainMethod("normal");
+    else if (hasImageLabelData) setTrainMethod("image");
+  }, [hasStructuredData, hasImageLabelData]);
 
   useEffect(() => {
     if (projects?.project?.available_gpu_list?.length) {
@@ -839,9 +834,16 @@ const Process = (props) => {
       return;
     }
 
-    if (IS_ENTERPRISE && ["speed", "accuracy", "labeling"].indexOf(value) > -1) {
-      checkIsValidKey(user, dispatch, t).then(() => {
-        if (!user.isValidUser || projects.project.status !== 0) return;
+    if (
+      IS_ENTERPRISE &&
+      ["speed", "accuracy", "labeling"].indexOf(value) > -1
+    ) {
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        )
+          return;
 
         if (user.me && user.me.usageplan && user.me.usageplan.planName === "trial") {
           dispatch(setPlanModalOpenRequestAction());
@@ -870,7 +872,6 @@ const Process = (props) => {
       dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
       return;
     }
-
     let hasNoError = true;
     if (value === "object_detection" || value === "cycle_gan") {
       if (value === "cycle_gan") {
@@ -2430,7 +2431,14 @@ const Process = (props) => {
                             {handleHelpIconTip("method")}
                           </p>
                           <FormControl className={classes.formControl}>
-                            <Select id={projects.project.status !== 0 ? "disabledSelectBox" : "methodForPredictSelectBox"} labelid="demo-simple-select-outlined-label" disabled={projects.project.status !== 0 || projects.project?.option === "labeling"} value={trainMethod} onChange={methodChange}>
+                            <Select
+                              id={projects.project.status !== 0 ? "disabledSelectBox" : "methodForPredictSelectBox"}
+                              labelid="demo-simple-select-outlined-label"
+                              disabled={projects.project.status !== 0 || projects.project?.option === "labeling"}
+                              value={projects.project.trainingMethod}
+                              defaultValue={trainMethod}
+                              onChange={methodChange}
+                            >
                               {hasStructuredData && <MenuItem value="normal">{t("Structured Data Automatic Classification")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="normal_classification">{t("Structured Data Category Classification")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="normal_regression">{t("Structured Data Regression")}</MenuItem>}
