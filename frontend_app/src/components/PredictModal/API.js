@@ -654,12 +654,18 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     const caseTrainMethodEtc = () => {
       if (projects.project && projects.project.trainingMethod !== "recommender") {
         let paramsList = Object.entries(paramsValue);
-        for (let value in paramsValue) {
-          const param = paramsValue[value];
+        let is_valid_to_proceed = true;
+        paramsList.forEach(function (value, index, array) {
+          const param = value[1];
           if (param === undefined || param === null || param === "") {
-            dispatch(openErrorSnackbarRequestAction(t("Please fill in all the data and proceed.")));
-            return;
+            if (value[0].indexOf("(Optional)") === -1) {
+              dispatch(openErrorSnackbarRequestAction(t("Please fill in all the data and proceed.")));
+              is_valid_to_proceed = false;
+            }
           }
+        });
+        if (!is_valid_to_proceed) {
+          return;
         }
         try {
           for (let i = 0; i < validCsvCheck.length; i++) {

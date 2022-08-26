@@ -778,10 +778,10 @@ class ManagePredict:
             return NO_SUPPORT_FOR_OPENSOURCE
 
     def predict_for_market(self, a, model, modelPath, learn=None):
-
+        model_name = a["model_name (Optional)"][0]
         if 'text_summarization' in model['project']['trainingMethod']:
             if not self.quickMarketModels.get("summarizer"):
-                self.quickMarketModels["summarizer"] = pipeline("summarization", model="facebook/bart-large-cnn")
+                self.quickMarketModels["summarizer"] = pipeline("summarization", model=model_name if model_name else "facebook/bart-large-cnn")
             result = self.quickMarketModels["summarizer"](a["article"][0], max_length=int(a["max_length"][0]),
                                                  min_length=int(a["min_length"][0]), do_sample=False)[0]["summary_text"]
             return {"summary_text__predict_value": result}
