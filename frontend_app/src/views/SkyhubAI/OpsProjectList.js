@@ -68,7 +68,6 @@ const Project = ({ history }) => {
   const [isCategoryClicked, setIsCategoryClicked] = useState(false);
   const [searchedValue, setSearchedValue] = useState("");
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
   const [sortingValue, setSortingValue] = useState("created_at");
   const [isSortDesc, setIsSortDesc] = useState(true);
   const [projectPage, setProjectPage] = useState(0);
@@ -92,6 +91,10 @@ const Project = ({ history }) => {
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   const url = window.location.href;
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
   const projectCountLimit = IS_ENTERPRISE ? 999999999 : 5; //instance 개수 제한 (n+1)개 까지 가능
 
   useEffect(() => {
@@ -130,24 +133,6 @@ const Project = ({ history }) => {
   }, [projects.projects]);
 
   useEffect(() => {
-    if (url) {
-      (async () => {
-        setSearchedValue("");
-        setSortingValue("created_at");
-        setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1];
-        if (projectTab) {
-          setActiveStep(projectTab);
-          setIsProjectRequested(true);
-        } else {
-          setActiveStep("all");
-          setIsProjectRequested(true);
-        }
-      })();
-    }
-  }, [url]);
-
-  useEffect(() => {
     setProjectPage(0);
     setIsProjectRequested(true);
   }, [searchedValue]);
@@ -164,7 +149,6 @@ const Project = ({ history }) => {
       sorting: sortingValue,
       count: projectRowsPerPage,
       start: projectPage,
-      tab: activeStep,
       isDesc: isSortDesc,
       searching: searchedValue,
     };
@@ -223,10 +207,6 @@ const Project = ({ history }) => {
 
   const goClickAI = () => {
     history.push("/admin/project");
-  };
-
-  const goDataconnector = () => {
-    history.push("/admin/dataconnector");
   };
 
   const goProjectDetail = (id) => {
@@ -322,7 +302,6 @@ const Project = ({ history }) => {
           sorting: sortingValue,
           count: projectRowsPerPage,
           start: projectPage,
-          tab: activeStep,
           isDesc: isSortDesc,
         },
       })
@@ -596,13 +575,7 @@ const Project = ({ history }) => {
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
               component="div"
-              count={
-                projects.totalLength
-                  ? projects.totalLength[activeStep]
-                    ? projects.totalLength[activeStep]
-                    : 0
-                  : 0
-              }
+              count={projects.totalLength}
               rowsPerPage={projectRowsPerPage}
               page={projectPage}
               backIconButtonProps={{
