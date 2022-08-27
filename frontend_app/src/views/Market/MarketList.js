@@ -50,8 +50,8 @@ export default function MarketList({ history }) {
   const { user, project, model, labelprojects, messages } = useSelector(
     (state) => ({
       user: state.user,
-      project: state.project,
-      model: state.model,
+      projects: state.projects,
+      models: state.models,
       labelprojects: state.labelprojects,
       messages: state.messages,
     }),
@@ -79,6 +79,7 @@ export default function MarketList({ history }) {
   const [selectedPreviewId, setSelectedPreviewId] = useState(null);
   const [isPredictModalOpen, setIsPredictModalOpen] = useState(false);
   const [selectedMarketModel, setSelectedMarketModel] = useState(null);
+  const [chosenItem, setChosenItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [rowsPerModelPage, setRowsPerModelPage] = useState(10);
   const [isKor, setIsKor] = useState(false);
@@ -388,6 +389,8 @@ export default function MarketList({ history }) {
   };
 
   const onClickButtonAction = async (marketModel) => {
+    await setSelectedMarketModel(null);
+    await setChosenItem(null);
     console.log(marketModel);
     if (marketModel["service_type"]) {
       history.push(`/admin/marketNewProject?id=${marketModel["id"]}`);
@@ -396,6 +399,14 @@ export default function MarketList({ history }) {
       await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
       await setSelectedMarketModel(marketModel);
+      if (selectedMarketModel?.externalAiType?.indexOf("image") > -1 ) {
+        await setChosenItem("apiImage");
+      } else if (selectedMarketModel?.externalAiType?.indexOf("audio") > -1 ) {
+        await setChosenItem("ApiSpeechToText");
+      } else {
+        await setChosenItem("api");
+      }
+
       await setIsPredictModalOpen(true);
     } else {
       await setRequestAITitle(isKor ? marketModel.name_kr : marketModel.name_en);
@@ -747,7 +758,7 @@ export default function MarketList({ history }) {
           </div>
         </Modal>
         <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPredictModalOpen} onClose={closeModal} className={classes.modalContainer}>
-          <ModalPage closeModal={closeModal} chosenItem={selectedMarketModel?.externalAiType?.indexOf("image") > -1 ? "apiImage" : "api"} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={selectedMarketModel?.project.trainingColumnInfo} history={history} />
+          <ModalPage closeModal={closeModal} chosenItem={chosenItem} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={selectedMarketModel?.project.trainingColumnInfo} history={history} />
         </Modal>
       </div>
     </>

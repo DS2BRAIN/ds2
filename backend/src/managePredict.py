@@ -35,6 +35,8 @@ from src.service.predictImage import PredictImage
 from src.util import Util
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 from transformers import pipeline, set_seed
+import soundfile
+from huggingsound import SpeechRecognitionModel
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -469,6 +471,46 @@ class ManagePredict:
         r = requests.get(url, allow_redirects=True)
         file = r.content
         return self.runImage(modelId, file, url.split("/")[-1], appToken, userId, xai=xai, info=info, background_tasks=background_tasks, modeltoken=modeltoken)
+
+    def speect_to_text(self, modelId, file, filename, appToken, userId,
+                 isStreaming=True, isMarket=False, opsId=None, background_tasks=None,
+                 modeltoken=None, marketproject=None, movie_start_time=None, task=None, file_creation_time=None):
+
+        filename = self.utilClass.unquote_url(filename)
+        if self.dbClass.isUserHavingExceedPredictCount(modelId):
+            return HTTP_503_SERVICE_UNAVAILABLE, {
+                "statusCode": 503,
+                "error": "Bad Request",
+                "message": "예측 기능 사용량 초과입니다."
+            }
+
+        if modeltoken:
+            user = self.dbClass.getUserByModelTokenAndModelId(modeltoken, modelId)
+            if not user:
+                return HTTP_503_SERVICE_UNAVAILABLE, {
+                    "statusCode": 503,
+                    "error": "Bad Request",
+                    "message": "앱 토큰을 잘 못 입력하였습니다."
+                }
+            appToken = user.appTokenCode
+
+        if not self.quickMarketModels.get("speech_to_text"):
+            self.quickMarketModels["speech_to_text"] = SpeechRecognitionModel("jonatasgrosman/wav2vec2-large-xlsr-53-english")
+
+        if not os.path.exists(f"{self.utilClass.save_path}/{appToken}/"):
+            os.makedirs(f"{self.utilClass.save_path}/{appToken}/", exist_ok=True)
+
+        temp_file_path = f"{self.utilClass.save_path}/{appToken}/{time.strftime('%y%m%d%H%M%S')}_{filename}"
+
+        with open(temp_file_path, "wb") as buffer:
+            buffer.write(file)
+
+        transcriptions = self.quickMarketModels["speech_to_text"].transcribe([temp_file_path])[0]['transcription']
+
+        if os.path.isfile(temp_file_path):
+            os.remove(temp_file_path)
+
+        return HTTP_200_OK, {"predict_value": transcriptions}
 
     def runMovie(self, modelId, file, filename, appToken, userId,
                  isStreaming=True, isMarket=False, opsId=None, background_tasks=None,

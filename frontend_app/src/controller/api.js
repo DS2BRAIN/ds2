@@ -513,6 +513,31 @@ export async function predictImage(modelId, files, isMarket, opsId) {
   });
 }
 
+export async function predictSpeechToText(modelId, files, isMarket, opsId) {
+  const user = JSON.parse(Cookies.getCookie("user"));
+  let query = backendurl.concat("market/predict-speech-to-text/");
+
+  const file = new Blob(files);
+  const apptoken = Cookies.getCookie("apptoken");
+  var formData = new FormData();
+  formData.append("file", file, encodeURIComponent(files[0].name));
+  formData.append("filename", encodeURIComponent(files[0].name));
+  formData.append("modelid", modelId);
+  formData.append("apptoken", JSON.parse(apptoken));
+  if (isMarket || opsId) {
+    formData.append("userId", user["id"]);
+  }
+
+  return await axios.post(query, formData, {
+    responseType: "json",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+      "access-control-allow-methods": "POST",
+    },
+  });
+}
+
 export async function predictVideo(
   modelId,
   files,

@@ -24,6 +24,7 @@ import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import {predictSpeechToText} from "controller/api.js";
 
 class CustomizedAxisTick extends PureComponent {
   render() {
@@ -291,6 +292,70 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         })
         .finally(() => {
           setCompleted(0);
+          setLoadingMessage(t("Predicting"));
+        });
+      return;
+    };
+
+    const caseItemApiSpeechToText = () => {
+      if (!files || files.length < 1) {
+        dispatch(openErrorSnackbarRequestAction(t("Please upload the file and proceed")));
+        return;
+      }
+      setLoadingMessage(t("Uploading"));
+      setApiLoading("loading");
+      setCompleted(5);
+      api
+        .predictSpeechToText(models.chosenModel, files, isMarket, opsId)
+        .then((res) => {
+            const response = res.data === null || res.data === undefined ? "오류" : res.data;
+            setResponse(response);
+            var responseJson = response;
+            Object.keys(responseJson).map((key) => {
+              if (key === "predict_value") {
+                var predictedValueRaw = responseJson[key];
+                setPredictedValue(predictedValueRaw);
+              } else if (key.indexOf("predict_value_info") > -1) {
+                setPredictedInfo(responseJson[key]);
+              } else if (key.indexOf("이상값") > -1) {
+                setOutliarInfo(responseJson[key]);
+              }
+            });
+            if (response === "오류") {
+              if (predictingCount !== 2) {
+                sendAPI(_, predictingCount + 1);
+                return;
+              }
+              dispatch(openErrorSnackbarRequestAction(t("An error occurred while predicting API. Please try again.")));
+            }
+          })
+        .catch((e) => {
+          // if (shouldCallApiAgain) {
+          if (!IS_ENTERPRISE && e.response && e.response.status === 402) {
+            window.location.href = "/admin/setting/payment/?cardRequest=true";
+            return;
+          }
+          if (e.response && e.response.status === 429) {
+            dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
+            setTimeout(() => {
+              Cookies.deleteAllCookies();
+              history.push("/signin/");
+            }, 2000);
+            return;
+          }
+          if (e.response && e.response.data.message) {
+            dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          } else {
+            dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded video. Please upload a different video file.")));
+          }
+          setApiLoading("");
+          // } else {
+          // setShouldCallApiAgain(true);
+          // }
+        })
+        .finally(() => {
+          setCompleted(0);
+          setApiLoading("done");
           setLoadingMessage(t("Predicting"));
         });
       return;
@@ -789,10 +854,12 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     };
 
     let trainMethod = projects.project?.trainingMethod;
-    if (chosenItem === "apiVideo") caseItemApiVideo();
-    if (trainMethod.indexOf("image") > -1) caseTrainMethodImage();
-    else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") caseTrainMethodObjectCycle();
-    else caseTrainMethodEtc();
+    if (chosenItem === "apiVideo")
+    {caseItemApiVideo();}
+    else if (chosenItem === "ApiSpeechToText") {caseItemApiSpeechToText();}
+    else if (trainMethod.indexOf("image") > -1) {caseTrainMethodImage();}
+    else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") {caseTrainMethodObjectCycle();}
+    else {caseTrainMethodEtc();}
   };
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -876,7 +943,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
 
   const resetImage = () => {
     let trainMethod = projects.project.trainingMethod;
-    if (trainMethod.indexOf("image") > -1 || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
+    if (trainMethod === "image" || models.model.externalAiType === "image" || models.model.externalAiType === "audio" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
       setIsPredictImageInfoDone(false);
       setIsPredictImageDone(false);
       setFiles(null);
@@ -1015,6 +1082,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
       let typeGuideText = null;
       if (type === "image") typeGuideText = "이미지";
       else if (type === "video") typeGuideText = "mp4";
+      else if (type === "audio") typeGuideText = "wav";
 
       const handleFileChange = (files) => {
         setFiles(
@@ -1053,7 +1121,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             showPreviewsInDropzone={false}
             maxFileSize={2147483648}
             dialogTitle={type === "image" ? t("Upload image") : t("비디오 업로드")}
-            dropzoneText={t(`드래그 앤 드롭으로 ${typeGuideText} 파일을 업로드해주세요.`)}
+            dropzoneText={t(`Please upload your ${typeGuideText} file.`)}
             filesLimit={1}
             maxWidth={"xs"}
             fullWidth={false}
@@ -1061,6 +1129,40 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
           />
         </div>
       );
+    };
+
+    const caseApiSpeechToText = (acceptedFiles) => {
+      if (files && files.length > 0) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "hidden",
+              marginTop: resultImageUrl && "44px",
+            }}
+          >
+            <video ref={uploadVideoRef} style={{ width: "100%", maxHeight: "24em" }} controls currentTime={0} src={files[0].preview} type="video/mp4">
+          </video>
+          </div>
+        );
+      } else if (randomFile) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "hidden",
+              marginTop: resultImageUrl && "44px",
+            }}
+          >
+            <video ref={randomFile} style={{ width: "100%", maxHeight: "24em" }} controls currentTime={0} src={files[0].preview} type="video/mp4">
+            </video>
+          </div>
+        );
+      } else return apiDropzone("audio", acceptedFiles);
     };
 
     const caseApiImage = (acceptedFiles) => {
@@ -1399,6 +1501,9 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         return caseApiLoaded();
       case "api":
         return caseApi();
+      case "ApiSpeechToText":
+        acceptedFiles = [".mp3", ".mp4", ".wav", ".flac"];
+        return caseApiSpeechToText(acceptedFiles);
       case "apiImage":
         acceptedFiles = [".jpg", ".jpeg", ".png"];
         return caseApiImage(acceptedFiles);

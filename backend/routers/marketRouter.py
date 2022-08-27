@@ -85,6 +85,21 @@ def getPredictImage(response: Response, userId: str = Form(...), file: UploadFil
     return result
 
 
+@router.post("/market/predict-speech-to-text/")
+def getPredictAudio(response: Response, userId: str = Form(...), file: UploadFile = File(...),
+                         filename: str = Form(...),
+                         modelid: str = Form(...), marketProjectId: str = Form(None), apptoken: str = Form(...),
+                         isStandardMovie: bool = Form(None), sync_cut_at: float = Form(0),
+                         creation_time: str = Form(None)):
+    file = file.file.read()
+    if filename.split('.')[-1].lower() in utilClass.soundExtensionName:
+        response.status_code, result = predictClass.speect_to_text(modelid, file, filename, apptoken, userId, isMarket=True)
+        return result
+    else:
+        response.status_code, result = EXTENSION_NAME_ERROR
+        return result
+
+
 class PredictWithURLObject(BaseModel):
     modelid: str = None
     apptoken: str = None
