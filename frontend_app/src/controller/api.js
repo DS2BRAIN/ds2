@@ -378,6 +378,30 @@ export function postAPI(params, isMarket, opsId) {
   return result;
 }
 
+export function predict_for_file_response(params, isMarket, opsId) {
+  const user = JSON.parse(Cookies.getCookie("user"));
+  const apptoken = Cookies.getCookie("apptoken");
+  params["apptoken"] = JSON.parse(apptoken);
+  let query = backendurl.concat(`predict/${user["id"]}/`);
+  if (isMarket) {
+    query = backendurl.concat("market/predict/");
+    params["userId"] = user["id"];
+  }
+  if (opsId) {
+    query = backendurl.concat(`inference/inferenceops${opsId}/`);
+    params["userId"] = user["id"];
+  }
+  let result = axios.post(query, params, {
+    responseType: "blob",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+      "access-control-allow-methods": "POST",
+    },
+  });
+  return result;
+}
+
 export async function predictImageForTextReturn(
   modelId,
   files,

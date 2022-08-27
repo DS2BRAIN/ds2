@@ -24,7 +24,7 @@ import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import {predictSpeechToText} from "controller/api.js";
+import {predict_for_file_response, predictSpeechToText} from "controller/api.js";
 
 class CustomizedAxisTick extends PureComponent {
   render() {
@@ -69,6 +69,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
   const [outliarInfo, setOutliarInfo] = useState({});
   const [files, setFiles] = useState(null);
   const [resultImageUrl, setResultImageUrl] = useState(null);
+  const [resultAudioUrl, setResultAudioUrl] = useState(null);
   const [completed, setCompleted] = useState(0);
   const [selectedObjectTab, setSelectedObjectTab] = useState("image");
   const [objectJson, setObjectJson] = useState(null);
@@ -770,7 +771,27 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         inputLoadedModel: inputLoadedModel,
       };
       let isClear = false;
-      api
+      if (modelDetail?.outputData_en?.indexOf("Text") === -1) {
+        api.predict_for_file_response(parameter, isMarket, opsId)
+            .then((response) => {
+              return new Blob([response.data]);
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(new Blob([blob]));
+              setResultAudioUrl(url);
+              setIsPredictImageDone(true);
+              setApiLoading("done");
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", `result.wav`);
+              document.body.appendChild(link);
+              link.click();
+              link.parentNode.removeChild(link);
+            })
+
+      } else {
+
+        api
         .postAPI(parameter, isMarket, opsId)
         .then((res) => {
           const response = res.data === null || res.data === undefined ? "오류" : res.data;
@@ -851,6 +872,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
           setCompleted(0);
           setLoadingMessage(t("Predicting"));
         });
+      }
     };
 
     let trainMethod = projects.project?.trainingMethod;
@@ -1528,6 +1550,15 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     link.parentNode.removeChild(link);
   };
 
+  const downloadAudio= () => {
+    const link = document.createElement("a");
+    link.href = resultAudioUrl;
+    link.setAttribute("download", `download.wav`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  };
+
   const renderApiResult = () => {
     if (chosenItem === "apiVideo")
       return (
@@ -1597,6 +1628,18 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               DOWNLOAD
             </Button>
             <img style={{ width: "100%", maxHeight: "24em" }} src={resultImageUrl} id="resultImg" />
+          </>
+        );
+    } else if (resultAudioUrl) {
+
+        return (
+          <>
+            <Button id="resultDownload" className={classes.defaultHighlightButton} onClick={downloadAudio}>
+              DOWNLOAD
+            </Button>
+            <video ref={standardVideoRef} style={{ width: "100%", maxHeight: "24em" }} controls currentTime={0}
+                         src={resultAudioUrl} type="video/wav">
+            </video>
           </>
         );
     } else {

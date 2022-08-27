@@ -36,6 +36,7 @@ from src.util import Util
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 from transformers import pipeline, set_seed
 import soundfile
+from espnet2.bin.tts_inference import Text2Speech
 from huggingsound import SpeechRecognitionModel
 
 class NumpyEncoder(json.JSONEncoder):
@@ -312,7 +313,10 @@ class ManagePredict:
                 print(traceback.format_exc())
                 pass
 
-            return HTTP_200_OK, json.dumps(result, indent=1, ensure_ascii=False, default=str)
+            if "text_to_speech" in model['project']['trainingMethod']:
+                return HTTP_200_OK, result
+            else:
+                return HTTP_200_OK, json.dumps(result, indent=1, ensure_ascii=False, default=str)
 
         except OSError:
             print(traceback.format_exc())
@@ -869,6 +873,19 @@ class ManagePredict:
             for result in results:
                 generated_text.append(result["sequence"])
             return {"generated_text__predict_value": generated_text}
+
+        if 'text_to_speech' in model['project']['trainingMethod']:
+            if not self.quickMarketModels.get("text_to_speech"):
+                self.quickMarketModels["text_to_speech"] = Text2Speech.from_pretrained(model_name if model_name else "espnet/kan-bayashi_ljspeech_vits")
+
+            speech = self.quickMarketModels["text_to_speech"](a["text"][0])["wav"]
+
+            memory_file = io.BytesIO()
+            memory_file.name = "result.wav"
+            soundfile.write(memory_file, speech.numpy(), self.quickMarketModels["text_to_speech"].fs, "PCM_16")
+            memory_file.seek(0)
+
+            return StreamingResponse(memory_file, media_type="audio/wav")
 
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:
