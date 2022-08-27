@@ -140,7 +140,7 @@ const Admin = ({ history, ...rest }) => {
         exact
         path="/admin"
         {...rest}
-        render={(props) => <Main {...props} />}
+        render={(props) => <MarketList {...props} />}
       />
       <Route
         path="/admin/setting"

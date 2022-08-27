@@ -8,6 +8,13 @@ const NavMenu = ({ localPath }) => {
 
   const routes = [
     {
+      id: "market",
+      path: "/marketList",
+      name: "AI Market",
+      layout: "/admin",
+      condition: true,
+    },
+    {
       id: "data",
       path: "/dataconnector",
       name: "Dataset",
@@ -39,13 +46,6 @@ const NavMenu = ({ localPath }) => {
       id: "verify",
       path: "/verifyproject",
       name: "Verify",
-      layout: "/admin",
-      condition: true,
-    },
-    {
-      id: "market",
-      path: "/marketList",
-      name: "AI Market",
       layout: "/admin",
       condition: true,
     },
