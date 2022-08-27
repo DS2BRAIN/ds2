@@ -136,7 +136,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
       if (projects.project && models.chosenModel) getRandomData();
       setIsLoading(false);
     })();
-  }, [models.chosenModel]);
+  }, [trainingColumnInfo]);
 
   // useEffect(()=>{
   //     if(isPredictReset){

@@ -47,7 +47,7 @@ export default function MarketList({ history }) {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const { user, project, model, labelprojects, messages } = useSelector(
+  const { user, projects, models, labelprojects, messages } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
@@ -398,10 +398,10 @@ export default function MarketList({ history }) {
       await setRequestMarketModelId(marketModel.id);
       await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
-      await setSelectedMarketModel(marketModel);
-      if (selectedMarketModel?.externalAiType?.indexOf("image") > -1 ) {
+      // await setSelectedMarketModel(marketModel);
+      if (models.model?.externalAiType?.indexOf("image") > -1 ) {
         await setChosenItem("apiImage");
-      } else if (selectedMarketModel?.externalAiType?.indexOf("audio") > -1 ) {
+      } else if (models.model?.externalAiType?.indexOf("audio") > -1 ) {
         await setChosenItem("ApiSpeechToText");
       } else {
         await setChosenItem("api");
@@ -758,7 +758,7 @@ export default function MarketList({ history }) {
           </div>
         </Modal>
         <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPredictModalOpen} onClose={closeModal} className={classes.modalContainer}>
-          <ModalPage closeModal={closeModal} chosenItem={chosenItem} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={selectedMarketModel?.project.trainingColumnInfo} history={history} />
+          <ModalPage closeModal={closeModal} chosenItem={chosenItem} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={projects?.project?.trainingColumnInfo} history={history} />
         </Modal>
       </div>
     </>
