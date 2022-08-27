@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import copy
 import io
 import platform
 import sys
@@ -38,6 +39,8 @@ from transformers import pipeline, set_seed
 import soundfile
 from espnet2.bin.tts_inference import Text2Speech
 from huggingsound import SpeechRecognitionModel
+from torch import autocast
+from diffusers import StableDiffusionPipeline
 
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -313,7 +316,8 @@ class ManagePredict:
                 print(traceback.format_exc())
                 pass
 
-            if "text_to_speech" in model['project']['trainingMethod']:
+            if "text_to_speech" in model['project']['trainingMethod'] \
+                    or 'text_to_image' in model['project']['trainingMethod']:
                 return HTTP_200_OK, result
             else:
                 return HTTP_200_OK, json.dumps(result, indent=1, ensure_ascii=False, default=str)
@@ -886,6 +890,23 @@ class ManagePredict:
             memory_file.seek(0)
 
             return StreamingResponse(memory_file, media_type="audio/wav")
+
+        if 'text_to_image' in model['project']['trainingMethod']:
+
+            if not self.quickMarketModels.get("text_to_image"):
+                self.quickMarketModels["text_to_image"] = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=True)
+                self.quickMarketModels["text_to_image"] = self.quickMarketModels["text_to_image"].to("cuda")
+            result = None
+            with autocast("cuda"):
+                image = self.quickMarketModels["text_to_image"](a["text"][0], guidance_scale=7.5)["sample"][0]
+                with io.BytesIO() as output:
+                    image.save(output, format="GIF")
+                    # contents = output.getvalue()
+                    output.name = "result.gif"
+                    output.seek(0)
+                    result = copy.deepcopy(output)
+
+            return StreamingResponse(result, media_type="image/gif")
 
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:

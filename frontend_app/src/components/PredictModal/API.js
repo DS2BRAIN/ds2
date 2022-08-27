@@ -175,7 +175,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     setParamsType(tempTypes);
 
     let trainMethod = projects.project.trainingMethod;
-    if (trainMethod.indexOf("image") > -1  || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
+    if (trainMethod === "image" || models.model.externalAiType === "image" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
       api.getSampleDataByModelId(models.chosenModel).then((res) => {
         if (res.data) {
           setRandomFiles(res.data);
@@ -771,7 +771,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         inputLoadedModel: inputLoadedModel,
       };
       let isClear = false;
-      if (modelDetail?.outputData_en?.indexOf("Text") === -1) {
+      if (modelDetail?.outputData_en?.indexOf("Audio") > -1) {
         api.predict_for_file_response(parameter, isMarket, opsId)
             .then((response) => {
               return new Blob([response.data]);
@@ -784,6 +784,24 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               const link = document.createElement("a");
               link.href = url;
               link.setAttribute("download", `result.wav`);
+              document.body.appendChild(link);
+              link.click();
+              link.parentNode.removeChild(link);
+            })
+
+      } else if (modelDetail?.outputData_en?.indexOf("Image") > -1) {
+        api.predict_for_file_response(parameter, isMarket, opsId)
+            .then((response) => {
+              return new Blob([response.data]);
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(new Blob([blob]));
+              setResultImageUrl(url);
+              setIsPredictImageDone(true);
+              setApiLoading("done");
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", `result.gif`);
               document.body.appendChild(link);
               link.click();
               link.parentNode.removeChild(link);
@@ -879,7 +897,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     if (chosenItem === "apiVideo")
     {caseItemApiVideo();}
     else if (chosenItem === "ApiSpeechToText") {caseItemApiSpeechToText();}
-    else if (trainMethod.indexOf("image") > -1) {caseTrainMethodImage();}
+    else if (trainMethod === "image" || models.model.externalAiType === "image") {caseTrainMethodImage();}
     else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") {caseTrainMethodObjectCycle();}
     else {caseTrainMethodEtc();}
   };
