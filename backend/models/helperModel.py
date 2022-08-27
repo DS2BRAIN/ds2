@@ -343,7 +343,7 @@ class HelperModel():
                                              marketModelsTable.visible_flag == True) & (
                                              marketModelsTable.service_type.not_in(not_list) | (marketModelsTable.service_type == None))
         if select_category == '전체':
-            category_list = ["공통", "금융", "보험", "제조", "물류", "마케팅", "경영", "농축산업", "에너지", "법", "공공", "기타"]
+            category_list = ["", "금융", "보험", "제조", "물류", "마케팅", "경영", "농축산업", "에너지", "법", "공공", "기타"]
             sorting_tuple = tuple([(name, idx) for idx, name in enumerate(category_list)])
             sorting_by = Case(marketModelsTable.category, sorting_tuple, 99)
             query = marketModelsTable.select().where(common_where_query).order_by(marketModelsTable.priority_flag.desc(), marketModelsTable.isQuickstart.desc(), sorting_by)
