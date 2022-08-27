@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import copy
+import gc
 import io
 import platform
 import sys
@@ -144,13 +145,6 @@ class ManagePredict:
             if user.deposit - user.usedPrice <= 0:
                 return HTTP_402_PAYMENT_REQUIRED, {'result': 'fail'}
 
-        try:
-            data = rd.get(f"||{modelId}||{json.dumps(parameter)}||{userId}||{isMarket}||{inputLoadedModel}||{opsId}||{modeltoken}||")
-            if data:
-                return HTTP_200_OK, data
-        except:
-            print(traceback.format_exc())
-            pass
 
 
         if opsId and not self.utilClass.opsId and self.utilClass.configOption != 'enterprise':
@@ -162,6 +156,17 @@ class ManagePredict:
         print("inference by this server")
         try:
             model, modelPath, learn, predictor, opt = self.loadModel(modelId, isMarket=isMarket, opsId=opsId)
+
+            try:
+                if "text_to_speech" not in model['project']['trainingMethod'] \
+                        and 'text_to_image' not in model['project']['trainingMethod']:
+                    data = rd.get(
+                        f"||{modelId}||{json.dumps(parameter)}||{userId}||{isMarket}||{inputLoadedModel}||{opsId}||{modeltoken}||")
+                    if data:
+                        return HTTP_200_OK, data
+            except:
+                print(traceback.format_exc())
+                pass
 
             if "load_torch" in model['project']['option']:
 
@@ -316,6 +321,12 @@ class ManagePredict:
                 print(traceback.format_exc())
                 pass
 
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
             if "text_to_speech" in model['project']['trainingMethod'] \
                     or 'text_to_image' in model['project']['trainingMethod']:
                 return HTTP_200_OK, result
@@ -442,6 +453,13 @@ class ManagePredict:
 
             if 'image_to_text' in trainingMethod:
                 result = self.predict_image_class.get_image_to_text(file, im, info)
+
+                try:
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                except:
+                    pass
+
                 return HTTP_200_OK, result
 
             if self.predict_class:
@@ -502,8 +520,7 @@ class ManagePredict:
                 }
             appToken = user.appTokenCode
 
-        if not self.quickMarketModels.get("speech_to_text"):
-            self.quickMarketModels["speech_to_text"] = SpeechRecognitionModel("jonatasgrosman/wav2vec2-large-xlsr-53-english")
+        prediction_model = SpeechRecognitionModel("jonatasgrosman/wav2vec2-large-xlsr-53-english")
 
         if not os.path.exists(f"{self.utilClass.save_path}/{appToken}/"):
             os.makedirs(f"{self.utilClass.save_path}/{appToken}/", exist_ok=True)
@@ -513,7 +530,7 @@ class ManagePredict:
         with open(temp_file_path, "wb") as buffer:
             buffer.write(file)
 
-        transcriptions = self.quickMarketModels["speech_to_text"].transcribe([temp_file_path])[0]['transcription']
+        transcriptions = prediction_model.transcribe([temp_file_path])[0]['transcription']
 
         if os.path.isfile(temp_file_path):
             os.remove(temp_file_path)
@@ -879,26 +896,25 @@ class ManagePredict:
             return {"generated_text__predict_value": generated_text}
 
         if 'text_to_speech' in model['project']['trainingMethod']:
-            if not self.quickMarketModels.get("text_to_speech"):
-                self.quickMarketModels["text_to_speech"] = Text2Speech.from_pretrained(model_name if model_name else "espnet/kan-bayashi_ljspeech_vits")
+            prediction_model = Text2Speech.from_pretrained(model_name if model_name else "espnet/kan-bayashi_ljspeech_vits")
 
-            speech = self.quickMarketModels["text_to_speech"](a["text"][0])["wav"]
+            speech = prediction_model(a["text"][0])["wav"]
 
             memory_file = io.BytesIO()
             memory_file.name = "result.wav"
-            soundfile.write(memory_file, speech.numpy(), self.quickMarketModels["text_to_speech"].fs, "PCM_16")
+            soundfile.write(memory_file, speech.numpy(), prediction_model.fs, "PCM_16")
             memory_file.seek(0)
 
             return StreamingResponse(memory_file, media_type="audio/wav")
 
         if 'text_to_image' in model['project']['trainingMethod']:
 
-            if not self.quickMarketModels.get("text_to_image"):
-                self.quickMarketModels["text_to_image"] = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=True)
-                self.quickMarketModels["text_to_image"] = self.quickMarketModels["text_to_image"].to("cuda")
+            prediction_model = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=True)
+            prediction_model = prediction_model.to("cuda")
+
             result = None
             with autocast("cuda"):
-                image = self.quickMarketModels["text_to_image"](a["text"][0], guidance_scale=7.5)["sample"][0]
+                image = prediction_model(a["text"][0], guidance_scale=7.5)["sample"][0]
                 with io.BytesIO() as output:
                     image.save(output, format="GIF")
                     # contents = output.getvalue()
