@@ -45,10 +45,7 @@ import struct
 from models import rd
 
 import os
-if os.path.exists('./src/training/predictImage.py'):
-    from src.training.predictImage import PredictImage
-else:
-    PredictImage = None
+from src.service.predictImage import PredictImage
 errorResponseList = ErrorResponseList()
 
 class ManageUpload:

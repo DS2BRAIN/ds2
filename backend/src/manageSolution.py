@@ -71,26 +71,15 @@ class ManageSolution:
             raise ex.NotFoundUserEx(token)
 
         market_models, total_length = self.dbClass.get_market_models(start, count, select_category, is_quick_model)
+        market_models_array = []
+        for market_model_raw in market_models:
+            market_project = self.dbClass.getOneMarketProjectById(market_model_raw.project)
+            market_model = market_model_raw.__dict__['__data__']
+            market_model["project"] = market_project
+            market_models_array.append(market_model)
         result = {
             'total_length': total_length,
-            'market_models': [{
-                "id": market_model.id,
-                "category": market_model.category,
-                "name_kr": market_model.name_kr,
-                "name_en": market_model.name_en,
-                "inputData_kr": market_model.inputData_kr,
-                "inputData_en": market_model.inputData_en,
-                "outputData_kr": market_model.outputData_kr,
-                "outputData_en": market_model.outputData_en,
-                "price": market_model.price,
-                "project": market_model.project,
-                "url": market_model.url,
-                "url_en": market_model.url_en,
-                "model": market_model.model,
-                "type": "CustomAi" if market_model.isCustomAi else "Quickstart",
-                "thumbnail": market_model.thumbnail,
-                "service_type": market_model.service_type
-            } for market_model in market_models]
+            'market_models': market_models_array
         }
 
         return HTTP_200_OK, result

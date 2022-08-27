@@ -24,6 +24,7 @@ import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import {predict_for_file_response, predictSpeechToText} from "controller/api.js";
 
 class CustomizedAxisTick extends PureComponent {
   render() {
@@ -68,6 +69,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
   const [outliarInfo, setOutliarInfo] = useState({});
   const [files, setFiles] = useState(null);
   const [resultImageUrl, setResultImageUrl] = useState(null);
+  const [resultAudioUrl, setResultAudioUrl] = useState(null);
   const [completed, setCompleted] = useState(0);
   const [selectedObjectTab, setSelectedObjectTab] = useState("image");
   const [objectJson, setObjectJson] = useState(null);
@@ -134,7 +136,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
       if (projects.project && models.chosenModel) getRandomData();
       setIsLoading(false);
     })();
-  }, [models.chosenModel]);
+  }, [trainingColumnInfo]);
 
   // useEffect(()=>{
   //     if(isPredictReset){
@@ -173,7 +175,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     setParamsType(tempTypes);
 
     let trainMethod = projects.project.trainingMethod;
-    if (trainMethod === "image" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
+    if (trainMethod === "image" || models.model.externalAiType === "image" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
       api.getSampleDataByModelId(models.chosenModel).then((res) => {
         if (res.data) {
           setRandomFiles(res.data);
@@ -296,6 +298,70 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
       return;
     };
 
+    const caseItemApiSpeechToText = () => {
+      if (!files || files.length < 1) {
+        dispatch(openErrorSnackbarRequestAction(t("Please upload the file and proceed")));
+        return;
+      }
+      setLoadingMessage(t("Uploading"));
+      setApiLoading("loading");
+      setCompleted(5);
+      api
+        .predictSpeechToText(models.chosenModel, files, isMarket, opsId)
+        .then((res) => {
+            const response = res.data === null || res.data === undefined ? "오류" : res.data;
+            setResponse(response);
+            var responseJson = response;
+            Object.keys(responseJson).map((key) => {
+              if (key === "predict_value") {
+                var predictedValueRaw = responseJson[key];
+                setPredictedValue(predictedValueRaw);
+              } else if (key.indexOf("predict_value_info") > -1) {
+                setPredictedInfo(responseJson[key]);
+              } else if (key.indexOf("이상값") > -1) {
+                setOutliarInfo(responseJson[key]);
+              }
+            });
+            if (response === "오류") {
+              if (predictingCount !== 2) {
+                sendAPI(_, predictingCount + 1);
+                return;
+              }
+              dispatch(openErrorSnackbarRequestAction(t("An error occurred while predicting API. Please try again.")));
+            }
+          })
+        .catch((e) => {
+          // if (shouldCallApiAgain) {
+          if (!IS_ENTERPRISE && e.response && e.response.status === 402) {
+            window.location.href = "/admin/setting/payment/?cardRequest=true";
+            return;
+          }
+          if (e.response && e.response.status === 429) {
+            dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
+            setTimeout(() => {
+              Cookies.deleteAllCookies();
+              history.push("/signin/");
+            }, 2000);
+            return;
+          }
+          if (e.response && e.response.data.message) {
+            dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          } else {
+            dispatch(openErrorSnackbarRequestAction(t("Failed to analyze uploaded video. Please upload a different video file.")));
+          }
+          setApiLoading("");
+          // } else {
+          // setShouldCallApiAgain(true);
+          // }
+        })
+        .finally(() => {
+          setCompleted(0);
+          setApiLoading("done");
+          setLoadingMessage(t("Predicting"));
+        });
+      return;
+    };
+
     const caseTrainMethodImage = () => {
       if (randomFile) {
         setApiLoading("loading");
@@ -307,16 +373,16 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             setResponse(response);
             var responseJson = response;
             Object.keys(responseJson).map((key) => {
-              if (key === "예측값") {
+              if (key === "predict_value") {
                 var predictedValueRaw = responseJson[key];
-                responseJson["예측값정보"] &&
-                  responseJson["예측값정보"].map((info) => {
+                responseJson["predict_value_info"] &&
+                  responseJson["predict_value_info"].map((info) => {
                     if (info["name"] === predictedValueRaw) {
                       predictedValueRaw += ` (${info["value"]}%)`;
                     }
                   });
                 setPredictedValue(predictedValueRaw);
-              } else if (key.indexOf("예측값정보") > -1) {
+              } else if (key.indexOf("predict_value_info") > -1) {
                 setPredictedInfo(responseJson[key]);
               } else if (key.indexOf("이상값") > -1) {
                 setOutliarInfo(responseJson[key]);
@@ -384,16 +450,16 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             setResponse(response);
             var responseJson = response;
             Object.keys(responseJson).map((key) => {
-              if (key === "예측값") {
+              if (key === "predict_value") {
                 var predictedValueRaw = responseJson[key];
-                responseJson["예측값정보"] &&
-                  responseJson["예측값정보"].map((info) => {
+                responseJson["predict_value_info"] &&
+                  responseJson["predict_value_info"].map((info) => {
                     if (info["name"] === predictedValueRaw) {
                       predictedValueRaw += ` (${info["value"]}%)`;
                     }
                   });
                 setPredictedValue(predictedValueRaw);
-              } else if (key.indexOf("예측값정보") > -1) {
+              } else if (key.indexOf("predict_value_info") > -1) {
                 setPredictedInfo(responseJson[key]);
               } else if (key.indexOf("이상값") > -1) {
                 setOutliarInfo(responseJson[key]);
@@ -654,12 +720,18 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     const caseTrainMethodEtc = () => {
       if (projects.project && projects.project.trainingMethod !== "recommender") {
         let paramsList = Object.entries(paramsValue);
-        for (let value in paramsValue) {
-          const param = paramsValue[value];
+        let is_valid_to_proceed = true;
+        paramsList.forEach(function (value, index, array) {
+          const param = value[1];
           if (param === undefined || param === null || param === "") {
-            dispatch(openErrorSnackbarRequestAction(t("Please fill in all the data and proceed.")));
-            return;
+            if (value[0].indexOf("(Optional)") === -1) {
+              dispatch(openErrorSnackbarRequestAction(t("Please fill in all the data and proceed.")));
+              is_valid_to_proceed = false;
+            }
           }
+        });
+        if (!is_valid_to_proceed) {
+          return;
         }
         try {
           for (let i = 0; i < validCsvCheck.length; i++) {
@@ -699,7 +771,45 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         inputLoadedModel: inputLoadedModel,
       };
       let isClear = false;
-      api
+      if (modelDetail?.outputData_en?.indexOf("Audio") > -1) {
+        api.predict_for_file_response(parameter, isMarket, opsId)
+            .then((response) => {
+              return new Blob([response.data]);
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(new Blob([blob]));
+              setResultAudioUrl(url);
+              setIsPredictImageDone(true);
+              setApiLoading("done");
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", `result.wav`);
+              document.body.appendChild(link);
+              link.click();
+              link.parentNode.removeChild(link);
+            })
+
+      } else if (modelDetail?.outputData_en?.indexOf("Image") > -1) {
+        api.predict_for_file_response(parameter, isMarket, opsId)
+            .then((response) => {
+              return new Blob([response.data]);
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(new Blob([blob]));
+              setResultImageUrl(url);
+              setIsPredictImageDone(true);
+              setApiLoading("done");
+              const link = document.createElement("a");
+              link.href = url;
+              link.setAttribute("download", `result.gif`);
+              document.body.appendChild(link);
+              link.click();
+              link.parentNode.removeChild(link);
+            })
+
+      } else {
+
+        api
         .postAPI(parameter, isMarket, opsId)
         .then((res) => {
           const response = res.data === null || res.data === undefined ? "오류" : res.data;
@@ -711,18 +821,18 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             setObjectJson(responseJson);
           }
           Object.keys(responseJson).map((key) => {
-            if (key.indexOf("__예측값") > -1) {
+            if (key.indexOf("__predict_value") > -1) {
               var predictedValueRaw = String(responseJson[key]);
               let tempMaxValue = 0;
-              responseJson["예측값정보"] &&
-                responseJson["예측값정보"].map((info) => {
+              responseJson["predict_value_info"] &&
+                responseJson["predict_value_info"].map((info) => {
                   if (info["value"] > tempMaxValue) {
                     tempMaxValue = info["value"];
                     predictedValueRaw = info["name"] + ` (${info["value"]}%)`;
                   }
                 });
               setPredictedValue(predictedValueRaw);
-            } else if (key.indexOf("예측값정보") > -1) {
+            } else if (key.indexOf("predict_value_info") > -1) {
               setPredictedInfo(responseJson[key]);
             } else if (key.indexOf("이상값") > -1) {
               setOutliarInfo(responseJson[key]);
@@ -780,13 +890,16 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
           setCompleted(0);
           setLoadingMessage(t("Predicting"));
         });
+      }
     };
 
     let trainMethod = projects.project?.trainingMethod;
-    if (chosenItem === "apiVideo") caseItemApiVideo();
-    if (trainMethod === "image") caseTrainMethodImage();
-    else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") caseTrainMethodObjectCycle();
-    else caseTrainMethodEtc();
+    if (chosenItem === "apiVideo")
+    {caseItemApiVideo();}
+    else if (chosenItem === "ApiSpeechToText") {caseItemApiSpeechToText();}
+    else if (trainMethod === "image" || models.model.externalAiType === "image") {caseTrainMethodImage();}
+    else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") {caseTrainMethodObjectCycle();}
+    else {caseTrainMethodEtc();}
   };
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -870,7 +983,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
 
   const resetImage = () => {
     let trainMethod = projects.project.trainingMethod;
-    if (trainMethod === "image" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
+    if (trainMethod === "image" || models.model.externalAiType === "image" || models.model.externalAiType === "audio" || trainMethod === "object_detection" || trainMethod === "cycle_gan") {
       setIsPredictImageInfoDone(false);
       setIsPredictImageDone(false);
       setFiles(null);
@@ -1009,6 +1122,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
       let typeGuideText = null;
       if (type === "image") typeGuideText = "이미지";
       else if (type === "video") typeGuideText = "mp4";
+      else if (type === "audio") typeGuideText = "wav";
 
       const handleFileChange = (files) => {
         setFiles(
@@ -1047,7 +1161,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
             showPreviewsInDropzone={false}
             maxFileSize={2147483648}
             dialogTitle={type === "image" ? t("Upload image") : t("비디오 업로드")}
-            dropzoneText={t(`드래그 앤 드롭으로 ${typeGuideText} 파일을 업로드해주세요.`)}
+            dropzoneText={t(`Please upload your ${typeGuideText} file.`)}
             filesLimit={1}
             maxWidth={"xs"}
             fullWidth={false}
@@ -1055,6 +1169,40 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
           />
         </div>
       );
+    };
+
+    const caseApiSpeechToText = (acceptedFiles) => {
+      if (files && files.length > 0) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "hidden",
+              marginTop: resultImageUrl && "44px",
+            }}
+          >
+            <video ref={uploadVideoRef} style={{ width: "100%", maxHeight: "24em" }} controls currentTime={0} src={files[0].preview} type="video/mp4">
+          </video>
+          </div>
+        );
+      } else if (randomFile) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "hidden",
+              marginTop: resultImageUrl && "44px",
+            }}
+          >
+            <video ref={randomFile} style={{ width: "100%", maxHeight: "24em" }} controls currentTime={0} src={files[0].preview} type="video/mp4">
+            </video>
+          </div>
+        );
+      } else return apiDropzone("audio", acceptedFiles);
     };
 
     const caseApiImage = (acceptedFiles) => {
@@ -1393,6 +1541,9 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         return caseApiLoaded();
       case "api":
         return caseApi();
+      case "ApiSpeechToText":
+        acceptedFiles = [".mp3", ".mp4", ".wav", ".flac"];
+        return caseApiSpeechToText(acceptedFiles);
       case "apiImage":
         acceptedFiles = [".jpg", ".jpeg", ".png"];
         return caseApiImage(acceptedFiles);
@@ -1412,6 +1563,15 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     const link = document.createElement("a");
     link.href = resultImageUrl;
     link.setAttribute("download", `download.jpg`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+  };
+
+  const downloadAudio= () => {
+    const link = document.createElement("a");
+    link.href = resultAudioUrl;
+    link.setAttribute("download", `download.wav`);
     document.body.appendChild(link);
     link.click();
     link.parentNode.removeChild(link);
@@ -1486,6 +1646,18 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
               DOWNLOAD
             </Button>
             <img style={{ width: "100%", maxHeight: "24em" }} src={resultImageUrl} id="resultImg" />
+          </>
+        );
+    } else if (resultAudioUrl) {
+
+        return (
+          <>
+            <Button id="resultDownload" className={classes.defaultHighlightButton} onClick={downloadAudio}>
+              DOWNLOAD
+            </Button>
+            <video ref={standardVideoRef} style={{ width: "100%", maxHeight: "24em" }} controls currentTime={0}
+                         src={resultAudioUrl} type="video/wav">
+            </video>
           </>
         );
     } else {
