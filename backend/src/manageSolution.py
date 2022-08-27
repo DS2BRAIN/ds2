@@ -61,7 +61,7 @@ class ManageSolution:
         user = self.dbClass.getUser(token)
         if not user:
             raise ex.NotFoundUserEx(token)
-        result = ["공통", "금융", "보험", "제조", "물류", "마케팅", "경영", "농축산업", "에너지", "법", "공공", "기타"]
+        result = ["", "금융", "보험", "제조", "물류", "마케팅", "경영", "농축산업", "에너지", "법", "공공", "기타"]
 
         return HTTP_200_OK, result
 
