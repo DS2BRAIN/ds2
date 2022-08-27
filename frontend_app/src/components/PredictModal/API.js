@@ -1120,7 +1120,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
 
     const apiDropzone = (type, acceptedFiles) => {
       let typeGuideText = null;
-      if (type === "image") typeGuideText = "이미지";
+      if (type === "image") typeGuideText = "png";
       else if (type === "video") typeGuideText = "mp4";
       else if (type === "audio") typeGuideText = "wav";
 
@@ -1793,13 +1793,13 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
         </GridItem>
         <GridItem xs={4}>
           <Button id="resetData" className={classes.defaultF0F0OutlineButton} style={{ width: "100%", height: "35px", marginRight: "20px" }} onClick={resetImage}>
-            {isNewUpload ? t("New Upload") : t("새로 예측하기")}
+            {isNewUpload ? t("New Upload") : t("New Prediction")}
           </Button>
         </GridItem>
         <GridItem xs={4}>
           {apiLoading === "done" ? null : (
             <Button className={classes.defaultGreenOutlineButton} style={{ width: "100%", height: "35px" }} onClick={sendAPI} id="sendApiBtn">
-              {isNewUpload ? t("Confirm") : t("실행")}
+              {isNewUpload ? t("Confirm") : t("Execute")}
             </Button>
           )}
         </GridItem>
