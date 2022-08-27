@@ -514,48 +514,43 @@ export default function MarketList({ history }) {
     <>
       <ReactTitle title={"DS2.AI - " + "AI " + t("Market")} />
       <div>
-        <div className={classes.topTitle} style={{ margin: "30px 0 16px" }}>
-          {t("Market Product List(Quick Start + Custom AI)")}
+        <div className={classes.topTitle} style={{ margin: "30px 0 30px" }}>
+          {t("Market Product List")}
         </div>
         <div>
-          <div style={{ fontSize: "16px" }}>
-            {t("Custom AI Application process")} {" : "}
-            {t("Data review for AI creation > Check availability > After the installation fee is paid, the project proceeds > Use the generated AI according to the deferred payment system")}
-          </div>
-          <div style={{ fontSize: "14px" }}>{t("*The amount may change depending on the size of the training data or whether it is pre-processed, and for details, it is possible to guide the progress and accurate quotation through a consultant.")}</div>
         </div>
 
-        {!isLoading && (
-          <div
-            id="category_select_container"
-            style={{
-              margin: "50px 0 20px",
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Select
-              id="category_select"
-              disabled={isLoading}
-              variant="outlined"
-              style={{
-                height: "36px",
-                color: currentThemeColor.textWhite87,
-                minWidth: "200px",
-                borderRadius: "0px",
-                fontSize: 15,
-              }}
-              value={category}
-              onChange={changeCategory}
-            >
-              <MenuItem value={"Select Category"}>{t("Select Category")}</MenuItem>
-              <MenuItem value={"All"}>{t("All")}</MenuItem>
-              {categories.map((category) => (
-                <MenuItem value={category}>{t(category)}</MenuItem>
-              ))}
-            </Select>
-          </div>
-        )}
+        {/*{!isLoading && (*/}
+        {/*  <div*/}
+        {/*    id="category_select_container"*/}
+        {/*    style={{*/}
+        {/*      margin: "50px 0 20px",*/}
+        {/*      display: "flex",*/}
+        {/*      justifyContent: "flex-start",*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <Select*/}
+        {/*      id="category_select"*/}
+        {/*      disabled={isLoading}*/}
+        {/*      variant="outlined"*/}
+        {/*      style={{*/}
+        {/*        height: "36px",*/}
+        {/*        color: currentThemeColor.textWhite87,*/}
+        {/*        minWidth: "200px",*/}
+        {/*        borderRadius: "0px",*/}
+        {/*        fontSize: 15,*/}
+        {/*      }}*/}
+        {/*      value={category}*/}
+        {/*      onChange={changeCategory}*/}
+        {/*    >*/}
+        {/*      <MenuItem value={"Select Category"}>{t("Select Category")}</MenuItem>*/}
+        {/*      <MenuItem value={"All"}>{t("All")}</MenuItem>*/}
+        {/*      {categories.map((category) => (*/}
+        {/*        <MenuItem value={category}>{t(category)}</MenuItem>*/}
+        {/*      ))}*/}
+        {/*    </Select>*/}
+        {/*  </div>*/}
+        {/*)}*/}
 
         {isLoading ? (
           <div className={classes.smallLoading} style={{ height: 460 }}>
