@@ -85,13 +85,13 @@ export default function MarketList({ history }) {
   const [isKor, setIsKor] = useState(false);
 
   const tableHeads = [
-    { value: "카테고리", width: "15%" },
-    { value: "미리보기", width: "7.5%" },
-    { value: "제목", width: "20%" },
-    { value: "입력 데이터 내용", width: "20%" },
-    { value: "출력 데이터 내용", width: "20%" },
-    // { value: "가격", width: "11%" },
-    { value: "유형", width: "10%" },
+    { value: "Category", width: "15%" },
+    { value: "Preview", width: "7.5%" },
+    { value: "Title", width: "20%" },
+    { value: "Input data", width: "20%" },
+    { value: "Output data", width: "20%" },
+    // { value: "Price", width: "11%" },
+    { value: "Type", width: "10%" },
     { value: "Action", width: "7.5%" },
   ];
 
@@ -101,14 +101,14 @@ export default function MarketList({ history }) {
     { value: isKor ? "name_kr" : "name_en", name: "제목" },
     {
       value: isKor ? "inputData_kr" : "inputData_en",
-      name: "입력 데이터 내용",
+      name: "Input Data",
     },
     {
       value: isKor ? "outputData_kr" : "outputData_en",
-      name: "출력 데이터 내용",
+      name: "Output data",
     },
-    // { value: "price", name: "가격" },
-    { value: "type", name: "유형" },
+    // { value: "price", name: "price" },
+    { value: "type", name: "type" },
   ];
 
   useEffect(() => {
@@ -514,48 +514,43 @@ export default function MarketList({ history }) {
     <>
       <ReactTitle title={"DS2.AI - " + "AI " + t("Market")} />
       <div>
-        <div className={classes.topTitle} style={{ margin: "30px 0 16px" }}>
-          {t("Market Product List(Quick Start + Custom AI)")}
+        <div className={classes.topTitle} style={{ margin: "30px 0 30px" }}>
+          {t("Market Product List")}
         </div>
         <div>
-          <div style={{ fontSize: "16px" }}>
-            {t("Custom AI Application process")} {" : "}
-            {t("Data review for AI creation > Check availability > After the installation fee is paid, the project proceeds > Use the generated AI according to the deferred payment system")}
-          </div>
-          <div style={{ fontSize: "14px" }}>{t("*The amount may change depending on the size of the training data or whether it is pre-processed, and for details, it is possible to guide the progress and accurate quotation through a consultant.")}</div>
         </div>
 
-        {!isLoading && (
-          <div
-            id="category_select_container"
-            style={{
-              margin: "50px 0 20px",
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Select
-              id="category_select"
-              disabled={isLoading}
-              variant="outlined"
-              style={{
-                height: "36px",
-                color: currentThemeColor.textWhite87,
-                minWidth: "200px",
-                borderRadius: "0px",
-                fontSize: 15,
-              }}
-              value={category}
-              onChange={changeCategory}
-            >
-              <MenuItem value={"Select Category"}>{t("Select Category")}</MenuItem>
-              <MenuItem value={"All"}>{t("All")}</MenuItem>
-              {categories.map((category) => (
-                <MenuItem value={category}>{t(category)}</MenuItem>
-              ))}
-            </Select>
-          </div>
-        )}
+        {/*{!isLoading && (*/}
+        {/*  <div*/}
+        {/*    id="category_select_container"*/}
+        {/*    style={{*/}
+        {/*      margin: "50px 0 20px",*/}
+        {/*      display: "flex",*/}
+        {/*      justifyContent: "flex-start",*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <Select*/}
+        {/*      id="category_select"*/}
+        {/*      disabled={isLoading}*/}
+        {/*      variant="outlined"*/}
+        {/*      style={{*/}
+        {/*        height: "36px",*/}
+        {/*        color: currentThemeColor.textWhite87,*/}
+        {/*        minWidth: "200px",*/}
+        {/*        borderRadius: "0px",*/}
+        {/*        fontSize: 15,*/}
+        {/*      }}*/}
+        {/*      value={category}*/}
+        {/*      onChange={changeCategory}*/}
+        {/*    >*/}
+        {/*      <MenuItem value={"Select Category"}>{t("Select Category")}</MenuItem>*/}
+        {/*      <MenuItem value={"All"}>{t("All")}</MenuItem>*/}
+        {/*      {categories.map((category) => (*/}
+        {/*        <MenuItem value={category}>{t(category)}</MenuItem>*/}
+        {/*      ))}*/}
+        {/*    </Select>*/}
+        {/*  </div>*/}
+        {/*)}*/}
 
         {isLoading ? (
           <div className={classes.smallLoading} style={{ height: 460 }}>
