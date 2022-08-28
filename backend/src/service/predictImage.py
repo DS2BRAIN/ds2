@@ -23,7 +23,6 @@ import cv2
 from PIL import Image as PILImage
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
-from src.training.gan.data.base_dataset import BaseDataset, get_transform
 from src.rcf.main import RCF
 from PIL import Image as pil_image
 from httplib2 import Http
