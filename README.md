@@ -168,6 +168,17 @@ ds2 = ds2ai.DS2("Your App code")
 ```
 After the code is executed, the ability to predict or deploy the job situation and the trained model is available in ds2.ai as-is. For more information on how to use, refer to "SDK | PYTHON" in the left menu.
 
+
+### Use API
+
+After completing the installation, access to http://localhost:13002/skyhubredoc to check the API information.
+
+<p align="center">
+    <img width="80%" alt="logo" src="https://user-images.githubusercontent.com/60835181/187060752-5c13324e-42e4-4a31-b96f-626c43515d32.png">
+</p>
+
+You can use all DS2 functions through API and Python SDK.
+
 ---
 
 ### BibTeX entry and citation info of the SOTA models
