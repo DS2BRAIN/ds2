@@ -9,7 +9,6 @@ import random
 import chardet
 import cv2
 from PIL import ExifTags, Image
-from boto3.s3.transfer import TransferConfig
 from bson import json_util
 
 from src.errors.exceptions import APIException

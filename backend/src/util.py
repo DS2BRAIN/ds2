@@ -14,7 +14,6 @@ import pwd
 import numpy as np
 import pandas as pd
 import requests
-import boto3
 from uuid import getnode as get_mac
 import torch.cuda
 
@@ -421,12 +420,6 @@ class Util():
     def getBotoClient(self, name, region_name="ap-northeast-2"):
         if self.configOption == "enterprise":
             return enterprise_boto_object
-        if region_name:
-            return boto3.client(name, aws_access_key_id=self.access_key,
-                                aws_secret_access_key=self.secret_key, region_name=region_name)
-        else:
-            return boto3.client(name, aws_access_key_id=self.access_key,
-                                aws_secret_access_key=self.secret_key)
 
     def check_deposit(self, user, amount):
 
