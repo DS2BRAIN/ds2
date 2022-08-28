@@ -4,12 +4,13 @@
 
 ---
 
-Hello 👋 Introduce the Data-Centric MLOps based data science platform, the DS2.ai solution.
-
+Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations, and also easy to build the customized AI model with SOTA algorithms by MLOps based active learning process.
 
 <img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130068-115e8f3e-058c-46f8-9d0c-740a5e176927.png">
 
 DS2 is a data science platform that automates machine learning pipelines and prescriptive analytics.
+
+ - Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations
 
  - Manual & Auto Annotation Tools (Tableur, Text, Image, Recommeder system)
 
@@ -30,23 +31,29 @@ DS2 is a data science platform that automates machine learning pipelines and pre
 
 [Extended documentation for DS2](https://docs.ds2.ai)
 
+---
+
+## 1) Easy to use SOTA models
+
+### Image to Text
+
+### Speech to Text (STT)
+
+### GPT
+
+### Translation
+
+### Text to Image
+
+and also you can use OCR, Text summary, fill mask, text to speech (TTS).
+
 
 ---
 
-### Why Prescriptive Analysis?
+2) Easy to build the customized AI model with SOTA algorithms
 
-Prescriptive analysis is a statistical method that focuses on finding the necessary action or ideal method for a specific scenario based on data. In the case of data visualization, you have to make your own decisions after seeing the graph, but prescriptive analysis has a great advantage in the insight of actionable sentences that can follow the decision as it is.
+### DS2 provides active learning process based on an automated machine learning pipeline.
 
-
-Prescriptive analytics not only predicts what the future will look like, but also uses those predictions to take the best course of action for the future. The key to prescriptive analysis is to minimize human errors that can occur when making decisions and to increase the accuracy of decision-making in companies and projects.
-
-![image](https://user-images.githubusercontent.com/60835181/186130362-0e931552-8105-44a7-8cdd-fa49eb08e129.png)
-
----
-
-### DS2 provides high-precision prescriptive analytics based on an automated machine learning pipeline.
-
-A deep learning model for executing prescriptive analysis can increase its accuracy as it advances over time, and prescriptive analysis made with such increased accuracy will have higher accuracy. DS2 automatically installs a machine learning pipeline through the Active Learning process to [Learn - Analyze - Deploy - Collect] - [Relearn - Analyze - Deploy - Collect] - … Let us help you do it without much effort.
 <p align="center">
     <img width="50%" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130479-584d0aa4-65fb-48ae-88dc-09ba9346256d.png">
 </p>
@@ -96,6 +103,7 @@ After the model is deployed, the input and output values used for prediction are
 
 Supports training data labeling tools needed to create artificial intelligence models. 
 After clicking Labeling on the top menu, upload the dataset, and you can start labeling by selecting the desired function between manual labeling and auto-labeling tool.
+(Labeling tool type: Tablur(Classification, Regression), Text, Image, Object Detection)
 
 ![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
 
