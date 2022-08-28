@@ -10,7 +10,6 @@ from starlette.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 from starlette.status import HTTP_201_CREATED
 from starlette.status import HTTP_503_SERVICE_UNAVAILABLE
 import os, io
-import boto3
 import urllib
 import urllib.request
 import json
