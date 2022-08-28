@@ -418,8 +418,7 @@ class Util():
         return MetabaseAPI(self.metabase_url, self.metabase_admin_email, self.metabase_admin_password)
 
     def getBotoClient(self, name, region_name="ap-northeast-2"):
-        if self.configOption == "enterprise":
-            return enterprise_boto_object
+        return enterprise_boto_object
 
     def check_deposit(self, user, amount):
 
