@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+
+import WorkSpaceList from "./WorkSpaceList";
+import TemplateGrid from "./TemplateGrid";
 
 import { Button, Grid } from "@mui/material";
 
@@ -50,6 +52,8 @@ const Flow = () => {
           </Button>
         ))}
       </Grid>
+      <WorkSpaceList />
+      <TemplateGrid />
     </Grid>
   );
 };
