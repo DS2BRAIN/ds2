@@ -32,7 +32,7 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 export default function SignIn() {
   const classes = currentTheme();
   const history = useHistory();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useSelector(
     (state) => ({ user: state.user, messages: state.messages }),
     []
@@ -47,11 +47,11 @@ export default function SignIn() {
   });
   const [isRememberChecked, setIsRememberChecked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const queryString = require("query-string");
-  const parsed = queryString.parse(window.location.search);
-  const [lang, setLang] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const lang = i18n.language;
+  const queryString = require("query-string");
+  const parsed = queryString.parse(window.location.search);
   const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
   const logo = fileurl + "asset/front/img/logo_transparent.png";
   const mainImage = fileurl + "asset/front/img/img_mainCircle.png";
@@ -75,10 +75,6 @@ export default function SignIn() {
     checkEmailVerify();
     checkPasswordChange();
   }, []);
-
-  useEffect(() => {
-    setLang(user.language);
-  }, [user.language]);
 
   const checkUtm = () => {
     if (parsed.utm_source) {
