@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
@@ -28,8 +29,10 @@ import MySnackbar from "components/MySnackbar/MySnackbar.js";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
-export default function SignIn(props) {
+export default function SignIn() {
   const classes = currentTheme();
+  const history = useHistory();
+  const { t } = useTranslation();
   const { user } = useSelector(
     (state) => ({ user: state.user, messages: state.messages }),
     []
@@ -45,22 +48,21 @@ export default function SignIn(props) {
   const [isRememberChecked, setIsRememberChecked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const queryString = require("query-string");
-  const parsed = queryString.parse(props.location.search);
+  const parsed = queryString.parse(window.location.search);
   const [lang, setLang] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { t } = useTranslation();
   const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
   const logo = fileurl + "asset/front/img/logo_transparent.png";
   const mainImage = fileurl + "asset/front/img/img_mainCircle.png";
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
-      props.history.push("/admin");
+      history.push("/admin");
     } else {
       api.getUserCountInfo().then((res) => {
         if (!res.data) {
-          props.history.push("/signup");
+          history.push("/signup");
         }
       });
     }
@@ -109,7 +111,7 @@ export default function SignIn(props) {
     if (isMobile) {
       setMobileOpen(true);
     } else if (!isChrome) {
-      window.location.href = "/error";
+      history.push("/error");
     }
 
     if (localStorage.userId) {
@@ -157,7 +159,7 @@ export default function SignIn(props) {
         return res.data.user.isAgreedWithPolicy;
       })
       .then(() => {
-        window.location.href = "/admin";
+        history.push("/admin");
       })
       .then(() => {
         if (isRememberChecked) {
