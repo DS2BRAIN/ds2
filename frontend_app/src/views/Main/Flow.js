@@ -54,8 +54,8 @@ const Flow = () => {
         </Tabs>
       </Grid>
       <Grid>
-        {selectedTabId === "workspaces" && <WorkSpaceList />}
-        {selectedTabId === "templates" && <TemplateGrid />}
+        {selectedTabId === 0 && <WorkSpaceList />}
+        {selectedTabId === 1 && <TemplateGrid />}
       </Grid>
     </Grid>
   );
