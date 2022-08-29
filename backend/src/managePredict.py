@@ -439,17 +439,20 @@ class ManagePredict:
                     outputImage = self.predict_image_class.getFaceDetect(im, info)
                     if info:
                         return HTTP_200_OK, outputImage
-                elif model['objectDetectionModel'] == "ocr":
-                    outputImage = self.predict_image_class.getOCR(file, im, info)
-                    if info:
-                        return HTTP_200_OK, outputImage
-                    else:
-                        return HTTP_200_OK, StreamingResponse(io.BytesIO(image.tobytes()), media_type="image/jpg",
-                                                              background=background_tasks)
                 elif model['objectDetectionModel'] == "faceLandmark":
                     outputImage = self.predict_image_class.getFaceLandmark(im, info, predictor=self.predictor)
                     if info:
                         return HTTP_200_OK, outputImage
+
+            if 'ocr' in trainingMethod:
+                result = self.predict_image_class.getOCR(file, im, info)
+
+                try:
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                except:
+                    pass
+                return HTTP_200_OK, result
 
             if 'image_to_text' in trainingMethod:
                 result = self.predict_image_class.get_image_to_text(file, im, info)
