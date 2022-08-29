@@ -6,7 +6,10 @@ import Loading from "components/Loading/Loading.js";
 import Cookies from "helpers/Cookies";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import { getLabelProjectRequestAction } from "redux/reducers/labelprojects.js";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
@@ -162,15 +165,18 @@ const LabelNatural = ({ history }) => {
         switch (e.key) {
           case "a":
           case "ㅁ":
-            document.getElementById("prevBtn") && document.getElementById("prevBtn").click();
+            document.getElementById("prevBtn") &&
+              document.getElementById("prevBtn").click();
             break;
           case "s":
           case "ㄴ":
-            document.getElementById("saveBtn") && document.getElementById("saveBtn").click();
+            document.getElementById("saveBtn") &&
+              document.getElementById("saveBtn").click();
             break;
           case "d":
           case "ㅇ":
-            document.getElementById("nextBtn") && document.getElementById("nextBtn").click();
+            document.getElementById("nextBtn") &&
+              document.getElementById("nextBtn").click();
             break;
           default:
             break;
@@ -184,16 +190,31 @@ const LabelNatural = ({ history }) => {
 
   useEffect(() => {
     if (qs.includes("start=true")) {
-      Cookies.setCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`, labelFileId, 1);
+      Cookies.setCookie(
+        `fileHistoryBy${labelProjectId}At${timeStamp}`,
+        labelFileId,
+        1
+      );
     } else {
-      let fileHistoryCookieArr = Cookies.getCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`).split(",");
+      let fileHistoryCookieArr = Cookies.getCookie(
+        `fileHistoryBy${labelProjectId}At${timeStamp}`
+      ).split(",");
 
-      if (fileHistoryCookieArr.indexOf(labelFileId) === -1 && labelFileId !== "" && labelFileId !== "null" && labelFileId !== "undefined") {
+      if (
+        fileHistoryCookieArr.indexOf(labelFileId) === -1 &&
+        labelFileId !== "" &&
+        labelFileId !== "null" &&
+        labelFileId !== "undefined"
+      ) {
         if (fileHistoryCookieArr.length >= 10) {
           fileHistoryCookieArr.shift();
         }
         fileHistoryCookieArr.push(labelFileId);
-        Cookies.setCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`, fileHistoryCookieArr, 1);
+        Cookies.setCookie(
+          `fileHistoryBy${labelProjectId}At${timeStamp}`,
+          fileHistoryCookieArr,
+          1
+        );
       }
     }
     setIsHistoryChanged(true);
@@ -201,7 +222,9 @@ const LabelNatural = ({ history }) => {
 
   useEffect(() => {
     if (isHistoryChanged) {
-      let fileHistoryCookieArr = Cookies.getCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`).split(",");
+      let fileHistoryCookieArr = Cookies.getCookie(
+        `fileHistoryBy${labelProjectId}At${timeStamp}`
+      ).split(",");
       let fileIndex = fileHistoryCookieArr.indexOf(labelFileId);
 
       if (fileHistoryCookieArr[fileIndex - 1] === undefined) {
@@ -214,8 +237,26 @@ const LabelNatural = ({ history }) => {
   }, [isHistoryChanged]);
 
   useEffect(() => {
-    let tmp = appStatus === "prepare" || appStatus === "working" ? "prepare" : appStatus === "review" ? "review" : appStatus === "done" ? "done" : appStatus === "reject" ? "reject" : "none";
-    let tmpTxt = appStatus === "prepare" || appStatus === "working" ? "시작 전" : appStatus === "review" ? "리뷰 중" : appStatus === "done" ? "완료" : appStatus === "reject" ? "반려" : "없음";
+    let tmp =
+      appStatus === "prepare" || appStatus === "working"
+        ? "prepare"
+        : appStatus === "review"
+        ? "review"
+        : appStatus === "done"
+        ? "done"
+        : appStatus === "reject"
+        ? "reject"
+        : "none";
+    let tmpTxt =
+      appStatus === "prepare" || appStatus === "working"
+        ? "시작 전"
+        : appStatus === "review"
+        ? "리뷰 중"
+        : appStatus === "done"
+        ? "완료"
+        : appStatus === "reject"
+        ? "반려"
+        : "없음";
 
     setAppStatusForRequestValue(tmp);
     setAppStatusTxt(tmpTxt);
@@ -307,7 +348,8 @@ const LabelNatural = ({ history }) => {
       .getLabelAppData(labelProjectId, labelFileId)
       .then((res) => {
         const fileDetail = res.data.sthreefile;
-        const labelData = fileDetail.labelData === null ? {} : fileDetail.labelData;
+        const labelData =
+          fileDetail.labelData === null ? {} : fileDetail.labelData;
         const labelClasses = res.data.labelclass;
         const rawData = fileDetail.rawData === null ? {} : fileDetail.rawData;
 
@@ -318,10 +360,17 @@ const LabelNatural = ({ history }) => {
         });
         setLabelClasses(labelClasses);
         setWorkapp(fileDetail.workapp);
-        let isReviewTmp = fileDetail.status === "review" || (fileDetail.inspectionResult !== undefined && fileDetail.inspectionResult !== null);
+        let isReviewTmp =
+          fileDetail.status === "review" ||
+          (fileDetail.inspectionResult !== undefined &&
+            fileDetail.inspectionResult !== null);
 
         if (fileDetail && fileDetail.labelData !== null) {
-          Object.values(fileDetail.labelData)[0] === null ? setSelectedValueName("") : setSelectedValueName(String(Object.values(fileDetail.labelData)[0]));
+          Object.values(fileDetail.labelData)[0] === null
+            ? setSelectedValueName("")
+            : setSelectedValueName(
+                String(Object.values(fileDetail.labelData)[0])
+              );
         } else {
           setSelectedValueName("");
         }
@@ -336,16 +385,30 @@ const LabelNatural = ({ history }) => {
       })
       .catch((e) => {
         console.log(e);
-        dispatch(openErrorSnackbarRequestAction(t("The labeling data was not loaded due to a temporary error.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("The labeling data was not loaded due to a temporary error.")
+          )
+        );
       });
   };
 
   const onGoToSelectedPage = (id) => {
-    if (window.confirm(t("Labeling information in progress is initialized. Are you sure you want to move to the selected row?"))) {
+    if (
+      window.confirm(
+        t(
+          "Labeling information in progress is initialized. Are you sure you want to move to the selected row?"
+        )
+      )
+    ) {
       setSelectedValueName("");
       setSelectedValueId(0);
       setFileStatus("");
-      history.push(`/admin/${labelFileType}/${labelProjectId}/${id}/?token=${Cookies.getCookie("jwt")}&appStatus=${appStatus}&timeStamp=${timeStamp}`);
+      history.push(
+        `/admin/${labelFileType}/${labelProjectId}/${id}/?token=${Cookies.getCookie(
+          "jwt"
+        )}&appStatus=${appStatus}&timeStamp=${timeStamp}`
+      );
       setIsListModalOpen(false);
     }
   };
@@ -392,7 +455,9 @@ const LabelNatural = ({ history }) => {
     if (checkSaveNum === 0) {
       checkSaveNum++;
       if (selectedValueName === "") {
-        dispatch(openErrorSnackbarRequestAction(t("Select or enter a value to label.")));
+        dispatch(
+          openErrorSnackbarRequestAction(t("Select or enter a value to label."))
+        );
         checkSaveNum = 0;
         return;
       }
@@ -401,7 +466,10 @@ const LabelNatural = ({ history }) => {
       if (selectedValueId !== 0) {
         // 기존에 저장된 라벨이 있을 때
         if (Object.values(labelFileDetail.labelData)[0] !== null) {
-          if (selectedValueName !== String(Object.values(labelFileDetail.labelData)[0])) {
+          if (
+            selectedValueName !==
+            String(Object.values(labelFileDetail.labelData)[0])
+          ) {
             // 다른 클래스 버튼을 클릭하여 클래스가 변경되었을 때
             await changeLabel(buttonType);
             isSavingSuccess = true;
@@ -424,7 +492,9 @@ const LabelNatural = ({ history }) => {
                 }
               : {
                   // 클래스를 선택한 경우
-                  [Object.keys(labelFileDetail.labelData)[0]]: selectedValueName,
+                  [Object.keys(
+                    labelFileDetail.labelData
+                  )[0]]: selectedValueName,
                 };
 
           let labelToPostInfo = [
@@ -450,7 +520,11 @@ const LabelNatural = ({ history }) => {
             })
             .catch((e) => {
               isSavingSuccess = false;
-              if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+              if (
+                process.env.REACT_APP_ENTERPRISE !== "true" &&
+                e.response &&
+                e.response.status === 402
+              ) {
                 var tempUrl = `http://localhost:3000/`;
                 setIsCardRequestError(true);
 
@@ -459,11 +533,21 @@ const LabelNatural = ({ history }) => {
                 }
 
                 if (process.env.REACT_APP_ENTERPRISE) {
-                  tempUrl = "http://" + window.location.host.split(":")[0] + ":13000/";
+                  tempUrl =
+                    "http://" + window.location.host.split(":")[0] + ":13000/";
                 }
-                window.open(`${tempUrl}admin/setting/payment/?cardRequest=true`, "_blank");
+                window.open(
+                  `${tempUrl}admin/setting/payment/?cardRequest=true`,
+                  "_blank"
+                );
               }
-              dispatch(openErrorSnackbarRequestAction(t("The labeling data was not loaded due to a temporary error.")));
+              dispatch(
+                openErrorSnackbarRequestAction(
+                  t(
+                    "The labeling data was not loaded due to a temporary error."
+                  )
+                )
+              );
               return isSavingSuccess;
             });
         }
@@ -478,13 +562,18 @@ const LabelNatural = ({ history }) => {
   const goToPrevOrNextFilePage = async (buttonType, res) => {
     setIsNextOrPrevLoading(true);
 
-    let fileHistoryCookieArr = Cookies.getCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`).split(",");
+    let fileHistoryCookieArr = Cookies.getCookie(
+      `fileHistoryBy${labelProjectId}At${timeStamp}`
+    ).split(",");
     let currentFileIdx = fileHistoryCookieArr.indexOf(labelFileId);
     let nextFileId = "";
     let prevFileId = "";
 
     if (buttonType === "next") {
-      if (currentFileIdx !== -1 && currentFileIdx === fileHistoryCookieArr.length - 1) {
+      if (
+        currentFileIdx !== -1 &&
+        currentFileIdx === fileHistoryCookieArr.length - 1
+      ) {
         nextFileId = res.data.nextSthreeFile.id;
         // console.log("현재 아이디가 포함되어 있으면서 마지막 파일인 경우");
       } else {
@@ -497,9 +586,16 @@ const LabelNatural = ({ history }) => {
       prevFileId = fileHistoryCookieArr[currentFileIdx - 1];
     }
 
-    let prevUrl = fileHistoryCookieArr[currentFileIdx - 1] !== undefined ? `/admin/${labelFileType}/${labelProjectId}/${prevFileId}/?token=${Cookies.getCookie("jwt")}&appStatus=${appStatus}&timeStamp=${timeStamp}` : "none";
+    let prevUrl =
+      fileHistoryCookieArr[currentFileIdx - 1] !== undefined
+        ? `/admin/${labelFileType}/${labelProjectId}/${prevFileId}/?token=${Cookies.getCookie(
+            "jwt"
+          )}&appStatus=${appStatus}&timeStamp=${timeStamp}`
+        : "none";
 
-    let nextUrl = `/admin/${labelFileType}/${labelProjectId}/${nextFileId}/?token=${Cookies.getCookie("jwt")}&appStatus=${appStatus}&timeStamp=${timeStamp}`;
+    let nextUrl = `/admin/${labelFileType}/${labelProjectId}/${nextFileId}/?token=${Cookies.getCookie(
+      "jwt"
+    )}&appStatus=${appStatus}&timeStamp=${timeStamp}`;
 
     if (fileHistoryCookieArr[currentFileIdx + 1] === undefined) {
       if (res.data.nextSthreeFile.id === null) {
@@ -514,13 +610,17 @@ const LabelNatural = ({ history }) => {
       await setTimeout(() => {
         if (isSavingSuccess) {
           setFileStatus("");
-          dispatch(openErrorSnackbarRequestAction(t("There are no labelable files.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("There are no labelable files."))
+          );
           setIsSavingLoading(false);
           setIsNextOrPrevLoading(false);
           checkSaveNum = 0;
         } else {
           setFileStatus("");
-          dispatch(openErrorSnackbarRequestAction(t("Sorry. please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Sorry. please try again."))
+          );
           setIsSavingLoading(false);
           setIsNextOrPrevLoading(false);
           checkSaveNum = 0;
@@ -532,13 +632,17 @@ const LabelNatural = ({ history }) => {
         if (isSavingSuccess) {
           let keyword = buttonType === "prev" ? "이전" : "다음";
 
-          dispatch(openSuccessSnackbarRequestAction(t(`${keyword} 행으로 이동합니다.`)));
+          dispatch(
+            openSuccessSnackbarRequestAction(t(`${keyword} 행으로 이동합니다.`))
+          );
 
           history.push(url);
           // checkSaveNum = 0;
           setFileStatus("");
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry. please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Sorry. please try again."))
+          );
           setIsContentLoading(false);
           setIsNextOrPrevLoading(false);
           setIsSavingLoading(false);
@@ -612,7 +716,10 @@ const LabelNatural = ({ history }) => {
     <>
       <ReactTitle title={"DS2.ai - " + t("Natural Language Labelling")} />
       <Container maxWidth="lg" style={{ padding: "0px" }}>
-        {isNextOrPrevLoading || isContentLoading || isSavingLoading || isClassesLoading ? (
+        {isNextOrPrevLoading ||
+        isContentLoading ||
+        isSavingLoading ||
+        isClassesLoading ? (
           <div
             style={{
               width: "100%",
@@ -652,9 +759,19 @@ const LabelNatural = ({ history }) => {
                   borderBottom: "1px solid rgba(255,255,255,.2)",
                 }}
               >
-                <Grid container item xs={7} justify="flex-start" alignItems="center" style={{ flexWrap: "nowrap" }}>
+                <Grid
+                  container
+                  item
+                  xs={7}
+                  justify="flex-start"
+                  alignItems="center"
+                  style={{ flexWrap: "nowrap" }}
+                >
                   <Grid item>
-                    <IconButton aria-label="파일리스트" onClick={onClickListButton}>
+                    <IconButton
+                      aria-label="파일리스트"
+                      onClick={onClickListButton}
+                    >
                       <ListIcon fontSize="large" />
                     </IconButton>
                   </Grid>
@@ -669,9 +786,20 @@ const LabelNatural = ({ history }) => {
                     {labelProjectName}
                   </Grid>
                 </Grid>
-                <Grid container item xs={5} justify="flex-end" alignItems="center" style={{ flexWrap: "nowrap" }}>
+                <Grid
+                  container
+                  item
+                  xs={5}
+                  justify="flex-end"
+                  alignItems="center"
+                  style={{ flexWrap: "nowrap" }}
+                >
                   <Button
-                    className={prevButtonDisabled ? `${classes.defaultDisabledButton} ${classes.labeling_default_button}` : `${classes.defaultOutlineButton} ${classes.labeling_default_button}`}
+                    className={
+                      prevButtonDisabled
+                        ? `${classes.defaultDisabledButton} ${classes.labeling_default_button}`
+                        : `${classes.defaultOutlineButton} ${classes.labeling_default_button}`
+                    }
                     style={{
                       width: "25%",
                       textTransform: "none",
@@ -719,8 +847,21 @@ const LabelNatural = ({ history }) => {
                   marginBottom: "60px",
                 }}
               >
-                <Grid container item xs={12} justify="space-between" alignItems="center" style={{ padding: "12px 0" }}>
-                  <Grid container item xs={4} justify="flex-start" alignItems="center">
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  justify="space-between"
+                  alignItems="center"
+                  style={{ padding: "12px 0" }}
+                >
+                  <Grid
+                    container
+                    item
+                    xs={4}
+                    justify="flex-start"
+                    alignItems="center"
+                  >
                     <Grid item>
                       <PlaylistAddCheckIcon
                         style={{
@@ -732,9 +873,22 @@ const LabelNatural = ({ history }) => {
                     </Grid>
                     <Grid item>{t("Inspection Result")}</Grid>
                   </Grid>
-                  <Grid container item xs justify="flex-end" alignItems="center">
+                  <Grid
+                    container
+                    item
+                    xs
+                    justify="flex-end"
+                    alignItems="center"
+                  >
                     <FormControl component="fieldset" style={{ width: "100%" }}>
-                      <RadioGroup aria-label="model-types" name="model-types" value={inspectionResult} onChange={handleChange} row style={{ justifyContent: "flex-end" }}>
+                      <RadioGroup
+                        aria-label="model-types"
+                        name="model-types"
+                        value={inspectionResult}
+                        onChange={handleChange}
+                        row
+                        style={{ justifyContent: "flex-end" }}
+                      >
                         <FormControlLabel
                           value="1"
                           control={
@@ -746,7 +900,11 @@ const LabelNatural = ({ history }) => {
                               checked={inspectionResult === "1"}
                             />
                           }
-                          className={inspectionResult === "1" ? classes.defaultHighlightButton : classes.defaultOutlineButton}
+                          className={
+                            inspectionResult === "1"
+                              ? classes.defaultHighlightButton
+                              : classes.defaultOutlineButton
+                          }
                           style={{
                             justifyContent: "center",
                             height: "30px",
@@ -765,7 +923,11 @@ const LabelNatural = ({ history }) => {
                               checked={inspectionResult === "2"}
                             />
                           }
-                          className={inspectionResult === "2" ? classes.defaultHighlightButton : classes.defaultOutlineButton}
+                          className={
+                            inspectionResult === "2"
+                              ? classes.defaultHighlightButton
+                              : classes.defaultOutlineButton
+                          }
                           style={{
                             justifyContent: "center",
                             height: "30px",
@@ -786,17 +948,35 @@ const LabelNatural = ({ history }) => {
                       color: "red",
                     }}
                   >
-                    {t("* Please note that in case of 'reject', all existing label data is deleted and cannot be recovered.")}
+                    {t(
+                      "* Please note that in case of 'reject', all existing label data is deleted and cannot be recovered."
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
             )}
-            <Grid container item xs={12} justify="center" style={{ marginBottom: "120px" }}>
-              <Grid container xs={10} justify="center" style={{ marginBottom: "20px" }}>
+            <Grid
+              container
+              item
+              xs={12}
+              justify="center"
+              style={{ marginBottom: "120px" }}
+            >
+              <Grid
+                container
+                xs={10}
+                justify="center"
+                style={{ marginBottom: "20px" }}
+              >
                 <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <TableContainer component={Paper} style={{ margin: "0 0 20px", padding: "0 0 20px" }}>
+                  <TableContainer
+                    component={Paper}
+                    style={{ margin: "0 0 20px", padding: "0 0 20px" }}
+                  >
                     <Table aria-label="caption table">
-                      <caption className="sr-only">라벨링할 자연어 데이터 목록입니다.</caption>
+                      <caption className="sr-only">
+                        라벨링할 자연어 데이터 목록입니다.
+                      </caption>
                       <TableBody>
                         {Object.keys(labelFileDetail.rawData).map((key, i) => (
                           <TableRow>
@@ -810,7 +990,11 @@ const LabelNatural = ({ history }) => {
                             >
                               {key}
                             </TableCell>
-                            <TableCell key={i} align="center" style={{ color: "var(--textWhite)" }}>
+                            <TableCell
+                              key={i}
+                              align="center"
+                              style={{ color: "var(--textWhite)" }}
+                            >
                               {labelFileDetail.rawData[key]}
                             </TableCell>
                           </TableRow>
@@ -832,7 +1016,9 @@ const LabelNatural = ({ history }) => {
                               backgroundColor: "#0A84FF",
                             }}
                           >
-                            {selectedValueName !== null ? selectedValueName : ""}
+                            {selectedValueName !== null
+                              ? selectedValueName
+                              : ""}
                           </TableCell>
                         </TableRow>
                       </TableBody>
@@ -856,7 +1042,11 @@ const LabelNatural = ({ history }) => {
                 </Grid>
                 <Grid container spacing={3} justify="center">
                   {Object.entries(labelClasses).map((labelClass) => (
-                    <Grid item justify="center" style={{ marginBottom: "10px" }}>
+                    <Grid
+                      item
+                      justify="center"
+                      style={{ marginBottom: "10px" }}
+                    >
                       <Button
                         variant="outlined"
                         style={
@@ -888,7 +1078,13 @@ const LabelNatural = ({ history }) => {
             </Grid>
           </Grid>
         )}
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isListModalOpen} onClose={closeListModal} className={modalClasses.modalContainer}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isListModalOpen}
+          onClose={closeListModal}
+          className={modalClasses.modalContainer}
+        >
           <div className={modalClasses.modalContent}>
             <div className={modalClasses.title}>
               <div>{t("file list")}</div>
@@ -915,7 +1111,9 @@ const LabelNatural = ({ history }) => {
                     </div>
                   );
                 })}
-              {labelFiles.length === 0 && <div>{t(`'${appStatusTxt}'인 상태의 행이 없습니다.`)}</div>}
+              {labelFiles.length === 0 && (
+                <div>{t(`'${appStatusTxt}'인 상태의 행이 없습니다.`)}</div>
+              )}
             </div>
             <div
               style={{
@@ -925,9 +1123,18 @@ const LabelNatural = ({ history }) => {
                 zIndex: "1000",
               }}
             >
-              <Pagination count={totalLength ? Math.ceil(totalLength / listCnt) : 0} page={page} size="small" onChange={onChangeListPage} classes={{ ul: classes.paginationNum }} />
+              <Pagination
+                count={totalLength ? Math.ceil(totalLength / listCnt) : 0}
+                page={page}
+                size="small"
+                onChange={onChangeListPage}
+                classes={{ ul: classes.paginationNum }}
+              />
             </div>
-            <div className={modalClasses.title} style={{ justifyContent: "flex-end" }}>
+            <div
+              className={modalClasses.title}
+              style={{ justifyContent: "flex-end" }}
+            >
               <Button
                 onClick={() => {
                   setIsListModalOpen(false);
