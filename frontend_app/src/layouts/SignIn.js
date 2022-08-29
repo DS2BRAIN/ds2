@@ -6,6 +6,13 @@ import { ReactTitle } from "react-meta-tags";
 import * as api from "controller/api.js";
 import { fileurl } from "controller/api";
 import Cookies from "helpers/Cookies";
+import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
+import Language from "components/Language/Language";
+import checkHttps, {
+  sendErrorMessage,
+} from "components/Function/globalFunc.js";
+import Copyright from "components/Footer/Copyright";
+import Button from "components/CustomButtons/Button";
 
 import {
   Box,
@@ -21,14 +28,6 @@ import MySnackbar from "components/MySnackbar/MySnackbar.js";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
-import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
-import Language from "components/Language/Language";
-import checkHttps, {
-  sendErrorMessage,
-} from "components/Function/globalFunc.js";
-import Copyright from "components/Footer/Copyright";
-import Button from "components/CustomButtons/Button";
-
 export default function SignIn(props) {
   const classes = currentTheme();
   const { user } = useSelector(
@@ -43,23 +42,17 @@ export default function SignIn(props) {
     variant: "success",
     message: "",
   });
-  const [userId, setUserId] = useState(null);
   const [isRememberChecked, setIsRememberChecked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const queryString = require("query-string");
   const parsed = queryString.parse(props.location.search);
-  const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
   const [lang, setLang] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const { t } = useTranslation();
+  const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
   const logo = fileurl + "asset/front/img/logo_transparent.png";
   const mainImage = fileurl + "asset/front/img/img_mainCircle.png";
-  const date = new Date();
-
-  let year = date.getFullYear().toString();
-  let month = (date.getMonth() + 1).toString();
-  let day = date.getDate().toString();
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
@@ -154,7 +147,6 @@ export default function SignIn(props) {
     return api
       .Login(user)
       .then((res) => {
-        setUserId(res.data.user.id);
         Cookies.setCookie("jwt", res.data.jwt, 90);
         Cookies.setCookie("user", JSON.stringify(res.data.user), 90);
         Cookies.setCookie(
