@@ -52,8 +52,10 @@ const Flow = () => {
           </Button>
         ))}
       </Grid>
-      <WorkSpaceList />
-      <TemplateGrid />
+      <Grid>
+        {selectedPage === "workspaces" && <WorkSpaceList />}
+        {selectedPage === "templates" && <TemplateGrid />}
+      </Grid>
     </Grid>
   );
 };
