@@ -34,15 +34,14 @@ class DaemonAsyncTask():
         self.testMode = False
         self.predictClass = None
         self.processingLabelingClass = None
-        self.processingClass = None
+        from src.managePredict import ManagePredict
+        self.predictClass = ManagePredict()
         self.analysingClass = None
 
         if os.path.exists('./src/training/predict.py'):
             from src.training.processingLabeling import ProcessingLabeling
             from src.training.processing import Processing
             from src.training.analysing import Analysing
-            from src.training.predict import Predict
-            self.predictClass = Predict()
             self.processingLabelingClass = ProcessingLabeling()
             self.processingClass = Processing()
             self.analysingClass = Analysing()
@@ -210,7 +209,7 @@ class DaemonAsyncTask():
                     localFile = r.read()
             user = self.dbClass.getOneUserById(task.user, raw=True)
 
-            if "train" in task.taskType or 'customAi' in task.taskType:
+            if "train" in task.taskType or 'customAi' in task.taskType or 'verify' in task.taskType:
                 self.daemonClass.run(project_id=task.project)
             if "runAll" in task.taskType:
                 code, response = self.machine_learning_class.predict_all(user.appTokenCode, user.id, localFile, localFilePath, task.model, None, return_type="file")
@@ -315,7 +314,7 @@ class DaemonAsyncTask():
                                            num_workers=1, shuffle=False, drop_last=False)
                     a = learn.get_preds(dl=dl)
                     a1 = a[1]
-                    important_df["__예측값__" + dep_var] = a1.tolist()
+                    important_df["__predict_value__" + dep_var] = a1.tolist()
                     print(important_df.head())
                     # AutoVisClass = AutoVisualizing(model=model)
                     # dft = AutoVisClass.AutoViz("", "", dep_var, important_df, header=0, verbose=2)
@@ -424,7 +423,7 @@ class DaemonAsyncTask():
             pass
         if task.status != 100:
             task.status = 99
-        if task.taskType in ("train", "customAi"):
+        if task.taskType in ("train", "customAi", "verify"):
             task.status = task_before_status
 
         endTime = datetime.now()
