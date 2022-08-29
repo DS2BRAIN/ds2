@@ -3,15 +3,18 @@ import React, { useState } from "react";
 import WorkSpaceList from "./WorkSpaceList";
 import TemplateGrid from "./TemplateGrid";
 
-import { Button, Grid } from "@mui/material";
+import { Grid, Tab, Tabs } from "@mui/material";
 
 const Flow = () => {
-  const pageList = ["workspaces", "templates"];
+  const pageList = [
+    { id: 0, label: "workspaces" },
+    { id: 1, label: "templates" },
+  ];
 
-  const [selectedPage, setSelectedPage] = useState(pageList[0]);
+  const [selectedTabId, setSelectedTabId] = useState(pageList[0].id);
 
-  const handlePage = (page) => {
-    setSelectedPage(page);
+  const handlePage = (e, newValue) => {
+    setSelectedTabId(newValue);
   };
 
   return (
@@ -24,37 +27,35 @@ const Flow = () => {
           backgroundColor: "var(--background2)",
         }}
       >
-        {pageList.map((page) => (
-          <Button
-            key={`${page}_tab`}
-            id={`${page}_tab`}
-            sx={{
-              p: 3,
-              borderRadius: 0,
-              borderBottom:
-                selectedPage === page
-                  ? "4px solid var(--secondary1)"
-                  : "4px solid transparent",
-            }}
-            onClick={() => handlePage(page)}
-          >
-            <span
-              style={{
-                textTransform: "capitalize",
+        <Tabs
+          value={selectedTabId}
+          TabIndicatorProps={{
+            sx: {
+              backgroundColor: "var(--secondary1)",
+              color: "var(--secondary1)",
+            },
+          }}
+          onChange={handlePage}
+        >
+          {pageList.map((page) => (
+            <Tab
+              key={`${page.id}_tab`}
+              id={`${page.id}_tab`}
+              label={page.label}
+              sx={{
+                p: 3,
                 color:
-                  selectedPage === page
-                    ? "var(--textWhite87)"
+                  selectedTabId === page.id
+                    ? "var(--textWhite87) !important"
                     : "var(--textWhite6)",
               }}
-            >
-              {page}
-            </span>
-          </Button>
-        ))}
+            />
+          ))}
+        </Tabs>
       </Grid>
       <Grid>
-        {selectedPage === "workspaces" && <WorkSpaceList />}
-        {selectedPage === "templates" && <TemplateGrid />}
+        {selectedTabId === "workspaces" && <WorkSpaceList />}
+        {selectedTabId === "templates" && <TemplateGrid />}
       </Grid>
     </Grid>
   );
