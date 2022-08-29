@@ -20,7 +20,7 @@ export default function Header(props) {
   const dispatch = useDispatch();
   const classes = currentTheme();
   const { user } = useSelector((state) => ({ user: state.user }), []);
-  const { logo, color, localPath } = props;
+  const { logo, color } = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color,
   });
@@ -61,7 +61,7 @@ export default function Header(props) {
               <img src="/images/logo_transparent.png" alt="logo" width={120} />
             </Grid>
 
-            <NavMenu localPath={localPath} />
+            <NavMenu />
           </Grid>
           <Toolbar disableGutters>
             <a

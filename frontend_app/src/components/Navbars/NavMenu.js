@@ -3,8 +3,9 @@ import { Grid } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const NavMenu = ({ localPath }) => {
+const NavMenu = () => {
   const { t } = useTranslation();
+  const localPath = window.location.pathname;
 
   const routes = [
     {

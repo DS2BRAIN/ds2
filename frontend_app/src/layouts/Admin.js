@@ -81,7 +81,6 @@ const Admin = ({ history, ...rest }) => {
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
   );
-  const [localPath, setLocalPath] = useState("");
 
   const { t } = useTranslation();
 
@@ -424,10 +423,6 @@ const Admin = ({ history, ...rest }) => {
     if (!isLogined) history.push("/signout");
   });
 
-  useEffect(() => {
-    setLocalPath(window.location.pathname);
-  }, [window.location.pathname]);
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -505,7 +500,6 @@ const Admin = ({ history, ...rest }) => {
             handleDrawerToggle={handleDrawerToggle}
             headerHeight={headerHeight}
             containerWidth={containerWidth}
-            localPath={localPath}
             {...rest}
           />
         )}
