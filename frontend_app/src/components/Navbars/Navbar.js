@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import { NavLink } from "react-router-dom";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
 import * as api from "controller/api.js";
+import { toHome } from "components/Function/globalFunc";
 import { updateNotification } from "redux/reducers/user";
 import currentTheme from "assets/jss/custom.js";
 import NotiPopover from "components/Notifications/NotiPopover";
@@ -18,6 +20,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 export default function Header(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = currentTheme();
   const { user } = useSelector((state) => ({ user: state.user }), []);
   const { logo, color } = props;
@@ -53,8 +56,7 @@ export default function Header(props) {
               item
               id="logoToAdmin"
               onClick={() => {
-                // props.history.push("/admin");
-                window.location.href = "/admin";
+                toHome(history);
               }}
               style={{ cursor: "pointer", lineHeight: "60px", marginRight: 48 }}
             >
@@ -91,7 +93,7 @@ export default function Header(props) {
                 </b>
               )}
             </a>
-            <NotiPopover history={props.history} />
+            <NotiPopover />
             <IconButton
               id="logoutLink"
               sx={{ ml: 1, mr: 2, mt: 0.25 }}
@@ -103,7 +105,7 @@ export default function Header(props) {
             </IconButton>
 
             <Grid className="itemsCenter">
-              <PageController history={props.history} />
+              <PageController />
             </Grid>
           </Toolbar>
         </Toolbar>

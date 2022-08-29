@@ -11,6 +11,7 @@ import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import Language from "components/Language/Language";
 import checkHttps, {
   sendErrorMessage,
+  toHome,
 } from "components/Function/globalFunc.js";
 import Copyright from "components/Footer/Copyright";
 import Button from "components/CustomButtons/Button";
@@ -58,7 +59,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
-      history.push("/admin");
+      toHome(history);
     } else {
       api.getUserCountInfo().then((res) => {
         if (!res.data) {
@@ -155,7 +156,7 @@ export default function SignIn() {
         return res.data.user.isAgreedWithPolicy;
       })
       .then(() => {
-        history.push("/admin");
+        toHome(history);
       })
       .then(() => {
         if (isRememberChecked) {

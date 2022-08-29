@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 import GoogleLogin from "react-google-login";
@@ -43,6 +44,7 @@ import ParPrivacyPolicy from "components/User/ParPrivacyPolicy";
 import Copyright from "components/Footer/Copyright";
 import Button from "components/CustomButtons/Button";
 import { openChat } from "components/Function/globalFunc";
+import { toHome } from "components/Function/globalFunc";
 
 // const emailRegExp = /^[0-9a-z]([-_\.]?[0-9a-z])*@[0-9a-z]([-_\.]?[0-9a-z])*\.[a-z]/;
 //const emailRegExp = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/i;
@@ -59,8 +61,9 @@ const emailCheck = (email) => {
 const cliedId =
   "1033414311470-pjcodotllde5c91klbml7ecjs32kk3rl.apps.googleusercontent.com";
 
-export default function SignUp(props) {
+export default function SignUp() {
   const classes = currentTheme();
+  const history = useHistory();
   const dispatch = useDispatch();
   const { user, messages } = useSelector(
     (state) => ({ user: state.user, messages: state.messages }),
@@ -106,7 +109,7 @@ export default function SignUp(props) {
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
-      props.history.push("/admin");
+      toHome(history);
     }
 
     if (!process.env.REACT_APP_ENTERPRISE) {
@@ -216,7 +219,7 @@ export default function SignUp(props) {
       //     .then(() => {
       //       setSnackbarOption("success", t("Thank you for creating an account"));
       //       setTimeout(() => {
-      //         props.history.push("/signin/");
+      //         history.push("/signin/");
       //       }, 5000);
       //     })
       //     .catch((e) => {
@@ -253,7 +256,7 @@ export default function SignUp(props) {
               )}`
             );
             setTimeout(() => {
-              props.history.push("/signin/");
+              history.push("/signin/");
             }, 5000);
           } else {
             setSnackbarOption(
@@ -261,7 +264,7 @@ export default function SignUp(props) {
               t("Thank you for creating an account")
             );
             setTimeout(() => {
-              props.history.push("/signin/");
+              history.push("/signin/");
             }, 5000);
           }
         })
@@ -309,7 +312,7 @@ export default function SignUp(props) {
       //           .then(()=>{
       //             setSnackbarOption('success', `${t('Thank you for creating an account')} ${t('이메일 인증 후 이용이 가능합니다.')} ${t('메일발송까지 5-10분 정도 소요될 수 있습니다.')}`);
       //             setTimeout(()=>{
-      //               props.history.push('/signin/');
+      //               history.push('/signin/');
       //             }, 5000);
       //           })
       //           .catch((e)=>{
@@ -500,7 +503,7 @@ export default function SignUp(props) {
         return res.data.user.isAgreedWithPolicy;
       })
       .then((isAgreed) => {
-        props.history.push("");
+        history.push("");
       })
       .then(() => {
         localStorage.setItem("userId", email);
