@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import currentTheme from "assets/jss/custom.js";
 import InputBase from "@material-ui/core/InputBase";
 import { useDispatch, useSelector } from "react-redux";
-import { askModalRequestAction, openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  askModalRequestAction,
+  openErrorSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { Grid } from "@material-ui/core";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -52,7 +55,9 @@ const RequestInspecting = (props) => {
         }
       })
       .catch((e) => {
-        dispatch(openErrorSnackbarRequestAction(t("Failed to fetch information.")));
+        dispatch(
+          openErrorSnackbarRequestAction(t("Failed to fetch information."))
+        );
       });
 
     setIsLoading(false);
@@ -86,7 +91,9 @@ const RequestInspecting = (props) => {
 
   const requestNextStep = () => {
     if (regExp.test(requestPhoneNumber) === false) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter your mobile number.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your mobile number."))
+      );
       return;
     }
     api
@@ -103,11 +110,19 @@ const RequestInspecting = (props) => {
         setStep((prevStep) => prevStep + 1);
       })
       .catch((e) => {
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("A problem occurred during the inspection request.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("A problem occurred during the inspection request.")
+            )
+          );
         }
       });
   };
@@ -136,7 +151,11 @@ const RequestInspecting = (props) => {
             {step === 0 && (
               <>
                 <div>
-                  <Grid container justify="space-between" style={{ marginBottom: "24px" }}>
+                  <Grid
+                    container
+                    justify="space-between"
+                    style={{ marginBottom: "24px" }}
+                  >
                     <Grid item>현재 진행된 라벨링 건수</Grid>
                     <Grid item>{totalCnt.toLocaleString()} 건</Grid>
                   </Grid>
@@ -157,7 +176,9 @@ const RequestInspecting = (props) => {
                     autoFocus
                     value={requestLabelingContent}
                     onChange={changeRequestLabelingContent}
-                    placeholder={t("ex.신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이 있다면 다른 물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다.")}
+                    placeholder={t(
+                      "ex.신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이 있다면 다른 물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다."
+                    )}
                     id="requestLabelingContent"
                     style={{
                       display: "block",
@@ -229,12 +250,20 @@ const RequestInspecting = (props) => {
                         <Grid item>
                           {resData &&
                             Object.keys(resData).map((key) => (
-                              <Grid key={labelingTypes[key].name} container justify="space-between">
+                              <Grid
+                                key={labelingTypes[key].name}
+                                container
+                                justify="space-between"
+                              >
                                 <Grid item>
-                                  {labelingTypes[key].name} 라벨링 금액 ({resData[key].count.toLocaleString()}건):
+                                  {labelingTypes[key].name} 라벨링 금액 (
+                                  {resData[key].count.toLocaleString()}건):
                                 </Grid>
                                 <Grid item>
-                                  {(resData[key].price * resData[key].count).toLocaleString()}원 (건당 {resData[key].price}원)
+                                  {(
+                                    resData[key].price * resData[key].count
+                                  ).toLocaleString()}
+                                  원 (건당 {resData[key].price}원)
                                 </Grid>
                               </Grid>
                             ))}
@@ -260,7 +289,8 @@ const RequestInspecting = (props) => {
                               fontSize: "14px",
                             }}
                           >
-                            *예상금액은 참고용 가격으로 컨설팅 이후 변경될 수 있습니다.
+                            *예상금액은 참고용 가격으로 컨설팅 이후 변경될 수
+                            있습니다.
                           </b>
                         </Grid>
                       </Grid>
@@ -273,12 +303,18 @@ const RequestInspecting = (props) => {
           <footer style={{ marginTop: "24px" }}>
             <Grid container justify="flex-end" alignItems="center" spacing={1}>
               <Grid item>
-                <Button onClick={cancelRequestInspecting} className={classes.defaultGreyOutlineButton}>
+                <Button
+                  onClick={cancelRequestInspecting}
+                  className={classes.defaultGreyOutlineButton}
+                >
                   취소
                 </Button>
               </Grid>
               <Grid item>
-                <Button onClick={requestNextStep} className={classes.defaultGreyOutlineButton}>
+                <Button
+                  onClick={requestNextStep}
+                  className={classes.defaultGreyOutlineButton}
+                >
                   검수요청
                 </Button>
               </Grid>
@@ -286,12 +322,21 @@ const RequestInspecting = (props) => {
           </footer>
         </div>
       ) : (
-        <Grid container className={classes.defaultModalContent} justify="space-between" alignItems="center" direction="column">
+        <Grid
+          container
+          className={classes.defaultModalContent}
+          justify="space-between"
+          alignItems="center"
+          direction="column"
+        >
           <Grid item style={{ padding: "80px 0" }}>
             라벨링 검수 의뢰가 완료되었습니다. 확인 후 빠르게 연락드리겠습니다.{" "}
           </Grid>
           <Grid item style={{ alignSelf: "flex-end" }}>
-            <Button onClick={cancelRequestInspecting} className={classes.defaultGreyOutlineButton}>
+            <Button
+              onClick={cancelRequestInspecting}
+              className={classes.defaultGreyOutlineButton}
+            >
               닫기
             </Button>
           </Grid>

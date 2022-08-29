@@ -313,10 +313,8 @@ class PredictImage:
         generated_ids = self.models["OCR"]["model"].generate(pixel_values)
         generated_text = self.models["OCR"]["processor"].batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-        if info:
-            ocrResultRaw = json.dumps({"result": generated_text}, default=self.convert, ensure_ascii=False)
-            return HTTP_200_OK, ocrResultRaw
-        return
+        result = json.dumps({"predict_value": generated_text}, default=self.convert, ensure_ascii=False)
+        return result
 
     def get_image_to_text(self, file, image, info=False):
 

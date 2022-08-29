@@ -1288,7 +1288,7 @@ function* getDataconnectorInfo(action) {
       ),
     });
 
-    history.push("/admin/dataconnector");
+    history.goBack();
   }
 }
 

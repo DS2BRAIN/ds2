@@ -17,6 +17,7 @@ import {
 } from "redux/reducers/projects.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import "assets/css/material-control.css";
+import { listPagination } from "components/Function/globalFunc";
 import DataIntro from "components/Guide/DataIntro.js";
 import Templates from "components/Templates/Templates.js";
 import SearchInputBox from "components/Table/SearchInputBox";
@@ -54,6 +55,11 @@ const Dataconnector = ({ history }) => {
     []
   );
 
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isProjectStartLoading, setIsProjectStartLoading] = useState(false);
   const [introOn, setIntroOn] = useState(false);
@@ -64,8 +70,8 @@ const Dataconnector = ({ history }) => {
   const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(10);
   const [sortDataValue, setSortDataValue] = useState("created_at");
   const [isSortDesc, setIsSortDesc] = useState(true);
-  const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isPublicData, setIsPublicData] = useState(false);
+  const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
     false
   );
@@ -101,6 +107,18 @@ const Dataconnector = ({ history }) => {
   }, []);
 
   useEffect(() => {
+    const pagiInfoDict = listPagination(urlLoc);
+    setDatatablePage(pagiInfoDict.page);
+    setDatatableRowsPerPage(pagiInfoDict.rows);
+    setSortDataValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setSearchedDataValue(pagiInfoDict.search);
+    setIsPublicData(pagiInfoDict.public);
+
+    setIsDataRequested(true);
+  }, [urlSearch]);
+
+  useEffect(() => {
     if (isDataRequested) {
       getDataByDispatch();
       setIsDataRequested(false);
@@ -108,17 +126,17 @@ const Dataconnector = ({ history }) => {
   }, [isDataRequested]);
 
   useEffect(() => {
-    setIsDataRequested(true);
-  }, [isPublicData]);
-
-  useEffect(() => {
     if (isSearchHiddenForRefresh) setIsSearchHiddenForRefresh(false);
   }, [isSearchHiddenForRefresh]);
 
   useEffect(() => {
-    setDatatablePage(0);
-    setIsLoading(true);
-    setIsDataRequested(true);
+    let urlSP = urlSearchParams;
+    let searchVal = searchedDataValue;
+    if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
+      urlSP.set("search", searchVal);
+    }
+    handleSearchParams(urlSP);
   }, [searchedDataValue]);
 
   useEffect(() => {
@@ -223,12 +241,13 @@ const Dataconnector = ({ history }) => {
 
   useEffect(() => {
     if (projects.isDatasetPosted) {
-      setSearchedDataValue("");
       setIsSearchHiddenForRefresh(true);
-      setSortDataValue("created_at");
-      setDatatablePage(0);
-      setIsSortDesc(true);
-      setIsDataRequested(true);
+      let urlSP = urlSearchParams;
+      if (urlSP.has("page")) urlSP.delete("page");
+      if (urlSP.has("sorting")) urlSP.delete("sorting");
+      if (urlSP.has("desc")) urlSP.delete("desc");
+      if (urlSP.has("search")) urlSP.delete("search");
+      handleSearchParams(urlSP);
     }
   }, [projects.isDatasetPosted]);
 
@@ -240,7 +259,8 @@ const Dataconnector = ({ history }) => {
         else setDatasetList(reduxDataset);
       } else {
         if (datatablePage) {
-          setDatatablePage(datatablePage - 1);
+          urlSearchParams.set("page", 1);
+          handleSearchParams(urlSearchParams);
           setTimeTick(-2);
         }
       }
@@ -271,6 +291,10 @@ const Dataconnector = ({ history }) => {
     }
 
     dispatch(getDataconnectorsRequestAction(payloadJson));
+  };
+
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
   };
 
   const checkNewPageAllSelected = (dataset, selIdList) => {
@@ -647,14 +671,14 @@ const Dataconnector = ({ history }) => {
 
     const dataTablePagination = () => {
       const handleDataconnectorChangePage = (event, newPage) => {
-        setDatatablePage(newPage);
-        setIsDataRequested(true);
+        urlSearchParams.set("page", newPage + 1);
+        handleSearchParams(urlSearchParams);
       };
 
       const handleChangeDatatableRowsPerPage = (event) => {
-        setDatatableRowsPerPage(+event.target.value);
-        setDatatablePage(0);
-        setIsDataRequested(true);
+        urlSearchParams.delete("page");
+        urlSearchParams.set("rows", event.target.value);
+        handleSearchParams(urlSearchParams);
       };
 
       return (
@@ -946,28 +970,31 @@ const Dataconnector = ({ history }) => {
     setSelectedDataIdList([]);
     setAllSelected(false);
     setIsSearchHiddenForRefresh(true);
-    setDatatablePage(0);
-    setDatatableRowsPerPage(10);
-    setSearchedDataValue("");
-    setSortDataValue("created_at");
+
+    let urlSP = urlSearchParams;
+    if (urlSP.has("page")) urlSP.delete("page");
+    if (urlSP.has("rows")) urlSP.delete("rows");
+    if (urlSP.has("sorting")) urlSP.delete("sorting");
+    if (urlSP.has("search")) urlSP.delete("search");
 
     if (data === "private") {
-      setIsPublicData(false);
+      urlSP.delete("public");
     } else if (data === "public") {
-      setIsPublicData(true);
+      urlSP.set("public", true);
     }
+    handleSearchParams(urlSP);
   };
 
   const onSetSortDataValue = (value) => {
+    let urlSP = urlSearchParams;
     if (value === sortDataValue) {
-      let tempIsSortDesc = isSortDesc;
-      setIsSortDesc(!tempIsSortDesc);
+      urlSP.set("desc", !isSortDesc);
     } else {
-      setSortDataValue(value);
-      setIsSortDesc(true);
+      urlSP.set("sorting", value);
+      urlSP.delete("desc");
     }
-    setDatatablePage(0);
-    setIsDataRequested(true);
+    if (urlSP.has("page")) urlSP.delete("page");
+    handleSearchParams(urlSP);
   };
 
   const startLabeling = () => {
@@ -1297,12 +1324,7 @@ const Dataconnector = ({ history }) => {
               {publicDataTab}
             </Grid>
             <Grid item xs={4}>
-              {isSearchHiddenForRefresh ? null : (
-                <SearchInputBox
-                  tooltipText="Enter the data name."
-                  setSearchedValue={setSearchedDataValue}
-                />
-              )}
+              {isSearchHiddenForRefresh ? null : <SearchInputBox />}
             </Grid>
           </Grid>
           <Grid
