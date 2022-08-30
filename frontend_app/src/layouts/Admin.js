@@ -63,6 +63,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import amplitude from "amplitude-js";
 import { openChat } from "components/Function/globalFunc";
 import i18n from "language/i18n";
+import Diagram from "views/Main/Diagram";
 let ps;
 const useStyles = makeStyles(styles);
 // Import the functions you need from the SDKs you need
@@ -146,6 +147,11 @@ const Admin = ({ history, ...rest }) => {
         path="/admin/flow"
         {...rest}
         render={(props) => <Flow {...props} />}
+      />
+      <Route
+        path="/admin/diagram"
+        {...rest}
+        render={(props) => <Diagram {...props} />}
       />
       <Route
         path="/admin/setting"
