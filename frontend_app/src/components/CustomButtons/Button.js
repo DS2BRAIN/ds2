@@ -8,7 +8,7 @@ import PastMaterialButton from "./PastMaterialButton";
 import { styled } from "@mui/material/styles";
 
 const TraceableButton = (props) => {
-  const { id, shape, size, disabled, children, onClick, ...rest } = props;
+  const { id, shape, size, disabled, children, ...rest } = props;
   const { user } = useSelector((state) => ({ user: state.user }), []);
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
@@ -115,7 +115,7 @@ const TraceableButton = (props) => {
     if (id) {
       eventText = "Click_Button_" + id;
     }
-    onClick();
+    props.onClick();
     if (user?.me && user?.me.isAgreedBehaviorStatistics) {
       amplitude.getInstance().logEvent("button click : " + window.location.pathname + " : " + eventText);
     }
@@ -123,7 +123,7 @@ const TraceableButton = (props) => {
 
   if (disabled) {
     return (
-      <DefaultButton id={id} disabled={disabled} onClick={customClick} {...rest}>
+      <DefaultButton id={id} disabled={disabled} {...rest}>
         {children}
       </DefaultButton>
     );
