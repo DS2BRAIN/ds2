@@ -399,9 +399,9 @@ export default function MarketList({ history }) {
       await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
       // await setSelectedMarketModel(marketModel);
-      if (models.model?.externalAiType?.indexOf("image") > -1 ) {
+      if (marketModel?.externalAiType?.indexOf("image") > -1 || marketModel?.externalAiType?.indexOf("object_detection") > -1 ) {
         await setChosenItem("apiImage");
-      } else if (models.model?.externalAiType?.indexOf("audio") > -1 ) {
+      } else if (marketModel?.externalAiType?.indexOf("audio") > -1 ) {
         await setChosenItem("ApiSpeechToText");
       } else {
         await setChosenItem("api");
