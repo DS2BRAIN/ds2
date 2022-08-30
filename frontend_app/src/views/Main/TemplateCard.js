@@ -22,6 +22,7 @@ const TemplateCard = ({ template }) => {
         <Grid
           sx={{
             backgroundColor: "rgba(255, 255, 255, 0.2)",
+            borderRadius: "2px",
             height: `${thumbHeight}px`,
             display: "flex",
             justifyContent: "center",

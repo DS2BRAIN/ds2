@@ -22,8 +22,8 @@ const WorkSpaceCard = ({ flow }) => {
           alignItems: "center",
           fontSize: "10px",
           fontWeight: 300,
-          border: "1px solid var(--textWhite6)",
           borderRadius: "4px",
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
           minWidth: "80px",
           minHeight: "60px",
         }}
