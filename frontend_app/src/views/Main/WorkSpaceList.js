@@ -17,7 +17,7 @@ const WorkSpaceList = () => {
         </Grid>
       </Grid>
       {mockupFlows.map((flow) => (
-        <WorkSpaceCard flow={flow} />
+        <WorkSpaceCard key={`workspace_card_${flow.id}`} flow={flow} />
       ))}
     </Grid>
   );
