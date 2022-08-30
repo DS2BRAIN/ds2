@@ -115,9 +115,8 @@ const TraceableButton = (props) => {
     if (id) {
       eventText = "Click_Button_" + id;
     }
-    console.log("onClick");
     onClick();
-    if (user.me && user.me.isAgreedBehaviorStatistics) {
+    if (user?.me && user?.me.isAgreedBehaviorStatistics) {
       amplitude.getInstance().logEvent("button click : " + window.location.pathname + " : " + eventText);
     }
   }
