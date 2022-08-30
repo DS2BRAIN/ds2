@@ -321,7 +321,7 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     console.log("amplitude init");
-    amplitude.getInstance().init("1cbafbadf45197fffec28396736998d7");
+    amplitude.getInstance().init("446d673fc8928366cc815f058ba93381");
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
