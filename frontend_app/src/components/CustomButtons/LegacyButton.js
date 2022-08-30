@@ -40,19 +40,6 @@ export default function RegularButton(props) {
     ...rest
   } = props;
 
-  useEffect(() => {
-    if (user.me && user.me.isAgreedBehaviorStatistics) {
-      setIsAgreedBehaviorStatistics(true);
-      const analytics = getAnalytics();
-      amplitude.getInstance().logEvent(window.location.pathname);
-      logEvent(analytics, "select_content", {
-        content_type: "page",
-        content_id: "1",
-        items: [{ name: "window.location.pathname" }],
-      });
-    }
-  }, [user]);
-
   if (isAgreedBehaviorStatistics) {
     const analytics = getAnalytics();
     logEvent(analytics, "select_button", {
