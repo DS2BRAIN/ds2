@@ -15,9 +15,8 @@ import {
 } from "redux/reducers/user.js";
 import { IS_ENTERPRISE } from "variables/common";
 
-import { Badge, Popover, Tooltip } from "@material-ui/core";
-import { CircularProgress, Grid, IconButton } from "@mui/material";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
+import { Popover } from "@material-ui/core";
+import { Badge, CircularProgress, Grid, IconButton } from "@mui/material";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
 const NotiPopover = () => {
@@ -29,7 +28,6 @@ const NotiPopover = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [isNotiLoading, setIsNotiLoading] = useState(false);
-  const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
 
   useEffect(() => {
     window.ChannelIO("onShow", function() {
@@ -70,7 +68,7 @@ const NotiPopover = () => {
       >
         <Badge
           badgeContent={notis ? (notis.length >= 30 ? "30+" : notis.length) : 0}
-          color="secondary"
+          color="error"
         >
           <NotificationsIcon className={classes.fillBDhoverFF} />
         </Badge>
@@ -144,13 +142,13 @@ const NotiPopover = () => {
       const onClickLabellingProject = async (id, project) => {
         setAnchorEl(null);
         await dispatch(postCheckAsynctasksRequestAction(id));
-        await history.push(`/admin/labelling/${project}`);
+        history.push(`/admin/labelling/${project}`);
       };
 
       const onClickDevelopProject = async (id, project) => {
         setAnchorEl(null);
         await dispatch(postCheckAsynctasksRequestAction(id));
-        await history.push(`/admin/train/${project}`);
+        history.push(`/admin/train/${project}`);
       };
 
       const onCheckNavbarAlarm = async (id) => {
