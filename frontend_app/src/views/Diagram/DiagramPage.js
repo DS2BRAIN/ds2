@@ -4,9 +4,10 @@ import "beautiful-react-diagrams/styles.css";
 import "./diagram-style.css";
 
 import { NodeRecipe } from "./NodeRecipe";
-
 import Button from "components/CustomButtons/Button";
+
 import { Grid } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 const initialSchema = createSchema({
   nodes: [
@@ -66,12 +67,41 @@ const initialSchema = createSchema({
 });
 
 const DiagramPage = () => {
-  const [schema, { onChange }] = useSchema(initialSchema);
+  const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
+
+  const deleteNodeFromSchema = (id) => {
+    const nodeToRemove = schema.nodes.find((node) => node.id === id);
+    removeNode(nodeToRemove);
+  };
+
+  const addNewNode = () => {
+    const nextNode = {
+      id: `node-${schema.nodes.length + 1}`,
+      content: `Node ${schema.nodes.length + 1}`,
+      coordinates: [
+        schema.nodes[schema.nodes.length - 1].coordinates[0] + 100,
+        schema.nodes[schema.nodes.length - 1].coordinates[1],
+      ],
+      render: NodeRecipe,
+      data: { onClick: deleteNodeFromSchema },
+      inputs: [{ id: `port-${Math.random()}` }],
+      outputs: [{ id: `port-${Math.random()}` }],
+    };
+
+    addNode(nextNode);
+  };
 
   return (
-    <div style={{ height: "80vh" }}>
+    <Grid sx={{ height: "80vh", mt: 3 }}>
+      <Button
+        shape="greenContainedSquare"
+        startIcon={<AddIcon />}
+        onClick={addNewNode}
+      >
+        Add new node
+      </Button>
       <Diagram schema={schema} onChange={onChange} />
-    </div>
+    </Grid>
   );
 };
 
