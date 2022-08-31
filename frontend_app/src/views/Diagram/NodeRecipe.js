@@ -1,10 +1,24 @@
 import React from "react";
 
+import { IconButton, Grid } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 export const NodeRecipe = (props) => {
-  const { inputs, outputs, data } = props;
+  const { id, content, inputs, outputs, data } = props;
 
   return (
     <div className="custom-node">
+      {!(id === "node-1" || id === "node-2" || id === "node-3") && (
+        <Grid sx={{ textAlign: "right", mt: -4.25 }}>
+          <IconButton
+            icon="times"
+            size="small"
+            onClick={() => data.onClick(id)}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </Grid>
+      )}
       <div className="custom-node-header" style={{ backgroundColor: "#fff" }}>
         Custom Node
       </div>
