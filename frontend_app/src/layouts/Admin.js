@@ -63,7 +63,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import amplitude from "amplitude-js";
 import { openChat } from "components/Function/globalFunc";
 import i18n from "language/i18n";
-import DiagramPage from "views/Main/DiagramPage";
+import DiagramPage from "views/Diagram/DiagramPage";
 
 let ps;
 const useStyles = makeStyles(styles);
