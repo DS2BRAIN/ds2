@@ -932,7 +932,7 @@ export default function SignUp() {
               }}
               onClick={checkValidEmail}
             >
-              {isAbleEmail ? t("Checked") : t("중복 확인")}
+              {isAbleEmail ? t("Checked") : t("Duplicate Check")}
             </Button>
           </Grid>
           <Grid item xs={12}>
