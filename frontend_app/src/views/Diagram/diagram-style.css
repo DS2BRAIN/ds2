@@ -15,12 +15,13 @@
 }
 
 .custom-node-header {
+  display: flex;
+  justify-content: space-between;
   flex-grow: 1;
-  padding: 8px 24px;
+  padding: 8px 12px;
   margin-bottom: 8px;
   color: #212227;
   border-radius: 7px 7px 0px 0px;
-  text-align: center;
 }
 .custom-node-subheader {
   flex-grow: 1;
