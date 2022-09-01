@@ -100,7 +100,7 @@ class InnerTrip():
 
             response = requests.post(url, data=json.dumps(payload), headers=headers)
             res_string = response.json()
-            res = json.loads(res_string)['예측값정보']
+            res = json.loads(res_string)["predict_value_info"]
             res_final = sorted(res, key=lambda res: (res['value']), reverse=True)
             df = df.append(res_final)
 
@@ -124,7 +124,7 @@ class InnerTrip():
 
                 response = requests.post(url, data=json.dumps(payload), headers=headers)
                 res_string = response.json()
-                res = json.loads(res_string)['예측값정보']
+                res = json.loads(res_string)["predict_value_info"]
                 res_final = sorted(res, key=lambda res: (res['value']), reverse=True)
                 df_1 = df_1.append(res_final)
 

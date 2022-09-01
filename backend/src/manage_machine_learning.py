@@ -23,11 +23,8 @@ from machine_learning.keras_ann import KerasAnn
 from machine_learning.fastai_ann import FastAnn
 import json
 import os
-if os.path.exists('./src/training/predict.py'):
-    from src.training import predict
-    predictClass = predict.Predict(isLoadModel=True)
-else:
-    predictClass = None
+from src.managePredict import ManagePredict
+predictClass = ManagePredict()
 
 class ManageMachineLearning(ManageBaseClass):
     def __init__(self):

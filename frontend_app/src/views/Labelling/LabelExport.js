@@ -7,7 +7,15 @@ import * as api from "controller/labelApi.js";
 import { getAsynctaskAll } from "controller/api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { getRecentProjectsRequestAction } from "redux/reducers/projects.js";
-import { askProjectFromLabelRequestAction, askExportCocoRequestAction, askExportVocRequestAction, askExportDataRequestAction, openSuccessSnackbarRequestAction, openErrorSnackbarRequestAction, askResetMessageRequestAction } from "redux/reducers/messages.js";
+import {
+  askProjectFromLabelRequestAction,
+  askExportCocoRequestAction,
+  askExportVocRequestAction,
+  askExportDataRequestAction,
+  openSuccessSnackbarRequestAction,
+  openErrorSnackbarRequestAction,
+  askResetMessageRequestAction,
+} from "redux/reducers/messages.js";
 
 import { Checkbox, FormControlLabel } from "@material-ui/core";
 import { CircularProgress } from "@mui/material";
@@ -73,7 +81,10 @@ const LabelExport = ({ history }) => {
           res.data.asynctasks &&
             res.data.asynctasks.length > 0 &&
             res.data.asynctasks.map((asynctask) => {
-              if (!shoulStopProcess && asynctask.labelproject === labelprojects.projectDetail.id) {
+              if (
+                !shoulStopProcess &&
+                asynctask.labelproject === labelprojects.projectDetail.id
+              ) {
                 shoulStopProcess = true;
                 setExportCocoStatus(asynctask.status);
                 let now = new Date().toISOString();
@@ -95,7 +106,10 @@ const LabelExport = ({ history }) => {
           res.data.asynctasks &&
             res.data.asynctasks.length > 0 &&
             res.data.asynctasks.map((asynctask) => {
-              if (!shoulStopProcess && asynctask.labelproject === labelprojects.projectDetail.id) {
+              if (
+                !shoulStopProcess &&
+                asynctask.labelproject === labelprojects.projectDetail.id
+              ) {
                 shoulStopProcess = true;
                 setExportVocStatus(asynctask.status);
                 let now = new Date().toISOString();
@@ -117,7 +131,10 @@ const LabelExport = ({ history }) => {
           res.data.asynctasks &&
             res.data.asynctasks.length > 0 &&
             res.data.asynctasks.map((asynctask) => {
-              if (!shoulStopProcess && asynctask.labelproject === labelprojects.projectDetail.id) {
+              if (
+                !shoulStopProcess &&
+                asynctask.labelproject === labelprojects.projectDetail.id
+              ) {
                 shoulStopProcess = true;
                 setExportDataStatus(asynctask.status);
                 let now = new Date().toISOString();
@@ -182,7 +199,11 @@ const LabelExport = ({ history }) => {
       })
       .catch((e) => {
         if (e.response && e.response.status === 401) {
-          dispatch(openErrorSnackbarRequestAction(t("You have been logged out automatically, please log in again")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("You have been logged out automatically, please log in again")
+            )
+          );
           setTimeout(() => {
             Cookies.deleteAllCookies();
             history.push("/signin/");
@@ -190,9 +211,23 @@ const LabelExport = ({ history }) => {
           return;
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("An error occurred during the developing process. Please try again in a moment")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "An error occurred during the developing process. Please try again in a moment"
+              )
+            )
+          );
         }
       })
       .finally(() => {
@@ -210,14 +245,34 @@ const LabelExport = ({ history }) => {
       .postCocoDataset(requestInfo)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(openSuccessSnackbarRequestAction(t("COCO file conversion has started. Upon completion, it can be downloaded from the Notifications.")));
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t(
+                "COCO file conversion has started. Upon completion, it can be downloaded from the Notifications."
+              )
+            )
+          );
         }
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("An error occurred while requesting the data. Please try again in a few minutes.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "An error occurred while requesting the data. Please try again in a few minutes."
+              )
+            )
+          );
         }
       })
       .then(() => {
@@ -238,14 +293,34 @@ const LabelExport = ({ history }) => {
       .postVocDataset(requestInfo)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(openSuccessSnackbarRequestAction(t("VOC file conversion has started. Upon completion, it can be downloaded from the notifications.")));
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t(
+                "VOC file conversion has started. Upon completion, it can be downloaded from the notifications."
+              )
+            )
+          );
         }
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("An error occurred while requesting the data. Please try again in a few minutes.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "An error occurred while requesting the data. Please try again in a few minutes."
+              )
+            )
+          );
         }
       })
       .then(() => {
@@ -265,14 +340,34 @@ const LabelExport = ({ history }) => {
       .postDataset(requestInfo)
       .then((res) => {
         if (res.status === 200) {
-          dispatch(openSuccessSnackbarRequestAction(t("The file conversion has started. Upon completion, it can be downloaded from the notifications.")));
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t(
+                "The file conversion has started. Upon completion, it can be downloaded from the notifications."
+              )
+            )
+          );
         }
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("An error occurred while requesting the data. Please try again in a few minutes.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "An error occurred while requesting the data. Please try again in a few minutes."
+              )
+            )
+          );
         }
       })
       .then(() => {
@@ -288,7 +383,9 @@ const LabelExport = ({ history }) => {
     let minutes = parseInt(remainTime / 60000);
     let seconds = parseInt((remainTime % 60000) / 1000);
 
-    return user.language === "ko" ? `${minutes}분 ${seconds}초 후에 다운로드 가능합니다...` : `Download will be available in ${minutes}:${seconds} `;
+    return user.language === "ko"
+      ? `${minutes}분 ${seconds}초 후에 다운로드 가능합니다...`
+      : `Download will be available in ${minutes}:${seconds} `;
   };
 
   const secExportData = (workApp) => {
@@ -317,7 +414,17 @@ const LabelExport = ({ history }) => {
         }
 
         return (
-          <Button id={btnId} aria-controls="customized-menu" aria-haspopup="true" shape="greenOutlined" size="sm" disabled={isDisabled} startIcon={<RedoIcon className="secondaryColorIcon" />} style={{ minWidth: 136 }} onClick={saveDataFunc}>
+          <Button
+            id={btnId}
+            aria-controls="customized-menu"
+            aria-haspopup="true"
+            shape="greenOutlined"
+            size="sm"
+            disabled={isDisabled}
+            startIcon={<RedoIcon className="secondaryColorIcon" />}
+            style={{ minWidth: 136 }}
+            onClick={saveDataFunc}
+          >
             {label}
           </Button>
         );
@@ -346,7 +453,16 @@ const LabelExport = ({ history }) => {
               margin: "10px",
               alignItems: "center",
             }}
-            control={<Checkbox id={chkboxId} value={isGetImage} checked={isGetImage} onChange={handleIsGetImage} color="primary" style={{ marginRight: "4px" }} />}
+            control={
+              <Checkbox
+                id={chkboxId}
+                value={isGetImage}
+                checked={isGetImage}
+                onChange={handleIsGetImage}
+                color="primary"
+                style={{ marginRight: "4px" }}
+              />
+            }
             label={t("with images")}
           />
         );
@@ -405,12 +521,20 @@ const LabelExport = ({ history }) => {
         <>
           <div>
             {renderExportData("coco")}
-            <div className={classes.text87}>{t("Click the Save COCO button to save the labeling information in a JSON format.")}</div>
+            <div className={classes.text87}>
+              {t(
+                "Click the Save COCO button to save the labeling information in a JSON format."
+              )}
+            </div>
           </div>
 
           <div style={{ marginTop: "30px" }}>
             {renderExportData("voc")}
-            <div className={classes.text87}>{t("Click the Save VOC button to save the labeling information in a XML format.")}</div>
+            <div className={classes.text87}>
+              {t(
+                "Click the Save VOC button to save the labeling information in a XML format."
+              )}
+            </div>
           </div>
         </>
       );
@@ -418,7 +542,11 @@ const LabelExport = ({ history }) => {
       return (
         <div>
           {renderExportData()}
-          <div className={classes.text87}>{t("Click the Save button to save the labeling information in a file format.")}</div>
+          <div className={classes.text87}>
+            {t(
+              "Click the Save button to save the labeling information in a file format."
+            )}
+          </div>
         </div>
       );
   };

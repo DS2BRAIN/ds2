@@ -283,7 +283,7 @@ class Analysing():
             pass
 
         try:
-            records['__예측값__' + project['valueForPredict']] = predictRows
+            records['__predict_value__' + project['valueForPredict']] = predictRows
             confusion_matrix = sklearn_confusion_materix(actualAllRows, predictRows).tolist()
             records = records.iloc[0:120].copy()
             records = records.to_dict('records')

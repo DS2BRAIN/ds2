@@ -25,9 +25,17 @@ import currentTheme from "assets/jss/custom.js";
 import { currentThemeColor } from "assets/jss/custom.js";
 import Container from "@material-ui/core/Container";
 import { useDispatch, useSelector } from "react-redux";
-import { askDeleteProjectsReqeustAction, askModalRequestAction, openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  askDeleteProjectsReqeustAction,
+  askModalRequestAction,
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
-import { getProjectsRequestAction, getRecentJupyterProjectsRequestAction } from "redux/reducers/projects";
+import {
+  getProjectsRequestAction,
+  getRecentJupyterProjectsRequestAction,
+} from "redux/reducers/projects";
 import { ReactTitle } from "react-meta-tags";
 import Tip from "../../components/Loading/Tip";
 import TextField from "@material-ui/core/TextField";
@@ -37,11 +45,20 @@ import FileCopyIcon from "@material-ui/icons/FileCopy";
 import DeleteIcon from "@material-ui/icons/Delete";
 import * as api from "../../controller/api";
 import Typography from "@material-ui/core/Typography";
-import { PieChart, Pie, Legend, Tooltip as rechartsTooltip, Cell } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Legend,
+  Tooltip as rechartsTooltip,
+  Cell,
+} from "recharts";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import ProjectIntro from "components/Guide/ProjectIntro";
 import { putUserRequestActionWithoutMessage } from "../../redux/reducers/user";
-import { convertToLocalDateStr, openChat } from "../../components/Function/globalFunc.js";
+import {
+  convertToLocalDateStr,
+  openChat,
+} from "../../components/Function/globalFunc.js";
 import { fileurl } from "controller/api";
 import "assets/css/material-control.css";
 import TrainTutorial from "components/Guide/TrainTutorial";
@@ -79,7 +96,9 @@ const Project = ({ history }) => {
   const [selectedPage, setSelectedPage] = useState("myproject");
   const [isShared, setIsShared] = useState(false);
   const [isLoadModelModalOpen, setIsLoadModelModalOpen] = useState(false);
-  const [isNewStartModelModalOpen, setIsNewStartModelModalOpen] = useState(false);
+  const [isNewStartModelModalOpen, setIsNewStartModelModalOpen] = useState(
+    false
+  );
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [previewText, setPreviewText] = useState(null);
   const [files, setFiles] = useState(null);
@@ -232,7 +251,10 @@ const Project = ({ history }) => {
     return projects.priority.map((project, idx) => {
       let trainingMethod = "없음";
 
-      const data = [{ name: "시작전", value: 1 - project.modelProgress }, { name: "완료", value: project.modelProgress }];
+      const data = [
+        { name: "시작전", value: 1 - project.modelProgress },
+        { name: "완료", value: project.modelProgress },
+      ];
 
       const COLORS = ["#3A3B3C", "#41D4D7"];
 
@@ -288,23 +310,45 @@ const Project = ({ history }) => {
           }}
           style={{ marginRight: "30px" }}
         >
-          <div className={classes.modalContainer} style={{ flexDirection: "column" }}>
+          <div
+            className={classes.modalContainer}
+            style={{ flexDirection: "column" }}
+          >
             <PieChart width={66} height={66}>
-              <Pie dataKey="value" data={data} innerRadius={25} outerRadius={30}>
+              <Pie
+                dataKey="value"
+                data={data}
+                innerRadius={25}
+                outerRadius={30}
+              >
                 {data.map((entry, index) => (
                   <Cell fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
             </PieChart>
-            <div className={classes.smallFontWhite87}>{project.status === 0 ? t("On Queue") : t("In Progress ") + (project.modelProgress * 100).toFixed(0) + "%"}</div>
+            <div className={classes.smallFontWhite87}>
+              {project.status === 0
+                ? t("On Queue")
+                : t("In Progress ") +
+                  (project.modelProgress * 100).toFixed(0) +
+                  "%"}
+            </div>
           </div>
           <div style={{ paddingLeft: "18px" }}>
             <div className={classes.text}>
-              <b>{project.projectName && project.projectName.length > 20 ? project.projectName.substring(0, 18) + " ..." : project.projectName}</b>
+              <b>
+                {project.projectName && project.projectName.length > 20
+                  ? project.projectName.substring(0, 18) + " ..."
+                  : project.projectName}
+              </b>
             </div>
-            <div className={classes.upgradePlanSubTitle}>{t(trainingMethod)}</div>
+            <div className={classes.upgradePlanSubTitle}>
+              {t(trainingMethod)}
+            </div>
             <div className={classes.upgradePlanSubTitle}>{t(option)}</div>
-            <div className={classes.upgradePlanSubTitle}>{convertToLocalDateStr(project.updated_at)}</div>
+            <div className={classes.upgradePlanSubTitle}>
+              {convertToLocalDateStr(project.updated_at)}
+            </div>
           </div>
         </div>
       );
@@ -312,7 +356,7 @@ const Project = ({ history }) => {
   };
 
   const onGotoLabelingPage = () => {
-    history.push("/admin/labelling?page=1&sorting=created_at&desc=true&rows=10");
+    history.push("/admin/labelling");
   };
 
   const goCustomTraining = () => {
@@ -498,7 +542,7 @@ const Project = ({ history }) => {
   //     ) {
   //       status = t("Error");
   //     } else {
-  //       status = t("In Progress");
+  //       status = t("In progress");
   //     }
   //     const prj = projects.projects[i];
   //     const project = [
@@ -683,7 +727,7 @@ const Project = ({ history }) => {
   //                     }
   //                     if (
   //                       typeof d === "string" &&
-  //                       d.indexOf(t("In Progress")) > -1
+  //                       d.indexOf(t("In progress")) > -1
   //                     ) {
   //                       statusColor = "#1BC6B4";
   //                       isStatus = true;
@@ -884,7 +928,7 @@ const Project = ({ history }) => {
   //         >
   //           <div>3</div>
   //         </div>
-  //         <div style={{ fontSize: "10px" }}>{t("In Progress")}</div>
+  //         <div style={{ fontSize: "10px" }}>{t("In progress")}</div>
   //       </div>
 
   //       <div
@@ -967,8 +1011,17 @@ const Project = ({ history }) => {
   // };
 
   const onOpenStartProject = () => {
-    if (parseInt(user.me.cumulativeProjectCount) >= parseInt(+user.me.remainProjectCount + +user.me.usageplan.projects)) {
-      dispatch(openErrorSnackbarRequestAction(`${t("You can’t add a new project. You’ve reached the maximum number of projects allowed for your account")} ${t("To continue, please upgrade your plan")}`));
+    if (
+      parseInt(user.me.cumulativeProjectCount) >=
+      parseInt(+user.me.remainProjectCount + +user.me.usageplan.projects)
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          `${t(
+            "You can’t add a new project. You’ve reached the maximum number of projects allowed for your account"
+          )} ${t("To continue, please upgrade your plan")}`
+        )
+      );
       return;
     }
     setIsNewStartModelModalOpen(true);
@@ -1086,13 +1139,24 @@ const Project = ({ history }) => {
           status = t("Ready");
         } else if (projects.recentJupyterProjects[i].status === 100) {
           status = t("Completed");
-        } else if (projects.recentJupyterProjects[i].status === 99 || projects.recentJupyterProjects[i].status === 9 || projects.recentJupyterProjects[i].status < 0) {
+        } else if (
+          projects.recentJupyterProjects[i].status === 99 ||
+          projects.recentJupyterProjects[i].status === 9 ||
+          projects.recentJupyterProjects[i].status < 0
+        ) {
           status = t("Error");
         } else {
-          status = t("In Progress");
+          status = t("In progress");
         }
         const prj = projects.recentJupyterProjects[i];
-        const project = [prj.id, prj.projectName, projects.recentJupyterProjects[i].created_at ? projects.recentJupyterProjects[i].created_at.substring(0, 10) : "", status];
+        const project = [
+          prj.id,
+          prj.projectName,
+          projects.recentJupyterProjects[i].created_at
+            ? projects.recentJupyterProjects[i].created_at.substring(0, 10)
+            : "",
+          status,
+        ];
         datas.push(project);
       }
     }
@@ -1101,7 +1165,12 @@ const Project = ({ history }) => {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell id="mainHeader" className={classes.tableHead} align="left" width="40%">
+            <TableCell
+              id="mainHeader"
+              className={classes.tableHead}
+              align="left"
+              width="40%"
+            >
               <b
                 style={{
                   paddingLeft: "15px",
@@ -1111,11 +1180,25 @@ const Project = ({ history }) => {
                 {t("Project name")}
               </b>
             </TableCell>
-            <TableCell id="mainHeader" className={classes.tableHead} align="center" width="20%">
-              <b style={{ color: currentThemeColor.textWhite6 }}>{t("Date created")}</b>
+            <TableCell
+              id="mainHeader"
+              className={classes.tableHead}
+              align="center"
+              width="20%"
+            >
+              <b style={{ color: currentThemeColor.textWhite6 }}>
+                {t("Date created")}
+              </b>
             </TableCell>
-            <TableCell id="mainHeader" className={classes.tableHead} align="center" width="20%">
-              <b style={{ color: currentThemeColor.textWhite6 }}>{t("Status")}</b>
+            <TableCell
+              id="mainHeader"
+              className={classes.tableHead}
+              align="center"
+              width="20%"
+            >
+              <b style={{ color: currentThemeColor.textWhite6 }}>
+                {t("Status")}
+              </b>
             </TableCell>
           </TableRow>
         </TableHead>
@@ -1125,7 +1208,10 @@ const Project = ({ history }) => {
               key={idx}
               className={classes.tableRow}
               style={{
-                background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                background:
+                  idx % 2 === 0
+                    ? currentTheme.tableRow1
+                    : currentTheme.tableRow2,
               }}
             >
               {data.map((d, idx) => {
@@ -1136,7 +1222,10 @@ const Project = ({ history }) => {
                     statusColor = "#6B6B6B";
                     isStatus = true;
                   }
-                  if (typeof d === "string" && d.indexOf(t("In Progress")) > -1) {
+                  if (
+                    typeof d === "string" &&
+                    d.indexOf(t("In progress")) > -1
+                  ) {
                     statusColor = "#1BC6B4";
                     isStatus = true;
                   }
@@ -1149,7 +1238,11 @@ const Project = ({ history }) => {
                     isStatus = true;
                   }
                   return (
-                    <TableCell className={classes.tableRowCell} align={idx === 1 ? "left" : "center"} onClick={() => goJupyterProjectDetail(data[0])}>
+                    <TableCell
+                      className={classes.tableRowCell}
+                      align={idx === 1 ? "left" : "center"}
+                      onClick={() => goJupyterProjectDetail(data[0])}
+                    >
                       <div
                         style={
                           idx === 1
@@ -1161,7 +1254,10 @@ const Project = ({ history }) => {
                             : { wordBreak: "break-all", color: statusColor }
                         }
                       >
-                        <div style={{ display: isStatus ? "inline" : "none" }}>⦁</div> {d}
+                        <div style={{ display: isStatus ? "inline" : "none" }}>
+                          ⦁
+                        </div>{" "}
+                        {d}
                       </div>
                     </TableCell>
                   );
@@ -1181,14 +1277,23 @@ const Project = ({ history }) => {
     }
 
     let filename = files[0].name;
-    if (filename.toLowerCase().indexOf(".pth") === -1 && filename.toLowerCase().indexOf(".zip") === -1) {
-      dispatch(openErrorSnackbarRequestAction(t("Please upload a pth file or a zip file.")));
+    if (
+      filename.toLowerCase().indexOf(".pth") === -1 &&
+      filename.toLowerCase().indexOf(".zip") === -1
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please upload a pth file or a zip file.")
+        )
+      );
       return;
     }
 
     setIsPreviewLoading(true);
     setFiles(files[0]);
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been uploaded")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been uploaded"))
+    );
     setPreviewText(filename);
   };
 
@@ -1196,7 +1301,9 @@ const Project = ({ history }) => {
     setProgress(0);
     setFiles(null);
     setPreviewText(null);
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been deleted")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been deleted"))
+    );
   };
 
   function sleep(ms) {
@@ -1213,15 +1320,21 @@ const Project = ({ history }) => {
       .postProjectWithModelFile(files)
       .then((res) => {
         if (res.data) {
-          dispatch(openSuccessSnackbarRequestAction(t("The model has been uploaded.")));
+          dispatch(
+            openSuccessSnackbarRequestAction(t("The model has been uploaded."))
+          );
           window.location.href = `/admin/train/` + res.data.id;
         }
       })
       .catch((err) => {
         if (err.response.data.code === "5030001") {
-          dispatch(openErrorSnackbarRequestAction(t("This is not a valid model file.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("This is not a valid model file."))
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Please try again in a moment.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please try again in a moment."))
+          );
         }
       });
     let oldProgress = progress;
@@ -1241,13 +1354,22 @@ const Project = ({ history }) => {
     <div>
       <ReactTitle title={"DS2.ai - " + t("AI development")} />
       {introOn ? (
-        <ProjectIntro setIntroOn={setIntroOn} setIntroOffClicked={setIntroOffClicked} useTranslation={useTranslation} userLang={user.language} />
+        <ProjectIntro
+          setIntroOn={setIntroOn}
+          setIntroOffClicked={setIntroOffClicked}
+          useTranslation={useTranslation}
+          userLang={user.language}
+        />
       ) : (
         <>
           <GridContainer style={{ alignItems: "center" }}>
             <GridItem xs={12} style={currentTheme.titleGridItem}>
               <div className={classes.topTitle}>{t("AI development")}</div>
-              <div className={classes.subTitleText}>{t("Create new projects and develop your own AI models. Analyze your data and make predictions.")}</div>
+              <div className={classes.subTitleText}>
+                {t(
+                  "Create new projects and develop your own AI models. Analyze your data and make predictions."
+                )}
+              </div>
             </GridItem>
             {isLoading || projects.isLoading ? (
               <GridItem xs={12}>
@@ -1334,11 +1456,17 @@ const Project = ({ history }) => {
 
                     <>
                       <GridItem xs={3} lg={2}>
-                        <b className={classes.subTitle}>{t("Recent Custom Training")}</b>
+                        <b className={classes.subTitle}>
+                          {t("Recent Custom Training")}
+                        </b>
                       </GridItem>
                       <GridItem xs={9} lg={10}>
                         <div className={classes.alignRight}>
-                          <Button id="startProjectButton" className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH35}`} onClick={onOpenStartProject}>
+                          <Button
+                            id="startProjectButton"
+                            className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH35}`}
+                            onClick={onOpenStartProject}
+                          >
                             {t("Create a new project")}
                           </Button>
                           <Button
@@ -1351,7 +1479,8 @@ const Project = ({ history }) => {
                             {t("Load Model")}
                           </Button>
                         </div>
-                        {projects.recentJupyterProjects && projects.recentJupyterProjects.length > 0 ? (
+                        {projects.recentJupyterProjects &&
+                        projects.recentJupyterProjects.length > 0 ? (
                           renderRecentProject()
                         ) : (
                           <div
@@ -1368,19 +1497,33 @@ const Project = ({ history }) => {
                                 alignItems: "flex-end",
                               }}
                             >
-                              <span className={classes.startTriggerBtn} id="newProjectDiv">
-                                {t("You can start a project by clicking the top right button.")}
+                              <span
+                                className={classes.startTriggerBtn}
+                                id="newProjectDiv"
+                              >
+                                {t(
+                                  "You can start a project by clicking the top right button."
+                                )}
                               </span>
                               <div style={{ cursor: "pointer" }}>
                                 <span
                                   className={classes.manualTriggerBtn}
                                   onClick={() => {
-                                    window.open(user.language === "en" ? "https://www.notion.so/dslabglobal/Guide-to-CLICK-AI-1286524a5302472ebdf2eb546f113462" : "https://www.notion.so/dslabglobal/CLICK-AI-de9396dd36be46609fb5ffbef2ec1007", "_blank");
+                                    window.open(
+                                      user.language === "en"
+                                        ? "https://www.notion.so/dslabglobal/Guide-to-CLICK-AI-1286524a5302472ebdf2eb546f113462"
+                                        : "https://www.notion.so/dslabglobal/CLICK-AI-de9396dd36be46609fb5ffbef2ec1007",
+                                      "_blank"
+                                    );
                                   }}
                                 >
                                   {t("Go to Manual")}
                                 </span>
-                                <ArrowForwardIosIcon id="manualIcon" fontSize="xs" className={classes.manualTriggerBtn} />
+                                <ArrowForwardIosIcon
+                                  id="manualIcon"
+                                  fontSize="xs"
+                                  className={classes.manualTriggerBtn}
+                                />
                               </div>
                             </div>
                           </div>
@@ -1392,7 +1535,9 @@ const Project = ({ history }) => {
                   <GridContainer style={{ height: "40px" }}></GridContainer>
                   <GridContainer>
                     <GridItem xs={3} lg={2}>
-                      <b className={classes.subTitle}>{t("AutoML Training Status")}</b>
+                      <b className={classes.subTitle}>
+                        {t("AutoML Training Status")}
+                      </b>
                     </GridItem>
                     <GridItem
                       xs={9}
@@ -1405,13 +1550,20 @@ const Project = ({ history }) => {
                       {projects.priority?.length > 0 ? (
                         renderProcessingProject()
                       ) : (
-                        <div className={classes.subContent} style={{ width: "100%", alignSelf: "flex-start" }}>
-                          {t("There is no training project in progress at the moment.")}
+                        <div
+                          className={classes.subContent}
+                          style={{ width: "100%", alignSelf: "flex-start" }}
+                        >
+                          {t(
+                            "There is no training project in progress at the moment."
+                          )}
                         </div>
                       )}
                     </GridItem>
                   </GridContainer>
-                  {user.language === "ko" && <TrainTutorial history={history} />}
+                  {user.language === "ko" && (
+                    <TrainTutorial history={history} />
+                  )}
                 </GridItem>
               </>
             )}
@@ -1419,10 +1571,26 @@ const Project = ({ history }) => {
         </>
       )}
 
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isTemplateModalOpen} onClose={closeTemplateModal} className={classes.modalContainer}>
-        <Samples className={classes.predictModalContent} closeTemplateModal={closeTemplateModal} history={history} />
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isTemplateModalOpen}
+        onClose={closeTemplateModal}
+        className={classes.modalContainer}
+      >
+        <Samples
+          className={classes.predictModalContent}
+          closeTemplateModal={closeTemplateModal}
+          history={history}
+        />
       </Modal>
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isLoadModelModalOpen} onClose={closeLoadModelModal} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isLoadModelModalOpen}
+        onClose={closeLoadModelModal}
+        className={classes.modalContainer}
+      >
         {isLoading ? (
           <div className={classes.modalLoading}>
             {/* <Tip /> */}
@@ -1441,9 +1609,16 @@ const Project = ({ history }) => {
                 }}
               >
                 <GridItem xs={11}>
-                  <div>{t("Model loading supports Pytorch and tensorflow2.")}</div>
+                  <div>
+                    {t("Model loading supports Pytorch and tensorflow2.")}
+                  </div>
                 </GridItem>
-                <CloseIcon xs={1} id="deleteLabelIcon" className={classes.pointerCursor} onClick={closeLoadModelModal} />
+                <CloseIcon
+                  xs={1}
+                  id="deleteLabelIcon"
+                  className={classes.pointerCursor}
+                  onClick={closeLoadModelModal}
+                />
               </div>
               <>
                 <div style={{ width: "100%", textAlign: "center" }}>
@@ -1458,7 +1633,10 @@ const Project = ({ history }) => {
                     }}
                   >
                     <>
-                      <div className={classes.uploadContent} style={{ width: "95%" }}>
+                      <div
+                        className={classes.uploadContent}
+                        style={{ width: "95%" }}
+                      >
                         {isPreviewLoading ? (
                           <div
                             style={{
@@ -1468,7 +1646,9 @@ const Project = ({ history }) => {
                             }}
                           >
                             <Loading size={200} />
-                            <b className={classes.text87}>{t("Uploading file. Please wait a moment.")}</b>
+                            <b className={classes.text87}>
+                              {t("Uploading file. Please wait a moment.")}
+                            </b>
                           </div>
                         ) : (
                           <Dropzone onDrop={dropFiles}>
@@ -1484,9 +1664,13 @@ const Project = ({ history }) => {
                                     >
                                       <input {...getInputProps()} />
                                       <p className={classes.dropzoneText}>
-                                        {t("Drag the file or click the box to upload it!")}
+                                        {t(
+                                          "Drag the file or click the box to upload it!"
+                                        )}
                                         <br />
-                                        {t("Only PTH and ZIP files under 5GB are supported.")}
+                                        {t(
+                                          "Only PTH and ZIP files under 5GB are supported."
+                                        )}
                                         <br />
                                       </p>
                                       <CloudUploadIcon fontSize="large" />
@@ -1531,7 +1715,8 @@ const Project = ({ history }) => {
                               <span
                                 id="uploadFileAgain"
                                 style={{
-                                  borderBottom: "2px solid " + currentThemeColor.secondary1,
+                                  borderBottom:
+                                    "2px solid " + currentThemeColor.secondary1,
                                   cursor: "pointer",
                                 }}
                                 onClick={() => {
@@ -1543,8 +1728,15 @@ const Project = ({ history }) => {
                             </div>
                           </div>
                         ) : (
-                          <div style={{ marginTop: "40px" }} className={classes.text87} id="informText">
-                            {t("No files uploaded. Please upload your data file.")} <br />
+                          <div
+                            style={{ marginTop: "40px" }}
+                            className={classes.text87}
+                            id="informText"
+                          >
+                            {t(
+                              "No files uploaded. Please upload your data file."
+                            )}{" "}
+                            <br />
                           </div>
                         )}
                       </div>
@@ -1559,18 +1751,40 @@ const Project = ({ history }) => {
                   <>
                     <GridItem xs={6}></GridItem>
                     <GridItem xs={3}>
-                      <Button id="closeLoadModelModal" style={{ width: "100%", height: "1.7rem" }} className={classes.defaultF0F0OutlineButton} onClick={closeLoadModelModal}>
+                      <Button
+                        id="closeLoadModelModal"
+                        style={{ width: "100%", height: "1.7rem" }}
+                        className={classes.defaultF0F0OutlineButton}
+                        onClick={closeLoadModelModal}
+                      >
                         {t("Cancel")}
                       </Button>
                     </GridItem>
                     <GridItem xs={3}>
                       {files ? (
-                        <Button id="nextLoadModelModal" style={{ width: "100%", height: "1.7rem" }} className={classes.defaultGreenOutlineButton} onClick={confirmLoadModelModal}>
+                        <Button
+                          id="nextLoadModelModal"
+                          style={{ width: "100%", height: "1.7rem" }}
+                          className={classes.defaultGreenOutlineButton}
+                          onClick={confirmLoadModelModal}
+                        >
                           {t("Confirm")}
                         </Button>
                       ) : (
-                        <Tooltip title={<span style={{ fontSize: "11px" }}>{t("Upload file")}</span>} placement="bottom">
-                          <Button id="nextLoadModelModal" style={{ width: "100%", height: "1.7rem" }} className={classes.defaultDisabledButton} disabled>
+                        <Tooltip
+                          title={
+                            <span style={{ fontSize: "11px" }}>
+                              {t("Upload file")}
+                            </span>
+                          }
+                          placement="bottom"
+                        >
+                          <Button
+                            id="nextLoadModelModal"
+                            style={{ width: "100%", height: "1.7rem" }}
+                            className={classes.defaultDisabledButton}
+                            disabled
+                          >
                             {t("Confirm")}
                           </Button>
                         </Tooltip>
@@ -1584,7 +1798,14 @@ const Project = ({ history }) => {
         )}
       </Modal>
       {/* start project modal */}
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isNewStartModelModalOpen} onClose={closeNewStartModelModal} className={classes.modalContainer} style={{ wordBreak: "keep-all" }}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isNewStartModelModalOpen}
+        onClose={closeNewStartModelModal}
+        className={classes.modalContainer}
+        style={{ wordBreak: "keep-all" }}
+      >
         {isLoading ? (
           <div className={classes.modalLoading}>
             {/* <Tip /> */}
@@ -1605,7 +1826,11 @@ const Project = ({ history }) => {
                 <div>
                   <b>{t("New Project")}</b>
                 </div>
-                <CloseIcon id="deleteLabelIcon" className={classes.pointerCursor} onClick={closeNewStartModelModal} />
+                <CloseIcon
+                  id="deleteLabelIcon"
+                  className={classes.pointerCursor}
+                  onClick={closeNewStartModelModal}
+                />
               </div>
               <>
                 <div style={{ width: "100%", textAlign: "center" }}>
@@ -1620,26 +1845,45 @@ const Project = ({ history }) => {
                     }}
                   >
                     <>
-                      <Table className={classes.table} aria-label="simple table">
+                      <Table
+                        className={classes.table}
+                        aria-label="simple table"
+                      >
                         <TableHead>
                           <TableRow>
-                            <TableCell className={classes.tableHead} align="center" style={{ width: "16%" }}>
+                            <TableCell
+                              className={classes.tableHead}
+                              align="center"
+                              style={{ width: "16%" }}
+                            >
                               <div className={classes.tableHeader}>
                                 <b>{""}</b>
                               </div>
                             </TableCell>
-                            <TableCell className={classes.tableHead} align="center" style={{ width: "28%" }}>
+                            <TableCell
+                              className={classes.tableHead}
+                              align="center"
+                              style={{ width: "28%" }}
+                            >
                               <div className={classes.tableHeader}>
                                 <b>{"Custom Training"}</b>
                               </div>
                             </TableCell>
-                            <TableCell className={classes.tableHead} align="center" style={{ width: "28%" }}>
+                            <TableCell
+                              className={classes.tableHead}
+                              align="center"
+                              style={{ width: "28%" }}
+                            >
                               <div className={classes.tableHeader}>
                                 <b>{"AutoML"}</b>
                               </div>
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                              <TableCell className={classes.tableHead} align="center" style={{ width: "28%" }}>
+                              <TableCell
+                                className={classes.tableHead}
+                                align="center"
+                                style={{ width: "28%" }}
+                              >
                                 <div className={classes.tableHeader}>
                                   <b>{t("Consultant Development Agency")}</b>
                                 </div>
@@ -1649,72 +1893,152 @@ const Project = ({ history }) => {
                         </TableHead>
                         <TableBody>
                           <TableRow className={classes.tableRow}>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Content")}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                              {t("Develop by renting a training server and coding directly in the Jupyter environment")}
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
+                              {t(
+                                "Develop by renting a training server and coding directly in the Jupyter environment"
+                              )}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                              {t("Service that automatically develops artificial intelligence without coding")}
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
+                              {t(
+                                "Service that automatically develops artificial intelligence without coding"
+                              )}
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                              <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                                {t("Service for developing artificial intelligence after data pre-processing through direct consultation with a consultant")}
+                              <TableCell
+                                className={classes.tableRowCell}
+                                align="center"
+                                style={{ cursor: "default" }}
+                              >
+                                {t(
+                                  "Service for developing artificial intelligence after data pre-processing through direct consultation with a consultant"
+                                )}
                               </TableCell>
                             )}
                           </TableRow>
                           <TableRow className={classes.tableRow}>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Develop Period")}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Depends on code and server size")}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Fastest of options (within 3 days)")}
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                              <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                              <TableCell
+                                className={classes.tableRowCell}
+                                align="center"
+                                style={{ cursor: "default" }}
+                              >
                                 {t("Depends on data type")}
                               </TableCell>
                             )}
                           </TableRow>
                           <TableRow className={classes.tableRow}>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Cost")}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                              {t("Charge according to the term of the server lease")}
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
+                              {t(
+                                "Charge according to the term of the server lease"
+                              )}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Depends on data size")}
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                              <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                              <TableCell
+                                className={classes.tableRowCell}
+                                align="center"
+                                style={{ cursor: "default" }}
+                              >
                                 {"$ 2000"}
                               </TableCell>
                             )}
                           </TableRow>
                           <TableRow className={classes.tableRow}>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Data Preprocessing")}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Requires direct preprocessing")}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               {t("Provides basic pre-processing function")}
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                              <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                              <TableCell
+                                className={classes.tableRowCell}
+                                align="center"
+                                style={{ cursor: "default" }}
+                              >
                                 {t("Customized pretreatment available")}
                               </TableCell>
                             )}
                           </TableRow>
                           <TableRow>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}></TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            ></TableCell>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               <Button
                                 id="closeNewStartModelModal"
                                 style={{
@@ -1728,7 +2052,11 @@ const Project = ({ history }) => {
                                 {t("Start")}
                               </Button>
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ cursor: "default" }}
+                            >
                               <Button
                                 id="closeNewStartModelModal"
                                 style={{
@@ -1743,7 +2071,11 @@ const Project = ({ history }) => {
                               </Button>
                             </TableCell>
                             {process.env.REACT_APP_ENTERPRISE !== "true" && (
-                              <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                              <TableCell
+                                className={classes.tableRowCell}
+                                align="center"
+                                style={{ cursor: "default" }}
+                              >
                                 <Button
                                   id="closeNewStartModelModal"
                                   style={{

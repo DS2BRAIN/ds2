@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import * as labelApi from "controller/labelApi";
 import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
-import { convertToLocalDateStr, sendErrorMessage, setMemoryUnit } from "../../components/Function/globalFunc.js";
+import {
+  convertToLocalDateStr,
+  sendErrorMessage,
+  setMemoryUnit,
+} from "../../components/Function/globalFunc.js";
 import currentTheme from "assets/jss/custom.js";
 import RawDataTable from "views/Table/RawDataTable.js";
 
@@ -17,7 +21,11 @@ import Chip from "@mui/material/Chip";
 import CloseIcon from "@mui/icons-material/Close";
 import { fileurl } from "controller/api.js";
 
-const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }) => {
+const DataconnectorPreview = ({
+  connectorInfo,
+  sampleData,
+  isDataConnectorPage,
+}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const classes = currentTheme();
@@ -53,7 +61,17 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
         handleImgModalOpen();
       })
       .catch((err) => {
-        dispatch(openErrorSnackbarRequestAction(err.response?.data.message ? sendErrorMessage(err.response?.data.message, err.response?.data.message_en, user.language) : t("A temporary error has occurred.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            err.response?.data.message
+              ? sendErrorMessage(
+                  err.response?.data.message,
+                  err.response?.data.message_en,
+                  user.language
+                )
+              : t("A temporary error has occurred.")
+          )
+        );
         handleImgModalClose();
       })
       .finally(() => {
@@ -63,12 +81,20 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
 
   const getPath = () => {
     try {
-      if (!imgData || (connectorInfo.label_class && connectorInfo.label_class.length === 0)) return;
+      if (
+        !imgData ||
+        (connectorInfo.label_class && connectorInfo.label_class.length === 0)
+      )
+        return;
 
       const labels = imgData?.labels;
       const labelClasses = connectorInfo.label_class;
-      const width = document.getElementById("previewImage").width ? document.getElementById("previewImage").width : (imgData.height * width) / imgData.height;
-      const height = document.getElementById("previewImage").height ? document.getElementById("previewImage").height : (imgData.height * width) / imgData.width;
+      const width = document.getElementById("previewImage").width
+        ? document.getElementById("previewImage").width
+        : (imgData.height * width) / imgData.height;
+      const height = document.getElementById("previewImage").height
+        ? document.getElementById("previewImage").height
+        : (imgData.height * width) / imgData.width;
       let c = canvasRef.current;
       if (c) {
         c.width = width;
@@ -93,7 +119,10 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
                 ctx.beginPath();
                 ctx.moveTo(label.x * width, label.y * height);
                 ctx.lineTo((label.x + label.w) * width, label.y * height);
-                ctx.lineTo((label.x + label.w) * width, (label.y + label.h) * height);
+                ctx.lineTo(
+                  (label.x + label.w) * width,
+                  (label.y + label.h) * height
+                );
                 ctx.lineTo(label.x * width, (label.y + label.h) * height);
                 ctx.lineTo(label.x * width, label.y * height);
                 ctx.stroke();
@@ -146,7 +175,11 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
   }, []);
 
   useEffect(() => {
-    if (connectorInfo?.label_class && connectorInfo.label_class.length > 0 && ((imgData?.labels && imgData.labels?.length > 0) || imgData?.labelData)) {
+    if (
+      connectorInfo?.label_class &&
+      connectorInfo.label_class.length > 0 &&
+      ((imgData?.labels && imgData.labels?.length > 0) || imgData?.labelData)
+    ) {
       // object detection: imgData?.labels(labeling info), image classification: imgData?.labelData(class name)
       const tmpSet = new Set();
       const classInfos = [];
@@ -164,7 +197,8 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
         const classesIds = Array.from(tmpSet);
 
         connectorInfo.label_class.map((v, i) => {
-          if (classesIds.includes(v.id)) classInfos.push({ name: v.name, color: v.color });
+          if (classesIds.includes(v.id))
+            classInfos.push({ name: v.name, color: v.color });
         });
       }
 
@@ -176,7 +210,12 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
     (async () => {
       const previewImgEl = document.getElementById("previewImage");
 
-      if (!isImgModalLoading && imgData?.s3key && previewImgEl && connectorInfo) {
+      if (
+        !isImgModalLoading &&
+        imgData?.s3key &&
+        previewImgEl &&
+        connectorInfo
+      ) {
         getPath();
       }
     })();
@@ -184,14 +223,27 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
 
   return (
     <>
-      {connectorInfo.trainingMethod === "image" || connectorInfo.trainingMethod === "object_detection" ? (
+      {connectorInfo.trainingMethod === "image" ||
+      connectorInfo.trainingMethod === "object_detection" ? (
         <>
-          {connectorInfo.dataconnectortype.dataconnectortypeName === "Video" && (
+          {connectorInfo.dataconnectortype.dataconnectortypeName ===
+            "Video" && (
             <Grid container sx={{ mb: 3 }}>
               <figure style={{ width: "100%" }}>
-                <figcaption style={{ marginBottom: 4, fontSize: 14, fontWeight: 500 }}>{t("Video Preview")}</figcaption>
+                <figcaption
+                  style={{ marginBottom: 4, fontSize: 14, fontWeight: 500 }}
+                >
+                  {t("Video Preview")}
+                </figcaption>
                 <video width="100%" controls autoPlay>
-                  <source src={process.env.REACT_APP_ENTERPRISE === "true" ? fileurl + "static" + connectorInfo.filePath : connectorInfo.filePath} type="video/mp4" />
+                  <source
+                    src={
+                      process.env.REACT_APP_ENTERPRISE === "true"
+                        ? fileurl + "static" + connectorInfo.filePath
+                        : connectorInfo.filePath
+                    }
+                    type="video/mp4"
+                  />
                   Your browser does not support the video tag.
                 </video>
               </figure>
@@ -225,7 +277,11 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
                           position: "absolute",
                           top: 0,
                           left: 0,
-                          background: `no-repeat center url("${process.env.REACT_APP_ENTERPRISE === "true" ? fileurl + "static" + v.s3key : v.s3key}")`,
+                          background: `no-repeat center url("${
+                            process.env.REACT_APP_ENTERPRISE === "true"
+                              ? fileurl + "static" + v.s3key
+                              : v.s3key
+                          }")`,
                           backgroundSize: "cover",
                           transition: "all 0.4s",
                         },
@@ -237,11 +293,22 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
                         },
                       }}
                       onClick={() => {
-                        if (!isImgModalLoading) getPreviewData(v.image_id, connectorInfo.originalLabelproject, connectorInfo.trainingMethod);
+                        if (!isImgModalLoading)
+                          getPreviewData(
+                            v.image_id,
+                            connectorInfo.originalLabelproject,
+                            connectorInfo.trainingMethod
+                          );
                       }}
                     >
                       {isImgModalLoading && v.image_id === selectedImgId && (
-                        <Grid container width="100%" height="100%" justifyContent="center" alignItems="center">
+                        <Grid
+                          container
+                          width="100%"
+                          height="100%"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
                           <CircularProgress
                             size={35}
                             thickness={4}
@@ -279,7 +346,9 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
                               textOverflow: "ellipsis",
                             }}
                           >
-                            {v.file_name && v.file_name.length > 80 ? v.file_name.substring(0, 82) + "..." : v.file_name}
+                            {v.file_name && v.file_name.length > 80
+                              ? v.file_name.substring(0, 82) + "..."
+                              : v.file_name}
                           </p>
                           <p style={{ color: "var(--textWhite87)" }}>
                             ({v.width} * {v.height})
@@ -294,7 +363,13 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
         </>
       ) : (
         <Grid item xs={12}>
-          {sampleData && <RawDataTable sampleData={sampleData} sampleDataId={connectorInfo.id} isDataConnectorPage />}
+          {sampleData && (
+            <RawDataTable
+              sampleData={sampleData}
+              sampleDataId={connectorInfo.id}
+              isDataConnectorPage
+            />
+          )}
         </Grid>
       )}
 
@@ -382,14 +457,25 @@ const DataconnectorPreview = ({ connectorInfo, sampleData, isDataConnectorPage }
                 id="previewImage"
                 ref={imageRef}
                 alt={imgData.originalFileName}
-                src={process.env.REACT_APP_ENTERPRISE === "true" ? fileurl + "static" + imgData.s3key : imgData.s3key}
+                src={
+                  process.env.REACT_APP_ENTERPRISE === "true"
+                    ? fileurl + "static" + imgData.s3key
+                    : imgData.s3key
+                }
                 style={{
                   maxWidth: "100%",
                   maxHeight: 640,
                   borderRadius: "8px",
                 }}
               />
-              {imgData.labels && imgData.labels.length > 0 && <canvas ref={canvasRef} className={classes.datasetLabelCanvas} id="labelCanvas" style={{ width: "100%" }}></canvas>}
+              {imgData.labels && imgData.labels.length > 0 && (
+                <canvas
+                  ref={canvasRef}
+                  className={classes.datasetLabelCanvas}
+                  id="labelCanvas"
+                  style={{ width: "100%" }}
+                ></canvas>
+              )}
             </figure>
           </DialogContent>
         </Dialog>

@@ -106,7 +106,6 @@ const Process = (props) => {
   const [hasMissingValue, setHasMissingValue] = useState(false);
   const [valueForPredictName, setValueForPredictName] = useState("");
   const [trainingValueForStart, setTrainingValueForStart] = useState(null);
-  const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
   const [colabInfo, setColabInfo] = useState({
     epoch: 2,
     learningRate: 0.01,
@@ -133,8 +132,6 @@ const Process = (props) => {
   const [instanceType, setInstanceType] = useState("");
   const [algorithmType, setAlgorithmType] = useState(INITIAL_ALGORITHM_TYPE);
   const [isAnyModelFinished, setIsAnyModelFinished] = useState(false);
-  const [timeTickAsync, setTimeTickAsync] = useState(0);
-  const [timeTickAsyncCount, setTimeTickAsyncCount] = useState(0);
   const [isDownloadReportLoading, setIsDownloadReportLoading] = useState(false);
   const [algorithmInfo, setAlgorithmInfo] = useState(INITIAL_ALGORITHM_INFO);
   const [isRequiredHyperParameters, setIsRequiredHyperParameters] = useState(false);
@@ -145,7 +142,6 @@ const Process = (props) => {
   const [isModelPageAccessible, setIsModelPageAccessible] = useState(false);
 
   const path = window.location.pathname;
-  const modelPause = fileurl + "asset/front/img/modelIcon/Delay_white@300x.png";
 
   useEffect(() => {
     const url = window.location.href;
@@ -178,33 +174,6 @@ const Process = (props) => {
     setDate(dateString);
     projects.project = null;
   }, []);
-
-  // useEffect(() => {
-  //   if (timeTickAsync == 0) {
-  //     let timer = setTimeout(() => {
-  //       setTimeTickAsync(1);
-  //     }, 15000);
-  //   } else if (timeTickAsync == 1) {
-  //     setTimeTickAsync(0);
-  //     setTimeTickAsyncCount(timeTickAsyncCount + 1);
-  //   }
-  // }, [timeTickAsync]);
-
-  // useEffect(() => {
-  //   if (projects?.project) {
-  //     if (timeTickAsyncCount <= 20) {
-  //       intervalAction();
-  //     } else if (timeTickAsyncCount <= 240) {
-  //       if (timeTickAsyncCount % 4 == 0) {
-  //         intervalAction();
-  //       }
-  //     } else {
-  //       if (timeTickAsyncCount % 120 == 0) {
-  //         intervalAction();
-  //       }
-  //     }
-  //   }
-  // }, [timeTickAsyncCount]);
 
   useEffect(() => {
     if (!messages.isAskSnackbarOpen && projects.project?.projectName !== nextProjectName) {
@@ -275,17 +244,6 @@ const Process = (props) => {
 
         setIsLoading(false);
       })();
-
-      // if (
-      //   projects.project.status > 0 &&
-      //   projects.project.status < 100 &&
-      //   projects.project.status !== 99
-      // ) {
-      //   interval = setInterval(intervalAction, 100000);
-      // }
-      // return () => {
-      //   clearInterval(interval);
-      // };
 
       if (projects.project.id) {
         function getProjectStatus(event) {
@@ -559,24 +517,25 @@ const Process = (props) => {
   // };
 
   const onSetSampleData = () => {
-    if (!projects.project) return;
+    const project = projects.project;
+    if (!project) return;
 
     let sampleDataRaw = {};
     let sampleDataIdDict = {};
-    let detailText = projects.project.description !== null ? projects.project.description : "";
-    setNextProjectName(projects.project.projectName);
+    let detailText = project.description !== null ? project.description : "";
+    setNextProjectName(project.projectName);
     setNextProjectDetail(detailText);
-    projects.project.timeSeriesColumnInfo && setTimeSeriesColumnInfo(projects.project.timeSeriesColumnInfo);
-    projects.project.preprocessingInfo && setPreprocessingInfo(projects.project.preprocessingInfo);
-    projects.project.preprocessingInfoValue && setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
+    project.timeSeriesColumnInfo && setTimeSeriesColumnInfo(project.timeSeriesColumnInfo);
+    project.preprocessingInfo && setPreprocessingInfo(project.preprocessingInfo);
+    project.preprocessingInfoValue && setPreprocessingInfoValue(project.preprocessingInfoValue);
 
-    if (projects.project.joinInfo) {
-      setjoinInfo(projects.project.joinInfo);
+    if (project.joinInfo) {
+      setjoinInfo(project.joinInfo);
       var subConnectorsRaw = [];
-      projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector) => {
+      project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector) => {
           var isMainConnector = true;
-          Object.keys(projects.project.joinInfo).map((joinInfoValue) => {
+          Object.keys(project.joinInfo).map((joinInfoValue) => {
             if (+connector.id === +joinInfoValue) {
               isMainConnector = false;
               subConnectorsRaw.push(connector);
@@ -587,14 +546,14 @@ const Process = (props) => {
           }
         });
       setSubConnectors(subConnectorsRaw);
-    } else if (projects.project.dataconnectorsList && projects.project.dataconnectorsList.length > 1) {
+    } else if (project.dataconnectorsList && project.dataconnectorsList.length > 1) {
       var subConnectorsRaw = [];
       var joinInfoRaw = {};
       var mainConnectorRaw = {};
 
-      projects.project &&
-        projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector, idx) => {
+      project &&
+        project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector, idx) => {
           if (idx === 0) {
             setMainConnector(connector);
             mainConnectorRaw = connector;
@@ -614,26 +573,26 @@ const Process = (props) => {
         });
       setSubConnectors(subConnectorsRaw);
       setjoinInfo(joinInfoRaw);
-    } else if (projects.project.dataconnectorsList && projects.project.dataconnectorsList.length === 1) {
+    } else if (project.dataconnectorsList && project.dataconnectorsList.length === 1) {
       setSubConnectors([]);
       setjoinInfo([]);
     }
 
-    projects.project.analyticsStandard && setAnalyticsStandard(projects.project.analyticsStandard);
+    project.analyticsStandard && setAnalyticsStandard(project.analyticsStandard);
 
     const state = props.history.location.state;
     if (state) {
       state.modelid && dispatch(setChosenModelRequestAction(state.modelid));
       state.page && setSelectedPage(state.page);
     } else {
-      if (projects.project.status === 0 && !isAnyModelFinished) {
-        if (projects.project.trainingMethod === "cycle_gan") {
+      if (project.status === 0 && !isAnyModelFinished) {
+        if (project.trainingMethod === "cycle_gan") {
           setSelectedPage("rawdata");
         } else {
           setSelectedPage("summary");
         }
       }
-      let models = projects.project.models;
+      let models = project.models;
       let tempFinished = false;
       if (models)
         for (let idx = 0; idx < models.length; idx++) {
@@ -644,32 +603,32 @@ const Process = (props) => {
         }
       setIsAnyModelFinished(tempFinished);
 
-      if ([9, 99].indexOf(projects.project.status) > -1 || (projects.project.status > 0 && [9, 99].indexOf(projects.project.status) === -1 && models?.length > 0) || tempFinished) {
+      if ([9, 99].indexOf(project.status) > -1 || (project.status > 0 && [9, 99].indexOf(project.status) === -1 && models?.length > 0) || tempFinished) {
         setIsModelPageAccessible(true);
         setSelectedPage("model");
       }
     }
 
-    if (projects.project.startTimeSeriesDatetime) {
-      var startTimeSeriesDatetimeSplit = projects.project.startTimeSeriesDatetime.split(" ");
+    if (project.startTimeSeriesDatetime) {
+      var startTimeSeriesDatetimeSplit = project.startTimeSeriesDatetime.split(" ");
       onChangeStartTimeSeriesDatetime(new Date(Date.parse(`${startTimeSeriesDatetimeSplit[0]}T${startTimeSeriesDatetimeSplit[1]}Z`)));
     }
-    if (projects.project.endTimeSeriesDatetime) {
-      var endTimeSeriesDatetimeSplit = projects.project.endTimeSeriesDatetime.split(" ");
+    if (project.endTimeSeriesDatetime) {
+      var endTimeSeriesDatetimeSplit = project.endTimeSeriesDatetime.split(" ");
       onChangeEndTimeSeriesDatetime(new Date(Date.parse(`${endTimeSeriesDatetimeSplit[0]}T${endTimeSeriesDatetimeSplit[1]}Z`)));
     }
 
-    if (projects.project.trainingColumnInfo) {
+    if (project.trainingColumnInfo) {
       var trainingColumnInfoRaw = {};
-      Object.keys(projects.project.trainingColumnInfo).map((columnInfo) => {
-        if (projects.project.trainingColumnInfo[columnInfo]) {
+      Object.keys(project.trainingColumnInfo).map((columnInfo) => {
+        if (project.trainingColumnInfo[columnInfo]) {
           trainingColumnInfoRaw[columnInfo] = true;
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
-    } else if (projects.project.fileStructure) {
+    } else if (project.fileStructure) {
       var trainingColumnInfoRaw = {};
-      JSON.parse(projects.project.fileStructure).map((columnInfo) => {
+      JSON.parse(project.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
           trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(columnInfo.use);
         }
@@ -682,13 +641,13 @@ const Process = (props) => {
     var datacolumnsRaw = [];
 
     var fileSizeRaw = 0;
-    if (projects.project.sampleData) {
-      sampleDataRaw["전체"] = projects.project.sampleData;
+    if (project.sampleData) {
+      sampleDataRaw["전체"] = project.sampleData;
     }
 
     var isImageLabelData = false;
-    projects.project.dataconnectorsList &&
-      projects.project.dataconnectorsList.map((dataconnector) => {
+    project.dataconnectorsList &&
+      project.dataconnectorsList.map((dataconnector) => {
         if (dataconnector.hasTextData) {
           setHasStructureData(true);
           setHasTimeSeriesData(true);
@@ -709,17 +668,17 @@ const Process = (props) => {
         sampleDataIdDict[dataconnector.dataconnectorName] = dataconnector.id;
         if (dataconnector.fileSize) fileSizeRaw += dataconnector.fileSize;
       });
-    if (projects.project.hasImageData) {
+    if (project.hasImageData) {
       setHasStructureData(false);
       setHasTimeSeriesData(false);
       setHasImageLabelData(true);
     }
-    if (projects.project.hasTextData) {
+    if (project.hasTextData) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
     }
-    if (!projects.project.dataconnectorsList && projects.project.hasTimeSeriesData) {
+    if (!project.dataconnectorsList && project.hasTimeSeriesData) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
@@ -727,16 +686,16 @@ const Process = (props) => {
     setFileSize(fileSizeRaw);
     setSampleData(sampleDataRaw);
     setSampleDataId(sampleDataIdDict);
-    if (!(datacolumnsRaw && datacolumnsRaw.length > 0) && projects.project.fileStructure) {
-      datacolumnsRaw = JSON.parse(projects.project.fileStructure);
+    if (!(datacolumnsRaw && datacolumnsRaw.length > 0) && project.fileStructure) {
+      datacolumnsRaw = JSON.parse(project.fileStructure);
     }
     setdatacolumns(datacolumnsRaw);
     datacolumnsRaw.forEach((datacolumn) => {
       if (datacolumn.miss > 0) setHasMissingValue(true);
     });
 
-    if (projects.project.trainingMethod) {
-      if (projects.project.trainingMethod.indexOf("time_series") > -1) {
+    if (project.trainingMethod) {
+      if (project.trainingMethod.indexOf("time_series") > -1) {
         //dispatch(putTrainingMethodRequestAction('time_series'))
         setHasTimeSeriesData(true);
         setHasImageLabelData(false);
@@ -744,7 +703,7 @@ const Process = (props) => {
     } else {
       if (isImageLabelData) {
         dispatch(putTrainingMethodRequestAction("image"));
-      } else if (projects.project.hasImageData && !projects.project.hasTextData) {
+      } else if (project.hasImageData && !project.hasTextData) {
         dispatch(putTrainingMethodRequestAction("image"));
       } else {
         dispatch(putTrainingMethodRequestAction("normal"));
@@ -753,13 +712,13 @@ const Process = (props) => {
 
     let total = 0;
     let done = 0;
-    projects.project.models &&
-      projects.project.models.forEach((model) => {
+    project.models &&
+      project.models.forEach((model) => {
         total++;
         if (model.status === 100) done++;
       });
     const percentage = parseInt((done / total) * 100) ? parseInt((done / total) * 100) : 0;
-    setModelPercentage(projects.project.status === 9 || projects.project.status === 99 ? -1 : percentage);
+    setModelPercentage(project.status === 9 || project.status === 99 ? -1 : percentage);
   };
 
   const setNameInputSize = () => {
@@ -1041,7 +1000,7 @@ const Process = (props) => {
 
               // min, max, split 중 하나라도 빈 값인 경우
               if (isEmpty) {
-                dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                dispatch(openErrorSnackbarRequestAction("Please enter all parameter values."));
 
                 resultData = null;
               } else {
@@ -1061,7 +1020,7 @@ const Process = (props) => {
               }
             } else {
               // min, max, split 값이 모두 입력되지 않은 경우
-              dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+              dispatch(openErrorSnackbarRequestAction("Please enter all parameter values."));
 
               resultData = null;
             }
@@ -1073,14 +1032,14 @@ const Process = (props) => {
               valueToPost = [...tmpValueArr];
 
               if (valueToPost.length === 0) {
-                dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                dispatch(openErrorSnackbarRequestAction("Please enter all parameter values."));
 
                 resultData = null;
               } else {
                 valueToPost.map((v, i) => {
                   if (v === "") {
                     // 빈 값이 하나라도 들어온 경우
-                    dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                    dispatch(openErrorSnackbarRequestAction("Please enter all parameter values."));
 
                     resultData = null;
                   } else {
@@ -1097,7 +1056,7 @@ const Process = (props) => {
               // 단일값 입력한 경우
               if (param.value === "") {
                 // 빈 값이 들어온 경우
-                dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                dispatch(openErrorSnackbarRequestAction("Please enter all parameter values."));
 
                 resultData = null;
               } else {
@@ -1147,7 +1106,7 @@ const Process = (props) => {
 
                 // 범위를 설정했는데 최대값이 최소값보다 작게 설정된 경우
                 if (hasRange && rangeMin >= rangeMax) {
-                  dispatch(openErrorSnackbarRequestAction("최대값을 최소값보다 크게 설정해주세요."));
+                  dispatch(openErrorSnackbarRequestAction("Please set the maximum value larger than the minimum value."));
 
                   resultData = null;
                 }
@@ -1286,12 +1245,31 @@ const Process = (props) => {
     const project = projects.project;
 
     if (project.option === "not selected") {
-      dispatch(openErrorSnackbarRequestAction(t("'선호하는 방식'을 선택해주세요. AutoML 옵션의 경우 라이센스 구매 후 이용 가능합니다.")));
+      dispatch(openErrorSnackbarRequestAction(t("Please select 'Preferred method'. AutoML options are available after purchasing a license.")));
+      return;
+    }
+
+    if (trainMethod === "object_detection" && (!isDeviceAllSelected && selectedDeviceArr.length === 0)) {
+      dispatch(openErrorSnackbarRequestAction(t("Object detection needs gpu.")));
       return;
     }
 
     if (project?.available_gpu_list?.length > 0 && trainMethod === "object_detection" && !isDeviceAllSelected && selectedDeviceArr.length === 0) {
       dispatch(openErrorSnackbarRequestAction(t("Please set at least one training GPU.")));
+      return;
+    }
+
+    if (
+      project?.available_gpu_list?.length > 0 &&
+      trainMethod === "object_detection" &&
+      !isDeviceAllSelected &&
+      selectedDeviceArr.length === 0
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please set at least one training GPU.")
+        )
+      );
       return;
     }
 
@@ -1372,7 +1350,7 @@ const Process = (props) => {
       }
     });
     if (hasMuchUniqueObject && (project.trainingMethod === "normal_classification" || (project.trainingMethod === "normal" && valueForPredictInfo["type"] === "object"))) {
-      dispatch(openErrorSnackbarRequestAction(`${t("The number of unique values ​​of strings that can be used in tabular data is limited to 250.")} ${t("계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요.")}`));
+      dispatch(openErrorSnackbarRequestAction(`${t("The number of unique values ​​of strings that can be used in tabular data is limited to 250.")} ${t("To continue, uncheck 'Training data usage' for columns with more than 250 unique values.")}`));
       return;
     }
 
@@ -1381,7 +1359,7 @@ const Process = (props) => {
         colabInfo[value] = colabInfo[value] === "" ? "" : parseFloat(colabInfo[value]);
 
         if (!colabInfo[value]) {
-          dispatch(openErrorSnackbarRequestAction("올바른 파라미터를 채운 후 실행해주세요."));
+          dispatch(openErrorSnackbarRequestAction("Please fill in correct parameter and proceed."));
           return;
         }
       }
@@ -1423,7 +1401,7 @@ const Process = (props) => {
         Object.values(tmpParameter).map((v, i) => (totalModelLength *= v.length));
 
         if (totalModelLength > 300) {
-          dispatch(openErrorSnackbarRequestAction(t("모델 생성은 최대 300개 까지 가능합니다. 파라미터들의 설정값 개수를 확인해주세요.")));
+          dispatch(openErrorSnackbarRequestAction(t("Model creation is possible up to 300. Please check the number of set values ​​of parameters.")));
 
           return;
         }
@@ -1473,7 +1451,6 @@ const Process = (props) => {
       ];
     }
 
-    console.log(projectInfo);
     if (valueForPredictInfo["unique"] > 250 && (project.trainingMethod === "text" || project.trainingMethod === "image" || project.trainingMethod === "object_detection" || project.trainingMethod === "normal_classification")) {
       dispatch(openErrorSnackbarRequestAction(t("The unique value of the classification you are trying to predict is more than 250. Please predict other values or reduce the classification value.")));
       return;
@@ -1501,7 +1478,7 @@ const Process = (props) => {
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message: "선택하신 옵션으로 프로젝트 모델링을 시작하시겠습니까?",
+          message: "Would you like to start modeling your project with the selected options?",
           project: projectInfo,
         })
       );
@@ -1543,8 +1520,8 @@ const Process = (props) => {
       return;
     }
 
-    if (projects.project.statusText === "중단" && ((projects.project.option && projects.project.option !== "custom") || (projects.project.option === "custom" && ["학습 인스턴스", "선호하는 방식"].includes(value)))) {
-      dispatch(openErrorSnackbarRequestAction(t(`중단되었던 프로젝트는 ${value}을 변경할 수 없습니다.`)));
+    if (projects.project.statusText === "중단" && ((projects.project.option && projects.project.option !== "custom") || (projects.project.option === "custom" && ["Training instance", "Preferred method"].includes(value)))) {
+      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to suspended projects")));
       return;
     }
     return;
@@ -1619,7 +1596,7 @@ const Process = (props) => {
   };
 
   const onSetAskStopProject = () => {
-    let stopMessage = "프로세스를 중단하시겠습니까?";
+    let stopMessage = "Do you want to stop the process?";
     // if (projects.project.models && projects.project.models.length > 0) {
     //   stopMessage =
     //     "모델 학습이 시작된 경우, 프로젝트를 중단하여도 학습된 시간만큼의 크레딧이 차감됩니다. 프로세스를 중단하시겠습니까?";
@@ -2173,7 +2150,7 @@ const Process = (props) => {
         <FormControl
           component="fieldset"
           onClick={() => {
-            onCheckedValueAlarm("분석단위");
+            onCheckedValueAlarm("Analyze unit");
           }}
           disabled={isProjectStopped}
         >
@@ -2184,7 +2161,7 @@ const Process = (props) => {
               color: currentTheme.text1 + " !important",
             }}
           >
-            {t("Analyze Unit")}
+            {t("Analyze unit")}
           </FormLabel>
           <RadioGroup row aria-label="position" name="position" defaultValue="auto" onChange={onChangeAnalyticsStandard} value={analyticsStandard} disabled={isProjectStopped}>
             <FormControlLabel value="auto" control={<Radio color="primary" />} disabled={isProjectStopped} label={t("Auto")} />
@@ -2203,7 +2180,7 @@ const Process = (props) => {
         {divTSUnitSetting()}
         <br />
         <p style={{ fontSize: "14px", color: "#F0F0F0" }}>
-          {t("Caution")} : {t("데이터들의 데이터 보유에 따라 분석 기간은 자동으로 조정될 수 있고, 분석 기준에 맞춰 통계값으로 가공됩니다.")}
+          {t("Caution")} : {t("According to the retention of the data, the analysis period can be automatically adjusted and processed into statistics based on the analysis criteria.")}
         </p>
       </>
     );
@@ -2256,8 +2233,8 @@ const Process = (props) => {
         <FormControl
           className={classes.formControl}
           onClick={() => {
-            if (type === "instance") onCheckedValueAlarm("학습 인스턴스");
-            // if (type === "gpu") onCheckedValueAlarm("학습 GPU");
+            if (type === "instance") onCheckedValueAlarm("Training instance");
+            // if (type === "gpu") onCheckedValueAlarm("Training GPU");
           }}
         >
           {type === "instance" && (
@@ -2310,12 +2287,12 @@ const Process = (props) => {
   };
 
   useEffect(() => {
-    if (messages.message === "프로젝트가 성공적으로 중단되었습니다.") setAlgorithmInfo(INITIAL_ALGORITHM_INFO);
+    if (messages.message === "The project has been successfully suspended." || messages.message === "프로젝트가 성공적으로 중단되었습니다.") setAlgorithmInfo(INITIAL_ALGORITHM_INFO);
   }, [messages.message]);
 
   return (
     <div style={{ marginTop: "30px" }}>
-      <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
+      <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")} />
       {isLoading || !projects || projects.isLoading || !user.me ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />
@@ -2468,14 +2445,7 @@ const Process = (props) => {
                             {handleHelpIconTip("method")}
                           </p>
                           <FormControl className={classes.formControl}>
-                            <Select
-                              id={projects.project.status !== 0 ? "disabledSelectBox" : "methodForPredictSelectBox"}
-                              labelid="demo-simple-select-outlined-label"
-                              disabled={projects.project.status !== 0 || projects.project?.option === "labeling"}
-                              value={projects.project.trainingMethod}
-                              defaultValue={trainMethod}
-                              onChange={methodChange}
-                            >
+                            <Select id={projects.project.status !== 0 ? "disabledSelectBox" : "methodForPredictSelectBox"} labelid="demo-simple-select-outlined-label" disabled={projects.project.status !== 0 || projects.project?.option === "labeling"} value={trainMethod} onChange={methodChange}>
                               {hasStructuredData && <MenuItem value="normal">{t("Structured Data Automatic Classification")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="normal_classification">{t("Structured Data Category Classification")}</MenuItem>}
                               {hasStructuredData && <MenuItem value="normal_regression">{t("Structured Data Regression")}</MenuItem>}
@@ -2510,7 +2480,7 @@ const Process = (props) => {
                         </GridItem>
                         <GridItem xs={12} style={{ marginTop: "16px" }}>
                           <p className={classes.text87size16}>
-                            {t("Preferred Method")}
+                            {t("Preferred method")}
                             {handleHelpIconTip("option")}
                           </p>
                           <FormControl component="fieldset" disabled={projects.project.status !== 0 || projects.project?.option === "labeling"} id="optionForPredictSelectBox">
@@ -2600,7 +2570,7 @@ const Process = (props) => {
                             <FormControl
                               className={classes.formControl}
                               onClick={() => {
-                                onCheckedValueAlarm("유저 정보 (유저 ID 칼럼)");
+                                onCheckedValueAlarm("User Info (User ID column)");
                               }}
                             >
                               <Select
@@ -2634,7 +2604,7 @@ const Process = (props) => {
                             <FormControl
                               className={classes.formControl}
                               onClick={() => {
-                                onCheckedValueAlarm("아이템 정보 (아이템 ID 칼럼)");
+                                onCheckedValueAlarm("Item information (Item ID column)");
                               }}
                             >
                               <Select

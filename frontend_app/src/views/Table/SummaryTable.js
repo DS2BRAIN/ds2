@@ -234,11 +234,11 @@ const SummaryTable = React.memo(({ category, csv, getTimeSeriesCheckedValue, get
       return;
     }
     if (projects.project.statusText === "중단") {
-      dispatch(openErrorSnackbarRequestAction(t(" You can’t make changes to a suspended project")));
+      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to suspended projects")));
       return;
     }
     if (value === projects.project.valueForPredictColumnId) {
-      dispatch(openErrorSnackbarRequestAction(t(" Values ​​you want to analyze/predict cannot be used as training data.")));
+      dispatch(openErrorSnackbarRequestAction(t("Values ​​you want to analyze/predict cannot be used as training data.")));
       return;
     }
     await setSummaryCheckedValue((prevState) => {

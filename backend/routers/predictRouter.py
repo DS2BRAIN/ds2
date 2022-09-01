@@ -25,11 +25,8 @@ manageUploadClass = ManageUpload()
 
 manageExternalAiClass = ManageExternalAi()
 import os
-if os.path.exists('./src/training/predict.py'):
-    from src.training import predict
-    predictClass = predict.Predict(isLoadModel=True)
-else:
-    predictClass = None
+from src.managePredict import ManagePredict
+predictClass = ManagePredict()
 
 
 class PredictObject(BaseModel):
