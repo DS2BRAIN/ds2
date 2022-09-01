@@ -143,7 +143,6 @@ const Process = (props) => {
   const [hasMissingValue, setHasMissingValue] = useState(false);
   const [valueForPredictName, setValueForPredictName] = useState("");
   const [trainingValueForStart, setTrainingValueForStart] = useState(null);
-  const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
   const [colabInfo, setColabInfo] = useState({
     epoch: 2,
     learningRate: 0.01,
@@ -173,8 +172,6 @@ const Process = (props) => {
   const [instanceType, setInstanceType] = useState("");
   const [algorithmType, setAlgorithmType] = useState(INITIAL_ALGORITHM_TYPE);
   const [isAnyModelFinished, setIsAnyModelFinished] = useState(false);
-  const [timeTickAsync, setTimeTickAsync] = useState(0);
-  const [timeTickAsyncCount, setTimeTickAsyncCount] = useState(0);
   const [isDownloadReportLoading, setIsDownloadReportLoading] = useState(false);
   const [algorithmInfo, setAlgorithmInfo] = useState(INITIAL_ALGORITHM_INFO);
   const [isRequiredHyperParameters, setIsRequiredHyperParameters] = useState(
@@ -187,7 +184,6 @@ const Process = (props) => {
   const [isModelPageAccessible, setIsModelPageAccessible] = useState(false);
 
   const path = window.location.pathname;
-  const modelPause = fileurl + "asset/front/img/modelIcon/Delay_white@300x.png";
 
   useEffect(() => {
     const url = window.location.href;
@@ -198,14 +194,9 @@ const Process = (props) => {
   }, []);
 
   useEffect(() => {
-    let tmpTrain = projects?.project?.trainingMethod;
-    if (tmpTrain) {
-      setTrainMethod(tmpTrain);
-    } else {
-      if (hasStructuredData) setTrainMethod("normal");
-      else if (hasImageLabelData) setTrainMethod("image");
-    }
-  }, [hasStructuredData, hasImageLabelData, projects?.project?.trainingMethod]);
+    if (hasStructuredData) setTrainMethod("normal");
+    else if (hasImageLabelData) setTrainMethod("image");
+  }, [hasStructuredData, hasImageLabelData]);
 
   useEffect(() => {
     if (projects?.project?.available_gpu_list?.length) {
@@ -229,33 +220,6 @@ const Process = (props) => {
     setDate(dateString);
     projects.project = null;
   }, []);
-
-  // useEffect(() => {
-  //   if (timeTickAsync == 0) {
-  //     let timer = setTimeout(() => {
-  //       setTimeTickAsync(1);
-  //     }, 15000);
-  //   } else if (timeTickAsync == 1) {
-  //     setTimeTickAsync(0);
-  //     setTimeTickAsyncCount(timeTickAsyncCount + 1);
-  //   }
-  // }, [timeTickAsync]);
-
-  // useEffect(() => {
-  //   if (projects?.project) {
-  //     if (timeTickAsyncCount <= 20) {
-  //       intervalAction();
-  //     } else if (timeTickAsyncCount <= 240) {
-  //       if (timeTickAsyncCount % 4 == 0) {
-  //         intervalAction();
-  //       }
-  //     } else {
-  //       if (timeTickAsyncCount % 120 == 0) {
-  //         intervalAction();
-  //       }
-  //     }
-  //   }
-  // }, [timeTickAsyncCount]);
 
   useEffect(() => {
     if (
@@ -346,17 +310,6 @@ const Process = (props) => {
 
         setIsLoading(false);
       })();
-
-      // if (
-      //   projects.project.status > 0 &&
-      //   projects.project.status < 100 &&
-      //   projects.project.status !== 99
-      // ) {
-      //   interval = setInterval(intervalAction, 100000);
-      // }
-      // return () => {
-      //   clearInterval(interval);
-      // };
 
       if (projects.project.id) {
         function getProjectStatus(event) {
@@ -656,7 +609,8 @@ const Process = (props) => {
   // };
 
   const onSetSampleData = () => {
-    if (!projects.project) return;
+    const project = projects.project;
+    if (!project) return;
 
     let sampleDataRaw = {};
     let sampleDataIdDict = {};
@@ -671,13 +625,13 @@ const Process = (props) => {
     projects.project.preprocessingInfoValue &&
       setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
 
-    if (projects.project.joinInfo) {
-      setjoinInfo(projects.project.joinInfo);
+    if (project.joinInfo) {
+      setjoinInfo(project.joinInfo);
       var subConnectorsRaw = [];
-      projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector) => {
+      project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector) => {
           var isMainConnector = true;
-          Object.keys(projects.project.joinInfo).map((joinInfoValue) => {
+          Object.keys(project.joinInfo).map((joinInfoValue) => {
             if (+connector.id === +joinInfoValue) {
               isMainConnector = false;
               subConnectorsRaw.push(connector);
@@ -696,9 +650,9 @@ const Process = (props) => {
       var joinInfoRaw = {};
       var mainConnectorRaw = {};
 
-      projects.project &&
-        projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector, idx) => {
+      project &&
+        project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector, idx) => {
           if (idx === 0) {
             setMainConnector(connector);
             mainConnectorRaw = connector;
@@ -734,14 +688,14 @@ const Process = (props) => {
       state.modelid && dispatch(setChosenModelRequestAction(state.modelid));
       state.page && setSelectedPage(state.page);
     } else {
-      if (projects.project.status === 0 && !isAnyModelFinished) {
-        if (projects.project.trainingMethod === "cycle_gan") {
+      if (project.status === 0 && !isAnyModelFinished) {
+        if (project.trainingMethod === "cycle_gan") {
           setSelectedPage("rawdata");
         } else {
           setSelectedPage("summary");
         }
       }
-      let models = projects.project.models;
+      let models = project.models;
       let tempFinished = false;
       if (models)
         for (let idx = 0; idx < models.length; idx++) {
@@ -791,17 +745,17 @@ const Process = (props) => {
       );
     }
 
-    if (projects.project.trainingColumnInfo) {
+    if (project.trainingColumnInfo) {
       var trainingColumnInfoRaw = {};
-      Object.keys(projects.project.trainingColumnInfo).map((columnInfo) => {
-        if (projects.project.trainingColumnInfo[columnInfo]) {
+      Object.keys(project.trainingColumnInfo).map((columnInfo) => {
+        if (project.trainingColumnInfo[columnInfo]) {
           trainingColumnInfoRaw[columnInfo] = true;
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
-    } else if (projects.project.fileStructure) {
+    } else if (project.fileStructure) {
       var trainingColumnInfoRaw = {};
-      JSON.parse(projects.project.fileStructure).map((columnInfo) => {
+      JSON.parse(project.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
           trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(
             columnInfo.use
@@ -816,13 +770,13 @@ const Process = (props) => {
     var datacolumnsRaw = [];
 
     var fileSizeRaw = 0;
-    if (projects.project.sampleData) {
-      sampleDataRaw["전체"] = projects.project.sampleData;
+    if (project.sampleData) {
+      sampleDataRaw["전체"] = project.sampleData;
     }
 
     var isImageLabelData = false;
-    projects.project.dataconnectorsList &&
-      projects.project.dataconnectorsList.map((dataconnector) => {
+    project.dataconnectorsList &&
+      project.dataconnectorsList.map((dataconnector) => {
         if (dataconnector.hasTextData) {
           setHasStructureData(true);
           setHasTimeSeriesData(true);
@@ -845,12 +799,12 @@ const Process = (props) => {
         sampleDataIdDict[dataconnector.dataconnectorName] = dataconnector.id;
         if (dataconnector.fileSize) fileSizeRaw += dataconnector.fileSize;
       });
-    if (projects.project.hasImageData) {
+    if (project.hasImageData) {
       setHasStructureData(false);
       setHasTimeSeriesData(false);
       setHasImageLabelData(true);
     }
-    if (projects.project.hasTextData) {
+    if (project.hasTextData) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
@@ -877,8 +831,8 @@ const Process = (props) => {
       if (datacolumn.miss > 0) setHasMissingValue(true);
     });
 
-    if (projects.project.trainingMethod) {
-      if (projects.project.trainingMethod.indexOf("time_series") > -1) {
+    if (project.trainingMethod) {
+      if (project.trainingMethod.indexOf("time_series") > -1) {
         //dispatch(putTrainingMethodRequestAction('time_series'))
         setHasTimeSeriesData(true);
         setHasImageLabelData(false);
@@ -898,8 +852,8 @@ const Process = (props) => {
 
     let total = 0;
     let done = 0;
-    projects.project.models &&
-      projects.project.models.forEach((model) => {
+    project.models &&
+      project.models.forEach((model) => {
         total++;
         if (model.status === 100) done++;
       });
@@ -1049,8 +1003,12 @@ const Process = (props) => {
       IS_ENTERPRISE &&
       ["speed", "accuracy", "labeling"].indexOf(value) > -1
     ) {
-      checkIsValidKey(user, dispatch, t).then(() => {
-        if (!user.isValidUser || projects.project.status !== 0) return;
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        )
+          return;
 
         if (
           user.me &&
@@ -1091,7 +1049,6 @@ const Process = (props) => {
       );
       return;
     }
-
     let hasNoError = true;
     if (value === "object_detection" || value === "cycle_gan") {
       if (value === "cycle_gan") {
@@ -1650,11 +1607,15 @@ const Process = (props) => {
     }
 
     if (
+      project?.available_gpu_list?.length > 0 &&
       trainMethod === "object_detection" &&
-      (!isDeviceAllSelected && selectedDeviceArr.length === 0)
+      !isDeviceAllSelected &&
+      selectedDeviceArr.length === 0
     ) {
       dispatch(
-        openErrorSnackbarRequestAction(t("Object detection needs gpu."))
+        openErrorSnackbarRequestAction(
+          t("Please set at least one training GPU.")
+        )
       );
       return;
     }
@@ -1951,6 +1912,7 @@ const Process = (props) => {
       ];
     }
 
+    console.log(projectInfo);
     if (
       valueForPredictInfo["unique"] > 250 &&
       (project.trainingMethod === "text" ||
@@ -2010,7 +1972,7 @@ const Process = (props) => {
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message: "선택하신 옵션으로 프로젝트 모델링을 시작하시겠습니까?",
+          message: "Would you like to start modeling your project with the selected options?",
           project: projectInfo,
         })
       );
@@ -2152,7 +2114,7 @@ const Process = (props) => {
   };
 
   const onSetAskStopProject = () => {
-    let stopMessage = "프로세스를 중단하시겠습니까?";
+    let stopMessage = "Do you want to stop the process?";
     // if (projects.project.models && projects.project.models.length > 0) {
     //   stopMessage =
     //     "모델 학습이 시작된 경우, 프로젝트를 중단하여도 학습된 시간만큼의 크레딧이 차감됩니다. 프로세스를 중단하시겠습니까?";
@@ -2505,6 +2467,7 @@ const Process = (props) => {
               onChange={onChangeNameInput}
               style={{
                 color: currentThemeColor.textWhite87,
+                fontSize: 24,
               }}
             />
             {!projects.project.isShared &&
@@ -2854,7 +2817,7 @@ const Process = (props) => {
         <FormControl
           component="fieldset"
           onClick={() => {
-            onCheckedValueAlarm("분석단위");
+            onCheckedValueAlarm("Analyze unit");
           }}
           disabled={isProjectStopped}
         >
@@ -2865,7 +2828,7 @@ const Process = (props) => {
               color: currentTheme.text1 + " !important",
             }}
           >
-            {t("Analyze Unit")}
+            {t("Analyze unit")}
           </FormLabel>
           <RadioGroup
             row
@@ -2977,8 +2940,8 @@ const Process = (props) => {
         <FormControl
           className={classes.formControl}
           onClick={() => {
-            if (type === "instance") onCheckedValueAlarm("학습 인스턴스");
-            // if (type === "gpu") onCheckedValueAlarm("학습 GPU");
+            if (type === "instance") onCheckedValueAlarm("Training instance");
+            // if (type === "gpu") onCheckedValueAlarm("Training GPU");
           }}
         >
           {type === "instance" && (
@@ -3071,7 +3034,7 @@ const Process = (props) => {
 
   return (
     <div style={{ marginTop: "30px" }}>
-      <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
+      <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")} />
       {isLoading || !projects || projects.isLoading || !user.me ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />
@@ -3319,7 +3282,8 @@ const Process = (props) => {
                                 projects.project.status !== 0 ||
                                 projects.project?.option === "labeling"
                               }
-                              value={trainMethod}
+                              value={projects.project.trainingMethod}
+                              defaultValue={trainMethod}
                               onChange={methodChange}
                             >
                               {hasStructuredData && (
@@ -3390,7 +3354,7 @@ const Process = (props) => {
                         </GridItem>
                         <GridItem xs={12} style={{ marginTop: "16px" }}>
                           <p className={classes.text87size16}>
-                            {t("Preferred Method")}
+                            {t("Preferred method")}
                             {handleHelpIconTip("option")}
                           </p>
                           <FormControl
@@ -3710,9 +3674,18 @@ const Process = (props) => {
                                               "custom" &&
                                             key !== "auto")) && (
                                           <MenuItem key={key} value={key}>
-                                            {t(
-                                              INITIAL_ALGORITHM_INFO[key].label
-                                            )}
+                                            <span style={{ marginRight: 8 }}>
+                                              {t(
+                                                INITIAL_ALGORITHM_INFO[key]
+                                                  .label
+                                              )}
+                                            </span>
+                                            <span
+                                              style={{
+                                                fontSize: 14,
+                                                verticalAlign: "middle",
+                                              }}
+                                            >{`( ${INITIAL_ALGORITHM_INFO[key].version} )`}</span>
                                           </MenuItem>
                                         )
                                       );

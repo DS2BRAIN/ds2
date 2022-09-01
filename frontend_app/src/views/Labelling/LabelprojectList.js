@@ -14,6 +14,7 @@ import {
   openErrorSnackbarRequestAction,
 } from "redux/reducers/messages";
 import currentTheme from "assets/jss/custom";
+import { listPagination } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer";
@@ -46,28 +47,23 @@ const LabelprojectList = ({ history }) => {
     }),
     []
   );
-  let currentUrl = window.location.href;
+
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
 
   const { t } = useTranslation();
-  const initialPage = parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
-  const initialSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-  const initialDescValue =
-    currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
-  const initialRowsValue = parseInt(
-    currentUrl.split("&rows=")[1].split("&")[0]
-  );
 
   const [isLoading, setIsLoading] = useState(true);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
-  const [projectPage, setProjectPage] = useState(initialPage);
-  const [projectRowsPerPage, setProjectRowsPerPage] = useState(
-    initialRowsValue
-  );
+  const [projectPage, setProjectPage] = useState(0);
+  const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
   const [searchedValue, setSearchedValue] = useState("");
-  const [sortingValue, setSortingValue] = useState(initialSortingValue);
-  const [isSortDesc, setIsSortDesc] = useState(initialDescValue);
+  const [sortingValue, setSortingValue] = useState("created_at");
+  const [isSortDesc, setIsSortDesc] = useState(true);
   const [isPagingChanged, setIsPagingChanged] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [introOn, setIntroOn] = useState(false);
@@ -75,29 +71,19 @@ const LabelprojectList = ({ history }) => {
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   useEffect(() => {
-    const selectedPage =
-      parseInt(currentUrl.split("?page=")[1].split("&")[0]) - 1;
-    const selectedSortingValue = currentUrl.split("&sorting=")[1].split("&")[0];
-    const selectedDescValue =
-      currentUrl.split("&desc=")[1].split("&")[0] === "true" ? true : false;
-    const selectedRowsValue = parseInt(
-      currentUrl.split("&rows=")[1].split("&")[0]
-    );
-
-    setProjectPage(selectedPage);
-    setSortingValue(selectedSortingValue);
-    setIsSortDesc(selectedDescValue);
-    setProjectRowsPerPage(selectedRowsValue);
-
-    if (selectedPage === 0 && selectedPage !== projectPage) {
-      setIsLoading(true);
-      onGetDefaultProject();
-    }
-  }, [currentUrl]);
-
-  useEffect(() => {
     getProjectByDispatch();
   }, []);
+
+  useEffect(() => {
+    const pagiInfoDict = listPagination(urlLoc);
+    setProjectPage(pagiInfoDict.page);
+    setProjectRowsPerPage(pagiInfoDict.rows);
+    setSortingValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setSearchedValue(pagiInfoDict.search);
+
+    setIsProjectRequested(true);
+  }, [urlSearch]);
 
   useEffect(() => {
     if (isProjectRequested) {
@@ -107,8 +93,13 @@ const LabelprojectList = ({ history }) => {
   }, [isProjectRequested]);
 
   useEffect(() => {
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    let urlSP = urlSearchParams;
+    let searchVal = searchedValue;
+    if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
+      urlSP.set("search", searchVal);
+    }
+    handleSearchParams(urlSP);
   }, [searchedValue]);
 
   useEffect(() => {
@@ -164,6 +155,10 @@ const LabelprojectList = ({ history }) => {
     );
   };
 
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
+  };
+
   const setProjectSettings = () => {
     setProjectCheckedValue({ all: false });
     for (let i = 0; i < labelprojects.projects.length; i++) {
@@ -189,48 +184,26 @@ const LabelprojectList = ({ history }) => {
   };
 
   const onSetSortValue = async (value) => {
-    let tempIsSortDesc = value === sortingValue ? !isSortDesc : true;
-    const changedUrl =
-      value === sortingValue
-        ? `labelling?page=${projectPage +
-            1}&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`
-        : `labelling?page=1&sorting=${value}&desc=${tempIsSortDesc}&rows=${projectRowsPerPage}`;
-    setIsLoading(true);
-
+    let urlSP = urlSearchParams;
     if (value === sortingValue) {
-      setIsSortDesc(tempIsSortDesc);
-      setProjectPage(0);
-      setSortingValue(value);
-      setIsProjectRequested(true);
+      urlSP.set("desc", !isSortDesc);
     } else {
-      setIsSortDesc(true);
-      setProjectPage(0);
-      setSortingValue(value);
-      setIsProjectRequested(true);
+      urlSP.set("sorting", value);
+      urlSP.delete("desc");
     }
-    setIsPagingChanged(true);
-    await history.push(changedUrl);
+    if (urlSP.has("page")) urlSP.delete("page");
+    handleSearchParams(urlSP);
   };
 
   const handleProjectChangePage = (event, newPage) => {
-    setIsLoading(true);
-    history.push(
-      `?page=${newPage +
-        1}&sorting=${sortingValue}&desc=${isSortDesc}&rows=${projectRowsPerPage}`
-    );
-    currentUrl = window.location.href;
-    setProjectPage(newPage);
-    setIsProjectRequested(true);
+    urlSearchParams.set("page", newPage + 1);
+    handleSearchParams(urlSearchParams);
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    const changedUrl = `labelling?page=1&sorting=${sortingValue}&desc=${isSortDesc}&rows=${+event
-      .target.value}`;
-    setIsLoading(true);
-    setProjectRowsPerPage(+event.target.value);
-    setProjectPage(0);
-    setIsProjectRequested(true);
-    history.push(changedUrl);
+    urlSearchParams.delete("page");
+    urlSearchParams.set("rows", event.target.value);
+    handleSearchParams(urlSearchParams);
   };
 
   const goProjectDetail = async (project) => {
@@ -264,11 +237,10 @@ const LabelprojectList = ({ history }) => {
         },
       })
     );
-    setSearchedValue("");
   };
 
   const tableHeads = [
-    { value: "No", width: "10%", name: "" },
+    { value: "No.", width: "10%", name: "" },
     { value: "Project name", width: "25%", name: "name" },
     { value: "Role", width: "10%", name: "role" },
     { value: "Type", width: "15%", name: "workapp" },
@@ -317,10 +289,10 @@ const LabelprojectList = ({ history }) => {
                   align="center"
                   width={tableHead.width}
                   style={{
-                    cursor: tableHead.value !== "No" ? "pointer" : "default",
+                    cursor: tableHead.value !== "No." ? "pointer" : "default",
                   }}
                   onClick={() =>
-                    tableHead.value !== "No" && onSetSortValue(tableHead.name)
+                    tableHead.value !== "No." && onSetSortValue(tableHead.name)
                   }
                 >
                   <div className={classes.tableHeader}>
@@ -452,13 +424,6 @@ const LabelprojectList = ({ history }) => {
     );
   };
 
-  const onGetDefaultProject = () => {
-    setSearchedValue("");
-    setProjectPage(0);
-    dispatch(setObjectlistsSearchedValue(""));
-    setIsProjectRequested(true);
-  };
-
   const onStartLabelProject = () => {
     history.push(`/admin/dataconnector`);
   };
@@ -535,10 +500,7 @@ const LabelprojectList = ({ history }) => {
                 </Tooltip>
               </GridItem>
               <GridItem xs={5}>
-                <SearchInputBox
-                  tooltipText={t("Enter the project name")}
-                  setSearchedValue={setSearchedValue}
-                />
+                <SearchInputBox />
               </GridItem>
               {isLoading ? (
                 <div className="emptyListTable">

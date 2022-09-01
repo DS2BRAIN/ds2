@@ -188,7 +188,7 @@ export default function SignUp(props) {
       const isAiTrainer = joiningPurpose === "aitrainer" ? true : false;
 
       if (isAgreetoMarketing) {
-        amplitude.getInstance().init("1cbafbadf45197fffec28396736998d7");
+        amplitude.getInstance().init("446d673fc8928366cc815f058ba93381");
         amplitude.getInstance().logEvent("Agreed to Marketing : " + email);
       }
 
@@ -929,7 +929,7 @@ export default function SignUp(props) {
               }}
               onClick={checkValidEmail}
             >
-              {isAbleEmail ? t("Checked") : t("중복 확인")}
+              {isAbleEmail ? t("Checked") : t("Duplicate Check")}
             </Button>
           </Grid>
           <Grid item xs={12}>

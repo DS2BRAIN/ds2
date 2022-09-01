@@ -52,7 +52,7 @@ const dashboardRoutes = !IS_ENTERPRISE
       //   layout: "/admin",
       // },
       {
-        path: "/labelling?page=1&sorting=created_at&desc=true&rows=10",
+        path: "/labelling",
         nickName: "LABELING AI | Annotation",
         name: "라벨링",
         icon: LabelIcon,
@@ -247,7 +247,7 @@ const dashboardRoutes = !IS_ENTERPRISE
       //   layout: "/admin",
       // },
       {
-        path: "/labelling?page=1&sorting=created_at&desc=true&rows=10",
+        path: "/labelling",
         nickName: "LABELING AI | Annotation",
         name: "라벨링",
         icon: LabelIcon,

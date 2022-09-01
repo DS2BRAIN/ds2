@@ -37,6 +37,8 @@ import { fileurl } from "controller/api";
 import { CircularProgress, Grid } from "@mui/material";
 import SearchInputBox from "components/Table/SearchInputBox";
 import Button from "components/CustomButtons/Button";
+import { listPagination } from "components/Function/globalFunc";
+import { IS_ENTERPRISE } from "variables/common";
 
 const Project = ({ history }) => {
   const classes = currentTheme();
@@ -51,7 +53,7 @@ const Project = ({ history }) => {
     []
   );
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
@@ -59,7 +61,6 @@ const Project = ({ history }) => {
   const [isCategoryClicked, setIsCategoryClicked] = useState(false);
   const [searchedValue, setSearchedValue] = useState("");
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
   const [sortingValue, setSortingValue] = useState("created_at");
   const [isSortDesc, setIsSortDesc] = useState(true);
   const [projectPage, setProjectPage] = useState(0);
@@ -70,15 +71,17 @@ const Project = ({ history }) => {
   const [previewText, setPreviewText] = useState(null);
   const [files, setFiles] = useState(null);
   const [progress, setProgress] = useState(0);
-  const url = window.location.href;
   const [introOn, setIntroOn] = useState(false);
   const [introOffClicked, setIntroOffClicked] = useState(false);
-  const [projectCountLimit, setProjectCountLimit] = useState(
-    process.env.REACT_APP_ENTERPRISE ? 99999999999 : 5
-  );
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   const logoBlue = fileurl + "asset/front/img/logo_title.png";
+  const url = window.location.href;
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
+  const projectCountLimit = IS_ENTERPRISE ? 999999999 : 5;
 
   useEffect(() => {
     const state = history.location.state;
@@ -114,31 +117,23 @@ const Project = ({ history }) => {
   }, [introOffClicked]);
 
   useEffect(() => {
+    const pagiInfoDict = listPagination(urlLoc);
+    setProjectPage(pagiInfoDict.page);
+    setProjectRowsPerPage(pagiInfoDict.rows);
+    setSortingValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setSearchedValue(pagiInfoDict.search);
+
+    setIsProjectRequested(true);
+  }, [urlSearch]);
+
+  useEffect(() => {
     if (url && projects.jupyterProjects) {
       (async () => {
         await setProjectSettings();
       })();
     }
   }, [projects.jupyterProjects]);
-
-  useEffect(() => {
-    if (url) {
-      (async () => {
-        await setIsLoading(true);
-        setSearchedValue("");
-        setSortingValue("created_at");
-        setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1];
-        if (projectTab) {
-          setActiveStep(projectTab);
-          setIsProjectRequested(true);
-        } else {
-          setActiveStep("all");
-          setIsProjectRequested(true);
-        }
-      })();
-    }
-  }, [url]);
 
   useEffect(() => {
     if (messages.shouldCloseModal) {
@@ -151,8 +146,13 @@ const Project = ({ history }) => {
   }, [isCategoryClicked]);
 
   useEffect(() => {
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    let urlSP = urlSearchParams;
+    let searchVal = searchedValue;
+    if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
+      urlSP.set("search", searchVal);
+    }
+    handleSearchParams(urlSP);
   }, [searchedValue]);
 
   useEffect(() => {
@@ -167,12 +167,15 @@ const Project = ({ history }) => {
       sorting: sortingValue,
       count: projectRowsPerPage,
       start: projectPage,
-      tab: activeStep,
       isDesc: isSortDesc,
       searching: searchedValue,
       isshared: isShared,
     };
     dispatch(getJupyterProjectsRequestAction(payloadJson));
+  };
+
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
   };
 
   const setProjectSettings = () => {
@@ -219,40 +222,33 @@ const Project = ({ history }) => {
           sorting: sortingValue,
           count: projectRowsPerPage,
           start: projectPage,
-          tab: activeStep,
           isDesc: isSortDesc,
         },
       })
     );
-    setSearchedValue("");
   };
 
   const handleProjectChangePage = (event, newPage) => {
-    setIsLoading(true);
-    setProjectPage(newPage);
-    setIsProjectRequested(true);
+    urlSearchParams.set("page", newPage + 1);
+    handleSearchParams(urlSearchParams);
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    setIsLoading(true);
-    setProjectRowsPerPage(+event.target.value);
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    urlSearchParams.delete("page");
+    urlSearchParams.set("rows", event.target.value);
+    handleSearchParams(urlSearchParams);
   };
 
   const onSetSortValue = async (value) => {
-    await setIsLoading(true);
+    let urlSP = urlSearchParams;
     if (value === sortingValue) {
-      let tempIsSortDesc = isSortDesc;
-      setIsSortDesc(!tempIsSortDesc);
-      setProjectPage(0);
-      setIsProjectRequested(true);
+      urlSP.set("desc", !isSortDesc);
     } else {
-      setIsSortDesc(true);
-      setSortingValue(value);
-      setProjectPage(0);
-      setIsProjectRequested(true);
+      urlSP.set("sorting", value);
+      urlSP.delete("desc");
     }
+    if (urlSP.has("page")) urlSP.delete("page");
+    handleSearchParams(urlSP);
   };
 
   const tableHeads = [
@@ -365,10 +361,10 @@ const Project = ({ history }) => {
                         width={tableHead.width}
                         style={{
                           cursor:
-                            tableHead.value !== "No" ? "pointer" : "default",
+                            tableHead.value !== "No." ? "pointer" : "default",
                         }}
                         onClick={() =>
-                          tableHead.value !== "No" &&
+                          tableHead.value !== "No." &&
                           onSetSortValue(tableHead.name)
                         }
                       >
@@ -388,11 +384,7 @@ const Project = ({ history }) => {
                     className={classes.tableHead}
                     align="center"
                     style={{ width: "10%" }}
-                  >
-                    {/* <div className={classes.tableHeader}>
-                      <b>{t("Delete Abusing")}</b>
-                    </div> */}
-                  </TableCell>
+                  ></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -499,11 +491,7 @@ const Project = ({ history }) => {
             <TablePagination
               rowsPerPageOptions={[10, 20, 50]}
               component="div"
-              count={
-                projects.jupyterTotalLength
-                  ? projects.jupyterTotalLength[activeStep]
-                  : 0
-              }
+              count={projects.jupyterTotalLength["all"]}
               rowsPerPage={projectRowsPerPage}
               page={projectPage}
               backIconButtonProps={{
@@ -646,7 +634,7 @@ const Project = ({ history }) => {
               >
                 <Button
                   id="add_project_btn"
-                  className={`${classes.defaultGreenContainedButton} ${classes.neoBtnH32}`}
+                  shape="greenContained"
                   onClick={() => {
                     if (projects?.jupyterProjects?.length < projectCountLimit)
                       openStartProject();
@@ -665,10 +653,7 @@ const Project = ({ history }) => {
                 </Button>
               </GridItem>
               <GridItem xs={4}>
-                <SearchInputBox
-                  tooltipText={t("Enter the project name")}
-                  setSearchedValue={setSearchedValue}
-                />
+                <SearchInputBox setSearchedValue={setSearchedValue} />
               </GridItem>
             </GridContainer>
             <GridContainer>

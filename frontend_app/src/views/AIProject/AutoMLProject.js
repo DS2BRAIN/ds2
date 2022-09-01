@@ -8,6 +8,12 @@ import { askDeleteProjectsReqeustAction } from "redux/reducers/messages";
 import { getProjectsRequestAction } from "redux/reducers/projects";
 import currentTheme from "assets/jss/custom.js";
 import { TRAINING_METHOD, PREFERRED_OPTION } from "variables/train";
+import { listPagination } from "components/Function/globalFunc";
+import ProjectIntro from "components/Guide/ProjectIntro";
+import Samples from "components/Templates/Samples.js";
+import ProjectListStepper from "components/Stepper/ProjectListStepper";
+import SearchInputBox from "components/Table/SearchInputBox";
+import Button from "components/CustomButtons/Button";
 
 import {
   Checkbox,
@@ -25,12 +31,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
-import ProjectIntro from "components/Guide/ProjectIntro";
-import Samples from "components/Templates/Samples.js";
-import ProjectListStepper from "components/Stepper/ProjectListStepper";
-import SearchInputBox from "components/Table/SearchInputBox";
-import Button from "components/CustomButtons/Button";
-
 const AutoMLProject = ({ history, route }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
@@ -44,23 +44,30 @@ const AutoMLProject = ({ history, route }) => {
   );
 
   const [isLoading, setIsLoading] = useState(true);
+  const [introOn, setIntroOn] = useState(false);
+  const [introOffClicked, setIntroOffClicked] = useState(false);
+  const [isCategoryClicked, setIsCategoryClicked] = useState(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [isVerify, setIsVerify] = useState(false);
+
+  const [activeStep, setActiveStep] = useState("all");
+  const [projectPage, setProjectPage] = useState(0);
+  const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
+  const [sortingValue, setSortingValue] = useState("created_at");
+  const [isSortDesc, setIsSortDesc] = useState(true);
+  const [searchedProjectValue, setSearchedProjectValue] = useState("");
+  const [isShared, setIsShared] = useState(false);
+
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
-  const [isCategoryClicked, setIsCategoryClicked] = useState(false);
-  const [searchedProjectValue, setSearchedProjectValue] = useState("");
-  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(null);
-  const [sortingValue, setSortingValue] = useState("created_at");
-  const [isSortDesc, setIsSortDesc] = useState(true);
-  const [projectPage, setProjectPage] = useState(0);
-  const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
-  const [isShared, setIsShared] = useState(false);
-  const url = window.location.href;
-  const [introOn, setIntroOn] = useState(false);
-  const [introOffClicked, setIntroOffClicked] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
-  const [isVerify, setIsVerify] = useState(false);
+
+  const url = window.location.href;
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
 
   useEffect(() => {
     if (route === "verifyproject") setIsVerify(true);
@@ -74,6 +81,18 @@ const AutoMLProject = ({ history, route }) => {
       setIntroOn(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    const pagiInfoDict = listPagination(urlLoc);
+    setActiveStep(pagiInfoDict.tab);
+    setProjectPage(pagiInfoDict.page);
+    setProjectRowsPerPage(pagiInfoDict.rows);
+    setSortingValue(pagiInfoDict.sorting);
+    setIsSortDesc(pagiInfoDict.desc);
+    setSearchedProjectValue(pagiInfoDict.search);
+
+    setIsProjectRequested(true);
+  }, [urlSearch]);
 
   useEffect(() => {
     if (introOffClicked) {
@@ -97,32 +116,17 @@ const AutoMLProject = ({ history, route }) => {
   }, [projects.projects]);
 
   useEffect(() => {
-    if (url) {
-      (async () => {
-        setIsLoading(true);
-        setSearchedProjectValue("");
-        setSortingValue("created_at");
-        setIsSortDesc(true);
-        const projectTab = url.split("?tab=")[1];
-        if (projectTab) {
-          setActiveStep(projectTab);
-          setProjectPage(0);
-          setIsProjectRequested(true);
-        } else {
-          setActiveStep("all");
-          setIsProjectRequested(true);
-        }
-      })();
-    }
-  }, [url]);
-
-  useEffect(() => {
     if (isCategoryClicked) setIsCategoryClicked(false);
   }, [isCategoryClicked]);
 
   useEffect(() => {
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    let urlSP = urlSearchParams;
+    let searchVal = searchedProjectValue;
+    if (searchVal) {
+      if (urlSP.has("page")) urlSP.delete("page");
+      urlSP.set("search", searchVal);
+    }
+    handleSearchParams(urlSP);
   }, [searchedProjectValue]);
 
   useEffect(() => {
@@ -143,6 +147,10 @@ const AutoMLProject = ({ history, route }) => {
     };
     if (isVerify) payloadJson["isVerify"] = true;
     dispatch(getProjectsRequestAction(payloadJson));
+  };
+
+  const handleSearchParams = (searchPar) => {
+    history.push(urlPath + "?" + searchPar);
   };
 
   const setProjectSettings = () => {
@@ -182,18 +190,17 @@ const AutoMLProject = ({ history, route }) => {
         sortInfo: sortInfoJson,
       })
     );
-    setSearchedProjectValue("");
   };
 
   const handleProjectChangePage = (event, newPage) => {
-    setProjectPage(newPage);
-    setIsProjectRequested(true);
+    urlSearchParams.set("page", newPage + 1);
+    handleSearchParams(urlSearchParams);
   };
 
   const handleChangeProjectRowsPerPage = (event) => {
-    setProjectRowsPerPage(+event.target.value);
-    setProjectPage(0);
-    setIsProjectRequested(true);
+    urlSearchParams.delete("page");
+    urlSearchParams.set("rows", event.target.value);
+    handleSearchParams(urlSearchParams);
   };
 
   const showMyProject = (projectArr) => {
@@ -230,18 +237,15 @@ const AutoMLProject = ({ history, route }) => {
       };
 
       const onSetSortValue = async (value) => {
+        let urlSP = urlSearchParams;
         if (value === sortingValue) {
-          let tempIsSortDesc = isSortDesc;
-          setSortingValue(value);
-          setProjectPage(0);
-          setIsSortDesc(!tempIsSortDesc);
-          setIsProjectRequested(true);
+          urlSP.set("desc", !isSortDesc);
         } else {
-          setIsSortDesc(true);
-          setSortingValue(value);
-          setProjectPage(0);
-          setIsProjectRequested(true);
+          urlSP.set("sorting", value);
+          urlSP.delete("desc");
         }
+        if (urlSP.has("page")) urlSP.delete("page");
+        handleSearchParams(urlSP);
       };
 
       return (
@@ -267,10 +271,15 @@ const AutoMLProject = ({ history, route }) => {
               align="center"
               width={tableHead.width}
               style={{
-                cursor: tableHead.value !== "no" ? "pointer" : "default",
+                cursor: !(
+                  tableHead.value === "No." || tableHead.value === "Role"
+                )
+                  ? "pointer"
+                  : "default",
               }}
               onClick={() =>
-                tableHead.value !== "no" && onSetSortValue(tableHead.name)
+                !(tableHead.value === "No." || tableHead.value === "Role") &&
+                onSetSortValue(tableHead.name)
               }
             >
               <div className={classes.tableHeader}>
@@ -521,19 +530,15 @@ const AutoMLProject = ({ history, route }) => {
             <div className={classes.subTitleText}>
               {t(
                 `Create new projects and ${
-                  isVerify ? "verify" : "train"
+                  isVerify ? "verify" : "develop"
                 } your own AI models. Analyze your data and make ${
-                  isVerify ? "verification" : "prediction"
+                  isVerify ? "verifications" : "predictions"
                 }.`
               )}
             </div>
           </Grid>
           <Grid sx={{ my: 8 }}>
-            <ProjectListStepper
-              history={history}
-              step={activeStep}
-              page={route}
-            />
+            <ProjectListStepper step={activeStep} page={route} />
           </Grid>
           <Grid
             container
@@ -543,10 +548,7 @@ const AutoMLProject = ({ history, route }) => {
           >
             <Grid item>{partStartBtns()}</Grid>
             <Grid item>
-              <SearchInputBox
-                tooltipText={t("Enter the project name")}
-                setSearchedValue={setSearchedProjectValue}
-              />
+              <SearchInputBox />
             </Grid>
           </Grid>
           <Grid>{showMyProject(projects.projects)}</Grid>
