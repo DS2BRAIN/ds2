@@ -3,6 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ChromePicker } from "react-color";
+import AceEditor from "react-ace";
+
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/mode-powershell";
+import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/ext-language_tools";
 
 import { putProjectServiceAppRequestActionWithoutLoading } from "redux/reducers/projects.js";
 import { openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
@@ -36,7 +44,11 @@ const Detail = React.memo(({ datacolumns }) => {
   );
   const { t } = useTranslation();
 
-  const url = `${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${JSON.parse(Cookies.getCookie("user"))["id"]}`;
+  const backendurl = `${
+    process.env.REACT_APP_BACKEND_URL
+      ? process.env.REACT_APP_BACKEND_URL
+      : "https://dslabaa.clickai.ai/"
+  }`;
   const [isLoading, setIsLoading] = useState(true);
   const [modelDetail, setModelDetail] = useState(null);
   const [chosenChart, setChosenChart] = useState("detail");
@@ -57,10 +69,20 @@ const Detail = React.memo(({ datacolumns }) => {
   useEffect(() => {
     if (models.model) {
       setIsLoading(true);
-      if (projects.project.trainingMethod.indexOf("normal") > -1 || projects.project.trainingMethod.indexOf("text") > -1 || projects.project.trainingMethod.indexOf("time_series") > -1) {
-        setApiUrl(`predict/${url}/`);
+      if (
+        projects.project.trainingMethod.indexOf("normal") > -1 ||
+        projects.project.trainingMethod.indexOf("text") > -1 ||
+        projects.project.trainingMethod.indexOf("time_series") > -1
+      ) {
+        setApiUrl(
+          `${backendurl}predict/${JSON.parse(Cookies.getCookie("user"))["id"]}`
+        );
       } else {
-        setApiUrl(`predictimage/${url}/`);
+        setApiUrl(
+          `${backendurl}predictimage/${
+            JSON.parse(Cookies.getCookie("user"))["id"]
+          }`
+        );
       }
       let data = models.model;
       try {
@@ -324,8 +346,8 @@ const Detail = React.memo(({ datacolumns }) => {
     onSaveServiceAppParameter();
   };
 
-  const onChangeApiContent = (e) => {
-    setApiContent(e.target.value);
+  const onChangeApiContent = (newValue) => {
+    setApiContent(newValue);
   };
 
   // const onSetJsonEditMode = () => {
@@ -846,14 +868,17 @@ const Detail = React.memo(({ datacolumns }) => {
                 <GridContainer style={{ height: "40px" }}></GridContainer>
                 <GridContainer style={{ padding: "0 15px", alignItems: "center" }}>
                   <GridItem xs={10}>
-                    <div className={classes.titleContainer}>
+                    <div
+                      className={classes.titleContainer}
+                      style={{ fontSize: 20 }}
+                    >
                       <b style={{ width: "10%" }}>POST</b>
                       <div className={classes.inputContainer}>{apiUrl}</div>
                     </div>
                   </GridItem>
                 </GridContainer>
                 <GridContainer style={{ height: "10px" }}></GridContainer>
-                <GridContainer style={{ padding: "0 15px", alignItems: "center" }}>
+                <GridContainer style={{ alignItems: "center" }}>
                   <GridItem
                     xs={12}
                     style={{
@@ -872,6 +897,7 @@ const Detail = React.memo(({ datacolumns }) => {
                         style={
                           chosenLanguage === "javascript"
                             ? {
+                                color: "var(--secondary1)",
                                 fontWeight: "bold",
                                 textDecoration: "underline",
                               }
@@ -889,6 +915,7 @@ const Detail = React.memo(({ datacolumns }) => {
                         style={
                           chosenLanguage === "python"
                             ? {
+                                color: "var(--secondary1)",
                                 fontWeight: "bold",
                                 textDecoration: "underline",
                               }
@@ -906,6 +933,7 @@ const Detail = React.memo(({ datacolumns }) => {
                         style={
                           chosenLanguage === "wget"
                             ? {
+                                color: "var(--secondary1)",
                                 fontWeight: "bold",
                                 textDecoration: "underline",
                               }
@@ -923,6 +951,7 @@ const Detail = React.memo(({ datacolumns }) => {
                         style={
                           chosenLanguage === "java"
                             ? {
+                                color: "var(--secondary1)",
                                 fontWeight: "bold",
                                 textDecoration: "underline",
                               }
@@ -938,16 +967,24 @@ const Detail = React.memo(({ datacolumns }) => {
                 <GridContainer>
                   <GridItem xs={12}>
                     <div className={classes.content}>
-                      <InputBase
-                        value={apiContent}
+                      <AceEditor
+                        width="100%"
+                        mode={
+                          chosenLanguage === "wget"
+                            ? "powershell"
+                            : chosenLanguage
+                        }
+                        theme="monokai"
                         onChange={onChangeApiContent}
-                        autoFocus={true}
-                        inputRef={apiRef}
-                        multiline={true}
-                        style={{
-                          width: "100%",
-                          color: currentThemeColor.textWhite87,
+                        value={apiContent}
+                        editorProps={{ $blockScrolling: true }}
+                        showPrintMargin={false}
+                        setOptions={{
+                          enableBasicAutocompletion: true,
+                          enableLiveAutocompletion: true,
+                          showLineNumbers: true,
                         }}
+                        readOnly
                       />
                     </div>
                   </GridItem>
