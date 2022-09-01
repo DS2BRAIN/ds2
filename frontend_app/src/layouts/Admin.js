@@ -63,7 +63,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import amplitude from "amplitude-js";
 import { openChat } from "components/Function/globalFunc";
 import i18n from "language/i18n";
-import DiagramPage from "views/Diagram/DiagramPage";
+import DiagramCover from "views/Diagram/DiagramCover";
 
 let ps;
 const useStyles = makeStyles(styles);
@@ -152,7 +152,7 @@ const Admin = ({ history, ...rest }) => {
       <Route
         path="/admin/diagram"
         {...rest}
-        render={(props) => <DiagramPage {...props} />}
+        render={(props) => <DiagramCover {...props} />}
       />
       <Route
         path="/admin/setting"
@@ -378,13 +378,17 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
   }, [user.me]);
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
   }, [window.location.href]);
 

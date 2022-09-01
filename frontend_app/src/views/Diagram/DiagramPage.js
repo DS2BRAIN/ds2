@@ -72,7 +72,7 @@ const DiagramPage = () => {
   };
 
   return (
-    <Grid sx={{ height: "80vh", mt: 3 }}>
+    <Grid sx={{ height: "75vh", mt: 3 }}>
       <Button
         shape="greenContainedSquare"
         startIcon={<AddIcon />}
