@@ -15,7 +15,7 @@ export const NodeRecipe = (props) => {
 
   const isStartBlock = id === "node-start";
   const isEndBlock = id === "node-end";
-  const isChangableBlock = !(id === "node-start" || id === "node-end");
+  const isChangableBlock = !(isStartBlock || isEndBlock);
 
   const [title, setTitle] = useState(content ? content : "New block");
   const [isEdit, setIsEdit] = useState(false);
@@ -39,11 +39,11 @@ export const NodeRecipe = (props) => {
     setEditValue(e.target.value);
   };
 
-  const addNewInputNode = () => {
+  const addNewInputPort = () => {
     console.log("addnewinputnode");
   };
 
-  const addNewOutputNode = () => {
+  const addNewOutputPort = () => {
     console.log("addnewoutputnode");
   };
 
@@ -54,7 +54,7 @@ export const NodeRecipe = (props) => {
           icon="times"
           size="small"
           sx={{ mt: -4, alignSelf: "flex-end" }}
-          onClick={() => data.onClick(id)}
+          onClick={() => data.onDeleteNode(id)}
         >
           <CloseIcon fontSize="small" />
         </IconButton>
@@ -91,16 +91,13 @@ export const NodeRecipe = (props) => {
             className: "circle-port circle-porter-in",
           })}
           <span>input node</span>
-          {/* {data.inputsDetail && (
-            <span>{data.inputsDetail[port.props.id].title || "not found"}</span>
-          )} */}
         </div>
       ))}
       {!isStartBlock && (
         <div className="custom-node-port custom-node-port-in">
           <Grid
             className="circle-port circle-porter-in"
-            onClick={addNewInputNode}
+            onClick={addNewInputPort}
           ></Grid>
         </div>
       )}
@@ -113,19 +110,13 @@ export const NodeRecipe = (props) => {
             className: "circle-port circle-porter-out",
           })}
           <span>output node</span>
-          {/* {data.outputsDetail && (
-            <span>
-              {data.outputsDetail[port.props.id].title ||
-                "not found" + port.props.id}
-            </span>
-          )} */}
         </div>
       ))}
       {!isEndBlock && (
         <div className="custom-node-port custom-node-port-out">
           <Grid
             className="circle-port circle-porter-out"
-            onClick={addNewOutputNode}
+            onClick={addNewOutputPort}
           ></Grid>
         </div>
       )}

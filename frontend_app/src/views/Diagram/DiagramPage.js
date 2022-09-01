@@ -63,7 +63,7 @@ const DiagramPage = () => {
         schema.nodes[nodeStandardPosition].coordinates[1],
       ],
       render: NodeRecipe,
-      data: { onClick: deleteNodeFromSchema },
+      data: { onDeleteNode: deleteNodeFromSchema },
       inputs: [{ id: `port-${Math.random()}` }],
       outputs: [{ id: `port-${Math.random()}` }],
     };
