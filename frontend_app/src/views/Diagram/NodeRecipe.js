@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
+import Button from "components/CustomButtons/Button";
 
-import { IconButton, InputBase, Grid } from "@mui/material";
+import { Grid, IconButton, InputBase } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
@@ -12,13 +13,11 @@ export const NodeRecipe = (props) => {
   const dispatch = useDispatch();
   const { id, content, inputs, outputs, data } = props;
 
-  const isChangableNode = !(
-    id === "node-1" ||
-    id === "node-2" ||
-    id === "node-3"
-  );
+  const isStartBlock = id === "node-start";
+  const isEndBlock = id === "node-end";
+  const isChangableBlock = !(id === "node-start" || id === "node-end");
 
-  const [title, setTitle] = useState("New node");
+  const [title, setTitle] = useState(content ? content : "New block");
   const [isEdit, setIsEdit] = useState(false);
   const [editValue, setEditValue] = useState("");
 
@@ -40,9 +39,17 @@ export const NodeRecipe = (props) => {
     setEditValue(e.target.value);
   };
 
+  const addNewInputNode = () => {
+    console.log("addnewinputnode");
+  };
+
+  const addNewOutputNode = () => {
+    console.log("addnewoutputnode");
+  };
+
   return (
     <div className="custom-node">
-      {isChangableNode && (
+      {isChangableBlock && (
         <IconButton
           icon="times"
           size="small"
@@ -83,11 +90,20 @@ export const NodeRecipe = (props) => {
           {React.cloneElement(port, {
             className: "circle-port circle-porter-in",
           })}
-          {data.inputsDetail && (
+          <span>input node</span>
+          {/* {data.inputsDetail && (
             <span>{data.inputsDetail[port.props.id].title || "not found"}</span>
-          )}
+          )} */}
         </div>
       ))}
+      {!isStartBlock && (
+        <div className="custom-node-port custom-node-port-in">
+          <Grid
+            className="circle-port circle-porter-in"
+            onClick={addNewInputNode}
+          ></Grid>
+        </div>
+      )}
       {outputs.map((port, index) => (
         <div
           key={"i-" + index}
@@ -96,14 +112,23 @@ export const NodeRecipe = (props) => {
           {React.cloneElement(port, {
             className: "circle-port circle-porter-out",
           })}
-          {data.outputsDetail && (
+          <span>output node</span>
+          {/* {data.outputsDetail && (
             <span>
               {data.outputsDetail[port.props.id].title ||
                 "not found" + port.props.id}
             </span>
-          )}
+          )} */}
         </div>
       ))}
+      {!isEndBlock && (
+        <div className="custom-node-port custom-node-port-out">
+          <Grid
+            className="circle-port circle-porter-out"
+            onClick={addNewOutputNode}
+          ></Grid>
+        </div>
+      )}
       {data.portAdd && data.portAdd.in && (
         <div className={"port-add-container port-add-in"}>
           {React.cloneElement(outputs[outputs.length - 1], {

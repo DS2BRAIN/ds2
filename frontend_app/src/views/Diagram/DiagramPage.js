@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 const initialSchema = createSchema({
   nodes: [
     {
-      id: "node-1",
+      id: "node-start",
       content: "Start",
       coordinates: [100, 150],
       render: NodeRecipe,
@@ -27,7 +27,7 @@ const initialSchema = createSchema({
       },
     },
     {
-      id: "node-2",
+      id: "node-middle",
       content: "Middle",
       coordinates: [300, 150],
       render: NodeRecipe,
@@ -44,7 +44,7 @@ const initialSchema = createSchema({
       },
     },
     {
-      id: "node-3",
+      id: "node-end",
       content: "End",
       coordinates: [600, 150],
       inputs: [
