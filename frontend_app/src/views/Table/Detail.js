@@ -1,23 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import currentTheme from "assets/jss/custom.js";
-import { currentThemeColor } from "assets/jss/custom.js";
-import { IS_ENTERPRISE } from "variables/common";
-import { putProjectServiceAppRequestActionWithoutLoading } from "redux/reducers/projects.js";
-import { openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
-import Cookies from "helpers/Cookies";
-import Button from "components/CustomButtons/Button";
-
 import { useTranslation } from "react-i18next";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ChromePicker } from "react-color";
+
+import { putProjectServiceAppRequestActionWithoutLoading } from "redux/reducers/projects.js";
+import { openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
+import currentTheme from "assets/jss/custom.js";
+import { currentThemeColor } from "assets/jss/custom.js";
+import { IS_ENTERPRISE } from "variables/common";
+import Cookies from "helpers/Cookies";
+import Button from "components/CustomButtons/Button";
 import Chart from "components/Chart/Chart.js";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
+
 import InputBase from "@material-ui/core/InputBase";
-import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@material-ui/core/Modal";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grid from "@mui/material/Grid";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 
@@ -51,6 +52,7 @@ const Detail = React.memo(({ datacolumns }) => {
   const [colorPickerModal, setColorPickerModal] = useState(false);
   const [jsonEditMode, setJsonEditMode] = useState(false);
   const [featureImportance, setFeatureImportance] = useState([]);
+  const [hyperParams, setHyperParams] = useState(null);
 
   useEffect(() => {
     if (models.model) {
@@ -118,7 +120,22 @@ const Detail = React.memo(({ datacolumns }) => {
   }, [projects.project]);
 
   useEffect(() => {
-    if (modelDetail) setIsLoading(false);
+    if (modelDetail) {
+      // Setting the state of the parameter value set for each model training
+      if (modelDetail.hyper_param) {
+        const params = modelDetail.hyper_param;
+        const excepted = ["id", "user", "project", "is_original"];
+        const tmpHyperParams = {};
+
+        Object.keys(params).map((key) => {
+          if (excepted.indexOf(key) === -1) tmpHyperParams[key] = params[key];
+        });
+
+        setHyperParams(tmpHyperParams);
+      }
+
+      setIsLoading(false);
+    }
   }, [modelDetail]);
 
   useEffect(() => {
@@ -490,14 +507,115 @@ const Detail = React.memo(({ datacolumns }) => {
 
     return (
       <div className={classes.detailContainer}>
-        <div style={{ fontSize: "20px", margin: "15px 5px" }}>
-          {modelDetail.name.toUpperCase()}
-          {!IS_ENTERPRISE && projects.project.trainingMethod.indexOf("load") === -1 && projects.project.trainingMethod.indexOf("recommender") === -1 && (
-            <Button id="shareAIApp" shape="greenOutlined" sx={{ ml: 2 }} onClick={() => shareModalActionOpen()}>
-              {t("Sharing a service app")}
-            </Button>
-          )}
+        <div style={{ margin: "32px 8px 16px" }}>
+          <span style={{ fontSize: "24px", fontWeight: 500 }}>
+            {modelDetail.name.toUpperCase()}
+          </span>
+
+          {!IS_ENTERPRISE &&
+            projects.project.trainingMethod.indexOf("load") === -1 &&
+            projects.project.trainingMethod.indexOf("recommender") === -1 && (
+              <Button
+                id="shareAIApp"
+                shape="greenOutlined"
+                sx={{ ml: 2 }}
+                onClick={() => shareModalActionOpen()}
+              >
+                {t("Sharing a service app")}
+              </Button>
+            )}
         </div>
+
+        {hyperParams && (
+          <Grid container sx={{ my: 1.5 }}>
+            <Grid container>
+              <span
+                style={{
+                  margin: "0 8px",
+                  fontSize: 17,
+                  fontWeight: 500,
+                  color: "var(--secondary1)",
+                }}
+              >
+                Hyperparameter settings
+              </span>
+            </Grid>
+            <Grid
+              container
+              sx={{
+                m: 1,
+                p: "24px 32px",
+                border: "2px solid var(--surface2)",
+                borderRadius: "8px",
+                backgroundColor: "var(--surface1)",
+              }}
+            >
+              <Grid container>
+                {Object.keys(hyperParams).map((key) => {
+                  if (key === "optimizer") return;
+
+                  return (
+                    <Grid key={key} item sx={{ mr: 2.5 }}>
+                      <Grid container>
+                        <span
+                          style={{ display: "inline-block", marginRight: 8 }}
+                        >
+                          {key} :
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 18,
+                            fontWeight: 500,
+                            color: "var(--secondary1)",
+                            verticalAlign: "middle",
+                          }}
+                        >
+                          {String(hyperParams[key])}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+
+              {hyperParams.optimizer && (
+                <Grid container sx={{ mt: 1.5 }}>
+                  <Grid
+                    item
+                    sx={{ mr: 4, fontWeight: 500, textDecoration: "underline" }}
+                  >
+                    *Optimizer
+                  </Grid>
+
+                  {Object.keys(hyperParams.optimizer).map((key) => {
+                    return (
+                      <Grid key={key} item sx={{ mr: 2.5 }}>
+                        <Grid container>
+                          <span
+                            style={{ display: "inline-block", marginRight: 8 }}
+                          >
+                            {key} :
+                          </span>
+                          <span
+                            style={{
+                              fontSize: 18,
+                              fontWeight: 500,
+                              color: "var(--secondary1)",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            {String(hyperParams.optimizer[key])}
+                          </span>
+                        </Grid>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
+        )}
+
         <div className={classes.chartContainer} style={{ marginLeft: "5px" }}>
           <div style={{ display: "flex", flexShrink: "0" }}>
             {isDetail && (
