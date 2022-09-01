@@ -120,7 +120,9 @@ const RawDataTable = ({ sampleData, sampleDataId, isDataConnectorPage }) => {
         } else {
           dispatch(
             openErrorSnackbarRequestAction(
-              t("An error occurred during data conversion. Please try again in a moment")
+              t(
+                "An error occurred during data conversion. Please try again in a moment"
+              )
             )
           );
         }

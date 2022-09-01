@@ -110,37 +110,15 @@ const TraceableButton = (props) => {
     }
   `;
 
-  useEffect(() => {
-    if (user.me && user.me.isAgreedBehaviorStatistics) {
-      setIsAgreedBehaviorStatistics(true);
-      const analytics = getAnalytics();
-      amplitude.getInstance().logEvent(window.location.pathname);
-      logEvent(analytics, "select_content", {
-        content_type: "page",
-        content_id: "1",
-        items: [{ name: "window.location.pathname" }],
-      });
-    }
-  }, [user]);
-
-  if (isAgreedBehaviorStatistics) {
-    let tempId = "1";
-    let isIdExist = false;
+  const customClick = () => {
     let eventText = "Click_Button_" + children;
-
     if (id) {
-      tempId = id;
-      isIdExist = true;
       eventText = "Click_Button_" + id;
     }
-
-    const analytics = getAnalytics();
-    logEvent(analytics, "select_button", {
-      content_type: "button",
-      content_id: tempId,
-      items: [children],
-    });
-    amplitude.getInstance().logEvent(eventText);
+    props.onClick();
+    if (user?.me && user?.me.isAgreedBehaviorStatistics) {
+      amplitude.getInstance().logEvent("button click : " + window.location.pathname + " : " + eventText);
+    }
   }
 
   if (disabled) {
@@ -151,13 +129,13 @@ const TraceableButton = (props) => {
     );
   } else if (shape) {
     return (
-      <DefaultButton id={id} {...rest}>
+      <DefaultButton id={id} onClick={customClick} {...rest}>
         {children}
       </DefaultButton>
     );
   } else
     return (
-      <PastMaterialButton id={id} {...rest}>
+      <PastMaterialButton id={id} onClick={customClick} {...rest}>
         {children}
       </PastMaterialButton>
     );

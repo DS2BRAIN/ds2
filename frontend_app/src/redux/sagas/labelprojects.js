@@ -160,7 +160,7 @@ function* deleteLabelProjects(action) {
       return;
     } else {
       const history = yield getContext("history");
-      history.push(`/labelling?page=1&sorting=created_at&desc=true&rows=10`);
+      history.push(`/labelling`);
       return;
     }
   } catch (err) {

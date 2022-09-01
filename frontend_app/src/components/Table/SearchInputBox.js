@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
@@ -10,10 +11,15 @@ import SearchIcon from "@material-ui/icons/Search";
 
 import currentTheme from "assets/jss/custom.js";
 
-const SearchInputBox = ({ tooltipText, setSearchedValue }) => {
+const SearchInputBox = () => {
+  const history = useHistory();
   const { t } = useTranslation();
   const classes = currentTheme();
-  const dispatch = useDispatch();
+
+  const urlLoc = window.location;
+  const urlPath = urlLoc.pathname;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
 
   const [searchingValue, setSearchingValue] = useState("");
   const [isSearched, setIsSearched] = useState(false);
@@ -26,14 +32,8 @@ const SearchInputBox = ({ tooltipText, setSearchedValue }) => {
 
   const onSubmitSearch = (e) => {
     e.preventDefault();
-
-    if (searchingValue && searchingValue.length > 0) {
-      setIsSearched(true);
-      setSearchedValue(searchingValue);
-    } else {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter a search term.")));
-      return;
-    }
+    setIsSearched(true);
+    onSetSearchOutput(searchingValue);
   };
 
   const onChangeSearch = async (e) => {
@@ -45,15 +45,32 @@ const SearchInputBox = ({ tooltipText, setSearchedValue }) => {
   const onGetDefault = () => {
     if (isSearched) {
       setIsSearched(false);
-      setSearchedValue("");
+      onSetSearchOutput("");
     }
     setSearchingValue("");
+  };
+
+  const onSetSearchOutput = (value) => {
+    let urlSP = urlSearchParams;
+    if (value === "") {
+      urlSP.delete("search");
+      if (urlSP.has("page")) urlSP.delete("page");
+    } else {
+      urlSP.set("search", value);
+    }
+    history.push(urlPath + "?" + urlSP);
   };
 
   return (
     <Tooltip
       id="search_tooltip"
-      title={<div style={{ fontSize: "12px" }}>{t(tooltipText)}</div>}
+      title={
+        <div style={{ fontSize: "12px" }}>
+          {urlPath.includes("/dataconnector")
+            ? t("Enter the data name.")
+            : t("Enter the project name")}
+        </div>
+      }
       placement="top"
     >
       <form

@@ -34,7 +34,9 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   };
 
   const onClickMoreBtn = (id) => {
-    const tmpInfo = connectorInfo.label_info.filter((v) => v.labelclass_id === id);
+    const tmpInfo = connectorInfo.label_info.filter(
+      (v) => v.labelclass_id === id
+    );
     setSelectedClsInfo(tmpInfo[0]);
     handleImgModalOpen();
   };
@@ -51,7 +53,9 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   ];
 
   if (connectorInfo.trainingMethod === "image") {
-    TABLE_HEADS = TABLE_HEADS.filter((v) => !["color", "box", "polyline", "polygon"].includes(v.value));
+    TABLE_HEADS = TABLE_HEADS.filter(
+      (v) => !["color", "box", "polyline", "polygon"].includes(v.value)
+    );
     TABLE_HEADS.push({
       value: "sample_img",
       name: t("Labeling image"),
@@ -87,7 +91,9 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   ];
 
   if (connectorInfo.trainingMethod === "image") {
-    TABLE_BODYS = TABLE_BODYS.filter((v) => !["color", "box", "polyline", "polygon"].includes(v.name));
+    TABLE_BODYS = TABLE_BODYS.filter(
+      (v) => !["color", "box", "polyline", "polygon"].includes(v.name)
+    );
     TABLE_BODYS.push({ name: "images", type: "array" });
   } else {
     if (connectorInfo.dataconnectortype.dataconnectortypeName === "CSV") {
@@ -257,12 +263,21 @@ const DataconnectorSummary = ({ connectorInfo }) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table
+          className={classes.table}
+          sx={{ minWidth: 650 }}
+          aria-label="simple table"
+        >
           <TableHead>
             <TableRow sx={{ borderBottom: "2px solid var(--textWhite38)" }}>
               {TABLE_HEADS.map((v) => {
                 return (
-                  <TableCell className={classes.tableHead} width={v.width} align="center" sx={{ color: "var(--textMediumGrey)" }}>
+                  <TableCell
+                    className={classes.tableHead}
+                    width={v.width}
+                    align="center"
+                    sx={{ color: "var(--textMediumGrey)" }}
+                  >
                     {v.name}
                   </TableCell>
                 );
@@ -307,11 +322,16 @@ const DataconnectorSummary = ({ connectorInfo }) => {
                   }}
                 >
                   <span>
-                    {t("Number of Labeling")} : {selectedClsInfo.count && selectedClsInfo.count.toLocaleString()}
+                    {t("Number of Labeling")} :{" "}
+                    {selectedClsInfo.count &&
+                      selectedClsInfo.count.toLocaleString()}
                   </span>
                   <span style={{ margin: "0 4px" }}>/</span>
                   <span>
-                    {t("Ratio of Total Labeling")} : {selectedClsInfo.ratio && Number(selectedClsInfo.ratio).toFixed(2)}%
+                    {t("Ratio of Total Labeling")} :{" "}
+                    {selectedClsInfo.ratio &&
+                      Number(selectedClsInfo.ratio).toFixed(2)}
+                    %
                   </span>
                 </p>
               </Grid>
