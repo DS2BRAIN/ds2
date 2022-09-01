@@ -6,7 +6,7 @@
 
 easy to build the customized AI model with SOTA algorithms by MLOps based active learning process and also Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations.
 
-<img width="958" alt="pa" src="https://www.dropbox.com/s/ss5cxrjqynqdyts/img_service_solution_en.png?raw=1">
+<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187967599-32af37d0-4b2f-4444-ab14-c309df09be0a.png">
 
 DS2 is a data science platform that automates machine learning pipelines and prescriptive analytics.
 
