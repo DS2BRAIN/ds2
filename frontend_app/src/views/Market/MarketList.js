@@ -408,9 +408,9 @@ export default function MarketList({ history }) {
                       key={tableBody.label + marketModel.id}
                       className={classes.tableRowCell}
                       align="center"
-                      onClick={() => {
-                        goNewPage(tableBody.value, isKor ? marketModel.url : marketModel.url_en);
-                      }}
+                      // onClick={() => {
+                      //   goNewPage(tableBody.value, isKor ? marketModel.url : marketModel.url_en);
+                      // }}
                       style={{
                         cursor: !tableBody.value.includes("name_") ? "default" : "pointer",
                         padding: tableBody.value === "thumbnail" && "0 !important",
