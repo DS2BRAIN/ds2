@@ -39,14 +39,6 @@ export const NodeRecipe = (props) => {
     setEditValue(e.target.value);
   };
 
-  const addNewInputPort = () => {
-    console.log("addnewinputnode");
-  };
-
-  const addNewOutputPort = () => {
-    console.log("addnewoutputnode");
-  };
-
   return (
     <div className="custom-node">
       {isChangableBlock && (
@@ -93,11 +85,11 @@ export const NodeRecipe = (props) => {
           <span>input node</span>
         </div>
       ))}
-      {!isStartBlock && (
+      {isChangableBlock && (
         <div className="custom-node-port custom-node-port-in">
           <Grid
             className="circle-port circle-porter-in"
-            onClick={addNewInputPort}
+            onClick={data.portAdd.inFunc}
           ></Grid>
         </div>
       )}
@@ -112,19 +104,12 @@ export const NodeRecipe = (props) => {
           <span>output node</span>
         </div>
       ))}
-      {!isEndBlock && (
+      {isChangableBlock && (
         <div className="custom-node-port custom-node-port-out">
           <Grid
             className="circle-port circle-porter-out"
-            onClick={addNewOutputPort}
+            onClick={data.portAdd.outFunc}
           ></Grid>
-        </div>
-      )}
-      {data.portAdd && data.portAdd.in && (
-        <div className={"port-add-container port-add-in"}>
-          {React.cloneElement(outputs[outputs.length - 1], {
-            className: "port-add",
-          })}
         </div>
       )}
     </div>

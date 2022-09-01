@@ -21,6 +21,10 @@ const initialSchema = createSchema({
       data: {
         foo: "bar",
         count: 0,
+        portAdd: {
+          in: false,
+          out: false,
+        },
       },
     },
     {
@@ -37,6 +41,10 @@ const initialSchema = createSchema({
             object: true,
           },
         },
+        portAdd: {
+          in: false,
+          out: false,
+        },
       },
     },
   ],
@@ -51,6 +59,14 @@ const DiagramPage = () => {
     removeNode(nodeToRemove);
   };
 
+  const addNewInputPort = () => {
+    console.log("addnewinputnode");
+  };
+
+  const addNewOutputPort = () => {
+    console.log("addnewoutputnode");
+  };
+
   const addNewNode = () => {
     let nodeStandardPosition =
       schema.nodes.length === 2 ? 0 : schema.nodes.length - 1;
@@ -63,7 +79,15 @@ const DiagramPage = () => {
         schema.nodes[nodeStandardPosition].coordinates[1],
       ],
       render: NodeRecipe,
-      data: { onDeleteNode: deleteNodeFromSchema },
+      data: {
+        onDeleteNode: deleteNodeFromSchema,
+        portAdd: {
+          in: true,
+          out: true,
+          inFunc: addNewInputPort,
+          outFunc: addNewOutputPort,
+        },
+      },
       inputs: [{ id: `port-${Math.random()}` }],
       outputs: [{ id: `port-${Math.random()}` }],
     };
