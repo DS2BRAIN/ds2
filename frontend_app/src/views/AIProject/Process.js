@@ -24,7 +24,10 @@ import {
   putInstanceTypeRequestAction,
   putAlgorithmTypeRequestAction,
 } from "redux/reducers/projects.js";
-import { setChosenModelRequestAction, getModelRequestAction } from "redux/reducers/models.js";
+import {
+  setChosenModelRequestAction,
+  getModelRequestAction,
+} from "redux/reducers/models.js";
 import * as api from "controller/api.js";
 import { fileurl } from "controller/api";
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
@@ -47,13 +50,45 @@ import RawDataTable from "views/Table/RawDataTable";
 import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
 import Detail from "views/Table/Detail";
 
-import { Checkbox, Container, FormControl, FormControlLabel, FormLabel, InputBase, Menu, MenuItem, Modal, Radio, RadioGroup, Select, Switch, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@material-ui/core";
+import {
+  Checkbox,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  InputBase,
+  Menu,
+  MenuItem,
+  Modal,
+  Radio,
+  RadioGroup,
+  Select,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@material-ui/core";
 import Create from "@material-ui/icons/Create";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import { CircularProgress, FormGroup, Grid, IconButton, Tooltip as MuiTooltip } from "@mui/material";
+import {
+  CircularProgress,
+  FormGroup,
+  Grid,
+  IconButton,
+  Tooltip as MuiTooltip,
+} from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-const PREFER_TYPE = [{ value: "custom", label: "Manual Setting" }, { value: "colab", label: "Code Generation" }, { value: "speed", label: "Faster training speed" }, { value: "accuracy", label: "Higher accuracy" }, { value: "labeling", label: "Auto Labeling" }];
+const PREFER_TYPE = [
+  { value: "custom", label: "Manual Setting" },
+  { value: "colab", label: "Code Generation" },
+  { value: "speed", label: "Faster training speed" },
+  { value: "accuracy", label: "Higher accuracy" },
+  { value: "labeling", label: "Auto Labeling" },
+];
 
 const INITIAL_ALGORITHM_TYPE = Object.keys(INITIAL_ALGORITHM_INFO)[0];
 
@@ -80,7 +115,9 @@ const Process = (props) => {
   const [hasImageLabelData, setHasImageLabelData] = useState(false);
   const [hasTimeSeriesData, setHasTimeSeriesData] = useState(false);
   const [timeSeriesColumnInfo, setTimeSeriesColumnInfo] = useState({});
-  const [startTimeSeriesDatetime, onChangeStartTimeSeriesDatetime] = useState(null);
+  const [startTimeSeriesDatetime, onChangeStartTimeSeriesDatetime] = useState(
+    null
+  );
   const [endTimeSeriesDatetime, onChangeEndTimeSeriesDatetime] = useState(null);
   const [analyticsStandard, setAnalyticsStandard] = useState("auto");
 
@@ -106,7 +143,6 @@ const Process = (props) => {
   const [hasMissingValue, setHasMissingValue] = useState(false);
   const [valueForPredictName, setValueForPredictName] = useState("");
   const [trainingValueForStart, setTrainingValueForStart] = useState(null);
-  const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
   const [colabInfo, setColabInfo] = useState({
     epoch: 2,
     learningRate: 0.01,
@@ -120,7 +156,10 @@ const Process = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [groupCheckboxDict, setGroupCheckboxDict] = useState({});
   const [isVerify, setIsVerify] = useState(false);
-  const [isParameterCompressedChecked, setIsParameterCompressedChecked] = useState(false);
+  const [
+    isParameterCompressedChecked,
+    setIsParameterCompressedChecked,
+  ] = useState(false);
   const [valueForPredictColumnId, setValueForPredictColumnId] = useState(null);
   const [valueForUserColumnId, setValueForUserColumnId] = useState(null);
   const [valueForItemColumnId, setValueForItemColumnId] = useState(null);
@@ -133,11 +172,11 @@ const Process = (props) => {
   const [instanceType, setInstanceType] = useState("");
   const [algorithmType, setAlgorithmType] = useState(INITIAL_ALGORITHM_TYPE);
   const [isAnyModelFinished, setIsAnyModelFinished] = useState(false);
-  const [timeTickAsync, setTimeTickAsync] = useState(0);
-  const [timeTickAsyncCount, setTimeTickAsyncCount] = useState(0);
   const [isDownloadReportLoading, setIsDownloadReportLoading] = useState(false);
   const [algorithmInfo, setAlgorithmInfo] = useState(INITIAL_ALGORITHM_INFO);
-  const [isRequiredHyperParameters, setIsRequiredHyperParameters] = useState(false);
+  const [isRequiredHyperParameters, setIsRequiredHyperParameters] = useState(
+    false
+  );
   const [hyperParamsData, setHyperParamsData] = useState(null);
   const [selectedDeviceArr, setSelectedDeviceArr] = useState([]);
   const [isDeviceAllSelected, setIsDeviceAllSelected] = useState(false);
@@ -145,7 +184,6 @@ const Process = (props) => {
   const [isModelPageAccessible, setIsModelPageAccessible] = useState(false);
 
   const path = window.location.pathname;
-  const modelPause = fileurl + "asset/front/img/modelIcon/Delay_white@300x.png";
 
   useEffect(() => {
     const url = window.location.href;
@@ -174,47 +212,33 @@ const Process = (props) => {
     let day = date.getDate().toString();
     let hours = date.getHours().toString();
     let minutes = date.getMinutes().toString();
-    let dateString = `${year}-${month < 10 ? "0" + month : month}-${day < 10 ? "0" + day : day}T${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}`;
+    let dateString = `${year}-${month < 10 ? "0" + month : month}-${
+      day < 10 ? "0" + day : day
+    }T${hours < 10 ? "0" + hours : hours}:${
+      minutes < 10 ? "0" + minutes : minutes
+    }`;
     setDate(dateString);
     projects.project = null;
   }, []);
 
-  // useEffect(() => {
-  //   if (timeTickAsync == 0) {
-  //     let timer = setTimeout(() => {
-  //       setTimeTickAsync(1);
-  //     }, 15000);
-  //   } else if (timeTickAsync == 1) {
-  //     setTimeTickAsync(0);
-  //     setTimeTickAsyncCount(timeTickAsyncCount + 1);
-  //   }
-  // }, [timeTickAsync]);
-
-  // useEffect(() => {
-  //   if (projects?.project) {
-  //     if (timeTickAsyncCount <= 20) {
-  //       intervalAction();
-  //     } else if (timeTickAsyncCount <= 240) {
-  //       if (timeTickAsyncCount % 4 == 0) {
-  //         intervalAction();
-  //       }
-  //     } else {
-  //       if (timeTickAsyncCount % 120 == 0) {
-  //         intervalAction();
-  //       }
-  //     }
-  //   }
-  // }, [timeTickAsyncCount]);
-
   useEffect(() => {
-    if (!messages.isAskSnackbarOpen && projects.project?.projectName !== nextProjectName) {
+    if (
+      !messages.isAskSnackbarOpen &&
+      projects.project?.projectName !== nextProjectName
+    ) {
       setNextProjectName(projects.project?.projectName);
     }
   }, [!messages.isAskSnackbarOpen && projects.project?.projectName]);
 
   useEffect(() => {
-    if (!messages.isAskSnackbarOpen && projects.project?.description !== nextProjectDetail) {
-      let detailText = projects.project?.description !== null ? projects.project?.description : "";
+    if (
+      !messages.isAskSnackbarOpen &&
+      projects.project?.description !== nextProjectDetail
+    ) {
+      let detailText =
+        projects.project?.description !== null
+          ? projects.project?.description
+          : "";
       setNextProjectDetail(detailText);
     }
   }, [!messages.isAskSnackbarOpen && projects.project?.description]);
@@ -251,12 +275,20 @@ const Process = (props) => {
         setIsLoading(true);
         setValueForUserColumnId(project.valueForUserColumnId);
         setValueForItemColumnId(project.valueForItemColumnId);
-        setPreprocessingInfo(project.preprocessingInfo == null ? {} : project.preprocessingInfo);
-        setPreprocessingInfoValue(project.preprocessingInfoValue == null ? {} : project.preprocessingInfoValue);
+        setPreprocessingInfo(
+          project.preprocessingInfo == null ? {} : project.preprocessingInfo
+        );
+        setPreprocessingInfoValue(
+          project.preprocessingInfoValue == null
+            ? {}
+            : project.preprocessingInfoValue
+        );
         onSetSampleData();
         setIsVerify(project.isVerify);
         if (groups.parentsGroup) onSetShareGroupDict();
-        setHyperParamsData(project.hyper_params?.length > 0 ? project.hyper_params : null);
+        setHyperParamsData(
+          project.hyper_params?.length > 0 ? project.hyper_params : null
+        );
 
         const algorithm = projects.project?.algorithm;
         const projectAlgorithm =
@@ -266,7 +298,10 @@ const Process = (props) => {
               : algorithm.includes("_reg")
               ? algorithm.split("_reg")[0]
               : algorithm
-            : (!project.option && project.trainingMethod && !project.trainingMethod.includes("normal")) || project.option === "colab"
+            : (!project.option &&
+                project.trainingMethod &&
+                !project.trainingMethod.includes("normal")) ||
+              project.option === "colab"
             ? "auto"
             : "keras_ann";
 
@@ -275,17 +310,6 @@ const Process = (props) => {
 
         setIsLoading(false);
       })();
-
-      // if (
-      //   projects.project.status > 0 &&
-      //   projects.project.status < 100 &&
-      //   projects.project.status !== 99
-      // ) {
-      //   interval = setInterval(intervalAction, 100000);
-      // }
-      // return () => {
-      //   clearInterval(interval);
-      // };
 
       if (projects.project.id) {
         function getProjectStatus(event) {
@@ -296,7 +320,9 @@ const Process = (props) => {
           }
         }
 
-        const project_status_sse = api.getProjectStatusViaSSE(projects.project.id);
+        const project_status_sse = api.getProjectStatusViaSSE(
+          projects.project.id
+        );
 
         project_status_sse.addEventListener("new_message", getProjectStatus);
 
@@ -317,7 +343,18 @@ const Process = (props) => {
   useEffect(() => {
     const project = projects.project;
 
-    dispatch(putOptionRequestAction(project?.option ? project?.option : project?.trainingMethod === "object_detection" ? "colab" : ["image", "text", "recommender"].indexOf(project?.trainingMethod) > -1 ? "not selected" : "custom"));
+    dispatch(
+      putOptionRequestAction(
+        project?.option
+          ? project?.option
+          : project?.trainingMethod === "object_detection"
+          ? "colab"
+          : ["image", "text", "recommender"].indexOf(project?.trainingMethod) >
+            -1
+          ? "not selected"
+          : "custom"
+      )
+    );
   }, [projects.project?.trainingMethod]);
 
   // // 학습 시작 후 설정된 값 적용
@@ -424,7 +461,8 @@ const Process = (props) => {
   }, [isUnableToChangeDetail]);
 
   useEffect(() => {
-    if (projects.project?.projectName) setNextProjectName(projects.project.projectName);
+    if (projects.project?.projectName)
+      setNextProjectName(projects.project.projectName);
 
     // if (projects.project?.algorithm) {
     //   const projectAlgorithm = projects.project.algorithm;
@@ -440,7 +478,10 @@ const Process = (props) => {
 
   useEffect(() => {
     if (projects.project && projects.project.description) {
-      let detailText = projects.project.description !== null ? projects.project.description : "";
+      let detailText =
+        projects.project.description !== null
+          ? projects.project.description
+          : "";
 
       setNextProjectDetail(detailText);
     }
@@ -485,7 +526,11 @@ const Process = (props) => {
     tempTM = trainingMethod ? trainingMethod : trainMethod;
 
     if (projects.project?.hasTextData) {
-      if (tempTM === "normal" || tempTM === "normal_classification" || tempTM === "normal_regression") {
+      if (
+        tempTM === "normal" ||
+        tempTM === "normal_classification" ||
+        tempTM === "normal_regression"
+      ) {
         setIsMagicCodePossible(true);
       } else {
         setIsMagicCodePossible(false);
@@ -498,7 +543,12 @@ const Process = (props) => {
       }
     }
 
-    if (trainingMethod && !["image", "text", "recommender"].includes(trainingMethod) && (!option || option === "colab" || option === "custom")) setIsRequiredHyperParameters(true);
+    if (
+      trainingMethod &&
+      !["image", "text", "recommender"].includes(trainingMethod) &&
+      (!option || option === "colab" || option === "custom")
+    )
+      setIsRequiredHyperParameters(true);
     else setIsRequiredHyperParameters(false);
 
     // // 학습형태 변경되면 값 초기화
@@ -559,24 +609,29 @@ const Process = (props) => {
   // };
 
   const onSetSampleData = () => {
-    if (!projects.project) return;
+    const project = projects.project;
+    if (!project) return;
 
     let sampleDataRaw = {};
     let sampleDataIdDict = {};
-    let detailText = projects.project.description !== null ? projects.project.description : "";
+    let detailText =
+      projects.project.description !== null ? projects.project.description : "";
     setNextProjectName(projects.project.projectName);
     setNextProjectDetail(detailText);
-    projects.project.timeSeriesColumnInfo && setTimeSeriesColumnInfo(projects.project.timeSeriesColumnInfo);
-    projects.project.preprocessingInfo && setPreprocessingInfo(projects.project.preprocessingInfo);
-    projects.project.preprocessingInfoValue && setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
+    projects.project.timeSeriesColumnInfo &&
+      setTimeSeriesColumnInfo(projects.project.timeSeriesColumnInfo);
+    projects.project.preprocessingInfo &&
+      setPreprocessingInfo(projects.project.preprocessingInfo);
+    projects.project.preprocessingInfoValue &&
+      setPreprocessingInfoValue(projects.project.preprocessingInfoValue);
 
-    if (projects.project.joinInfo) {
-      setjoinInfo(projects.project.joinInfo);
+    if (project.joinInfo) {
+      setjoinInfo(project.joinInfo);
       var subConnectorsRaw = [];
-      projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector) => {
+      project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector) => {
           var isMainConnector = true;
-          Object.keys(projects.project.joinInfo).map((joinInfoValue) => {
+          Object.keys(project.joinInfo).map((joinInfoValue) => {
             if (+connector.id === +joinInfoValue) {
               isMainConnector = false;
               subConnectorsRaw.push(connector);
@@ -587,14 +642,17 @@ const Process = (props) => {
           }
         });
       setSubConnectors(subConnectorsRaw);
-    } else if (projects.project.dataconnectorsList && projects.project.dataconnectorsList.length > 1) {
+    } else if (
+      projects.project.dataconnectorsList &&
+      projects.project.dataconnectorsList.length > 1
+    ) {
       var subConnectorsRaw = [];
       var joinInfoRaw = {};
       var mainConnectorRaw = {};
 
-      projects.project &&
-        projects.project.dataconnectorsList &&
-        projects.project.dataconnectorsList.map((connector, idx) => {
+      project &&
+        project.dataconnectorsList &&
+        project.dataconnectorsList.map((connector, idx) => {
           if (idx === 0) {
             setMainConnector(connector);
             mainConnectorRaw = connector;
@@ -614,26 +672,30 @@ const Process = (props) => {
         });
       setSubConnectors(subConnectorsRaw);
       setjoinInfo(joinInfoRaw);
-    } else if (projects.project.dataconnectorsList && projects.project.dataconnectorsList.length === 1) {
+    } else if (
+      projects.project.dataconnectorsList &&
+      projects.project.dataconnectorsList.length === 1
+    ) {
       setSubConnectors([]);
       setjoinInfo([]);
     }
 
-    projects.project.analyticsStandard && setAnalyticsStandard(projects.project.analyticsStandard);
+    projects.project.analyticsStandard &&
+      setAnalyticsStandard(projects.project.analyticsStandard);
 
     const state = props.history.location.state;
     if (state) {
       state.modelid && dispatch(setChosenModelRequestAction(state.modelid));
       state.page && setSelectedPage(state.page);
     } else {
-      if (projects.project.status === 0 && !isAnyModelFinished) {
-        if (projects.project.trainingMethod === "cycle_gan") {
+      if (project.status === 0 && !isAnyModelFinished) {
+        if (project.trainingMethod === "cycle_gan") {
           setSelectedPage("rawdata");
         } else {
           setSelectedPage("summary");
         }
       }
-      let models = projects.project.models;
+      let models = project.models;
       let tempFinished = false;
       if (models)
         for (let idx = 0; idx < models.length; idx++) {
@@ -644,34 +706,60 @@ const Process = (props) => {
         }
       setIsAnyModelFinished(tempFinished);
 
-      if ([9, 99].indexOf(projects.project.status) > -1 || (projects.project.status > 0 && [9, 99].indexOf(projects.project.status) === -1 && models?.length > 0) || tempFinished) {
+      if (
+        [9, 99].indexOf(projects.project.status) > -1 ||
+        (projects.project.status > 0 &&
+          [9, 99].indexOf(projects.project.status) === -1 &&
+          models?.length > 0) ||
+        tempFinished
+      ) {
         setIsModelPageAccessible(true);
         setSelectedPage("model");
       }
     }
 
     if (projects.project.startTimeSeriesDatetime) {
-      var startTimeSeriesDatetimeSplit = projects.project.startTimeSeriesDatetime.split(" ");
-      onChangeStartTimeSeriesDatetime(new Date(Date.parse(`${startTimeSeriesDatetimeSplit[0]}T${startTimeSeriesDatetimeSplit[1]}Z`)));
+      var startTimeSeriesDatetimeSplit = projects.project.startTimeSeriesDatetime.split(
+        " "
+      );
+      onChangeStartTimeSeriesDatetime(
+        new Date(
+          Date.parse(
+            `${startTimeSeriesDatetimeSplit[0]}T${
+              startTimeSeriesDatetimeSplit[1]
+            }Z`
+          )
+        )
+      );
     }
     if (projects.project.endTimeSeriesDatetime) {
-      var endTimeSeriesDatetimeSplit = projects.project.endTimeSeriesDatetime.split(" ");
-      onChangeEndTimeSeriesDatetime(new Date(Date.parse(`${endTimeSeriesDatetimeSplit[0]}T${endTimeSeriesDatetimeSplit[1]}Z`)));
+      var endTimeSeriesDatetimeSplit = projects.project.endTimeSeriesDatetime.split(
+        " "
+      );
+      onChangeEndTimeSeriesDatetime(
+        new Date(
+          Date.parse(
+            `${endTimeSeriesDatetimeSplit[0]}T${endTimeSeriesDatetimeSplit[1]}Z`
+          )
+        )
+      );
     }
 
-    if (projects.project.trainingColumnInfo) {
+    if (project.trainingColumnInfo) {
       var trainingColumnInfoRaw = {};
-      Object.keys(projects.project.trainingColumnInfo).map((columnInfo) => {
-        if (projects.project.trainingColumnInfo[columnInfo]) {
+      Object.keys(project.trainingColumnInfo).map((columnInfo) => {
+        if (project.trainingColumnInfo[columnInfo]) {
           trainingColumnInfoRaw[columnInfo] = true;
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
-    } else if (projects.project.fileStructure) {
+    } else if (project.fileStructure) {
       var trainingColumnInfoRaw = {};
-      JSON.parse(projects.project.fileStructure).map((columnInfo) => {
+      JSON.parse(project.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
-          trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(columnInfo.use);
+          trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(
+            columnInfo.use
+          );
         }
       });
       setTrainingColumnInfo(trainingColumnInfoRaw);
@@ -682,13 +770,13 @@ const Process = (props) => {
     var datacolumnsRaw = [];
 
     var fileSizeRaw = 0;
-    if (projects.project.sampleData) {
-      sampleDataRaw["전체"] = projects.project.sampleData;
+    if (project.sampleData) {
+      sampleDataRaw["전체"] = project.sampleData;
     }
 
     var isImageLabelData = false;
-    projects.project.dataconnectorsList &&
-      projects.project.dataconnectorsList.map((dataconnector) => {
+    project.dataconnectorsList &&
+      project.dataconnectorsList.map((dataconnector) => {
         if (dataconnector.hasTextData) {
           setHasStructureData(true);
           setHasTimeSeriesData(true);
@@ -702,24 +790,29 @@ const Process = (props) => {
         dataconnector.datacolumns &&
           dataconnector.datacolumns.map((datacolumn) => {
             datacolumn.dataconnectorName = dataconnector.dataconnectorName;
-            datacolumn.length = dataconnector.yClass && dataconnector.yClass.length;
+            datacolumn.length =
+              dataconnector.yClass && dataconnector.yClass.length;
             datacolumnsRaw.push(datacolumn);
           });
-        sampleDataRaw[dataconnector.dataconnectorName] = dataconnector.sampleData;
+        sampleDataRaw[dataconnector.dataconnectorName] =
+          dataconnector.sampleData;
         sampleDataIdDict[dataconnector.dataconnectorName] = dataconnector.id;
         if (dataconnector.fileSize) fileSizeRaw += dataconnector.fileSize;
       });
-    if (projects.project.hasImageData) {
+    if (project.hasImageData) {
       setHasStructureData(false);
       setHasTimeSeriesData(false);
       setHasImageLabelData(true);
     }
-    if (projects.project.hasTextData) {
+    if (project.hasTextData) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
     }
-    if (!projects.project.dataconnectorsList && projects.project.hasTimeSeriesData) {
+    if (
+      !projects.project.dataconnectorsList &&
+      projects.project.hasTimeSeriesData
+    ) {
       setHasStructureData(true);
       setHasTimeSeriesData(true);
       setHasImageLabelData(false);
@@ -727,7 +820,10 @@ const Process = (props) => {
     setFileSize(fileSizeRaw);
     setSampleData(sampleDataRaw);
     setSampleDataId(sampleDataIdDict);
-    if (!(datacolumnsRaw && datacolumnsRaw.length > 0) && projects.project.fileStructure) {
+    if (
+      !(datacolumnsRaw && datacolumnsRaw.length > 0) &&
+      projects.project.fileStructure
+    ) {
       datacolumnsRaw = JSON.parse(projects.project.fileStructure);
     }
     setdatacolumns(datacolumnsRaw);
@@ -735,8 +831,8 @@ const Process = (props) => {
       if (datacolumn.miss > 0) setHasMissingValue(true);
     });
 
-    if (projects.project.trainingMethod) {
-      if (projects.project.trainingMethod.indexOf("time_series") > -1) {
+    if (project.trainingMethod) {
+      if (project.trainingMethod.indexOf("time_series") > -1) {
         //dispatch(putTrainingMethodRequestAction('time_series'))
         setHasTimeSeriesData(true);
         setHasImageLabelData(false);
@@ -744,7 +840,10 @@ const Process = (props) => {
     } else {
       if (isImageLabelData) {
         dispatch(putTrainingMethodRequestAction("image"));
-      } else if (projects.project.hasImageData && !projects.project.hasTextData) {
+      } else if (
+        projects.project.hasImageData &&
+        !projects.project.hasTextData
+      ) {
         dispatch(putTrainingMethodRequestAction("image"));
       } else {
         dispatch(putTrainingMethodRequestAction("normal"));
@@ -753,13 +852,19 @@ const Process = (props) => {
 
     let total = 0;
     let done = 0;
-    projects.project.models &&
-      projects.project.models.forEach((model) => {
+    project.models &&
+      project.models.forEach((model) => {
         total++;
         if (model.status === 100) done++;
       });
-    const percentage = parseInt((done / total) * 100) ? parseInt((done / total) * 100) : 0;
-    setModelPercentage(projects.project.status === 9 || projects.project.status === 99 ? -1 : percentage);
+    const percentage = parseInt((done / total) * 100)
+      ? parseInt((done / total) * 100)
+      : 0;
+    setModelPercentage(
+      projects.project.status === 9 || projects.project.status === 99
+        ? -1
+        : percentage
+    );
   };
 
   const setNameInputSize = () => {
@@ -804,7 +909,11 @@ const Process = (props) => {
 
   const changeValueForPredict = (e) => {
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
     const columnId = e.target.value;
@@ -818,7 +927,10 @@ const Process = (props) => {
       }
     });
     dispatch(putValueForPredictRequestAction(columnInfo.id));
-    if (columnInfo.type === "object" && projects.project.trainingMethod === "normal_regression") {
+    if (
+      columnInfo.type === "object" &&
+      projects.project.trainingMethod === "normal_regression"
+    ) {
       dispatch(putTrainingMethodRequestAction("normal_classification"));
     }
     var subConnectorsRaw = [];
@@ -851,7 +963,11 @@ const Process = (props) => {
 
   const changeValueForUser = (e) => {
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
     const columnId = e.target.value;
@@ -860,7 +976,11 @@ const Process = (props) => {
 
   const changeValueForItem = (e) => {
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
     const columnId = e.target.value;
@@ -871,7 +991,11 @@ const Process = (props) => {
     const value = e.target.value;
 
     if (projects.project && projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
 
@@ -886,7 +1010,11 @@ const Process = (props) => {
         )
           return;
 
-        if (user.me && user.me.usageplan && user.me.usageplan.planName === "trial") {
+        if (
+          user.me &&
+          user.me.usageplan &&
+          user.me.usageplan.planName === "trial"
+        ) {
           dispatch(setPlanModalOpenRequestAction());
           return;
         }
@@ -906,11 +1034,19 @@ const Process = (props) => {
 
   const methodChange = (e) => {
     const value = e.target.value;
-    const algorithmType = ["object_detection", "cycle_gan", "recommender"].indexOf(value) > -1 || (projects.project.option === "colab" && !value.includes("normal")) ? "auto" : INITIAL_ALGORITHM_TYPE;
+    const algorithmType =
+      ["object_detection", "cycle_gan", "recommender"].indexOf(value) > -1 ||
+      (projects.project.option === "colab" && !value.includes("normal"))
+        ? "auto"
+        : INITIAL_ALGORITHM_TYPE;
     setTrainMethod(value);
 
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
     let hasNoError = true;
@@ -926,8 +1062,10 @@ const Process = (props) => {
 
       return;
     } else {
-      if (["image", "text", "recommender"].indexOf(value) > -1) dispatch(putOptionRequestAction("not selected"));
-      else if (value.includes("normal")) dispatch(putOptionRequestAction("custom"));
+      if (["image", "text", "recommender"].indexOf(value) > -1)
+        dispatch(putOptionRequestAction("not selected"));
+      else if (value.includes("normal"))
+        dispatch(putOptionRequestAction("custom"));
       else dispatch(putOptionRequestAction("colab"));
     }
 
@@ -943,7 +1081,11 @@ const Process = (props) => {
   const instanceTypeChange = (e) => {
     setInstanceType(e.target.value);
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
     dispatch(putInstanceTypeRequestAction(e.target.value));
@@ -952,7 +1094,11 @@ const Process = (props) => {
   const changeAlgorithmType = (e) => {
     setAlgorithmType(e.target.value);
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
     dispatch(putAlgorithmTypeRequestAction(e.target.value));
@@ -982,13 +1128,19 @@ const Process = (props) => {
       listKeys = Object.keys(list);
     }
 
-    if (projects.subHyperParameters[key] && projects.subHyperParameters[key].includes(subKey)) {
+    if (
+      projects.subHyperParameters[key] &&
+      projects.subHyperParameters[key].includes(subKey)
+    ) {
       subKeyVal = subKey;
     }
 
     if (n === listValues.length) {
       result.push({ ...current, function_name: subKeyVal });
-    } else listValues[n].forEach((item, i) => combos(listValues, n + 1, result, { ...current, [listKeys[n]]: item }));
+    } else
+      listValues[n].forEach((item, i) =>
+        combos(listValues, n + 1, result, { ...current, [listKeys[n]]: item })
+      );
 
     return result;
   }
@@ -998,7 +1150,11 @@ const Process = (props) => {
     let results = null;
 
     Object.keys(param.subParameter).map((subKey, j) => {
-      if (projects.subHyperParameters && projects.subHyperParameters[key] && projects.subHyperParameters[key].includes(subKey)) {
+      if (
+        projects.subHyperParameters &&
+        projects.subHyperParameters[key] &&
+        projects.subHyperParameters[key].includes(subKey)
+      ) {
         results = processParameterDatas(param.subParameter[subKey], true);
 
         if (results) resultVal.push(...combos(results, 0, [], {}, key, subKey));
@@ -1017,7 +1173,11 @@ const Process = (props) => {
     if (params && resultData) {
       Object.keys(params).map((key, i) => {
         const param = params[key];
-        const isMethodMatched = param.method === "clf/reg" || (trainingMethod === "normal_classification" && param.method === "clf") || (trainingMethod === "normal_regression" && param.method === "reg");
+        const isMethodMatched =
+          param.method === "clf/reg" ||
+          (trainingMethod === "normal_classification" &&
+            param.method === "clf") ||
+          (trainingMethod === "normal_regression" && param.method === "reg");
         const hasMinVal = param.hasOwnProperty("min");
         const hasMaxVal = param.hasOwnProperty("max");
         const hasValArr = param.hasOwnProperty("valueArr");
@@ -1037,17 +1197,31 @@ const Process = (props) => {
               const { min, max, split } = param.range;
               let value = Number(min);
               // const isFalsy = undefined || "";
-              const isEmpty = min === undefined || max === undefined || split === undefined || min === "" || max === "" || split === "";
+              const isEmpty =
+                min === undefined ||
+                max === undefined ||
+                split === undefined ||
+                min === "" ||
+                max === "" ||
+                split === "";
 
               // min, max, split 중 하나라도 빈 값인 경우
               if (isEmpty) {
-                dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                dispatch(
+                  openErrorSnackbarRequestAction(
+                    "모든 파라미터 값을 입력해주세요."
+                  )
+                );
 
                 resultData = null;
               } else {
                 // min, max, split 값이 모두 입력된 경우
-                const valLen = String(value).split(".")[1] ? String(value).split(".")[1].length : 0;
-                const splitLen = String(split).split(".")[1] ? String(split).split(".")[1].length : 0;
+                const valLen = String(value).split(".")[1]
+                  ? String(value).split(".")[1].length
+                  : 0;
+                const splitLen = String(split).split(".")[1]
+                  ? String(split).split(".")[1].length
+                  : 0;
                 const toFixedCnt = valLen >= splitLen ? valLen : splitLen;
 
                 if (split === 0) {
@@ -1061,7 +1235,11 @@ const Process = (props) => {
               }
             } else {
               // min, max, split 값이 모두 입력되지 않은 경우
-              dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+              dispatch(
+                openErrorSnackbarRequestAction(
+                  "모든 파라미터 값을 입력해주세요."
+                )
+              );
 
               resultData = null;
             }
@@ -1069,24 +1247,45 @@ const Process = (props) => {
             // 범위설정 안한 경우
             if (hasValArr) {
               // 다중값 지정한 경우
-              const tmpValueArr = param.valueArr ? (Array.isArray(param.valueArr) ? param.valueArr : trainingMethod === "normal_classification" ? param.valueArr.clf : param.valueArr.reg) : [];
+              const tmpValueArr = param.valueArr
+                ? Array.isArray(param.valueArr)
+                  ? param.valueArr
+                  : trainingMethod === "normal_classification"
+                  ? param.valueArr.clf
+                  : param.valueArr.reg
+                : [];
               valueToPost = [...tmpValueArr];
 
               if (valueToPost.length === 0) {
-                dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                dispatch(
+                  openErrorSnackbarRequestAction(
+                    "모든 파라미터 값을 입력해주세요."
+                  )
+                );
 
                 resultData = null;
               } else {
                 valueToPost.map((v, i) => {
                   if (v === "") {
                     // 빈 값이 하나라도 들어온 경우
-                    dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                    dispatch(
+                      openErrorSnackbarRequestAction(
+                        "모든 파라미터 값을 입력해주세요."
+                      )
+                    );
 
                     resultData = null;
                   } else {
                     // 값이 모두 있는 경우
-                    if (param.inputType === "option" && param.dataType !== "dict") {
-                      valueToPost = projects.hyperParameterOptionLists[key] && projects.hyperParameterOptionLists[key].length > 0 ? projects.hyperParameterOptionLists[key] : [param.value];
+                    if (
+                      param.inputType === "option" &&
+                      param.dataType !== "dict"
+                    ) {
+                      valueToPost =
+                        projects.hyperParameterOptionLists[key] &&
+                        projects.hyperParameterOptionLists[key].length > 0
+                          ? projects.hyperParameterOptionLists[key]
+                          : [param.value];
                     } else {
                       valueToPost[i] = param.dataType === "str" ? v : Number(v);
                     }
@@ -1097,13 +1296,21 @@ const Process = (props) => {
               // 단일값 입력한 경우
               if (param.value === "") {
                 // 빈 값이 들어온 경우
-                dispatch(openErrorSnackbarRequestAction("모든 파라미터 값을 입력해주세요."));
+                dispatch(
+                  openErrorSnackbarRequestAction(
+                    "모든 파라미터 값을 입력해주세요."
+                  )
+                );
 
                 resultData = null;
               } else {
                 // 값이 있는 경우
                 if (param.inputType === "option" && param.dataType !== "dict") {
-                  valueToPost = projects.hyperParameterOptionLists[key] && projects.hyperParameterOptionLists[key].length > 0 ? projects.hyperParameterOptionLists[key] : [param.value];
+                  valueToPost =
+                    projects.hyperParameterOptionLists[key] &&
+                    projects.hyperParameterOptionLists[key].length > 0
+                      ? projects.hyperParameterOptionLists[key]
+                      : [param.value];
                 } else
                   valueToPost.push(
                     param.dataType === "bool"
@@ -1111,7 +1318,16 @@ const Process = (props) => {
                         ? true
                         : false
                       : param.dataType === "int" || param.dataType === "float"
-                      ? Number(typeof param.value === "object" ? param.value[projects.project?.trainingMethod === "normal_classification" ? "clf" : "reg"] : param.value)
+                      ? Number(
+                          typeof param.value === "object"
+                            ? param.value[
+                                projects.project?.trainingMethod ===
+                                "normal_classification"
+                                  ? "clf"
+                                  : "reg"
+                              ]
+                            : param.value
+                        )
                       : param.value
                   );
               }
@@ -1128,13 +1344,24 @@ const Process = (props) => {
 
             if (param.valueArr) {
               param.valueArr.map((v, i) => {
-                isNotAllowedRange = param.between ? (hasMinVal && min >= v) || (hasMaxVal && max <= v) : (hasMinVal && min > v) || (hasMaxVal && max < v);
+                isNotAllowedRange = param.between
+                  ? (hasMinVal && min >= v) || (hasMaxVal && max <= v)
+                  : (hasMinVal && min > v) || (hasMaxVal && max < v);
 
                 // 다중값 설정하고 단일 인풋 입력한 경우
-                if (i === param.valueArr.length - 1 && param.inputType === "numb" && param.value && param.value !== "") {
+                if (
+                  i === param.valueArr.length - 1 &&
+                  param.inputType === "numb" &&
+                  param.value &&
+                  param.value !== ""
+                ) {
                   const paramVal = Number(param.value);
 
-                  isNotAllowedRange = param.between ? (hasMinVal && min >= paramVal) || (hasMaxVal && max <= paramVal) : (hasMinVal && min > paramVal) || (hasMaxVal && max < paramVal);
+                  isNotAllowedRange = param.between
+                    ? (hasMinVal && min >= paramVal) ||
+                      (hasMaxVal && max <= paramVal)
+                    : (hasMinVal && min > paramVal) ||
+                      (hasMaxVal && max < paramVal);
                 }
               });
             } else {
@@ -1142,12 +1369,22 @@ const Process = (props) => {
                 const paramVal = Number(param.value);
 
                 isNotAllowedRange = param.between
-                  ? (hasMinVal && (min >= paramVal || (hasRange && min >= rangeMin))) || (hasMaxVal && (max <= paramVal || (hasRange && max <= rangeMax)))
-                  : (hasMinVal && (min > paramVal || (hasRange && min > rangeMin))) || (hasMaxVal && (max < paramVal || (hasRange && max < rangeMax)));
+                  ? (hasMinVal &&
+                      (min >= paramVal || (hasRange && min >= rangeMin))) ||
+                    (hasMaxVal &&
+                      (max <= paramVal || (hasRange && max <= rangeMax)))
+                  : (hasMinVal &&
+                      (min > paramVal || (hasRange && min > rangeMin))) ||
+                    (hasMaxVal &&
+                      (max < paramVal || (hasRange && max < rangeMax)));
 
                 // 범위를 설정했는데 최대값이 최소값보다 작게 설정된 경우
                 if (hasRange && rangeMin >= rangeMax) {
-                  dispatch(openErrorSnackbarRequestAction("최대값을 최소값보다 크게 설정해주세요."));
+                  dispatch(
+                    openErrorSnackbarRequestAction(
+                      "최대값을 최소값보다 크게 설정해주세요."
+                    )
+                  );
 
                   resultData = null;
                 }
@@ -1156,14 +1393,23 @@ const Process = (props) => {
 
             // 입력값이 제한값 범위내에 없는 경우 (일반, 범위, 다중값 모두 포함)
             if (isNotAllowedRange) {
-              dispatch(openErrorSnackbarRequestAction(`${t("Please enter a parameter value suitable for the range.")} (${key})`));
+              dispatch(
+                openErrorSnackbarRequestAction(
+                  `${t(
+                    "Please enter a parameter value suitable for the range."
+                  )} (${key})`
+                )
+              );
 
               resultData = null;
             }
           }
 
           // subValue가 없거나, subValue가 있어도 선택되지 않은 경우에만 타입 판별 -> subValue는 None or str => 타입 판별 필요 없음
-          if (!param.subValue || (param.subValue && param.subValue !== param.value)) {
+          if (
+            !param.subValue ||
+            (param.subValue && param.subValue !== param.value)
+          ) {
             if (param.dataType === "int" || param.dataType === "float") {
               // dataType 체크
               let isValidType = true;
@@ -1181,7 +1427,12 @@ const Process = (props) => {
                     break;
                 }
 
-                if (i === valueToPost.length - 1 && param.inputType === "numb" && param.value && param.value !== "")
+                if (
+                  i === valueToPost.length - 1 &&
+                  param.inputType === "numb" &&
+                  param.value &&
+                  param.value !== ""
+                )
                   switch (param.dataType) {
                     case "int":
                       isValidType = isInt(Number(param.value));
@@ -1196,7 +1447,12 @@ const Process = (props) => {
               });
 
               if (!isValidType) {
-                dispatch(openErrorSnackbarRequestAction(t("Please check the data type of the entered value.") + ` ( ${key} )`));
+                dispatch(
+                  openErrorSnackbarRequestAction(
+                    t("Please check the data type of the entered value.") +
+                      ` ( ${key} )`
+                  )
+                );
 
                 resultData = null;
               }
@@ -1207,10 +1463,22 @@ const Process = (props) => {
 
               // 설정한 다중값들의 총 합 조건 판별
               if (subDomCon.action === "sum") {
-                resultDomainCon = valueToPost.reduce((prev, current) => prev + current, 0);
+                resultDomainCon = valueToPost.reduce(
+                  (prev, current) => prev + current,
+                  0
+                );
 
-                if ((resultDomainCon === Number(subDomCon.value)) !== subDomCon.isMatched) {
-                  dispatch(openErrorSnackbarRequestAction(t("Please check the setting value of the corresponding parameter.") + ` (${key}) `));
+                if (
+                  (resultDomainCon === Number(subDomCon.value)) !==
+                  subDomCon.isMatched
+                ) {
+                  dispatch(
+                    openErrorSnackbarRequestAction(
+                      t(
+                        "Please check the setting value of the corresponding parameter."
+                      ) + ` (${key}) `
+                    )
+                  );
 
                   resultData = null;
                 }
@@ -1224,7 +1492,9 @@ const Process = (props) => {
                   let compCount = 0;
 
                   if (typeof value === "string") {
-                    compCount = params[value]?.valueArr ? params[value].valueArr.length : Number(params[value].value);
+                    compCount = params[value]?.valueArr
+                      ? params[value].valueArr.length
+                      : Number(params[value].value);
                   }
 
                   const notAllowed =
@@ -1232,7 +1502,13 @@ const Process = (props) => {
                     (typeof value === "number" && count !== value); // value에 count값 들어있을 경우
 
                   if (notAllowed) {
-                    dispatch(openErrorSnackbarRequestAction(t("Please set as many values as the number that meets the conditions.") + ` (${key}) `));
+                    dispatch(
+                      openErrorSnackbarRequestAction(
+                        t(
+                          "Please set as many values as the number that meets the conditions."
+                        ) + ` (${key}) `
+                      )
+                    );
 
                     resultData = null;
                   }
@@ -1243,10 +1519,21 @@ const Process = (props) => {
 
           valueToPost.map((v, i) => {
             // 학습형태별 값 있는 경우 처리
-            if (typeof v === "object" && v.hasOwnProperty("clf") && v.hasOwnProperty("reg")) valueToPost[i] = projects.project?.trainingMethod === "normal_classification" ? v.clf : v.reg;
+            if (
+              typeof v === "object" &&
+              v.hasOwnProperty("clf") &&
+              v.hasOwnProperty("reg")
+            )
+              valueToPost[i] =
+                projects.project?.trainingMethod === "normal_classification"
+                  ? v.clf
+                  : v.reg;
 
             // 요청값 세팅 전 타입 변환
-            if (!param.subValue || (param.subValue && param.subValue !== param.value)) {
+            if (
+              !param.subValue ||
+              (param.subValue && param.subValue !== param.value)
+            ) {
               switch (param.dataType) {
                 case "int":
                   valueToPost[i] = parseInt(v);
@@ -1262,22 +1549,45 @@ const Process = (props) => {
                   break;
               }
 
-              if (i === valueToPost.length - 1 && param.inputType === "numb" && param.value && param.value !== "") if (!valueToPost.includes(Number(param.value))) valueToPost.push(param.dataType === "int" ? parseInt(param.value) : param.dataType === "float" ? parseFloat(param.value) : param.value);
+              if (
+                i === valueToPost.length - 1 &&
+                param.inputType === "numb" &&
+                param.value &&
+                param.value !== ""
+              )
+                if (!valueToPost.includes(Number(param.value)))
+                  valueToPost.push(
+                    param.dataType === "int"
+                      ? parseInt(param.value)
+                      : param.dataType === "float"
+                      ? parseFloat(param.value)
+                      : param.value
+                  );
             }
 
-            if (param.subValue && param.value && param.subValue === param.value) valueToPost[i] = param.value === "None" ? null : "auto";
+            if (param.subValue && param.value && param.subValue === param.value)
+              valueToPost[i] = param.value === "None" ? null : "auto";
           });
 
           if (isSubParamsData) {
             tmpSubParameter[key] = valueToPost;
           } else {
-            tmpParameter[key] = param.subParameter ? processSubParameterDatas(param, key) : ["moms", "metrics", "ps", "y_range"].includes(key) && valueToPost[0] !== null ? [valueToPost] : valueToPost;
+            tmpParameter[key] = param.subParameter
+              ? processSubParameterDatas(param, key)
+              : ["moms", "metrics", "ps", "y_range"].includes(key) &&
+                valueToPost[0] !== null
+              ? [valueToPost]
+              : valueToPost;
           }
         }
       });
     }
 
-    resultData = resultData ? (isSubParamsData ? tmpSubParameter : tmpParameter) : null;
+    resultData = resultData
+      ? isSubParamsData
+        ? tmpSubParameter
+        : tmpParameter
+      : null;
 
     return resultData;
   };
@@ -1286,12 +1596,41 @@ const Process = (props) => {
     const project = projects.project;
 
     if (project.option === "not selected") {
-      dispatch(openErrorSnackbarRequestAction(t("'선호하는 방식'을 선택해주세요. AutoML 옵션의 경우 라이센스 구매 후 이용 가능합니다.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "'선호하는 방식'을 선택해주세요. AutoML 옵션의 경우 라이센스 구매 후 이용 가능합니다."
+          )
+        )
+      );
       return;
     }
 
-    if (project?.available_gpu_list?.length > 0 && trainMethod === "object_detection" && !isDeviceAllSelected && selectedDeviceArr.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("Please set at least one training GPU.")));
+    if (
+      project?.available_gpu_list?.length > 0 &&
+      trainMethod === "object_detection" &&
+      !isDeviceAllSelected &&
+      selectedDeviceArr.length === 0
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please set at least one training GPU.")
+        )
+      );
+      return;
+    }
+
+    if (
+      project?.available_gpu_list?.length > 0 &&
+      trainMethod === "object_detection" &&
+      !isDeviceAllSelected &&
+      selectedDeviceArr.length === 0
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please set at least one training GPU.")
+        )
+      );
       return;
     }
 
@@ -1306,47 +1645,85 @@ const Process = (props) => {
           project.id
         )
         .then((res) => {
-          dispatch(openSuccessSnackbarRequestAction(t("Model loading is complete.")));
+          dispatch(
+            openSuccessSnackbarRequestAction(t("Model loading is complete."))
+          );
           project = res.data;
           setIsModelPageAccessible(true);
           setSelectedPage("model");
         })
         .catch((e) => {
-          dispatch(openErrorSnackbarRequestAction(t("Please try again in a moment.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please try again in a moment."))
+          );
         });
 
       return;
     }
 
     if (project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
 
     if (hasImageLabelData && project.trainingMethod.indexOf("normal") > -1) {
-      dispatch(openErrorSnackbarRequestAction(t("Please reselect your training method.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please reselect your training method.")
+        )
+      );
       return;
     }
 
     if (project.trainingMethod.length < 1) {
-      dispatch(openErrorSnackbarRequestAction(t("Please select a training method.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please select a training method."))
+      );
       return;
     }
 
-    if (project.trainingMethod.indexOf("time_series") > -1 && startTimeSeriesDatetime > endTimeSeriesDatetime && analyticsStandard !== "auto") {
-      dispatch(openErrorSnackbarRequestAction(t("The end point cannot be set earlier than the starting point. Please reset the analysis period to continue.")));
+    if (
+      project.trainingMethod.indexOf("time_series") > -1 &&
+      startTimeSeriesDatetime > endTimeSeriesDatetime &&
+      analyticsStandard !== "auto"
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "The end point cannot be set earlier than the starting point. Please reset the analysis period to continue."
+          )
+        )
+      );
       return;
     }
 
     if (project.trainingMethod.indexOf("time_series") > -1) {
       if (Object.keys(timeSeriesColumnInfo).length === 0) {
-        dispatch(openErrorSnackbarRequestAction(t("Set the standard row of time series for each data.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("Set the standard row of time series for each data.")
+          )
+        );
         return;
       }
     }
 
-    if (!(project.trainingMethod.indexOf("image") > -1 || project.trainingMethod.indexOf("object_detection") > -1) && !project.valueForPredictColumnId) {
-      dispatch(openErrorSnackbarRequestAction(t("Select the value you want to analyze/predict.")));
+    if (
+      !(
+        project.trainingMethod.indexOf("image") > -1 ||
+        project.trainingMethod.indexOf("object_detection") > -1
+      ) &&
+      !project.valueForPredictColumnId
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Select the value you want to analyze/predict.")
+        )
+      );
       return;
     }
 
@@ -1358,7 +1735,11 @@ const Process = (props) => {
         }
       });
     if (subConnectors.length !== joinInfoValueCount) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter all the linkage information.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please enter all the linkage information.")
+        )
+      );
       return;
     }
     let valueForPredictInfo = {};
@@ -1367,21 +1748,48 @@ const Process = (props) => {
       if (datacolumn["id"] === project.valueForPredict) {
         valueForPredictInfo = datacolumn;
       }
-      if (datacolumn["unique"] > 250 && datacolumn["type"] === "object" && trainingColumnInfo[datacolumn["id"]]) {
+      if (
+        datacolumn["unique"] > 250 &&
+        datacolumn["type"] === "object" &&
+        trainingColumnInfo[datacolumn["id"]]
+      ) {
         hasMuchUniqueObject = true;
       }
     });
-    if (hasMuchUniqueObject && (project.trainingMethod === "normal_classification" || (project.trainingMethod === "normal" && valueForPredictInfo["type"] === "object"))) {
-      dispatch(openErrorSnackbarRequestAction(`${t("The number of unique values ​​of strings that can be used in tabular data is limited to 250.")} ${t("계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요.")}`));
+    if (
+      hasMuchUniqueObject &&
+      (project.trainingMethod === "normal_classification" ||
+        (project.trainingMethod === "normal" &&
+          valueForPredictInfo["type"] === "object"))
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          `${t(
+            "The number of unique values ​​of strings that can be used in tabular data is limited to 250."
+          )} ${t(
+            "계속진행 하시려면 유일값이 250개가 초과하는 칼럼의 학습데이터사용여부 체크를 해제하세요."
+          )}`
+        )
+      );
       return;
     }
 
-    if (project.status === 0 && ((!project.option && isMagicCodePossible) || project?.option === "colab") && project.statusText !== "중단") {
+    if (
+      project.status === 0 &&
+      ((!project.option && isMagicCodePossible) ||
+        project?.option === "colab") &&
+      project.statusText !== "중단"
+    ) {
       for (let value in colabInfo) {
-        colabInfo[value] = colabInfo[value] === "" ? "" : parseFloat(colabInfo[value]);
+        colabInfo[value] =
+          colabInfo[value] === "" ? "" : parseFloat(colabInfo[value]);
 
         if (!colabInfo[value]) {
-          dispatch(openErrorSnackbarRequestAction("올바른 파라미터를 채운 후 실행해주세요."));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              "올바른 파라미터를 채운 후 실행해주세요."
+            )
+          );
           return;
         }
       }
@@ -1414,16 +1822,29 @@ const Process = (props) => {
 
     let tmpParameter;
 
-    if ((!project?.option && project.trainingMethod.includes("normal")) || project?.option === "custom") {
-      tmpParameter = processParameterDatas(algorithmInfo[!algorithmType ? INITIAL_ALGORITHM_TYPE : algorithmType]);
+    if (
+      (!project?.option && project.trainingMethod.includes("normal")) ||
+      project?.option === "custom"
+    ) {
+      tmpParameter = processParameterDatas(
+        algorithmInfo[!algorithmType ? INITIAL_ALGORITHM_TYPE : algorithmType]
+      );
 
       if (!tmpParameter) return;
       else {
         let totalModelLength = 1;
-        Object.values(tmpParameter).map((v, i) => (totalModelLength *= v.length));
+        Object.values(tmpParameter).map(
+          (v, i) => (totalModelLength *= v.length)
+        );
 
         if (totalModelLength > 300) {
-          dispatch(openErrorSnackbarRequestAction(t("모델 생성은 최대 300개 까지 가능합니다. 파라미터들의 설정값 개수를 확인해주세요.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "모델 생성은 최대 300개 까지 가능합니다. 파라미터들의 설정값 개수를 확인해주세요."
+              )
+            )
+          );
 
           return;
         }
@@ -1436,7 +1857,11 @@ const Process = (props) => {
       // isStart: true,
       status: 1,
       statusText: "1: 모델링이 시작됩니다.",
-      option: project?.option ? project?.option : isMagicCodePossible ? "custom" : "speed",
+      option: project?.option
+        ? project?.option
+        : isMagicCodePossible
+        ? "custom"
+        : "speed",
       trainingMethod: project.trainingMethod,
       joinInfo: joinInfo,
       fileSize: fileSize,
@@ -1450,13 +1875,27 @@ const Process = (props) => {
       valueForItemColumnId: valueForItemColumnId,
       valueForUserColumnId: valueForUserColumnId,
       instanceType: instanceType,
-      isParameterCompressed: project.status === 0 && project?.option === "colab" && project.statusText !== "중단" && hasStructuredData,
+      isParameterCompressed:
+        project.status === 0 &&
+        project?.option === "colab" &&
+        project.statusText !== "중단" &&
+        hasStructuredData,
     };
 
-    if (!isDeviceAllSelected && project.available_gpu_list?.length > selectedDeviceArr.length) projectInfo["require_gpus"] = selectedDeviceArr;
+    if (
+      !isDeviceAllSelected &&
+      project.available_gpu_list?.length > selectedDeviceArr.length
+    )
+      projectInfo["require_gpus"] = selectedDeviceArr;
 
     if (!project?.option || project?.option === "custom") {
-      projectInfo.algorithm = !algorithmType ? INITIAL_ALGORITHM_TYPE : algorithmType.includes("_ann") || project?.trainingMethod === "normal" ? algorithmType : project?.trainingMethod === "normal_classification" ? algorithmType + "_clf" : algorithmType + "_reg";
+      projectInfo.algorithm = !algorithmType
+        ? INITIAL_ALGORITHM_TYPE
+        : algorithmType.includes("_ann") || project?.trainingMethod === "normal"
+        ? algorithmType
+        : project?.trainingMethod === "normal_classification"
+        ? algorithmType + "_clf"
+        : algorithmType + "_reg";
       projectInfo.hyper_params = tmpParameter;
     }
 
@@ -1474,34 +1913,66 @@ const Process = (props) => {
     }
 
     console.log(projectInfo);
-    if (valueForPredictInfo["unique"] > 250 && (project.trainingMethod === "text" || project.trainingMethod === "image" || project.trainingMethod === "object_detection" || project.trainingMethod === "normal_classification")) {
-      dispatch(openErrorSnackbarRequestAction(t("The unique value of the classification you are trying to predict is more than 250. Please predict other values or reduce the classification value.")));
+    if (
+      valueForPredictInfo["unique"] > 250 &&
+      (project.trainingMethod === "text" ||
+        project.trainingMethod === "image" ||
+        project.trainingMethod === "object_detection" ||
+        project.trainingMethod === "normal_classification")
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "The unique value of the classification you are trying to predict is more than 250. Please predict other values or reduce the classification value."
+          )
+        )
+      );
       return;
-    } else if (hasMissingValue && valueForPredictInfo["unique"] > 25 && valueForPredictInfo["type"] === "object") {
+    } else if (
+      hasMissingValue &&
+      valueForPredictInfo["unique"] > 25 &&
+      valueForPredictInfo["type"] === "object"
+    ) {
       await dispatch(
         askStartProjectRequestAction({
-          message: `${t("If there are more than 25 unique values that you want to predict, the accuracy may decrease. If preprocessing is not performed, the rows with missing values will be removed.")} ${t("Would you like to proceed?")}`,
+          message: `${t(
+            "If there are more than 25 unique values that you want to predict, the accuracy may decrease. If preprocessing is not performed, the rows with missing values will be removed."
+          )} ${t("Would you like to proceed?")}`,
           project: projectInfo,
         })
       );
-    } else if (hasMissingValue && !(valueForPredictInfo["unique"] > 25 && valueForPredictInfo["type"] === "object")) {
+    } else if (
+      hasMissingValue &&
+      !(
+        valueForPredictInfo["unique"] > 25 &&
+        valueForPredictInfo["type"] === "object"
+      )
+    ) {
       await dispatch(
         askStartProjectRequestAction({
-          message: `${t("If preprocessing is not performed, the rows with missing values will be removed.")} ${t("Would you like to proceed?")}`,
+          message: `${t(
+            "If preprocessing is not performed, the rows with missing values will be removed."
+          )} ${t("Would you like to proceed?")}`,
           project: projectInfo,
         })
       );
-    } else if (!hasMissingValue && valueForPredictInfo["unique"] > 25 && valueForPredictInfo["type"] === "object") {
+    } else if (
+      !hasMissingValue &&
+      valueForPredictInfo["unique"] > 25 &&
+      valueForPredictInfo["type"] === "object"
+    ) {
       await dispatch(
         askStartProjectRequestAction({
-          message: `${t("If there are more than 25 unique values that you want to predict, the accuracy may decrease.")} ${t("Would you like to proceed?")}`,
+          message: `${t(
+            "If there are more than 25 unique values that you want to predict, the accuracy may decrease."
+          )} ${t("Would you like to proceed?")}`,
           project: projectInfo,
         })
       );
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message: "선택하신 옵션으로 프로젝트 모델링을 시작하시겠습니까?",
+          message: "Would you like to start modeling your project with the selected options?",
           project: projectInfo,
         })
       );
@@ -1539,29 +2010,48 @@ const Process = (props) => {
 
   const onCheckedValueAlarm = (value) => {
     if (projects.project.isShared) {
-      dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You can’t make changes to shared projects")
+        )
+      );
       return;
     }
 
-    if (projects.project.statusText === "중단" && ((projects.project.option && projects.project.option !== "custom") || (projects.project.option === "custom" && ["학습 인스턴스", "선호하는 방식"].includes(value)))) {
-      dispatch(openErrorSnackbarRequestAction(t(`중단되었던 프로젝트는 ${value}을 변경할 수 없습니다.`)));
+    if (
+      projects.project.statusText === "중단" &&
+      ((projects.project.option && projects.project.option !== "custom") ||
+        (projects.project.option === "custom" &&
+          ["학습 인스턴스", "선호하는 방식"].includes(value)))
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(`중단되었던 프로젝트는 ${value}을 변경할 수 없습니다.`)
+        )
+      );
       return;
     }
     return;
   };
 
-  const onClickjoinInfoValueValue = async (connectorId, connectorType, columnName) => {
+  const onClickjoinInfoValueValue = async (
+    connectorId,
+    connectorType,
+    columnName
+  ) => {
     var isJoinReady = false;
     var otherConnectorType = "mainConnector";
     if (!joinInfo[connectorId][connectorType][columnName]) {
       if (connectorType === "mainConnector") {
         otherConnectorType = "subConnector";
       }
-      await Object.keys(joinInfo[connectorId][otherConnectorType]).map(async (columnName) => {
-        if (joinInfo[connectorId][otherConnectorType][columnName]) {
-          isJoinReady = true;
+      await Object.keys(joinInfo[connectorId][otherConnectorType]).map(
+        async (columnName) => {
+          if (joinInfo[connectorId][otherConnectorType][columnName]) {
+            isJoinReady = true;
+          }
         }
-      });
+      );
     } else {
       await setjoinInfo((prevState) => {
         return {
@@ -1596,22 +2086,27 @@ const Process = (props) => {
         },
       };
     });
-    await Object.keys(joinInfo[connectorId][connectorType]).map(async (otherColumnName) => {
-      if (columnName !== otherColumnName && joinInfo[connectorId][connectorType][otherColumnName]) {
-        await setjoinInfo((prevState) => {
-          return {
-            ...prevState,
-            [connectorId]: {
-              ...prevState[connectorId],
-              [connectorType]: {
-                ...prevState[connectorId][connectorType],
-                [otherColumnName]: false,
+    await Object.keys(joinInfo[connectorId][connectorType]).map(
+      async (otherColumnName) => {
+        if (
+          columnName !== otherColumnName &&
+          joinInfo[connectorId][connectorType][otherColumnName]
+        ) {
+          await setjoinInfo((prevState) => {
+            return {
+              ...prevState,
+              [connectorId]: {
+                ...prevState[connectorId],
+                [connectorType]: {
+                  ...prevState[connectorId][connectorType],
+                  [otherColumnName]: false,
+                },
               },
-            },
-          };
-        });
+            };
+          });
+        }
       }
-    });
+    );
   };
 
   const closeTooltipModalOpen = () => {
@@ -1619,7 +2114,7 @@ const Process = (props) => {
   };
 
   const onSetAskStopProject = () => {
-    let stopMessage = "프로세스를 중단하시겠습니까?";
+    let stopMessage = "Do you want to stop the process?";
     // if (projects.project.models && projects.project.models.length > 0) {
     //   stopMessage =
     //     "모델 학습이 시작된 경우, 프로젝트를 중단하여도 학습된 시간만큼의 크레딧이 차감됩니다. 프로세스를 중단하시겠습니까?";
@@ -1640,7 +2135,11 @@ const Process = (props) => {
     if (tempValue && !isFinite(tempValue)) return;
     if (tempValue < 0) return;
 
-    if (paramName === "epoch" || paramName === "layerDeep" || paramName === "layerWidth")
+    if (
+      paramName === "epoch" ||
+      paramName === "layerDeep" ||
+      paramName === "layerWidth"
+    )
       if (!tempValue) tempValue = "";
       else tempValue = parseInt(tempValue);
     if (paramName === "learningRate" || paramName === "dropOut") {
@@ -1678,9 +2177,21 @@ const Process = (props) => {
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("A temporary error has occured. Please try again.")
+            )
+          );
         }
       })
       .finally(() => {
@@ -1695,7 +2206,13 @@ const Process = (props) => {
 
   const handleClickForShare = (event) => {
     if (!(groups.parentsGroup && groups.parentsGroup.length > 0)) {
-      dispatch(openErrorSnackbarRequestAction(t("Please create a group before sharing a project. You can create a group in Settings -> Sharing tab.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "Please create a group before sharing a project. You can create a group in Settings -> Sharing tab."
+          )
+        )
+      );
       return;
     }
     setAnchorEl(event.currentTarget);
@@ -1760,7 +2277,9 @@ const Process = (props) => {
       document.execCommand("copy");
       dispatch(openSuccessSnackbarRequestAction(t("Code copied")));
     } catch (e) {
-      dispatch(openErrorSnackbarRequestAction(t("Please copy the code yourself.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please copy the code yourself."))
+      );
     }
   };
 
@@ -1822,7 +2341,11 @@ const Process = (props) => {
   };
 
   const downloadReport = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("This operation may take more than 10 seconds. Please wait.")));
+    dispatch(
+      openSuccessSnackbarRequestAction(
+        t("This operation may take more than 10 seconds. Please wait.")
+      )
+    );
 
     setIsDownloadReportLoading(true);
 
@@ -1841,9 +2364,21 @@ const Process = (props) => {
         console.error(e);
 
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(e.response.data.message, e.response.data.message_en, user.language));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              e.response.data.message,
+              e.response.data.message_en,
+              user.language
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry. A temporary error occurred while downloading the report. please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "Sorry. A temporary error occurred while downloading the report. please try again."
+              )
+            )
+          );
         }
       })
       .finally(() => {
@@ -1856,7 +2391,13 @@ const Process = (props) => {
       e.preventDefault();
       let tempNameInput = e.target.value;
       if (tempNameInput.length > 255) {
-        dispatch(openErrorSnackbarRequestAction(t("The maximum number of characters that can be entered has been exceeded.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t(
+              "The maximum number of characters that can be entered has been exceeded."
+            )
+          )
+        );
         tempNameInput = tempNameInput.substring(0, 255);
       }
       setNextProjectName(tempNameInput);
@@ -1866,7 +2407,13 @@ const Process = (props) => {
       e.preventDefault();
       let tempDetailInput = e.target.value;
       if (tempDetailInput.length > 255) {
-        dispatch(openErrorSnackbarRequestAction(t("The maximum number of characters that can be entered has been exceeded.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t(
+              "The maximum number of characters that can be entered has been exceeded."
+            )
+          )
+        );
         tempDetailInput = tempDetailInput.substring(0, 255);
       }
       setNextProjectDetail(tempDetailInput);
@@ -1878,7 +2425,10 @@ const Process = (props) => {
     };
 
     const onCancelChangeDetail = () => {
-      let detailText = projects.project.description !== null ? projects.project.description : "";
+      let detailText =
+        projects.project.description !== null
+          ? projects.project.description
+          : "";
       setNextProjectDetail(detailText);
       setIsUnableTochangeDetail(true);
     };
@@ -1917,6 +2467,7 @@ const Process = (props) => {
               onChange={onChangeNameInput}
               style={{
                 color: currentThemeColor.textWhite87,
+                fontSize: 24,
               }}
             />
             {!projects.project.isShared &&
@@ -1932,10 +2483,20 @@ const Process = (props) => {
                 </IconButton>
               ) : (
                 <div>
-                  <Button id="save_projectname_btn" shape="blue" size="sm" onClick={saveProjectName}>
+                  <Button
+                    id="save_projectname_btn"
+                    shape="blue"
+                    size="sm"
+                    onClick={saveProjectName}
+                  >
                     {t("Save")}
                   </Button>
-                  <Button id="cancel_projectname_btn" shape="blue" size="sm" onClick={onCancelChangeName}>
+                  <Button
+                    id="cancel_projectname_btn"
+                    shape="blue"
+                    size="sm"
+                    onClick={onCancelChangeName}
+                  >
                     {t("Cancel")}
                   </Button>
                 </div>
@@ -1945,7 +2506,9 @@ const Process = (props) => {
             <InputBase
               id="projectComment"
               className={classes.detailInput}
-              placeholder={t("There is no detailed description for this project.")}
+              placeholder={t(
+                "There is no detailed description for this project."
+              )}
               value={nextProjectDetail}
               disabled={isUnableToChangeDetail}
               autoFocus={true}
@@ -1971,10 +2534,20 @@ const Process = (props) => {
                 </IconButton>
               ) : (
                 <div>
-                  <Button id="save_projectdescription_btn" shape="blue" size="xs" onClick={saveProjectDetail}>
+                  <Button
+                    id="save_projectdescription_btn"
+                    shape="blue"
+                    size="xs"
+                    onClick={saveProjectDetail}
+                  >
                     {t("Save")}
                   </Button>
-                  <Button id="cancel_projectdescription_btn" shape="blue" size="xs" onClick={onCancelChangeDetail}>
+                  <Button
+                    id="cancel_projectdescription_btn"
+                    shape="blue"
+                    size="xs"
+                    onClick={onCancelChangeDetail}
+                  >
                     {t("Cancel")}
                   </Button>
                 </div>
@@ -1986,7 +2559,10 @@ const Process = (props) => {
   };
 
   const partSelectTab = (project) => {
-    let isMethodCsv = !(project.trainingMethod === "image" || project.trainingMethod === "object_detection");
+    let isMethodCsv = !(
+      project.trainingMethod === "image" ||
+      project.trainingMethod === "object_detection"
+    );
 
     const handleChangeTab = (event) => {
       setSelectedPage(event.target.id);
@@ -2005,33 +2581,86 @@ const Process = (props) => {
         }}
       >
         <GridItem xs={8} lg={10} style={{ marginTop: "20px", display: "flex" }}>
-          {isMethodCsv && Object.keys(sampleData).indexOf("undefined") === -1 && Object.keys(sampleData).length > 0 && (
-            <div onClick={handleChangeTab} id="rawdata" className={selectedPage === "rawdata" ? classes.selectedTab : classes.notSelectedTab} style={{ fontSize: "14px" }}>
-              {t("Data")}
-            </div>
-          )}
+          {isMethodCsv &&
+            Object.keys(sampleData).indexOf("undefined") === -1 &&
+            Object.keys(sampleData).length > 0 && (
+              <div
+                onClick={handleChangeTab}
+                id="rawdata"
+                className={
+                  selectedPage === "rawdata"
+                    ? classes.selectedTab
+                    : classes.notSelectedTab
+                }
+                style={{ fontSize: "14px" }}
+              >
+                {t("Data")}
+              </div>
+            )}
           {project?.dataconnectorsList && (
-            <div onClick={handleChangeTab} id="summary" className={selectedPage === "summary" ? classes.selectedTab : classes.notSelectedTab} style={{ fontSize: "14px" }}>
+            <div
+              onClick={handleChangeTab}
+              id="summary"
+              className={
+                selectedPage === "summary"
+                  ? classes.selectedTab
+                  : classes.notSelectedTab
+              }
+              style={{ fontSize: "14px" }}
+            >
               {t("Summary")}
             </div>
           )}
           {subConnectors.map((subConnector, idx) => (
-            <div id={"join_" + subConnector.id} key={`sysLinkInfo_${subConnector.id}`} className={selectedPage === "join_" + subConnector.id ? classes.selectedTab : classes.notSelectedTab} onClick={handleChangeTab} style={{ fontSize: "14px" }}>
+            <div
+              id={"join_" + subConnector.id}
+              key={`sysLinkInfo_${subConnector.id}`}
+              className={
+                selectedPage === "join_" + subConnector.id
+                  ? classes.selectedTab
+                  : classes.notSelectedTab
+              }
+              onClick={handleChangeTab}
+              style={{ fontSize: "14px" }}
+            >
               {t("Linkage information")} {idx + 1}
             </div>
           ))}
-          {([9, 99].indexOf(project.status) > -1 || (project.status > 0 && [9, 99].indexOf(project.status) === -1 && project.models?.length > 0) || isAnyModelFinished) && (
-            <div onClick={handleChangeTab} id="model" className={selectedPage === "model" ? classes.selectedTab : selectedPage === "detail" || selectedPage === "analytics" ? classes.notSelectedTab : classes.notSelectedTab} style={{ fontSize: "14px" }}>
+          {([9, 99].indexOf(project.status) > -1 ||
+            (project.status > 0 &&
+              [9, 99].indexOf(project.status) === -1 &&
+              project.models?.length > 0) ||
+            isAnyModelFinished) && (
+            <div
+              onClick={handleChangeTab}
+              id="model"
+              className={
+                selectedPage === "model"
+                  ? classes.selectedTab
+                  : selectedPage === "detail" || selectedPage === "analytics"
+                  ? classes.notSelectedTab
+                  : classes.notSelectedTab
+              }
+              style={{ fontSize: "14px" }}
+            >
               {t("Model")}
             </div>
           )}
           {selectedPage === "detail" && (
-            <div id="detail" className={classes.selectedTab} style={{ fontSize: "14px" }}>
+            <div
+              id="detail"
+              className={classes.selectedTab}
+              style={{ fontSize: "14px" }}
+            >
               {t("Details")}
             </div>
           )}
           {selectedPage === "analytics" && (
-            <div id="analytics" className={classes.selectedTab} style={{ fontSize: "14px" }}>
+            <div
+              id="analytics"
+              className={classes.selectedTab}
+              style={{ fontSize: "14px" }}
+            >
               {t("Analysis")}
             </div>
           )}
@@ -2109,7 +2738,9 @@ const Process = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={(e) => onChangeStartDateFunc("datetime-local", e.target.value)}
+              onChange={(e) =>
+                onChangeStartDateFunc("datetime-local", e.target.value)
+              }
             />
           </form>
           <br />
@@ -2132,7 +2763,9 @@ const Process = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              onChange={(e) => onChangeEndDateFunc("datetime-local", e.target.value)}
+              onChange={(e) =>
+                onChangeEndDateFunc("datetime-local", e.target.value)
+              }
             />
           </form>
           <br />
@@ -2141,20 +2774,31 @@ const Process = (props) => {
     };
 
     const divTSUnitSetting = () => {
-      let isProjectStopped = projects.project.status !== 0 || projects.project.statusText === "중단";
+      let isProjectStopped =
+        projects.project.status !== 0 || projects.project.statusText === "중단";
 
       const onChangeAnalyticsStandard = (e) => {
         if (projects.project.isShared) {
-          dispatch(openErrorSnackbarRequestAction(t("You can’t make changes to shared projects")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("You can’t make changes to shared projects")
+            )
+          );
           return;
         }
         const targetValue = e.target.value;
-        if (projects.project.status !== 0 || projects.project.statusText === "중단") return;
+        if (
+          projects.project.status !== 0 ||
+          projects.project.statusText === "중단"
+        )
+          return;
         setAnalyticsStandard(targetValue);
         if (endTimeSeriesDatetime) {
           var changedDateTime = new Date(endTimeSeriesDatetime);
           if (targetValue && targetValue.indexOf("month") > -1) {
-            changedDateTime.setUTCFullYear(changedDateTime.getUTCFullYear() - 10);
+            changedDateTime.setUTCFullYear(
+              changedDateTime.getUTCFullYear() - 10
+            );
             onChangeStartTimeSeriesDatetime(changedDateTime);
           } else if (targetValue && targetValue.indexOf("day") > -1) {
             changedDateTime.setUTCMonth(changedDateTime.getUTCMonth() - 4);
@@ -2173,7 +2817,7 @@ const Process = (props) => {
         <FormControl
           component="fieldset"
           onClick={() => {
-            onCheckedValueAlarm("분석단위");
+            onCheckedValueAlarm("Analyze unit");
           }}
           disabled={isProjectStopped}
         >
@@ -2184,14 +2828,47 @@ const Process = (props) => {
               color: currentTheme.text1 + " !important",
             }}
           >
-            {t("Analyze Unit")}
+            {t("Analyze unit")}
           </FormLabel>
-          <RadioGroup row aria-label="position" name="position" defaultValue="auto" onChange={onChangeAnalyticsStandard} value={analyticsStandard} disabled={isProjectStopped}>
-            <FormControlLabel value="auto" control={<Radio color="primary" />} disabled={isProjectStopped} label={t("Auto")} />
-            <FormControlLabel value="month" control={<Radio color="primary" />} disabled={isProjectStopped} label={t("Month")} />
-            <FormControlLabel value="day" control={<Radio color="primary" />} disabled={isProjectStopped} label={t("Day")} />
-            <FormControlLabel value="hour" control={<Radio color="primary" />} disabled={isProjectStopped} label={t("Hour")} />
-            <FormControlLabel value="min" control={<Radio color="primary" />} disabled={isProjectStopped} label={t("Min")} />
+          <RadioGroup
+            row
+            aria-label="position"
+            name="position"
+            defaultValue="auto"
+            onChange={onChangeAnalyticsStandard}
+            value={analyticsStandard}
+            disabled={isProjectStopped}
+          >
+            <FormControlLabel
+              value="auto"
+              control={<Radio color="primary" />}
+              disabled={isProjectStopped}
+              label={t("Auto")}
+            />
+            <FormControlLabel
+              value="month"
+              control={<Radio color="primary" />}
+              disabled={isProjectStopped}
+              label={t("Month")}
+            />
+            <FormControlLabel
+              value="day"
+              control={<Radio color="primary" />}
+              disabled={isProjectStopped}
+              label={t("Day")}
+            />
+            <FormControlLabel
+              value="hour"
+              control={<Radio color="primary" />}
+              disabled={isProjectStopped}
+              label={t("Hour")}
+            />
+            <FormControlLabel
+              value="min"
+              control={<Radio color="primary" />}
+              disabled={isProjectStopped}
+              label={t("Min")}
+            />
           </RadioGroup>
         </FormControl>
       );
@@ -2199,11 +2876,16 @@ const Process = (props) => {
 
     return (
       <>
-        {analyticsStandard && analyticsStandard.indexOf("auto") === -1 && divTSStandardSetting()}
+        {analyticsStandard &&
+          analyticsStandard.indexOf("auto") === -1 &&
+          divTSStandardSetting()}
         {divTSUnitSetting()}
         <br />
         <p style={{ fontSize: "14px", color: "#F0F0F0" }}>
-          {t("Caution")} : {t("데이터들의 데이터 보유에 따라 분석 기간은 자동으로 조정될 수 있고, 분석 기준에 맞춰 통계값으로 가공됩니다.")}
+          {t("Caution")} :{" "}
+          {t(
+            "데이터들의 데이터 보유에 따라 분석 기간은 자동으로 조정될 수 있고, 분석 기준에 맞춰 통계값으로 가공됩니다."
+          )}
         </p>
       </>
     );
@@ -2211,7 +2893,9 @@ const Process = (props) => {
 
   const onSetTrainingDevice = (type, project) => {
     let isDisabled = project.status !== 0 || project.statusText === "중단";
-    let tmpGpuList = checkIsIterable(project.available_gpu_list) ? [...project.available_gpu_list] : [];
+    let tmpGpuList = checkIsIterable(project.available_gpu_list)
+      ? [...project.available_gpu_list]
+      : [];
 
     const handleDeviceCheckAll = (e) => {
       let tmpVal = e.target.value;
@@ -2256,12 +2940,21 @@ const Process = (props) => {
         <FormControl
           className={classes.formControl}
           onClick={() => {
-            if (type === "instance") onCheckedValueAlarm("학습 인스턴스");
-            // if (type === "gpu") onCheckedValueAlarm("학습 GPU");
+            if (type === "instance") onCheckedValueAlarm("Training instance");
+            // if (type === "gpu") onCheckedValueAlarm("Training GPU");
           }}
         >
           {type === "instance" && (
-            <Select labelid="demo-simple-select-outlined-label" value={project.instanceType ? project.instanceType : "normal"} onChange={instanceTypeChange} defaultValue={"normal"} disabled={isDisabled} id={isDisabled ? "disabledSelectBox" : "methodForPredictSelectBox"}>
+            <Select
+              labelid="demo-simple-select-outlined-label"
+              value={project.instanceType ? project.instanceType : "normal"}
+              onChange={instanceTypeChange}
+              defaultValue={"normal"}
+              disabled={isDisabled}
+              id={
+                isDisabled ? "disabledSelectBox" : "methodForPredictSelectBox"
+              }
+            >
               <MenuItem value="normal">{t("Auto setup")}</MenuItem>
               <MenuItem value="g4dn.2xlarge">{t("g4dn.2xlarge")}</MenuItem>
               <MenuItem value="g4dn.4xlarge">{t("g4dn.4xlarge")}</MenuItem>
@@ -2277,7 +2970,18 @@ const Process = (props) => {
                 <>
                   {gpuList.length > 1 && (
                     <FormGroup onChange={handleDeviceCheckAll}>
-                      <FormControlLabel label={"전체 선택"} control={<Checkbox value="all" size="small" checked={isDeviceAllSelected} style={{ marginRight: "4px" }} />} style={{ marginLeft: 0 }} />
+                      <FormControlLabel
+                        label={"전체 선택"}
+                        control={
+                          <Checkbox
+                            value="all"
+                            size="small"
+                            checked={isDeviceAllSelected}
+                            style={{ marginRight: "4px" }}
+                          />
+                        }
+                        style={{ marginLeft: 0 }}
+                      />
                     </FormGroup>
                   )}
                   <FormGroup
@@ -2290,7 +2994,19 @@ const Process = (props) => {
                     onChange={handleDeviceCheck}
                   >
                     {gpuList.map((gpu) => (
-                      <FormControlLabel key={`checkform_${gpu.idx}`} label={gpu.name} control={<Checkbox value={gpu.idx} size="small" checked={selectedDeviceArr.includes(gpu.idx)} style={{ marginRight: "4px" }} />} style={{ marginLeft: 0 }} />
+                      <FormControlLabel
+                        key={`checkform_${gpu.idx}`}
+                        label={gpu.name}
+                        control={
+                          <Checkbox
+                            value={gpu.idx}
+                            size="small"
+                            checked={selectedDeviceArr.includes(gpu.idx)}
+                            style={{ marginRight: "4px" }}
+                          />
+                        }
+                        style={{ marginLeft: 0 }}
+                      />
                     ))}
                   </FormGroup>
                 </>
@@ -2302,7 +3018,9 @@ const Process = (props) => {
                 ))
               )
             ) : (
-              <p style={disabledTextStyle}>{t("There is no GPU to choose from.")}</p>
+              <p style={disabledTextStyle}>
+                {t("There is no GPU to choose from.")}
+              </p>
             ))}
         </FormControl>
       </GridItem>
@@ -2310,22 +3028,30 @@ const Process = (props) => {
   };
 
   useEffect(() => {
-    if (messages.message === "프로젝트가 성공적으로 중단되었습니다.") setAlgorithmInfo(INITIAL_ALGORITHM_INFO);
+    if (messages.message === "프로젝트가 성공적으로 중단되었습니다.")
+      setAlgorithmInfo(INITIAL_ALGORITHM_INFO);
   }, [messages.message]);
 
   return (
     <div style={{ marginTop: "30px" }}>
-      <ReactTitle title={"DS2.ai - " + t(isVerify ? "검증" : "학습")} />
+      <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")} />
       {isLoading || !projects || projects.isLoading || !user.me ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />
-          <div style={{ fontSize: 15 }}>{t("Loading project. Please wait.")}</div>
+          <div style={{ fontSize: 15 }}>
+            {t("Loading project. Please wait.")}
+          </div>
         </div>
       ) : (
         <>
           {secProjectTitle()}
           <Grid container style={{ mb: 3 }}>
-            <Grid item xs={12} lg={isRequiredHyperParameters ? 7.5 : 6} sx={{ order: { xs: 2, lg: 0 } }}>
+            <Grid
+              item
+              xs={12}
+              lg={isRequiredHyperParameters ? 7.5 : 6}
+              sx={{ order: { xs: 2, lg: 0 } }}
+            >
               <Grid
                 container
                 className={classes.processMainCard}
@@ -2344,99 +3070,175 @@ const Process = (props) => {
                         {handleHelpIconTip("method")}
                       </p>
                       <FormControl className={classes.formControl}>
-                        <Select labelid="demo-simple-select-outlined-label" value={projects.project.trainingMethod} onChange={methodChange} disabled={projects.project.status !== 0} id={projects.project.status !== 0 ? "disabledSelectBox" : "methodForPredictSelectBox"}>
+                        <Select
+                          labelid="demo-simple-select-outlined-label"
+                          value={projects.project.trainingMethod}
+                          onChange={methodChange}
+                          disabled={projects.project.status !== 0}
+                          id={
+                            projects.project.status !== 0
+                              ? "disabledSelectBox"
+                              : "methodForPredictSelectBox"
+                          }
+                        >
                           <MenuItem value="normal">{t("General")}</MenuItem>
                           <MenuItem value="image">{t("Image")}</MenuItem>
                         </Select>
                       </FormControl>
-                      {projects.project.trainingMethod && projects.project.trainingMethod.indexOf("time_series") > -1 && partTimeSeriesSetting()}
+                      {projects.project.trainingMethod &&
+                        projects.project.trainingMethod.indexOf("time_series") >
+                          -1 &&
+                        partTimeSeriesSetting()}
                     </GridItem>
                   </GridContainer>
                 ) : (
                   <>
                     {/* button area */}
                     <Grid item xs={12} sx={{ mb: 1.5 }}>
-                      <Grid container justifyContent={projects.project.status > 0 && projects.project.option === "colab" ? "space-between" : "flex-end"} alignItems="center">
-                        {projects.project.status > 0 && projects.project.option === "colab" && (
-                          <Button id="check_colabcode_btn" shape="greenOutlined" onClick={(e) => onSetColabOpen(e)}>
-                            {t("View generated code")}
-                          </Button>
-                        )}
+                      <Grid
+                        container
+                        justifyContent={
+                          projects.project.status > 0 &&
+                          projects.project.option === "colab"
+                            ? "space-between"
+                            : "flex-end"
+                        }
+                        alignItems="center"
+                      >
+                        {projects.project.status > 0 &&
+                          projects.project.option === "colab" && (
+                            <Button
+                              id="check_colabcode_btn"
+                              shape="greenOutlined"
+                              onClick={(e) => onSetColabOpen(e)}
+                            >
+                              {t("View generated code")}
+                            </Button>
+                          )}
                         <div style={{ textAlign: "right" }}>
-                          {!projects.project.isShared && [0, 9, 99, 100].indexOf(projects.project.status) === -1 && (
-                            <Button id="stop_project_btn" shape="greenOutlined" onClick={onSetAskStopProject}>
-                              {t("Abort the process")}
-                            </Button>
-                          )}
-                          {!projects.project.isShared && isVerify && projects.project.status === 100 && (
-                            <Button id="download_report_btn" shape="greenOutlined" sx={{ ml: 1 }} onClick={downloadReport}>
-                              <span>{t("Download the training data verification report")}</span>
-                              {isDownloadReportLoading && (
-                                <CircularProgress
-                                  size={13}
-                                  color="inherit"
-                                  sx={{
-                                    ml: 1,
-                                    color: "var(--mainSub)",
-                                    verticalAlign: "middle",
-                                  }}
-                                />
-                              )}
-                            </Button>
-                          )}
-                          {user.me && user.me.usageplan.planName !== "trial" && parseInt(user.me.id) === parseInt(projects.project.user) && (
-                            <>
-                              <Button id="share_project_btn" shape="whiteOutlined" sx={{ ml: 1 }} onClick={handleClickForShare}>
-                                {t("Share your project")}
+                          {!projects.project.isShared &&
+                            [0, 9, 99, 100].indexOf(projects.project.status) ===
+                              -1 && (
+                              <Button
+                                id="stop_project_btn"
+                                shape="greenOutlined"
+                                onClick={onSetAskStopProject}
+                              >
+                                {t("Abort the process")}
                               </Button>
-                              <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={onCloseShareMenu}>
-                                <MenuItem style={{ padding: "4px 24px 4px 16px" }}>
-                                  <div className={classes.defaultContainer}>
-                                    <Switch
-                                      value="all"
-                                      checked={groupCheckboxDict["all"] ? true : false}
-                                      color="primary"
-                                      inputProps={{
-                                        "aria-label": "primary checkbox",
-                                      }}
-                                      onChange={onChangeShareGroup}
-                                    />
-                                    <b>Share to All Group</b>
-                                  </div>
-                                </MenuItem>
-                                {groups.parentsGroup &&
-                                  groups.parentsGroup.map((group) => {
-                                    var isChecked = groupCheckboxDict[group.id] ? true : false;
-                                    return (
-                                      <MenuItem
-                                        key={`parentGroup_${group.id}`}
-                                        style={{
-                                          padding: "4px 24px 4px 16px",
+                            )}
+                          {!projects.project.isShared &&
+                            isVerify &&
+                            projects.project.status === 100 && (
+                              <Button
+                                id="download_report_btn"
+                                shape="greenOutlined"
+                                sx={{ ml: 1 }}
+                                onClick={downloadReport}
+                              >
+                                <span>
+                                  {t(
+                                    "Download the training data verification report"
+                                  )}
+                                </span>
+                                {isDownloadReportLoading && (
+                                  <CircularProgress
+                                    size={13}
+                                    color="inherit"
+                                    sx={{
+                                      ml: 1,
+                                      color: "var(--mainSub)",
+                                      verticalAlign: "middle",
+                                    }}
+                                  />
+                                )}
+                              </Button>
+                            )}
+                          {user.me &&
+                            user.me.usageplan.planName !== "trial" &&
+                            parseInt(user.me.id) ===
+                              parseInt(projects.project.user) && (
+                              <>
+                                <Button
+                                  id="share_project_btn"
+                                  shape="whiteOutlined"
+                                  sx={{ ml: 1 }}
+                                  onClick={handleClickForShare}
+                                >
+                                  {t("Share your project")}
+                                </Button>
+                                <Menu
+                                  id="simple-menu"
+                                  anchorEl={anchorEl}
+                                  keepMounted
+                                  open={Boolean(anchorEl)}
+                                  onClose={onCloseShareMenu}
+                                >
+                                  <MenuItem
+                                    style={{ padding: "4px 24px 4px 16px" }}
+                                  >
+                                    <div className={classes.defaultContainer}>
+                                      <Switch
+                                        value="all"
+                                        checked={
+                                          groupCheckboxDict["all"]
+                                            ? true
+                                            : false
+                                        }
+                                        color="primary"
+                                        inputProps={{
+                                          "aria-label": "primary checkbox",
                                         }}
-                                      >
-                                        <div className={classes.defaultContainer}>
-                                          <Switch
-                                            className="shareGroupSwitch"
-                                            value={group.id}
-                                            checked={isChecked}
-                                            color="primary"
-                                            inputProps={{
-                                              "aria-label": "primary checkbox",
-                                            }}
-                                            onChange={onChangeShareGroup}
-                                          />
-                                          <b>Share to {group.groupname}</b>
-                                        </div>
-                                      </MenuItem>
-                                    );
-                                  })}
-                              </Menu>
-                            </>
-                          )}
+                                        onChange={onChangeShareGroup}
+                                      />
+                                      <b>Share to All Group</b>
+                                    </div>
+                                  </MenuItem>
+                                  {groups.parentsGroup &&
+                                    groups.parentsGroup.map((group) => {
+                                      var isChecked = groupCheckboxDict[
+                                        group.id
+                                      ]
+                                        ? true
+                                        : false;
+                                      return (
+                                        <MenuItem
+                                          key={`parentGroup_${group.id}`}
+                                          style={{
+                                            padding: "4px 24px 4px 16px",
+                                          }}
+                                        >
+                                          <div
+                                            className={classes.defaultContainer}
+                                          >
+                                            <Switch
+                                              className="shareGroupSwitch"
+                                              value={group.id}
+                                              checked={isChecked}
+                                              color="primary"
+                                              inputProps={{
+                                                "aria-label":
+                                                  "primary checkbox",
+                                              }}
+                                              onChange={onChangeShareGroup}
+                                            />
+                                            <b>Share to {group.groupname}</b>
+                                          </div>
+                                        </MenuItem>
+                                      );
+                                    })}
+                                </Menu>
+                              </>
+                            )}
                         </div>
                       </Grid>
                     </Grid>
-                    <Grid item xs={12} lg={isRequiredHyperParameters ? 5.5 : 12} sx={{ mb: 1 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      lg={isRequiredHyperParameters ? 5.5 : 12}
+                      sx={{ mb: 1 }}
+                    >
                       <Grid container direction="column" wrap="nowrap">
                         {/* <GridItem
                           xs={12}
@@ -2461,7 +3263,8 @@ const Process = (props) => {
                           </FormControl>
                         </GridItem> */}
 
-                        {projects.project && onSetTrainingDevice("gpu", projects.project)}
+                        {projects.project &&
+                          onSetTrainingDevice("gpu", projects.project)}
                         <GridItem xs={12} style={{ marginTop: "16px" }}>
                           <p className={classes.text87size16}>
                             {t("Training Method")}
@@ -2469,22 +3272,59 @@ const Process = (props) => {
                           </p>
                           <FormControl className={classes.formControl}>
                             <Select
-                              id={projects.project.status !== 0 ? "disabledSelectBox" : "methodForPredictSelectBox"}
+                              id={
+                                projects.project.status !== 0
+                                  ? "disabledSelectBox"
+                                  : "methodForPredictSelectBox"
+                              }
                               labelid="demo-simple-select-outlined-label"
-                              disabled={projects.project.status !== 0 || projects.project?.option === "labeling"}
+                              disabled={
+                                projects.project.status !== 0 ||
+                                projects.project?.option === "labeling"
+                              }
                               value={projects.project.trainingMethod}
                               defaultValue={trainMethod}
                               onChange={methodChange}
                             >
-                              {hasStructuredData && <MenuItem value="normal">{t("Structured Data Automatic Classification")}</MenuItem>}
-                              {hasStructuredData && <MenuItem value="normal_classification">{t("Structured Data Category Classification")}</MenuItem>}
-                              {hasStructuredData && <MenuItem value="normal_regression">{t("Structured Data Regression")}</MenuItem>}
-                              {hasStructuredData && <MenuItem value="text">{t("Natural Language Processing (NLP)")}</MenuItem>}
-                              {hasStructuredData && <MenuItem value="recommender">{t("Recommendation system (matrix)")}</MenuItem>}
-                              {hasImageLabelData && <MenuItem value="image">{t("Image Classification")}</MenuItem>}
+                              {hasStructuredData && (
+                                <MenuItem value="normal">
+                                  {t(
+                                    "Structured Data Automatic Classification"
+                                  )}
+                                </MenuItem>
+                              )}
+                              {hasStructuredData && (
+                                <MenuItem value="normal_classification">
+                                  {t("Structured Data Category Classification")}
+                                </MenuItem>
+                              )}
+                              {hasStructuredData && (
+                                <MenuItem value="normal_regression">
+                                  {t("Structured Data Regression")}
+                                </MenuItem>
+                              )}
+                              {hasStructuredData && (
+                                <MenuItem value="text">
+                                  {t("Natural Language Processing (NLP)")}
+                                </MenuItem>
+                              )}
+                              {hasStructuredData && (
+                                <MenuItem value="recommender">
+                                  {t("Recommendation system (matrix)")}
+                                </MenuItem>
+                              )}
+                              {hasImageLabelData && (
+                                <MenuItem value="image">
+                                  {t("Image Classification")}
+                                </MenuItem>
+                              )}
                               {/* {(!IS_ENTERPRISE && hasImageLabelData) && <MenuItem value='cycle_gan' >{t('Generative Adversarial Network (GAN)')}</MenuItem>} */}
                               {/* {!IS_ENTERPRISE && */}
-                              {hasImageLabelData && <MenuItem value="object_detection">{t("Object Detection")}</MenuItem>}
+                              {hasImageLabelData && (
+                                <MenuItem value="object_detection">
+                                  {t("Object Detection")}
+                                </MenuItem>
+                              )}
                               {/* {hasTimeSeriesData && (
                             <MenuItem value="time_series">
                               {t("Time Series Prediction")}
@@ -2506,26 +3346,54 @@ const Process = (props) => {
                             )} */}
                             </Select>
                           </FormControl>
-                          {projects.project.trainingMethod && projects.project.trainingMethod.indexOf("time_series") > -1 && partTimeSeriesSetting()}
+                          {projects.project.trainingMethod &&
+                            projects.project.trainingMethod.indexOf(
+                              "time_series"
+                            ) > -1 &&
+                            partTimeSeriesSetting()}
                         </GridItem>
                         <GridItem xs={12} style={{ marginTop: "16px" }}>
                           <p className={classes.text87size16}>
-                            {t("Preferred Method")}
+                            {t("Preferred method")}
                             {handleHelpIconTip("option")}
                           </p>
-                          <FormControl component="fieldset" disabled={projects.project.status !== 0 || projects.project?.option === "labeling"} id="optionForPredictSelectBox">
+                          <FormControl
+                            component="fieldset"
+                            disabled={
+                              projects.project.status !== 0 ||
+                              projects.project?.option === "labeling"
+                            }
+                            id="optionForPredictSelectBox"
+                          >
                             <RadioGroup
                               row
                               aria-label="position"
                               name="position"
                               onChange={optionChange}
-                              value={projects.project?.option ? projects.project?.option : isMagicCodePossible ? (projects.project.trainingMethod === "object_detection" ? "colab" : "custom") : "speed"}
+                              value={
+                                projects.project?.option
+                                  ? projects.project?.option
+                                  : isMagicCodePossible
+                                  ? projects.project.trainingMethod ===
+                                    "object_detection"
+                                    ? "colab"
+                                    : "custom"
+                                  : "speed"
+                              }
                               disabled={projects.project.status !== 0}
                             >
                               {PREFER_TYPE.map((v, i) => {
-                                const trainingMethod = projects.project?.trainingMethod;
+                                const trainingMethod =
+                                  projects.project?.trainingMethod;
                                 const option = projects.project?.option;
-                                const isRequired = ["accuracy", "speed"].indexOf(v.value) > -1 || (v.value === "colab" && isMagicCodePossible) || (v.value === "custom" && trainingMethod?.includes("normal")) || (v.value === "labeling" && option === "labeling");
+                                const isRequired =
+                                  ["accuracy", "speed"].indexOf(v.value) > -1 ||
+                                  (v.value === "colab" &&
+                                    isMagicCodePossible) ||
+                                  (v.value === "custom" &&
+                                    trainingMethod?.includes("normal")) ||
+                                  (v.value === "labeling" &&
+                                    option === "labeling");
 
                                 return (
                                   isRequired && (
@@ -2533,9 +3401,14 @@ const Process = (props) => {
                                       key={`radiogroup_${v.label}`}
                                       value={v.value}
                                       control={<Radio color="primary" />}
-                                      disabled={projects.project.status !== 0 || option === "labeling"}
+                                      disabled={
+                                        projects.project.status !== 0 ||
+                                        option === "labeling"
+                                      }
                                       label={
-                                        ["speed", "accuracy"].includes(v.value) ? (
+                                        ["speed", "accuracy"].includes(
+                                          v.value
+                                        ) ? (
                                           <span>
                                             {t(v.label)}{" "}
                                             <span
@@ -2559,107 +3432,193 @@ const Process = (props) => {
                             </RadioGroup>
                           </FormControl>
                         </GridItem>
-                        {projects.project.trainingMethod && !(projects.project.trainingMethod.indexOf("image") > -1 || projects.project.trainingMethod.indexOf("object_detection") > -1) && (
-                          <GridItem xs={12} style={{ marginTop: "16px" }}>
-                            <p className={classes.text87size16}>
-                              {t("Target Variable")}
-                              {handleHelpIconTip("predictValue")}
-                            </p>
-                            <FormControl className={classes.formControl}>
-                              <Select
-                                labelid="demo-simple-select-outlined-label"
-                                value={projects.project.valueForPredictColumnId ? projects.project.valueForPredictColumnId : "placeholder"}
-                                onChange={changeValueForPredict}
-                                disabled={projects.project.status !== 0 || (projects.project.statusText === "중단" && projects.project.option !== "custom") || (projects.project.trainingMethod.indexOf("image") > -1 || projects.project.trainingMethod.indexOf("object_detection") > -1)}
-                                className={classes.selectForm}
-                                id={projects.project.status !== 0 || (projects.project.statusText === "중단" && projects.project.option !== "custom") ? "disabledSelectBox" : "valueForPredictSelectBox"}
+                        {projects.project.trainingMethod &&
+                          !(
+                            projects.project.trainingMethod.indexOf("image") >
+                              -1 ||
+                            projects.project.trainingMethod.indexOf(
+                              "object_detection"
+                            ) > -1
+                          ) && (
+                            <GridItem xs={12} style={{ marginTop: "16px" }}>
+                              <p className={classes.text87size16}>
+                                {t("Target Variable")}
+                                {handleHelpIconTip("predictValue")}
+                              </p>
+                              <FormControl className={classes.formControl}>
+                                <Select
+                                  labelid="demo-simple-select-outlined-label"
+                                  value={
+                                    projects.project.valueForPredictColumnId
+                                      ? projects.project.valueForPredictColumnId
+                                      : "placeholder"
+                                  }
+                                  onChange={changeValueForPredict}
+                                  disabled={
+                                    projects.project.status !== 0 ||
+                                    (projects.project.statusText === "중단" &&
+                                      projects.project.option !== "custom") ||
+                                    (projects.project.trainingMethod.indexOf(
+                                      "image"
+                                    ) > -1 ||
+                                      projects.project.trainingMethod.indexOf(
+                                        "object_detection"
+                                      ) > -1)
+                                  }
+                                  className={classes.selectForm}
+                                  id={
+                                    projects.project.status !== 0 ||
+                                    (projects.project.statusText === "중단" &&
+                                      projects.project.option !== "custom")
+                                      ? "disabledSelectBox"
+                                      : "valueForPredictSelectBox"
+                                  }
+                                >
+                                  <MenuItem
+                                    value="placeholder"
+                                    disabled
+                                    style={{ fontSize: 14 }}
+                                  >
+                                    {t(
+                                      "Select the value you want to analyze/predict."
+                                    )}
+                                  </MenuItem>
+                                  {datacolumns &&
+                                    datacolumns.map(
+                                      (column) =>
+                                        !column.isForGan && (
+                                          <MenuItem
+                                            key={column.id}
+                                            value={column.id}
+                                          >
+                                            {column.columnName} -{" "}
+                                            {column.dataconnectorName}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                </Select>
+                              </FormControl>
+                            </GridItem>
+                          )}
+                        {projects.project.trainingMethod &&
+                          projects.project.trainingMethod.indexOf(
+                            "recommender"
+                          ) > -1 && (
+                            <GridItem xs={12} style={{ marginTop: "16px" }}>
+                              <p className={classes.text87size16}>
+                                {t("User Info (User ID column)")}
+                                {/*<HelpOutlineIcon fontSize="xs" style={{marginLeft: '4px', cursor: 'pointer'}} id="helpIcon"*/}
+                                {/*    onClick={()=>{onOpenTooltipModal('predictValue')}} />*/}
+                              </p>
+                              <FormControl
+                                className={classes.formControl}
+                                onClick={() => {
+                                  onCheckedValueAlarm(
+                                    "유저 정보 (유저 ID 칼럼)"
+                                  );
+                                }}
                               >
-                                <MenuItem value="placeholder" disabled style={{ fontSize: 14 }}>
-                                  {t("Select the value you want to analyze/predict.")}
-                                </MenuItem>
-                                {datacolumns &&
-                                  datacolumns.map(
-                                    (column) =>
-                                      !column.isForGan && (
-                                        <MenuItem key={column.id} value={column.id}>
-                                          {column.columnName} - {column.dataconnectorName}
+                                <Select
+                                  labelid="demo-simple-select-outlined-label"
+                                  value={valueForUserColumnId}
+                                  onChange={changeValueForUser}
+                                  disabled={
+                                    projects.project.status !== 0 ||
+                                    projects.project.statusText === "중단" ||
+                                    (projects.project.trainingMethod.indexOf(
+                                      "image"
+                                    ) > -1 ||
+                                      projects.project.trainingMethod.indexOf(
+                                        "object_detection"
+                                      ) > -1)
+                                  }
+                                  className={classes.selectForm}
+                                  id={
+                                    projects.project.status !== 0 ||
+                                    projects.project.statusText === "중단"
+                                      ? "disabledSelectBox"
+                                      : "valueForPredictSelectBox"
+                                  }
+                                >
+                                  {datacolumns.map(
+                                    (column, idx) =>
+                                      column.id !== valueForItemColumnId &&
+                                      column.id !== valueForPredictColumnId && (
+                                        <MenuItem value={column.id}>
+                                          {column.columnName} -{" "}
+                                          {column.dataconnectorName}
                                         </MenuItem>
                                       )
                                   )}
-                              </Select>
-                            </FormControl>
-                          </GridItem>
-                        )}
-                        {projects.project.trainingMethod && projects.project.trainingMethod.indexOf("recommender") > -1 && (
-                          <GridItem xs={12} style={{ marginTop: "16px" }}>
-                            <p className={classes.text87size16}>
-                              {t("User Info (User ID column)")}
-                              {/*<HelpOutlineIcon fontSize="xs" style={{marginLeft: '4px', cursor: 'pointer'}} id="helpIcon"*/}
-                              {/*    onClick={()=>{onOpenTooltipModal('predictValue')}} />*/}
-                            </p>
-                            <FormControl
-                              className={classes.formControl}
-                              onClick={() => {
-                                onCheckedValueAlarm("유저 정보 (유저 ID 칼럼)");
-                              }}
-                            >
-                              <Select
-                                labelid="demo-simple-select-outlined-label"
-                                value={valueForUserColumnId}
-                                onChange={changeValueForUser}
-                                disabled={projects.project.status !== 0 || projects.project.statusText === "중단" || (projects.project.trainingMethod.indexOf("image") > -1 || projects.project.trainingMethod.indexOf("object_detection") > -1)}
-                                className={classes.selectForm}
-                                id={projects.project.status !== 0 || projects.project.statusText === "중단" ? "disabledSelectBox" : "valueForPredictSelectBox"}
+                                </Select>
+                              </FormControl>
+                            </GridItem>
+                          )}
+                        {projects.project.trainingMethod &&
+                          projects.project.trainingMethod.indexOf(
+                            "recommender"
+                          ) > -1 && (
+                            <GridItem xs={12} style={{ marginTop: "16px" }}>
+                              <p className={classes.text87size16}>
+                                {t("Item information (Item ID column)")}
+                                {/*<HelpOutlineIcon fontSize="xs" style={{marginLeft: '4px', cursor: 'pointer'}} id="helpIcon"*/}
+                                {/*    onClick={()=>{onOpenTooltipModal('predictValue')}} />*/}
+                              </p>
+                              <FormControl
+                                className={classes.formControl}
+                                onClick={() => {
+                                  onCheckedValueAlarm(
+                                    "아이템 정보 (아이템 ID 칼럼)"
+                                  );
+                                }}
                               >
-                                {datacolumns.map(
-                                  (column, idx) =>
-                                    column.id !== valueForItemColumnId &&
-                                    column.id !== valueForPredictColumnId && (
-                                      <MenuItem value={column.id}>
-                                        {column.columnName} - {column.dataconnectorName}
-                                      </MenuItem>
-                                    )
-                                )}
-                              </Select>
-                            </FormControl>
-                          </GridItem>
-                        )}
-                        {projects.project.trainingMethod && projects.project.trainingMethod.indexOf("recommender") > -1 && (
-                          <GridItem xs={12} style={{ marginTop: "16px" }}>
-                            <p className={classes.text87size16}>
-                              {t("Item information (Item ID column)")}
-                              {/*<HelpOutlineIcon fontSize="xs" style={{marginLeft: '4px', cursor: 'pointer'}} id="helpIcon"*/}
-                              {/*    onClick={()=>{onOpenTooltipModal('predictValue')}} />*/}
-                            </p>
-                            <FormControl
-                              className={classes.formControl}
-                              onClick={() => {
-                                onCheckedValueAlarm("아이템 정보 (아이템 ID 칼럼)");
-                              }}
-                            >
-                              <Select
-                                labelid="demo-simple-select-outlined-label"
-                                value={valueForItemColumnId}
-                                onChange={changeValueForItem}
-                                disabled={projects.project.status !== 0 || projects.project.statusText === "중단" || (projects.project.trainingMethod.indexOf("image") > -1 || projects.project.trainingMethod.indexOf("object_detection") > -1)}
-                                className={classes.selectForm}
-                                id={projects.project.status !== 0 || projects.project.statusText === "중단" ? "disabledSelectBox" : "valueForPredictSelectBox"}
-                              >
-                                {datacolumns.map(
-                                  (column, idx) =>
-                                    column.id !== valueForUserColumnId &&
-                                    column.id !== valueForPredictColumnId && (
-                                      <MenuItem value={column.id}>
-                                        {column.columnName} - {column.dataconnectorName}
-                                      </MenuItem>
-                                    )
-                                )}
-                              </Select>
-                            </FormControl>
-                          </GridItem>
-                        )}
+                                <Select
+                                  labelid="demo-simple-select-outlined-label"
+                                  value={valueForItemColumnId}
+                                  onChange={changeValueForItem}
+                                  disabled={
+                                    projects.project.status !== 0 ||
+                                    projects.project.statusText === "중단" ||
+                                    (projects.project.trainingMethod.indexOf(
+                                      "image"
+                                    ) > -1 ||
+                                      projects.project.trainingMethod.indexOf(
+                                        "object_detection"
+                                      ) > -1)
+                                  }
+                                  className={classes.selectForm}
+                                  id={
+                                    projects.project.status !== 0 ||
+                                    projects.project.statusText === "중단"
+                                      ? "disabledSelectBox"
+                                      : "valueForPredictSelectBox"
+                                  }
+                                >
+                                  {datacolumns.map(
+                                    (column, idx) =>
+                                      column.id !== valueForUserColumnId &&
+                                      column.id !== valueForPredictColumnId && (
+                                        <MenuItem value={column.id}>
+                                          {column.columnName} -{" "}
+                                          {column.dataconnectorName}
+                                        </MenuItem>
+                                      )
+                                  )}
+                                </Select>
+                              </FormControl>
+                            </GridItem>
+                          )}
 
-                        {((!projects.project?.option && ["object_detection", "normal", "normal_regression", "normal_classification"].indexOf(projects.project?.trainingMethod) > -1) || ["colab", "custom"].includes(projects.project?.option)) && (
+                        {((!projects.project?.option &&
+                          [
+                            "object_detection",
+                            "normal",
+                            "normal_regression",
+                            "normal_classification",
+                          ].indexOf(projects.project?.trainingMethod) > -1) ||
+                          ["colab", "custom"].includes(
+                            projects.project?.option
+                          )) && (
                           <GridItem xs={12} style={{ marginTop: "16px" }}>
                             <p className={classes.text87size16}>
                               {t("Algorithm Option")}
@@ -2670,26 +3629,68 @@ const Process = (props) => {
                                 labelid="demo-simple-select-outlined-label"
                                 value={algorithmType}
                                 onChange={changeAlgorithmType}
-                                disabled={projects.project.status !== 0 || (projects.project.statusText === "중단" && projects.project.option !== "custom") || projects.project?.option === "colab"}
-                                id={projects.project.status !== 0 || (projects.project.statusText === "중단" && projects.project.option !== "custom") || projects.project?.option === "colab" ? "disabledSelectBox" : "methodForPredictSelectBox"}
+                                disabled={
+                                  projects.project.status !== 0 ||
+                                  (projects.project.statusText === "중단" &&
+                                    projects.project.option !== "custom") ||
+                                  projects.project?.option === "colab"
+                                }
+                                id={
+                                  projects.project.status !== 0 ||
+                                  (projects.project.statusText === "중단" &&
+                                    projects.project.option !== "custom") ||
+                                  projects.project?.option === "colab"
+                                    ? "disabledSelectBox"
+                                    : "methodForPredictSelectBox"
+                                }
                               >
                                 {projects.project?.option === "colab" ? (
-                                  <MenuItem value="auto">{t("Deep Learning")}</MenuItem>
+                                  <MenuItem value="auto">
+                                    {t("Deep Learning")}
+                                  </MenuItem>
                                 ) : (
-                                  Object.keys(INITIAL_ALGORITHM_INFO).map((key, i) => {
-                                    const method = INITIAL_ALGORITHM_INFO[key].method;
-                                    const trainingMethod = projects.project?.trainingMethod;
-                                    const isMethodMatched = (method && (trainingMethod === "normal" && method.includes("clf/reg"))) || (trainingMethod === "normal_classification" && method.includes("clf")) || (trainingMethod === "normal_regression" && method.includes("reg"));
+                                  Object.keys(INITIAL_ALGORITHM_INFO).map(
+                                    (key, i) => {
+                                      const method =
+                                        INITIAL_ALGORITHM_INFO[key].method;
+                                      const trainingMethod =
+                                        projects.project?.trainingMethod;
+                                      const isMethodMatched =
+                                        (method &&
+                                          (trainingMethod === "normal" &&
+                                            method.includes("clf/reg"))) ||
+                                        (trainingMethod ===
+                                          "normal_classification" &&
+                                          method.includes("clf")) ||
+                                        (trainingMethod ===
+                                          "normal_regression" &&
+                                          method.includes("reg"));
 
-                                    return (
-                                      isMethodMatched &&
-                                      (!projects.project.option || (projects.project && projects.project.option === "custom" && key !== "auto")) && (
-                                        <MenuItem key={key} value={key}>
-                                          {t(INITIAL_ALGORITHM_INFO[key].label)}
-                                        </MenuItem>
-                                      )
-                                    );
-                                  })
+                                      return (
+                                        isMethodMatched &&
+                                        (!projects.project.option ||
+                                          (projects.project &&
+                                            projects.project.option ===
+                                              "custom" &&
+                                            key !== "auto")) && (
+                                          <MenuItem key={key} value={key}>
+                                            <span style={{ marginRight: 8 }}>
+                                              {t(
+                                                INITIAL_ALGORITHM_INFO[key]
+                                                  .label
+                                              )}
+                                            </span>
+                                            <span
+                                              style={{
+                                                fontSize: 14,
+                                                verticalAlign: "middle",
+                                              }}
+                                            >{`( ${INITIAL_ALGORITHM_INFO[key].version} )`}</span>
+                                          </MenuItem>
+                                        )
+                                      );
+                                    }
+                                  )
                                 )}
                               </Select>
                             </FormControl>
@@ -2698,23 +3699,37 @@ const Process = (props) => {
                       </Grid>
                     </Grid>
 
-                    {isRequiredHyperParameters && ((projects.project?.option && projects.project?.option !== "colab") || ((!projects.project?.option || projects.project?.option === "colab") && isMagicCodePossible)) && (
-                      <Grid item xs={12} lg={6.5}>
-                        <HyperParameters
-                          algorithmInfo={algorithmInfo}
-                          setAlgorithmInfo={setAlgorithmInfo}
-                          option={algorithmType}
-                          preferedMethod={projects.project?.option ? projects.project?.option : projects.project.trainingMethod === "object_detection" ? "colab" : "custom"}
-                          trainingMethod={projects.project?.trainingMethod}
-                          colabInfo={colabInfo}
-                          onChangeColabInfo={onChangeColabInfo}
-                          isParameterCompressedChecked={isParameterCompressedChecked}
-                          projectStatus={projects.project?.status}
-                          hyperParamsData={hyperParamsData}
-                          initialInfo={INITIAL_ALGORITHM_INFO}
-                        />
-                      </Grid>
-                    )}
+                    {isRequiredHyperParameters &&
+                      ((projects.project?.option &&
+                        projects.project?.option !== "colab") ||
+                        ((!projects.project?.option ||
+                          projects.project?.option === "colab") &&
+                          isMagicCodePossible)) && (
+                        <Grid item xs={12} lg={6.5}>
+                          <HyperParameters
+                            algorithmInfo={algorithmInfo}
+                            setAlgorithmInfo={setAlgorithmInfo}
+                            option={algorithmType}
+                            preferedMethod={
+                              projects.project?.option
+                                ? projects.project?.option
+                                : projects.project.trainingMethod ===
+                                  "object_detection"
+                                ? "colab"
+                                : "custom"
+                            }
+                            trainingMethod={projects.project?.trainingMethod}
+                            colabInfo={colabInfo}
+                            onChangeColabInfo={onChangeColabInfo}
+                            isParameterCompressedChecked={
+                              isParameterCompressedChecked
+                            }
+                            projectStatus={projects.project?.status}
+                            hyperParamsData={hyperParamsData}
+                            initialInfo={INITIAL_ALGORITHM_INFO}
+                          />
+                        </Grid>
+                      )}
                   </>
                 )}
               </Grid>
@@ -2730,20 +3745,38 @@ const Process = (props) => {
                 order: { xs: 1, lg: 0 },
               }}
             >
-              <Container maxWidth={false} component="main" style={{ minHeight: 360, margin: 16 }}>
+              <Container
+                maxWidth={false}
+                component="main"
+                style={{ minHeight: 360, margin: 16 }}
+              >
                 <div className={classes.addressContainer}>
                   {projects.project.status === 0 ? (
                     <>
-                      <div className={classes.opacityDiv} id="opacityDiv" style={{ marginTop: "-6px" }}></div>
+                      <div
+                        className={classes.opacityDiv}
+                        id="opacityDiv"
+                        style={{ marginTop: "-6px" }}
+                      ></div>
                       <div className={classes.circleDiv}>
-                        <b className={classes.textDiv} onMouseEnter={onMakeCircleOpacity} onMouseLeave={onBackCircleOpacity} onClick={startProcess}>
+                        <b
+                          className={classes.textDiv}
+                          onMouseEnter={onMakeCircleOpacity}
+                          onMouseLeave={onBackCircleOpacity}
+                          onClick={startProcess}
+                        >
                           START
                         </b>
-                        <StartCircle projectStatus={projects.project.status} id="startProcess" />
+                        <StartCircle
+                          projectStatus={projects.project.status}
+                          id="startProcess"
+                        />
                       </div>
                     </>
                   ) : projects.project.status === 100 ? (
-                    projects.project.models.filter((model) => model.status === 100).length === 0 ? (
+                    projects.project.models.filter(
+                      (model) => model.status === 100
+                    ).length === 0 ? (
                       <div className={classes.circleDiv}>
                         <ProcessCircle modelPercentage={-1} />
                       </div>
@@ -2768,19 +3801,31 @@ const Process = (props) => {
           <Grid container>
             <Grid item xs={12} lg={10}>
               {subConnectors.map((subConnector, idx) => {
-                let isReady = joinInfo && joinInfo[subConnector.id] && joinInfo[subConnector.id]["isJoinReady"];
+                let isReady =
+                  joinInfo &&
+                  joinInfo[subConnector.id] &&
+                  joinInfo[subConnector.id]["isJoinReady"];
 
                 return (
-                  <div key={`sysLink_${subConnector.id}`} style={{ marginTop: "10px" }}>
+                  <div
+                    key={`sysLink_${subConnector.id}`}
+                    style={{ marginTop: "10px" }}
+                  >
                     <Button
                       id="join_subconnector_btn"
                       shape="whiteOutlinedSquare"
                       style={{
-                        background: isReady ? "rgba(24, 160, 251, 0.5)" : "rgba(24, 160, 251, 1)",
+                        background: isReady
+                          ? "rgba(24, 160, 251, 0.5)"
+                          : "rgba(24, 160, 251, 1)",
                       }}
-                      onClick={() => changeSelectedPage("join_" + subConnector.id)}
+                      onClick={() =>
+                        changeSelectedPage("join_" + subConnector.id)
+                      }
                     >
-                      {isReady ? t("Linkage complete") : t("Linkage") + " " + (idx + 1)}
+                      {isReady
+                        ? t("Linkage complete")
+                        : t("Linkage") + " " + (idx + 1)}
                     </Button>
                     <span style={{ marginLeft: "10px" }}>
                       {mainConnector.dataconnectorName}&nbsp;&lt;-&gt;&nbsp;
@@ -2791,16 +3836,23 @@ const Process = (props) => {
               })}
             </Grid>
           </Grid>
-          {projects.project.status === 0 && (!projects.project.option || projects.project?.option === "colab") && projects.project.statusText !== "중단" && (
-            <Container component="main" className={classes.mainCard} style={{ maxHeight: "2000px" }}>
-              <GridContainer
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                }}
+          {projects.project.status === 0 &&
+            (!projects.project.option ||
+              projects.project?.option === "colab") &&
+            projects.project.statusText !== "중단" && (
+              <Container
+                component="main"
+                className={classes.mainCard}
+                style={{ maxHeight: "2000px" }}
               >
-                {/* {isMagicCodePossible && (
+                <GridContainer
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* {isMagicCodePossible && (
                     <>
                       <GridItem xs={2}>epoch</GridItem>
                       <GridItem xs={2}>
@@ -2876,9 +3928,9 @@ const Process = (props) => {
                       </GridItem>
                     </>
                   )} */}
-              </GridContainer>
-            </Container>
-          )}
+                </GridContainer>
+              </Container>
+            )}
           {partSelectTab(projects.project)}
           <GridContainer>
             <Container
@@ -2888,7 +3940,11 @@ const Process = (props) => {
                 padding: "0px",
               }}
             >
-              <RawDataTable category="sample" sampleData={sampleData} sampleDataId={sampleDataId} />
+              <RawDataTable
+                category="sample"
+                sampleData={sampleData}
+                sampleDataId={sampleDataId}
+              />
             </Container>
             <Container
               maxWidth={false}
@@ -2916,12 +3972,21 @@ const Process = (props) => {
                 selectedPage === "join_" + subConnector.id && (
                   <>
                     <GridItem xs={6} style={{ marginTop: "20px" }}>
-                      <div style={{ textAlign: "center", margin: "10px" }}>{mainConnector.dataconnectorName}</div>
+                      <div style={{ textAlign: "center", margin: "10px" }}>
+                        {mainConnector.dataconnectorName}
+                      </div>
                       <div className={classes.tableWrapper}>
-                        <Table stickyheader="true" className={classes.table} aria-label="sticky table">
+                        <Table
+                          stickyheader="true"
+                          className={classes.table}
+                          aria-label="sticky table"
+                        >
                           <TableHead>
                             <TableRow>
-                              <TableCell className={classes.tableHead} align="center">
+                              <TableCell
+                                className={classes.tableHead}
+                                align="center"
+                              >
                                 <div
                                   style={{
                                     display: "flex",
@@ -2933,7 +3998,12 @@ const Process = (props) => {
                                   <b>{t("Linkage standard")}</b>
                                 </div>
                               </TableCell>
-                              <TableCell className={classes.tableHead} style={{ wordBreak: "keep-all" }} key="columnName" align="center">
+                              <TableCell
+                                className={classes.tableHead}
+                                style={{ wordBreak: "keep-all" }}
+                                key="columnName"
+                                align="center"
+                              >
                                 <b>{t("Column name")}</b>
                               </TableCell>
                             </TableRow>
@@ -2947,19 +4017,55 @@ const Process = (props) => {
                                   tabIndex={-1}
                                   key={row.columnName}
                                   style={{
-                                    background: idx % 2 === 0 ? "rgba(23, 27, 45, 0.5)" : "rgba(128, 128, 128, 0.1)",
+                                    background:
+                                      idx % 2 === 0
+                                        ? "rgba(23, 27, 45, 0.5)"
+                                        : "rgba(128, 128, 128, 0.1)",
                                   }}
                                 >
-                                  <TableCell align="center" onClick={() => onCheckedValueAlarm(row[0])}>
+                                  <TableCell
+                                    align="center"
+                                    onClick={() => onCheckedValueAlarm(row[0])}
+                                  >
                                     <Checkbox
-                                      disabled={projects.project.status !== 0 || (joinInfo && joinInfo[subConnector.id] && joinInfo[subConnector.id]["mainConnector"][row.id]) === projects.project.valueForPredictColumnId || projects.project.statusText === "중단"}
-                                      checked={joinInfo && joinInfo[subConnector.id] && joinInfo[subConnector.id]["mainConnector"] && joinInfo[subConnector.id]["mainConnector"][row.id]}
-                                      onClick={() => onClickjoinInfoValueValue(subConnector.id, "mainConnector", row.id)}
+                                      disabled={
+                                        projects.project.status !== 0 ||
+                                        (joinInfo &&
+                                          joinInfo[subConnector.id] &&
+                                          joinInfo[subConnector.id][
+                                            "mainConnector"
+                                          ][row.id]) ===
+                                          projects.project
+                                            .valueForPredictColumnId ||
+                                        projects.project.statusText === "중단"
+                                      }
+                                      checked={
+                                        joinInfo &&
+                                        joinInfo[subConnector.id] &&
+                                        joinInfo[subConnector.id][
+                                          "mainConnector"
+                                        ] &&
+                                        joinInfo[subConnector.id][
+                                          "mainConnector"
+                                        ][row.id]
+                                      }
+                                      onClick={() =>
+                                        onClickjoinInfoValueValue(
+                                          subConnector.id,
+                                          "mainConnector",
+                                          row.id
+                                        )
+                                      }
                                       className="mainConnectorCheckbox"
                                     />
                                   </TableCell>
-                                  <TableCell key={row.columnName + idx} align="center">
-                                    <div style={{ whiteSpace: "nowrap" }}>{row.columnName}</div>
+                                  <TableCell
+                                    key={row.columnName + idx}
+                                    align="center"
+                                  >
+                                    <div style={{ whiteSpace: "nowrap" }}>
+                                      {row.columnName}
+                                    </div>
                                   </TableCell>
                                 </TableRow>
                               );
@@ -2969,12 +4075,21 @@ const Process = (props) => {
                       </div>
                     </GridItem>
                     <GridItem xs={6} style={{ marginTop: "20px" }}>
-                      <div style={{ textAlign: "center", margin: "10px" }}>{subConnector.dataconnectorName}</div>
+                      <div style={{ textAlign: "center", margin: "10px" }}>
+                        {subConnector.dataconnectorName}
+                      </div>
                       <div className={classes.tableWrapper}>
-                        <Table stickyheader="true" className={classes.table} aria-label="sticky table">
+                        <Table
+                          stickyheader="true"
+                          className={classes.table}
+                          aria-label="sticky table"
+                        >
                           <TableHead>
                             <TableRow>
-                              <TableCell className={classes.tableHead} align="center">
+                              <TableCell
+                                className={classes.tableHead}
+                                align="center"
+                              >
                                 <div
                                   style={{
                                     display: "flex",
@@ -2986,7 +4101,12 @@ const Process = (props) => {
                                   <b>{t("Linkage standard")}</b>
                                 </div>
                               </TableCell>
-                              <TableCell className={classes.tableHead} style={{ wordBreak: "keep-all" }} key="columnName" align="center">
+                              <TableCell
+                                className={classes.tableHead}
+                                style={{ wordBreak: "keep-all" }}
+                                key="columnName"
+                                align="center"
+                              >
                                 <b>{t("Column name")}</b>
                               </TableCell>
                             </TableRow>
@@ -2999,19 +4119,59 @@ const Process = (props) => {
                                 tabIndex={-1}
                                 key={row.columnName}
                                 style={{
-                                  background: idx % 2 === 0 ? "rgba(23, 27, 45, 0.5)" : "rgba(128, 128, 128, 0.1)",
+                                  background:
+                                    idx % 2 === 0
+                                      ? "rgba(23, 27, 45, 0.5)"
+                                      : "rgba(128, 128, 128, 0.1)",
                                 }}
                               >
-                                <TableCell align="center" onClick={() => onCheckedValueAlarm(joinInfo && joinInfo[subConnector.id] && joinInfo[subConnector.id]["subConnector"][row.id])}>
+                                <TableCell
+                                  align="center"
+                                  onClick={() =>
+                                    onCheckedValueAlarm(
+                                      joinInfo &&
+                                        joinInfo[subConnector.id] &&
+                                        joinInfo[subConnector.id][
+                                          "subConnector"
+                                        ][row.id]
+                                    )
+                                  }
+                                >
                                   <Checkbox
-                                    disabled={projects.project.status !== 0 || (joinInfo && joinInfo[subConnector.id] && joinInfo[subConnector.id]["subConnector"][row.id]) === projects.project.valueForPredict || projects.project.statusText === "중단"}
-                                    checked={joinInfo && joinInfo[subConnector.id] && joinInfo[subConnector.id]["subConnector"][row.id]}
-                                    onClick={() => onClickjoinInfoValueValue(subConnector.id, "subConnector", row.id)}
+                                    disabled={
+                                      projects.project.status !== 0 ||
+                                      (joinInfo &&
+                                        joinInfo[subConnector.id] &&
+                                        joinInfo[subConnector.id][
+                                          "subConnector"
+                                        ][row.id]) ===
+                                        projects.project.valueForPredict ||
+                                      projects.project.statusText === "중단"
+                                    }
+                                    checked={
+                                      joinInfo &&
+                                      joinInfo[subConnector.id] &&
+                                      joinInfo[subConnector.id]["subConnector"][
+                                        row.id
+                                      ]
+                                    }
+                                    onClick={() =>
+                                      onClickjoinInfoValueValue(
+                                        subConnector.id,
+                                        "subConnector",
+                                        row.id
+                                      )
+                                    }
                                     className="subConnectorCheckbox"
                                   />
                                 </TableCell>
-                                <TableCell key={row.columnName + idx} align="center">
-                                  <div style={{ whiteSpace: "nowrap" }}>{row.columnName}</div>
+                                <TableCell
+                                  key={row.columnName + idx}
+                                  align="center"
+                                >
+                                  <div style={{ whiteSpace: "nowrap" }}>
+                                    {row.columnName}
+                                  </div>
                                 </TableCell>
                               </TableRow>
                             ))}
@@ -3024,18 +4184,50 @@ const Process = (props) => {
             )}
             {isModelPageAccessible && (
               <GridItem xs={12}>
-                <ModelTable category="process" csv={datacolumns} trainingColumnInfo={trainingColumnInfo} onSetColabOpen={onSetColabOpen} history={props.history} price={price} isAnyModelFinished={isAnyModelFinished} isVerify={isVerify} selectedPage={selectedPage} />
+                <ModelTable
+                  category="process"
+                  csv={datacolumns}
+                  trainingColumnInfo={trainingColumnInfo}
+                  onSetColabOpen={onSetColabOpen}
+                  history={props.history}
+                  price={price}
+                  isAnyModelFinished={isAnyModelFinished}
+                  isVerify={isVerify}
+                  selectedPage={selectedPage}
+                />
               </GridItem>
             )}
             {selectedPage === "detail" && <Detail datacolumns={datacolumns} />}
-            {selectedPage === "analytics" && <Analytics valueForPredictName={valueForPredictName} csv={datacolumns} trainingColumnInfo={trainingColumnInfo} history={props.history} />}
+            {selectedPage === "analytics" && (
+              <Analytics
+                valueForPredictName={valueForPredictName}
+                csv={datacolumns}
+                trainingColumnInfo={trainingColumnInfo}
+                history={props.history}
+              />
+            )}
           </GridContainer>
           {/* </Container>
           </GridContainer> */}
-          <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isTooltipModalOpen} onClose={closeTooltipModalOpen} className={classes.modalContainer}>
-            <Tooltip tooltipCategory={tooltipCategory} closeTooltipModalOpen={closeTooltipModalOpen} />
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={isTooltipModalOpen}
+            onClose={closeTooltipModalOpen}
+            className={classes.modalContainer}
+          >
+            <Tooltip
+              tooltipCategory={tooltipCategory}
+              closeTooltipModalOpen={closeTooltipModalOpen}
+            />
           </Modal>
-          <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={colabModalOpen} onClose={onCloseColabModal} className={classes.modalContainer}>
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={colabModalOpen}
+            onClose={onCloseColabModal}
+            className={classes.modalContainer}
+          >
             <div className={classes.modalContent}>
               <h5>
                 <b>{t("How to use the generated code")}</b>
@@ -3047,7 +4239,10 @@ const Process = (props) => {
                     t("Turn on Jupyter with custom training.")
                   ) : (
                     <>
-                      <a href="https://colab.research.google.com/" target="_blank">
+                      <a
+                        href="https://colab.research.google.com/"
+                        target="_blank"
+                      >
                         {t("Colab")}
                       </a>{" "}
                       {t("or launch Jupyter.")}
@@ -3057,11 +4252,27 @@ const Process = (props) => {
                 <div>2. {t("Copy the code.")}</div>
                 <div>3. {t("Paste the copied code and run it.")}</div>
                 <div>
-                  4. {t("After completion, you can view the results on the current page.")} <br /> <span style={{ fontSize: 14 }}>({t("If the result does not come out, please click Refresh.")})</span>
+                  4.{" "}
+                  {t(
+                    "After completion, you can view the results on the current page."
+                  )}{" "}
+                  <br />{" "}
+                  <span style={{ fontSize: 14 }}>
+                    (
+                    {t(
+                      "If the result does not come out, please click Refresh."
+                    )}
+                    )
+                  </span>
                 </div>
                 <br />
                 <div>
-                  <b className={classes.subHighlightText}>* {t("Please note that after installing the library, press the 'restart runtime' button and run it again otherwise you may get an error.")}</b>
+                  <b className={classes.subHighlightText}>
+                    *{" "}
+                    {t(
+                      "Please note that after installing the library, press the 'restart runtime' button and run it again otherwise you may get an error."
+                    )}
+                  </b>
                 </div>
                 <br />
               </div>
@@ -3076,7 +4287,11 @@ const Process = (props) => {
                 <h5 style={{ marginBottom: 0 }}>CODE</h5>
                 <div className={classes.alignRight}>
                   {colabCode && (
-                    <Button id="copy_colabcode_btn" shape="greenContained" onClick={onCopyColabCode}>
+                    <Button
+                      id="copy_colabcode_btn"
+                      shape="greenContained"
+                      onClick={onCopyColabCode}
+                    >
                       {t("Copy")}
                     </Button>
                   )}
@@ -3107,8 +4322,14 @@ const Process = (props) => {
                       background: currentThemeColor.surface1,
                     }}
                   >
-                    <CircularProgress size={40} color="inherit" sx={{ mb: 2, color: "var(--secondary1)" }} />
-                    <div style={{ fontSize: 14, textAlign: "center" }}>{t("Please wait a moment.")}</div>
+                    <CircularProgress
+                      size={40}
+                      color="inherit"
+                      sx={{ mb: 2, color: "var(--secondary1)" }}
+                    />
+                    <div style={{ fontSize: 14, textAlign: "center" }}>
+                      {t("Please wait a moment.")}
+                    </div>
                   </Grid>
                 ) : (
                   <textarea

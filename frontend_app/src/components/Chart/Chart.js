@@ -57,7 +57,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
       const yclass = modelDetail.yClass;
       let _records = modelDetail.records;
       _records = _records
-        .replace(/__pred__/g, "예측값")
+        .replace(/__pred__/g, "predict_value")
         .replace(/"false"/gi, '"거짓"')
         .replace(/"true"/gi, '"참"');
 

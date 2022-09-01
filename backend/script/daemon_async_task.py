@@ -34,15 +34,14 @@ class DaemonAsyncTask():
         self.testMode = False
         self.predictClass = None
         self.processingLabelingClass = None
-        self.processingClass = None
+        from src.managePredict import ManagePredict
+        self.predictClass = ManagePredict()
         self.analysingClass = None
 
         if os.path.exists('./src/training/predict.py'):
             from src.training.processingLabeling import ProcessingLabeling
             from src.training.processing import Processing
             from src.training.analysing import Analysing
-            from src.training.predict import Predict
-            self.predictClass = Predict()
             self.processingLabelingClass = ProcessingLabeling()
             self.processingClass = Processing()
             self.analysingClass = Analysing()
@@ -315,7 +314,7 @@ class DaemonAsyncTask():
                                            num_workers=1, shuffle=False, drop_last=False)
                     a = learn.get_preds(dl=dl)
                     a1 = a[1]
-                    important_df["__예측값__" + dep_var] = a1.tolist()
+                    important_df["__predict_value__" + dep_var] = a1.tolist()
                     print(important_df.head())
                     # AutoVisClass = AutoVisualizing(model=model)
                     # dft = AutoVisClass.AutoViz("", "", dep_var, important_df, header=0, verbose=2)

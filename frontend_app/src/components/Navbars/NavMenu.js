@@ -8,6 +8,13 @@ const NavMenu = ({ localPath }) => {
 
   const routes = [
     {
+      id: "market",
+      path: "/marketList",
+      name: "AI Market",
+      layout: "/admin",
+      condition: true,
+    },
+    {
       id: "data",
       path: "/dataconnector",
       name: "Dataset",
@@ -16,7 +23,7 @@ const NavMenu = ({ localPath }) => {
     },
     {
       id: "label",
-      path: "/labelling?page=1&sorting=created_at&desc=true&rows=10",
+      path: "/labelling",
       name: "Labeling",
       layout: "/admin",
       condition: true,
@@ -43,13 +50,6 @@ const NavMenu = ({ localPath }) => {
       condition: true,
     },
     {
-      id: "market",
-      path: "/marketList",
-      name: "AI Market",
-      layout: "/admin",
-      condition: true,
-    },
-    {
       id: "jupyter",
       path: "/jupyterproject",
       name: "Jupyter",
@@ -58,7 +58,8 @@ const NavMenu = ({ localPath }) => {
     },
   ];
 
-  const navLinkClassName = "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
+  const navLinkClassName =
+    "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
   const navLinkActiveClassName = "navLinkActive";
 
   return (

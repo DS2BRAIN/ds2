@@ -4,7 +4,6 @@ import sys
 import traceback
 
 import typing
-import boto3
 import os
 
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
@@ -237,20 +236,9 @@ def checkVersion(response: Response):
     response.status_code = HTTP_200_OK
     return result
 
-def download_model():
-    s3 = boto3.client('s3', aws_access_key_id=utilClass.access_key,
-                 aws_secret_access_key=utilClass.secret_key)
-
-    if not os.path.exists(f'{utilClass.save_path}/asset/bdcn_pretrained_on_bsds500.pth'):
-        os.makedirs(f'{utilClass.save_path}/asset', exist_ok=True)
-        s3.download_file(utilClass.bucket_name, 'asset/bdcn_pretrained_on_bsds500.pth',
-                         f'{utilClass.save_path}/asset/bdcn_pretrained_on_bsds500.pth')
-
-
 if __name__ == '__main__':
     import uvicorn
 
-    download_model()
     if utilClass.configOption == 'enterprise':
         uvicorn.run("main:app", host='0.0.0.0', port=13002, workers=4)
     elif utilClass.configOption == 'prod_local':

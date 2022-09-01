@@ -1,7 +1,8 @@
 export const INITIAL_ALGORITHM_INFO = {
   keras_ann: {
-    label: "ANN-Keras",
+    label: "ANN_Keras",
     method: "clf/reg",
+    version: "2.9.0",
     parameter: {
       layer_width: {
         inputType: "numb",
@@ -612,8 +613,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   torch_ann: {
-    label: "ANN-Pytorch",
+    label: "ANN_Pytorch",
     method: "clf/reg",
+    version: "1.10.1",
     parameter: {
       layer_width: {
         inputType: "numb",
@@ -1261,8 +1263,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   fastai_ann: {
-    label: "ANN-FastAI",
+    label: "ANN_FastAI",
     method: "clf/reg",
+    version: "2.7.3",
     parameter: {
       layer_width: {
         inputType: "numb",
@@ -1575,8 +1578,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   xgboost: {
-    label: "XGBoost",
+    label: "XGBoost_XGBoost",
     method: "clf/reg",
+    version: "1.6.1",
     parameter: {
       booster: {
         inputType: "option",
@@ -1926,8 +1930,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   random_forest: {
-    label: "RandomForest",
+    label: "RandomForest_scikit-learn",
     method: "clf/reg",
+    version: "1.1.1",
     parameter: {
       n_estimators: {
         inputType: "numb",
@@ -2132,8 +2137,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   gaussian_nb: {
-    label: "GaussianNB",
+    label: "GaussianNB_scikit-learn",
     method: "clf",
+    version: "1.1.1",
     parameter: {
       priors: {
         inputType: "numb",
@@ -2165,8 +2171,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   isolation_forest: {
-    label: "IsolationForest",
+    label: "IsolationForest_scikit-learn",
     method: "clf",
+    version: "1.1.1",
     parameter: {
       n_estimators: {
         inputType: "numb",
@@ -2268,8 +2275,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   gradient_boosting: {
-    label: "GradientBoosting",
+    label: "GradientBoosting_scikit-learn",
     method: "clf/reg",
+    version: "1.1.1",
     parameter: {
       loss: {
         inputType: "option",
@@ -2512,8 +2520,9 @@ export const INITIAL_ALGORITHM_INFO = {
     },
   },
   sgd: {
-    label: "SGD",
+    label: "SGD_scikit-learn",
     method: "clf/reg",
+    version: "1.1.1",
     parameter: {
       loss: {
         inputType: "option",

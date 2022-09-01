@@ -5,15 +5,34 @@ import { ReactTitle } from "react-meta-tags";
 import { ChromePicker } from "react-color";
 
 import { askModalRequestAction } from "redux/reducers/messages.js";
-import { stopLabelProjectsLoadingRequestAction, putLabelClassRequestAction, postLabelClassRequestAction, setIsProjectRefreshed } from "redux/reducers/labelprojects.js";
-import { askDeleteLabelClassRequestAction, openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  stopLabelProjectsLoadingRequestAction,
+  putLabelClassRequestAction,
+  postLabelClassRequestAction,
+  setIsProjectRefreshed,
+} from "redux/reducers/labelprojects.js";
+import {
+  askDeleteLabelClassRequestAction,
+  openErrorSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import * as api from "controller/labelApi.js";
 import currentTheme from "assets/jss/custom";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button";
 
-import { Box, Checkbox, Grid, InputBase, Modal, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import {
+  Box,
+  Checkbox,
+  Grid,
+  InputBase,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import { CircularProgress } from "@mui/material";
 
@@ -51,7 +70,16 @@ const LabelClass = ({ history, isMarketProject }) => {
   );
   const { t } = useTranslation();
 
-  const TABLE_HEADS = [{ value: "No", width: "5%" }, { value: "색상", width: "10%" }, { value: isMarketProject ? "구역 클래스 이름" : "클래스명", width: "45%" }, { value: isMarketProject ? "구역 개수" : "라벨링 개수", width: "20%" }, { value: "", width: "10%" }];
+  const TABLE_HEADS = [
+    { value: "No.", width: "5%" },
+    { value: "Color", width: "10%" },
+    { value: isMarketProject ? "Zone class name" : "Class name", width: "45%" },
+    {
+      value: isMarketProject ? "Number of zones" : "Number of Labeling",
+      width: "20%",
+    },
+    { value: "", width: "10%" },
+  ];
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFirst, setIsFirst] = useState(true);
@@ -119,7 +147,9 @@ const LabelClass = ({ history, isMarketProject }) => {
       }
     }
     if (list.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("Please select at least one class.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please select at least one class."))
+      );
       return;
     }
     setIsDeleteLabelClasses(false);
@@ -157,7 +187,13 @@ const LabelClass = ({ history, isMarketProject }) => {
 
   const onSetChangeClassName = () => {
     if (inputClassChangeValue.match(/[/~!@#$%^&*()+=|<>?:{}\-]/g)) {
-      let a = dispatch(openErrorSnackbarRequestAction(t("Class names can contain only letters, numbers, and letters starting with Korean. (You can include _)")));
+      let a = dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "Class names can contain only letters, numbers, and letters starting with Korean. (You can include _)"
+          )
+        )
+      );
       return;
     }
 
@@ -165,7 +201,9 @@ const LabelClass = ({ history, isMarketProject }) => {
 
     labelClasses.forEach((each) => {
       if (each.id !== selectedClass.id && inputClassChangeValue === each.name) {
-        dispatch(openErrorSnackbarRequestAction(t("Class name already exists")));
+        dispatch(
+          openErrorSnackbarRequestAction(t("Class name already exists"))
+        );
         hasSameClassName = true;
         return;
       }
@@ -205,7 +243,8 @@ const LabelClass = ({ history, isMarketProject }) => {
     }
   };
 
-  const generateRandomHexColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  const generateRandomHexColor = () =>
+    `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
   const getLabelClassesPerPage = (labelClassesInfo) => {
     setIsLoading(true);
@@ -282,7 +321,11 @@ const LabelClass = ({ history, isMarketProject }) => {
   return (
     <>
       <ReactTitle title={"DS2.ai - " + t("Labeling")} />
-      {labelprojects == undefined || labelprojects.isLabelClassDeleteLoading || (labelprojects.projectDetail.chart.ready === 0 && isLoading && isFirst) ? (
+      {labelprojects == undefined ||
+      labelprojects.isLabelClassDeleteLoading ||
+      (labelprojects.projectDetail.chart.ready === 0 &&
+        isLoading &&
+        isFirst) ? (
         // { false ? (
         <div className={classes.loading}>
           <CircularProgress />
@@ -291,31 +334,55 @@ const LabelClass = ({ history, isMarketProject }) => {
         <>
           <Grid container style={{ marginBottom: "16px" }}>
             <Grid item>
-              {user.me && !user.me.isAiTrainer && labelprojects.projectDetail && !labelprojects.projectDetail.isShared && (
-                <>
-                  <Button
-                    id="add_class_btn"
-                    aria-controls="customized-menu"
-                    aria-haspopup="true"
-                    shape="greenOutlined"
-                    onClick={onSetNewClass}
-                    // startIcon={<AddIcon />}
-                  >
-                    {isMarketProject ? t("Add zone class") : t("Create Class")}
-                  </Button>
-                </>
-              )}
+              {user.me &&
+                !user.me.isAiTrainer &&
+                labelprojects.projectDetail &&
+                !labelprojects.projectDetail.isShared && (
+                  <>
+                    <Button
+                      id="add_class_btn"
+                      aria-controls="customized-menu"
+                      aria-haspopup="true"
+                      shape="greenOutlined"
+                      onClick={onSetNewClass}
+                      // startIcon={<AddIcon />}
+                    >
+                      {isMarketProject
+                        ? t("Add zone class")
+                        : t("Create Class")}
+                    </Button>
+                  </>
+                )}
             </Grid>
           </Grid>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell className={classes.tableHead} align="center" style={{ width: "5%" }}>
-                  {user.me && !user.me.isAiTrainer && labelprojects.projectDetail && !labelprojects.projectDetail.isShared && <Checkbox value="all" checked={projectCheckedValue["all"]} onChange={onSetProjectCheckedValueAll} />}
+                <TableCell
+                  className={classes.tableHead}
+                  align="center"
+                  style={{ width: "5%" }}
+                >
+                  {user.me &&
+                    !user.me.isAiTrainer &&
+                    labelprojects.projectDetail &&
+                    !labelprojects.projectDetail.isShared && (
+                      <Checkbox
+                        value="all"
+                        checked={projectCheckedValue["all"]}
+                        onChange={onSetProjectCheckedValueAll}
+                      />
+                    )}
                 </TableCell>
                 {TABLE_HEADS.map((tableHead, idx) => {
                   return (
-                    <TableCell id="mainHeader" key={idx} className={classes.tableHead} align="center" width={tableHead.width}>
+                    <TableCell
+                      id="mainHeader"
+                      key={idx}
+                      className={classes.tableHead}
+                      align="center"
+                      width={tableHead.width}
+                    >
                       <b>{t(tableHead.value)}</b>
                     </TableCell>
                   );
@@ -327,7 +394,7 @@ const LabelClass = ({ history, isMarketProject }) => {
                 !user.me.isAiTrainer &&
                 !labelprojects.projectDetail.isShared &&
                 (totalLength === 0 ? (
-                  <NoClassText text={t(isLoading ? "클래스 정보를 불러오는 중입니다. 잠시만 기다려주세요." : "등록된 클래스가 없습니다. 클래스를 추가해주세요.")} />
+                  <NoClassText text={t(isLoading ? "Loading class information. Please wait." : "There is no class registered. Please add class")} />
                 ) : (
                   labelClasses &&
                   labelClasses.map((labelClass, idx) => (
@@ -335,19 +402,49 @@ const LabelClass = ({ history, isMarketProject }) => {
                       key={idx}
                       className={classes.tableRow}
                       style={{
-                        background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                        background:
+                          idx % 2 === 0
+                            ? currentTheme.tableRow1
+                            : currentTheme.tableRow2,
                         cursor: "default",
                       }}
                     >
-                      <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                        {user.me && !user.me.isAiTrainer && labelprojects.projectDetail && !labelprojects.projectDetail.isShared && (
-                          <Checkbox value={labelClass.id} checked={projectCheckedValue[labelClass.id] ? true : false} id="deleteClasses" name="deleteClasses" onChange={() => onSetProjectCheckedValue(labelClass.id)} />
-                        )}
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ cursor: "default" }}
+                      >
+                        {user.me &&
+                          !user.me.isAiTrainer &&
+                          labelprojects.projectDetail &&
+                          !labelprojects.projectDetail.isShared && (
+                            <Checkbox
+                              value={labelClass.id}
+                              checked={
+                                projectCheckedValue[labelClass.id]
+                                  ? true
+                                  : false
+                              }
+                              id="deleteClasses"
+                              name="deleteClasses"
+                              onChange={() =>
+                                onSetProjectCheckedValue(labelClass.id)
+                              }
+                            />
+                          )}
                       </TableCell>
-                      <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ cursor: "default" }}
+                      >
                         {totalLength - (listCnt * (page - 1) + idx)}
                       </TableCell>
-                      <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ cursor: "default" }}
+                      >
                         <Box
                           component="div"
                           style={{
@@ -361,7 +458,11 @@ const LabelClass = ({ history, isMarketProject }) => {
                           {!labelClass.color && "no color"}
                         </Box>
                       </TableCell>
-                      <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ cursor: "default" }}
+                      >
                         <div className={classes.defaultContainer}>
                           <div
                             style={{
@@ -373,27 +474,45 @@ const LabelClass = ({ history, isMarketProject }) => {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                        <div className={classes.wordBreakDiv}>{labelClass.completedLabelCount}</div>
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ cursor: "default" }}
+                      >
+                        <div className={classes.wordBreakDiv}>
+                          {labelClass.completedLabelCount}
+                        </div>
                       </TableCell>
-                      <TableCell className={classes.tableRowCell} align="center" style={{ cursor: "default" }}>
-                        {user.me && !user.me.isAiTrainer && labelprojects.projectDetail && !labelprojects.projectDetail.isShared && (
-                          <Grid container className={classes.wordBreakDiv} justify="space-evenly" spacing={2}>
-                            <Grid item>
-                              <Button
-                                shape="blue"
-                                size="sm"
-                                onClick={() => {
-                                  startUpdateLabelClasses();
-                                  onChangeClasses(labelClass);
-                                }}
-                                id="labelClass_modyfy_class_btn"
-                              >
-                                {t("Edit")}
-                              </Button>
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ cursor: "default" }}
+                      >
+                        {user.me &&
+                          !user.me.isAiTrainer &&
+                          labelprojects.projectDetail &&
+                          !labelprojects.projectDetail.isShared && (
+                            <Grid
+                              container
+                              className={classes.wordBreakDiv}
+                              justify="space-evenly"
+                              spacing={2}
+                            >
+                              <Grid item>
+                                <Button
+                                  shape="blue"
+                                  size="sm"
+                                  onClick={() => {
+                                    startUpdateLabelClasses();
+                                    onChangeClasses(labelClass);
+                                  }}
+                                  id="labelClass_modyfy_class_btn"
+                                >
+                                  {t("Edit")}
+                                </Button>
+                              </Grid>
                             </Grid>
-                          </Grid>
-                        )}
+                          )}
                       </TableCell>
                     </TableRow>
                   ))
@@ -410,10 +529,25 @@ const LabelClass = ({ history, isMarketProject }) => {
                 marginTop: "15px",
               }}
             >
-              <Button id="delete_class_btn" aria-controls="customized-menu" aria-haspopup="true" shape="redOutlined" size="sm" disabled={!Object.values(projectCheckedValue).includes(true)} style={{ marginRight: "auto" }} onClick={deleteLabelClasses}>
+              <Button
+                id="delete_class_btn"
+                aria-controls="customized-menu"
+                aria-haspopup="true"
+                shape="redOutlined"
+                size="sm"
+                disabled={!Object.values(projectCheckedValue).includes(true)}
+                style={{ marginRight: "auto" }}
+                onClick={deleteLabelClasses}
+              >
                 {t("Delete selection")}
               </Button>
-              <Pagination count={totalLength ? Math.ceil(totalLength / listCnt) : 0} page={page} onChange={onChangePage} classes={{ ul: classes.paginationNum }} style={{ marginRight: "auto" }} />
+              <Pagination
+                count={totalLength ? Math.ceil(totalLength / listCnt) : 0}
+                page={page}
+                onChange={onChangePage}
+                classes={{ ul: classes.paginationNum }}
+                style={{ marginRight: "auto" }}
+              />
             </div>
           )}
 
@@ -424,22 +558,36 @@ const LabelClass = ({ history, isMarketProject }) => {
             onClose={() => {
               dispatch(askModalRequestAction());
 
-              history.push(`/admin/labelling/${labelprojects.projectDetail.id}`);
+              history.push(
+                `/admin/labelling/${labelprojects.projectDetail.id}`
+              );
             }}
             className={classes.modalContainer}
             id="labelClass_modify_class_modal"
           >
-            <div className={classes.defaultModalContent} style={{ width: "30%", minWidth: "500px" }}>
-              <Grid container direction="colomn" justify="center" alignItems="center">
+            <div
+              className={classes.defaultModalContent}
+              style={{ width: "30%", minWidth: "500px" }}
+            >
+              <Grid
+                container
+                direction="colomn"
+                justify="center"
+                alignItems="center"
+              >
                 <GridItem xs={7} style={{ marginBottom: "10px" }}>
-                  <b>{isMarketProject ? t("Zone class name") : t("클래스명")} : </b>
+                  <b>{isMarketProject ? t("Zone class name") : t("Class name")} : </b>
 
                   <InputBase
                     className={classes.input}
                     autoFocus
                     value={inputClassChangeValue}
                     onChange={changeInputNameChangeValue}
-                    placeholder={isMarketProject ? t("Please enter the zone name.") : t("Please enter the class name")}
+                    placeholder={
+                      isMarketProject
+                        ? t("Please enter the zone name.")
+                        : t("Please enter the class name")
+                    }
                     multiline={true}
                     maxRows={5}
                     id="labelclass_name_input"
@@ -461,7 +609,11 @@ const LabelClass = ({ history, isMarketProject }) => {
                       alignItems: "center",
                     }}
                   >
-                    <b>{isMarketProject ? t("Zone class color") : t("Class color")}</b>
+                    <b>
+                      {isMarketProject
+                        ? t("Zone class color")
+                        : t("Class color")}
+                    </b>
                     <div
                       id="class_color_block"
                       style={{
@@ -473,7 +625,11 @@ const LabelClass = ({ history, isMarketProject }) => {
                     ></div>
                   </div>
                   <div style={{ height: "250px" }} id="labelClass_color_picker">
-                    <ChromePicker color={color} onChangeComplete={onChangeColor} disableAlpha={true} />
+                    <ChromePicker
+                      color={color}
+                      onChangeComplete={onChangeColor}
+                      disableAlpha={true}
+                    />
                   </div>
                 </GridItem>
                 <GridItem xs={12}>
@@ -485,7 +641,9 @@ const LabelClass = ({ history, isMarketProject }) => {
                         style={{ width: "100%" }}
                         onClick={() => {
                           dispatch(askModalRequestAction());
-                          history.push(`/admin/labelling/${labelprojects.projectDetail.id}`);
+                          history.push(
+                            `/admin/labelling/${labelprojects.projectDetail.id}`
+                          );
                         }}
                       >
                         {t("Cancel")}
@@ -499,7 +657,9 @@ const LabelClass = ({ history, isMarketProject }) => {
                         style={{ width: "100%" }}
                         onClick={() => {
                           onSetChangeClassName();
-                          history.push(`/admin/labelling/${labelprojects.projectDetail.id}`);
+                          history.push(
+                            `/admin/labelling/${labelprojects.projectDetail.id}`
+                          );
                         }}
                       >
                         {t("Enter")}
