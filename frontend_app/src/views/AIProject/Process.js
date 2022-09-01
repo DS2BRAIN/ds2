@@ -1003,8 +1003,12 @@ const Process = (props) => {
       IS_ENTERPRISE &&
       ["speed", "accuracy", "labeling"].indexOf(value) > -1
     ) {
-      checkIsValidKey(user, dispatch, t).then(() => {
-        if (!user.isValidUser || projects.project.status !== 0) return;
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        )
+          return;
 
         if (
           user.me &&
