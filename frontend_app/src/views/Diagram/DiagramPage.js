@@ -52,12 +52,15 @@ const DiagramPage = () => {
   };
 
   const addNewNode = () => {
+    let nodeStandardPosition =
+      schema.nodes.length === 2 ? 0 : schema.nodes.length - 1;
+
     const nextNode = {
-      id: `node-${schema.nodes.length + 1}`,
-      content: `Node ${schema.nodes.length + 1}`,
+      id: `node-${schema.nodes.length - 1}`,
+      content: `Node ${schema.nodes.length - 1}`,
       coordinates: [
-        schema.nodes[schema.nodes.length - 1].coordinates[0] + 100,
-        schema.nodes[schema.nodes.length - 1].coordinates[1],
+        schema.nodes[nodeStandardPosition].coordinates[0] + 100,
+        schema.nodes[nodeStandardPosition].coordinates[1],
       ],
       render: NodeRecipe,
       data: { onClick: deleteNodeFromSchema },
