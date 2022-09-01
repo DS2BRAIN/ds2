@@ -16,10 +16,7 @@ const initialSchema = createSchema({
       content: "Start",
       coordinates: [100, 150],
       render: NodeRecipe,
-      outputs: [
-        { id: "port-1", alignment: "right" },
-        { id: "port-2", alignment: "right" },
-      ],
+      outputs: [{ id: "port-0", alignment: "right" }],
       disableDrag: true,
       data: {
         foo: "bar",
@@ -27,30 +24,10 @@ const initialSchema = createSchema({
       },
     },
     {
-      id: "node-middle",
-      content: "Middle",
-      coordinates: [300, 150],
-      render: NodeRecipe,
-      inputs: [
-        { id: "port-3", alignment: "left" },
-        { id: "port-4", alignment: "left", name: "dslab2" },
-      ],
-      outputs: [
-        { id: "port-5", alignment: "right", name: "dslab3" },
-        { id: "port-6", alignment: "right", name: "dslab4" },
-      ],
-      data: {
-        bar: "foo",
-      },
-    },
-    {
       id: "node-end",
       content: "End",
-      coordinates: [600, 150],
-      inputs: [
-        { id: "port-7", alignment: "left" },
-        { id: "port-8", alignment: "left" },
-      ],
+      coordinates: [1200, 150],
+      inputs: [{ id: "port-1", alignment: "left" }],
       render: NodeRecipe,
       data: {
         foo: true,
@@ -63,7 +40,7 @@ const initialSchema = createSchema({
       },
     },
   ],
-  links: [{ input: "port-1", output: "port-4" }],
+  links: [{ input: "port-0", output: "port-1" }],
 });
 
 const DiagramPage = () => {
