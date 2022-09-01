@@ -34,10 +34,12 @@ export default function MarketList({ history }) {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const { user, model, messages } = useSelector(
+  const { user, projects, models, labelprojects, messages } = useSelector(
     (state) => ({
       user: state.user,
-      model: state.model,
+      projects: state.projects,
+      models: state.models,
+      labelprojects: state.labelprojects,
       messages: state.messages,
     }),
     []
@@ -76,10 +78,12 @@ export default function MarketList({ history }) {
   const [completed, setCompleted] = useState(0);
   const [selectedPreviewId, setSelectedPreviewId] = useState(null);
   const [isPredictModalOpen, setIsPredictModalOpen] = useState(false);
+  const [chosenItem, setChosenItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [rowsPerModelPage, setRowsPerModelPage] = useState(10);
   const [isModelDownloadModalOpen, setIsModelDownloadModalOpen] = useState(false);
   const [progress, setProgress] = useState(10);
+  const [selectedMarketModel, setSelectedMarketModel] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -311,11 +315,11 @@ export default function MarketList({ history }) {
                       // key={marketModel.id + marketModel.name_en + idx}
                       className={classes.tableRowCell}
                       align="center"
-                      onClick={() => {
-                        goNewPage(tableBody.value, isKor ? marketModel.url : marketModel.url_en);
-                      }}
+                      // onClick={() => {
+                      //   goNewPage(tableBody.value, isKor ? marketModel.url : marketModel.url_en);
+                      // }}
                       style={{
-                        cursor: !tableBody.value.includes("name_") ? "default" : "pointer",
+                        cursor: "default",
                         padding: tableBody.value === "thumbnail" && "0 !important",
                       }}
                     >
@@ -324,7 +328,7 @@ export default function MarketList({ history }) {
                         style={{
                           textDecoration: tableBody.value.includes("name_") && "underline",
                           textUnderlinePosition: tableBody.value.includes("name_") && "under",
-                          cursor: tableBody.value.includes("name_") ? "pointer" : "default",
+                          cursor: "default",
                         }}
                       >
                         {tableBody.value === "thumbnail" ? (
@@ -365,7 +369,6 @@ export default function MarketList({ history }) {
                       style={{
                         width: "auto",
                         borderRadius: "12px",
-                        border: "1px solid transparent",
                         background: "linear-gradient(94.02deg, #0A84FF 1.34%, #1BC6B4 98.21%)",
                         backgroundOrigin: "border-box",
                         boxShadow: marketModel["type"] !== "Quickstart" && !marketModel.is_needed_to_be_install && "2px 1000px 1px #161616 inset",
@@ -433,7 +436,7 @@ export default function MarketList({ history }) {
                                   padding: "4px 8px",
                                 }}
                               >
-                                {marketModel.service_type ? (marketModel.service_type === "installation" ? "Installation" : "Service") : marketModel[tableBody.value] === "Quickstart" ? "Quick Start" : "Custom AI"}
+                                {marketModel.service_type ? <>Service</> : marketModel[tableBody.value] !== "CustomAi" ? <>Quick Start</> : <>Custom AI</>}
                               </span>
                             ) : (
                               <>{tableBody.value === "category" ? t(marketModel[tableBody.value]) : isKor ? marketModel[tableBody.value] : marketModel[`${tableBody.value.split("_")[0]}_en`]}</>
@@ -468,21 +471,14 @@ export default function MarketList({ history }) {
                       style={{
                         width: "auto",
                         borderRadius: "12px",
-                        border: "1px solid transparent",
                         backgroundImage: "linear-gradient(94.02deg, #0A84FF 1.34%, #1BC6B4 98.21%)",
                         backgroundOrigin: "border-box",
-                        boxShadow: marketModel["type"] !== "Quickstart" && !marketModel.is_needed_to_be_install && "2px 1000px 1px #161616 inset",
+                        boxShadow: marketModel["type"] === "CustomAi" && "2px 1000px 1px #161616 inset",
                       }}
                     >
-                      {marketModel.is_needed_to_be_install ? (
-                        marketModel.is_installed ? (
-                          <span>{t("Predict")}</span>
-                        ) : (
-                          <span>{t("Activate")}</span>
-                        )
-                      ) : marketModel["service_type"] ? (
+                      {marketModel["service_type"] ? (
                         <span>{t("Start")}</span>
-                      ) : marketModel["type"] === "Quickstart" ? (
+                      ) : marketModel["type"] !== "CustomAi" ? (
                         <span>{t("Predict")}</span>
                       ) : (
                         <span
@@ -535,6 +531,9 @@ export default function MarketList({ history }) {
   };
 
   const onClickButtonAction = async (marketModel) => {
+    await setSelectedMarketModel(null);
+    await setChosenItem(null);
+
     if (marketModel.is_needed_to_be_install) {
       if (marketModel.is_installed) {
         // predict 로직 적용
@@ -542,10 +541,19 @@ export default function MarketList({ history }) {
       // activate 로직 적용
     } else if (marketModel["service_type"]) {
       history.push(`/admin/marketNewProject?id=${marketModel["id"]}`);
-    } else if (marketModel["type"] === "Quickstart") {
+    } else if (marketModel["type"] !== "CustomAi") {
       await setRequestMarketModelId(marketModel.id);
-      await dispatch(getMarketProjectRequestAction(marketModel.project));
+      await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
+      // await setSelectedMarketModel(marketModel);
+      if (marketModel?.externalAiType?.indexOf("image") > -1 || marketModel?.externalAiType?.indexOf("object_detection") > -1) {
+        await setChosenItem("apiImage");
+      } else if (marketModel?.externalAiType?.indexOf("audio") > -1) {
+        await setChosenItem("ApiSpeechToText");
+      } else {
+        await setChosenItem("api");
+      }
+
       await setIsPredictModalOpen(true);
     } else {
       await setRequestAITitle(isKor ? marketModel.name_kr : marketModel.name_en);
@@ -653,16 +661,10 @@ export default function MarketList({ history }) {
     <>
       <ReactTitle title={"DS2.AI - " + "AI " + t("Market")} />
       <div>
-        <div className={classes.topTitle} style={{ margin: "30px 0 16px" }}>
-          {t("Market Product List(Quick Start + Custom AI)")}
+        <div className={classes.topTitle} style={{ margin: "30px 0px" }}>
+          {t("Market Product List")}
         </div>
-        <div>
-          <div style={{ fontSize: "16px" }}>
-            {t("Custom AI Application process")} {" : "}
-            {t("Data review for AI creation > Check availability > After the installation fee is paid, the project proceeds > Use the generated AI according to the deferred payment system")}
-          </div>
-          <div style={{ fontSize: "14px" }}>{t("*The amount may change depending on the size of the training data or whether it is pre-processed, and for details, it is possible to guide the progress and accurate quotation through a consultant.")}</div>
-        </div>
+        <div></div>
 
         {!isLoading && (
           <div
@@ -897,7 +899,7 @@ export default function MarketList({ history }) {
           </div>
         </Modal>
         <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPredictModalOpen} onClose={closeModal} className={classes.modalContainer}>
-          <ModalPage closeModal={closeModal} chosenItem={model?.externalAiType?.indexOf("image") === -1 ? "api" : "apiImage"} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={{}} history={history} />
+          <ModalPage closeModal={closeModal} chosenItem={chosenItem} isMarket={true} opsId={null} csv={{}} trainingColumnInfo={projects?.project?.trainingColumnInfo} history={history} />
         </Modal>
 
         <Modal open={isModelDownloadModalOpen} onClose={handleModelDownloadModalClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
