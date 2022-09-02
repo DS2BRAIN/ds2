@@ -135,18 +135,23 @@ const Admin = ({ history, ...rest }) => {
         }
         return null;
       })}
-      <Route exact path="/" {...rest} render={(props) => <Main {...props} />} />
+      <Route
+        exact
+        path="/"
+        {...rest}
+        render={(props) => <AutoMLProject {...props} route="train" />}
+      />
       <Route
         exact
         path="/admin"
         {...rest}
-        render={(props) => <Main {...props} />}
+        render={(props) => <AutoMLProject {...props} route="train" />}
       />
-      <Route
+      {/* <Route
         path="/admin/flow"
         {...rest}
         render={(props) => <Flow {...props} />}
-      />
+      /> */}
       <Route
         path="/admin/setting"
         {...rest}
@@ -371,13 +376,17 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
   }, [user.me]);
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
   }, [window.location.href]);
 
