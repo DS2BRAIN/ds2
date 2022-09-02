@@ -314,7 +314,7 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     console.log("amplitude init");
-    amplitude.getInstance().init("1cbafbadf45197fffec28396736998d7");
+    amplitude.getInstance().init("446d673fc8928366cc815f058ba93381");
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -371,27 +371,17 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      setIsAgreedBehaviorStatistics(true);
-      const analytics = getAnalytics();
-      amplitude.getInstance().logEvent(window.location.pathname);
-      logEvent(analytics, "select_content", {
-        content_type: "page",
-        content_id: "1",
-        items: [{ name: "window.location.pathname" }],
-      });
+      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
     }
-  }, [user]);
+  }, [user.me]);
 
   useEffect(() => {
-    if (isAgreedBehaviorStatistics) {
-      const analytics = getAnalytics();
-      logEvent(analytics, "select_content", {
-        content_type: "page",
-        content_id: "1",
-        items: [{ name: window.location.pathname }],
-      });
-      amplitude.getInstance().logEvent(window.location.pathname);
+    if (user.me && user.me.isAgreedBehaviorStatistics) {
+      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
     }
+  }, [window.location.href]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
 
     if (path.includes("admin/train/") || path.includes("admin/verifyproject/"))
