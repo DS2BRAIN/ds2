@@ -278,5 +278,5 @@ export const listPagination = (location) => {
 };
 
 export const toHome = (history) => {
-  history.push("/admin/flow");
+  history.push("/admin/train");
 };
