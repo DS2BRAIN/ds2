@@ -3,8 +3,10 @@ import currentTheme from "assets/jss/custom.js";
 import KeyboardArrowLeftOutlinedIcon from "@material-ui/icons/KeyboardArrowLeftOutlined";
 import KeyboardArrowRightOutlinedIcon from "@material-ui/icons/KeyboardArrowRightOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { useHistory } from "react-router";
 
-const PageController = ({ history }) => {
+const PageController = () => {
+  const history = useHistory();
   const classes = currentTheme();
 
   const onClickForceRefreshBtn = () => {

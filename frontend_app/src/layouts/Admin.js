@@ -48,6 +48,7 @@ import LabelImage from "views/Labelling/LabelImage.js";
 import DataconnectorDetail from "views/Dataconnector/DataconnectorDetail";
 import LabelprojectList from "views/Labelling/LabelprojectList";
 import MarketDetail from "../views/Market/MarketDetail";
+import Flow from "views/Main/Flow";
 import Button from "components/CustomButtons/Button";
 import { IS_ENTERPRISE } from "variables/common";
 
@@ -81,7 +82,6 @@ const Admin = ({ history, ...rest }) => {
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
   );
-  const [localPath, setLocalPath] = useState("");
 
   const { t } = useTranslation();
 
@@ -141,6 +141,11 @@ const Admin = ({ history, ...rest }) => {
         path="/admin"
         {...rest}
         render={(props) => <Main {...props} />}
+      />
+      <Route
+        path="/admin/flow"
+        {...rest}
+        render={(props) => <Flow {...props} />}
       />
       <Route
         path="/admin/setting"
@@ -414,10 +419,6 @@ const Admin = ({ history, ...rest }) => {
     if (!isLogined) history.push("/signout");
   });
 
-  useEffect(() => {
-    setLocalPath(window.location.pathname);
-  }, [window.location.pathname]);
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -495,7 +496,6 @@ const Admin = ({ history, ...rest }) => {
             handleDrawerToggle={handleDrawerToggle}
             headerHeight={headerHeight}
             containerWidth={containerWidth}
-            localPath={localPath}
             {...rest}
           />
         )}
