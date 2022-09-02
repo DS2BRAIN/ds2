@@ -9,30 +9,16 @@ const NavMenu = () => {
 
   const routes = [
     {
-      id: "market",
-      path: "/marketList",
-      name: "AI Market",
-      layout: "/admin",
-      condition: true,
-    },
-    {
-      id: "data",
-      path: "/dataconnector",
-      name: "Dataset",
-      layout: "/admin",
-      condition: true,
-    },
-    {
-      id: "label",
-      path: "/labelling",
-      name: "Labeling",
-      layout: "/admin",
-      condition: true,
-    },
-    {
       id: "train",
       path: "/train",
       name: "Train",
+      layout: "/admin",
+      condition: true,
+    },
+    {
+      id: "verify",
+      path: "/verifyproject",
+      name: "Verify",
       layout: "/admin",
       condition: true,
     },
@@ -44,9 +30,16 @@ const NavMenu = () => {
       condition: true,
     },
     {
-      id: "verify",
-      path: "/verifyproject",
-      name: "Verify",
+      id: "label",
+      path: "/labelling",
+      name: "Labeling",
+      layout: "/admin",
+      condition: true,
+    },
+    {
+      id: "market",
+      path: "/marketList",
+      name: "AI Market",
       layout: "/admin",
       condition: true,
     },
