@@ -53,11 +53,17 @@ const initialSchema = createSchema({
 
 const DiagramPage = () => {
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
-  const [newNodeHistoryCount, setNewNodeHistoryCount] = useState(1);
+  const [nodeIdList, setNodeIdList] = useState([]);
 
   useEffect(() => {
-    console.log("schema", schema.nodes);
-  }, [schema.nodes]);
+    if (schema.nodes) {
+      let idList = [];
+      schema.nodes.forEach((node) => {
+        idList.push(node.id);
+      });
+      setNodeIdList(idList);
+    }
+  }, [schema.nodes?.length]);
 
   const deleteNodeFromSchema = (id) => {
     const nodeToRemove = schema.nodes.find((node) => node.id === id);
@@ -77,14 +83,44 @@ const DiagramPage = () => {
     onChange(schemaChanges);
   };
 
+  const onSetNodeNum = (num) => {
+    let strIdList = nodeIdList;
+    let intIdList = [];
+
+    strIdList.forEach((strId) => {
+      let isStartOrEnd = strId === "node-start" || strId === "node-end";
+      if (!isStartOrEnd) {
+        let splitedArr = strId.split("-");
+        let intId = parseInt(splitedArr[1]);
+        intIdList.push(intId);
+      }
+    });
+
+    if (intIdList?.length) {
+      intIdList = intIdList.sort((a, b) => {
+        return a - b;
+      });
+      intIdList.forEach((intId) => {
+        if (intId === num) num += 1;
+        else return;
+      });
+    }
+
+    return num;
+  };
+
   const addNewNode = () => {
     let nodeStandardPosition =
       schema.nodes.length === 2 ? 0 : schema.nodes.length - 1;
-    let count = newNodeHistoryCount;
+
+    let startNum = 1;
+    let nodeNum = onSetNodeNum(startNum);
+
+    let isBelowTen = nodeNum < 10;
 
     const nextNode = {
-      id: `node-${count}`,
-      content: `Node ${count}`,
+      id: isBelowTen ? `node-0${nodeNum}` : `node-${nodeNum}`,
+      content: isBelowTen ? `Node 0${nodeNum}` : `Node ${nodeNum}`,
       coordinates: [
         schema.nodes[nodeStandardPosition].coordinates[0] + 100,
         schema.nodes[nodeStandardPosition].coordinates[1],
@@ -104,8 +140,6 @@ const DiagramPage = () => {
     };
 
     addNode(nextNode);
-    count = count + 1;
-    setNewNodeHistoryCount(count);
   };
 
   return (
