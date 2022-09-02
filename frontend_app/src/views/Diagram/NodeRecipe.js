@@ -74,44 +74,46 @@ export const NodeRecipe = (props) => {
           )}
         </IconButton>
       </Grid>
-      {inputs.map((port, index) => (
-        <div
-          key={"i-" + index}
-          className="custom-node-port custom-node-port-in"
-        >
-          {React.cloneElement(port, {
-            className: "circle-port circle-porter-in",
-          })}
-          <span>input node</span>
-        </div>
-      ))}
-      {isChangableBlock && (
-        <div className="custom-node-port custom-node-port-in">
-          <Grid
-            className="circle-port circle-porter-in"
-            onClick={() => data.portAdd.func(id, "in")}
-          ></Grid>
-        </div>
-      )}
-      {outputs.map((port, index) => (
-        <div
-          key={"i-" + index}
-          className="custom-node-port custom-node-port-out"
-        >
-          {React.cloneElement(port, {
-            className: "circle-port circle-porter-out",
-          })}
-          <span>output node</span>
-        </div>
-      ))}
-      {isChangableBlock && (
-        <div className="custom-node-port custom-node-port-out">
-          <Grid
-            className="circle-port circle-porter-out"
-            onClick={() => data.portAdd.func(id, "out")}
-          ></Grid>
-        </div>
-      )}
+      <Grid sx={{ cursor: "pointer" }} onClick={() => data.onOpenDrawer(id)}>
+        {inputs.map((port, index) => (
+          <div
+            key={"i-" + index}
+            className="custom-node-port custom-node-port-in"
+          >
+            {React.cloneElement(port, {
+              className: "circle-port circle-porter-in",
+            })}
+            <span>input node</span>
+          </div>
+        ))}
+        {isChangableBlock && (
+          <div className="custom-node-port custom-node-port-in">
+            <Grid
+              className="circle-port circle-porter-in"
+              onClick={() => data.portAdd.func(id, "in")}
+            ></Grid>
+          </div>
+        )}
+        {outputs.map((port, index) => (
+          <div
+            key={"i-" + index}
+            className="custom-node-port custom-node-port-out"
+          >
+            {React.cloneElement(port, {
+              className: "circle-port circle-porter-out",
+            })}
+            <span>output node</span>
+          </div>
+        ))}
+        {isChangableBlock && (
+          <div className="custom-node-port custom-node-port-out">
+            <Grid
+              className="circle-port circle-porter-out"
+              onClick={() => data.portAdd.func(id, "out")}
+            ></Grid>
+          </div>
+        )}
+      </Grid>
     </div>
   );
 };

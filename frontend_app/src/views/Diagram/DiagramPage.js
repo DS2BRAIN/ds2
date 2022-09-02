@@ -3,10 +3,11 @@ import Diagram, { useSchema, createSchema } from "beautiful-react-diagrams";
 import "beautiful-react-diagrams/styles.css";
 import "./diagram-style.css";
 
+import NodeDetailSetting from "./NodeDetailSetting";
 import { NodeRecipe } from "./NodeRecipe";
 import Button from "components/CustomButtons/Button";
 
-import { Grid } from "@mui/material";
+import { Drawer, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 const initialSchema = createSchema({
@@ -53,7 +54,10 @@ const initialSchema = createSchema({
 
 const DiagramPage = () => {
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [nodeIdList, setNodeIdList] = useState([]);
+  const [selectedNode, setSelectedNode] = useState({});
 
   useEffect(() => {
     if (schema.nodes) {
@@ -64,6 +68,34 @@ const DiagramPage = () => {
       setNodeIdList(idList);
     }
   }, [schema.nodes?.length]);
+
+  useEffect(() => {
+    console.log(selectedNode);
+  }, [selectedNode]);
+
+  const onChangeCustom = (schemaChanges) => {
+    console.log("onChangeCustom", schemaChanges);
+    onChange(schemaChanges);
+  };
+
+  const openDrawer = (nodeId) => {
+    if (nodeId) {
+      let nodes = schema.nodes;
+      let selectedNd = {};
+
+      nodes.forEach((node) => {
+        if (node.id === nodeId) {
+          selectedNd = node;
+        }
+      });
+      setSelectedNode(selectedNd);
+    }
+    setIsDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
 
   const deleteNodeFromSchema = (id) => {
     const nodeToRemove = schema.nodes.find((node) => node.id === id);
@@ -95,11 +127,6 @@ const DiagramPage = () => {
       });
       onChange(tmpSchema);
     }
-  };
-
-  const onChangeCustom = (schemaChanges) => {
-    console.log("onChangeCustom", schemaChanges);
-    onChange(schemaChanges);
   };
 
   const onSetNodeNum = (num) => {
@@ -153,6 +180,7 @@ const DiagramPage = () => {
       coordinates: [xPosition, yPosition],
       render: NodeRecipe,
       data: {
+        onOpenDrawer: openDrawer,
         onDeleteNode: deleteNodeFromSchema,
         portAdd: {
           in: true,
@@ -177,6 +205,14 @@ const DiagramPage = () => {
         Add new node
       </Button>
       <Diagram schema={schema} onChange={onChangeCustom} />
+      <Drawer
+        anchor="left"
+        open={isDrawerOpen}
+        onClose={closeDrawer}
+        sx={{ zIndex: 1000 }}
+      >
+        <NodeDetailSetting selectedNode={selectedNode} />
+      </Drawer>
     </Grid>
   );
 };
