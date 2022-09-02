@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Diagram, { useSchema, createSchema } from "beautiful-react-diagrams";
 import "beautiful-react-diagrams/styles.css";
 import "./diagram-style.css";
@@ -53,6 +53,11 @@ const initialSchema = createSchema({
 
 const DiagramPage = () => {
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
+  const [newNodeHistoryCount, setNewNodeHistoryCount] = useState(1);
+
+  useEffect(() => {
+    console.log("schema", schema.nodes);
+  }, [schema.nodes]);
 
   const deleteNodeFromSchema = (id) => {
     const nodeToRemove = schema.nodes.find((node) => node.id === id);
@@ -67,13 +72,19 @@ const DiagramPage = () => {
     console.log("addnewoutputnode");
   };
 
+  const onChangeCustom = (schemaChanges) => {
+    console.log("onChangeCustom", schemaChanges);
+    onChange(schemaChanges);
+  };
+
   const addNewNode = () => {
     let nodeStandardPosition =
       schema.nodes.length === 2 ? 0 : schema.nodes.length - 1;
+    let count = newNodeHistoryCount;
 
     const nextNode = {
-      id: `node-${schema.nodes.length - 1}`,
-      content: `Node ${schema.nodes.length - 1}`,
+      id: `node-${count}`,
+      content: `Node ${count}`,
       coordinates: [
         schema.nodes[nodeStandardPosition].coordinates[0] + 100,
         schema.nodes[nodeStandardPosition].coordinates[1],
@@ -93,6 +104,8 @@ const DiagramPage = () => {
     };
 
     addNode(nextNode);
+    count = count + 1;
+    setNewNodeHistoryCount(count);
   };
 
   return (
@@ -104,7 +117,7 @@ const DiagramPage = () => {
       >
         Add new node
       </Button>
-      <Diagram schema={schema} onChange={onChange} />
+      <Diagram schema={schema} onChange={onChangeCustom} />
     </Grid>
   );
 };
