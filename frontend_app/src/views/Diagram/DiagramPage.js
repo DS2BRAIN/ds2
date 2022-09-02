@@ -76,8 +76,6 @@ const DiagramPage = () => {
     let changeNode = {};
     let changeNodeIndex = -1;
 
-    console.log(nodeId);
-
     nodes.forEach((node, index) => {
       if (node.id === nodeId) {
         changeNodeIndex = index;
@@ -147,11 +145,11 @@ const DiagramPage = () => {
 
     let startNum = 1;
     let nodeNum = onSetNodeNum(startNum);
-    let isBelowTen = nodeNum < 10;
+    let twoDigitNum = nodeNum < 10 ? `0${nodeNum}` : nodeNum;
 
     const nextNode = {
-      id: isBelowTen ? `node-0${nodeNum}` : `node-${nodeNum}`,
-      content: isBelowTen ? `Node 0${nodeNum}` : `Node ${nodeNum}`,
+      id: `node-${twoDigitNum}`,
+      content: `Node ${twoDigitNum}`,
       coordinates: [xPosition, yPosition],
       render: NodeRecipe,
       data: {
