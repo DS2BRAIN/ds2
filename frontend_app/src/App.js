@@ -13,6 +13,8 @@ import ResetPassword from "layouts/ResetPassword.js";
 import BrowserError from "layouts/BrowserError.js";
 import EmailConfirm from "layouts/EmailConfirm.js";
 import Page404 from "views/Error/Page404";
+import Publish from "views/Publish/Publish";
+
 import { IS_ENTERPRISE } from "variables/common";
 
 import MinimalFeedback from "minimal-feedback";
@@ -116,6 +118,7 @@ const App = () => {
           <Route path="/forgetpassword" component={ForgetPassword} />
           <Route path="/resetpassword" component={ResetPassword} />
           <Route path="/emailconfirm" component={EmailConfirm} />
+          <Route path="/publish" component={Publish} />
           <Route component={Page404} />
         </Switch>
       </BrowserRouter>
