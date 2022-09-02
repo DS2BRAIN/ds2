@@ -70,12 +70,33 @@ const DiagramPage = () => {
     removeNode(nodeToRemove);
   };
 
-  const addNewInputPort = () => {
-    console.log("addnewinputnode");
-  };
+  const addNewPort = (nodeId, direction) => {
+    let tmpSchema = schema;
+    let nodes = tmpSchema.nodes;
+    let changeNode = {};
+    let changeNodeIndex = -1;
 
-  const addNewOutputPort = () => {
-    console.log("addnewoutputnode");
+    console.log(nodeId);
+
+    nodes.forEach((node, index) => {
+      if (node.id === nodeId) {
+        changeNodeIndex = index;
+        changeNode = node;
+      }
+    });
+
+    if (changeNodeIndex > -1 && tmpSchema.nodes[changeNodeIndex]) {
+      let portList = [];
+      if (direction === "in")
+        portList = tmpSchema.nodes[changeNodeIndex].inputs;
+      else if (direction === "out")
+        portList = tmpSchema.nodes[changeNodeIndex].outputs;
+
+      portList.push({
+        id: `port-${Math.random()}`,
+      });
+      onChange(tmpSchema);
+    }
   };
 
   const onChangeCustom = (schemaChanges) => {
@@ -131,8 +152,7 @@ const DiagramPage = () => {
         portAdd: {
           in: true,
           out: true,
-          inFunc: addNewInputPort,
-          outFunc: addNewOutputPort,
+          func: addNewPort,
         },
       },
       inputs: [{ id: `port-${Math.random()}` }],

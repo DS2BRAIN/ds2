@@ -89,7 +89,7 @@ export const NodeRecipe = (props) => {
         <div className="custom-node-port custom-node-port-in">
           <Grid
             className="circle-port circle-porter-in"
-            onClick={data.portAdd.inFunc}
+            onClick={() => data.portAdd.func(id, "in")}
           ></Grid>
         </div>
       )}
@@ -108,7 +108,7 @@ export const NodeRecipe = (props) => {
         <div className="custom-node-port custom-node-port-out">
           <Grid
             className="circle-port circle-porter-out"
-            onClick={data.portAdd.outFunc}
+            onClick={() => data.portAdd.func(id, "out")}
           ></Grid>
         </div>
       )}
