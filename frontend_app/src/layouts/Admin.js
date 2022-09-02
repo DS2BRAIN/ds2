@@ -48,6 +48,7 @@ import LabelImage from "views/Labelling/LabelImage.js";
 import DataconnectorDetail from "views/Dataconnector/DataconnectorDetail";
 import LabelprojectList from "views/Labelling/LabelprojectList";
 import MarketDetail from "../views/Market/MarketDetail";
+import Flow from "views/Main/Flow";
 import Button from "components/CustomButtons/Button";
 import { IS_ENTERPRISE } from "variables/common";
 
@@ -81,7 +82,6 @@ const Admin = ({ history, ...rest }) => {
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
   );
-  const [localPath, setLocalPath] = useState("");
 
   const { t } = useTranslation();
 
@@ -135,13 +135,23 @@ const Admin = ({ history, ...rest }) => {
         }
         return null;
       })}
-      <Route exact path="/" {...rest} render={(props) => <Main {...props} />} />
+      <Route
+        exact
+        path="/"
+        {...rest}
+        render={(props) => <AutoMLProject {...props} route="train" />}
+      />
       <Route
         exact
         path="/admin"
         {...rest}
-        render={(props) => <Main {...props} />}
+        render={(props) => <AutoMLProject {...props} route="train" />}
       />
+      {/* <Route
+        path="/admin/flow"
+        {...rest}
+        render={(props) => <Flow {...props} />}
+      /> */}
       <Route
         path="/admin/setting"
         {...rest}
@@ -366,13 +376,17 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
   }, [user.me]);
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      amplitude.getInstance().logEvent("solution : " + window.location.pathname);
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
   }, [window.location.href]);
 
@@ -413,10 +427,6 @@ const Admin = ({ history, ...rest }) => {
 
     if (!isLogined) history.push("/signout");
   });
-
-  useEffect(() => {
-    setLocalPath(window.location.pathname);
-  }, [window.location.pathname]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -495,7 +505,6 @@ const Admin = ({ history, ...rest }) => {
             handleDrawerToggle={handleDrawerToggle}
             headerHeight={headerHeight}
             containerWidth={containerWidth}
-            localPath={localPath}
             {...rest}
           />
         )}
