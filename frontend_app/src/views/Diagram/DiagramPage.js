@@ -30,7 +30,7 @@ const initialSchema = createSchema({
     {
       id: "node-end",
       content: "End",
-      coordinates: [1200, 150],
+      coordinates: [1250, 150],
       inputs: [{ id: "port-1", alignment: "left" }],
       render: NodeRecipe,
       data: {
@@ -131,21 +131,28 @@ const DiagramPage = () => {
   };
 
   const addNewNode = () => {
-    let nodeStandardPosition =
-      schema.nodes.length === 2 ? 0 : schema.nodes.length - 1;
+    const nodes = schema.nodes;
+
+    let startNodeIndex = 0;
+    let endNodeIndex = 1;
+    let nodeStandard = nodes.length === 2 ? startNodeIndex : nodes.length - 1;
+    let lastNode = nodes[nodeStandard];
+
+    let xPosition = lastNode.coordinates[0] + 100;
+    let yPosition = lastNode.coordinates[1];
+    if (xPosition > nodes[endNodeIndex].coordinates[0]) {
+      xPosition = nodes[startNodeIndex].coordinates[0];
+      yPosition = yPosition + 100;
+    }
 
     let startNum = 1;
     let nodeNum = onSetNodeNum(startNum);
-
     let isBelowTen = nodeNum < 10;
 
     const nextNode = {
       id: isBelowTen ? `node-0${nodeNum}` : `node-${nodeNum}`,
       content: isBelowTen ? `Node 0${nodeNum}` : `Node ${nodeNum}`,
-      coordinates: [
-        schema.nodes[nodeStandardPosition].coordinates[0] + 100,
-        schema.nodes[nodeStandardPosition].coordinates[1],
-      ],
+      coordinates: [xPosition, yPosition],
       render: NodeRecipe,
       data: {
         onDeleteNode: deleteNodeFromSchema,
