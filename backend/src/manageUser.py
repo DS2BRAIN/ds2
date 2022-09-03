@@ -39,7 +39,7 @@ from src.errorResponseList import ErrorResponseList, NOT_FOUND_USER_ERROR, NOT_A
     WRONG_PASSWORD_ERROR, NOT_ACCESS_ERROR, NOT_FOUND_GROUP_ERROR, ALREADY_REGISTER_GROUP_MEMBER, NOT_VALID_EMAIL, \
     NOT_HOST_USER_ERROR, PERMISSION_DENIED_GROUP_ERROR, LEAVE_ADMIN_USER_ERROR, EXCEED_PROJECT_ERROR, \
     NOT_EXISTENT_GROUP_ERROR, NOT_FOUND_AI_ERROR, TOO_MANY_INVITE_ERROR, ALREADY_INVITATION_USER_ERROR, PRICING_ERROR, \
-    DO_NOT_EXIT_ADMIN_USER
+    DO_NOT_EXIT_ADMIN_USER, SEARCH_PROJECT_ERROR, ALREADY_DELETED_OBJECT
 
 errorResponseList = ErrorResponseList()
 
@@ -619,6 +619,7 @@ class ManageUser:
 
             user["billings"] = []
             user['hasFirstTrialTeam'] = self.dbClass.getFirstTrialTeamByUserId(user['id'])
+            user['user_properties'] = self.dbClass.getUserPropertiesByUserId(user['id'])
 
             try:
                 user["usageplan"] = self.dbClass.getOneUsageplanById(user["usageplan"])
@@ -1235,3 +1236,190 @@ class ManageUser:
             results.append(result)
 
         return HTTP_200_OK, results
+
+
+    def getUserPropertysById(self, token, sorting, page, count, tab, desc, searching, is_verify=False):
+        user = self.dbClass.getUser(token)
+
+        if not user:
+            self.utilClass.sendSlackMessage(f"파일 : manageUser.py \n함수 : getUserPropertysById \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                                            appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        shared_user_propertys = []
+        for temp in self.dbClass.getSharedUserPropertyIdByUserId(user['id']):
+            if temp.user_propertysid:
+                shared_user_propertys = list(set(shared_user_propertys + ast.literal_eval(temp.user_propertysid)))
+        user_propertys, totalLength = self.dbClass.getAllUserPropertyByUserId(user['id'], shared_user_propertys, sorting, tab, desc,
+                                                                   searching, page, count, is_verify)
+
+        result_user_propertys = []
+        for user_property in user_propertys:
+            user_property = model_to_dict(user_property)
+            result_user_propertys.append(user_property)
+
+        result = {'user_propertys': result_user_propertys, 'totalLength': totalLength}
+
+        return HTTP_200_OK, result
+
+    def deleteUserProperty(self, token, user_property_id):
+
+        user = self.dbClass.getUser(token)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser.py \n함수 : deleteUserProperty \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        user_property = self.dbClass.getOneUserPropertyById(user_property_id, raw=True)
+
+        if user_property.user != user['id']:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser\n 함수 : deleteUserProperty \n허용되지 않은 토큰 값입니다. token = {token})",
+                appError=True, userInfo=user)
+            return NOT_ALLOWED_TOKEN_ERROR
+
+        user_property.is_deleted = True
+        user_property.status = 0
+        user_property.save()
+        if self.utilClass.configOption == 'enterprise':
+            try:
+                shutil.rmtree(f"{self.utilClass.save_path}/{user_property.id}")
+            except:
+                pass
+
+        self.utilClass.sendSlackMessage(
+            f"USER PROPERTY를 삭제하였습니다. {user['email']} (ID: {user['id']}) , {user_property.user_property_name} (ID: {user_property.id})",
+            appLog=True, userInfo=user)
+
+        return HTTP_204_NO_CONTENT, {}
+
+    def deleteUserPropertys(self, token, user_property_idList):
+
+        failList = []
+        successList = []
+
+        user = self.dbClass.getUser(token)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser.py \n함수 : deleteUserProperty \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        for user_property_id in user_property_idList:
+            try:
+                user_property = self.dbClass.getOneUserPropertyById(user_property_id, raw=True)
+
+                if user_property.user != user['id']:
+                    self.utilClass.sendSlackMessage(
+                        f"파일 : manageUser\n 함수 : deleteUserProperty \n허용되지 않은 토큰 값입니다. token = {token})",
+                        appError=True, userInfo=user)
+                    return NOT_ALLOWED_TOKEN_ERROR
+
+                user_property.is_deleted = True
+                user_property.status = 0
+                user_property.save()
+                if self.utilClass.configOption == 'enterprise':
+                    try:
+                        shutil.rmtree(f"{self.utilClass.save_path}/{user_property.id}")
+                    except:
+                        pass
+
+                self.utilClass.sendSlackMessage(
+                    f"USER PROPERTY를 삭제하였습니다. {user['email']} (ID: {user['id']}) , {user_property.user_property_name} (ID: {user_property.id})",
+                    appLog=True, userInfo=user)
+                successList.append(user_property_id)
+            except:
+                failList.append(user_property_id)
+                self.utilClass.sendSlackMessage(
+                    f"USER PROPERTY 삭제 중 실패하였습니다. {user['email']} (ID: {user['id']}) , {user_property.user_property_name} (ID: {user_property.id})",
+                    appLog=True, userInfo=user)
+
+        return HTTP_200_OK, {'successList': successList, 'failList': failList}
+
+    def putUserProperty(self, token, user_property_info_raw, user_property_id):
+        user = self.dbClass.getUser(token)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser.py \n함수 : putUserProperty \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        user_property_info = {**user_property_info_raw.__dict__}
+
+        user_property = self.dbClass.getOneUserPropertyById(user_property_id)
+
+        if user_property.get('user', 0) != user['id']:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser\n 함수 : putUserProperty \n허용되지 않은 토큰 값입니다. token = {token})",
+                appError=True, userInfo=user)
+            return NOT_ALLOWED_TOKEN_ERROR
+
+        user_property_info = {k: v for k, v in user_property_info.items() if v is not None}
+
+        self.utilClass.sendSlackMessage(
+            f"USER PROPERTY 상태가 변경되었습니다. {user['email']} (ID: {user['id']}) , {user_property['user_property_name']} (ID: {user_property_id})\n" +
+            json.dumps(user_property_info, indent=4, ensure_ascii=False, default=str),
+            appLog=True, userInfo=user)
+
+        self.dbClass.updateUserProperty(user_property_id, user_property_info)
+        user_property_info = self.dbClass.getOneUserPropertyById(user_property_id)
+
+        return HTTP_200_OK, user_property_info
+
+    def get_user_property_status_by_id(self, token, user_property_id):
+        user = self.dbClass.getUser(token)
+
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser.py \n함수 : getUserPropertyById \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        user_property = self.dbClass.getOneUserPropertyById(user_property_id)
+
+        if user_property['user'] != user['id']:
+            shared_user_propertys = []
+            for temp in self.dbClass.getSharedUserPropertyIdByUserId(user['id']):
+                if temp.user_propertysid:
+                    shared_user_propertys = list(set(shared_user_propertys + ast.literal_eval(temp.user_propertysid)))
+
+            if int(user_property_id) not in shared_user_propertys:
+                raise ex.NotAllowedTokenEx(user['email'])
+
+        result = {
+            "user_property_id": user_property_id,
+            "status": user_property['status'],
+        }
+
+        return HTTP_200_OK, result
+
+    def getUserPropertyById(self, token, user_property_id):
+        user = self.dbClass.getUser(token)
+
+        if not user:
+            self.utilClass.sendSlackMessage(f"파일 : manageUser.py \n함수 : getUserPropertyById \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                                            appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        user_property = self.dbClass.getOneUserPropertyById(user_property_id)
+
+        if user_property['is_deleted']:
+            return ALREADY_DELETED_OBJECT
+
+        if user_property['user'] != user['id'] and user_property['is_sample'] in [False, None]:
+            shared_user_propertys = []
+            for temp in self.dbClass.getSharedUserPropertyIdByUserId(user['id']):
+                if temp.user_propertysid:
+                    shared_user_propertys = list(set(shared_user_propertys + ast.literal_eval(temp.user_propertysid)))
+
+            if int(user_property_id) not in shared_user_propertys:
+                raise ex.NotAllowedTokenEx(user['email'])
+
+
+        if user_property.get('user', 0) == user['id']:
+            return HTTP_200_OK, user_property
+        elif user_property.get('is_sample'):
+            return HTTP_200_OK, user_property
+        else:
+            return SEARCH_PROJECT_ERROR
