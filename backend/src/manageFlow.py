@@ -184,9 +184,9 @@ class ManageFlow:
 
         self.dbClass.updateFlow(flow_id, flow_info)
 
-        flow_components = [x.__dict__['__data__'] for x in self.dbClass.getFlowComponentsByFlowId(flow_id, isSimplified=True)]
-        flow_info['flow_components'] = flow_components
-        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowComponentId(flow_id, isSimplified=True)]
+        flow_nodes = [x.__dict__['__data__'] for x in self.dbClass.getFlowNodesByFlowId(flow_id, isSimplified=True)]
+        flow_info['flow_nodes'] = flow_nodes
+        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowNodeId(flow_id, isSimplified=True)]
         flow_info['monitoring_alerts'] = monitoring_alerts
         
         return HTTP_200_OK, flow_info
@@ -249,9 +249,9 @@ class ManageFlow:
                         flow['is_shared'] = True
 
         flow = self.dbClass.getOneFlowById(flow_id)
-        flow_components = [x.__dict__['__data__'] for x in self.dbClass.getFlowComponentsByFlowId(flow_id, isSimplified=True)]
-        flow['flow_components'] = flow_components
-        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowComponentId(flow_id, isSimplified=True)]
+        flow_nodes = [x.__dict__['__data__'] for x in self.dbClass.getFlowNodesByFlowId(flow_id, isSimplified=True)]
+        flow['flow_nodes'] = flow_nodes
+        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowNodeId(flow_id, isSimplified=True)]
         flow['monitoring_alerts'] = monitoring_alerts
 
         if flow['is_shared']:

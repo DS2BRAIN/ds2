@@ -308,5 +308,5 @@ class HelperMonitoringAlert():
         return monitoringAlertTable.select().where(monitoringAlertTable.flow_id == flow_id).order_by(monitoringAlertTable.status).execute()
 
     @wrapper
-    def getMonitoringAlertsByFlowComponentId(self, flow_component_id, isSimplified = False):
-        return monitoringAlertTable.select().where(monitoringAlertTable.flow_component_id == flow_component_id).order_by(monitoringAlertTable.status).execute()
+    def getMonitoringAlertsByFlowNodeId(self, flow_node_id, isSimplified = False):
+        return monitoringAlertTable.select().where(monitoringAlertTable.flow_node_id == flow_node_id).order_by(monitoringAlertTable.status).execute()

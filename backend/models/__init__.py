@@ -289,7 +289,7 @@ class monitoringAlertTable(MySQLModel):
         db_table = 'monitoring_alert'
 
     id = pw.AutoField()
-    flow_component_id = pw.IntegerField(null=True)
+    flow_node_id = pw.IntegerField(null=True)
     monitoring_alert_name = pw.CharField(null=True)
     monitoring_alert_type = pw.CharField(null=True)
     status = pw.IntegerField(null=True)
@@ -301,14 +301,14 @@ class monitoringAlertTable(MySQLModel):
     is_deleted = pw.IntegerField(null=True)
     monitoring_alert_info = JSONField(null=True)
 
-class flowComponentTable(MySQLModel):
+class flowNodeTable(MySQLModel):
     class Meta:
-        db_table = 'flow_component'
+        db_table = 'flow_node'
 
     id = pw.AutoField()
     flow_id = pw.IntegerField(null=True)
-    flow_component_name = pw.CharField(null=True)
-    flow_component_type = pw.CharField(null=True)
+    flow_node_name = pw.CharField(null=True)
+    flow_node_type = pw.CharField(null=True)
     status = pw.IntegerField(null=True)
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
@@ -317,7 +317,7 @@ class flowComponentTable(MySQLModel):
     is_sample = pw.IntegerField(null=True)
     is_deleted = pw.IntegerField(null=True)
     option = pw.CharField(null=True)
-    flow_component_info = JSONField(null=True)
+    flow_node_info = JSONField(null=True)
 
 class userPropertyTable(MySQLModel):
     class Meta:
