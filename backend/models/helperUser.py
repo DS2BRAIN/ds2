@@ -286,4 +286,4 @@ class HelperUser():
 
     @wrapper
     def getUserPropertiesByUserId(self, user_id, isSimplified = False):
-        return userPropertyTable.select().where(flowComponentTable.user == user_id).order_by(flowComponentTable.status).execute()
+        return userPropertyTable.select().where(userPropertyTable.user == user_id).order_by(userPropertyTable.status).execute()

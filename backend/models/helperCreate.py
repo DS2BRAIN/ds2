@@ -156,8 +156,8 @@ class HelperCreate():
         return flowTable.create(**(data))
 
     @wrapper
-    def createFlowComponent(self, data):
-        return flowComponentTable.create(**(data))
+    def createFlowNode(self, data):
+        return flowNodeTable.create(**(data))
 
     @wrapper
     def createMonitoringAlert(self, data):
