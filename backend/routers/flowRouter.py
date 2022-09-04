@@ -18,6 +18,17 @@ manageFlowClass = ManageFlow()
 errorResponseList = ErrorResponseList()
 API_KEY_HEADER = APIKeyHeader(name="Authorization", auto_error=True)
 
+
+class FlowData(BaseModel):
+    flow_name: str = None
+    flow_node_info: dict = None
+
+@router.post("/flows/")
+def createFlow(response: Response, flow_data: FlowData, token: str):
+    response.status_code, result = manageFlowClass.createFlow(token, flow_data)
+
+    return result
+
 @router.get("/flows/")
 def readFlows(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', isVerify: bool = False):
@@ -35,17 +46,13 @@ async def read_flow_status(response: Response, token: str, flow_id: str):
     response.status_code, result = manageFlowClass.get_flow_status_by_id(token, flow_id)
     return result
 
-@router.get("/flowsasync/{flow_id}/")
+@router.get("/flows-async/{flow_id}/")
 async def readFlowasync(flow_id: str, token: str, response: Response):
     response.status_code, result = manageFlowClass.getFlowAsyncById(token, flow_id)
     return result
 
-class FlowInfo(BaseModel):
-    flow_name: str = None
-    flow_node_info: dict = None
-
 @router.put("/flows/{flow_id}/")
-async def updateFlow(flow_id: str, token: str, flowInfo: FlowInfo, response: Response):
+async def updateFlow(flow_id: str, token: str, flowInfo: FlowModel, response: Response):
     response.status_code, result = manageFlowClass.putFlow(token, flowInfo, flow_id)
 
     return result

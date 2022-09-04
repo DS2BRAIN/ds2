@@ -41,6 +41,22 @@ class ManageFlow:
         self.dbClass = Helper(init=True)
         self.utilClass = Util()
 
+    def createFlow(self, token, flow_data):
+        user = self.dbClass.getUser(token, raw=True)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageFile.py \n함수 : createFlow \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        flow_raw = self.dbClass.createFlow({
+            "flow_name": flow_data.flow_name,
+            "flow_node_info": flow_data.flow_node_info,
+            "user": user.id,
+        })
+
+        return HTTP_200_OK, flow_raw.__dict__['__data__']
+
     def getFlowsById(self, token, sorting, page, count, tab, desc, searching, is_verify=False):
         user = self.dbClass.getUser(token)
 

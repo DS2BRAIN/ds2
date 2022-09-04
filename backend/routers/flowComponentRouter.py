@@ -18,6 +18,16 @@ manageFlowComponentClass = ManageFlowComponent()
 errorResponseList = ErrorResponseList()
 API_KEY_HEADER = APIKeyHeader(name="Authorization", auto_error=True)
 
+class FlowComponentData(BaseModel):
+    flow_component_name: str = None
+    flow_component_info: dict = None
+
+@router.post("/flow-components/")
+def createFlow(response: Response, flow_component_data: FlowComponentData, token: str):
+    response.status_code, result = manageFlowComponentClass.createFlowComponent(token, flow_component_data)
+
+    return result
+
 @router.get("/flow-components/")
 def readFlowComponents(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', isVerify: bool = False):
@@ -35,17 +45,13 @@ async def read_flow_component_status(response: Response, token: str, flow_compon
     response.status_code, result = manageFlowComponentClass.get_flow_component_status_by_id(token, flow_component_id)
     return result
 
-@router.get("/flow-componentsasync/{flow_component_id}/")
+@router.get("/flow-components-async/{flow_component_id}/")
 async def readFlowComponentasync(flow_component_id: str, token: str, response: Response):
     response.status_code, result = manageFlowComponentClass.getFlowComponentAsyncById(token, flow_component_id)
     return result
 
-class FlowComponentInfo(BaseModel):
-    flow_component_name: str = None
-    flow_component_info: dict = None
-
 @router.put("/flow-components/{flow_component_id}/")
-async def updateFlowComponent(flow_component_id: str, token: str, flow_componentInfo: FlowComponentInfo, response: Response):
+async def updateFlowComponent(flow_component_id: str, token: str, flow_componentInfo: FlowComponentData, response: Response):
     response.status_code, result = manageFlowComponentClass.putFlowComponent(token, flow_componentInfo, flow_component_id)
 
     return result
