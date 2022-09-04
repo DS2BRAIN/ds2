@@ -1246,8 +1246,8 @@ class ManageUser:
             return NOT_FOUND_USER_ERROR
 
         user_property_raw = self.dbClass.createUserProperty({
-            "flow_name": flow_data.flow_name,
-            "flow_node_info": flow_data.flow_node_info,
+            "user_property": flow_data.user_property,
+            "user_property_info": flow_data.user_property_info,
             "user": user.id,
         })
 
