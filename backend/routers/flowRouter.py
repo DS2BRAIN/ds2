@@ -52,7 +52,7 @@ async def readFlowasync(flow_id: str, token: str, response: Response):
     return result
 
 @router.put("/flows/{flow_id}/")
-async def updateFlow(flow_id: str, token: str, flowInfo: FlowModel, response: Response):
+async def updateFlow(flow_id: str, token: str, flowInfo: FlowData, response: Response):
     response.status_code, result = manageFlowClass.putFlow(token, flowInfo, flow_id)
 
     return result

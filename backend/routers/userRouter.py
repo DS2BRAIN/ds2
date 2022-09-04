@@ -368,6 +368,8 @@ async def readUserProperty(user_property_id: int, token: str, response: Response
 async def read_user_property_status(response: Response, token: str, user_property_id: str):
     response.status_code, result = manageUserClass.get_user_property_status_by_id(token, user_property_id)
     return result
+    flow_id: int = None
+    flow_component_id: int = None
 
 @router.get("/user-properties-async/{user_property_id}/")
 async def readUserPropertyasync(user_property_id: str, token: str, response: Response):

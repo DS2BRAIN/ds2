@@ -52,6 +52,7 @@ class ManageFlowComponent:
         flow_component_raw = self.dbClass.createFlowComponent({
             "flow_component_name": flow_data.flow_component_name,
             "flow_component_info": flow_data.flow_component_info,
+            "flow_id": flow_data.flow_id,
             "user": user.id,
         })
 

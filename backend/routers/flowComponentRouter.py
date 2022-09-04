@@ -21,6 +21,7 @@ API_KEY_HEADER = APIKeyHeader(name="Authorization", auto_error=True)
 class FlowComponentData(BaseModel):
     flow_component_name: str = None
     flow_component_info: dict = None
+    flow_id: int
 
 @router.post("/flow-components/")
 def createFlow(response: Response, flow_component_data: FlowComponentData, token: str):
