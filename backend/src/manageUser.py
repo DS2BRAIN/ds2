@@ -1237,6 +1237,21 @@ class ManageUser:
 
         return HTTP_200_OK, results
 
+    def createUserProperty(self, token, flow_data):
+        user = self.dbClass.getUser(token, raw=True)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageFile.py \n함수 : createFlow \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        user_property_raw = self.dbClass.createUserProperty({
+            "flow_name": flow_data.flow_name,
+            "flow_node_info": flow_data.flow_node_info,
+            "user": user.id,
+        })
+
+        return HTTP_200_OK, user_property_raw.__dict__['__data__']
 
     def getUserPropertysById(self, token, sorting, page, count, tab, desc, searching, is_verify=False):
         user = self.dbClass.getUser(token)
@@ -1246,19 +1261,19 @@ class ManageUser:
                                             appError=True, userInfo=user)
             return NOT_FOUND_USER_ERROR
 
-        shared_user_propertys = []
+        shared_user_properties = []
         for temp in self.dbClass.getSharedUserPropertyIdByUserId(user['id']):
-            if temp.user_propertysid:
-                shared_user_propertys = list(set(shared_user_propertys + ast.literal_eval(temp.user_propertysid)))
-        user_propertys, totalLength = self.dbClass.getAllUserPropertyByUserId(user['id'], shared_user_propertys, sorting, tab, desc,
+            if temp.user_propertiesid:
+                shared_user_properties = list(set(shared_user_properties + ast.literal_eval(temp.user_propertiesid)))
+        user_properties, totalLength = self.dbClass.getAllUserPropertyByUserId(user['id'], shared_user_properties, sorting, tab, desc,
                                                                    searching, page, count, is_verify)
 
-        result_user_propertys = []
-        for user_property in user_propertys:
+        result_user_properties = []
+        for user_property in user_properties:
             user_property = model_to_dict(user_property)
-            result_user_propertys.append(user_property)
+            result_user_properties.append(user_property)
 
-        result = {'user_propertys': result_user_propertys, 'totalLength': totalLength}
+        result = {'user_properties': result_user_properties, 'totalLength': totalLength}
 
         return HTTP_200_OK, result
 
@@ -1379,12 +1394,12 @@ class ManageUser:
         user_property = self.dbClass.getOneUserPropertyById(user_property_id)
 
         if user_property['user'] != user['id']:
-            shared_user_propertys = []
+            shared_user_properties = []
             for temp in self.dbClass.getSharedUserPropertyIdByUserId(user['id']):
-                if temp.user_propertysid:
-                    shared_user_propertys = list(set(shared_user_propertys + ast.literal_eval(temp.user_propertysid)))
+                if temp.user_propertiesid:
+                    shared_user_properties = list(set(shared_user_properties + ast.literal_eval(temp.user_propertiesid)))
 
-            if int(user_property_id) not in shared_user_propertys:
+            if int(user_property_id) not in shared_user_properties:
                 raise ex.NotAllowedTokenEx(user['email'])
 
         result = {
@@ -1408,12 +1423,12 @@ class ManageUser:
             return ALREADY_DELETED_OBJECT
 
         if user_property['user'] != user['id'] and user_property['is_sample'] in [False, None]:
-            shared_user_propertys = []
+            shared_user_properties = []
             for temp in self.dbClass.getSharedUserPropertyIdByUserId(user['id']):
-                if temp.user_propertysid:
-                    shared_user_propertys = list(set(shared_user_propertys + ast.literal_eval(temp.user_propertysid)))
+                if temp.user_propertiesid:
+                    shared_user_properties = list(set(shared_user_properties + ast.literal_eval(temp.user_propertiesid)))
 
-            if int(user_property_id) not in shared_user_propertys:
+            if int(user_property_id) not in shared_user_properties:
                 raise ex.NotAllowedTokenEx(user['email'])
 
 

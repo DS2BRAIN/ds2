@@ -41,6 +41,22 @@ class ManageFlowComponent:
         self.dbClass = Helper(init=True)
         self.utilClass = Util()
 
+    def createFlowComponent(self, token, flow_data):
+        user = self.dbClass.getUser(token, raw=True)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageFile.py \n함수 : createFlow \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        flow_component_raw = self.dbClass.createFlowComponent({
+            "flow_component_name": flow_data.flow_component_name,
+            "flow_component_info": flow_data.flow_component_info,
+            "user": user.id,
+        })
+
+        return HTTP_200_OK, flow_component_raw.__dict__['__data__']
+
     def getFlowComponentsById(self, token, sorting, page, count, tab, desc, searching, is_verify=False):
         user = self.dbClass.getUser(token)
 
