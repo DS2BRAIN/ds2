@@ -55,7 +55,7 @@ const initialSchema = createSchema({
   links: [{ input: "port-data-out", output: "port-model-in" }],
 });
 
-const DiagramPage = () => {
+const DiagramPage = ({ setIsSchemaChanged }) => {
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -73,11 +73,11 @@ const DiagramPage = () => {
   }, [schema.nodes?.length]);
 
   useEffect(() => {
-    console.log(selectedNode);
-  }, [selectedNode]);
+    setIsSchemaChanged(true);
+  }, [schema]);
 
   const onChangeCustom = (schemaChanges) => {
-    console.log("onChangeCustom", schemaChanges);
+    // console.log("onChangeCustom", schemaChanges);
     onChange(schemaChanges);
   };
 
@@ -177,8 +177,6 @@ const DiagramPage = () => {
 
   const addNewNode = () => {
     const nodes = schema.nodes;
-
-    console.log(initialSchema);
 
     let startNodeIndex = 0;
     let endNodeIndex = 2;

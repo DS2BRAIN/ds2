@@ -7,11 +7,13 @@ import { Grid, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import SaveIcon from "@mui/icons-material/Save";
+import WarningIcon from "@mui/icons-material/Warning";
 
 const DiagramCover = () => {
   const [selectedStep, setSelectedStep] = useState("build");
   const [isPublished, setIsPublished] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
 
   const steps = ["build", "settings", "analyze", "monitoring"];
 
@@ -24,6 +26,7 @@ const DiagramCover = () => {
   };
 
   const onSaveTemplate = () => {
+    setIsChanged(false);
     setIsSaved(true);
   };
 
@@ -62,7 +65,16 @@ const DiagramCover = () => {
           })}
         </Grid>
         <Grid sx={{ display: "flex", alignItems: "center" }}>
-          {isSaved ? (
+          {isChanged ? (
+            <>
+              <Grid>
+                <span style={{ fontSize: "14px" }}>Unsaved changes</span>
+              </Grid>
+              <IconButton sx={{ mx: 1.5 }} onClick={onSaveTemplate}>
+                <SaveIcon fontSize="small" />
+              </IconButton>
+            </>
+          ) : isSaved ? (
             <>
               <Grid>
                 <span style={{ fontSize: "14px" }}>Saved!</span>
@@ -76,10 +88,10 @@ const DiagramCover = () => {
           ) : (
             <>
               <Grid>
-                <span style={{ fontSize: "14px" }}>Unsaved changes</span>
+                <span style={{ fontSize: "14px" }}>Errors in the flow!</span>
               </Grid>
-              <IconButton sx={{ mx: 1.5 }} onClick={onSaveTemplate}>
-                <SaveIcon fontSize="small" />
+              <IconButton sx={{ mx: 1.5, backgroundColor: "red" }}>
+                <WarningIcon fontSize="small" sx={{ fill: "white" }} />
               </IconButton>
             </>
           )}
@@ -93,7 +105,9 @@ const DiagramCover = () => {
           </Button>
         </Grid>
       </Grid>
-      {selectedStep === "build" && <DiagramPage />}
+      {selectedStep === "build" && (
+        <DiagramPage setIsSchemaChanged={setIsChanged} />
+      )}
     </Grid>
   );
 };
