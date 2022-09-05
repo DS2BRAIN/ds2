@@ -75,6 +75,11 @@ const AutoMLProject = ({ history, route }) => {
   }, [route]);
 
   useEffect(() => {
+    if (!urlPath.includes("/train") && route !== "verifyproject")
+      history.push("/admin/train");
+  });
+
+  useEffect(() => {
     if (user.me && !user.me.intro3Checked) {
       setIntroOn(true);
     } else {

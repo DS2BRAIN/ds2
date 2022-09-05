@@ -276,3 +276,7 @@ export const listPagination = (location) => {
 
   return pagiDict;
 };
+
+export const toHome = (history) => {
+  history.push("/admin/train");
+};
