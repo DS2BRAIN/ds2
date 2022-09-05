@@ -10,54 +10,49 @@ import Button from "components/CustomButtons/Button";
 import { Drawer, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
+const initialNodeDataSetting = {
+  isDeletable: false,
+  title: {
+    isEditable: false,
+  },
+  portAdd: {
+    in: false,
+    out: false,
+  },
+};
+
+const initalNodeList = [
+  {
+    id: "node-data",
+    content: "Choose data",
+    coordinates: [100, 150],
+    render: NodeRecipe,
+    outputs: [{ id: "port-data-out", alignment: "right" }],
+    disableDrag: true,
+    data: initialNodeDataSetting,
+  },
+  {
+    id: "node-model",
+    content: "Model",
+    coordinates: [700, 150],
+    render: NodeRecipe,
+    inputs: [{ id: "port-model-in", alignment: "left" }],
+    outputs: [{ id: "port-model-out", alignment: "right" }],
+    data: initialNodeDataSetting,
+  },
+  {
+    id: "node-result",
+    content: "Result",
+    coordinates: [1250, 150],
+    inputs: [{ id: "port-1", alignment: "left" }],
+    render: NodeRecipe,
+    data: initialNodeDataSetting,
+  },
+];
+
 const initialSchema = createSchema({
-  nodes: [
-    {
-      id: "node-start",
-      content: "Start",
-      coordinates: [100, 150],
-      render: NodeRecipe,
-      outputs: [{ id: "port-0", alignment: "right" }],
-      disableDrag: true,
-      data: {
-        foo: "bar",
-        count: 0,
-        isDeletable: false,
-        title: {
-          isEditable: false,
-        },
-        portAdd: {
-          in: false,
-          out: false,
-        },
-      },
-    },
-    {
-      id: "node-end",
-      content: "End",
-      coordinates: [1250, 150],
-      inputs: [{ id: "port-1", alignment: "left" }],
-      render: NodeRecipe,
-      data: {
-        foo: true,
-        bar: false,
-        some: {
-          deep: {
-            object: true,
-          },
-        },
-        isDeletable: false,
-        title: {
-          isEditable: false,
-        },
-        portAdd: {
-          in: false,
-          out: false,
-        },
-      },
-    },
-  ],
-  links: [{ input: "port-0", output: "port-1" }],
+  nodes: initalNodeList,
+  links: [{ input: "port-data-out", output: "port-model-in" }],
 });
 
 const DiagramPage = () => {
@@ -156,8 +151,11 @@ const DiagramPage = () => {
     let intIdList = [];
 
     strIdList.forEach((strId) => {
-      let isStartOrEnd = strId === "node-start" || strId === "node-end";
-      if (!isStartOrEnd) {
+      let isInitialNode =
+        strId === "node-data" ||
+        strId === "node-model" ||
+        strId === "node-result";
+      if (!isInitialNode) {
         let splitedArr = strId.split("-");
         let intId = parseInt(splitedArr[1]);
         intIdList.push(intId);
@@ -180,9 +178,12 @@ const DiagramPage = () => {
   const addNewNode = () => {
     const nodes = schema.nodes;
 
+    console.log(initialSchema);
+
     let startNodeIndex = 0;
-    let endNodeIndex = 1;
-    let nodeStandard = nodes.length === 2 ? startNodeIndex : nodes.length - 1;
+    let endNodeIndex = 2;
+    let nodeStandard =
+      nodes.length === endNodeIndex + 1 ? startNodeIndex : nodes.length - 1;
     let lastNode = nodes[nodeStandard];
 
     let xPosition = lastNode.coordinates[0] + 100;
