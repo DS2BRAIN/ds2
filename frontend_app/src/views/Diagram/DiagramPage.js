@@ -22,6 +22,10 @@ const initialSchema = createSchema({
       data: {
         foo: "bar",
         count: 0,
+        isDeletable: false,
+        title: {
+          isEditable: false,
+        },
         portAdd: {
           in: false,
           out: false,
@@ -41,6 +45,10 @@ const initialSchema = createSchema({
           deep: {
             object: true,
           },
+        },
+        isDeletable: false,
+        title: {
+          isEditable: false,
         },
         portAdd: {
           in: false,
@@ -97,17 +105,9 @@ const DiagramPage = () => {
     setIsDrawerOpen(false);
   };
 
-  const deleteNodeFromSchema = (id) => {
-    const nodeToRemove = schema.nodes.find((node) => node.id === id);
-    removeNode(nodeToRemove);
-  };
-
-  const addNewPort = (nodeId, direction) => {
-    let tmpSchema = schema;
-    let nodes = tmpSchema.nodes;
-    let changeNode = {};
+  const findNodeIndex = (nodeId, nodes) => {
     let changeNodeIndex = -1;
-
+    let changeNode = {};
     nodes.forEach((node, index) => {
       if (node.id === nodeId) {
         changeNodeIndex = index;
@@ -115,12 +115,34 @@ const DiagramPage = () => {
       }
     });
 
-    if (changeNodeIndex > -1 && tmpSchema.nodes[changeNodeIndex]) {
+    return [changeNodeIndex, changeNode];
+  };
+
+  const deleteNodeFromSchema = (id) => {
+    const nodeToRemove = schema.nodes.find((node) => node.id === id);
+    removeNode(nodeToRemove);
+  };
+
+  const handleTitle = (nodeId, editedTitle) => {
+    let tmpSchema = schema;
+    let nodes = tmpSchema.nodes;
+    let [changeNodeIndex, changeNode] = findNodeIndex(nodeId, nodes);
+
+    if (changeNodeIndex > -1) {
+      nodes[changeNodeIndex].content = editedTitle;
+      onChange(tmpSchema);
+    }
+  };
+
+  const addNewPort = (nodeId, direction) => {
+    let tmpSchema = schema;
+    let nodes = tmpSchema.nodes;
+    let [changeNodeIndex, changeNode] = findNodeIndex(nodeId, nodes);
+
+    if (changeNodeIndex > -1) {
       let portList = [];
-      if (direction === "in")
-        portList = tmpSchema.nodes[changeNodeIndex].inputs;
-      else if (direction === "out")
-        portList = tmpSchema.nodes[changeNodeIndex].outputs;
+      if (direction === "in") portList = changeNode.inputs;
+      else if (direction === "out") portList = changeNode.outputs;
 
       portList.push({
         id: `port-${Math.random()}`,
@@ -181,7 +203,12 @@ const DiagramPage = () => {
       render: NodeRecipe,
       data: {
         onOpenDrawer: openDrawer,
+        isDeletable: true,
         onDeleteNode: deleteNodeFromSchema,
+        title: {
+          isEditable: true,
+          editFunc: handleTitle,
+        },
         portAdd: {
           in: true,
           out: true,

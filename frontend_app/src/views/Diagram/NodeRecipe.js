@@ -13,11 +13,11 @@ export const NodeRecipe = (props) => {
   const dispatch = useDispatch();
   const { id, content, inputs, outputs, data } = props;
 
-  const isStartBlock = id === "node-start";
-  const isEndBlock = id === "node-end";
-  const isChangableBlock = !(isStartBlock || isEndBlock);
+  const isDeletable = data.isDeletable;
+  const isTitleEditable = data.title.isEditable;
+  const isPortInAddable = data.portAdd.in;
+  const isPortOutAddable = data.portAdd.out;
 
-  const [title, setTitle] = useState(content ? content : "New block");
   const [isEdit, setIsEdit] = useState(false);
   const [editValue, setEditValue] = useState("");
 
@@ -28,7 +28,7 @@ export const NodeRecipe = (props) => {
   const handleEditOff = (e) => {
     e.preventDefault();
     if (editValue) {
-      setTitle(editValue);
+      data.title.editFunc(id, editValue);
       setIsEdit(false);
     } else {
       dispatch(openErrorSnackbarRequestAction("Please enter new title"));
@@ -41,7 +41,7 @@ export const NodeRecipe = (props) => {
 
   return (
     <div className="custom-node">
-      {isChangableBlock && (
+      {isDeletable && (
         <IconButton
           icon="times"
           size="small"
@@ -53,26 +53,29 @@ export const NodeRecipe = (props) => {
       )}
       <Grid className="custom-node-header" style={{ backgroundColor: "#fff" }}>
         {isEdit ? (
-          <form onSubmit={handleEditOff}>
+          <form id={`titleform_${id}`} onSubmit={handleEditOff}>
             <input
+              id={`titleinput_${id}`}
               placeholder="Enter new title"
               style={{ borderColor: "transparent" }}
               onChange={handleTitle}
             />
           </form>
         ) : (
-          title
+          content
         )}
-        <IconButton
-          sx={{ mb: 0.5, p: 0.5, alignSelf: "flex-end" }}
-          onClick={isEdit ? handleEditOff : handleEditOn}
-        >
-          {isEdit ? (
-            <DoneIcon fontSize="small" sx={{ fill: "var(--secondary1)" }} />
-          ) : (
-            <EditIcon fontSize="small" sx={{ fill: "lightgray" }} />
-          )}
-        </IconButton>
+        {isTitleEditable && (
+          <IconButton
+            sx={{ mb: 0.5, p: 0.5, alignSelf: "flex-end" }}
+            onClick={isEdit ? handleEditOff : handleEditOn}
+          >
+            {isEdit ? (
+              <DoneIcon fontSize="small" sx={{ fill: "var(--secondary1)" }} />
+            ) : (
+              <EditIcon fontSize="small" sx={{ fill: "lightgray" }} />
+            )}
+          </IconButton>
+        )}
       </Grid>
       <Grid sx={{ cursor: "pointer" }} onClick={() => data.onOpenDrawer(id)}>
         {inputs.map((port, index) => (
@@ -86,7 +89,7 @@ export const NodeRecipe = (props) => {
             <span>input node</span>
           </div>
         ))}
-        {isChangableBlock && (
+        {isPortInAddable && (
           <div className="custom-node-port custom-node-port-in">
             <Grid
               className="circle-port circle-porter-in"
@@ -108,7 +111,7 @@ export const NodeRecipe = (props) => {
             <span>output node</span>
           </div>
         ))}
-        {isChangableBlock && (
+        {isPortOutAddable && (
           <div className="custom-node-port custom-node-port-out">
             <Grid
               className="circle-port circle-porter-out"
