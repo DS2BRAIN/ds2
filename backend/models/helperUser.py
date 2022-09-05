@@ -206,3 +206,84 @@ class HelperUser():
             'apiKey': key,
             'additionalKey': id}
             developedAiModelsTable.create(**data)
+
+    @wrapper
+    def getOneUserPropertyById(self, rowId, raw=False):
+        user_property = userPropertyTable.get_or_none(userPropertyTable.id == rowId)
+        if user_property:
+            return user_property.__dict__['__data__'] if not raw else user_property
+        return user_property
+
+    @wrapper
+    def get_all_user_property_in_ids(self, ids, raw=False):
+        result = userPropertyTable.select().where(userPropertyTable.id.in_(ids)).execute()
+        if raw:
+            return [raw for raw in result]
+        else:
+            return [raw.__dict__['__data__'] for raw in result]
+
+    @wrapper
+    def getAllUserPropertyByUserId(self, user_id, user_property_ids, sorting='created_at', tab='all', desc=False, searching='',
+                              page=0, count=10, isVerify=False):
+        if sorting == 'created_at':
+            sorting = userPropertyTable.created_at
+        elif sorting == 'updated_at':
+            sorting = userPropertyTable.updated_at
+        elif sorting == 'option':
+            sorting = userPropertyTable.option
+        elif sorting == 'user_property_name':
+            sorting = userPropertyTable.user_property_name
+        elif sorting == 'status':
+            sorting = peewee.Case(userPropertyTable.status, (
+            (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
+            (61, 12)), 0)
+
+        if desc and sorting != 'status':
+            sorting = sorting.desc()
+        common_where = ((userPropertyTable.is_deleted == None) | (userPropertyTable.is_deleted == False)) & (
+                    (userPropertyTable.user == user_id) | (userPropertyTable.id.in_(user_property_ids)))
+        if isVerify:
+            common_where = common_where & (userPropertyTable.isVerify == True)
+        else:
+            common_where = common_where & ((userPropertyTable.isVerify == False) | (userPropertyTable.isVerify == None))
+        user_property_query = userPropertyTable.select(userPropertyTable.id, userPropertyTable.user_property_name, userPropertyTable.created_at,
+                                            userPropertyTable.updated_at, userPropertyTable.status, userPropertyTable.option)
+
+        query = user_property_query.where(
+            (userPropertyTable.user_property_name.contains(searching)) & (common_where))
+        return query.order_by(sorting).paginate(page, count).execute(), query.count()
+
+    @wrapper
+    def getUserPropertysByUserId(self, tableInstance, user_id, sorting = 'created_at', tab = 'all', desc = False, searching = '', start = 0, count = 10):
+        if sorting == 'created_at':
+            sorting = tableInstance.created_at
+        elif sorting == 'updated_at':
+            sorting = tableInstance.updated_at
+        elif sorting == 'option':
+            sorting = tableInstance.option
+        elif sorting == 'user_property_name':
+            sorting = tableInstance.user_property_name
+        elif sorting == 'status':
+            sorting = tableInstance.status
+
+        if desc:
+            sorting = sorting.desc()
+        common_where = (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False)
+        user_property_query = tableInstance.select(tableInstance.id, tableInstance.user_property_name, tableInstance.created_at,tableInstance.updated_at, tableInstance.status, tableInstance.option)
+
+
+        return user_property_query.where((tableInstance.user_property_name.contains(searching)) & (tableInstance.user == user_id) & (
+                common_where)).order_by(sorting).paginate(start, count).execute()
+
+    @wrapper
+    def getUserPropertysById(self, user_property_id):
+        return userPropertyTable.select().where(userPropertyTable.id == user_property_id).execute()
+
+    @wrapper
+    def updateUserProperty(self, rowId, data):
+        data["updated_at"] = datetime.datetime.utcnow()
+        return userPropertyTable.update(**data).where(userPropertyTable.id == rowId).execute()
+
+    @wrapper
+    def getUserPropertiesByUserId(self, user_id, isSimplified = False):
+        return userPropertyTable.select().where(userPropertyTable.user == user_id).order_by(userPropertyTable.status).execute()

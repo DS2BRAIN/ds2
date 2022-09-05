@@ -150,3 +150,19 @@ class HelperCreate():
     @wrapper
     def create_pricing(self, data):
         return pricingTable.create(**(data))
+
+    @wrapper
+    def createFlow(self, data):
+        return flowTable.create(**(data))
+
+    @wrapper
+    def createFlowNode(self, data):
+        return flowNodeTable.create(**(data))
+
+    @wrapper
+    def createMonitoringAlert(self, data):
+        return monitoringAlertTable.create(**(data))
+
+    @wrapper
+    def createUserProperty(self, data):
+        return userPropertyTable.create(**(data))
