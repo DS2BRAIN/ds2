@@ -124,7 +124,7 @@ const ModelTable = React.memo(
       }),
       []
     );
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [sortedModels, setSortedModels] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -171,7 +171,7 @@ const ModelTable = React.memo(
 
     const sortValueRef = useRef(sortValue);
     sortValueRef.current = sortValue;
-    let lang = user.language ? user.language : Cookies.getCookie("language");
+    let lang = i18n.language;
     const modelDone = fileurl + "asset/front/img/modelIcon/modelDone.png";
     const modelError = fileurl + "asset/front/img/modelIcon/modelError.png";
     const modelPause = fileurl + "asset/front/img/modelIcon/modelPause.png";
@@ -1209,15 +1209,22 @@ const ModelTable = React.memo(
                   return (
                     <>
                       {isImage ? (
-                        <div
+                        <Button
+                          id={`model${id}_image_prediction_btn`}
+                          shape="blueOutlined"
+                          size="sm"
+                          sx={{ mx: 0.5 }}
                           onClick={() => openModal(id, "apiImage")}
-                          className={`${classes.modelTab} imageBtn ${classes.modelTabButton}`}
                         >
                           {t("Image prediction")}
-                        </div>
+                        </Button>
                       ) : (
                         <>
-                          <div
+                          <Button
+                            id={`model${id}_single_prediction_btn`}
+                            shape="blueOutlined"
+                            size="sm"
+                            sx={{ mx: 0.5 }}
                             onClick={() =>
                               openModal(
                                 id,
@@ -1226,17 +1233,19 @@ const ModelTable = React.memo(
                                   : "apiLoaded"
                               )
                             }
-                            className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
                           >
                             {t("Single prediction")}
-                          </div>
+                          </Button>
                           {!isRecommender && (
-                            <div
+                            <Button
+                              id={`model${id}_collective_prediction_btn`}
+                              shape="blueOutlined"
+                              size="sm"
+                              sx={{ mx: 0.5 }}
                               onClick={() => openModal(id, "predict")}
-                              className={`${classes.modelTab} predictBtn ${classes.modelTabButton}`}
                             >
                               {t("Collective prediction")}
-                            </div>
+                            </Button>
                           )}
                           {/*<div onClick={() => openModal(id, 'autolabelling')} className={`${classes.modelTab} autoLabellingBtn ${classes.modelTabButton}`}>*/}
                           {/*    {t('Auto-labeling')}*/}
@@ -1244,12 +1253,15 @@ const ModelTable = React.memo(
                         </>
                       )}
                       {isVideo && (
-                        <div
+                        <Button
+                          id={`model${id}_video_prediction_btn`}
+                          shape="blueOutlined"
+                          size="sm"
+                          sx={{ mx: 0.5 }}
                           onClick={() => openModal(id, "apiVideo")}
-                          className={`${classes.modelTab} videoBtn ${classes.modelTabButton}`}
                         >
                           {t("Video prediction")}
-                        </div>
+                        </Button>
                       )}
                     </>
                   );
@@ -1317,13 +1329,15 @@ const ModelTable = React.memo(
                       )} */}
                       {(category !== "sample" || hasModelAnalytics) &&
                         !project.isShared && (
-                          <div
-                            id="modeltable_deploy_btn"
-                            className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
+                          <Button
+                            id={`model${id}_deploy_btn`}
+                            shape="blueOutlined"
+                            size="sm"
+                            sx={{ mx: 0.5 }}
                             onClick={() => deploy(id)}
                           >
-                            {t("Deploy")}
-                          </div>
+                            {lang === "ko" ? "배포하기" : "Deploy"}
+                          </Button>
                         )}
                       {/* {(category !== "sample" || hasModelAnalytics) &&
                         !project.isShared &&
@@ -1369,12 +1383,15 @@ const ModelTable = React.memo(
                         justifyContent: "center",
                       }}
                     >
-                      <div
+                      <Button
+                        id={`model${id}_details_btn`}
+                        shape="blueOutlined"
+                        size="sm"
+                        sx={{ mx: 0.5 }}
                         onClick={() => openDetailPage("detail", id, project.id)}
-                        className={`${classes.modelTab} detailBtn ${classes.modelTabButton}`}
                       >
                         {t("Details")}
-                      </div>
+                      </Button>
                       {secPredictBtns(projectTrainMethod, id)}
                       {secActionBtns(model.metabase, id)}
                     </div>
@@ -1387,9 +1404,10 @@ const ModelTable = React.memo(
                         }}
                       >
                         <Button
-                          id="modeltable_analysis_btn"
+                          id={`model${id}_prescription_analysis_btn`}
                           shape="greenContained"
                           size="sm"
+                          sx={{ mx: 0.5 }}
                           onClick={() => openPrescriptiveAnalyticsModal(id)}
                         >
                           {t("Prescriptive Analyze")}
