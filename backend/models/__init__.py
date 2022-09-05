@@ -264,6 +264,78 @@ class projectsTable(MySQLModel):
     algorithm = pw.CharField(null=True, default='auto')
     require_gpus = JSONField(null=True)
 
+class flowTable(MySQLModel):
+    class Meta:
+        db_table = 'flow'
+
+    id = pw.AutoField()
+    flow_name = pw.CharField(null=True)
+    flow_type = pw.CharField(null=True, default='model')
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.BooleanField(null=True)
+    is_deleted = pw.BooleanField(null=True)
+    option = pw.CharField(null=True)
+    role = pw.CharField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
+    flow_node_info = JSONField(null=True)
+
+class monitoringAlertTable(MySQLModel):
+    class Meta:
+        db_table = 'monitoring_alert'
+
+    id = pw.AutoField()
+    flow_node_id = pw.IntegerField(null=True)
+    monitoring_alert_name = pw.CharField(null=True)
+    monitoring_alert_type = pw.CharField(null=True)
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    monitoring_alert_info = JSONField(null=True)
+
+class flowNodeTable(MySQLModel):
+    class Meta:
+        db_table = 'flow_node'
+
+    id = pw.AutoField()
+    flow_id = pw.IntegerField(null=True)
+    flow_node_name = pw.CharField(null=True)
+    flow_node_type = pw.CharField(null=True)
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    option = pw.CharField(null=True)
+    flow_node_info = JSONField(null=True)
+
+class userPropertyTable(MySQLModel):
+    class Meta:
+        db_table = 'user_property'
+
+    id = pw.AutoField()
+    user_property_name = pw.CharField(null=True)
+    user_property_type = pw.CharField(null=True)
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    option = pw.CharField(null=True)
+    user_property_info = JSONField(null=True)
+
 class projecthistoriesTable(MySQLModel):
     class Meta:
         db_table = 'projecthistories'
