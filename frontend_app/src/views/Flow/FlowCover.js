@@ -13,7 +13,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 const FlowCover = () => {
   const history = useHistory();
 
-  const [selectedStep, setSelectedStep] = useState("build");
+  const [selectedStep, setSelectedStep] = useState("");
   const [isPublished, setIsPublished] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [isChanged, setIsChanged] = useState(false);

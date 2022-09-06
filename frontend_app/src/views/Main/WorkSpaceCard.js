@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 
 import BarChartIcon from "@mui/icons-material/BarChart";
+import LaunchIcon from "@mui/icons-material/Launch";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import { Checkbox, Grid, IconButton } from "@mui/material";
 
@@ -35,9 +37,23 @@ const WorkSpaceCard = ({ flow }) => {
     </Grid>
   );
 
-  const iconAnalysis = (
+  const iconButtonAnalysis = (
     <IconButton onClick={() => history.push("/admin/flow/analyze")}>
       <BarChartIcon />
+    </IconButton>
+  );
+
+  const iconButtonPublish = (
+    <IconButton onClick={() => history.push("/admin/publish")}>
+      <LaunchIcon />
+    </IconButton>
+  );
+
+  const openDropdown = () => {};
+
+  const iconButtonSetting = (
+    <IconButton onClick={openDropdown}>
+      <MoreHorizIcon />
     </IconButton>
   );
 
@@ -84,7 +100,9 @@ const WorkSpaceCard = ({ flow }) => {
         sx={{ width: "auto" }}
       >
         <Grid item>{blockFinishedNum}</Grid>
-        <Grid item>{iconAnalysis}</Grid>
+        <Grid item>{iconButtonAnalysis}</Grid>
+        <Grid item>{iconButtonPublish}</Grid>
+        <Grid item>{iconButtonSetting}</Grid>
       </Grid>
     </Grid>
   );
