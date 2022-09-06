@@ -97,12 +97,15 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
   return (
     <>
       {metabaseStatus === 0 || metabaseStatus === 100 ? (
-        <div
+        <Button
           id={`metabase_${type}_${
             metabaseStatus === 100 ? "check" : "start"
           }_btn`}
-          className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
-          style={{
+          shape={type === "data" ? "whiteOutlined" : "blue"}
+          size={type === "data" ? "md" : "sm"}
+          sx={{
+            ml: type === "data" && 2,
+            mx: type === "model" && 0.5,
             fontWeight: metabaseStatus === 100 && "bold",
           }}
           onClick={() => {
@@ -117,7 +120,7 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
           {metabaseStatus === 100 ? t("Check analysis") : t("Start analysis")}
           {type === "data" && !isKor ? " on data" : null}
           {type === "data" ? " (Prod.By METABASE)" : null}
-        </div>
+        </Button>
       ) : metabaseStatus === 1 || metabaseStatus === 99 ? (
         <Tooltip
           title={
@@ -130,12 +133,14 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
           placement="bottom"
         >
           <div>
-            <div
+            <Button
               id={`metabase_${type}_${
                 metabaseStatus === 1 ? "processing" : "start"
               }_btn`}
+              shape={type === "data" ? "whiteOutlined" : "blue"}
+              size={type === "data" ? "md" : "sm"}
               disabled
-              className={`${classes.modelTab} apiBtn ${classes.modelTabButton}`}
+              sx={{ ml: type === "data" && 2, mx: type === "model" && 0.5 }}
             >
               {metabaseStatus === 1 ? (
                 <CircularProgress
@@ -156,7 +161,7 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
                   : " on data"
                 : null}
               {type === "data" ? " (Prod.By METABASE)" : null}
-            </div>
+            </Button>
           </div>
         </Tooltip>
       ) : null}
