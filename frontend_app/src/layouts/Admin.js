@@ -149,11 +149,11 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <AutoMLProject {...props} route="train" />}
       />
-      {/* <Route
+      <Route
         path="/admin/flow"
         {...rest}
         render={(props) => <Flow {...props} />}
-      /> */}
+      />
       <Route
         path="/admin/diagram"
         {...rest}

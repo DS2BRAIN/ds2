@@ -17,7 +17,7 @@ const TemplateGrid = () => {
 
   return (
     <Grid>
-      <Grid container justifyContent="flex-end" sx={{ mb: 10 }}>
+      <Grid container justifyContent="flex-end" sx={{ mb: 10, py: 1.5 }}>
         <Button shape="greenContainedSquare" size="lg" onClick={openDiagram}>
           Start from scratch
         </Button>
