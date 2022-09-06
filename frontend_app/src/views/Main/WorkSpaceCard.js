@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 
-import BarChartIcon from "@mui/icons-material/BarChart";
+import Button from "components/CustomButtons/Button";
 
-import { Checkbox, Grid, IconButton } from "@mui/material";
+import { Checkbox, Grid, IconButton, Popover } from "@mui/material";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import LaunchIcon from "@mui/icons-material/Launch";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const WorkSpaceCard = ({ flow }) => {
   const history = useHistory();
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const blockFinishedNum = (
     <Grid sx={{ textAlign: "center" }}>
@@ -35,10 +40,47 @@ const WorkSpaceCard = ({ flow }) => {
     </Grid>
   );
 
-  const iconAnalysis = (
+  const iconButtonAnalysis = (
     <IconButton onClick={() => history.push("/admin/flow/analyze")}>
       <BarChartIcon />
     </IconButton>
+  );
+
+  const iconButtonPublish = (
+    <IconButton onClick={() => history.push("/admin/publish")}>
+      <LaunchIcon />
+    </IconButton>
+  );
+
+  const openDropdown = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const closeDropdown = () => {
+    setAnchorEl(null);
+  };
+
+  const isPopOpen = Boolean(anchorEl);
+  const id = `workspace${flow.id}_more_popover`;
+
+  const iconButtonSetting = (
+    <>
+      <IconButton onClick={openDropdown}>
+        <MoreHorizIcon />
+      </IconButton>
+      <Popover
+        id={id}
+        open={isPopOpen}
+        anchorEl={anchorEl}
+        onClose={closeDropdown}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Grid sx={{ backgroundColor: "darkgray" }}>
+          <Button shape="redContainedSquare">Delete</Button>
+        </Grid>
+      </Popover>
+    </>
   );
 
   return (
@@ -84,7 +126,9 @@ const WorkSpaceCard = ({ flow }) => {
         sx={{ width: "auto" }}
       >
         <Grid item>{blockFinishedNum}</Grid>
-        <Grid item>{iconAnalysis}</Grid>
+        <Grid item>{iconButtonAnalysis}</Grid>
+        <Grid item>{iconButtonPublish}</Grid>
+        <Grid item>{iconButtonSetting}</Grid>
       </Grid>
     </Grid>
   );
