@@ -32,6 +32,7 @@
     "amplitude-js": "^8.18.5",
     "axios": "^0.19.2",
     "babel-polyfill": "^6.26.0",
+    "beautiful-react-diagrams": "^0.5.1",
     "canvasjs": "^1.8.3",
     "chai": "^4.2.0",
     "chartist": "^0.10.1",
