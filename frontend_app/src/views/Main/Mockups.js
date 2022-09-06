@@ -5,6 +5,7 @@ export const WORKSPACES_MOCKUP = [
     created: "about 1 year ago",
     updated: "10 months ago",
     owner: "coo@dslab.global",
+    finished: 0,
     disabled: false,
   },
   {
@@ -13,6 +14,7 @@ export const WORKSPACES_MOCKUP = [
     created: "about 1 year ago",
     updated: "10 months ago",
     owner: "coo@dslab.global",
+    finished: 1,
     disabled: false,
   },
   {
@@ -21,6 +23,7 @@ export const WORKSPACES_MOCKUP = [
     created: "11 months ago",
     updated: "10 months ago",
     owner: "coo@dslab.global",
+    finished: 0,
     disabled: false,
   },
   {
@@ -29,6 +32,7 @@ export const WORKSPACES_MOCKUP = [
     created: "11 months ago",
     updated: "10 months ago",
     owner: "coo@dslab.global",
+    finished: 0,
     disabled: false,
   },
   {
@@ -37,6 +41,7 @@ export const WORKSPACES_MOCKUP = [
     created: "11 months ago",
     updated: "11 months ago",
     owner: "coo@dslab.global",
+    finished: 0,
     disabled: false,
   },
   {
@@ -45,6 +50,7 @@ export const WORKSPACES_MOCKUP = [
     created: "over 2 years ago",
     updated: "over 1 year ago",
     owner: "dslab",
+    finished: 0,
     disabled: true,
   },
 ];
