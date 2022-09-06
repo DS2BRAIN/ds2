@@ -2586,18 +2586,23 @@ class MongoDb():
         if db_conn_dict[db_name]:
             return db_conn_dict[db_name][collection_name]
         try:
-            if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
-                db_conn_dict[db_name] = MongoClient(
-                    f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[db_name]
-            elif utilClass.configOption == 'enterprise':
-                db_conn_dict[db_name] = \
-                MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[db_name]
-            else:
-                db_conn_dict[db_name] = MongoClient(
-                    f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[db_name]
 
             if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
-                db_conn_dict[db_name] = MongoClient(host=util_configs.get('staging_mongodb_schema'), port=27017, username="root", password="dslabglobal")[db_name]
+                db_conn_dict[db_name] = MongoClient(
+                    f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
+                    db_name]
+            else:
+                if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
+                    db_conn_dict[db_name] = MongoClient(
+                        f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[
+                        db_name]
+                elif utilClass.configOption == 'enterprise':
+                    db_conn_dict[db_name] = \
+                        MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[db_name]
+                else:
+                    db_conn_dict[db_name] = MongoClient(
+                        f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
+                        db_name]
 
         except Exception as e:
             print(e)
@@ -2609,19 +2614,24 @@ class MongoDb():
         global db_conn_dict
         if db_conn_dict[db_name]:
             return db_conn_dict[db_name]
-        if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
+        if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
             db_conn_dict[db_name] = MongoClient(
-                f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/astore?retryWrites=true&w=majority")[db_name]
-        else:
-            db_conn_dict[db_name] = MongoClient(
-                f"mongodb+srv://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[db_name]
-            # conn_host = "localhost:27017/aistore"
-            # conn_opt = "readPreference=primary&directConnection=true&ssl=false"
-            # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
-            # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
-        if utilClass.configOption == 'enterprise' or config_option == "prod":
-            db_conn_dict[db_name] = MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[
+                f"mongodb+srv://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[
                 db_name]
+        else:
+            if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
+                db_conn_dict[db_name] = MongoClient(
+                    f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/astore?retryWrites=true&w=majority")[db_name]
+            else:
+                db_conn_dict[db_name] = MongoClient(
+                    f"mongodb+srv://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[db_name]
+                # conn_host = "localhost:27017/aistore"
+                # conn_opt = "readPreference=primary&directConnection=true&ssl=false"
+                # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
+                # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
+            if utilClass.configOption == 'enterprise' or config_option == "prod":
+                db_conn_dict[db_name] = MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[
+                    db_name]
         return db_conn_dict[db_name]
 
     def change_id(self, data):
