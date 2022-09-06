@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import Button from "components/CustomButtons/Button";
-import DiagramPage from "./DiagramPage";
+import FlowPage from "./FlowPage";
 
 import { Grid, IconButton } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
@@ -9,7 +9,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import SaveIcon from "@mui/icons-material/Save";
 import WarningIcon from "@mui/icons-material/Warning";
 
-const DiagramCover = () => {
+const FlowCover = () => {
   const [selectedStep, setSelectedStep] = useState("build");
   const [isPublished, setIsPublished] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -96,7 +96,7 @@ const DiagramCover = () => {
             </>
           )}
           <Button
-            id={`diagram_${isPublished ? "published" : "publish"}_btn`}
+            id={`flow_${isPublished ? "published" : "publish"}_btn`}
             shape={`${isPublished ? "green" : "blue"}ContainedSquare`}
             sx={{ minWidth: "120px" }}
             onClick={handlePublish}
@@ -106,10 +106,10 @@ const DiagramCover = () => {
         </Grid>
       </Grid>
       {selectedStep === "build" && (
-        <DiagramPage setIsSchemaChanged={setIsChanged} />
+        <FlowPage setIsSchemaChanged={setIsChanged} />
       )}
     </Grid>
   );
 };
 
-export default DiagramCover;
+export default FlowCover;

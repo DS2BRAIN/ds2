@@ -11,14 +11,14 @@ const TemplateGrid = () => {
   const history = useHistory();
   const mockupTemplates = TEMPLATES_MOCKUP;
 
-  const openDiagram = () => {
-    history.push("/admin/diagram");
+  const openFlow = () => {
+    history.push("/admin/flow");
   };
 
   return (
     <Grid>
       <Grid container justifyContent="flex-end" sx={{ mb: 10, py: 1.5 }}>
-        <Button shape="greenContainedSquare" size="lg" onClick={openDiagram}>
+        <Button shape="greenContainedSquare" size="lg" onClick={openFlow}>
           Start from scratch
         </Button>
       </Grid>

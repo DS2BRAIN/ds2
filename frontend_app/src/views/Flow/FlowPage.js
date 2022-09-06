@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Diagram, { useSchema, createSchema } from "beautiful-react-diagrams";
 import "beautiful-react-diagrams/styles.css";
-import "./diagram-style.css";
+import "./flow-style.css";
 
 import NodeDetailSetting from "./NodeDetailSetting";
 import { NodeRecipe } from "./NodeRecipe";
@@ -55,7 +55,7 @@ const initialSchema = createSchema({
   links: [{ input: "port-data-out", output: "port-model-in" }],
 });
 
-const DiagramPage = ({ setIsSchemaChanged }) => {
+const FlowPage = ({ setIsSchemaChanged }) => {
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -243,4 +243,4 @@ const DiagramPage = ({ setIsSchemaChanged }) => {
   );
 };
 
-export default DiagramPage;
+export default FlowPage;
