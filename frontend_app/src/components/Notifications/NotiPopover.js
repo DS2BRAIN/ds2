@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 
 import Cookies from "helpers/Cookies";
@@ -19,8 +20,9 @@ import { CircularProgress, Grid, IconButton } from "@mui/material";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-const NotiPopover = ({ history }) => {
+const NotiPopover = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = currentTheme();
   const { user } = useSelector((state) => ({ user: state.user }), []);
   const { t, i18n } = useTranslation();

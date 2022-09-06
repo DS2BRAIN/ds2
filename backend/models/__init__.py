@@ -264,6 +264,78 @@ class projectsTable(MySQLModel):
     algorithm = pw.CharField(null=True, default='auto')
     require_gpus = JSONField(null=True)
 
+class flowTable(MySQLModel):
+    class Meta:
+        db_table = 'flow'
+
+    id = pw.AutoField()
+    flow_name = pw.CharField(null=True)
+    flow_type = pw.CharField(null=True, default='model')
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.BooleanField(null=True)
+    is_deleted = pw.BooleanField(null=True)
+    option = pw.CharField(null=True)
+    role = pw.CharField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
+    flow_node_info = JSONField(null=True)
+
+class monitoringAlertTable(MySQLModel):
+    class Meta:
+        db_table = 'monitoring_alert'
+
+    id = pw.AutoField()
+    flow_node_id = pw.IntegerField(null=True)
+    monitoring_alert_name = pw.CharField(null=True)
+    monitoring_alert_type = pw.CharField(null=True)
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    monitoring_alert_info = JSONField(null=True)
+
+class flowNodeTable(MySQLModel):
+    class Meta:
+        db_table = 'flow_node'
+
+    id = pw.AutoField()
+    flow_id = pw.IntegerField(null=True)
+    flow_node_name = pw.CharField(null=True)
+    flow_node_type = pw.CharField(null=True)
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    option = pw.CharField(null=True)
+    flow_node_info = JSONField(null=True)
+
+class userPropertyTable(MySQLModel):
+    class Meta:
+        db_table = 'user_property'
+
+    id = pw.AutoField()
+    user_property_name = pw.CharField(null=True)
+    user_property_type = pw.CharField(null=True)
+    status = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    is_test = pw.BooleanField(null=True)
+    is_sample = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    option = pw.CharField(null=True)
+    user_property_info = JSONField(null=True)
+
 class projecthistoriesTable(MySQLModel):
     class Meta:
         db_table = 'projecthistories'
@@ -2514,18 +2586,23 @@ class MongoDb():
         if db_conn_dict[db_name]:
             return db_conn_dict[db_name][collection_name]
         try:
-            if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
-                db_conn_dict[db_name] = MongoClient(
-                    f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[db_name]
-            elif utilClass.configOption == 'enterprise':
-                db_conn_dict[db_name] = \
-                MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[db_name]
-            else:
-                db_conn_dict[db_name] = MongoClient(
-                    f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[db_name]
 
             if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
-                db_conn_dict[db_name] = MongoClient(host=util_configs.get('staging_mongodb_schema'), port=27017, username="root", password="dslabglobal")[db_name]
+                db_conn_dict[db_name] = MongoClient(
+                    f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
+                    db_name]
+            else:
+                if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
+                    db_conn_dict[db_name] = MongoClient(
+                        f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[
+                        db_name]
+                elif utilClass.configOption == 'enterprise':
+                    db_conn_dict[db_name] = \
+                        MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[db_name]
+                else:
+                    db_conn_dict[db_name] = MongoClient(
+                        f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
+                        db_name]
 
         except Exception as e:
             print(e)
@@ -2537,19 +2614,24 @@ class MongoDb():
         global db_conn_dict
         if db_conn_dict[db_name]:
             return db_conn_dict[db_name]
-        if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
+        if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
             db_conn_dict[db_name] = MongoClient(
-                f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/astore?retryWrites=true&w=majority")[db_name]
-        else:
-            db_conn_dict[db_name] = MongoClient(
-                f"mongodb+srv://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[db_name]
-            # conn_host = "localhost:27017/aistore"
-            # conn_opt = "readPreference=primary&directConnection=true&ssl=false"
-            # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
-            # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
-        if utilClass.configOption == 'enterprise' or config_option == "prod":
-            db_conn_dict[db_name] = MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[
+                f"mongodb+srv://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[
                 db_name]
+        else:
+            if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
+                db_conn_dict[db_name] = MongoClient(
+                    f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/astore?retryWrites=true&w=majority")[db_name]
+            else:
+                db_conn_dict[db_name] = MongoClient(
+                    f"mongodb+srv://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[db_name]
+                # conn_host = "localhost:27017/aistore"
+                # conn_opt = "readPreference=primary&directConnection=true&ssl=false"
+                # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
+                # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
+            if utilClass.configOption == 'enterprise' or config_option == "prod":
+                db_conn_dict[db_name] = MongoClient(host="0.0.0.0", port=27017, username="root", password="dslabglobal")[
+                    db_name]
         return db_conn_dict[db_name]
 
     def change_id(self, data):

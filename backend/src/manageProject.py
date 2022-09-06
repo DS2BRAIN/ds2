@@ -4629,6 +4629,9 @@ class ManageProject:
             for key, value in model['ap_info'].items():
                 if value is not None and np.isnan(value):
                     model['ap_info'][key] = None
+        if model.get("hyper_param_id"):
+          hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
+          model['hyper_param'] = hyper_param
 
         if isShared:
             return HTTP_200_OK, model
