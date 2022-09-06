@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 
 import Button from "components/CustomButtons/Button";
 import FlowPage from "./FlowPage";
@@ -10,6 +11,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import WarningIcon from "@mui/icons-material/Warning";
 
 const FlowCover = () => {
+  const history = useHistory();
+
   const [selectedStep, setSelectedStep] = useState("build");
   const [isPublished, setIsPublished] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -33,7 +36,7 @@ const FlowCover = () => {
   return (
     <Grid sx={{ height: "90vh", mt: 4 }}>
       <Grid container justifyContent="space-between" alignItems="center">
-        <Grid>
+        <Grid sx={{ width: "200px" }}>
           <span
             style={{
               fontWeight: 700,
@@ -64,7 +67,14 @@ const FlowCover = () => {
             );
           })}
         </Grid>
-        <Grid sx={{ display: "flex", alignItems: "center" }}>
+        <Grid
+          sx={{
+            width: "300px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
           {isChanged ? (
             <>
               <Grid>
