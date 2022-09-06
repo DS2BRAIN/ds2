@@ -2319,5 +2319,8 @@
   "Modifying the setting conditions": "Modifying the setting conditions",
   "Set 'Minimum' Percentage": "Set 'Minimum' Percentage",
   "Set 'Max' Percentage": "Set 'Max' Percentage",
-  "Start Analysis": "Start Analysis"
+  "Start Analysis": "Start Analysis",
+  "Loading model information. Please wait for a moment.": "Loading model information. Please wait for a moment.",
+  "Try AI Model": "Try AI Model",
+  "Input Data": "Input Data"
 }

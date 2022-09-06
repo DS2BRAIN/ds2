@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
-const PublishTitle = () => {
+const PublishTitle = ({ model }) => {
   const { t } = useTranslation();
 
   return (
@@ -13,21 +13,23 @@ const PublishTitle = () => {
       xs={12}
       sx={{ p: 4.5, textAlign: "center", backgroundColor: "var(--surface2)" }}
     >
+      <h1 style={{ fontSize: 36, fontWeight: 700 }}>{t("Try AI Model")}</h1>
       <Typography
         sx={{
           mb: 1,
-          fontSize: 24,
+          fontSize: 30,
           color: "var(--textWhite87)",
         }}
       >
-        File Name
+        {model.name}
       </Typography>
-      <h1 style={{ fontWeight: 700 }}>Model Name</h1>
       <Typography sx={{ mt: 5 }}>
-        <span style={{ marginRight: 8, color: "var(--textWhite6)" }}>
+        <span
+          style={{ marginRight: 8, fontSize: 12, color: "var(--textWhite6)" }}
+        >
           powered by
         </span>{" "}
-        <img alt="ds2 logo" width={120} src="/images/logo_transparent.png" />
+        <img alt="ds2 logo" width={100} src="/images/logo_transparent.png" />
       </Typography>
     </Grid>
   );

@@ -744,7 +744,7 @@ const Process = (props) => {
         )
       );
     }
-
+    // console.log(project.fileStructure, JSON.parse(project.fileStructure));
     if (project.trainingColumnInfo) {
       var trainingColumnInfoRaw = {};
       Object.keys(project.trainingColumnInfo).map((columnInfo) => {
@@ -755,6 +755,7 @@ const Process = (props) => {
       setTrainingColumnInfo(trainingColumnInfoRaw);
     } else if (project.fileStructure) {
       var trainingColumnInfoRaw = {};
+
       JSON.parse(project.fileStructure).map((columnInfo) => {
         if (columnInfo.use) {
           trainingColumnInfoRaw[columnInfo.columnName] = JSON.parse(
@@ -1972,7 +1973,8 @@ const Process = (props) => {
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message: "Would you like to start modeling your project with the selected options?",
+          message:
+            "Would you like to start modeling your project with the selected options?",
           project: projectInfo,
         })
       );
@@ -3034,7 +3036,9 @@ const Process = (props) => {
 
   return (
     <div style={{ marginTop: "30px" }}>
-      <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")} />
+      <ReactTitle
+        title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")}
+      />
       {isLoading || !projects || projects.isLoading || !user.me ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />

@@ -2313,5 +2313,8 @@
   "Quant project creation is complete.": "퀀트 프로젝트 생성이 완료되었습니다.",
   "Modifying the setting conditions": "설정 조건 수정하기",
   "Set 'Minimum' Percentage": "'최소' Percentage 설정",
-  "Set 'Max' Percentage": "'최대' Percentage 설정"
+  "Set 'Max' Percentage": "'최대' Percentage 설정",
+  "Loading model information. Please wait for a moment.": "모델 정보를 불러오는 중입니다. 잠시만 기다려주세요.",
+  "Try AI Model": "인공지능 모델 사용해보기",
+  "Input Data": "입력 데이터"
 }

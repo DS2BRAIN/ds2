@@ -386,8 +386,14 @@ const currentTheme = makeStyles((theme) => ({
   smallLoading: {
     width: "100%",
     height: "calc(100vh - 144px)",
-    // height: "300px",
-    // padding: "30px 0 15px 0",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  fullLoading: {
+    width: "100%",
+    height: "100vh",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
