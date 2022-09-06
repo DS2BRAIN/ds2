@@ -48,7 +48,7 @@ import LabelImage from "views/Labelling/LabelImage.js";
 import DataconnectorDetail from "views/Dataconnector/DataconnectorDetail";
 import LabelprojectList from "views/Labelling/LabelprojectList";
 import MarketDetail from "../views/Market/MarketDetail";
-import Flow from "views/Main/Flow";
+import Inference from "views/Main/Inference";
 import Button from "components/CustomButtons/Button";
 import { IS_ENTERPRISE } from "variables/common";
 
@@ -150,9 +150,9 @@ const Admin = ({ history, ...rest }) => {
         render={(props) => <AutoMLProject {...props} route="train" />}
       />
       <Route
-        path="/admin/flow"
+        path="/admin/inference"
         {...rest}
-        render={(props) => <Flow {...props} />}
+        render={(props) => <Inference {...props} />}
       />
       <Route
         path="/admin/diagram"
