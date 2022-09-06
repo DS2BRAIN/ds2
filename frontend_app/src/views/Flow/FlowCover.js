@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 
 import Button from "components/CustomButtons/Button";
@@ -18,10 +18,17 @@ const FlowCover = () => {
   const [isSaved, setIsSaved] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
 
+  const pathname = window.location.pathname;
   const steps = ["build", "settings", "analyze", "monitoring"];
 
+  useEffect(() => {
+    let flowSplitedPath = pathname.split("/flow/");
+    let stepPath = flowSplitedPath[1];
+    if (steps.includes(stepPath)) setSelectedStep(stepPath);
+  }, [pathname]);
+
   const handleSelectedStep = (step) => {
-    setSelectedStep(step);
+    history.push(`/admin/flow/${step}`);
   };
 
   const handlePublish = () => {

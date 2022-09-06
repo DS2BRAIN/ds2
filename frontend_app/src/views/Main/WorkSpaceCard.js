@@ -36,7 +36,7 @@ const WorkSpaceCard = ({ flow }) => {
   );
 
   const iconAnalysis = (
-    <IconButton onClick={() => history.push("/admin/flow/analysis")}>
+    <IconButton onClick={() => history.push("/admin/flow/analyze")}>
       <BarChartIcon />
     </IconButton>
   );
