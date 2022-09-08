@@ -18,6 +18,7 @@ const SettingGpuOption = ({
   setSelectedDeviceArr,
 }) => {
   const { t } = useTranslation();
+  const isStatusZero = status === 0;
 
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
@@ -101,18 +102,20 @@ const SettingGpuOption = ({
       <Grid sx={{ p: 1.5 }}>
         {serverDataList ? (
           <>
-            <Grid container justifyContent="flex-end">
-              <Grid sx={{ mt: -5.5 }}>
-                <Button
-                  id="add_server_btn"
-                  shape="greenOutlined"
-                  size="sm"
-                  onClick={openAddServerModal}
-                >
-                  Add training server
-                </Button>
+            {!isStatusZero && (
+              <Grid container justifyContent="flex-end">
+                <Grid sx={{ mt: -5 }}>
+                  <Button
+                    id="add_server_btn"
+                    shape="greenOutlined"
+                    size="sm"
+                    onClick={openAddServerModal}
+                  >
+                    Add training server
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
+            )}
             <Grid container rowSpacing={1}>
               {serverDataList?.map((serverDict) => {
                 let serverId = serverDict.server_id;
@@ -134,15 +137,17 @@ const SettingGpuOption = ({
                       >
                         {serverName}
                       </span>
-                      <Checkbox
-                        id={`server_${serverId}_checkbox`}
-                        value={serverName}
-                        checked={isChecked}
-                        size="small"
-                        sx={{ mx: 1 }}
-                        onChange={handleServerCheck}
-                      />
-                      {!isLocalServer && (
+                      {!isStatusZero && (
+                        <Checkbox
+                          id={`server_${serverId}_checkbox`}
+                          value={serverName}
+                          checked={isChecked}
+                          size="small"
+                          sx={{ mx: 1 }}
+                          onChange={handleServerCheck}
+                        />
+                      )}
+                      {!isStatusZero && !isLocalServer && (
                         <Button
                           id={`delete_server${serverId}_btn`}
                           shape="redOutlined"
@@ -166,16 +171,23 @@ const SettingGpuOption = ({
 
                         return (
                           <Grid container sx={{ mb: 0.5 }}>
-                            <Checkbox
-                              id={`gpu_${gpuId}_checkbox`}
-                              value={gpuName}
-                              checked={isChecked}
-                              size="small"
-                              sx={{ mr: 1 }}
-                              onChange={(e, checked) =>
-                                handleGpuCheck(e, checked, serverName, gpuDict)
-                              }
-                            />
+                            {!isStatusZero && (
+                              <Checkbox
+                                id={`gpu_${gpuId}_checkbox`}
+                                value={gpuName}
+                                checked={isChecked}
+                                size="small"
+                                sx={{ mr: 1 }}
+                                onChange={(e, checked) =>
+                                  handleGpuCheck(
+                                    e,
+                                    checked,
+                                    serverName,
+                                    gpuDict
+                                  )
+                                }
+                              />
+                            )}
                             <span style={{ fontSize: "15px" }}>
                               {gpuDict.gpu_name}
                             </span>
