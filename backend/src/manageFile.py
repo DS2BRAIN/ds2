@@ -1532,7 +1532,7 @@ class ManageFile:
 
                 for key, label_data in label_data_info.items():
                     label_data_info[key].update({
-                        'ratio': round(label_data['count']/total_cnt*100, 2),
+                        'ratio': round(label_data['count']/total_cnt*100, 2) if total_cnt > 0 else 0,
                         'labelclass': key
                     })
                     label_data_list.append(label_data_info[key])
