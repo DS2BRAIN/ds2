@@ -9,6 +9,9 @@ import CloseIcon from "@mui/icons-material/Close";
 const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
   const classes = currentTheme();
 
+  const [hostValue, setHostValue] = useState("");
+  const [tokenValue, setTokenValue] = useState("");
+
   const customDivider = (
     <Divider
       sx={{
@@ -19,6 +22,20 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
       }}
     />
   );
+
+  const handleHostInput = (e) => {
+    let tmpValue = e.target.value;
+    setHostValue(tmpValue);
+  };
+
+  const handleTokenInput = (e) => {
+    let tmpValue = e.target.value;
+    setTokenValue(tmpValue);
+  };
+
+  const submitRegister = () => {
+    console.log(hostValue, tokenValue);
+  };
 
   return (
     <Modal
@@ -54,6 +71,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               <Input
                 placeholder="Enter the host"
                 sx={{ color: "var(--textWhite6)" }}
+                onChange={handleHostInput}
               />
             </Grid>
             {customDivider}
@@ -64,6 +82,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               <Input
                 placeholder="Enter the token"
                 sx={{ color: "var(--textWhite6)" }}
+                onChange={handleTokenInput}
               />
             </Grid>
             {customDivider}
@@ -80,6 +99,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               shape="whiteOutlinedSquare"
               size="lg"
               sx={{ minWidth: "100px" }}
+              onClick={closeAddServerModal}
             >
               Cancel
             </Button>
@@ -89,6 +109,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               shape="greenOutlinedSquare"
               size="lg"
               sx={{ minWidth: "100px" }}
+              onClick={submitRegister}
             >
               Register
             </Button>
