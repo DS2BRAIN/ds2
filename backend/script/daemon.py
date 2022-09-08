@@ -195,8 +195,8 @@ class Daemon():
 
             self.runCount += 1
 
-            if 'TEST' not in self.instanceName:
-                self.hasGPUError()
+            # if 'TEST' not in self.instanceName:
+            #     self.hasGPUError()
 
             if checkAvailablity:
                 if 'business' in self.utilClass.planOption:
