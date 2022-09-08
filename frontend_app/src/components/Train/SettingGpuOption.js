@@ -330,19 +330,30 @@ const SettingGpuOption = ({
                 {customDivider}
               </Grid>
             </Grid>
-            <Grid container sx={{ pb: 4 }}>
-              <Grid item xs={2}></Grid>
-              <Grid item xs={4} textAlign="center">
-                <Button shape="whiteSquare" size="lg">
+            <Grid
+              container
+              justifyContent="center"
+              columnSpacing={10}
+              sx={{ pt: 2, pb: 4 }}
+            >
+              <Grid item>
+                <Button
+                  shape="whiteOutlinedSquare"
+                  size="lg"
+                  sx={{ minWidth: "100px" }}
+                >
                   Cancel
                 </Button>
               </Grid>
-              <Grid item xs={4} textAlign="center">
-                <Button shape="greenSquare" size="lg">
+              <Grid item>
+                <Button
+                  shape="greenOutlinedSquare"
+                  size="lg"
+                  sx={{ minWidth: "100px" }}
+                >
                   Register
                 </Button>
               </Grid>
-              <Grid item xs={2}></Grid>
             </Grid>
           </Box>
         </Modal>
@@ -373,7 +384,7 @@ const SettingGpuOption = ({
                 <CloseIcon />
               </IconButton>
             </Grid>
-            <Grid sx={{ px: 5 }}>
+            <Grid sx={{ px: 8 }}>
               <Grid>
                 <span style={{ marginRight: "8px", fontWeight: 700 }}>
                   server :
@@ -391,13 +402,13 @@ const SettingGpuOption = ({
               sx={{ my: 4 }}
             >
               <Grid item>
-                <Button shape="greenOutlinedSquare" sx={{ minWidth: "80px" }}>
-                  Yes
+                <Button shape="whiteOutlinedSquare" sx={{ minWidth: "80px" }}>
+                  No
                 </Button>
               </Grid>
               <Grid item>
-                <Button shape="whiteOutlinedSquare" sx={{ minWidth: "80px" }}>
-                  No
+                <Button shape="greenOutlinedSquare" sx={{ minWidth: "80px" }}>
+                  Yes
                 </Button>
               </Grid>
             </Grid>
