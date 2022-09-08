@@ -154,7 +154,7 @@ const SettingGpuOption = ({
     );
   else
     return (
-      <Grid sx={{ p: 2 }}>
+      <Grid sx={{ p: 1.5 }}>
         <Grid container justifyContent="flex-end">
           <Grid sx={{ mt: -5.5 }}>
             <Button
@@ -166,45 +166,49 @@ const SettingGpuOption = ({
             </Button>
           </Grid>
         </Grid>
-        {serverDataList.map((serverDict) => {
-          let serverName = serverDict.server_name;
-          let isLocalServer = serverName === "localhost";
+        <Grid container rowSpacing={1}>
+          {serverDataList.map((serverDict) => {
+            let serverName = serverDict.server_name;
+            let isLocalServer = serverName === "localhost";
 
-          return (
-            <Grid sx={{ mb: 3 }}>
-              <Grid container sx={{ mb: 1 }}>
-                <span
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: 700,
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {serverName}
-                </span>
-                <Checkbox size="small" sx={{ mx: 1 }} />
-                {!isLocalServer && (
-                  <Button
-                    shape="redOutlined"
-                    size="xs"
-                    sx={{ ml: 1 }}
-                    onClick={() => openDeleteServerModal(serverName)}
+            return (
+              <Grid item xs={12}>
+                <Grid container sx={{ mb: 1 }}>
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: 700,
+                      textTransform: "capitalize",
+                    }}
                   >
-                    Delete
-                  </Button>
-                )}
+                    {serverName}
+                  </span>
+                  <Checkbox size="small" sx={{ mx: 1 }} />
+                  {!isLocalServer && (
+                    <Button
+                      shape="redOutlined"
+                      size="xs"
+                      sx={{ ml: 1 }}
+                      onClick={() => openDeleteServerModal(serverName)}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </Grid>
+                <Grid sx={{ pl: 1 }}>
+                  {serverDict.gpu_list.map((gpuDict) => (
+                    <Grid container sx={{ mb: 0.5 }}>
+                      <Checkbox size="small" sx={{ mr: 1 }} />
+                      <span style={{ fontSize: "15px" }}>
+                        {gpuDict.gpu_name}
+                      </span>
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
-              <Grid sx={{ pl: 2 }}>
-                {serverDict.gpu_list.map((gpuDict) => (
-                  <Grid container sx={{ mb: 0.5 }}>
-                    <Checkbox size="small" sx={{ mr: 1 }} />
-                    <span>{gpuDict.gpu_name}</span>
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-          );
-        })}
+            );
+          })}
+        </Grid>
         <Modal
           open={isAddServerModalOpen}
           onClose={closeAddServerModal}
