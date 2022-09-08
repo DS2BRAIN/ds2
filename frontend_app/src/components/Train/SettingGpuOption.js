@@ -35,6 +35,7 @@ const SettingGpuOption = ({
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
   const [isDeleteServerModalOpen, setIsDeleteServerModalOpen] = useState(false);
   const [selectedServer, setSelectedServer] = useState("");
+  const [checkedDict, setCheckedDict] = useState({});
 
   const openAddServerModal = () => {
     setIsAddServerModalOpen(true);
@@ -76,6 +77,20 @@ const SettingGpuOption = ({
     if (selectArr.length < checkedGpuList.length) setIsDeviceAllSelected(false);
     else setIsDeviceAllSelected(true);
     setSelectedDeviceArr(selectArr);
+  };
+
+  const handleAllChecked = (e, isChecked) => {
+    let serverName = e.target.value;
+    let tmpCheckedDict = checkedDict;
+    if (isChecked) {
+      let filteredServer = serverDataList.filter((serverDict) => {
+        return serverDict.server_name === serverName;
+      });
+      tmpCheckedDict[serverName] = filteredServer[0].gpu_list;
+    } else {
+      if (tmpCheckedDict[serverName]) delete tmpCheckedDict[serverName];
+    }
+    setCheckedDict({ ...tmpCheckedDict });
   };
 
   const disabledTextStyle = {
@@ -168,6 +183,7 @@ const SettingGpuOption = ({
         </Grid>
         <Grid container rowSpacing={1}>
           {serverDataList.map((serverDict) => {
+            let serverId = serverDict.server_id;
             let serverName = serverDict.server_name;
             let isLocalServer = serverName === "localhost";
 
@@ -183,7 +199,13 @@ const SettingGpuOption = ({
                   >
                     {serverName}
                   </span>
-                  <Checkbox size="small" sx={{ mx: 1 }} />
+                  <Checkbox
+                    id={`server_${serverId}_checkbox`}
+                    value={serverName}
+                    size="small"
+                    sx={{ mx: 1 }}
+                    onChange={handleAllChecked}
+                  />
                   {!isLocalServer && (
                     <Button
                       shape="redOutlined"
