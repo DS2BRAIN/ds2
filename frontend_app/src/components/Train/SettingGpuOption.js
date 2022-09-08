@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
 import { serverDataList } from "./mockupGPUData";
 
-import { Box, Checkbox, Grid, IconButton, Modal } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Checkbox, Grid } from "@mui/material";
 import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
@@ -20,7 +18,6 @@ const SettingGpuOption = ({
   setSelectedDeviceArr,
 }) => {
   const { t } = useTranslation();
-  const classes = currentTheme();
 
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
@@ -108,7 +105,7 @@ const SettingGpuOption = ({
           </Grid>
         </Grid>
         <Grid container rowSpacing={1}>
-          {serverDataList.map((serverDict) => {
+          {serverDataList?.map((serverDict) => {
             let serverId = serverDict.server_id;
             let serverName = serverDict.server_name;
             let isLocalServer = serverName === "localhost";
@@ -148,7 +145,7 @@ const SettingGpuOption = ({
                   )}
                 </Grid>
                 <Grid sx={{ pl: 1 }}>
-                  {serverDict.gpu_list.map((gpuDict) => {
+                  {serverDict.gpu_list?.map((gpuDict) => {
                     let gpuId = gpuDict.gpu_id;
                     let gpuName = gpuDict.gpu_name;
                     const isChecked =

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
 
 import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
-
 import { Box, Divider, Grid, IconButton, Modal, Input } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
   const classes = currentTheme();
+  const dispatch = useDispatch();
 
   const [hostValue, setHostValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
@@ -36,6 +39,14 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
   const submitRegister = () => {
     console.log("hostValue", hostValue);
     console.log("tokenValue", tokenValue);
+    if (!hostValue) {
+      dispatch(openErrorSnackbarRequestAction("Please enter the host."));
+      return;
+    }
+    if (!tokenValue) {
+      dispatch(openErrorSnackbarRequestAction("Please enter the token."));
+      return;
+    }
   };
 
   return (
