@@ -33,6 +33,8 @@ const SettingGpuOption = ({
 
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
+  const [isDeleteServerModalOpen, setIsDeleteServerModalOpen] = useState(false);
+  const [selectedServer, setSelectedServer] = useState("");
 
   const openAddServerModal = () => {
     setIsAddServerModalOpen(true);
@@ -40,6 +42,16 @@ const SettingGpuOption = ({
 
   const closeAddServerModal = () => {
     setIsAddServerModalOpen(false);
+  };
+
+  const openDeleteServerModal = (hostName) => {
+    setSelectedServer(hostName);
+    setIsDeleteServerModalOpen(true);
+  };
+
+  const closeDeleteServerModal = () => {
+    setSelectedServer("");
+    setIsDeleteServerModalOpen(false);
   };
 
   const handleDeviceCheckAll = (e) => {
@@ -157,12 +169,23 @@ const SettingGpuOption = ({
         {Object.keys(gpuOptionData).map((hostOption) => (
           <Grid sx={{ mb: 3 }}>
             <Grid container sx={{ mb: 1 }}>
-              <span style={{ fontSize: "18px", fontWeight: 700 }}>
+              <span
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  textTransform: "capitalize",
+                }}
+              >
                 {hostOption}
               </span>
               <Checkbox size="small" sx={{ mx: 1 }} />
               {hostOption !== "localhost" && (
-                <Button shape="redOutlined" size="xs" sx={{ ml: 1 }}>
+                <Button
+                  shape="redOutlined"
+                  size="xs"
+                  sx={{ ml: 1 }}
+                  onClick={() => openDeleteServerModal(hostOption)}
+                >
                   Delete
                 </Button>
               )}
@@ -243,6 +266,37 @@ const SettingGpuOption = ({
               </Grid>
               <Grid item xs={2}></Grid>
             </Grid>
+          </Box>
+        </Modal>
+        <Modal
+          open={isDeleteServerModalOpen}
+          onClose={closeDeleteServerModal}
+          className={classes.modalContainer}
+        >
+          <Box
+            sx={{
+              borderRadius: "4px",
+              backgroundColor: "var(--background2)",
+              minWidth: "500px",
+              minHeight: "200px",
+            }}
+          >
+            <Grid
+              container
+              justifyContent="space-between"
+              sx={{ py: 2, px: 2 }}
+            >
+              <Grid sx={{ pt: 1, pl: 1 }}>
+                <span style={{ fontSize: "18px", fontWeight: 700 }}>
+                  Delete server
+                </span>
+              </Grid>
+              <IconButton onClick={closeDeleteServerModal}>
+                <CloseIcon />
+              </IconButton>
+            </Grid>
+            <Grid>{selectedServer}</Grid>
+            <Grid>Do u wanna delete?</Grid>
           </Box>
         </Modal>
       </Grid>
