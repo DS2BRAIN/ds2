@@ -34,7 +34,8 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
   };
 
   const submitRegister = () => {
-    console.log(hostValue, tokenValue);
+    console.log("hostValue", hostValue);
+    console.log("tokenValue", tokenValue);
   };
 
   return (

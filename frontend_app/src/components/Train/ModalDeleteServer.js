@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
 import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
 
-import { Box, Divider, Grid, IconButton, Modal, Input } from "@mui/material";
+import { Box, Grid, IconButton, Modal } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const ModalDeleteServer = ({
@@ -12,6 +12,11 @@ const ModalDeleteServer = ({
   selectedServer,
 }) => {
   const classes = currentTheme();
+
+  const submitDelete = () => {
+    console.log("server_id", selectedServer.server_id);
+    console.log("server_name", selectedServer.server_name);
+  };
 
   return (
     <Modal
@@ -33,7 +38,10 @@ const ModalDeleteServer = ({
               Delete server
             </span>
           </Grid>
-          <IconButton onClick={closeDeleteServerModal}>
+          <IconButton
+            id="close_deletemodal_btn"
+            onClick={closeDeleteServerModal}
+          >
             <CloseIcon />
           </IconButton>
         </Grid>
@@ -43,7 +51,7 @@ const ModalDeleteServer = ({
               server :
             </span>
             <span style={{ fontSize: "18px", fontWeight: 700 }}>
-              {selectedServer}
+              {selectedServer.server_name}
             </span>
           </Grid>
           <Grid>Are you sure you want to delete the server?</Grid>
@@ -55,12 +63,22 @@ const ModalDeleteServer = ({
           sx={{ my: 4 }}
         >
           <Grid item>
-            <Button shape="whiteOutlinedSquare" sx={{ minWidth: "80px" }}>
+            <Button
+              id="close_deletemodal_btn"
+              shape="whiteOutlinedSquare"
+              sx={{ minWidth: "80px" }}
+              onClick={closeDeleteServerModal}
+            >
               No
             </Button>
           </Grid>
           <Grid item>
-            <Button shape="greenOutlinedSquare" sx={{ minWidth: "80px" }}>
+            <Button
+              id="delete_server_btn"
+              shape="greenOutlinedSquare"
+              sx={{ minWidth: "80px" }}
+              onClick={submitDelete}
+            >
               Yes
             </Button>
           </Grid>

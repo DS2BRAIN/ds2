@@ -25,7 +25,7 @@ const SettingGpuOption = ({
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
   const [isDeleteServerModalOpen, setIsDeleteServerModalOpen] = useState(false);
-  const [selectedServer, setSelectedServer] = useState("");
+  const [selectedServer, setSelectedServer] = useState({});
   const [checkedDict, setCheckedDict] = useState({});
 
   const openAddServerModal = () => {
@@ -98,6 +98,7 @@ const SettingGpuOption = ({
         <Grid container justifyContent="flex-end">
           <Grid sx={{ mt: -5.5 }}>
             <Button
+              id="add_server_btn"
               shape="greenOutlined"
               size="sm"
               onClick={openAddServerModal}
@@ -136,10 +137,11 @@ const SettingGpuOption = ({
                   />
                   {!isLocalServer && (
                     <Button
+                      id={`delete_server${serverId}_btn`}
                       shape="redOutlined"
                       size="xs"
                       sx={{ ml: 1 }}
-                      onClick={() => openDeleteServerModal(serverName)}
+                      onClick={() => openDeleteServerModal(serverDict)}
                     >
                       Delete
                     </Button>
