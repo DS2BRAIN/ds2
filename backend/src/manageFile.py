@@ -804,24 +804,45 @@ class ManageFile:
                     if annotation.get('iscrowd') == 1:
                         continue
                     if annotation['image_id'] == json_image['id']:
+                        # if not annotation.get('segmentation') and annotation['bbox']:
+                        #     x1 = annotation['bbox'][0]
+                        #     x2 = annotation['bbox'][0] + annotation['bbox'][2]
+                        #     y1 = annotation['bbox'][1]
+                        #     y2 = annotation['bbox'][1] + annotation['bbox'][3]
+                        #     annotation['segmentation'] = [[x1, y1, x2, y1, x2, y2, x1, y2]]
+                        bbox = {}
+
                         if not annotation.get('segmentation') and annotation['bbox']:
-                            x1 = annotation['bbox'][0]
-                            x2 = annotation['bbox'][0] + annotation['bbox'][2]
-                            y1 = annotation['bbox'][1]
-                            y2 = annotation['bbox'][1] + annotation['bbox'][3]
-                            annotation['segmentation'] = [[x1, y1, x2, y1, x2, y2, x1, y2]]
+                            bbox = {
+                                "x": annotation['bbox'][0] / width,
+                                "y": annotation['bbox'][1] / height,
+                                "w": annotation['bbox'][2] / width,
+                                "h": annotation['bbox'][3] / height
+                            }
+                        # bbox = self.get_coco_segmentation(annotation['bbox'], width, height)
 
-                        if type(annotation['segmentation'][0]) != list:
-                            points = self.get_coco_segmentation(annotation['segmentation'], width, height)
-                        else:
-                            points = self.get_coco_segmentation(annotation['segmentation'][0], width, height)
+                        labeltype = 'box'
+                        points = None
+                        if annotation['segmentation']:
+                            if type(annotation['segmentation'][0]) != list:
+                                points = self.get_coco_segmentation(annotation['segmentation'], width, height)
+                            else:
+                                points = self.get_coco_segmentation(annotation['segmentation'][0], width, height)
 
-                        label_data = {'labeltype': 'polygon',
-                                      'color': '#ff000',
-                                      'status': 'done', 'user': user_id,
-                                      'workAssignee': user_id,
-                                      'labelclass': categories_dict.get(annotation['category_id']),
-                                      'points': points}
+                        if points:
+                            labeltype = 'polygon'
+
+                        label_data = {
+                                          'labeltype': labeltype,
+                                          'color': '#ff000',
+                                          'status': 'done', 'user': user_id,
+                                          'workAssignee': user_id,
+                                          'labelclass': categories_dict.get(annotation['category_id']),
+                                          'points': points,
+                                          'bbox': bbox
+                                      }
+                        if labeltype == "box":
+                            label_data.update(bbox)
 
                         preprocessing_json_data[json_image['file_name']]['labels'].append(label_data)
                 if not is_labelproject:
@@ -831,6 +852,7 @@ class ManageFile:
                         connector_raw.progress = progress
                         connector_raw.save()
         except Exception as e:
+            print(traceback.format_exc())
             fail_file_list.append('json')
             shutil.rmtree(unzipped_dir)
             return fail_file_list
