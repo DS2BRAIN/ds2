@@ -3,21 +3,19 @@ import { useTranslation } from "react-i18next";
 
 import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
-import { checkIsIterable } from "components/Function/globalFunc";
 import { serverDataList } from "./mockupGPUData";
 
 import {
   Box,
   Checkbox,
   Divider,
-  FormGroup,
-  FormControlLabel,
   Grid,
   IconButton,
   Modal,
   Input,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import LagacySettingGpuOption from "./LegacySettingGpuOption";
 
 const SettingGpuOption = ({
   status,
@@ -29,7 +27,6 @@ const SettingGpuOption = ({
 }) => {
   const { t } = useTranslation();
   const classes = currentTheme();
-  const checkedGpuList = checkIsIterable(gpuList) ? [...gpuList] : [];
 
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
@@ -53,30 +50,6 @@ const SettingGpuOption = ({
   const closeDeleteServerModal = () => {
     setSelectedServer("");
     setIsDeleteServerModalOpen(false);
-  };
-
-  const handleDeviceCheckAll = (e) => {
-    let tmpVal = e.target.value;
-    if (tmpVal === "all") {
-      if (isDeviceAllSelected) {
-        setSelectedDeviceArr([]);
-      } else {
-        setSelectedDeviceArr(checkedGpuList);
-      }
-      setIsDeviceAllSelected(!isDeviceAllSelected);
-      return;
-    }
-  };
-
-  const handleDeviceCheck = (e) => {
-    let tmpVal = e.target.value;
-    let selectArr = [...selectedDeviceArr];
-    let exIndex = selectArr.indexOf(tmpVal);
-    if (exIndex > -1) selectArr.splice(exIndex, 1);
-    else selectArr.push(tmpVal);
-    if (selectArr.length < checkedGpuList.length) setIsDeviceAllSelected(false);
-    else setIsDeviceAllSelected(true);
-    setSelectedDeviceArr(selectArr);
   };
 
   const handleServerCheck = (e, isChecked) => {
@@ -114,17 +87,6 @@ const SettingGpuOption = ({
     setCheckedDict({ ...tmpCheckedDict });
   };
 
-  useEffect(() => {
-    console.log(checkedDict);
-  }, [checkedDict]);
-
-  const disabledTextStyle = {
-    color: "darkgray",
-    marginBottom: "0px",
-    fontSize: "16px",
-    fontWeight: 400,
-  };
-
   const customDivider = (
     <Divider
       sx={{
@@ -137,60 +99,15 @@ const SettingGpuOption = ({
   );
 
   if (isPastVersion)
-    return gpuList?.length ? (
-      status === 0 ? (
-        <>
-          {gpuList.length > 1 && (
-            <FormGroup onChange={handleDeviceCheckAll}>
-              <FormControlLabel
-                label={"전체 선택"}
-                control={
-                  <Checkbox
-                    value="all"
-                    size="small"
-                    checked={isDeviceAllSelected}
-                    style={{ marginRight: "4px" }}
-                  />
-                }
-                style={{ marginLeft: 0 }}
-              />
-            </FormGroup>
-          )}
-          <FormGroup
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              maxHeight: "100px",
-              overflowY: "auto",
-            }}
-            onChange={handleDeviceCheck}
-          >
-            {gpuList.map((gpu) => (
-              <FormControlLabel
-                key={`checkform_${gpu.idx}`}
-                label={gpu.name}
-                control={
-                  <Checkbox
-                    value={gpu.idx}
-                    size="small"
-                    checked={selectedDeviceArr.includes(gpu.idx)}
-                    style={{ marginRight: "4px" }}
-                  />
-                }
-                style={{ marginLeft: 0 }}
-              />
-            ))}
-          </FormGroup>
-        </>
-      ) : (
-        gpuList.map((gpu) => (
-          <p key={`gpu_${gpu.idx}`} style={disabledTextStyle}>
-            {gpu.name}
-          </p>
-        ))
-      )
-    ) : (
-      <p style={disabledTextStyle}>{t("There is no GPU to choose from.")}</p>
+    return (
+      <LagacySettingGpuOption
+        status={status}
+        gpuList={gpuList}
+        isDeviceAllSelected={isDeviceAllSelected}
+        setIsDeviceAllSelected={setIsDeviceAllSelected}
+        selectedDeviceArr={selectedDeviceArr}
+        setSelectedDeviceArr={setSelectedDeviceArr}
+      />
     );
   else
     return (
