@@ -373,8 +373,34 @@ const SettingGpuOption = ({
                 <CloseIcon />
               </IconButton>
             </Grid>
-            <Grid>{selectedServer}</Grid>
-            <Grid>Do u wanna delete?</Grid>
+            <Grid sx={{ px: 5 }}>
+              <Grid>
+                <span style={{ marginRight: "8px", fontWeight: 700 }}>
+                  server :
+                </span>
+                <span style={{ fontSize: "18px", fontWeight: 700 }}>
+                  {selectedServer}
+                </span>
+              </Grid>
+              <Grid>Are you sure you want to delete the server?</Grid>
+            </Grid>
+            <Grid
+              container
+              justifyContent="center"
+              columnSpacing={5}
+              sx={{ my: 4 }}
+            >
+              <Grid item>
+                <Button shape="greenOutlinedSquare" sx={{ minWidth: "80px" }}>
+                  Yes
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button shape="whiteOutlinedSquare" sx={{ minWidth: "80px" }}>
+                  No
+                </Button>
+              </Grid>
+            </Grid>
           </Box>
         </Modal>
       </Grid>
