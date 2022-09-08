@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
 
@@ -11,6 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [hostValue, setHostValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
@@ -40,11 +42,11 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
     console.log("hostValue", hostValue);
     console.log("tokenValue", tokenValue);
     if (!hostValue) {
-      dispatch(openErrorSnackbarRequestAction("Please enter the host."));
+      dispatch(openErrorSnackbarRequestAction(t("Please enter the host.")));
       return;
     }
     if (!tokenValue) {
-      dispatch(openErrorSnackbarRequestAction("Please enter the token."));
+      dispatch(openErrorSnackbarRequestAction(t("Please enter the token.")));
       return;
     }
   };
@@ -66,7 +68,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
         <Grid container justifyContent="space-between" sx={{ py: 2, px: 2 }}>
           <Grid sx={{ pt: 1, pl: 1 }}>
             <span style={{ fontSize: "18px", fontWeight: 700 }}>
-              Add new server
+              {t("Add new server")}
             </span>
           </Grid>
           <IconButton onClick={closeAddServerModal}>
@@ -77,22 +79,22 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
           <Grid container justifyContent="center" rowSpacing={2}>
             {customDivider}
             <Grid item xs={6} textAlign="center">
-              Host
+              {t("Host")}
             </Grid>
             <Grid item xs={6} textAlign="center">
               <Input
-                placeholder="Enter the host"
+                placeholder={t("Enter the host")}
                 sx={{ color: "var(--textWhite6)" }}
                 onChange={handleHostInput}
               />
             </Grid>
             {customDivider}
             <Grid item xs={6} textAlign="center">
-              DS2.ai Admin Token
+              DS2.ai {t("Admin token")}
             </Grid>
             <Grid item xs={6} textAlign="center">
               <Input
-                placeholder="Enter the token"
+                placeholder={t("Enter the token")}
                 sx={{ color: "var(--textWhite6)" }}
                 onChange={handleTokenInput}
               />
@@ -113,7 +115,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               sx={{ minWidth: "100px" }}
               onClick={closeAddServerModal}
             >
-              Cancel
+              {t("Cancel")}
             </Button>
           </Grid>
           <Grid item>
@@ -123,7 +125,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               sx={{ minWidth: "100px" }}
               onClick={submitRegister}
             >
-              Register
+              {t("Register")}
             </Button>
           </Grid>
         </Grid>

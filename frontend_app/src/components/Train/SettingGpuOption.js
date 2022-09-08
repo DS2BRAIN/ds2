@@ -111,7 +111,7 @@ const SettingGpuOption = ({
                     size="sm"
                     onClick={openAddServerModal}
                   >
-                    Add training server
+                    {t("Add training server")}
                   </Button>
                 </Grid>
               </Grid>
@@ -155,7 +155,7 @@ const SettingGpuOption = ({
                           sx={{ ml: 1 }}
                           onClick={() => openDeleteServerModal(serverDict)}
                         >
-                          Delete
+                          {t("Delete")}
                         </Button>
                       )}
                     </Grid>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import currentTheme from "assets/jss/custom.js";
 import Button from "components/CustomButtons/Button";
@@ -12,6 +13,7 @@ const ModalDeleteServer = ({
   selectedServer,
 }) => {
   const classes = currentTheme();
+  const { t } = useTranslation();
 
   const submitDelete = () => {
     console.log("server_id", selectedServer.server_id);
@@ -35,7 +37,7 @@ const ModalDeleteServer = ({
         <Grid container justifyContent="space-between" sx={{ py: 2, px: 2 }}>
           <Grid sx={{ pt: 1, pl: 1 }}>
             <span style={{ fontSize: "18px", fontWeight: 700 }}>
-              Delete server
+              {t("Delete server")}
             </span>
           </Grid>
           <IconButton
@@ -46,7 +48,7 @@ const ModalDeleteServer = ({
           </IconButton>
         </Grid>
         <Grid sx={{ px: 8 }}>
-          <Grid>
+          <Grid sx={{ mb: 0.5 }}>
             <span style={{ marginRight: "8px", fontWeight: 700 }}>
               server :
             </span>
@@ -54,7 +56,7 @@ const ModalDeleteServer = ({
               {selectedServer.server_name}
             </span>
           </Grid>
-          <Grid>Are you sure you want to delete the server?</Grid>
+          <Grid>{t("Are you sure you want to delete the server?")}</Grid>
         </Grid>
         <Grid
           container
@@ -69,7 +71,7 @@ const ModalDeleteServer = ({
               sx={{ minWidth: "80px" }}
               onClick={closeDeleteServerModal}
             >
-              No
+              {t("No")}
             </Button>
           </Grid>
           <Grid item>
@@ -79,7 +81,7 @@ const ModalDeleteServer = ({
               sx={{ minWidth: "80px" }}
               onClick={submitDelete}
             >
-              Yes
+              {t("Yes")}
             </Button>
           </Grid>
         </Grid>
