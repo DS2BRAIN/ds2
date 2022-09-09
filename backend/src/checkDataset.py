@@ -500,8 +500,8 @@ class CheckDataset():
                         "category_id": label['labelclass'],
                         "id": labels_count
                     }
-                    if bbox:
-                        data["bbox"] = bbox
+                    
+                    data["bbox"] = bbox
 
                     labels_count += 1
 
