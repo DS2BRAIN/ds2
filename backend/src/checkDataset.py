@@ -465,15 +465,22 @@ class CheckDataset():
 
                     width = sthreefile['width']
                     height = sthreefile['height']
+                    bbox = None
                     if label['labeltype'] == 'box':
+                        # points = [[round(width * label['x']), round(height * label['y']),
+                        #            round(width * label['x']), round(height * (label['y'] + label['h'])),
+                        #            round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h'])),
+                        #            round(width * (label['x'] + label['w'])), round(height * label['y'])]]
                         points = [[round(width * label['x']), round(height * label['y']),
+                                   round(width * (label['x'] + label['w'])), round(height * label['y']),
                                    round(width * label['x']), round(height * (label['y'] + label['h'])),
-                                   round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h'])),
-                                   round(width * (label['x'] + label['w'])), round(height * label['y'])]]
+                                   round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h']))
+                                   ]]
                         numpyarray = np.array(points).reshape((-1, 2))
                         npmin = np.min(numpyarray, axis=0)
                         npmax = np.max(numpyarray, axis=0)
-                        area = (int(npmax[0]) - int(npmin[0])) * (int(npmax[1]) - int(npmin[1]))
+                        area = width * height
+                        bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
                     elif label['labeltype'] == 'polygon':
                         basiclist = ast.literal_eval(label['points']) if type(label['points']) == str else label[
                             'points']
@@ -483,9 +490,6 @@ class CheckDataset():
                         numpyarray = np.array(basiclist)
                         points = ast.literal_eval(str(basiclist).replace('], [', ', '))
                         area = int(self.calcPolygonArea(numpyarray))
-                    npmin = np.min(numpyarray, axis=0)
-                    npmax = np.max(numpyarray, axis=0)
-                    bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
 
                     data = {
                         "segmentation": points,
@@ -493,10 +497,12 @@ class CheckDataset():
                         "iscrowd": 0,
                         "ignore": 0,
                         "image_id": images_count,
-                        "bbox": bbox,
                         "category_id": label['labelclass'],
                         "id": labels_count
                     }
+                    if bbox:
+                        data["bbox"] = bbox
+
                     labels_count += 1
 
                     trainannotation.append(data) if image_point < train_image_count else testannotations.append(
@@ -518,7 +524,7 @@ class CheckDataset():
 
 
             result = {'trainCocodata': trainCocodata, 'testCocodata': testCocodata} if is_train_data else trainCocodata
-            print(result)
+            # print(result)
             # result = json.dumps(result, ensure_ascii=False)
         except:
             print(traceback.format_exc())
