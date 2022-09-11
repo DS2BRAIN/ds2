@@ -5,6 +5,7 @@ from pytz import timezone
 from fastapi import Request
 from sse_starlette.sse import EventSourceResponse
 from models.helper import Helper
+from src.errorResponseList import NO_SUPPORT_FOR_OPENSOURCE
 from src.manageTask import ManageTask
 from src.util import Util
 from src.manageUser import ManageUser
@@ -487,4 +488,41 @@ class FeedbackObject(BaseModel):
 @router.post("/feedback/")
 async def post_feedback(response: Response, feedback_object: FeedbackObject):
     response.status_code, result = manageEtcClass.send_slack_for_feedback(feedback_object)
+    return result
+
+
+class TrainingServerObject(BaseModel):
+    ip: str
+    access_token: str
+
+@router.post("/training-servers/")
+async def post_training_servers(response: Response, training_server_object: TrainingServerObject):
+    try:
+        from src.creating.manageTeam import ManageTeam
+    except:
+        return NO_SUPPORT_FOR_OPENSOURCE
+    response.status_code, result = ManageTeam.create_training_server(training_server_object)
+    return result
+
+class ConnectingTrainingServerObject(BaseModel):
+    ip: str
+    access_token: str
+    public_key: str
+
+@router.post("/connect-training-servers/")
+async def post_connect_training_servers(response: Response, training_server_object: ConnectingTrainingServerObject):
+    try:
+        from src.creating.manageTeam import ManageTeam
+    except:
+        return NO_SUPPORT_FOR_OPENSOURCE
+    response.status_code, result = ManageTeam.connect_training_server(training_server_object)
+    return result
+
+@router.delete("/training-servers/{training_server_id}")
+async def delete_training_servers(training_server_id: int, token: str, response: Response):
+    try:
+        from src.creating.manageTeam import ManageTeam
+    except:
+        return NO_SUPPORT_FOR_OPENSOURCE
+    response.status_code, result = ManageTeam.delete_training_server(token, training_server_id)
     return result
