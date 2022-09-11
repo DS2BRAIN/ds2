@@ -141,7 +141,21 @@ class DaemonSMS():
 
             else:
                 my_env["DS2_DAEMON_TASK_MODE"] = "true"
-                cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
+
+                try:
+                    import horovod
+                    cmd = f'''
+                        mpirun -np 1 -H Name2:1 --allow-run-as-root -v  \
+                            -bind-to none -map-by slot \
+                            --prefix /usr/lib/openmpi \
+                            --mca pml ob1 --mca btl ^openib \
+                            --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" \
+                            -mca plm_rsh_agent "ssh -p 13022 $*" \
+                            -x NCCL_SOCKET_IFNAME=^lo,docker0 \
+                            -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
+                            {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
+                except:
+                    cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
 
             print("DS2_DAEMON_TASK_MODE=true " + cmd)
             print(f"{self.utilClass.save_path}/{data.get('taskType', '')}_{data['id']}.out")
