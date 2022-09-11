@@ -144,8 +144,19 @@ class DaemonSMS():
 
                 try:
                     import horovod
+                    training_server_total = 0
+                    training_server_info = ""
+                    project = self.dbClass.getOneProjectById(data['id'])
+                    if project['require_gpus']:
+                        try:
+                            for key, gpu_info in project['require_gpus'].items():
+                                training_server_total += 1
+                                training_server_info += f"{key}:{len(gpu_info)}"
+                        except:
+                            training_server_total = 1
+                            training_server_info = f"localhost:{len(project['require_gpus'])}"
                     cmd = f'''
-                        mpirun -np 1 -H Name2:1 --allow-run-as-root -v  \
+                        mpirun -np {training_server_total} -H {training_server_info} --allow-run-as-root -v  \
                             -bind-to none -map-by slot \
                             --prefix /usr/lib/openmpi \
                             --mca pml ob1 --mca btl ^openib \
