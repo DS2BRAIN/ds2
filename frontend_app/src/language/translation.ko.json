@@ -1628,7 +1628,7 @@
   "Register payment card": "카드 등록",
   "All selected projects have been deleted.": "선택한 모든 프로젝트가 삭제되었습니다.",
   "All selected projects have been deleted. It will be applied when the computer is restarted.": "선택한 모든 프로젝트가 삭제되었습니다. 컴퓨터 재시작 시 적용됩니다.",
-  "Cancel": "취소하기",
+  "Cancel": "취소",
   "minutes left": "분 후 변경 가능",
   "The number of projects that can be created has been exceeded. If you want to create additional projects, please contact our sales team.": "생성 가능한 프로젝트 개수를 초과하였습니다. 추가 생성을 하고싶다면 영업팀에 문의해주세요.",
   "Projects created less than 10 minutes ago are excluded from selection.": "생성한지 10분지 지나지 않은 프로젝트는 선택에서 제외됩니다.",
@@ -2313,5 +2313,13 @@
   "Quant project creation is complete.": "퀀트 프로젝트 생성이 완료되었습니다.",
   "Modifying the setting conditions": "설정 조건 수정하기",
   "Set 'Minimum' Percentage": "'최소' Percentage 설정",
-  "Set 'Max' Percentage": "'최대' Percentage 설정"
+  "Set 'Max' Percentage": "'최대' Percentage 설정",
+  "Add training server": "학습 서버 추가하기",
+  "Delete server": "서버 삭제하기",
+  "Add new server": "서버 추가하기",
+  "Admin token": "관리 토큰",
+  "Enter the host": "host를 입력하세요",
+  "Please enter the host.": "host를 입력해주세요.",
+  "Enter the token": "token을 입력하세요",
+  "Please enter the token.": "token을 입력해주세요."
 }

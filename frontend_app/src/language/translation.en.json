@@ -2319,5 +2319,13 @@
   "Modifying the setting conditions": "Modifying the setting conditions",
   "Set 'Minimum' Percentage": "Set 'Minimum' Percentage",
   "Set 'Max' Percentage": "Set 'Max' Percentage",
-  "Start Analysis": "Start Analysis"
+  "Start Analysis": "Start Analysis",
+  "Add training server": "Add training server",
+  "Delete server": "Delete server",
+  "Add new server": "Add new server",
+  "Admin token": "Admin token",
+  "Enter the host": "Enter the host",
+  "Please enter the host.": "Please enter the host.",
+  "Enter the token": "Enter the token",
+  "Please enter the token.": "Please enter the token."
 }
