@@ -4549,6 +4549,14 @@ class ManageProject:
                 })
             project['available_gpu_list'] = available_gpu_list
 
+        project['available_gpu_list_total'] = {
+          "localhost": available_gpu_list,
+        }
+        training_sub_servers = self.dbClass.getTrainingSubServers()
+        if training_sub_servers:
+            for training_sub_server in training_sub_servers:
+                project['available_gpu_list_total'][training_sub_server.ip] = training_sub_server.gpu_info
+
         project['hasCustomTrainingServer'] = True if self.dbClass.getAliveJupyterServersByUserId(user['id']).count() else False
 
         if project['isShared']:
