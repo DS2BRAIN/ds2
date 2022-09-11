@@ -36,6 +36,10 @@ except:
 utilClass = Util()
 mongodb_conn = None
 mongodb_conn_dev = None
+master_ip = None
+with open(f"{os.path.expanduser('~')}/ds2ai/master_ip.txt", "r") as r:
+    master_ip = r.readlines()[0]
+    print(f"master ip : {master_ip}")
 
 def check_open_new_port():
 
@@ -68,7 +72,7 @@ else:
         mongodb = 'astore'
         quentdb = 'quent'
     elif utilClass.configOption in 'enterprise':
-        skyhub = pw.MySQLDatabase("astore", host="0.0.0.0", port=13006 if check_open_new_port() else 3306,
+        skyhub = pw.MySQLDatabase("astore", host=master_ip if master_ip else "0.0.0.0", port=13006 if check_open_new_port() else 3306,
                                   user="root", passwd="dslabglobal")
         mongodb = 'astoretest'
         quentdb = 'quent'
@@ -2663,7 +2667,7 @@ class MongoDb():
                 # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
                 # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
             if utilClass.configOption == 'enterprise' or config_option == "prod":
-                db_conn_dict[db_name] = MongoClient(host="0.0.0.0", port=13007 if check_open_new_port() else 27017, username="root", password="dslabglobal")[
+                db_conn_dict[db_name] = MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13007 if check_open_new_port() else 27017, username="root", password="dslabglobal")[
                     db_name]
         return db_conn_dict[db_name]
 

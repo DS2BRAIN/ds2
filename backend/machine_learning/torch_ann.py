@@ -135,9 +135,9 @@ class TorchAnn(torch.nn.Module, SettingData):
             train_loader = torch.utils.data.DataLoader(train_dataset, sampler=train_sampler)
 
             # Add Horovod Distributed Optimizer
-            optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=self.forward)
+            optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=self.named_parameters())
             # Broadcast parameters from rank 0 to all other processes.
-            hvd.broadcast_parameters(self.forward.state_dict(), root_rank=0)
+            hvd.broadcast_parameters(self.state_dict(), root_rank=0)
 
             for epoch in range(epochs):
                 for batch_idx, (data, target) in enumerate(train_loader):

@@ -4,6 +4,8 @@ from fastapi import APIRouter, UploadFile, File, Query
 from pytz import timezone
 from fastapi import Request
 from sse_starlette.sse import EventSourceResponse
+from starlette.background import BackgroundTasks
+
 from models.helper import Helper
 from src.errorResponseList import NO_SUPPORT_FOR_OPENSOURCE
 from src.manageTask import ManageTask
@@ -510,12 +512,13 @@ class ConnectingTrainingServerObject(BaseModel):
     public_key: str
 
 @router.post("/connect-training-servers/")
-async def post_connect_training_servers(response: Response, training_server_object: ConnectingTrainingServerObject):
+async def post_connect_training_servers(response: Response, training_server_object: ConnectingTrainingServerObject,
+                                        background_tasks: BackgroundTasks):
     try:
         from src.creating.manageTeam import ManageTeam
     except:
         return NO_SUPPORT_FOR_OPENSOURCE
-    response.status_code, result = ManageTeam.connect_training_server(training_server_object)
+    response.status_code, result = ManageTeam.connect_training_server(training_server_object, background_tasks)
     return result
 
 @router.delete("/training-servers/{training_server_id}")
