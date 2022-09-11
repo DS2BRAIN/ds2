@@ -141,6 +141,7 @@ class DaemonSMS():
 
             else:
                 my_env["DS2_DAEMON_TASK_MODE"] = "true"
+                my_env["DS2_TASK_ID"] = data['id']
 
                 try:
                     import horovod
@@ -163,6 +164,8 @@ class DaemonSMS():
                             --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" \
                             -mca plm_rsh_agent "ssh -p 13022 $*" \
                             -x NCCL_SOCKET_IFNAME=^lo,docker0 \
+                            -x DS2_TASK_ID={data['id']} \
+                            -x DS2_CONFIG_OPTION=enterprise \
                             -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH \
                             {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
                 except:

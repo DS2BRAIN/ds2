@@ -81,8 +81,7 @@ class KerasAnn(MachineLearning, SettingData):
 
             layer_width = train_params.pop('layer_width', 10)
             layer_deep = train_params.pop('layer_deep', 3) - 1
-            optimizer_function = self.optimizer_function_info[train_params['optimizer'].pop('function_name').lower()](
-                0.001 * hvd.size(), **train_params['optimizer'])
+            optimizer_function = self.optimizer_function_info[train_params['optimizer'].pop('function_name').lower()](0.001 * hvd.size())
             loss_function = self.loss_function_info[train_params['loss_function']]
             output_activation = self.activation_info[train_params['output_activation']]
 
