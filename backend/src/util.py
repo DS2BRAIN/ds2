@@ -109,7 +109,7 @@ class enterpriseBoto():
             try:
                 shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
             except:
-                print(traceback.format_exc())
+                # print(traceback.format_exc())
                 pass
         try:
 

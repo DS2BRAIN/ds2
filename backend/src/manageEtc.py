@@ -221,8 +221,8 @@ class ManageEtc:
             for chart in model_chart:
 
                 img_url = chart['filePath'].replace('https://astoredslab.s3.ap-northeast-2.amazonaws.com/', '')
-                save_image_path = f'{self.utilClass.save_path}/model/{models[0]["id"]}/{chart["graphName"]}'
-                os.makedirs(f'{self.utilClass.save_path}/model/{models[0]["id"]}', exist_ok=True)
+                save_image_path = f'{self.utilClass.save_path}/models/{models[0]["id"]}/{chart["graphName"]}'
+                os.makedirs(f'{self.utilClass.save_path}/models/{models[0]["id"]}', exist_ok=True)
                 self.s3.download_file(self.utilClass.bucket_name, img_url, save_image_path)
                 if chart["graphName"] == 'heatmap_0.png':
                     image_content += f'<img src="{chart["filePath"]}" alt="{chart["graphName"]}"> <br>'

@@ -1290,6 +1290,7 @@ class Daemon():
             iterations = {
                 'epoch' : split['epoch'],
                 'objectDetectionModel': split['objectDetectionModel'],
+                'learningRateFromFit': split['learningRateFromFit'],
                 'visionModel': [""],
             }
         if 'image' in trainingMethod:
