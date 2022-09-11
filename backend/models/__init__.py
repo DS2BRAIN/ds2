@@ -37,9 +37,10 @@ utilClass = Util()
 mongodb_conn = None
 mongodb_conn_dev = None
 master_ip = None
-with open(f"{os.path.expanduser('~')}/ds2ai/master_ip.txt", "r") as r:
-    master_ip = r.readlines()[0]
-    print(f"master ip : {master_ip}")
+if os.path.exists(f"{os.path.expanduser('~')}/ds2ai/master_ip.txt"):
+    with open(f"{os.path.expanduser('~')}/ds2ai/master_ip.txt", "r") as r:
+        master_ip = r.readlines()[0]
+        print(f"master ip : {master_ip}")
 
 def check_open_new_port():
 
