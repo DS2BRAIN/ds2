@@ -445,3 +445,18 @@ class HelperSub():
         if data:
             return data.__dict__['__data__'] if not raw else data
         return data
+
+
+    @wrapper
+    def getOneTrainingServerByName(self, name, raw=False):
+        data = trainingServerTable.get_or_none(trainingServerTable.name == name)
+        if data:
+            return data.__dict__['__data__'] if not raw else data
+        return data
+
+    @wrapper
+    def getOneTrainingServerByIP(self, ip, raw=False):
+        data = trainingServerTable.get_or_none(trainingServerTable.ip == ip)
+        if data:
+            return data.__dict__['__data__'] if not raw else data
+        return data

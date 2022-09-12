@@ -498,12 +498,12 @@ class TrainingServerObject(BaseModel):
     access_token: str
 
 @router.post("/training-servers/")
-async def post_training_servers(response: Response, training_server_object: TrainingServerObject):
+async def post_training_servers(token: str, response: Response, training_server_object: TrainingServerObject):
     try:
         from src.creating.manageTeam import ManageTeam
     except:
         return NO_SUPPORT_FOR_OPENSOURCE
-    response.status_code, result = ManageTeam.create_training_server(training_server_object)
+    response.status_code, result = ManageTeam().create_training_server(token, training_server_object)
     return result
 
 class ConnectingTrainingServerObject(BaseModel):
@@ -512,20 +512,30 @@ class ConnectingTrainingServerObject(BaseModel):
     public_key: str
 
 @router.post("/connect-training-servers/")
-async def post_connect_training_servers(response: Response, training_server_object: ConnectingTrainingServerObject,
+async def post_connect_training_servers(response: Response,
+                                        connect_training_server_object: ConnectingTrainingServerObject,
                                         background_tasks: BackgroundTasks):
     try:
         from src.creating.manageTeam import ManageTeam
     except:
         return NO_SUPPORT_FOR_OPENSOURCE
-    response.status_code, result = ManageTeam.connect_training_server(training_server_object, background_tasks)
+    response.status_code, result = ManageTeam().connect_training_server(connect_training_server_object, background_tasks)
     return result
 
-@router.delete("/training-servers/{training_server_id}")
-async def delete_training_servers(training_server_id: int, token: str, response: Response):
+@router.delete("/training-servers/{training_server_name}/")
+async def delete_training_servers(training_server_name: str, token: str, response: Response):
     try:
         from src.creating.manageTeam import ManageTeam
     except:
         return NO_SUPPORT_FOR_OPENSOURCE
-    response.status_code, result = ManageTeam.delete_training_server(token, training_server_id)
+    response.status_code, result = ManageTeam().delete_training_server(token, training_server_name)
+    return result
+
+@router.delete("/connect-training-servers/{main_server_ip}/")
+async def delete_training_servers(main_server_ip: str, access_token:str, response: Response, background_tasks: BackgroundTasks):
+    try:
+        from src.creating.manageTeam import ManageTeam
+    except:
+        return NO_SUPPORT_FOR_OPENSOURCE
+    response.status_code, result = ManageTeam().delete_connected_training_server(access_token, main_server_ip, background_tasks)
     return result

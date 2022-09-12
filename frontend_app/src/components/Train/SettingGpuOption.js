@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useTranslation } from "react-i18next";
 
 import Button from "components/CustomButtons/Button";
@@ -8,6 +8,9 @@ import { Checkbox, Grid } from "@mui/material";
 import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
+import {openErrorSnackbarRequestAction} from "../../redux/reducers/messages";
+import * as api from "../../controller/api";
+import {useDispatch, useSelector} from "react-redux";
 
 const SettingGpuOption = ({
   status,
@@ -16,15 +19,56 @@ const SettingGpuOption = ({
   setIsDeviceAllSelected,
   selectedDeviceArr,
   setSelectedDeviceArr,
+  checkedDict,
+  setCheckedDict,
 }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const isStatusZero = status === 0;
-
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
   const [isDeleteServerModalOpen, setIsDeleteServerModalOpen] = useState(false);
   const [selectedServer, setSelectedServer] = useState({});
-  const [checkedDict, setCheckedDict] = useState({});
+  const [hostValue, setHostValue] = useState("");
+  const [tokenValue, setTokenValue] = useState("");
+  const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList);
+
+
+  const submitAddServer = () => {
+    console.log("hostValue", hostValue);
+    console.log("tokenValue", tokenValue);
+    if (!hostValue) {
+      dispatch(openErrorSnackbarRequestAction(t("Please enter the host.")));
+      return;
+    }
+    if (!tokenValue) {
+      dispatch(openErrorSnackbarRequestAction(t("Please enter the token.")));
+      return;
+    }
+
+    api.postAddServer({
+      ip: hostValue,
+      access_token: tokenValue,
+    }).then((res) => {
+        if (res.data?.gpu_info) {
+          setAvailableGpuListTotal(Object.assign({}, availableGpuListTotal, {
+            [res.data.name]: res.data.gpu_info
+          }))
+          closeAddServerModal();
+        } else {
+          dispatch(openErrorSnackbarRequestAction(t("Please check the connection.")));
+        }
+      });
+
+  };
+
+  const submitDelete = () => {
+    console.log("selectedServer");
+    console.log(selectedServer);
+    api.deleteAddServer(selectedServer).then((res) => {
+        window.location.reload();
+      });
+  };
 
   const openAddServerModal = () => {
     setIsAddServerModalOpen(true);
@@ -86,23 +130,23 @@ const SettingGpuOption = ({
     fontWeight: 400,
   };
 
-  if (isPastVersion)
-    return (
-      <LagacySettingGpuOption
-        status={status}
-        gpuList={gpuList}
-        isDeviceAllSelected={isDeviceAllSelected}
-        setIsDeviceAllSelected={setIsDeviceAllSelected}
-        selectedDeviceArr={selectedDeviceArr}
-        setSelectedDeviceArr={setSelectedDeviceArr}
-      />
-    );
-  else
+  // if (isPastVersion)
+  //   return (
+  //     <LagacySettingGpuOption
+  //       status={status}
+  //       gpuList={gpuList}
+  //       isDeviceAllSelected={isDeviceAllSelected}
+  //       setIsDeviceAllSelected={setIsDeviceAllSelected}
+  //       selectedDeviceArr={selectedDeviceArr}
+  //       setSelectedDeviceArr={setSelectedDeviceArr}
+  //     />
+  //   );
+  // else
     return (
       <Grid sx={{ p: 1.5 }}>
         {serverDataList ? (
           <>
-            {!isStatusZero && (
+            {isStatusZero && (
               <Grid container justifyContent="flex-end">
                 <Grid sx={{ mt: -5 }}>
                   <Button
@@ -117,13 +161,12 @@ const SettingGpuOption = ({
               </Grid>
             )}
             <Grid container rowSpacing={1}>
-              {serverDataList?.map((serverDict) => {
-                let serverId = serverDict.server_id;
-                let serverName = serverDict.server_name;
+              {Object.keys(availableGpuListTotal).map((serverName) => {
+                let serverId = serverName;
+                let serverDict = availableGpuListTotal[serverName];
+                // let serverName = serverDict.name;
                 let isLocalServer = serverName === "localhost";
-                let isChecked =
-                  serverDict.gpu_list?.length ===
-                  checkedDict[serverName]?.length;
+                let isChecked = serverDict?.length === checkedDict[serverName]?.length;
 
                 return (
                   <Grid item xs={12}>
@@ -137,7 +180,7 @@ const SettingGpuOption = ({
                       >
                         {serverName}
                       </span>
-                      {!isStatusZero && (
+                      {isStatusZero && (
                         <Checkbox
                           id={`server_${serverId}_checkbox`}
                           value={serverName}
@@ -147,22 +190,22 @@ const SettingGpuOption = ({
                           onChange={handleServerCheck}
                         />
                       )}
-                      {!isStatusZero && !isLocalServer && (
+                      {isStatusZero && !isLocalServer && (
                         <Button
                           id={`delete_server${serverId}_btn`}
                           shape="redOutlined"
                           size="xs"
                           sx={{ ml: 1 }}
-                          onClick={() => openDeleteServerModal(serverDict)}
+                          onClick={() => openDeleteServerModal(serverName)}
                         >
                           {t("Delete")}
                         </Button>
                       )}
                     </Grid>
                     <Grid sx={{ pl: 1 }}>
-                      {serverDict.gpu_list?.map((gpuDict) => {
-                        let gpuId = gpuDict.gpu_id;
-                        let gpuName = gpuDict.gpu_name;
+                      {serverDict.map((gpuDict) => {
+                        let gpuId = gpuDict.idx;
+                        let gpuName = gpuDict.name;
                         const isChecked =
                           checkedDict[serverName] &&
                           checkedDict[serverName].includes(gpuDict)
@@ -171,7 +214,7 @@ const SettingGpuOption = ({
 
                         return (
                           <Grid container sx={{ mb: 0.5 }}>
-                            {!isStatusZero && (
+                            {isStatusZero && (
                               <Checkbox
                                 id={`gpu_${gpuId}_checkbox`}
                                 value={gpuName}
@@ -189,7 +232,7 @@ const SettingGpuOption = ({
                               />
                             )}
                             <span style={{ fontSize: "15px" }}>
-                              {gpuDict.gpu_name}
+                              {gpuName}
                             </span>
                           </Grid>
                         );
@@ -202,11 +245,15 @@ const SettingGpuOption = ({
             <ModalAddServer
               isAddServerModalOpen={isAddServerModalOpen}
               closeAddServerModal={closeAddServerModal}
+              setHostValue={setHostValue}
+              setTokenValue={setTokenValue}
+              submitAddServer={submitAddServer}
             />
             <ModalDeleteServer
               isDeleteServerModalOpen={isDeleteServerModalOpen}
               closeDeleteServerModal={closeDeleteServerModal}
               selectedServer={selectedServer}
+              submitDelete={submitDelete}
             />
           </>
         ) : (

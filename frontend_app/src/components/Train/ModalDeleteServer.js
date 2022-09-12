@@ -11,14 +11,10 @@ const ModalDeleteServer = ({
   isDeleteServerModalOpen,
   closeDeleteServerModal,
   selectedServer,
+  submitDelete,
 }) => {
   const classes = currentTheme();
   const { t } = useTranslation();
-
-  const submitDelete = () => {
-    console.log("server_id", selectedServer.server_id);
-    console.log("server_name", selectedServer.server_name);
-  };
 
   return (
     <Modal
