@@ -162,7 +162,7 @@ export default function SignUp() {
       setSnackbarOption(
         "error",
         t(
-          "비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다."
+          "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!."
         )
       );
     } else if (passwordCheck === "") {
@@ -632,37 +632,37 @@ export default function SignUp() {
           tip: false,
         },
         email: {
-          label: "이메일을 입력해주세요.",
+          label: "Please enter your email.",
           type: "text",
           value: email,
           func: inputEmailValue,
           tip: false,
         },
         password: {
-          label: "비밀번호를 입력해주세요.",
+          label: "Please enter your password.",
           type: "password",
           value: password,
           func: inputPasswordValue,
           tip: true,
           tipTitle:
-            "비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다.",
+            "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!.",
         },
         passwordCheck: {
-          label: "비밀번호 확인",
+          label: "Re-enter password",
           type: "password",
           value: passwordCheck,
           func: inputPasswordCheckValue,
           tip: false,
         },
         company: {
-          label: "재직중인 회사를 입력해주세요. (선택사항)",
+          label: "(Optional) Please enter your company name.",
           type: "text",
           value: company,
           func: inputCompanyValue,
           tip: false,
         },
         promotionCode: {
-          label: "프로모션 코드가 있을 시에 입력해주세요. (선택사항)",
+          label: "(Optional) Please enter the promotion code.",
           type: "text",
           value: promotionCode,
           func: inputPromotionCodeValue,
@@ -819,14 +819,14 @@ export default function SignUp() {
                 );
               }}
             >
-              {t("Privacy Policy")}{" "}
+              {t("Privacy Policy")}
             </span>
             <span
               style={{
                 cursor: "default",
               }}
             >
-              {t("I agree to the terms.")}
+              {" "}{t("I agree to the terms.")}
             </span>
           </Grid>
           <Grid

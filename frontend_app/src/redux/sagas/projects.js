@@ -403,7 +403,7 @@ function* deleteOpsProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 프로젝트 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -519,7 +519,7 @@ function* deleteJupyterProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 프로젝트 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -540,7 +540,7 @@ function* deleteDataConnectors(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "데이터커넥터가 삭제되었습니다.",
+      data: "The data connector has been deleted.",
     });
     yield put({
       type: GET_DATACONNECTORS_REQUEST,
@@ -552,7 +552,7 @@ function* deleteDataConnectors(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 데이터커넥터 삭제중 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -571,14 +571,14 @@ function* startProjectFunc(data) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "데이터커넥터 등록후 프로젝트가 생성되었습니다.",
+      data: "A new project has been created.",
     });
     yield (window.location.href = `/admin/train/` + result.data.id);
   } catch (err) {
     if (JSON.stringify(err).indexOf("507") > -1) {
       yield put({
         type: REQUEST_ERROR_MESSAGE,
-        data: "데이터 중첩 개수 한도 초과입니다.",
+        data: "The total number of data exceeded.",
       });
     } else {
       yield put({
@@ -586,7 +586,7 @@ function* startProjectFunc(data) {
         data: renderSnackbarMessage(
           "error",
           err.response,
-          "죄송합니다. 데이터커넥터 등록후 프로젝트 생성중 오류가 발생하였습니다. 다시 시도해주세요."
+          "A temporary error has occured. Please try again."
         ),
       });
       yield put({
@@ -624,7 +624,7 @@ function* postDataConnector(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 데이터커넥터 등록중 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -687,7 +687,7 @@ function* postPurchaseModel(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "모델 사용권을 구매하였습니다.",
+      data: "Model license purchased.",
     });
     // yield put({
     //   type: CLOSE_MODAL_CONTENT,
@@ -727,7 +727,7 @@ function* postOpsProjectSellPrice(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "판매요청이 등록되었습니다.",
+      data: "The sales request has been registered.",
     });
     yield put({
       type: CLOSE_MODAL_CONTENT,
@@ -786,7 +786,7 @@ function* postConnectorWithFile(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 데이터커넥터 등록중 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -1123,7 +1123,7 @@ function* putProjectWebhooks(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -1155,7 +1155,7 @@ function* putProjectStatus(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -1186,7 +1186,7 @@ function* updateShareGroup(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
@@ -1218,7 +1218,7 @@ function* putProjectServiceApp(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occured. Please try again."
       ),
     });
     yield put({
