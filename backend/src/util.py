@@ -104,7 +104,7 @@ class enterpriseBoto():
             with open(f"{self.save_path}/master_ip.txt", 'r') as r:
                 master_ip = r.readlines()[0]
                 os.makedirs(os.path.dirname(s3_route), exist_ok=True)
-                cmd = f"scp -P 13022 root@{master_ip}:{s3_route} {s3_route}"
+                cmd = f"scp -P 13022 -i /root/.ssh/id_rsa root@{master_ip}:{s3_route} {s3_route}"
                 call(cmd.split(" "))
 
         if not os.path.exists(file_route):

@@ -148,17 +148,16 @@ class DaemonSMS():
                     import horovod
                     training_server_total = 0
                     training_server_info = ""
-                    project = self.dbClass.getOneProjectById(data['project'])
-                    print(project['require_gpus_total'])
-                    if project['require_gpus_total']:
+                    print(data['require_gpus_total'])
+                    if data['require_gpus_total']:
                         try:
-                            for key, gpu_info in project['require_gpus_total'].items():
+                            for key, gpu_info in data['require_gpus_total'].items():
                                 training_server_total += 1
-                                training_server_info += f"{key}:{len(gpu_info)}"
+                                training_server_info += f'"{key}":{len(gpu_info)}'
                         except:
                             training_server_total = 1
-                            training_server_info = f"localhost:{len(project['require_gpus_total'])}"
-                    cmd = f'''/usr/lib/openmpi/bin/mpirun --allow-run-as-root -v -np {training_server_total} -H {training_server_info} -bind-to none -map-by slot --prefix /usr/lib/openmpi --mca pml ob1 --mca btl ^openib --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" -mca plm_rsh_agent "ssh -p 13022 $*" -x NCCL_SOCKET_IFNAME=^lo,docker0 -x DS2_TASK_ID={data['id']} -x DS2_CONFIG_OPTION=enterprise -x DS2_DAEMON_TASK_MODE=true -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
+                            training_server_info = f"localhost:{len(data['require_gpus_total'])}"
+                    cmd = f'''/usr/lib/openmpi/bin/mpirun --allow-run-as-root -v -np {training_server_total} -H {training_server_info} -bind-to none -map-by slot --prefix /usr/lib/openmpi --mca pml ob1 --mca btl ^openib --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" --mca plm_rsh_args "-F /root/.ssh/config" -x NCCL_SOCKET_IFNAME=^lo,docker0 -x DS2_TASK_ID={data['id']} -x DS2_CONFIG_OPTION=enterprise -x DS2_DAEMON_TASK_MODE=true -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
                 except:
                     cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
 
