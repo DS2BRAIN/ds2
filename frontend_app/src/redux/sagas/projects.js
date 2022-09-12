@@ -1053,7 +1053,7 @@ function* startProject(action) {
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
         data:
-          "AI 개발이 시작되었습니다. 개발이 완료되면 이메일로 알려드리겠습니다.",
+          "AI development has started. We’ll e-mail you when development is complete.",
       });
     }
   } catch (err) {

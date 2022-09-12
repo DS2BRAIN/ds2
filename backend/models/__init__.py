@@ -2640,7 +2640,7 @@ class MongoDb():
                         db_name]
                 elif utilClass.configOption == 'enterprise':
                     db_conn_dict[db_name] = \
-                        MongoClient(host="0.0.0.0", port=13007 if check_open_new_port() else 27017, username="root", password="dslabglobal")[db_name]
+                        MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13007 if check_open_new_port() else 27017, username="root", password="dslabglobal")[db_name]
                 else:
                     db_conn_dict[db_name] = MongoClient(
                         f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
