@@ -61,11 +61,21 @@ class DaemonSMS():
                     is_started = self.is_gpu_available(reqiure_gpus)
                     data["is_started"] = is_started
 
-                    for reqiure_gpu in reqiure_gpus:
-                        if self.gpu_wait_list.get(reqiure_gpu):
-                            self.gpu_wait_list[reqiure_gpu].append(data)
-                        else:
-                            self.gpu_wait_list[reqiure_gpu] = [data]
+                    is_working_on_this_server = True
+
+                    if data["require_gpus_total"]:
+                        is_working_on_this_server = False
+                        for key, value in data["require_gpus_total"].items():
+                            if key == "localhost":
+                                is_working_on_this_server = True
+
+                    if is_working_on_this_server:
+
+                        for reqiure_gpu in reqiure_gpus:
+                            if self.gpu_wait_list.get(reqiure_gpu):
+                                self.gpu_wait_list[reqiure_gpu].append(data)
+                            else:
+                                self.gpu_wait_list[reqiure_gpu] = [data]
 
                     if data["is_started"] or data.get('jupyterProject'):
                         self.start_daemon(data, reqiure_gpus)
