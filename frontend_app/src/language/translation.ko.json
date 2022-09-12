@@ -2321,5 +2321,6 @@
   "Enter the host": "host를 입력하세요",
   "Please enter the host.": "host를 입력해주세요.",
   "Enter the token": "token을 입력하세요",
-  "Please enter the token.": "token을 입력해주세요."
+  "Please enter the token.": "token을 입력해주세요.",
+  "Please check the connection.": "커넥션 정보를 확인해주세요."
 }

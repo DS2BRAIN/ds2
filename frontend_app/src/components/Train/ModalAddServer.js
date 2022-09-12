@@ -9,13 +9,11 @@ import Button from "components/CustomButtons/Button";
 import { Box, Divider, Grid, IconButton, Modal, Input } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
+const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal,
+                          setHostValue, setTokenValue,
+                          submitAddServer }) => {
   const classes = currentTheme();
-  const dispatch = useDispatch();
   const { t } = useTranslation();
-
-  const [hostValue, setHostValue] = useState("");
-  const [tokenValue, setTokenValue] = useState("");
 
   const customDivider = (
     <Divider
@@ -36,19 +34,6 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
   const handleTokenInput = (e) => {
     let tmpValue = e.target.value;
     setTokenValue(tmpValue);
-  };
-
-  const submitRegister = () => {
-    console.log("hostValue", hostValue);
-    console.log("tokenValue", tokenValue);
-    if (!hostValue) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter the host.")));
-      return;
-    }
-    if (!tokenValue) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter the token.")));
-      return;
-    }
   };
 
   return (
@@ -123,7 +108,7 @@ const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal }) => {
               shape="greenOutlinedSquare"
               size="lg"
               sx={{ minWidth: "100px" }}
-              onClick={submitRegister}
+              onClick={submitAddServer}
             >
               {t("Register")}
             </Button>

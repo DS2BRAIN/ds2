@@ -182,6 +182,7 @@ const Process = (props) => {
   const [isDeviceAllSelected, setIsDeviceAllSelected] = useState(false);
   const [isGetColabCodeLoading, setIsGetColabCodeLoading] = useState(false);
   const [isModelPageAccessible, setIsModelPageAccessible] = useState(false);
+  const [checkedDict, setCheckedDict] = useState({});
 
   const path = window.location.pathname;
 
@@ -1882,11 +1883,11 @@ const Process = (props) => {
         hasStructuredData,
     };
 
-    if (
-      !isDeviceAllSelected &&
-      project.available_gpu_list?.length > selectedDeviceArr.length
-    )
-      projectInfo["require_gpus"] = selectedDeviceArr;
+    if (!isDeviceAllSelected)
+      projectInfo["require_gpus"] = checkedDict['localhost'];
+
+    if (!isDeviceAllSelected)
+      projectInfo["require_gpus_total"] = checkedDict;
 
     if (!project?.option || project?.option === "custom") {
       projectInfo.algorithm = !algorithmType
@@ -2932,11 +2933,13 @@ const Process = (props) => {
           {type === "gpu" && (
             <SettingGpuOption
               status={project.status}
-              gpuList={project.available_gpu_list}
+              gpuList={project.available_gpu_list_total}
               isDeviceAllSelected={isDeviceAllSelected}
               setIsDeviceAllSelected={setIsDeviceAllSelected}
               selectedDeviceArr={selectedDeviceArr}
+              checkedDict={checkedDict}
               setSelectedDeviceArr={setSelectedDeviceArr}
+              setCheckedDict={setCheckedDict}
             />
           )}
         </FormControl>

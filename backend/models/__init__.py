@@ -288,6 +288,7 @@ class projectsTable(MySQLModel):
     training_data_statistics = JSONField(null=True)
     algorithm = pw.CharField(null=True, default='auto')
     require_gpus = JSONField(null=True)
+    require_gpus_total = JSONField(null=True)
 
 class flowTable(MySQLModel):
     class Meta:
@@ -1807,6 +1808,7 @@ class asynctasksTable(MySQLModel):
     research = pw.IntegerField(null=True)
     provider = pw.CharField(null=True)
     require_gpus = JSONField(null=True)
+    require_gpus_total = JSONField(null=True)
 
 class labelsTable(MySQLModel):
     class Meta:
@@ -2575,10 +2577,12 @@ class trainingServerTable(MySQLModel):
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
     ip = pw.CharField(null=True)
+    name = pw.CharField(null=True)
     gpu_info = JSONField(null=True)
     ssh_public_key = pw.TextField(null=True)
     is_main = pw.BooleanField(null=True)
     is_deleted = pw.BooleanField(null=True)
+    access_token = pw.CharField(null=True)
 
 
 class MongoDb():
