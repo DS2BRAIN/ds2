@@ -2019,3 +2019,17 @@ export function postFeedback(feedbackInfo) {
 
   return axios.post(query, feedbackInfo);
 }
+
+export function postAddServer(addServerInfo) {
+  const token = Cookies.getCookie("jwt");
+  const query = backendurl.concat(`training-servers/?token=${token}`);
+
+  return axios.post(query, addServerInfo);
+}
+
+export function deleteAddServer(name) {
+  const token = Cookies.getCookie("jwt");
+  const query = backendurl.concat(`training-servers/${name}/?token=${token}`);
+
+  return axios.delete(query);
+}

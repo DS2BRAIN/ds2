@@ -86,6 +86,7 @@ class ProjectInfo(BaseModel):
     algorithm: str = None
     models: list = None
     require_gpus: list = None
+    require_gpus_total: dict = None
 
 @router.put("/projects/{projectId}/")
 async def updateProject(projectId: str, token: str, projectInfo: ProjectInfo, response: Response):
