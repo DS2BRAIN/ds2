@@ -1380,6 +1380,14 @@ class Daemon():
                 modelInfo['lossFunction'] = 0
                 modelInfo['token'] = uuid4()
                 modelInfos.append(modelInfo)
+
+            try:
+                if os.path.exists("/root/ds2ai/test_mode.txt"):
+                    with open("/root/ds2ai/test_mode.txt" , 'r') as r:
+                        modelInfos = modelInfos[:int(r.readlines[0])]
+            except:
+                pass
+
             for num, modelInfo in enumerate(modelInfos):
                 if isTest and num > 10:
                     break
