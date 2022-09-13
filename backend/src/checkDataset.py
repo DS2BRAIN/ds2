@@ -473,13 +473,13 @@ class CheckDataset():
                         #            round(width * (label['x'] + label['w'])), round(height * label['y'])]]
                         points = [[round(width * label['x']), round(height * label['y']),
                                    round(width * (label['x'] + label['w'])), round(height * label['y']),
-                                   round(width * label['x']), round(height * (label['y'] + label['h'])),
-                                   round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h']))
+                                   round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h'])),
+                                   round(width * label['x']), round(height * (label['y'] + label['h']))
                                    ]]
                         numpyarray = np.array(points).reshape((-1, 2))
                         npmin = np.min(numpyarray, axis=0)
                         npmax = np.max(numpyarray, axis=0)
-                        area = width * height
+                        area = label['w'] * label['h']
                         bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
                     elif label['labeltype'] == 'polygon':
                         basiclist = ast.literal_eval(label['points']) if type(label['points']) == str else label[
@@ -502,7 +502,7 @@ class CheckDataset():
                     }
 
                     if label['labeltype'] == 'box' and not is_train_data:
-                        del data["segmentation"]
+                        data["segmentation"] = []
                     
                     data["bbox"] = bbox
 
