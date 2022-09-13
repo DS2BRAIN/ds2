@@ -64,7 +64,7 @@ function* postGroup(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "그룹이 등록되었습니다.",
+      data: "Group registered.",
     });
     yield put({
       type: GET_GROUPS_REQUEST,
@@ -102,7 +102,7 @@ function* postMember(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "해당 회원님께 멤버 요청을 보냈습니다.",
+      data: "Member request sent.",
     });
   } catch (err) {
     yield put({
@@ -134,8 +134,8 @@ function* postAcceptGroup(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data: action.data.accept
-        ? "그룹요청을 수락했습니다."
-        : "그룹요청을 거절했습니다.",
+        ? "Group invitation accepted."
+        : "Group invitation declined.",
     });
   } catch (err) {
     yield put({
@@ -166,7 +166,7 @@ function* deleteMember(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "해당 멤버를 삭제하였습니다.",
+      data: "Member deleted.",
     });
   } catch (err) {
     yield put({
@@ -194,7 +194,7 @@ function* leaveGroup(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "해당 그룹을 탈퇴하였습니다.",
+      data: "You have left the group.",
     });
   } catch (err) {
     yield put({
@@ -222,7 +222,7 @@ function* deleteGroup(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "해당 그룹을 삭제하였습니다.",
+      data: "Group deleted.",
     });
   } catch (err) {
     yield put({
@@ -250,7 +250,7 @@ function* putGroup(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "그룹정보가 변경되었습니다.",
+      data: "Group information edited.",
     });
     yield put({
       type: GET_GROUPS_REQUEST,

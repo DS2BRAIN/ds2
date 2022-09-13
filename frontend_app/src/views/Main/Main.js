@@ -180,9 +180,7 @@ const Main = ({ history }) => {
         })
         .catch((e) => {
           dispatch(
-            openErrorSnackbarRequestAction(
-              t("Failed to fetch notice.")
-            )
+            openErrorSnackbarRequestAction(t("Failed to fetch notice."))
           );
         });
     }
@@ -310,7 +308,9 @@ const Main = ({ history }) => {
           .then((res) => {
             if (res.data) {
               dispatch(
-                openSuccessSnackbarRequestAction(t("The model has been uploaded."))
+                openSuccessSnackbarRequestAction(
+                  t("The model has been uploaded.")
+                )
               );
               setIsLoading(false);
               window.location.href =
@@ -326,16 +326,14 @@ const Main = ({ history }) => {
               );
             } else {
               dispatch(
-                openErrorSnackbarRequestAction(t("Please try again in a moment."))
+                openErrorSnackbarRequestAction(
+                  t("Please try again in a moment.")
+                )
               );
             }
           });
       } else {
-        dispatch(
-          openErrorSnackbarRequestAction(
-            t(" Please upload file again")
-          )
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Please upload file again")));
         return;
       }
     }
@@ -346,9 +344,7 @@ const Main = ({ history }) => {
     fileCnt++;
     if (fileCnt > 1) {
       if (fileCnt === 2) {
-        dispatch(
-          openErrorSnackbarRequestAction(t("Choose one file"))
-        );
+        dispatch(openErrorSnackbarRequestAction(t("Choose one file")));
       }
       return;
     } else {
@@ -369,7 +365,9 @@ const Main = ({ history }) => {
   };
 
   const deleteFiles = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been deleted")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been deleted"))
+    );
   };
 
   const deleteUploadedFile = (files) => {
@@ -404,7 +402,10 @@ const Main = ({ history }) => {
         {t("Drag a file or click here to upload it.")}
         <div style={{ textAlign: "center" }}>
           <div>
-            {"(" + ".csv .zip .mp4 .mov - " + t("Only 1 upload is allowed") + ")"}
+            {"(" +
+              ".csv .zip .mp4 .mov - " +
+              t("Only 1 upload is allowed") +
+              ")"}
           </div>
         </div>
       </div>
