@@ -61,11 +61,21 @@ class DaemonSMS():
                     is_started = self.is_gpu_available(reqiure_gpus)
                     data["is_started"] = is_started
 
-                    for reqiure_gpu in reqiure_gpus:
-                        if self.gpu_wait_list.get(reqiure_gpu):
-                            self.gpu_wait_list[reqiure_gpu].append(data)
-                        else:
-                            self.gpu_wait_list[reqiure_gpu] = [data]
+                    is_working_on_this_server = True
+
+                    if data["require_gpus_total"]:
+                        is_working_on_this_server = False
+                        for key, value in data["require_gpus_total"].items():
+                            if key == "localhost":
+                                is_working_on_this_server = True
+
+                    if is_working_on_this_server:
+
+                        for reqiure_gpu in reqiure_gpus:
+                            if self.gpu_wait_list.get(reqiure_gpu):
+                                self.gpu_wait_list[reqiure_gpu].append(data)
+                            else:
+                                self.gpu_wait_list[reqiure_gpu] = [data]
 
                     if data["is_started"] or data.get('jupyterProject'):
                         self.start_daemon(data, reqiure_gpus)
@@ -141,9 +151,34 @@ class DaemonSMS():
 
             else:
                 my_env["DS2_DAEMON_TASK_MODE"] = "true"
+                my_env["DS2_TASK_ID"] = str(data['id'])
+                my_env["DS2_CONFIG_OPTION"] = "enterprise"
+
                 cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
 
-            print("DS2_DAEMON_TASK_MODE=true " + cmd)
+                if data['require_gpus_total']: #Temp
+                    try:
+                        import horovod
+                        training_server_total = 0
+                        training_server_info = ""
+                        print(data['require_gpus_total'])
+                        if data['require_gpus_total']:
+                            try:
+                                for key, gpu_info in data['require_gpus_total'].items():
+                                    training_server_total += 1
+                                    training_server_info += f'"{key}":{len(gpu_info)}'
+                            except:
+                                training_server_total = 1
+                                training_server_info = f"localhost:{len(data['require_gpus_total'])}"
+                        if not training_server_total:
+                            training_server_total = 1
+                            training_server_info = f"localhost:{len(data['require_gpus_total'])}"
+
+                        cmd = f'''/usr/lib/openmpi/bin/mpirun --allow-run-as-root -v -np {training_server_total} -H {training_server_info} -bind-to none -map-by slot --prefix /usr/lib/openmpi --mca pml ob1 --mca btl ^openib --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" --mca plm_rsh_args "-F /root/.ssh/config" -x NCCL_SOCKET_IFNAME=^lo,docker0 -x DS2_TASK_ID={data['id']} -x DS2_CONFIG_OPTION=enterprise -x DS2_DAEMON_TASK_MODE=true -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
+                    except:
+                        pass
+
+            print(cmd)
             print(f"{self.utilClass.save_path}/{data.get('taskType', '')}_{data['id']}.out")
             print(f"{self.utilClass.save_path}/{data.get('taskType', '')}_{data['id']}.err")
             with open(f"{self.utilClass.save_path}/{data.get('taskType', '')}_{data['id']}.out", "wb") as out, open(f"{self.utilClass.save_path}/{data.get('taskType', '')}_{data['id']}.err", "wb") as err:

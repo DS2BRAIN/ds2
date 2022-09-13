@@ -166,3 +166,6 @@ class HelperCreate():
     @wrapper
     def createUserProperty(self, data):
         return userPropertyTable.create(**(data))
+    @wrapper
+    def createTrainingServer(self, data):
+        return trainingServerTable.create(**(data))

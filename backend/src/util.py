@@ -20,6 +20,7 @@ import torch.cuda
 from src.errors import exceptions as ex
 
 from dateutil.relativedelta import relativedelta
+from subprocess import call
 
 if os.path.exists('./src/training/aistore_config.py'):
     from src.training.aistore_config import aistore_configs
@@ -98,6 +99,13 @@ class enterpriseBoto():
         file_route = urllib.parse.unquote(file_route)
         print('file_route')
         print(file_route)
+
+        if os.path.exists(f"{self.save_path}/master_ip.txt"):
+            with open(f"{self.save_path}/master_ip.txt", 'r') as r:
+                master_ip = r.readlines()[0]
+                os.makedirs(os.path.dirname(s3_route), exist_ok=True)
+                cmd = f"scp -P 13022 -i /root/.ssh/id_rsa root@{master_ip}:{s3_route} {s3_route}"
+                call(cmd.split(" "))
 
         if not os.path.exists(file_route):
             try:

@@ -27,7 +27,11 @@ import Container from "@material-ui/core/Container";
 import InputBase from "@material-ui/core/InputBase";
 import GridFullContainer from "components/Grid/GridFullContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { askModalRequestAction, openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  askModalRequestAction,
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import { updatePredictCountRequestAction } from "redux/reducers/user.js";
 import { useTranslation } from "react-i18next";
 import CloseIcon from "@material-ui/icons/Close";
@@ -45,7 +49,10 @@ const ACADEMY_RECOMMENDATION_ID = 17;
 const EngineAILists = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
-  const { user, messages } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
+  const { user, messages } = useSelector(
+    (state) => ({ user: state.user, messages: state.messages }),
+    []
+  );
   const { t } = useTranslation();
 
   const [externalAIModels, setExternalAIModels] = useState([]);
@@ -71,7 +78,10 @@ const EngineAILists = ({ history }) => {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [myDevelopedModels, setMyDevelopedModels] = useState(null);
   const [myDevelopedModelsId, setMydevelopedModelsId] = useState({});
-  const [myDevelopedModelsIdbyTypeId, setMydevelopedModelsIdbyTypeId] = useState({});
+  const [
+    myDevelopedModelsIdbyTypeId,
+    setMydevelopedModelsIdbyTypeId,
+  ] = useState({});
   const [paramsValue, setParamsValue] = useState({
     grade_id: null,
     school_id: null,
@@ -118,7 +128,12 @@ const EngineAILists = ({ history }) => {
         return;
       }
       if (completed < 40) {
-        if (completed >= 10) setLoadingMessage(t("The model is downloading. This may take 3-5 minutes or longer depending on the size of the model file."));
+        if (completed >= 10)
+          setLoadingMessage(
+            t(
+              "The model is downloading. This may take 3-5 minutes or longer depending on the size of the model file."
+            )
+          );
         setTimeout(() => {
           setCompleted(tempCompleted);
         }, 3000);
@@ -175,9 +190,21 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("A temporary error has occured. Please try again.")
+            )
+          );
         }
       });
   };
@@ -204,9 +231,21 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("A temporary error has occured. Please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("A temporary error has occured. Please try again.")
+            )
+          );
         }
       });
   };
@@ -228,9 +267,23 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we can’t load your Favorites list. Please try again in a moment")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "Sorry, we can’t load your Favorites list. Please try again in a moment"
+              )
+            )
+          );
         }
       });
   };
@@ -239,13 +292,31 @@ const EngineAILists = ({ history }) => {
     api
       .setFavoriteModel(isTrue, id)
       .then((res) => {
-        setFavoriteModels(favoriteModels.filter((model, i) => model.id !== parseInt(res.data.modelId)));
+        setFavoriteModels(
+          favoriteModels.filter(
+            (model, i) => model.id !== parseInt(res.data.modelId)
+          )
+        );
       })
       .catch((e) => {
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we can’t add it to your Favorites. Please try again in a moment")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "Sorry, we can’t add it to your Favorites. Please try again in a moment"
+              )
+            )
+          );
         }
       });
   };
@@ -274,7 +345,8 @@ const EngineAILists = ({ history }) => {
   };
 
   const onSortObjChange = (value) => {
-    const sortedModels = selectedTab === "ocr" ? myDevelopedModels : favoriteModels;
+    const sortedModels =
+      selectedTab === "ocr" ? myDevelopedModels : favoriteModels;
     if (sortObj[value] === "up") {
       for (let index in sortObj) {
         sortObj[index] = "down";
@@ -323,9 +395,15 @@ const EngineAILists = ({ history }) => {
     await setApiLoading("loading");
     await setCompleted(5);
     if (selectedOcrModel.id === MOVIE_RECOMMENDATION_ID) {
-      await predictDevelopedText(myDevelopedModelsIdbyTypeId[MOVIE_RECOMMENDATION_ID], { user_id: parseInt(movieRecommendValue) });
+      await predictDevelopedText(
+        myDevelopedModelsIdbyTypeId[MOVIE_RECOMMENDATION_ID],
+        { user_id: parseInt(movieRecommendValue) }
+      );
     } else if (selectedOcrModel.id === ACADEMY_RECOMMENDATION_ID) {
-      await predictDevelopedText(myDevelopedModelsIdbyTypeId[ACADEMY_RECOMMENDATION_ID], paramsValue);
+      await predictDevelopedText(
+        myDevelopedModelsIdbyTypeId[ACADEMY_RECOMMENDATION_ID],
+        paramsValue
+      );
     } else {
       await postDevelopedAiFile();
     }
@@ -340,7 +418,11 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (!process.env.REACT_APP_DEPLOY) console.log(e);
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
@@ -348,9 +430,21 @@ const EngineAILists = ({ history }) => {
           apiRateExceedError();
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we could not parse the values ​​you entered.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("Sorry, we could not parse the values ​​you entered.")
+            )
+          );
         }
         setApiLoading("");
       })
@@ -364,14 +458,21 @@ const EngineAILists = ({ history }) => {
   const postDevelopedAiFile = async () => {
     if (!uploadFile) return;
     await api
-      .postDevelopedAiFile(myDevelopedModelsId[selectedOcrModel.externalAiName], uploadFile[0])
+      .postDevelopedAiFile(
+        myDevelopedModelsId[selectedOcrModel.externalAiName],
+        uploadFile[0]
+      )
       .then((res) => {
         setObjectJson(res.data);
         dispatch(updatePredictCountRequestAction());
       })
       .catch((e) => {
         if (!process.env.REACT_APP_DEPLOY) console.log(e);
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
@@ -380,9 +481,23 @@ const EngineAILists = ({ history }) => {
           return;
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the file you uploaded. Please upload a different file")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "Sorry, we were unable to analyze the file you uploaded. Please upload a different file"
+              )
+            )
+          );
         }
         setApiLoading("");
       })
@@ -396,12 +511,18 @@ const EngineAILists = ({ history }) => {
   const sendAPI = async () => {
     if (selectedOcrModel.externalAiType === "text" && predictType === "each") {
       if (!inputText || inputText.length === 0) {
-        dispatch(openErrorSnackbarRequestAction(t("Please enter the text and proceed")));
+        dispatch(
+          openErrorSnackbarRequestAction(t("Please enter the text and proceed"))
+        );
         return;
       }
     } else {
       if (!uploadFile || uploadFile.length < 1) {
-        dispatch(openErrorSnackbarRequestAction(t("Please upload the file and proceed")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("Please upload the file and proceed")
+          )
+        );
         return;
       }
     }
@@ -440,7 +561,11 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (!process.env.REACT_APP_DEPLOY) console.log(e);
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
@@ -449,9 +574,21 @@ const EngineAILists = ({ history }) => {
           return;
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the text you entered")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("Sorry, we were unable to analyze the text you entered")
+            )
+          );
         }
         setApiLoading("");
       })
@@ -470,7 +607,11 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (!process.env.REACT_APP_DEPLOY) console.log(e);
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
@@ -478,9 +619,21 @@ const EngineAILists = ({ history }) => {
           apiRateExceedError();
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the text you entered")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("Sorry, we were unable to analyze the text you entered")
+            )
+          );
         }
         setApiLoading("");
       })
@@ -500,7 +653,11 @@ const EngineAILists = ({ history }) => {
       })
       .catch((e) => {
         if (!process.env.REACT_APP_DEPLOY) console.log(e);
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
@@ -509,9 +666,23 @@ const EngineAILists = ({ history }) => {
           return;
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the file you uploaded. Please upload a different file")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "Sorry, we were unable to analyze the file you uploaded. Please upload a different file"
+              )
+            )
+          );
         }
         setApiLoading("");
       })
@@ -527,13 +698,23 @@ const EngineAILists = ({ history }) => {
       .postTextAllApi(uploadFile[0], selectedOcrModel.externalAiName)
       .then((res) => {
         if (res.status === 201) {
-          dispatch(openSuccessSnackbarRequestAction(t("Batch prediction has started. You will see when it is completed in the notification center")));
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t(
+                "Batch prediction has started. You will see when it is completed in the notification center"
+              )
+            )
+          );
           dispatch(updatePredictCountRequestAction());
         }
       })
       .catch((e) => {
         if (!process.env.REACT_APP_DEPLOY) console.log(e);
-        if (process.env.REACT_APP_ENTERPRISE !== "true" && e.response && e.response.status === 402) {
+        if (
+          process.env.REACT_APP_ENTERPRISE !== "true" &&
+          e.response &&
+          e.response.status === 402
+        ) {
           window.location.href = "/admin/setting/payment/?cardRequest=true";
           return;
         }
@@ -542,9 +723,23 @@ const EngineAILists = ({ history }) => {
           return;
         }
         if (e.response && e.response.data.message) {
-          dispatch(openErrorSnackbarRequestAction(sendErrorMessage(e.response.data.message, e.response.data.message_en, user.language)));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                user.language
+              )
+            )
+          );
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry, we were unable to analyze the file you uploaded. Please upload a different file")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "Sorry, we were unable to analyze the file you uploaded. Please upload a different file"
+              )
+            )
+          );
         }
         setApiLoading("");
       })
@@ -556,7 +751,13 @@ const EngineAILists = ({ history }) => {
   };
 
   const apiRateExceedError = () => {
-    dispatch(openErrorSnackbarRequestAction(t("You have been logged out due to exceeded API requests, please log in again")));
+    dispatch(
+      openErrorSnackbarRequestAction(
+        t(
+          "You have been logged out due to exceeded API requests, please log in again"
+        )
+      )
+    );
     setTimeout(() => {
       Cookies.deleteAllCookies();
       history.push("/signin/");
@@ -616,11 +817,23 @@ const EngineAILists = ({ history }) => {
             </div>
           </GridItem>
         </GridContainer>
-        <Table className={classes.table} stickyheader="true" aria-label="sticky table">
+        <Table
+          className={classes.table}
+          stickyheader="true"
+          aria-label="sticky table"
+        >
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableHead} align="center" style={{ width: "15%", cursor: "pointer" }}></TableCell>
-              <TableCell className={classes.tableHead} align="center" style={{ width: "25%", cursor: "pointer" }}>
+              <TableCell
+                className={classes.tableHead}
+                align="center"
+                style={{ width: "15%", cursor: "pointer" }}
+              ></TableCell>
+              <TableCell
+                className={classes.tableHead}
+                align="center"
+                style={{ width: "25%", cursor: "pointer" }}
+              >
                 {/* <div className={classes.tableHeader} style={{marginLeft:'10%'}}>
                                     {sortValue === 'displayName' &&
                                     (sortObj[sortValue] === 'down' ? <ArrowUpwardIcon fontSize='small'/>
@@ -630,7 +843,11 @@ const EngineAILists = ({ history }) => {
                 </div>
                 {/* </div> */}
               </TableCell>
-              <TableCell className={classes.tableHead} align="center" style={{ width: "35%" }}>
+              <TableCell
+                className={classes.tableHead}
+                align="center"
+                style={{ width: "35%" }}
+              >
                 <div className={classes.tableHeader}>
                   <b>{t("Summary")}</b>
                 </div>
@@ -644,55 +861,74 @@ const EngineAILists = ({ history }) => {
                                     {t('Type')}
                                 </div>
                             </TableCell> */}
-              <TableCell className={classes.tableHead} style={{ width: "25%" }}></TableCell>
+              <TableCell
+                className={classes.tableHead}
+                style={{ width: "25%" }}
+              ></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {externalAIModels &&
-              externalAIModels.slice(modelPage * rowsPerModelPage, modelPage * rowsPerModelPage + rowsPerModelPage).map((model, idx) => {
-                const id = model.id;
-                return (
-                  <TableRow
-                    className={classes.tableRow}
-                    key={model.name + idx}
-                    style={{
-                      background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
-                    }}
-                  >
-                    <TableCell className={classes.tableRowCell} align="left">
-                      <img src={model.imageUrl} style={{ width: "50px", marginLeft: "20%" }} />
-                    </TableCell>
-                    <TableCell className={classes.tableRowCell} align="left">
-                      {t(model.name)}
-                    </TableCell>
-                    <TableCell className={classes.tableRowCell} align="left">
-                      {t(model.externalAiSummary)}
-                    </TableCell>
-                    {/* <TableCell className={classes.tableRowCell} align="left" >{t(model.externalAiType)}</TableCell> */}
-                    <TableCell className={classes.tableRowCell} align="center">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
+              externalAIModels
+                .slice(
+                  modelPage * rowsPerModelPage,
+                  modelPage * rowsPerModelPage + rowsPerModelPage
+                )
+                .map((model, idx) => {
+                  const id = model.id;
+                  return (
+                    <TableRow
+                      className={classes.tableRow}
+                      key={model.name + idx}
+                      style={{
+                        background:
+                          idx % 2 === 0
+                            ? currentTheme.tableRow1
+                            : currentTheme.tableRow2,
+                      }}
+                    >
+                      <TableCell className={classes.tableRowCell} align="left">
+                        <img
+                          src={model.imageUrl}
+                          style={{ width: "50px", marginLeft: "20%" }}
+                        />
+                      </TableCell>
+                      <TableCell className={classes.tableRowCell} align="left">
+                        {t(model.name)}
+                      </TableCell>
+                      <TableCell className={classes.tableRowCell} align="left">
+                        {t(model.externalAiSummary)}
+                      </TableCell>
+                      {/* <TableCell className={classes.tableRowCell} align="left" >{t(model.externalAiType)}</TableCell> */}
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
                       >
-                        <GridItem xs={6} lg={6}>
-                          <Button
-                            className={`${classes.defaultOutlineButton} predictBtn`}
-                            onClick={() => {
-                              onOpenOcrModal(model, "each");
-                            }}
-                          >
-                            {model.externalAiType === "model" ? t("Try") : t("Single prediction")}
-                          </Button>
-                        </GridItem>
-                        <GridItem xs={6} lg={6}></GridItem>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <GridItem xs={6} lg={6}>
+                            <Button
+                              className={`${classes.defaultOutlineButton} predictBtn`}
+                              onClick={() => {
+                                onOpenOcrModal(model, "each");
+                              }}
+                            >
+                              {model.externalAiType === "model"
+                                ? t("Try")
+                                : t("Single prediction")}
+                            </Button>
+                          </GridItem>
+                          <GridItem xs={6} lg={6}></GridItem>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
           </TableBody>
         </Table>
         <TablePagination
@@ -715,15 +951,23 @@ const EngineAILists = ({ history }) => {
   };
 
   const dropFilesReject = (type) => {
-    dispatch(openErrorSnackbarRequestAction(`${t("Invalid file type")} ${t(type + "파일만 업로드 가능합니다.")}`));
+    dispatch(
+      openErrorSnackbarRequestAction(
+        `${t("Invalid file type")} ${t(type + "파일만 업로드 가능합니다.")}`
+      )
+    );
   };
 
   const dropFiles = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been uploaded")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been uploaded"))
+    );
   };
 
   const deleteFiles = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been deleted")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been deleted"))
+    );
   };
 
   const handelFileChange = (files) => {
@@ -781,7 +1025,14 @@ const EngineAILists = ({ history }) => {
             }}
             onClick={onSetTextFocus}
           >
-            <InputBase style={{ width: "100%", color: currentThemeColor.textWhite87 }} value={inputText} autoFocus={true} onChange={onChangeTextInput} multiline={true} inputRef={ref} />
+            <InputBase
+              style={{ width: "100%", color: currentThemeColor.textWhite87 }}
+              value={inputText}
+              autoFocus={true}
+              onChange={onChangeTextInput}
+              multiline={true}
+              inputRef={ref}
+            />
           </div>
         );
       } else {
@@ -809,7 +1060,9 @@ const EngineAILists = ({ history }) => {
                 showPreviewsInDropzone={false}
                 maxFileSize={2147483648}
                 dialogTitle={t("Upload text")}
-                dropzoneText={t("Drag and drop the text (txt/csv) file to upload")}
+                dropzoneText={t(
+                  "Drag and drop the text (txt/csv) file to upload"
+                )}
                 filesLimit={1}
                 maxWidth={"xs"}
                 fullWidth={false}
@@ -832,7 +1085,10 @@ const EngineAILists = ({ history }) => {
                 overflow: "hidden",
               }}
             >
-              <img src={uploadFile[0].preview} style={{ width: "100%", maxHeight: "28em" }} />
+              <img
+                src={uploadFile[0].preview}
+                style={{ width: "100%", maxHeight: "28em" }}
+              />
             </div>
           );
         } else {
@@ -851,7 +1107,7 @@ const EngineAILists = ({ history }) => {
                 showPreviewsInDropzone={false}
                 maxFileSize={2147483648}
                 dialogTitle={t("Upload image")}
-                dropzoneText={t(" Drag and drop the image file to upload")}
+                dropzoneText={t("Drag and drop the image file to upload")}
                 filesLimit={1}
                 maxWidth={"xs"}
                 fullWidth={false}
@@ -860,7 +1116,10 @@ const EngineAILists = ({ history }) => {
             </div>
           );
         }
-      } else if (selectedOcrModel.externalAiType === "audio" || selectedOcrModel.externalAiType === "voice") {
+      } else if (
+        selectedOcrModel.externalAiType === "audio" ||
+        selectedOcrModel.externalAiType === "voice"
+      ) {
         const acceptedFiles = [".mp4", ".mp3", ".wav", ".flac"];
         if (uploadFile && uploadFile.length > 0) {
           return (
@@ -892,7 +1151,9 @@ const EngineAILists = ({ history }) => {
                 showPreviewsInDropzone={false}
                 maxFileSize={2147483648}
                 dialogTitle={t("Upload audio")}
-                dropzoneText={t(" Drag and drop the audio ('mp4', 'mp3', 'wav', 'flac') file to upload")}
+                dropzoneText={t(
+                  "Drag and drop the audio ('mp4', 'mp3', 'wav', 'flac') file to upload"
+                )}
                 filesLimit={1}
                 maxWidth={"xs"}
                 fullWidth={false}
@@ -962,17 +1223,29 @@ const EngineAILists = ({ history }) => {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell className={classes.tableRowCell} style={{ width: "30%" }} align="center">
+                    <TableCell
+                      className={classes.tableRowCell}
+                      style={{ width: "30%" }}
+                      align="center"
+                    >
                       <b>KEY</b>
                     </TableCell>
-                    <TableCell className={classes.tableRowCell} style={{ width: "70%" }} align="center">
+                    <TableCell
+                      className={classes.tableRowCell}
+                      style={{ width: "70%" }}
+                      align="center"
+                    >
                       <b>VALUE</b>
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow className={classes.tableRow}>
-                    <TableCell className={classes.tableRowCell} align="center" style={{ wordBreak: "keep-all", width: "50%" }}>
+                    <TableCell
+                      className={classes.tableRowCell}
+                      align="center"
+                      style={{ wordBreak: "keep-all", width: "50%" }}
+                    >
                       user_id
                     </TableCell>
                     <TableCell className={classes.tableRowCell} align="center">
@@ -1022,7 +1295,11 @@ const EngineAILists = ({ history }) => {
                     overflowY: "auto",
                   }}
                 >
-                  <JSONPretty id="json-pretty" data={objectJson} className={classes.predictResultJson}></JSONPretty>
+                  <JSONPretty
+                    id="json-pretty"
+                    data={objectJson}
+                    className={classes.predictResultJson}
+                  ></JSONPretty>
                 </div>
               </div>
             </div>
@@ -1042,10 +1319,18 @@ const EngineAILists = ({ history }) => {
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell className={classes.tableRowCell} style={{ width: "30%" }} align="center">
+                    <TableCell
+                      className={classes.tableRowCell}
+                      style={{ width: "30%" }}
+                      align="center"
+                    >
                       <b>KEY</b>
                     </TableCell>
-                    <TableCell className={classes.tableRowCell} style={{ width: "70%" }} align="center">
+                    <TableCell
+                      className={classes.tableRowCell}
+                      style={{ width: "70%" }}
+                      align="center"
+                    >
                       <b>VALUE</b>
                     </TableCell>
                   </TableRow>
@@ -1053,13 +1338,23 @@ const EngineAILists = ({ history }) => {
                 <TableBody>
                   {Object.keys(paramsValue).map((param, idx) => (
                     <TableRow key={param + idx} className={classes.tableRow}>
-                      <TableCell className={classes.tableRowCell} align="center" style={{ wordBreak: "keep-all", width: "50%" }}>
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                        style={{ wordBreak: "keep-all", width: "50%" }}
+                      >
                         {getParamsName(param)}
                       </TableCell>
-                      <TableCell className={classes.tableRowCell} align="center">
+                      <TableCell
+                        className={classes.tableRowCell}
+                        align="center"
+                      >
                         <TextField
                           placeholder={t("Enter the value.")}
-                          type={(param === "grade_id" || param === "school_id") && "number"}
+                          type={
+                            (param === "grade_id" || param === "school_id") &&
+                            "number"
+                          }
                           style={{
                             width: "50%",
                             wordBreak: "keep-all",
@@ -1105,7 +1400,11 @@ const EngineAILists = ({ history }) => {
                     overflowY: "auto",
                   }}
                 >
-                  <JSONPretty id="json-pretty" data={objectJson} className={classes.predictResultJson}></JSONPretty>
+                  <JSONPretty
+                    id="json-pretty"
+                    data={objectJson}
+                    className={classes.predictResultJson}
+                  ></JSONPretty>
                 </div>
               </div>
             </div>
@@ -1131,7 +1430,10 @@ const EngineAILists = ({ history }) => {
                   overflow: "hidden",
                 }}
               >
-                <img src={uploadFile[0].preview} style={{ width: "100%", maxHeight: "28em" }} />
+                <img
+                  src={uploadFile[0].preview}
+                  style={{ width: "100%", maxHeight: "28em" }}
+                />
               </div>
             ) : (
               <div id="imagePredict">
@@ -1148,7 +1450,7 @@ const EngineAILists = ({ history }) => {
                   showPreviewsInDropzone={false}
                   maxFileSize={2147483648}
                   dialogTitle={t("Upload image")}
-                  dropzoneText={t(" Drag and drop the image file to upload")}
+                  dropzoneText={t("Drag and drop the image file to upload")}
                   filesLimit={1}
                   maxWidth={"xs"}
                   fullWidth={false}
@@ -1184,7 +1486,11 @@ const EngineAILists = ({ history }) => {
                       overflowY: "auto",
                     }}
                   >
-                    <JSONPretty id="json-pretty" data={objectJson} className={classes.predictResultJson}></JSONPretty>
+                    <JSONPretty
+                      id="json-pretty"
+                      data={objectJson}
+                      className={classes.predictResultJson}
+                    ></JSONPretty>
                   </div>
                 </div>
               )}
@@ -1219,13 +1525,20 @@ const EngineAILists = ({ history }) => {
         className={classes.modalContainer}
       >
         {apiLoading === "loading" ? (
-          <div className={classes.predictModalContent} style={{ minHeight: "410px" }}>
+          <div
+            className={classes.predictModalContent}
+            style={{ minHeight: "410px" }}
+          >
             {
               <div className={classes.loading}>
                 <Loading size={400} />
                 {
                   <>
-                    <LinearProgress style={{ width: "100%", marginTop: "20px" }} variant="determinate" value={completed} />
+                    <LinearProgress
+                      style={{ width: "100%", marginTop: "20px" }}
+                      variant="determinate"
+                      value={completed}
+                    />
                     <p className={classes.text}>
                       {loadingMesseage} {completed}% {t("Completed")}...{" "}
                     </p>
@@ -1237,15 +1550,22 @@ const EngineAILists = ({ history }) => {
         ) : (
           <div className={classes.predictModalContent}>
             <GridContainer style={{ padding: "0 15px" }}>
-              <GridItem xs={12} style={{ marginBottom: "30px", marginTop: "12px" }}>
+              <GridItem
+                xs={12}
+                style={{ marginBottom: "30px", marginTop: "12px" }}
+              >
                 <h3>
-                  <b style={{ borderBottom: "2px solid #00d69e" }}>{t(selectedOcrModel.displayName)}</b>
+                  <b style={{ borderBottom: "2px solid #00d69e" }}>
+                    {t(selectedOcrModel.displayName)}
+                  </b>
                 </h3>
                 {selectedOcrModel.externalAiDescription
                   ? selectedOcrModel.externalAiDescription.includes("\\n")
-                    ? selectedOcrModel.externalAiDescription.split("\\n").map((sentence, idx) => {
-                        return <div key={idx}>{t(sentence)}</div>;
-                      })
+                    ? selectedOcrModel.externalAiDescription
+                        .split("\\n")
+                        .map((sentence, idx) => {
+                          return <div key={idx}>{t(sentence)}</div>;
+                        })
                     : t(selectedOcrModel.externalAiDescription)
                   : ""}
               </GridItem>
@@ -1288,7 +1608,11 @@ const EngineAILists = ({ history }) => {
                               overflowY: "auto",
                             }}
                           >
-                            <JSONPretty id="json-pretty" data={objectJson} className={classes.predictResultJson}></JSONPretty>
+                            <JSONPretty
+                              id="json-pretty"
+                              data={objectJson}
+                              className={classes.predictResultJson}
+                            ></JSONPretty>
                           </div>
                         </div>
                       )}
@@ -1310,13 +1634,22 @@ const EngineAILists = ({ history }) => {
                   {!develpedModelsDict[selectedOcrModel.id] ? (
                     <GridContainer style={{ width: "100%", padding: "20px" }}>
                       <GridItem xs={6}>
-                        <Button id="cancelBtn" className={classes.defaultOutlineButton} style={{ marginRight: "20px", width: "100%" }} onClick={closeModalAction}>
+                        <Button
+                          id="cancelBtn"
+                          className={classes.defaultOutlineButton}
+                          style={{ marginRight: "20px", width: "100%" }}
+                          onClick={closeModalAction}
+                        >
                           {t("Cancel")}
                         </Button>
                       </GridItem>
                       {!process.env.REACT_APP_ENTERPRISE && (
                         <GridItem xs={6}>
-                          <Button className={classes.defaultHighlightButton} onClick={onOpenChatbot} id="askBtn">
+                          <Button
+                            className={classes.defaultHighlightButton}
+                            onClick={onOpenChatbot}
+                            id="askBtn"
+                          >
                             {t("Contact us")}
                           </Button>
                         </GridItem>
@@ -1325,17 +1658,31 @@ const EngineAILists = ({ history }) => {
                   ) : (
                     <GridContainer style={{ width: "100%", padding: "20px" }}>
                       <GridItem xs={4}>
-                        <Button id="cancelBtn" className={classes.defaultOutlineButton} style={{ marginRight: "20px", width: "100%" }} onClick={closeModalAction}>
+                        <Button
+                          id="cancelBtn"
+                          className={classes.defaultOutlineButton}
+                          style={{ marginRight: "20px", width: "100%" }}
+                          onClick={closeModalAction}
+                        >
                           {t("Cancel")}
                         </Button>
                       </GridItem>
                       <GridItem xs={4}>
-                        <Button className={classes.defaultOutlineButton} style={{ width: "100%" }} onClick={resetDevelopedAIPredict}>
+                        <Button
+                          className={classes.defaultOutlineButton}
+                          style={{ width: "100%" }}
+                          onClick={resetDevelopedAIPredict}
+                        >
                           {t("Reset")}
                         </Button>
                       </GridItem>
                       <GridItem xs={4}>
-                        <Button className={classes.defaultHighlightButton} style={{ width: "100%" }} onClick={sendDevelopedAPI} id="sendApiBtn">
+                        <Button
+                          className={classes.defaultHighlightButton}
+                          style={{ width: "100%" }}
+                          onClick={sendDevelopedAPI}
+                          id="sendApiBtn"
+                        >
                           {t("Run")}
                         </Button>
                       </GridItem>
@@ -1353,17 +1700,31 @@ const EngineAILists = ({ history }) => {
                 >
                   <GridContainer style={{ width: "100%", padding: "20px" }}>
                     <GridItem xs={4}>
-                      <Button id="cancelBtn" className={classes.defaultOutlineButton} style={{ marginRight: "20px", width: "100%" }} onClick={closeModalAction}>
+                      <Button
+                        id="cancelBtn"
+                        className={classes.defaultOutlineButton}
+                        style={{ marginRight: "20px", width: "100%" }}
+                        onClick={closeModalAction}
+                      >
                         {t("Cancel")}
                       </Button>
                     </GridItem>
                     <GridItem xs={4}>
-                      <Button className={classes.defaultOutlineButton} style={{ width: "100%" }} onClick={resetPredict}>
+                      <Button
+                        className={classes.defaultOutlineButton}
+                        style={{ width: "100%" }}
+                        onClick={resetPredict}
+                      >
                         {t("Reset")}
                       </Button>
                     </GridItem>
                     <GridItem xs={4}>
-                      <Button className={classes.defaultHighlightButton} style={{ width: "100%" }} onClick={sendAPI} id="sendApiBtn">
+                      <Button
+                        className={classes.defaultHighlightButton}
+                        style={{ width: "100%" }}
+                        onClick={sendAPI}
+                        id="sendApiBtn"
+                      >
                         {t("Run")}
                       </Button>
                     </GridItem>
@@ -1387,10 +1748,15 @@ const EngineAILists = ({ history }) => {
           <div className={classes.cancelModalContent}>
             <GridContainer style={{ padding: "0 15px" }}>
               <GridItem xs={12}>
-                <div className={classes.title}>{t(selectedOcrModel.displayName)}</div>
+                <div className={classes.title}>
+                  {t(selectedOcrModel.displayName)}
+                </div>
               </GridItem>
               <GridItem xs={12}>
-                <div className={classes.content} style={{ margin: "20px 0 10px" }}>
+                <div
+                  className={classes.content}
+                  style={{ margin: "20px 0 10px" }}
+                >
                   {t(selectedOcrModel.externalAiDescription)}
                 </div>
               </GridItem>

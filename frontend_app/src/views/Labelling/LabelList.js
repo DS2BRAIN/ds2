@@ -701,7 +701,7 @@ const LabelList = ({
       }
     }
     if (tmpFiles.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
+      dispatch(openErrorSnackbarRequestAction(t("Please upload file again")));
       setIsUploadLoading(false);
       return;
     }
@@ -1439,7 +1439,7 @@ const LabelList = ({
           )}
           <br />
           {t(
-            " You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
+            "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
           )}
         </>
       );

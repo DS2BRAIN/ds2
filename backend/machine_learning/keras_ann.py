@@ -64,28 +64,75 @@ class KerasAnn(MachineLearning, SettingData):
 
     def train(self, df: pd.DataFrame, target_column_name: str, train_params: dict, project_id: int):
         # with tf.device("/cpu:0"):
-        layer_width = train_params.pop('layer_width', 10)
-        layer_deep = train_params.pop('layer_deep', 3) - 1
-        optimizer_function = self.optimizer_function_info[train_params['optimizer'].pop('function_name').lower()](
-            **train_params['optimizer'])
-        loss_function = self.loss_function_info[train_params['loss_function']]
-        output_activation = self.activation_info[train_params['output_activation']]
 
-        model = Sequential()
-        model.add(Dense(layer_width, input_shape=(len(df.columns) - 1, ), activation=self.activation_info[train_params.get('activation')]))
-        for i in range(0, layer_deep):
-            model.add(Dense(layer_width))
-        model.add(Dense(1, activation=output_activation))
+        try:
+            import horovod.tensorflow.keras as hvd
+            is_with_horovod = True
+        except:
+            is_with_horovod = False
 
-        self.x_train = np.array(self.x_train)
-        self.y_train = np.array(self.y_train)
-        self.x_test = np.array(self.x_test)
-        self.y_test = np.array(self.y_test)
+        if is_with_horovod:
+            hvd.init()
+            gpus = tf.config.experimental.list_physical_devices('GPU')
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+            if gpus:
+                tf.config.experimental.set_visible_devices(gpus[hvd.local_rank()], 'GPU')
 
-        model.compile(loss=loss_function, optimizer=optimizer_function, metrics=['accuracy', 'mse'])
-        model.fit(self.x_train, self.y_train, epochs=int(train_params.get("epochs", 100)),
-                  batch_size=int(train_params.get("batch_size", 20)), validation_data=(self.x_test, self.y_test))
-        self.model = model
+            layer_width = train_params.pop('layer_width', 10)
+            layer_deep = train_params.pop('layer_deep', 3) - 1
+            optimizer_function = self.optimizer_function_info[train_params['optimizer'].pop('function_name').lower()](0.001 * hvd.size())
+            loss_function = self.loss_function_info[train_params['loss_function']]
+            output_activation = self.activation_info[train_params['output_activation']]
+
+            model = Sequential()
+            model.add(Dense(layer_width, input_shape=(len(df.columns) - 1, ), activation=self.activation_info[train_params.get('activation')]))
+            for i in range(0, layer_deep):
+                model.add(Dense(layer_width))
+            model.add(Dense(1, activation=output_activation))
+
+            self.x_train = np.array(self.x_train)
+            self.y_train = np.array(self.y_train)
+            self.x_test = np.array(self.x_test)
+            self.y_test = np.array(self.y_test)
+
+            opt = hvd.DistributedOptimizer(optimizer_function)
+            model.compile(loss=loss_function, optimizer=opt, metrics=['accuracy', 'mse'])
+            callbacks = [hvd.callbacks.BroadcastGlobalVariablesCallback(0)]
+            # if hvd.rank() == 0:
+            #     callbacks.append(keras.callbacks.ModelCheckpoint('./checkpoint-{epoch}.h5'))
+
+            model.fit(self.x_train, self.y_train, epochs=int(train_params.get("epochs", 100)),
+                      steps_per_epoch=500 // hvd.size(), verbose=1 if hvd.rank() == 0 else 0, callbacks=callbacks,
+                      batch_size=int(train_params.get("batch_size", 20)), validation_data=(self.x_test, self.y_test))
+            self.model = model
+        else:
+            # with tf.device("/cpu:0"):
+            layer_width = train_params.pop('layer_width', 10)
+            layer_deep = train_params.pop('layer_deep', 3) - 1
+            optimizer_function = self.optimizer_function_info[train_params['optimizer'].pop('function_name').lower()](
+                **train_params['optimizer'])
+            loss_function = self.loss_function_info[train_params['loss_function']]
+            output_activation = self.activation_info[train_params['output_activation']]
+
+            model = Sequential()
+            model.add(Dense(layer_width, input_shape=(len(df.columns) - 1,),
+                            activation=self.activation_info[train_params.get('activation')]))
+            for i in range(0, layer_deep):
+                model.add(Dense(layer_width))
+            model.add(Dense(1, activation=output_activation))
+
+            self.x_train = np.array(self.x_train)
+            self.y_train = np.array(self.y_train)
+            self.x_test = np.array(self.x_test)
+            self.y_test = np.array(self.y_test)
+
+            model.compile(loss=loss_function, optimizer=optimizer_function, metrics=['accuracy', 'mse'])
+            model.fit(self.x_train, self.y_train, epochs=int(train_params.get("epochs", 100)),
+                      batch_size=int(train_params.get("batch_size", 20)), validation_data=(self.x_test, self.y_test))
+            self.model = model
+
+            return self.model
 
         return self.model
 

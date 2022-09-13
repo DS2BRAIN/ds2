@@ -4237,6 +4237,7 @@ class ManageProject:
                 self.dbClass.delete_train_params_by_project_id(project['id'])
         else:
             require_gpus = project_info.get("require_gpus")
+            require_gpus_total = project_info.get("require_gpus_total")
             if require_gpus:
                 require_gpus = [gpu_dict.get('idx') for gpu_dict in require_gpus]
             task_type = 'train'
@@ -4252,6 +4253,7 @@ class ManageProject:
                 'status': 0,
                 'user': user['id'],
                 'require_gpus': require_gpus,
+                'require_gpus_total': require_gpus_total,
                 'outputFilePath': '',
                 'isChecked': 0
             })
@@ -4548,6 +4550,14 @@ class ManageProject:
                     'name': self.utilClass.available_gpu_name_list[idx]
                 })
             project['available_gpu_list'] = available_gpu_list
+
+        project['available_gpu_list_total'] = {
+          "localhost": project['available_gpu_list']
+        }
+        training_sub_servers = self.dbClass.getTrainingSubServers()
+        if training_sub_servers:
+            for training_sub_server in training_sub_servers:
+                project['available_gpu_list_total'][training_sub_server.name] = training_sub_server.gpu_info
 
         project['hasCustomTrainingServer'] = True if self.dbClass.getAliveJupyterServersByUserId(user['id']).count() else False
 

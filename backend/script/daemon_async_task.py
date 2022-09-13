@@ -134,8 +134,13 @@ class DaemonAsyncTask():
 
         # if not torch.cuda.is_available():
         #     return
+        print("os.environ.get('DS2_TASK_ID')")
+        print(os.environ.get('DS2_TASK_ID'))
 
-        if len(sys.argv) == 5:
+        if os.environ.get('DS2_TASK_ID'):
+            task = self.dbClass.getAsnycTasksById(int(os.environ.get('DS2_TASK_ID')))
+            self._run(task, is_selected=True)
+        elif len(sys.argv) == 5:
             task = self.dbClass.getAsnycTasksById(int(sys.argv[4]))
             self._run(task, is_selected=True)
         else:

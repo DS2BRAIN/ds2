@@ -34,7 +34,6 @@ import currentTheme, { currentThemeColor } from "assets/jss/custom";
 import { checkIsValidKey } from "components/Function/globalFunc";
 import { IS_ENTERPRISE } from "variables/common";
 import { INITIAL_ALGORITHM_INFO } from "variables/hyperparameters";
-import { checkIsIterable } from "components/Function/globalFunc";
 import GridItem from "components/Grid/GridItem";
 import GridContainer from "components/Grid/GridContainer";
 import ProcessCircle from "components/Circle/ProcessCircle";
@@ -49,6 +48,7 @@ import SummaryTable from "views/Table/SummaryTable";
 import RawDataTable from "views/Table/RawDataTable";
 import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
 import Detail from "views/Table/Detail";
+import SettingGpuOption from "components/Train/SettingGpuOption";
 
 import {
   Checkbox,
@@ -182,6 +182,7 @@ const Process = (props) => {
   const [isDeviceAllSelected, setIsDeviceAllSelected] = useState(false);
   const [isGetColabCodeLoading, setIsGetColabCodeLoading] = useState(false);
   const [isModelPageAccessible, setIsModelPageAccessible] = useState(false);
+  const [checkedDict, setCheckedDict] = useState({});
 
   const path = window.location.pathname;
 
@@ -1882,11 +1883,11 @@ const Process = (props) => {
         hasStructuredData,
     };
 
-    if (
-      !isDeviceAllSelected &&
-      project.available_gpu_list?.length > selectedDeviceArr.length
-    )
-      projectInfo["require_gpus"] = selectedDeviceArr;
+    if (!isDeviceAllSelected)
+      projectInfo["require_gpus"] = checkedDict['localhost'];
+
+    if (!isDeviceAllSelected)
+      projectInfo["require_gpus_total"] = checkedDict;
 
     if (!project?.option || project?.option === "custom") {
       projectInfo.algorithm = !algorithmType
@@ -1972,7 +1973,8 @@ const Process = (props) => {
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message: "Would you like to start modeling your project with the selected options?",
+          message:
+            "Would you like to start modeling your project with the selected options?",
           project: projectInfo,
         })
       );
@@ -2893,42 +2895,6 @@ const Process = (props) => {
 
   const onSetTrainingDevice = (type, project) => {
     let isDisabled = project.status !== 0 || project.statusText === "중단";
-    let tmpGpuList = checkIsIterable(project.available_gpu_list)
-      ? [...project.available_gpu_list]
-      : [];
-
-    const handleDeviceCheckAll = (e) => {
-      let tmpVal = e.target.value;
-      if (tmpVal === "all") {
-        if (isDeviceAllSelected) {
-          setSelectedDeviceArr([]);
-        } else {
-          setSelectedDeviceArr(tmpGpuList);
-        }
-        setIsDeviceAllSelected(!isDeviceAllSelected);
-        return;
-      }
-    };
-
-    const handleDeviceCheck = (e) => {
-      let tmpVal = e.target.value;
-      let selectArr = [...selectedDeviceArr];
-      let exIndex = selectArr.indexOf(tmpVal);
-      if (exIndex > -1) selectArr.splice(exIndex, 1);
-      else selectArr.push(tmpVal);
-      if (selectArr.length < tmpGpuList.length) setIsDeviceAllSelected(false);
-      else setIsDeviceAllSelected(true);
-      setSelectedDeviceArr(selectArr);
-    };
-
-    const disabledTextStyle = {
-      color: "darkgray",
-      marginBottom: "0px",
-      fontSize: "16px",
-      fontWeight: 400,
-    };
-
-    let gpuList = project.available_gpu_list;
 
     return (
       <GridItem xs={12} style={{ marginTop: "16px" }}>
@@ -2964,64 +2930,18 @@ const Process = (props) => {
               <MenuItem value="g4dn.64xlarge">{t("g4dn.64xlarge")}</MenuItem>
             </Select>
           )}
-          {type === "gpu" &&
-            (gpuList?.length ? (
-              project.status === 0 ? (
-                <>
-                  {gpuList.length > 1 && (
-                    <FormGroup onChange={handleDeviceCheckAll}>
-                      <FormControlLabel
-                        label={"전체 선택"}
-                        control={
-                          <Checkbox
-                            value="all"
-                            size="small"
-                            checked={isDeviceAllSelected}
-                            style={{ marginRight: "4px" }}
-                          />
-                        }
-                        style={{ marginLeft: 0 }}
-                      />
-                    </FormGroup>
-                  )}
-                  <FormGroup
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      maxHeight: "100px",
-                      overflowY: "auto",
-                    }}
-                    onChange={handleDeviceCheck}
-                  >
-                    {gpuList.map((gpu) => (
-                      <FormControlLabel
-                        key={`checkform_${gpu.idx}`}
-                        label={gpu.name}
-                        control={
-                          <Checkbox
-                            value={gpu.idx}
-                            size="small"
-                            checked={selectedDeviceArr.includes(gpu.idx)}
-                            style={{ marginRight: "4px" }}
-                          />
-                        }
-                        style={{ marginLeft: 0 }}
-                      />
-                    ))}
-                  </FormGroup>
-                </>
-              ) : (
-                gpuList.map((gpu) => (
-                  <p key={`gpu_${gpu.idx}`} style={disabledTextStyle}>
-                    {gpu.name}
-                  </p>
-                ))
-              )
-            ) : (
-              <p style={disabledTextStyle}>
-                {t("There is no GPU to choose from.")}
-              </p>
-            ))}
+          {type === "gpu" && (
+            <SettingGpuOption
+              status={project.status}
+              gpuList={project.available_gpu_list_total}
+              isDeviceAllSelected={isDeviceAllSelected}
+              setIsDeviceAllSelected={setIsDeviceAllSelected}
+              selectedDeviceArr={selectedDeviceArr}
+              checkedDict={checkedDict}
+              setSelectedDeviceArr={setSelectedDeviceArr}
+              setCheckedDict={setCheckedDict}
+            />
+          )}
         </FormControl>
       </GridItem>
     );
@@ -3034,7 +2954,9 @@ const Process = (props) => {
 
   return (
     <div style={{ marginTop: "30px" }}>
-      <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")} />
+      <ReactTitle
+        title={"DS2.ai - " + t(isVerify ? "Verification" : "Train")}
+      />
       {isLoading || !projects || projects.isLoading || !user.me ? (
         <div className={classes.smallLoading}>
           <CircularProgress size={50} sx={{ mb: 3.5 }} />

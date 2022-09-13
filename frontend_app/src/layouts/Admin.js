@@ -466,9 +466,7 @@ const Admin = ({ history, ...rest }) => {
         } else {
           dispatch(
             openErrorSnackbarRequestAction(
-              t(
-                "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
-              )
+              t("A temporary error has occurred. Please try again.")
             )
           );
         }

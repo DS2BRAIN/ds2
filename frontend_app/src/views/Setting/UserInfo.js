@@ -4,9 +4,22 @@ import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
 import currentTheme from "assets/jss/custom.js";
-import { postResetPasswordRequestAction, postWithdrawRequestAction, postCompanyLogoRequestAction, putUserRequestAction, stopUserLoadingRequestAction } from "redux/reducers/user.js";
-import { askModalRequestAction, askAppCodeRequestAction, askDeleteLogoRequestAction } from "redux/reducers/messages.js";
-import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  postResetPasswordRequestAction,
+  postWithdrawRequestAction,
+  postCompanyLogoRequestAction,
+  putUserRequestAction,
+  stopUserLoadingRequestAction,
+} from "redux/reducers/user.js";
+import {
+  askModalRequestAction,
+  askAppCodeRequestAction,
+  askDeleteLogoRequestAction,
+} from "redux/reducers/messages.js";
+import {
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import { convertToLocalDateStr } from "components/Function/globalFunc.js";
 import { fileurl } from "controller/api";
 import { IS_ENTERPRISE } from "variables/common";
@@ -22,7 +35,10 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 const UserInfo = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
-  const { user, messages } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
+  const { user, messages } = useSelector(
+    (state) => ({ user: state.user, messages: state.messages }),
+    []
+  );
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -52,12 +68,18 @@ const UserInfo = ({ history }) => {
   const [modalLoading, setIsModalLoading] = useState(false);
   const [userCreatedDate, setUserCreatedDate] = useState("");
   const [imgUrl, setImgUrl] = useState({ file: "", url: "" });
-  const amazon_color = fileurl + "asset/front/img/externalAiLogo/Amazon logo color.png";
-  const amazon_gray = fileurl + "asset/front/img/externalAiLogo/Amazon logo greyscale.png";
-  const azure_color = fileurl + "asset/front/img/externalAiLogo/Azure logo colored.png";
-  const azure_gray = fileurl + "asset/front/img/externalAiLogo/Azure logo greyscale.png";
-  const google_color = fileurl + "asset/front/img/externalAiLogo/google-logo.png";
-  const google_gray = fileurl + "asset/front/img/externalAiLogo/google-logo greyscale.png";
+  const amazon_color =
+    fileurl + "asset/front/img/externalAiLogo/Amazon logo color.png";
+  const amazon_gray =
+    fileurl + "asset/front/img/externalAiLogo/Amazon logo greyscale.png";
+  const azure_color =
+    fileurl + "asset/front/img/externalAiLogo/Azure logo colored.png";
+  const azure_gray =
+    fileurl + "asset/front/img/externalAiLogo/Azure logo greyscale.png";
+  const google_color =
+    fileurl + "asset/front/img/externalAiLogo/google-logo.png";
+  const google_gray =
+    fileurl + "asset/front/img/externalAiLogo/google-logo greyscale.png";
 
   useEffect(() => {
     if (user.me) {
@@ -114,13 +136,25 @@ const UserInfo = ({ history }) => {
 
     user.externalAiModels &&
       user.externalAiModels.forEach((model) => {
-        if (model.modelpath === "google" && model.apiKey && googleKey.indexOf(model.apiKey) === -1) {
+        if (
+          model.modelpath === "google" &&
+          model.apiKey &&
+          googleKey.indexOf(model.apiKey) === -1
+        ) {
           googleKey.push(model.apiKey);
         }
-        if (model.modelpath === "amazon" && model.apiKey && amazonKey.indexOf(model.apiKey) === -1) {
+        if (
+          model.modelpath === "amazon" &&
+          model.apiKey &&
+          amazonKey.indexOf(model.apiKey) === -1
+        ) {
           amazonKey.push(model.apiKey);
         }
-        if (model.modelpath === "azure" && model.apiKey && azureKey.indexOf(model.apiKey) === -1) {
+        if (
+          model.modelpath === "azure" &&
+          model.apiKey &&
+          azureKey.indexOf(model.apiKey) === -1
+        ) {
           azureKey.push(model.apiKey);
         }
       });
@@ -176,7 +210,11 @@ const UserInfo = ({ history }) => {
   const onDropGoogleFile = (e) => {
     const file = e.target.files[0];
     if (file.type.indexOf("json") === -1) {
-      dispatch(openErrorSnackbarRequestAction(t(`올바른 파일 형식이 아닙니다. JSON 파일만 업로드 가능합니다.`)));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(`올바른 파일 형식이 아닙니다. JSON 파일만 업로드 가능합니다.`)
+        )
+      );
     }
     setGoogleFile(file);
   };
@@ -233,32 +271,48 @@ const UserInfo = ({ history }) => {
   };
 
   const dropFilesReject = (type) => {
-    dispatch(openErrorSnackbarRequestAction(t(`올바른 파일 형식이 아닙니다. ${type}파일만 업로드 가능합니다.`)));
+    dispatch(
+      openErrorSnackbarRequestAction(
+        t(`올바른 파일 형식이 아닙니다. ${type}파일만 업로드 가능합니다.`)
+      )
+    );
   };
 
   const dropFiles = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been uploaded")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been uploaded"))
+    );
   };
 
   const deleteFiles = () => {
-    dispatch(openSuccessSnackbarRequestAction(t("The file(s) has been deleted")));
+    dispatch(
+      openSuccessSnackbarRequestAction(t("The file(s) has been deleted"))
+    );
   };
 
   const keyChangeSubmit = async () => {
     if (azureKey.length > 0 && azureEndpoint.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter Azure Endpoint")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter Azure Endpoint"))
+      );
       return;
     }
     if (azureEndpoint.length > 0 && azureKey.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter your Azure Key")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your Azure Key"))
+      );
       return;
     }
     if (amazonId.length > 0 && amazonKey.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter your Amazon Key.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your Amazon Key."))
+      );
       return;
     }
     if (amazonKey.length > 0 && amazonId.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter your Amazon Id")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your Amazon Id"))
+      );
       return;
     }
     await setIsLoading(true);
@@ -290,9 +344,13 @@ const UserInfo = ({ history }) => {
   const reRenderAfterAiKeys = (count) => {
     if (count === 0) {
       setIsLoading(false);
-      dispatch(openErrorSnackbarRequestAction(t("Please enter at least one key.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter at least one key."))
+      );
     } else {
-      dispatch(openSuccessSnackbarRequestAction(t("Key registration completed.")));
+      dispatch(
+        openSuccessSnackbarRequestAction(t("Key registration completed."))
+      );
       window.location.reload();
     }
   };
@@ -550,13 +608,23 @@ const UserInfo = ({ history }) => {
     </div>
   ) : (
     user.me && (
-      <Container component="main" maxWidth="false" disableGutters className={classes.mainCard}>
+      <Container
+        component="main"
+        maxWidth="false"
+        disableGutters
+        className={classes.mainCard}
+      >
         <Grid className={classes.settingTitle} sx={{ mt: 7, mb: 3.5 }}>
           Account Info
         </Grid>
         <Grid container rowSpacing={3} sx={{ px: 3, pb: 3 }}>
           {user.me && user.me.name && (
-            <Grid item xs={12} id="userName" className={classes.accountNameTitle}>
+            <Grid
+              item
+              xs={12}
+              id="userName"
+              className={classes.accountNameTitle}
+            >
               {user.me.name ? user.me.name : t("name")}
             </Grid>
           )}
@@ -568,24 +636,46 @@ const UserInfo = ({ history }) => {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>{t("Company name")}</div>
+              <div className={classes.settingFontWhite6}>
+                {t("Company name")}
+              </div>
               <div className={classes.settingFontWhite87} id="userCompany">
                 {user.me.company ? user.me.company : "-"}
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>{t("Company logo")}</div>
-              <div className={classes.settingFontWhite87}>{user && user.me && user.me.companyLogoUrl ? <img id="userCompanyLogo" src={(IS_ENTERPRISE ? fileurl + "static" : "") + user.me.companyLogoUrl} style={{ width: "50px", maxHeight: "50px" }} /> : "-"}</div>
+              <div className={classes.settingFontWhite6}>
+                {t("Company logo")}
+              </div>
+              <div className={classes.settingFontWhite87}>
+                {user && user.me && user.me.companyLogoUrl ? (
+                  <img
+                    id="userCompanyLogo"
+                    src={
+                      (IS_ENTERPRISE ? fileurl + "static" : "") +
+                      user.me.companyLogoUrl
+                    }
+                    style={{ width: "50px", maxHeight: "50px" }}
+                  />
+                ) : (
+                  "-"
+                )}
+              </div>
             </Grid>
             <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>{t("Member since …")}</div>
+              <div className={classes.settingFontWhite6}>
+                {t("Member since …")}
+              </div>
               <div className={classes.settingFontWhite87} id="userCreateDate">
                 {userCreatedDate}
               </div>
             </Grid>
             <Grid item xs={12}>
               <div className={classes.settingFontWhite6}>{t("App code")}</div>
-              <div className={classes.settingFontWhite87} style={{ display: "flex", alignItems: "center" }}>
+              <div
+                className={classes.settingFontWhite87}
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <div id="userAppCode">{user.me.appTokenCode}</div>
                 <RefreshIcon
                   id="resetAppCodeIcon"
@@ -618,8 +708,12 @@ const UserInfo = ({ history }) => {
                 {t("Change password")}
               </Button>
             )}
-            <Button id="change_userinfo_btn" shape="whiteOutlined" onClick={openInfoModal}>
-              {t(" Edit info")}
+            <Button
+              id="change_userinfo_btn"
+              shape="whiteOutlined"
+              onClick={openInfoModal}
+            >
+              {t("Edit info")}
             </Button>
           </Grid>
         </Grid>
@@ -632,15 +726,31 @@ const UserInfo = ({ history }) => {
             justifyContent: "flex-end",
           }}
         >
-          <Button id="withdrawUser" shape="whiteOutlined" size="sm" onClick={openWithdrawModal}>
+          <Button
+            id="withdrawUser"
+            shape="whiteOutlined"
+            size="sm"
+            onClick={openWithdrawModal}
+          >
             {t("Delete account")}
           </Button>
         </Grid>
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isInfoModalOpen} onClose={closeModalOpen} className={classes.modalContainer}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isInfoModalOpen}
+          onClose={closeModalOpen}
+          className={classes.modalContainer}
+        >
           <div className={classes.modalContent}>
             <Grid container justifyContent="space-between">
-              <div className={classes.title}>{t(" Edit info")}</div>
-              <IconButton id="close_userinfomodal_btn" className={classes.closeImg} sx={{ p: 0 }} onClick={closeModalOpen}>
+              <div className={classes.title}>{t("Edit info")}</div>
+              <IconButton
+                id="close_userinfomodal_btn"
+                className={classes.closeImg}
+                sx={{ p: 0 }}
+                onClick={closeModalOpen}
+              >
                 <CloseIcon fontSize="small" />
               </IconButton>
             </Grid>
@@ -651,12 +761,23 @@ const UserInfo = ({ history }) => {
               </div>
             ) : (
               <Grid sx={{ p: 2 }}>
-                <Grid container alignItems="center" rowSpacing={3} sx={{ mt: 0, mb: 4 }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  rowSpacing={3}
+                  sx={{ mt: 0, mb: 4 }}
+                >
                   <Grid item xs={4}>
                     {t("Name")}
                   </Grid>
                   <Grid item xs={8}>
-                    <TextField id="userNameInput" placeholder={t("Please enter your name")} onChange={inputNameChange} value={userName} className={classes.textField} />
+                    <TextField
+                      id="userNameInput"
+                      placeholder={t("Please enter your name")}
+                      onChange={inputNameChange}
+                      value={userName}
+                      className={classes.textField}
+                    />
                   </Grid>
                   {IS_ENTERPRISE ? (
                     <>
@@ -664,7 +785,9 @@ const UserInfo = ({ history }) => {
                         {t("Password")}
                       </Grid>
                       <Grid item xs={8}>
-                        <Grid sx={{ pl: 1 }}>{t("Please contact the administrator.")}</Grid>
+                        <Grid sx={{ pl: 1 }}>
+                          {t("Please contact the administrator.")}
+                        </Grid>
                       </Grid>
                     </>
                   ) : null}
@@ -672,7 +795,13 @@ const UserInfo = ({ history }) => {
                     {t("Company name")}
                   </Grid>
                   <Grid item xs={8}>
-                    <TextField id="companyInput" placeholder={t("Enter your company name")} onChange={inputCompanyChange} value={company} className={classes.textField} />
+                    <TextField
+                      id="companyInput"
+                      placeholder={t("Enter your company name")}
+                      onChange={inputCompanyChange}
+                      value={company}
+                      className={classes.textField}
+                    />
                   </Grid>
                   <Grid item xs={4}>
                     {t("Company logo")}
@@ -686,7 +815,8 @@ const UserInfo = ({ history }) => {
                         justifyContent: "space-between",
                       }}
                     >
-                      {imgUrl?.url !== null && imgUrl?.url?.indexOf("user/") == -1 ? (
+                      {imgUrl?.url !== null &&
+                      imgUrl?.url?.indexOf("user/") == -1 ? (
                         <img
                           className="profile_preview"
                           src={imgUrl.url}
@@ -699,7 +829,10 @@ const UserInfo = ({ history }) => {
                       ) : user && user.me && user.me.companyLogoUrl ? (
                         <img
                           className="profile_preview"
-                          src={(IS_ENTERPRISE ? fileurl + "static" : "") + user.me.companyLogoUrl}
+                          src={
+                            (IS_ENTERPRISE ? fileurl + "static" : "") +
+                            user.me.companyLogoUrl
+                          }
                           style={{
                             width: "50px",
                             maxHeight: "50px",
@@ -712,7 +845,10 @@ const UserInfo = ({ history }) => {
 
                       <div style={{ display: "flex" }}>
                         {!companyLogoUrl ? (
-                          <label htmlFor="files" className={classes.modelTabHighlightButton}>
+                          <label
+                            htmlFor="files"
+                            className={classes.modelTabHighlightButton}
+                          >
                             {t("Upload")}
                           </label>
                         ) : (
@@ -756,7 +892,13 @@ const UserInfo = ({ history }) => {
                             </Button>
                           </>
                         )}
-                        <input id="files" name="companyLogo" onChange={onDropFile} style={{ display: "none" }} type="file" />
+                        <input
+                          id="files"
+                          name="companyLogo"
+                          onChange={onDropFile}
+                          style={{ display: "none" }}
+                          type="file"
+                        />
                       </div>
                     </div>
                   </Grid>
@@ -764,11 +906,22 @@ const UserInfo = ({ history }) => {
                     {t("Promotion code")}
                   </Grid>
                   <Grid item xs={8}>
-                    <TextField id="promotionInput" placeholder={t("Please enter the correct promotion code")} className={classes.textField} onChange={inputPromotionCode} value={promotionCode} />
+                    <TextField
+                      id="promotionInput"
+                      placeholder={t("Please enter the correct promotion code")}
+                      className={classes.textField}
+                      onChange={inputPromotionCode}
+                      value={promotionCode}
+                    />
                   </Grid>
                 </Grid>
                 <Grid container justifyContent="center">
-                  <Button id="submitBtn" shape="greenOutlined" sx={{ minWidth: "160px" }} onClick={infoChangeSubmit}>
+                  <Button
+                    id="submitBtn"
+                    shape="greenOutlined"
+                    sx={{ minWidth: "160px" }}
+                    onClick={infoChangeSubmit}
+                  >
                     {t("Submit")}
                   </Button>
                 </Grid>
@@ -776,24 +929,44 @@ const UserInfo = ({ history }) => {
             )}
           </div>
         </Modal>
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPasswordModalOpen} onClose={closeModalOpen} className={classes.modalContainer}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isPasswordModalOpen}
+          onClose={closeModalOpen}
+          className={classes.modalContainer}
+        >
           <div className={classes.modalContent}>
             <Grid container justifyContent="space-between">
               <div className={classes.title}>{t("Change password")}</div>
-              <IconButton id="close_passwordmodal_btn" sx={{ p: 0 }} onClick={closeModalOpen}>
+              <IconButton
+                id="close_passwordmodal_btn"
+                sx={{ p: 0 }}
+                onClick={closeModalOpen}
+              >
                 <CloseIcon fontSize="small" />
               </IconButton>
             </Grid>
             {user.isLoading ? (
               <div className={classes.loadingModal}>
                 <CircularProgress size={30} sx={{ mb: 2 }} />
-                {t("The link has been sent to your e-mail. It may take 5-10 minutes to arrive in your inbox.")}
+                {t(
+                  "The link has been sent to your e-mail. It may take 5-10 minutes to arrive in your inbox."
+                )}
               </div>
             ) : (
               <>
                 <Grid sx={{ p: 2 }}>
-                  <div>{t("You can change your password via the link sent to your e-mail.")}</div>
-                  <div>{t("If you want to continue, please press the Submit button.")}</div>
+                  <div>
+                    {t(
+                      "You can change your password via the link sent to your e-mail."
+                    )}
+                  </div>
+                  <div>
+                    {t(
+                      "If you want to continue, please press the Submit button."
+                    )}
+                  </div>
                 </Grid>
                 <Grid container justifyContent="center">
                   <Button
@@ -816,19 +989,37 @@ const UserInfo = ({ history }) => {
             )}
           </div>
         </Modal>
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isWithdrawModalOpen} onClose={closeModalOpen} className={classes.modalContainer}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isWithdrawModalOpen}
+          onClose={closeModalOpen}
+          className={classes.modalContainer}
+        >
           <div className={classes.modalContent}>
             <GridContainer>
               {user.isLoading ? (
                 <div className={classes.loading}>
                   <CircularProgress size={20} style={{ mb: 2 }} />
-                  <div>{t("Your request to terminate your account has been submitted. Please wait")}</div>
-                  <div>{t("You will be automatically logged out once your account is deleted")}</div>
+                  <div>
+                    {t(
+                      "Your request to terminate your account has been submitted. Please wait"
+                    )}
+                  </div>
+                  <div>
+                    {t(
+                      "You will be automatically logged out once your account is deleted"
+                    )}
+                  </div>
                 </div>
               ) : (
                 <>
                   <GridItem xs={12}>
-                    <CloseIcon id="withdrawModalClose" className={classes.closeImg} onClick={closeModalOpen} />
+                    <CloseIcon
+                      id="withdrawModalClose"
+                      className={classes.closeImg}
+                      onClick={closeModalOpen}
+                    />
                   </GridItem>
                   <GridItem xs={12}>
                     <div className={classes.title}>{t("Delete account")}</div>
@@ -844,18 +1035,42 @@ const UserInfo = ({ history }) => {
                       >
                         {user.isWidthDrawDone ? (
                           <GridItem xs={12} style={{ marginBottom: "10px" }}>
-                            <div>{t("According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination.")}</div>
-                            <div>{t("You will be automatically logged out in 10 seconds. Thank you for using our services.")}</div>
+                            <div>
+                              {t(
+                                "According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination."
+                              )}
+                            </div>
+                            <div>
+                              {t(
+                                "You will be automatically logged out in 10 seconds. Thank you for using our services."
+                              )}
+                            </div>
                           </GridItem>
                         ) : (
                           <>
                             <GridItem xs={12} style={{ marginBottom: "10px" }}>
-                              <div>{t("According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination.")}</div>
-                              <div>{t("It is impossible to restore the account after your account is deleted. Please enter your password if you want to continue.")}</div>
+                              <div>
+                                {t(
+                                  "According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination."
+                                )}
+                              </div>
+                              <div>
+                                {t(
+                                  "It is impossible to restore the account after your account is deleted. Please enter your password if you want to continue."
+                                )}
+                              </div>
                             </GridItem>
                             <GridItem xs={4}>{t("Current password")}</GridItem>
                             <GridItem xs={8}>
-                              <TextField id="passwordInput" type="password" autoComplete="current-password" className={classes.textField} margin="normal" onChange={inputNowPasswordChange} value={password} />
+                              <TextField
+                                id="passwordInput"
+                                type="password"
+                                autoComplete="current-password"
+                                className={classes.textField}
+                                margin="normal"
+                                onChange={inputNowPasswordChange}
+                                value={password}
+                              />
                             </GridItem>
                           </>
                         )}
@@ -864,8 +1079,15 @@ const UserInfo = ({ history }) => {
                   </GridItem>
                   {!user.isWidthDrawDone && (
                     <GridItem xs={12}>
-                      <div style={{ display: "flex", justifyContent: "center" }}>
-                        <Button id="submitBtn" shape="greenOutlined" sx={{ minWidth: "160px" }} onClick={withdrawSubmit}>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <Button
+                          id="submitBtn"
+                          shape="greenOutlined"
+                          sx={{ minWidth: "160px" }}
+                          onClick={withdrawSubmit}
+                        >
                           {t("Submit")}
                         </Button>
                       </div>

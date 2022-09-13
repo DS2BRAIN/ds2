@@ -2,6 +2,8 @@ import torch
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from machine_learning import SettingData
+from torch.utils.data import TensorDataset
+
 
 class TorchAnn(torch.nn.Module, SettingData):
     def __init__(self, input_size, layer_width):
@@ -95,33 +97,78 @@ class TorchAnn(torch.nn.Module, SettingData):
         self.layer_deep = hyper_param.get('layer_deep', 3)
 
     def fit(self, hyper_param: dict):
+        try:
+            import horovod.torch as hvd
+            is_with_horovod = True
+        except:
+            is_with_horovod = False
+
         self.x_train = torch.from_numpy(self.x_train.values).float()
         self.x_test = torch.from_numpy(self.x_test.values).float()
         self.y_train = torch.FloatTensor(self.y_train.values).float()
         self.y_test = torch.FloatTensor(self.y_test.values).float()
         self.layer_deep = hyper_param.get('layer_deep', 3)
         self.activation = self.activation_function.get(hyper_param['activation'].lower(), torch.nn.ReLU)
-        self.output_activation = self.activation_function.get(hyper_param['output_activation'].lower(), torch.nn.Sigmoid)
+        self.output_activation = self.activation_function.get(hyper_param['output_activation'].lower(),
+                                                              torch.nn.Sigmoid)
         epochs = hyper_param.get('epochs', 50)
-        optimizer_function = self.optimizer_function.get(hyper_param['optimizer']['function_name'].lower(), torch.optim.Adam)
-        loss_function_name = self.loss_function.get(hyper_param['loss_function'].lower(), torch.nn.modules.loss.L1Loss)
+        optimizer_function = self.optimizer_function.get(hyper_param['optimizer']['function_name'].lower(),
+                                                         torch.optim.Adam)
+        loss_function_name = self.loss_function.get(hyper_param['loss_function'].lower(),
+                                                    torch.nn.modules.loss.L1Loss)
         loss_function = loss_function_name()
         optimizer = optimizer_function(self.parameters(), lr=hyper_param['optimizer'].get('learning_rate', 0.01))
 
-        for epoch in range(epochs):
-            self.train()
+        if is_with_horovod:
+            print(is_with_horovod)
+            # Initialize Horovod
+            hvd.init()
 
-            optimizer.zero_grad()
+            # Pin GPU to be used to process local rank (one GPU per process)
+            if torch.cuda.is_available():
+                torch.cuda.set_device(hvd.local_rank())
+            train_dataset = TensorDataset(self.x_train, self.y_train)
+            # Partition dataset among workers using DistributedSampler
+            train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, num_replicas=hvd.size(),
+                                                                            rank=hvd.rank())
 
-            train_output = self.forward(self.x_train)
+            train_loader = torch.utils.data.DataLoader(train_dataset, sampler=train_sampler)
 
-            train_loss = loss_function(train_output.squeeze(), self.y_train)
+            # Add Horovod Distributed Optimizer
+            optimizer = hvd.DistributedOptimizer(optimizer, named_parameters=self.named_parameters())
+            # Broadcast parameters from rank 0 to all other processes.
+            hvd.broadcast_parameters(self.state_dict(), root_rank=0)
 
-            if epoch % 100 == 0:
-                print('Train loss at {} is {}'.format(epoch, train_loss.item()))
+            for epoch in range(epochs):
+                for batch_idx, (data, target) in enumerate(train_loader):
+                    self.train()
 
-            train_loss.backward()
-            optimizer.step()
+                    optimizer.zero_grad()
+
+                    train_output = self.forward(data)
+
+                    train_loss = loss_function(train_output.squeeze(), target)
+
+                    if epoch % 100 == 0:
+                        print('Train loss at {} is {}'.format(epoch, train_loss.item()))
+
+                    train_loss.backward()
+                    optimizer.step()
+        else:
+            for epoch in range(epochs):
+                self.train()
+
+                optimizer.zero_grad()
+
+                train_output = self.forward(self.x_train)
+
+                train_loss = loss_function(train_output.squeeze(), self.y_train)
+
+                if epoch % 100 == 0:
+                    print('Train loss at {} is {}'.format(epoch, train_loss.item()))
+
+                train_loss.backward()
+                optimizer.step()
 
         self.eval()
         test_loss = loss_function(torch.squeeze(self(self.x_test)), self.y_test)
