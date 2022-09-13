@@ -89,7 +89,7 @@ function* getLabelProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 라벨링프로젝트 정보를 불러오는데 실패하였습니다."
+        "The labeling project was not loaded due to a temporary error."
       ),
     });
     yield put({
@@ -130,7 +130,7 @@ function* WatchGetRecentLabelProjects() {
 //       type: REQUEST_ERROR_MESSAGE,
 //       data: err.response.data.message
 //         ? err.response.data.message
-//         : "죄송합니다. 일시적인 오류 발생으로 라벨링프로젝트 정보를 불러오는데 실패하였습니다.",
+//         : "The labeling project was not loaded due to a temporary error.",
 //     });
 //     yield put({
 //       type: GET_AITRAINERLABELPROJECT_FAILURE,
@@ -150,7 +150,7 @@ function* deleteLabelProjects(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트가 정상적으로 삭제되었습니다.",
+      data: "The project has been deleted.",
     });
     if (action.data.sortInfo) {
       yield put({
@@ -169,7 +169,7 @@ function* deleteLabelProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 프로젝트 삭제 중 오류가 발생하였습니다. 다시 시도해주세요."
+        "The project was not deleted due to a temporary error. Please try again."
       ),
     });
     yield put({
@@ -201,7 +201,7 @@ function* postLabelProject(action) {
           });
           yield put({
             type: REQUEST_SUCCESS_MESSAGE,
-            data: "프로젝트가 정상적으로 생성되었습니다.",
+            data: "The project has been successfully created.",
           });
         } catch (err) {
           yield put({
@@ -209,7 +209,7 @@ function* postLabelProject(action) {
             data: renderSnackbarMessage(
               "error",
               err.response,
-              "죄송합니다. 파일 업로드 중 오류가 발생하였습니다. 다시 시도해주세요."
+              "The file was not uploaded due to a temporary error. Please try again."
             ),
           });
           yield put({
@@ -231,7 +231,7 @@ function* postLabelProject(action) {
         data: renderSnackbarMessage(
           "error",
           err.response,
-          "죄송합니다. 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요."
+          "The project was not created due to a temporary error. Please try again."
         ),
       });
       yield put({
@@ -258,7 +258,7 @@ function* postLabelProject(action) {
           });
           yield put({
             type: REQUEST_SUCCESS_MESSAGE,
-            data: "프로젝트가 정상적으로 생성되었습니다.",
+            data: "The project has been successfully created.",
           });
         } catch (err) {
           yield put({
@@ -266,7 +266,7 @@ function* postLabelProject(action) {
             data: renderSnackbarMessage(
               "error",
               err.response,
-              "죄송합니다. 파일 업로드 중 오류가 발생하였습니다. 다시 시도해주세요."
+              "The file was not uploaded due to a temporary error. Please try again."
             ),
           });
           yield put({
@@ -288,7 +288,7 @@ function* postLabelProject(action) {
         data: renderSnackbarMessage(
           "error",
           err.response,
-          "죄송합니다. 프로젝트 생성 중 오류가 발생하였습니다. 다시 시도해주세요."
+          "The project was not created due to a temporary error. Please try again."
         ),
       });
       yield put({
@@ -314,7 +314,7 @@ function* getObjectLists(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 라벨링 파일 정보를 불러오는데 실패하였습니다."
+        "The labeling data was not loaded due to a temporary error."
       ),
     });
     yield put({
@@ -339,7 +339,7 @@ function* getLabelProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 라벨링프로젝트 정보를 불러오는데 실패하였습니다."
+        "The labeling project was not loaded due to a temporary error."
       ),
     });
     yield put({
@@ -364,7 +364,7 @@ function* getLabelclasses(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "클래스를 불러오는데 실패하였습니다."
+        "Failed to load class"
       ),
     });
     yield put({
@@ -388,7 +388,7 @@ function* putLabelProject(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트 정보가 정상적으로 변경되었습니다.",
+      data: "The project information has been successfully edited.",
     });
   } catch (err) {
     yield put({
@@ -396,7 +396,7 @@ function* putLabelProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 프로젝트 정보 변경에 실패하였습니다."
+        "The project information was not edited due to a temporary error"
       ),
     });
     yield put({
@@ -426,8 +426,8 @@ function* postLabelClass(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data: action.data.isMarketProject
-        ? "구역이 성공적으로 생성되었습니다."
-        : "클래스가 성공적으로 생성되었습니다.",
+        ? "Zone created successfully."
+        : "The class has been created successfully.",
     });
   } catch (err) {
     yield put({
@@ -436,8 +436,8 @@ function* postLabelClass(action) {
         "error",
         err.response,
         action.data.isMarketProject
-          ? "죄송합니다. 일시적인 오류로 구역 생성에 실패하였습니다."
-          : "죄송합니다. 일시적인 오류로 클래스 생성에 실패하였습니다."
+          ? "Sorry, zone creation failed due to a temporary error."
+          : "The class was not created due to a temporary error."
       ),
     });
     yield put({
@@ -471,7 +471,7 @@ function* putLabelClass(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "클래스가 정상적으로 변경되었습니다.",
+      data: "The class has been successfully edited.",
     });
   } catch (err) {
     yield put({
@@ -479,7 +479,7 @@ function* putLabelClass(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 클래스 변경에 실패하였습니다."
+        "The class was not edited due to a temporary error."
       ),
     });
     yield put({
@@ -504,7 +504,7 @@ function* deleteLabelClass(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "클래스가 성공적으로 삭제되었습니다.",
+      data: "The class has been successfully deleted.",
     });
   } catch (err) {
     yield put({
@@ -512,7 +512,7 @@ function* deleteLabelClass(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 라벨 삭제에 실패하였습니다."
+        "The label was not deleted due to a temporary error."
       ),
     });
     yield put({
@@ -539,7 +539,7 @@ function* postObjectLists(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data:
-        "데이터 업로드가 시작되었습니다. 파일의 형태나 용량에 따라 소요되는 시간이 다를 수 있으며, 알림내역에서 작업 상태를 확인 가능합니다.",
+        "Data upload has started. The time required may vary depending on the file type or capacity, and you can check the job status in the notification history.",
     });
     yield put({
       type: REQUEST_RESET_ISPOSTSUCCESS,
@@ -558,7 +558,7 @@ function* postObjectLists(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 파일 등록에 실패하였습니다. 다시 시도해주세요."
+        "The file upload failed due to a temporary error. Please try again."
       ),
     });
   }
@@ -576,7 +576,7 @@ function* deleteObjectLists(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "파일이 성공적으로 삭제되었습니다.",
+      data: "The file has been successfully deleted.",
     });
     yield put({
       type: GET_OBJECTLISTS_REQUEST,
@@ -588,7 +588,7 @@ function* deleteObjectLists(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 파일 삭제에 실패하였습니다."
+        "The file was not deleted due to a temporary error."
       ),
     });
     yield put({
@@ -606,8 +606,8 @@ function* updateLabelShareGroup(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data: action.data.isUpdate
-        ? "라벨프로젝트 공유를 하였습니다."
-        : "라벨프로젝트 공유를 취소했습니다.",
+        ? "Label project shared."
+        : "Label project sharing canceled.",
     });
     yield put({
       type: UPDATE_LABELSHAREGROUP_SUCCESS,
@@ -619,7 +619,7 @@ function* updateLabelShareGroup(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occurred. Please try again."
       ),
     });
     yield put({
@@ -640,8 +640,8 @@ function* postAiTrainerLabelproject(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data: action.data.isshared
-        ? "라벨프로젝트 공유를 하였습니다."
-        : "라벨프로젝트 공유를 취소했습니다.",
+        ? "Label project shared."
+        : "Label project sharing canceled.",
     });
     yield put({
       type: POST_AITRAINERLABELPROJECT_SUCCESS,
@@ -653,7 +653,7 @@ function* postAiTrainerLabelproject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occurred. Please try again."
       ),
     });
     yield put({

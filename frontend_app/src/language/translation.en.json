@@ -688,7 +688,7 @@
   "Unsubscribing failed due to a temporary error. Please try again.": "Unsubscribing failed due to a temporary error. Please try again.",
   "The plan that will be applied from next month has been canceled successfully.": "The plan that will be applied from next month has been canceled successfully.",
   "The plan was not canceled due to a temporary error. Please try again.": "The plan was not canceled due to a temporary error. Please try again.",
-  " All notifications have been marked as read.": " All notifications have been marked as read.",
+  "All notifications have been marked as read.": "All notifications have been marked as read.",
   "The project has been deleted.": "The project has been deleted.",
   "The project was not deleted due to a temporary error. Please try again.": "The project was not deleted due to a temporary error. Please try again.",
   "The project has been successfully created.": "The project has been successfully created.",
@@ -2327,5 +2327,6 @@
   "Enter the host": "Enter the host",
   "Please enter the host.": "Please enter the host.",
   "Enter the token": "Enter the token",
-  "Please enter the token.": "Please enter the token."
+  "Please enter the token.": "Please enter the token.",
+  "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again."
 }

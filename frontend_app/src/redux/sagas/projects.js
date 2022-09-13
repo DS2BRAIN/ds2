@@ -236,7 +236,7 @@ function* deleteProjects(action) {
       });
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
-        data: "프로젝트가 삭제되었습니다.",
+        data: "The project has been deleted.",
       });
     } else if (
       result.data.failList.length > 0 &&
@@ -248,7 +248,7 @@ function* deleteProjects(action) {
       });
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
-        data: "선택한 프로젝트중 일부가 삭제되었습니다.",
+        data: "Some of the selected projects have been deleted.",
       });
     } else if (
       result.data.failList.length > 0 &&
@@ -260,7 +260,7 @@ function* deleteProjects(action) {
       yield put({
         type: REQUEST_ERROR_MESSAGE,
         data:
-          "선택한 모든 프로젝트가 삭제를 실패했습니다. 프로젝트는 생성한 이후 일정 시간이 경과되어야 삭제 가능합니다.",
+          "Deletion of all selected projects failed. Projects cannot be deleted until a certain amount of time has elapsed since they were created.",
       });
     }
     yield put({
@@ -277,7 +277,7 @@ function* deleteProjects(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 모델정보를 불러오는데 실패했습니다. 잠시후 다시 시도해주세요."
+        "The model information could not be retrieved. Please try again in a moment."
       ),
     });
     yield put({
@@ -305,7 +305,7 @@ function* deleteOpsProjects(action) {
         });
         yield put({
           type: REQUEST_SUCCESS_MESSAGE,
-          data: "프로젝트가 삭제되었습니다.",
+          data: "The project has been deleted.",
         });
         yield put({
           type: GET_OPSPROJECTS_REQUEST,
@@ -316,8 +316,8 @@ function* deleteOpsProjects(action) {
         yield put({
           type: REQUEST_ERROR_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 프로젝트 삭제중 오류가 발생했습니다."
-            : "프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다.",
+            ? "An error occurred while deleting the selected project."
+            : "Deleting a project is possible after a certain period of time has passed since creation.",
         });
         yield put({
           type: DELETE_PROJECTS_FAILURE,
@@ -341,8 +341,8 @@ function* deleteOpsProjects(action) {
         yield put({
           type: REQUEST_SUCCESS_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 프로젝트중 일부가 삭제되었습니다."
-            : "선택한 프로젝트중 일부가 삭제되었습니다. 프로젝트는 생성한 이후 일정 시간이 경과되어야 삭제 가능합니다.",
+            ? "Some of the selected projects have been deleted."
+            : "Some of the selected projects have been deleted. A project can only be deleted after a certain amount of time has passed since it was created.",
         });
         yield put({
           type: GET_OPSPROJECTS_REQUEST,
@@ -356,7 +356,7 @@ function* deleteOpsProjects(action) {
         });
         yield put({
           type: REQUEST_SUCCESS_MESSAGE,
-          data: "선택한 모든 프로젝트가 삭제되었습니다.",
+          data: "All selected projects have been deleted.",
         });
         yield put({
           type: GET_OPSPROJECTS_REQUEST,
@@ -367,8 +367,8 @@ function* deleteOpsProjects(action) {
         yield put({
           type: REQUEST_ERROR_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 모든 프로젝트가 삭제중 오류가 발생했습니다."
-            : "선택한 모든 프로젝트가 삭제를 실패했습니다. 프로젝트는 생성한 이후 일정 시간이 경과되어야 삭제 가능합니다.",
+            ? "An error occurred while deleting all selected projects."
+            : "Deletion of all selected projects failed. Projects cannot be deleted until a certain amount of time has elapsed since they were created.",
         });
         yield put({
           type: DELETE_PROJECTS_FAILURE,
@@ -387,7 +387,7 @@ function* deleteOpsProjects(action) {
     // });
     // yield put({
     //   type: REQUEST_SUCCESS_MESSAGE,
-    //   data: "프로젝트가 삭제되었습니다.",
+    //   data: "The project has been deleted.",
     // });
     // yield put({
     //   type: GET_OPSPROJECTS_REQUEST,
@@ -432,8 +432,8 @@ function* deleteJupyterProjects(action) {
         yield put({
           type: REQUEST_SUCCESS_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "프로젝트가 삭제되었습니다. 컴퓨터 재시작 시 적용됩니다."
-            : "프로젝트가 삭제되었습니다.",
+            ? "The project has been deleted. It will be applied when the computer is restarted."
+            : "The project has been deleted.",
         });
         yield put({
           type: GET_JUPYTERPROJECTS_REQUEST,
@@ -444,8 +444,8 @@ function* deleteJupyterProjects(action) {
         yield put({
           type: REQUEST_ERROR_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 프로젝트 삭제중 오류가 발생했습니다."
-            : "프로젝트 삭제는 생성한 이후 일정 시간 경과 후 가능합니다.",
+            ? "An error occurred while deleting the selected project."
+            : "Deleting a project is possible after a certain period of time has passed since creation.",
         });
         yield put({
           type: DELETE_PROJECTS_FAILURE,
@@ -469,8 +469,8 @@ function* deleteJupyterProjects(action) {
         yield put({
           type: REQUEST_SUCCESS_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 프로젝트중 일부가 삭제되었습니다."
-            : "선택한 프로젝트중 일부가 삭제되었습니다. 프로젝트는 생성한 이후 일정 시간이 경과되어야 삭제 가능합니다.",
+            ? "Some of the selected projects have been deleted."
+            : "Some of the selected projects have been deleted. A project can only be deleted after a certain amount of time has passed since it was created.",
         });
         yield put({
           type: GET_JUPYTERPROJECTS_REQUEST,
@@ -485,7 +485,7 @@ function* deleteJupyterProjects(action) {
         yield put({
           type: REQUEST_SUCCESS_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 모든 프로젝트가 삭제되었습니다. 컴퓨터 재시작 시 적용됩니다."
+            ? "All selected projects have been deleted. It will be applied when the computer is restarted."
             : "선택한 모든 프로젝트가 삭제되었습니다.",
         });
         yield put({
@@ -497,8 +497,8 @@ function* deleteJupyterProjects(action) {
         yield put({
           type: REQUEST_ERROR_MESSAGE,
           data: process.env.REACT_APP_ENTERPRISE
-            ? "선택한 모든 프로젝트가 삭제중 오류가 발생했습니다."
-            : "선택한 모든 프로젝트가 삭제를 실패했습니다. 프로젝트는 생성한 이후 일정 시간이 경과되어야 삭제 가능합니다.",
+            ? "An error occurred while deleting all selected projects."
+            : "Deletion of all selected projects failed. Projects cannot be deleted until a certain amount of time has elapsed since they were created.",
         });
         yield put({
           type: DELETE_PROJECTS_FAILURE,
@@ -612,7 +612,7 @@ function* postDataConnector(action) {
       });
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
-        data: "데이터커넥터가 등록되었습니다.",
+        data: "The data connector has been registered.",
       });
       yield put({
         type: CLOSE_MODAL_CONTENT,
@@ -651,7 +651,7 @@ function* postConnectorWithAuthFile(action) {
       });
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
-        data: "데이터커넥터가 등록되었습니다.",
+        data: "The data connector has been registered.",
       });
       yield put({
         type: CLOSE_MODAL_CONTENT,
@@ -663,7 +663,7 @@ function* postConnectorWithAuthFile(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 데이터커넥터 등록중 오류가 발생하였습니다. 입력 정보를 확인해주세요."
+        "An error occurred while registering the data connector. Please check the information you entered again."
       ),
     });
     yield put({
@@ -706,7 +706,7 @@ function* postPurchaseModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 인하여 모델 사용권을 구매하지 못하였습니다."
+        "Model license purchase failed due to a temporary error."
       ),
     });
     yield put({
@@ -738,7 +738,7 @@ function* postOpsProjectSellPrice(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 판매요청 등록중 오류가 발생하였습니다. 입력 정보를 확인해주세요."
+        "An error occurred while registering the sales request. Please check the information you entered again."
       ),
     });
     yield put({
@@ -766,7 +766,7 @@ function* postConnectorWithFile(action) {
       });
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
-        data: "데이터커넥터가 등록되었습니다.",
+        data: "The data connector has been registered.",
       });
       yield put({
         type: CLOSE_MODAL_CONTENT,
@@ -811,7 +811,7 @@ function* getProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다."
+        "The sample data was not retrieved due to a temporary error."
       ),
     });
     yield put({
@@ -833,10 +833,10 @@ function* getOpsProject(action) {
   } catch (err) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트 정보 갱신중",
+      data: "Updating project information",
       // data: err.response.data.message
       //   ? err.response.data.message
-      //   : "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다.",
+      //   : "The sample data was not retrieved due to a temporary error.",
     });
     yield put({
       type: GET_PROJECT_FAILURE,
@@ -860,7 +860,7 @@ function* getMarketProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다."
+        "The sample data was not retrieved due to a temporary error."
       ),
     });
     yield put({
@@ -882,11 +882,11 @@ function* getJupyterProject(action) {
   } catch (err) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트 정보 갱신중",
+      data: "Updating project information",
       // type: REQUEST_ERROR_MESSAGE,
       // data: err.response.data.message
       //   ? err.response.data.message
-      //   : "죄송합니다. 일시적인 오류로 인하여, 샘플 정보를 가져오는데 실패하였습니다.",
+      //   : "The sample data was not retrieved due to a temporary error.",
     });
     yield put({
       type: GET_PROJECT_FAILURE,
@@ -907,7 +907,7 @@ function* putProjectName(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트명이 정상적으로 변경되었습니다.",
+      data: "The project title has been successfully edited.",
     });
     // yield put({
     //     type: GET_RECENTPROJECTS_REQUEST,
@@ -919,7 +919,7 @@ function* putProjectName(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 인하여, 프로젝트명 변경에 실패하였습니다."
+        "The project title was not edited due to a temporary error."
       ),
     });
     yield put({
@@ -941,7 +941,7 @@ function* putProjectDescription(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트 설명이 정상적으로 변경되었습니다.",
+      data: "The project description has been successfully edited.",
     });
   } catch (err) {
     yield put({
@@ -949,7 +949,7 @@ function* putProjectDescription(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 인하여, 프로젝트 설명 변경에 실패하였습니다."
+        "The project description was not edited due to a temporary error."
       ),
     });
     yield put({
@@ -1011,7 +1011,7 @@ function* stopProject(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트가 성공적으로 중단되었습니다.",
+      data: "The project has been successfully suspended.",
     });
   } catch (err) {
     yield put({
@@ -1019,7 +1019,7 @@ function* stopProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. AI개발을 다시 중단해주세요."
+        "A temporary error occurred. Please stop the project development."
       ),
     });
     yield put({
@@ -1065,7 +1065,7 @@ function* startProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. AI개발을 다시 시작해주세요."
+        "A temporary error occurred. Please restart AI development."
       ),
     });
   }
@@ -1090,7 +1090,7 @@ function* postFavoriteModel(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 즐겨찾기 추가에 실패했습니다. 잠시후 다시 시도해주세요."
+        "Sorry, we can’t add it to your Favorites. Please try again in a moment"
       ),
     });
     yield put({
@@ -1111,7 +1111,7 @@ function* putProjectWebhooks(action) {
     const result = yield api.updateProject(projectInfo, action.data.id);
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "웹훅 정보가 정상적으로 변경되었습니다.",
+      data: "The webhooks URL & method have been successfully edited.",
     });
     yield put({
       type: PUT_PROJECTWEBHOOKS_SUCCESS,
@@ -1142,8 +1142,8 @@ function* putProjectStatus(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data: action.data.priority_flag
-        ? "프로젝트가 우선적으로 학습될 예정입니다."
-        : "프로젝트 우선적 학습을 취소하였습니다.",
+        ? "This project will start training first."
+        : "Project priority training has been canceled.",
     });
     yield put({
       type: PUT_PROJECTSTATUS_SUCCESS,
@@ -1173,8 +1173,8 @@ function* updateShareGroup(action) {
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
       data: action.data.isUpdate
-        ? "프로젝트 공유를 하였습니다."
-        : "프로젝트 공유를 취소했습니다.",
+        ? "Project shared."
+        : "Project sharing canceled.",
     });
     yield put({
       type: UPDATE_SHAREGROUP_SUCCESS,
@@ -1206,7 +1206,7 @@ function* putProjectServiceApp(action) {
     );
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "서비스앱 파라미터가 저장되었습니다.",
+      data: "Service app parameter has been successfully saved.",
     });
     yield put({
       type: PUT_PROJECTSERVICEAPP_SUCCESS,
@@ -1246,7 +1246,7 @@ function* putMarketProject(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "프로젝트 정보가 정상적으로 변경되었습니다.",
+      data: "The project information has been successfully edited.",
     });
   } catch (err) {
     yield put({
@@ -1254,7 +1254,7 @@ function* putMarketProject(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 프로젝트 정보 변경에 실패하였습니다."
+        "The project information was not edited due to a temporary error"
       ),
     });
     yield put({
@@ -1284,7 +1284,7 @@ function* getDataconnectorInfo(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 데이터커넥터 정보 조회에 실패하였습니다."
+        "Sorry. Data connector information inquiry failed due to a temporary error."
       ),
     });
 
