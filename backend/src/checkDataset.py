@@ -500,6 +500,9 @@ class CheckDataset():
                         "category_id": label['labelclass'],
                         "id": labels_count
                     }
+
+                    if label['labeltype'] == 'box' and not is_train_data:
+                        del data["segmentation"]
                     
                     data["bbox"] = bbox
 
