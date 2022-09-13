@@ -2006,7 +2006,6 @@
   "Please enter your daily upload time.": "일일 업로드 시간을 입력해 주세요.",
   "The video start point exceeds the video length.": "영상 시작점이 영상 길이를 초과했습니다.",
   "You cannot delete the label project automatically created as a market project.": "마켓프로젝트로 자동 생성된 라벨프로젝트는 삭제하실 수 없습니다.",
-  "Payment": "결제",
   "Paid": "결제 완료",
   "No Paid": "미결제",
   "Projects that have not been auto-labeled cannot be refreshed.": "오토라벨링이 진행되지 않은 프로젝트는 새로고침이 불가합니다.",
