@@ -1684,14 +1684,16 @@ class ManageLabeling:
             raise ex.NotAllowedLabelProjectIdEx(labelproject_id)
 
         sthreefile_status = sthreefile_data['status']
+        sthreefile_work_assignee = sthreefile_data['workAssignee']
         if sthreefile_data['workAssignee'] is None:
             if sthreefile_status == 'prepare':
+                sthreefile_status = 'working'
+                sthreefile_work_assignee = user['email']
                 sthreefile_dict = {
-                    'status': 'working',
-                    'workAssignee': user['email']
+                    'status': sthreefile_status,
+                    'workAssignee': sthreefile_work_assignee
                 }
                 self.dbClass.updateSthreeFileById(sthreefile_id, sthreefile_dict)
-                sthreefile_status = 'working'
             elif sthreefile_status == 'review':
                 sthreefile_dict = {
                     'reviewer': user['email']
@@ -1713,7 +1715,7 @@ class ManageLabeling:
                 'reviewer': sthreefile_data.get('reviewer', None),
                 's3key': sthreefile_data.get('s3key', None),
                 'status': sthreefile_status,
-                'workAssignee': sthreefile_data.get('workAssignee', None),
+                'workAssignee': sthreefile_work_assignee,
                 'labelData': sthreefile_data.get('labelData', None),
                 'rawData': sthreefile_data.get('rawData', None),
                 'workapp': labelproject_dict['workapp']
@@ -1763,7 +1765,7 @@ class ManageLabeling:
             'isDeleted': sthreefile_data['isDeleted'],
             'labels': sthreefile_data['labels'],
             'reviewer': sthreefile_data['reviewer'],
-            'workAssignee': sthreefile_data['workAssignee'],
+            'workAssignee': sthreefile_work_assignee,
             'inspectionResult': sthreefile_data.get('inspectionResult', None)
         }
 
