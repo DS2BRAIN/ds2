@@ -83,7 +83,7 @@ function* getMainPageData() {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다."
+        "A temporary error has occurred."
       ),
     });
     yield put({
@@ -108,7 +108,7 @@ function* getMeData() {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다."
+        "A temporary error has occurred."
       ),
     });
     yield put({
@@ -133,7 +133,7 @@ function* getCardData() {
         data: renderSnackbarMessage(
           "error",
           err.response,
-          "죄송합니다. 일시적인 오류 발생으로 카드정보를 불러오는데 실패하였습니다."
+          "Card information retrieval failed due to a temporary error."
         ),
       });
       yield put({
@@ -192,13 +192,12 @@ function* postAppCode() {
       );
       yield put({
         type: REQUEST_SUCCESS_MESSAGE,
-        data: "앱코드가 성공적으로 재발급 되었습니다.",
+        data: "App code has been successfully reissued.",
       });
     } else {
       yield put({
         type: REQUEST_ERROR_MESSAGE,
-        data:
-          "죄송합니다. 일시적인 오류가 발생으로 인하여 앱코드 발행에 실패하였습니다.",
+        data: "App code was not issued due to a temporary error.",
       });
       yield put({
         type: POST_APPCODE_FAILURE,
@@ -210,7 +209,7 @@ function* postAppCode() {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 인하여 앱코드 발행에 실패하였습니다."
+        "App code was not issued due to a temporary error."
       ),
     });
     yield put({
@@ -230,7 +229,7 @@ function* postResetPassword(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "고객님의 메일로 링크를 보내드렸습니다.",
+      data: "The link has been sent to your e-mail.",
     });
     yield put({
       type: CLOSE_MODAL_CONTENT,
@@ -241,7 +240,7 @@ function* postResetPassword(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류 발생으로 인하여 메일전송에 실패하였습니다."
+        "E-mail sending failed due to a temporary error."
       ),
     });
     yield put({
@@ -268,7 +267,7 @@ function* postWidthdraw(action) {
           data: renderSnackbarMessage(
             "error",
             err.response,
-            "죄송합니다. 다시한번 시도해주세요."
+            "Please try again."
           ),
         });
         yield put({
@@ -279,11 +278,11 @@ function* postWidthdraw(action) {
   } catch (err) {
     let errorMessage = "";
     if (err.response.status === 400) {
-      errorMessage = "비밀번호를 다시 한번 확인해 주세요.";
+      errorMessage = "Please check your password again.";
     } else {
       errorMessage = err.response.data.message
         ? err.response.data.message
-        : "죄송합니다. 다시 한번 시도해 주세요.";
+        : "Please try again.";
     }
     yield put({
       type: REQUEST_ERROR_MESSAGE,
@@ -307,7 +306,7 @@ function* postCompanyLogo(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "로고를 업로드 하였습니다.",
+      data: "Logo uploaded.",
     });
   } catch (err) {
     yield put({
@@ -315,7 +314,7 @@ function* postCompanyLogo(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 로고 업로드에 실패하였습니다. 다시 시도해주세요."
+        "Logo upload failed. Please try again."
       ),
     });
     yield put({
@@ -335,7 +334,7 @@ function* deleteCompanyLogo(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "로고를 삭제 하였습니다.",
+      data: "The logo has been deleted.",
     });
   } catch (err) {
     yield put({
@@ -343,7 +342,7 @@ function* deleteCompanyLogo(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 로고 삭제에 실패하였습니다. 다시 시도해주세요."
+        "Logo deleting failed. Please try again."
       ),
     });
     yield put({
@@ -364,7 +363,7 @@ function* putUser(action) {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "회원님의 정보가 성공적으로 변경되었습니다.",
+      data: "Your information has been successfully edited.",
     });
     yield put({
       type: CLOSE_MODAL_CONTENT,
@@ -375,7 +374,7 @@ function* putUser(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적 오류로 인하여, 회원정보 변경에 실패하였습니다. 다시 시도해주세요."
+        "Information editing failed due to a temporary error. Please try again."
       ),
     });
     yield put({
@@ -399,7 +398,7 @@ function* putUserWithoutMessage(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요."
+        "Error setting the introduction page and language. Please refresh and try again."
       ),
     });
     yield put({
@@ -433,7 +432,7 @@ function* postCancelPlan(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 인하여 구독취소에 실패하였습니다. 다시 시도해주세요."
+        "Unsubscribing failed due to a temporary error. Please try again."
       ),
     });
     yield put({
@@ -454,7 +453,8 @@ function* postCancelNextPlan() {
     });
     yield put({
       type: REQUEST_SUCCESS_MESSAGE,
-      data: "다음달 부터 적용될 플랜을 정상적으로 취소하였습니다.",
+      data:
+        "The plan that will be applied from next month has been canceled successfully.",
     });
     yield put({
       type: CLOSE_MODAL_CONTENT,
@@ -465,7 +465,7 @@ function* postCancelNextPlan() {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류로 인하여 이용플랜 취소에 실패하였습니다. 다시 시도해주세요."
+        "The plan was not canceled due to a temporary error. Please try again."
       ),
     });
     yield put({
@@ -490,7 +490,7 @@ function* postCheckAsynctasks(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occurred. Please try again."
       ),
     });
     yield put({
@@ -510,7 +510,7 @@ function* postCheckAllAsynctasks(action) {
     });
     yield put({
       REQUEST_SUCCESS_MESSAGE,
-      data: "전체 알림을 읽음 처리하였습니다.",
+      data: "All notifications have been marked as read.",
     });
   } catch (err) {
     yield put({
@@ -518,7 +518,7 @@ function* postCheckAllAsynctasks(action) {
       data: renderSnackbarMessage(
         "error",
         err.response,
-        "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
+        "A temporary error has occurred. Please try again."
       ),
     });
     yield put({
