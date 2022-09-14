@@ -887,9 +887,9 @@ class Daemon():
                     if custom_model_class == TorchAnn:
                         model_file_name = f'model.pt'
                     elif custom_model_class == FastAnn:
-                        importance_data = f'model.pt'
+                        model_file_name = f'model.pt'
                     elif custom_model_class == KerasAnn:
-                        importance_data = f'model.savedmodel'
+                        model_file_name = f'model.savedmodel'
                         platform = 'tensorflow_savedmodel'
 
                     with open(f'{model_dir_path}/{model["id"]}/config.pbtxt', 'w') as w:
