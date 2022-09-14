@@ -297,6 +297,7 @@ class flowTable(MySQLModel):
     id = pw.AutoField()
     flow_name = pw.CharField(null=True)
     flow_type = pw.CharField(null=True, default='model')
+    flow_token = pw.TextField(null=True)
     status = pw.IntegerField(null=True)
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
