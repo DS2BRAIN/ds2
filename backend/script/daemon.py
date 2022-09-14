@@ -879,30 +879,10 @@ class Daemon():
                 self.updateStatusForTraining(project, model, instancesUser, instanceId)
 
                 os.makedirs(f'{model_dir_path}/{model["id"]}/1/', exist_ok=True)
-                with open(f'{model_dir_path}/{model["id"]}/config.pbtxt', 'w') as w:
-                    w.writelines([
-                        f'name: "{model["id"]}"\n',
-                        'max_batch_size: 100\n',
-                        'dynamic_batching { preferred_batch_size: [ 50 ]}\n',
-                        'instance_group [ { count: 2 }]\n',
-                        'input [\n',
-                        '  {\n',
-                        f'    name: "input0"\n',
-                        '    data_type: TYPE_FP32\n',
-                        f'    dims: [ {len(df.columns) - 1} ]\n',
-                        '  }\n',
-                        ']\n',
-                        'output [\n',
-                        '  {\n',
-                        '    name: "output0"\n',
-                        '    data_type: TYPE_FP32\n',
-                        '    dims: [ 1 ]\n',
-                        '  }\n',
-                        ']\n',
-                    ])
                 if 'custom' == project['option']:
                     status_text = None
                     importance_data = None
+                    platform = 'pytorch_libtorch'
                     model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}.dsm'
                     if custom_model_class == TorchAnn:
                         model_file_name = f'model.pt'
@@ -910,6 +890,30 @@ class Daemon():
                         importance_data = f'model.pt'
                     elif custom_model_class == KerasAnn:
                         importance_data = f'model.savedmodel'
+                        platform = 'tensorflow_savedmodel'
+
+                    with open(f'{model_dir_path}/{model["id"]}/config.pbtxt', 'w') as w:
+                        w.writelines([
+                            f'name: "{model["id"]}"\n',
+                            f'platform: "{platform}"\n',
+                            'max_batch_size: 100\n',
+                            'dynamic_batching { preferred_batch_size: [ 50 ]}\n',
+                            'instance_group [ { count: 2 }]\n',
+                            'input [\n',
+                            '  {\n',
+                            f'    name: "input0"\n',
+                            '    data_type: TYPE_FP32\n',
+                            f'    dims: [ {len(df.columns) - 1} ]\n',
+                            '  }\n',
+                            ']\n',
+                            'output [\n',
+                            '  {\n',
+                            '    name: "output0"\n',
+                            '    data_type: TYPE_FP32\n',
+                            '    dims: [ 1 ]\n',
+                            '  }\n',
+                            ']\n',
+                        ])
 
                     model_file_path = f'{model_dir_path}/{model["id"]}/1/{model_file_name}'
                     hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
