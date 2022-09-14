@@ -884,6 +884,7 @@ class Daemon():
                     status_text = None
                     importance_data = None
                     model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}'
+                    os.makedirs(f'{model_dir_path}/{model["id"]}/1/', exist_ok=True)
                     model_file_path = f'{model_dir_path}/{model["id"]}/1/{model_file_name}'
                     hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
                     train_custom_params = {
