@@ -349,7 +349,27 @@ class ManageFlow:
         else:
             return SEARCH_PROJECT_ERROR
 
+    def run_flow(self, flow_token, flow_id):
 
+        flow = self.dbClass.getOneFlowById(flow_id)
+
+        if flow.flow_token != flow_token:
+            return NOT_ALLOWED_TOKEN_ERROR
+
+        if flow['is_deleted']:
+            return ALREADY_DELETED_OBJECT
+
+        flow = self.dbClass.getOneFlowById(flow_id)
+        flow_nodes = [x.__dict__['__data__'] for x in self.dbClass.getFlowNodesByFlowId(flow_id, isSimplified=True)]
+        flow['flow_nodes'] = flow_nodes
+        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowNodeId(flow_id, isSimplified=True)]
+        flow['monitoring_alerts'] = monitoring_alerts
+
+        #TODO: Develop when get a sample JSON is ready
+
+        result = None
+
+        return HTTP_200_OK, result
 
 if __name__ == '__main__':
     ManageFlow()
