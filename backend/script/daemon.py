@@ -440,7 +440,7 @@ class Daemon():
         custom_model_class.set_train_data(df, dep_var, project["id"])
         custom_model_class.train(df, dep_var, hyper_param, project["id"])
         try:
-            custom_model_class.save(model_file_path.split(self.utilClass.save_path)[1])
+            custom_model_class.save(os.path.dirname(os.path.realpath(model_file_path.split(self.utilClass.save_path)[1])))
         except:
             custom_model_class.save(model_file_path)    
 
@@ -765,7 +765,7 @@ class Daemon():
 
         self.dbClass.updateProjectStatusById(project['id'], 11, "11 : 모델 학습이 시작되었습니다.")
 
-        model_dir_path = f'{self.utilClass.save_path}/model'
+        model_dir_path = f'{self.utilClass.save_path}/models'
         if not os.path.exists(model_dir_path):
             os.makedirs(model_dir_path)
         custom_model_class = None
@@ -880,8 +880,8 @@ class Daemon():
                 if 'custom' == project['option']:
                     status_text = None
                     importance_data = None
-                    model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}.dsm'
-                    model_file_path = f'{model_dir_path}/{model["id"]}/{model_file_name}'
+                    model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}.'
+                    model_file_path = f'{model_dir_path}/{model["id"]}/1/{model_file_name}'
                     hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
                     train_custom_params = {
                         'df': df,
