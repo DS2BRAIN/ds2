@@ -78,5 +78,5 @@ async def getInstantUseflow(flow_id: int, flow_token: str, response: Response):
 
 @router.post("/run-flow/{flow_id}/")
 async def runFlow(flow_id: int, flow_token: str, response: Response):
-    response.status_code, result = manageFlowClass.run_flow(flow_token, flow_id) # TODO: Develop when get a sample JSON is ready
+    response.status_code, result = manageFlowClass.run_flow(flow_token, flow_id)
     return result
