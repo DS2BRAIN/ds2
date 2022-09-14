@@ -39,6 +39,7 @@ import sys
 import random
 from src.errors import exceptions as ex
 import numpy as np
+import tensorflow as tf
 
 class EnterpriseFailed(Exception):
     def __init__(self, m):
@@ -397,7 +398,8 @@ class Daemon():
         torch_model = TorchAnn(len(df.columns) - 1, hyper_param.get('layer_width', 0))
         torch_model.set_train_data(df, dep_var, project["id"])
         torch_model.fit(hyper_param)
-        torch.save(torch_model.state_dict(), model_file_path + ".pt")
+        torch.save(torch_model, model_file_path)
+        torch_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None
         try:
@@ -418,8 +420,8 @@ class Daemon():
         custom_model_class = custom_model_class()
         custom_model_class.set_train_data(df, dep_var, project["id"], is_fastai=True)
         trained_model = custom_model_class.train(hyper_param)
-        trained_model.export(model_file_path + ".pkl")
-        torch.save(trained_model.model, f"{model_file_path}" + ".pt")
+        torch.save(trained_model, model_file_path)
+        trained_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None
         try:
@@ -440,12 +442,8 @@ class Daemon():
         custom_model_class = custom_model_class()
         custom_model_class.set_train_data(df, dep_var, project["id"])
         custom_model_class.train(df, dep_var, hyper_param, project["id"])
-        save_path = model_file_path.split(self.utilClass.save_path)[1]
-        print(save_path)
-        try:
-            custom_model_class.save(save_path)
-        except:
-            custom_model_class.save(model_file_path)    
+        custom_model_class.save(model_file_path.replace("savedmodel, dsm"))
+        tf.saved_model.save(custom_model_class, model_file_path)
 
         importance_data = None
         try:
@@ -905,7 +903,14 @@ class Daemon():
                 if 'custom' == project['option']:
                     status_text = None
                     importance_data = None
-                    model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}'
+                    model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}.dsm'
+                    if custom_model_class == TorchAnn:
+                        model_file_name = f'model.pt'
+                    elif custom_model_class == FastAnn:
+                        importance_data = f'model.pt'
+                    elif custom_model_class == KerasAnn:
+                        importance_data = f'model.savedmodel'
+
                     model_file_path = f'{model_dir_path}/{model["id"]}/1/{model_file_name}'
                     hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
                     train_custom_params = {
