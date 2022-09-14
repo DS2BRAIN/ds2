@@ -52,6 +52,7 @@ class ManageFlow:
         flow_raw = self.dbClass.createFlow({
             "flow_name": flow_data.flow_name,
             "flow_node_info": flow_data.flow_node_info,
+            "flow_token": uuid4(),
             "user": user.id,
         })
 
@@ -324,6 +325,51 @@ class ManageFlow:
             #     break
 
             await asyncio.sleep(3)
+
+    def get_flow_by_token_and_id(self, flow_token, flow_id):
+
+        flow = self.dbClass.getOneFlowById(flow_id)
+
+        if flow.flow_token != flow_token:
+            return NOT_ALLOWED_TOKEN_ERROR
+
+        if flow['is_deleted']:
+            return ALREADY_DELETED_OBJECT
+
+        flow = self.dbClass.getOneFlowById(flow_id)
+        flow_nodes = [x.__dict__['__data__'] for x in self.dbClass.getFlowNodesByFlowId(flow_id, isSimplified=True)]
+        flow['flow_nodes'] = flow_nodes
+        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowNodeId(flow_id, isSimplified=True)]
+        flow['monitoring_alerts'] = monitoring_alerts
+
+        if flow['is_shared']:
+            return HTTP_200_OK, flow
+        elif flow.get('is_sample'):
+            return HTTP_200_OK, flow
+        else:
+            return SEARCH_PROJECT_ERROR
+
+    def run_flow(self, flow_token, flow_id):
+
+        flow = self.dbClass.getOneFlowById(flow_id)
+
+        if flow.flow_token != flow_token:
+            return NOT_ALLOWED_TOKEN_ERROR
+
+        if flow['is_deleted']:
+            return ALREADY_DELETED_OBJECT
+
+        flow = self.dbClass.getOneFlowById(flow_id)
+        flow_nodes = [x.__dict__['__data__'] for x in self.dbClass.getFlowNodesByFlowId(flow_id, isSimplified=True)]
+        flow['flow_nodes'] = flow_nodes
+        monitoring_alerts = [x.__dict__['__data__'] for x in self.dbClass.getMonitoringAlertsByFlowNodeId(flow_id, isSimplified=True)]
+        flow['monitoring_alerts'] = monitoring_alerts
+
+        #TODO: Develop when get a sample JSON is ready
+
+        result = None
+
+        return HTTP_200_OK, result
 
 if __name__ == '__main__':
     ManageFlow()

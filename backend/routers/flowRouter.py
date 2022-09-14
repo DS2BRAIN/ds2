@@ -68,5 +68,15 @@ async def deleteFlow(token: str, response: Response, flow_id):
     return result
 
 @router.get('/sse/flow-status/{flow_id}/')
-async def sse_model_info(request: Request, flow_id: int, token: str):
+async def sse_flow_info(request: Request, flow_id: int, token: str):
     return EventSourceResponse(manageFlowClass.get_flow_status(token, flow_id, request))
+
+@router.get("/flows/instant-use/{flow_id}/")
+async def getInstantUseflow(flow_id: int, flow_token: str, response: Response):
+    response.status_code, result = manageFlowClass.get_flow_by_token_and_id(flow_token, flow_id)
+    return result
+
+@router.post("/run-flow/{flow_id}/")
+async def runFlow(flow_id: int, flow_token: str, response: Response):
+    response.status_code, result = manageFlowClass.run_flow(flow_token, flow_id)
+    return result
