@@ -183,7 +183,7 @@ class ManageUser:
 
     def register_metabase_user(self, user: dict, raw_password: str):
 
-        meta_email = user.get('emailContent')
+        meta_email = user.get('email')
         meta_names = meta_email.split('@')
         meta_first_name = meta_names[0]
         meta_last_name = meta_names[1]
