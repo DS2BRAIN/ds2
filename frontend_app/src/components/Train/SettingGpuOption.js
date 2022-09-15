@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import Button from "components/CustomButtons/Button";
@@ -8,9 +8,9 @@ import { Checkbox, Grid } from "@mui/material";
 import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
-import {openErrorSnackbarRequestAction} from "../../redux/reducers/messages";
+import { openErrorSnackbarRequestAction } from "../../redux/reducers/messages";
 import * as api from "../../controller/api";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const SettingGpuOption = ({
   status,
@@ -33,7 +33,6 @@ const SettingGpuOption = ({
   const [tokenValue, setTokenValue] = useState("");
   const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList);
 
-
   const submitAddServer = () => {
     console.log("hostValue", hostValue);
     console.log("tokenValue", tokenValue);
@@ -46,28 +45,33 @@ const SettingGpuOption = ({
       return;
     }
 
-    api.postAddServer({
-      ip: hostValue,
-      access_token: tokenValue,
-    }).then((res) => {
+    api
+      .postAddServer({
+        ip: hostValue,
+        access_token: tokenValue,
+      })
+      .then((res) => {
         if (res.data?.gpu_info) {
-          setAvailableGpuListTotal(Object.assign({}, availableGpuListTotal, {
-            [res.data.name]: res.data.gpu_info
-          }))
+          setAvailableGpuListTotal(
+            Object.assign({}, availableGpuListTotal, {
+              [res.data.name]: res.data.gpu_info,
+            })
+          );
           closeAddServerModal();
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Please check the connection.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please check the connection."))
+          );
         }
       });
-
   };
 
   const submitDelete = () => {
     console.log("selectedServer");
     console.log(selectedServer);
     api.deleteAddServer(selectedServer).then((res) => {
-        window.location.reload();
-      });
+      window.location.reload();
+    });
   };
 
   const openAddServerModal = () => {
@@ -142,31 +146,33 @@ const SettingGpuOption = ({
   //     />
   //   );
   // else
-    return (
-      <Grid sx={{ p: 1.5 }}>
-        {serverDataList ? (
-          <>
-            {isStatusZero && (
-              <Grid container justifyContent="flex-end">
-                <Grid sx={{ mt: -5 }}>
-                  <Button
-                    id="add_server_btn"
-                    shape="greenOutlined"
-                    size="sm"
-                    onClick={openAddServerModal}
-                  >
-                    {t("Add training server")}
-                  </Button>
-                </Grid>
+  return (
+    <Grid sx={{ p: 1.5 }}>
+      {serverDataList ? (
+        <>
+          {isStatusZero && (
+            <Grid container justifyContent="flex-end">
+              <Grid sx={{ mt: -5 }}>
+                <Button
+                  id="add_server_btn"
+                  shape="greenOutlined"
+                  size="sm"
+                  onClick={openAddServerModal}
+                >
+                  {t("Add training server")}
+                </Button>
               </Grid>
-            )}
-            <Grid container rowSpacing={1}>
-              {Object.keys(availableGpuListTotal).map((serverName) => {
+            </Grid>
+          )}
+          <Grid container rowSpacing={1}>
+            {availableGpuListTotal &&
+              Object.keys(availableGpuListTotal).map((serverName) => {
                 let serverId = serverName;
                 let serverDict = availableGpuListTotal[serverName];
                 // let serverName = serverDict.name;
                 let isLocalServer = serverName === "localhost";
-                let isChecked = serverDict?.length === checkedDict[serverName]?.length;
+                let isChecked =
+                  serverDict?.length === checkedDict[serverName]?.length;
 
                 return (
                   <Grid item xs={12}>
@@ -231,9 +237,7 @@ const SettingGpuOption = ({
                                 }
                               />
                             )}
-                            <span style={{ fontSize: "15px" }}>
-                              {gpuName}
-                            </span>
+                            <span style={{ fontSize: "15px" }}>{gpuName}</span>
                           </Grid>
                         );
                       })}
@@ -241,28 +245,26 @@ const SettingGpuOption = ({
                   </Grid>
                 );
               })}
-            </Grid>
-            <ModalAddServer
-              isAddServerModalOpen={isAddServerModalOpen}
-              closeAddServerModal={closeAddServerModal}
-              setHostValue={setHostValue}
-              setTokenValue={setTokenValue}
-              submitAddServer={submitAddServer}
-            />
-            <ModalDeleteServer
-              isDeleteServerModalOpen={isDeleteServerModalOpen}
-              closeDeleteServerModal={closeDeleteServerModal}
-              selectedServer={selectedServer}
-              submitDelete={submitDelete}
-            />
-          </>
-        ) : (
-          <p style={disabledTextStyle}>
-            {t("There is no GPU to choose from.")}
-          </p>
-        )}
-      </Grid>
-    );
+          </Grid>
+          <ModalAddServer
+            isAddServerModalOpen={isAddServerModalOpen}
+            closeAddServerModal={closeAddServerModal}
+            setHostValue={setHostValue}
+            setTokenValue={setTokenValue}
+            submitAddServer={submitAddServer}
+          />
+          <ModalDeleteServer
+            isDeleteServerModalOpen={isDeleteServerModalOpen}
+            closeDeleteServerModal={closeDeleteServerModal}
+            selectedServer={selectedServer}
+            submitDelete={submitDelete}
+          />
+        </>
+      ) : (
+        <p style={disabledTextStyle}>{t("There is no GPU to choose from.")}</p>
+      )}
+    </Grid>
+  );
 };
 
 export default SettingGpuOption;
