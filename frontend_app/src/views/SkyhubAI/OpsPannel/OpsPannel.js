@@ -169,7 +169,7 @@ const OpsPannel = (props) => {
   if (monitoring_url[monitoring_url.length - 1] === "/") {
     monitoring_url = monitoring_url.slice(0, monitoring_url.length - 1);
   }
-  monitoring_url = monitoring_url.split(":13000")[0] + ":13003";
+  monitoring_url = monitoring_url.split(":13000")[0] + ":19999";
   monitoring_url = monitoring_url.replace("https", "http");
 
   const onLoadStatistic = () => {
@@ -1077,7 +1077,7 @@ const OpsPannel = (props) => {
                         if (ip[ip.length - 1] === "/") {
                           ip = ip.slice(0, ip.length - 1);
                         }
-                        ip = ip.split(":13000")[0] + ":13003";
+                        ip = ip.split(":13000")[0] + ":19999";
                         ip = ip.replace("https", "http");
                         window.open(ip);
                       }}
