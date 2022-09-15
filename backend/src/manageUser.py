@@ -202,11 +202,11 @@ class ManageUser:
         if not user or not user.get('is_admin'):
             raise ex.NotFoundAdminEx(token)
 
-        user_info = self.dbClass.get_user_by_id(user_id)
+        user_info = self.dbClass.get_user_by_id(user_id, raw=True)
         if not user_info:
             raise ex.NotFoundUserEx()
 
-        self.dbClass.deleteOneRow(user_raw)
+        self.dbClass.deleteOneRow(user_info)
 
         return HTTP_200_OK, {}
 
