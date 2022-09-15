@@ -311,7 +311,10 @@ const Manager = ({ history }) => {
   const deleteManageUser = (id) => {
     api
       .deleteUserInfo(id)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        closeSelectedUserModal();
+      })
       .catch((e) => console.log(e));
   };
 
