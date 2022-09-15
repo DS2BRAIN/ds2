@@ -405,7 +405,6 @@ class Util():
             self.tradier_client_id = aistore_configs.get('tradier_client_id', '')
             self.tradier_client_secret = aistore_configs.get('tradier_client_secret', '')
             self.tradier_access_token = aistore_configs.get('tradier_access_token', '')
-            self.metabase_admin_password = aistore_configs.get('metabase_admin_pw', '')
             self.enterprise_key = aistore_configs.get('enterprisekey12', '')
         if self.configOption in "enterprise":
             self.backendURL = f"http://{self.public_ip_address}:13002"

@@ -80,8 +80,8 @@ class ManageModel:
             if mb is None:
                 asyncio.sleep(120)
                 mb = self.utilClass.get_metabase_client()
-        except:
-            pass
+        except Exception as e:
+            print(e.args[0].text)
         while True:
             if await request.is_disconnected():
                 break
