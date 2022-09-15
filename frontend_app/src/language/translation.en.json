@@ -2326,5 +2326,6 @@
   "Please enter the host.": "Please enter the host.",
   "Enter the token": "Enter the token",
   "Please enter the token.": "Please enter the token.",
-  "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again."
+  "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
+  "Triton Config": "Triton Config"
 }
