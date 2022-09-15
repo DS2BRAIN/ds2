@@ -8,8 +8,9 @@ from tensorflow.keras.layers import Dense, LSTM
 from tensorflow.keras import optimizers, losses, activations
 from machine_learning import MachineLearning, SettingData
 from models.helper import Helper
+import tensorflow as tf
 
-class KerasAnn(MachineLearning, tensorflow.keras.Model, SettingData):
+class KerasAnn(MachineLearning, tf.keras.Model, SettingData):
 
     def __init__(self):
         super().__init__()
