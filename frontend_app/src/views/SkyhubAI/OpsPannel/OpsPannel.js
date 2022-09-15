@@ -41,6 +41,7 @@ import { ChromePicker } from "react-color";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useTranslation } from "react-i18next";
 import { openChat } from "components/Function/globalFunc";
+import TritonConfig from "./Triton/TritonConfig";
 
 const useStyle = makeStyles({
   groupRow: {
@@ -1371,13 +1372,7 @@ const OpsPannel = (props) => {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Button
-                      className={`${newClasses.sideButton} ${classes.defaultHighlightButton}`}
-                      onClick={() => null}
-                      fullWidth
-                    >
-                      {t("Triton Config")}
-                    </Button>
+                    <TritonConfig newClasses={newClasses} />
                   </Grid>
                 </Grid>
               </>

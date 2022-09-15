@@ -18,20 +18,18 @@ echo "Directory created"
 fi
 `;
 
-const TritonConfigModal = () => {
+const TritonConfigModal = ({ isOpen, openModalHandler }) => {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
   const [shellScript, setShellScript] = useState(dummyScript);
 
   const handleClose = () => {
-    setOpen(false);
+    openModalHandler(false);
   };
 
   return (
     <Dialog
-      //   open={open}
-      open={true}
-      //   onClose={handleClose}
+      open={isOpen}
+      onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       PaperProps={{
