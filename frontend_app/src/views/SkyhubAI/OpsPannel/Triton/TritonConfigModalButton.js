@@ -5,7 +5,7 @@ import Button from "components/CustomButtons/Button";
 
 import DialogActions from "@mui/material/DialogActions";
 
-const TritonConfigModalButton = ({ handleClose }) => {
+const TritonConfigModalButton = ({ handleClose, handleConnect }) => {
   const { t } = useTranslation();
 
   return (
@@ -13,7 +13,7 @@ const TritonConfigModalButton = ({ handleClose }) => {
       <Button shape="greenOutlined" onClick={handleClose}>
         {t("Cancel")}
       </Button>
-      <Button shape="greenContained" onClick={handleClose}>
+      <Button shape="greenContained" onClick={handleConnect}>
         {t("Connect")}
       </Button>
     </DialogActions>

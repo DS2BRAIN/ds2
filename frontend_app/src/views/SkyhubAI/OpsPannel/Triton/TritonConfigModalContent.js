@@ -5,9 +5,23 @@ import "ace-builds/src-noconflict/mode-powershell";
 
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import Button from "../../../../components/CustomButtons/Button";
+import {openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction} from "../../../../redux/reducers/messages";
+import {useDispatch} from "react-redux";
 
 const TritonConfigModalContent = ({ shellScript }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const onCopyTritonCode = () => {
+    navigator.clipboard.writeText(shellScript).then(function() {
+          dispatch(openSuccessSnackbarRequestAction(t("Code copied")));
+        }, function(err) {
+          dispatch(
+        openErrorSnackbarRequestAction(t("Please copy the code yourself."))
+      );
+        });
+  };
 
   return (
     <DialogContent>
@@ -18,23 +32,35 @@ const TritonConfigModalContent = ({ shellScript }) => {
           provides AI researchers and data scientists the freedom to choose the
           right framework for their projects without impacting production
           deployment. It also helps developers deliver high-performance
-          inference across cloud, on-prem, edge, and embedded devices. Please
+          inference across cloud, on-prem, edge, and embedded devices.`)}
+      </DialogContentText><DialogContentText sx={{ mb: 3, color: "var(--secondary1)" }}>
+        {t(`Please
           run the code to connect with Triton server.`)}
       </DialogContentText>
+        <Button
+          id="copy_triton_code_btn"
+          shape="greenContained"
+          onClick={onCopyTritonCode}
+        >
+          {t("Copy")}
+        </Button>
       <AceEditor
         width="100%"
         mode="powershell"
         theme="monokai"
+        id="tritonCode"
         value={shellScript}
         editorProps={{ $blockScrolling: true }}
         showPrintMargin={false}
         setOptions={{
+          useWrapMode: true,   // wrap text to view
+          indentedSoftWrap: false,
           enableBasicAutocompletion: true,
           enableLiveAutocompletion: true,
           showLineNumbers: true,
         }}
         readOnly
-        style={{ height: 240, border: "1px solid var(--surface2)" }}
+        style={{ height: 100, marginTop: 15, border: "1px solid var(--surface2)" }}
       />
     </DialogContent>
   );

@@ -2033,3 +2033,9 @@ export function deleteAddServer(name) {
 
   return axios.delete(query);
 }
+
+export async function checkTritonHealth() {
+  const token = Cookies.getCookie("jwt");
+  const query = backendurl.concat(`triton-healty-check/?token=${token}`);
+  return axios.get(query);
+}
