@@ -399,6 +399,8 @@ class Daemon():
         torch_model.set_train_data(df, dep_var, project["id"])
         torch_model.fit(hyper_param)
         torch.save(torch_model.state_dict(), model_file_path)
+        # torch.save(torch_model, model_file_path)
+        # torch.jit.save(torch_model, model_file_path)
         # torch_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None
@@ -420,7 +422,7 @@ class Daemon():
         custom_model_class = custom_model_class()
         custom_model_class.set_train_data(df, dep_var, project["id"], is_fastai=True)
         trained_model = custom_model_class.train(hyper_param)
-        torch.save(trained_model.state_dict(), model_file_path)
+        torch.jit.save(trained_model, model_file_path)
         trained_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None
@@ -443,7 +445,8 @@ class Daemon():
         custom_model_class.set_train_data(df, dep_var, project["id"])
         custom_model_class.train(df, dep_var, hyper_param, project["id"])
         # custom_model_class.save(model_file_path.replace("savedmodel", "dsm"))
-        tf.saved_model.save(custom_model_class, model_file_path)
+        # tf.saved_model.save(custom_model_class, model_file_path)
+        tf.keras.models.save_model(custom_model_class, model_file_path)
 
         importance_data = None
         try:
