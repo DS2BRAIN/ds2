@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
-import { backendurl } from "controller/api.js";
+import { frontendurl } from "controller/api.js";
 
 import { Modal } from "@material-ui/core";
 import {
@@ -89,7 +89,7 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
   };
 
   const openMetabaseTab = (metabaseUrl) => {
-    let newUrl = new URL(backendurl);
+    let newUrl = new URL(frontendurl);
     let fullUrl = "http://" + newUrl.hostname + metabaseUrl;
     window.open(fullUrl);
   };
