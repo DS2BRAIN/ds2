@@ -39,7 +39,7 @@ import urllib.parse
 import ast
 import pdfkit
 from more_itertools import locate
-from src.errorResponseList import ErrorResponseList, NOT_ALLOWED_TOKEN_ERROR
+from src.errorResponseList import ErrorResponseList, NOT_ALLOWED_TOKEN_ERROR, NOT_FOUND_USER_ERROR
 from uuid import getnode as get_mac
 
 errorResponseList = ErrorResponseList()
@@ -1312,6 +1312,19 @@ pprint(response.json())""" % (model_id, input_data, app_token)
         }
 
         return HTTP_200_OK, result
+
+    def check_triton_healty(self, token):
+
+        user = self.dbClass.getUser(token)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : managePayment.py \n함수 : cancelUsage \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        res = requests.get('http://0.0.0.0:8000/v2/health/ready')
+
+        return res.status_code, {}
 
 if __name__ == '__main__':
     from pydantic import BaseModel

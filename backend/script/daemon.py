@@ -399,6 +399,10 @@ class Daemon():
         torch_model.set_train_data(df, dep_var, project["id"])
         torch_model.fit(hyper_param)
         torch.save(torch_model.state_dict(), model_file_path)
+        example = torch.zeros(len(df.columns) - 1, dtype=torch.float)  # bsz , seqlen
+        pt_model = torch_model.eval()
+        traced_script_module = torch.jit.trace(pt_model, example)
+        traced_script_module.save(model_file_path)
         # torch.save(torch_model, model_file_path)
         # torch.jit.save(torch_model, model_file_path)
         # torch_model.export(model_file_path.replace("pt", "pkl"))
@@ -439,14 +443,17 @@ class Daemon():
         custom_model_class = train_params.get('custom_model_class')
         model_file_path = train_params.get('model_file_path')
         hyper_param = train_params.get('hyper_param')
+        model = train_params.get('model')
         dep_var = project["valueForPredict"]
 
         custom_model_class = custom_model_class()
         custom_model_class.set_train_data(df, dep_var, project["id"])
         custom_model_class.train(df, dep_var, hyper_param, project["id"])
-        # custom_model_class.save(model_file_path.replace("savedmodel", "dsm"))
+        custom_model_class.save(model_file_path)
         # tf.saved_model.save(custom_model_class, model_file_path)
-        tf.keras.models.save_model(custom_model_class, model_file_path)
+        call = custom_model_class.__call__.get_concrete_function(
+            tf.TensorSpec([None, None], tf.int32, name='input_0'))  # bsz x seqlen
+        tf.saved_model.save(custom_model_class, f'{self.utilClass.save_path}/models/{model["id"]}/1/model.savedmodel', signatures=call)
 
         importance_data = None
         try:
@@ -886,13 +893,18 @@ class Daemon():
                     status_text = None
                     importance_data = None
                     platform = 'pytorch_libtorch'
+                    input_name = "input_0"
+                    output_name = "output_0"
                     model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}.dsm'
-                    if custom_model_class == TorchAnn:
+                    print("len(df.columns) - 1")
+                    print(len(df.columns) - 1)
+                    if custom_model_class == TorchAnn or custom_model_class == FastAnn:
                         model_file_name = f'model.pt'
-                    elif custom_model_class == FastAnn:
-                        model_file_name = f'model.pt'
+                        input_name = "input__0"
+                        output_name = "output__0"
+
                     elif custom_model_class == KerasAnn:
-                        model_file_name = f'model.savedmodel'
+                        # model_file_name = f'model.savedmodel'
                         platform = 'tensorflow_savedmodel'
 
                     with open(f'{model_dir_path}/{model["id"]}/config.pbtxt', 'w') as w:
@@ -901,17 +913,18 @@ class Daemon():
                             f'platform: "{platform}"\n',
                             'max_batch_size: 100\n',
                             'dynamic_batching { preferred_batch_size: [ 50 ]}\n',
-                            'instance_group [ { count: 2 }]\n',
+                            'optimization {  graph { level: 1 } }\n',
+                            #'instance_group [ { count: 2 }]\n',
                             'input [\n',
                             '  {\n',
-                            f'    name: "input0"\n',
-                            '    data_type: TYPE_FP32\n',
+                            f'    name: "{input_name}"\n',
+                            '    data_type: TYPE_INT32\n',
                             f'    dims: [ {len(df.columns) - 1} ]\n',
                             '  }\n',
                             ']\n',
                             'output [\n',
                             '  {\n',
-                            '    name: "output0"\n',
+                            f'    name: "{output_name}"\n',
                             '    data_type: TYPE_FP32\n',
                             '    dims: [ 1 ]\n',
                             '  }\n',
@@ -941,6 +954,7 @@ class Daemon():
                             'statusText': status_text,
                             'progress': status,
                             'featureImportance': importance_data,
+                            'isModelDownloaded': True,
                             'layerDeep': hyper_param.get('layer_deep'),
                             'layerWidth': hyper_param.get('layer_width')
                         }

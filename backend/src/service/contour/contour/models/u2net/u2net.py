@@ -14,7 +14,10 @@ import urllib.request
 class U2Net:
     model_path = f'/opt/u2netp.pth'
     if not os.path.exists(model_path):
-        urllib.request.urlretrieve("https://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/u2netp.pth", model_path)
+        try:
+            urllib.request.urlretrieve("https://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/u2netp.pth", model_path)
+        except:
+            pass
     # model_path = f'{os.path.dirname(__file__)}/checkpoints/u2net.pth'
 
     def __init__(
