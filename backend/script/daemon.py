@@ -398,8 +398,9 @@ class Daemon():
         torch_model = TorchAnn(len(df.columns) - 1, hyper_param.get('layer_width', 0))
         torch_model.set_train_data(df, dep_var, project["id"])
         torch_model.fit(hyper_param)
-        # torch.save(torch_model.state_dict(), model_file_path)
-        torch.jit.save(torch_model, model_file_path)
+        torch.save(torch_model.state_dict(), model_file_path)
+        # torch.save(torch_model, model_file_path)
+        # torch.jit.save(torch_model, model_file_path)
         # torch_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None

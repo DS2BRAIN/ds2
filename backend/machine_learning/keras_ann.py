@@ -8,9 +8,8 @@ from tensorflow.keras.layers import Dense, LSTM
 from tensorflow.keras import optimizers, losses, activations
 from machine_learning import MachineLearning, SettingData
 from models.helper import Helper
-from tensorflow.python.trackable import base as trackable
 
-class KerasAnn(MachineLearning, trackable.Trackable, SettingData):
+class KerasAnn(MachineLearning, tensorflow.keras.Model, SettingData):
 
     def __init__(self):
         super().__init__()
