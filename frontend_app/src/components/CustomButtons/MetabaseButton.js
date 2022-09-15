@@ -31,19 +31,18 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
 
   useEffect(() => {
     if (type === "data") {
-      function getDataInfo(event) {
-        const response = JSON.parse(event.data);
-        if (typeof response === "object" && Object.keys(response).length) {
-          setMetabaseInfo(response);
-          setMetabaseStatus(response.status);
-        }
-      }
-      const SSEapi = api.getDataInfoViaSSE(id);
-
-      SSEapi.addEventListener("new_message", getDataInfo);
-      return () => {
-        SSEapi.close();
-      };
+      // function getDataInfo(event) {
+      //   const response = JSON.parse(event.data);
+      //   if (typeof response === "object" && Object.keys(response).length) {
+      //     setMetabaseInfo(response);
+      //     setMetabaseStatus(response.status);
+      //   }
+      // }
+      // const SSEapi = api.getDataInfoViaSSE(id);
+      // SSEapi.addEventListener("new_message", getDataInfo);
+      // return () => {
+      //   SSEapi.close();
+      // };
     }
   }, [id, type]);
 
@@ -89,7 +88,7 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
   };
 
   const openMetabaseTab = (metabaseUrl) => {
-    let newUrl = new URL(frontendurl);
+    let newUrl = new URL(window.location.href);
     let fullUrl = "http://" + newUrl.hostname + metabaseUrl;
     window.open(fullUrl);
   };
