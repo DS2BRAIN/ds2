@@ -46,7 +46,7 @@ import ModelTable from "views/Table/ModelTable";
 import Analytics from "views/Table/Analytics";
 import SummaryTable from "views/Table/SummaryTable";
 import RawDataTable from "views/Table/RawDataTable";
-import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
+import LicenseRegisterModal from "components/Modal/LicenseRegisterModal";
 import Detail from "views/Table/Detail";
 import SettingGpuOption from "components/Train/SettingGpuOption";
 
@@ -4272,7 +4272,7 @@ const Process = (props) => {
             </div>
           </Modal>
 
-          <LiscenseRegisterModal />
+          <LicenseRegisterModal />
 
           {/* <Modal
             aria-labelledby="simple-modal-title"

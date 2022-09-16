@@ -18,7 +18,7 @@ import {
 } from "redux/reducers/messages.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import { checkIsValidKey } from "components/Function/globalFunc";
-import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
+import LicenseRegisterModal from "components/Modal/LicenseRegisterModal";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button";
@@ -695,7 +695,7 @@ const Group = () => {
         </div>
       </Modal>
 
-      <LiscenseRegisterModal />
+      <LicenseRegisterModal />
     </Container>
   );
 };

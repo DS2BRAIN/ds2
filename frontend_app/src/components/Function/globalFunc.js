@@ -217,7 +217,7 @@ export async function checkIsValidKey(user, dispatch, t) {
         if (!keyInfo || !keyInfo.is_valid) {
           dispatch(
             openErrorSnackbarRequestAction(
-              t("Available after purchasing the liscense")
+              t("Available after purchasing the License")
             )
           );
 
