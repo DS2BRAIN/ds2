@@ -1365,15 +1365,17 @@ const OpsPannel = (props) => {
                       </Button>
                     </Tooltip>
                   </Grid>
-                  <Grid
-                    container
-                    item
-                    xs={4}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <TritonConfig newClasses={newClasses} />
-                  </Grid>
+                  {(projects.opsProject?.algorithm?.indexOf('keras') > -1 )
+                      && <Grid
+                        container
+                        item
+                        xs={4}
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <TritonConfig newClasses={newClasses} />
+                      </Grid>}
+
                 </Grid>
               </>
             )}
