@@ -185,6 +185,8 @@ temp/.DS_Store
 backend/aistore_config.py
 backend/src/training/aistore_config.py
 backend/data/*.zip*
+backend/aistore_config.py
+backend/src/creating/aistore_config.py
 backend/data/*.pkl*
 backend/data/*.csv*
 backend/temp/*.csv
