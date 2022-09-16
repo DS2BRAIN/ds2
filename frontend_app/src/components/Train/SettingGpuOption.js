@@ -8,9 +8,12 @@ import { Checkbox, Grid } from "@mui/material";
 import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
-import {openErrorSnackbarRequestAction} from "../../redux/reducers/messages";
+import {openErrorSnackbarRequestAction, setPlanModalOpenRequestAction} from "../../redux/reducers/messages";
 import * as api from "../../controller/api";
 import {useDispatch, useSelector} from "react-redux";
+import {IS_ENTERPRISE} from "../../variables/common";
+import {checkIsValidKey} from "../Function/globalFunc";
+import LicenseRegisterModal from "../Modal/LicenseRegisterModal";
 
 const SettingGpuOption = ({
   status,
@@ -24,6 +27,16 @@ const SettingGpuOption = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { user, projects, messages, models, groups } = useSelector(
+    (state) => ({
+      user: state.user,
+      projects: state.projects,
+      messages: state.messages,
+      models: state.models,
+      groups: state.groups,
+    }),
+    []
+  );
   const isStatusZero = status === 0;
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
@@ -89,6 +102,20 @@ const SettingGpuOption = ({
   };
 
   const handleServerCheck = (e, isChecked) => {
+    let is_valid = true;
+    if (IS_ENTERPRISE) {
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        ) {
+          is_valid = false;
+        }
+      });
+    }
+    if (!is_valid) {
+      return;
+    }
     let serverName = e.target.value;
     let tmpCheckedDict = checkedDict;
     if (isChecked) {
@@ -103,6 +130,21 @@ const SettingGpuOption = ({
   };
 
   const handleGpuCheck = (e, isChecked, serverName, gpuDict) => {
+    let is_valid = true;
+    if (IS_ENTERPRISE) {
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        ) {
+          is_valid = false;
+        }
+      });
+    }
+    if (!is_valid) {
+      return;
+    }
+
     let tmpCheckedDict = checkedDict;
     let gpuList = tmpCheckedDict[serverName];
 
@@ -143,6 +185,7 @@ const SettingGpuOption = ({
   //   );
   // else
     return (
+        <>
       <Grid sx={{ p: 1.5 }}>
         {serverDataList ? (
           <>
@@ -262,6 +305,8 @@ const SettingGpuOption = ({
           </p>
         )}
       </Grid>
+      <LicenseRegisterModal />
+      </>
     );
 };
 
