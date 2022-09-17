@@ -1,10 +1,10 @@
 export const LABEL_FILE_STATUS = {
-  prepare: "시작전",
-  working: "진행중",
-  ready: "오토라벨링(대기중)",
-  review: "검수중",
-  reject: "반려",
-  done: "완료",
+  prepare: "prepare",
+  working: "working",
+  ready: "ready",
+  review: "review",
+  reject: "reject",
+  done: "done",
 };
 
 export const LABELAPP_ROUTES = {
@@ -18,19 +18,19 @@ export const LABELAPP_ROUTES = {
 export const GENERAL_AI_GROUPS = [
   {
     name: "person",
-    label: "사람",
+    label: "person",
   },
   {
     name: "animal",
-    label: "동물",
+    label: "animal",
   },
   {
     name: "road",
-    label: "자율주행",
+    label: "road",
   },
   {
     name: "facepoint",
-    label: "페이스 포인트 검출",
+    label: "facepoint",
   },
   // {
   //   name: "keypoint",
@@ -75,7 +75,7 @@ export const GENERAL_AI_MODELS = {
 
 export const WORKAGE_TABLE_HEADER = [
   { title: "NO", width: "5%" },
-  { title: "작업자", width: "30%" },
+  { title: "worker", width: "30%" },
   { title: "Box", width: "12%" },
   { title: "Polygon", width: "12%" },
   { title: "Magic", width: "12%" },
