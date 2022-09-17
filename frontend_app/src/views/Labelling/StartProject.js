@@ -9,8 +9,15 @@ import Tip from "components/Loading/Tip.js";
 import CloseIcon from "@material-ui/icons/Close";
 import InputBase from "@material-ui/core/InputBase";
 import { useDispatch, useSelector } from "react-redux";
-import { postLabelProjectRequestAction, setLabelProjectStarted } from "redux/reducers/labelprojects.js";
-import { askModalRequestAction, openErrorSnackbarRequestAction, askStartLabelProjectReqeustAction } from "redux/reducers/messages.js";
+import {
+  postLabelProjectRequestAction,
+  setLabelProjectStarted,
+} from "redux/reducers/labelprojects.js";
+import {
+  askModalRequestAction,
+  openErrorSnackbarRequestAction,
+  askStartLabelProjectReqeustAction,
+} from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { currentThemeColor } from "assets/jss/custom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -58,7 +65,14 @@ const StartProject = ({ history }) => {
     const tmpFiles = [];
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > user.maximumFileSize) {
-        dispatch(openErrorSnackbarRequestAction(t(`${user.maximumFileSize / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t(
+              `${user.maximumFileSize /
+                1073741824}GB 크기이상의 파일은 업로드 불가합니다.`
+            )
+          )
+        );
       } else {
         const name = files[idx].name;
         if (idx < 100 && /\.(jpg|jpeg|png|zip)$/g.test(name.toLowerCase())) {
@@ -67,7 +81,7 @@ const StartProject = ({ history }) => {
       }
     }
     if (tmpFiles.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
+      dispatch(openErrorSnackbarRequestAction(t("Please upload file again")));
       setIsUploadLoading(false);
       return;
     }
@@ -94,7 +108,9 @@ const StartProject = ({ history }) => {
     <div className={classes.modalLoading}>
       {/* <Tip /> */}
       <LinearProgress />
-      <b style={{ alignSelf: "center" }}>{t("Creating project. Please wait")}</b>
+      <b style={{ alignSelf: "center" }}>
+        {t("Creating project. Please wait")}
+      </b>
     </div>
   ) : (
     <>
@@ -109,11 +125,16 @@ const StartProject = ({ history }) => {
               }}
             >
               <CircularProgress size={20} sx={{ mb: 2 }} />
-              <b className={classes.settingFontWhite6}>{t("Uploading. Please wait a moment")}</b>
+              <b className={classes.settingFontWhite6}>
+                {t("Uploading. Please wait a moment")}
+              </b>
             </div>
           ) : (
             <GridContainer>
-              <GridItem xs={9} style={{ display: "flex", alignItems: "center" }}>
+              <GridItem
+                xs={9}
+                style={{ display: "flex", alignItems: "center" }}
+              >
                 <span
                   style={{
                     marginRight: "10px",
@@ -143,11 +164,17 @@ const StartProject = ({ history }) => {
                           <p className={classes.settingFontWhite6}>
                             {t("Drag the file or click the box to upload it!")}
                             <br />
-                            {t("Only image files (png/jpg/jpeg) or image compression files (zip) can be uploaded")}
+                            {t(
+                              "Only image files (png/jpg/jpeg) or image compression files (zip) can be uploaded"
+                            )}
                             <br />
-                            {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
+                            {t(
+                              "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
+                            )}
                             <br />
-                            {t("Uploading large-size files may take more than 5 minutes")}
+                            {t(
+                              "Uploading large-size files may take more than 5 minutes"
+                            )}
                           </p>
                           <CloudUploadIcon fontSize="large" />
                         </div>
@@ -165,14 +192,19 @@ const StartProject = ({ history }) => {
                                 }}
                               >
                                 <span>
-                                  {t("Upload file")} : {t("총")} {uploadFile.length}
+                                  {t("Upload file")} : {t("총")}{" "}
+                                  {uploadFile.length}
                                   {t("")}
                                 </span>
                               </p>
                               <ul>
                                 {uploadFile.map((file, idx) => {
                                   if (idx === 10) {
-                                    return <li style={{ listStyle: "none" }}>.......</li>;
+                                    return (
+                                      <li style={{ listStyle: "none" }}>
+                                        .......
+                                      </li>
+                                    );
                                   }
                                   if (idx >= 10) {
                                     return null;
@@ -254,7 +286,12 @@ const StartProject = ({ history }) => {
             </GridItem>
           ) : (
             <GridItem xs={6}>
-              <Button id="clickNext" style={{ width: "100%" }} className={classes.defaultDisabledButton} disabled>
+              <Button
+                id="clickNext"
+                style={{ width: "100%" }}
+                className={classes.defaultDisabledButton}
+                disabled
+              >
                 {t("Next")}
               </Button>
             </GridItem>

@@ -146,6 +146,9 @@ class MachineLearning(metaclass=ABCMeta):
         return str(model)
 
     def save(self, s3_path):
+        print("save()")
+        print("s3_path")
+        print(s3_path)
         dir_path = ''
         for path_item in s3_path.split('/')[:-1]:
             dir_path += f'{path_item}/'
@@ -161,9 +164,10 @@ class MachineLearning(metaclass=ABCMeta):
             if os.path.exists(local_dir):
                 shutil.rmtree(local_dir)
 
-        return urllib.parse.quote(
-            f'https://{self.util_class.bucket_name}.s3.ap-northeast-2.amazonaws.com/{s3_path}').replace(
-            'https%3A//', 'https://')
+        return s3_path
+        # return urllib.parse.quote(
+        #     f'https://{self.util_class.bucket_name}.s3.ap-northeast-2.amazonaws.com/{s3_path}').replace(
+        #     'https%3A//', 'https://')
 
     @abstractmethod
     def train(self, df: pd.DataFrame, target_column_name: str, train_params: dict):

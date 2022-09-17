@@ -4,7 +4,6 @@ import sys
 import traceback
 
 import typing
-import boto3
 import os
 
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
@@ -59,7 +58,8 @@ from models import skyhub
 from middelwares.token_validator import access_control
 from starlette.responses import Response, JSONResponse
 from starlette.status import HTTP_200_OK
-from routers import apiRouter, dataconnectorRouter, etcRouter, fileRouter, modelsRouter, marketRouter, projectsRouter, predictRouter, labelRouter, userRouter, paymentRouter, jupyterRouter, opsRouter
+from routers import apiRouter, dataconnectorRouter, etcRouter, fileRouter, modelsRouter, marketRouter, projectsRouter, \
+    flowRouter, flowNodeRouter, monitoringAlertRouter, predictRouter, labelRouter, userRouter, paymentRouter, jupyterRouter, opsRouter
 from fastapi import Depends
 from fastapi.security import APIKeyHeader
 from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
@@ -124,6 +124,9 @@ app.include_router(marketRouter.router, tags=["Market Router"])
 app.include_router(paymentRouter.router, tags=["Payment Router"])
 app.include_router(jupyterRouter.router, tags=["Jupyter Router"])
 app.include_router(opsRouter.router, tags=["Ops Router"])
+app.include_router(flowRouter.router, tags=["Flow Router"])
+app.include_router(flowNodeRouter.router, tags=["Flow Node Router"])
+app.include_router(monitoringAlertRouter.router, tags=["Monitoring Alert Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)
@@ -237,20 +240,9 @@ def checkVersion(response: Response):
     response.status_code = HTTP_200_OK
     return result
 
-def download_model():
-    s3 = boto3.client('s3', aws_access_key_id=utilClass.access_key,
-                 aws_secret_access_key=utilClass.secret_key)
-
-    if not os.path.exists(f'{utilClass.save_path}/asset/bdcn_pretrained_on_bsds500.pth'):
-        os.makedirs(f'{utilClass.save_path}/asset', exist_ok=True)
-        s3.download_file(utilClass.bucket_name, 'asset/bdcn_pretrained_on_bsds500.pth',
-                         f'{utilClass.save_path}/asset/bdcn_pretrained_on_bsds500.pth')
-
-
 if __name__ == '__main__':
     import uvicorn
 
-    download_model()
     if utilClass.configOption == 'enterprise':
         uvicorn.run("main:app", host='0.0.0.0', port=13002, workers=4)
     elif utilClass.configOption == 'prod_local':

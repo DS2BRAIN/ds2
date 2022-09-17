@@ -162,7 +162,7 @@ class Analysing():
         updateModelDict = {
                 "status": 100,  # TODO : TEST 용
                 "statusText": "100 : 모델 학습이 완료되었습니다.",
-                "filePath": modelFilePath,
+                # "filePath": modelFilePath,
                 # "topKAccuracy": round(top_k_accuracy_value, 6) if not math.isnan(top_k_accuracy_value) else 0,
                 "accuracy": round(accuracy_value, 6) if not math.isnan(accuracy_value) else 0,
                 # "dice": round(dice_value, 6) if not math.isnan(dice_value) else 0,
@@ -283,7 +283,7 @@ class Analysing():
             pass
 
         try:
-            records['__예측값__' + project['valueForPredict']] = predictRows
+            records['__predict_value__' + project['valueForPredict']] = predictRows
             confusion_matrix = sklearn_confusion_materix(actualAllRows, predictRows).tolist()
             records = records.iloc[0:120].copy()
             records = records.to_dict('records')

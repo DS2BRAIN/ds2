@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 import GoogleLogin from "react-google-login";
@@ -43,6 +44,7 @@ import ParPrivacyPolicy from "components/User/ParPrivacyPolicy";
 import Copyright from "components/Footer/Copyright";
 import Button from "components/CustomButtons/Button";
 import { openChat } from "components/Function/globalFunc";
+import { toHome } from "components/Function/globalFunc";
 
 // const emailRegExp = /^[0-9a-z]([-_\.]?[0-9a-z])*@[0-9a-z]([-_\.]?[0-9a-z])*\.[a-z]/;
 //const emailRegExp = /[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$/i;
@@ -59,8 +61,9 @@ const emailCheck = (email) => {
 const cliedId =
   "1033414311470-pjcodotllde5c91klbml7ecjs32kk3rl.apps.googleusercontent.com";
 
-export default function SignUp(props) {
+export default function SignUp() {
   const classes = currentTheme();
+  const history = useHistory();
   const dispatch = useDispatch();
   const { user, messages } = useSelector(
     (state) => ({ user: state.user, messages: state.messages }),
@@ -106,7 +109,7 @@ export default function SignUp(props) {
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
-      props.history.push("/admin");
+      toHome(history);
     }
 
     if (!process.env.REACT_APP_ENTERPRISE) {
@@ -159,7 +162,7 @@ export default function SignUp(props) {
       setSnackbarOption(
         "error",
         t(
-          "비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다."
+          "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!."
         )
       );
     } else if (passwordCheck === "") {
@@ -188,7 +191,7 @@ export default function SignUp(props) {
       const isAiTrainer = joiningPurpose === "aitrainer" ? true : false;
 
       if (isAgreetoMarketing) {
-        amplitude.getInstance().init("1cbafbadf45197fffec28396736998d7");
+        amplitude.getInstance().init("446d673fc8928366cc815f058ba93381");
         amplitude.getInstance().logEvent("Agreed to Marketing : " + email);
       }
 
@@ -216,7 +219,7 @@ export default function SignUp(props) {
       //     .then(() => {
       //       setSnackbarOption("success", t("Thank you for creating an account"));
       //       setTimeout(() => {
-      //         props.history.push("/signin/");
+      //         history.push("/signin/");
       //       }, 5000);
       //     })
       //     .catch((e) => {
@@ -253,7 +256,7 @@ export default function SignUp(props) {
               )}`
             );
             setTimeout(() => {
-              props.history.push("/signin/");
+              history.push("/signin/");
             }, 5000);
           } else {
             setSnackbarOption(
@@ -261,7 +264,7 @@ export default function SignUp(props) {
               t("Thank you for creating an account")
             );
             setTimeout(() => {
-              props.history.push("/signin/");
+              history.push("/signin/");
             }, 5000);
           }
         })
@@ -309,7 +312,7 @@ export default function SignUp(props) {
       //           .then(()=>{
       //             setSnackbarOption('success', `${t('Thank you for creating an account')} ${t('이메일 인증 후 이용이 가능합니다.')} ${t('메일발송까지 5-10분 정도 소요될 수 있습니다.')}`);
       //             setTimeout(()=>{
-      //               props.history.push('/signin/');
+      //               history.push('/signin/');
       //             }, 5000);
       //           })
       //           .catch((e)=>{
@@ -500,7 +503,7 @@ export default function SignUp(props) {
         return res.data.user.isAgreedWithPolicy;
       })
       .then((isAgreed) => {
-        props.history.push("");
+        history.push("");
       })
       .then(() => {
         localStorage.setItem("userId", email);
@@ -629,37 +632,37 @@ export default function SignUp(props) {
           tip: false,
         },
         email: {
-          label: "이메일을 입력해주세요.",
+          label: "Please enter your email.",
           type: "text",
           value: email,
           func: inputEmailValue,
           tip: false,
         },
         password: {
-          label: "비밀번호를 입력해주세요.",
+          label: "Please enter your password.",
           type: "password",
           value: password,
           func: inputPasswordValue,
           tip: true,
           tipTitle:
-            "비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다.",
+            "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!.",
         },
         passwordCheck: {
-          label: "비밀번호 확인",
+          label: "Re-enter password",
           type: "password",
           value: passwordCheck,
           func: inputPasswordCheckValue,
           tip: false,
         },
         company: {
-          label: "재직중인 회사를 입력해주세요. (선택사항)",
+          label: "(Optional) Please enter your company name.",
           type: "text",
           value: company,
           func: inputCompanyValue,
           tip: false,
         },
         promotionCode: {
-          label: "프로모션 코드가 있을 시에 입력해주세요. (선택사항)",
+          label: "(Optional) Please enter the promotion code.",
           type: "text",
           value: promotionCode,
           func: inputPromotionCodeValue,
@@ -816,14 +819,14 @@ export default function SignUp(props) {
                 );
               }}
             >
-              {t("Privacy Policy")}{" "}
+              {t("Privacy Policy")}
             </span>
             <span
               style={{
                 cursor: "default",
               }}
             >
-              {t("I agree to the terms.")}
+              {" "}{t("I agree to the terms.")}
             </span>
           </Grid>
           <Grid
@@ -929,7 +932,7 @@ export default function SignUp(props) {
               }}
               onClick={checkValidEmail}
             >
-              {isAbleEmail ? t("Checked") : t("중복 확인")}
+              {isAbleEmail ? t("Checked") : t("Duplicate Check")}
             </Button>
           </Grid>
           <Grid item xs={12}>

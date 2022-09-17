@@ -9,7 +9,6 @@ import random
 import chardet
 import cv2
 from PIL import ExifTags, Image
-from boto3.s3.transfer import TransferConfig
 from bson import json_util
 
 from src.errors.exceptions import APIException
@@ -45,10 +44,7 @@ import struct
 from models import rd
 
 import os
-if os.path.exists('./src/training/predictImage.py'):
-    from src.training.predictImage import PredictImage
-else:
-    PredictImage = None
+from src.service.predictImage import PredictImage
 errorResponseList = ErrorResponseList()
 
 class ManageUpload:

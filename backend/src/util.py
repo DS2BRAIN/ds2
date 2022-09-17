@@ -14,13 +14,13 @@ import pwd
 import numpy as np
 import pandas as pd
 import requests
-import boto3
 from uuid import getnode as get_mac
 import torch.cuda
 
 from src.errors import exceptions as ex
 
 from dateutil.relativedelta import relativedelta
+from subprocess import call
 
 if os.path.exists('./src/training/aistore_config.py'):
     from src.training.aistore_config import aistore_configs
@@ -100,32 +100,40 @@ class enterpriseBoto():
         print('file_route')
         print(file_route)
 
-        try:
-            shutil.copyfile(f"{s3_route}", file_route)
-        except:
-            print(traceback.format_exc())
-            pass
+        if os.path.exists(f"{self.save_path}/master_ip.txt"):
+            with open(f"{self.save_path}/master_ip.txt", 'r') as r:
+                master_ip = r.readlines()[0]
+                os.makedirs(os.path.dirname(s3_route), exist_ok=True)
+                cmd = f"scp -P 13022 -i /root/.ssh/id_rsa root@{master_ip}:{s3_route} {s3_route}"
+                call(cmd.split(" "))
 
-        try:
-            shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
-        except:
-            print(traceback.format_exc())
-            pass
+        if not os.path.exists(file_route):
+            try:
+                shutil.copyfile(f"{s3_route}", file_route)
+            except:
+                print(traceback.format_exc())
+                pass
+
+            try:
+                shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
+            except:
+                # print(traceback.format_exc())
+                pass
         try:
 
             filePath = f"{os.getcwd()}/../aimaker-backend-deploy/data/{file_route.split('/')[-1]}"
-            if not os.path.exists(filePath):
+            if not os.path.exists(filePath) and os.path.exists(f"{os.getcwd()}/../aimaker-backend-deploy/"):
                 shutil.copyfile(f"{os.getcwd()}/{file_route}", filePath)
 
             filePath = f"{os.getcwd()}/../aimaker-daemon-deploy/data/{file_route.split('/')[-1]}"
-            if not os.path.exists(filePath):
+            if not os.path.exists(filePath) and os.path.exists(f"{os.getcwd()}/../aimaker-daemon-deploy/"):
                 shutil.copyfile(f"{os.getcwd()}/{file_route}", filePath)
 
             if len(file_route.split('/')) > 0:
                 file_route = file_route.split('/')[-1]
 
             filePath = f"{os.getcwd()}/../aimaker-daemon-deploy/models/{file_route}"
-            if os.path.exists(filePath):
+            if os.path.exists(filePath) and not os.path.exists(f"{self.save_path}/{file_route}") and os.path.exists(f"{os.getcwd()}/../aimaker-daemon-deploy/"):
                 shutil.copyfile(filePath, f"{self.save_path}/{file_route}")
 
         except:
@@ -418,14 +426,7 @@ class Util():
         return MetabaseAPI(self.metabase_url, self.metabase_admin_email, self.metabase_admin_password)
 
     def getBotoClient(self, name, region_name="ap-northeast-2"):
-        if self.configOption == "enterprise":
-            return enterprise_boto_object
-        if region_name:
-            return boto3.client(name, aws_access_key_id=self.access_key,
-                                aws_secret_access_key=self.secret_key, region_name=region_name)
-        else:
-            return boto3.client(name, aws_access_key_id=self.access_key,
-                                aws_secret_access_key=self.secret_key)
+        return enterprise_boto_object
 
     def check_deposit(self, user, amount):
 

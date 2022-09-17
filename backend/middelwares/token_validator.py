@@ -62,6 +62,8 @@ async def access_control(request: Request, call_next):
     # except Exception as e:
     #     print(traceback.format_exc(e))
 
+    response = None
+
     if await url_pattern_check(url, EXCEPT_PATH_REGEX) or url in EXCEPT_PATH_LIST:
         response = await call_next(request)
         if url != "/":

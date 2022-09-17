@@ -48,6 +48,7 @@ import LabelImage from "views/Labelling/LabelImage.js";
 import DataconnectorDetail from "views/Dataconnector/DataconnectorDetail";
 import LabelprojectList from "views/Labelling/LabelprojectList";
 import MarketDetail from "../views/Market/MarketDetail";
+import Flow from "views/Main/Flow";
 import Button from "components/CustomButtons/Button";
 import { IS_ENTERPRISE } from "variables/common";
 
@@ -81,7 +82,6 @@ const Admin = ({ history, ...rest }) => {
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
   );
-  const [localPath, setLocalPath] = useState("");
 
   const { t } = useTranslation();
 
@@ -135,13 +135,23 @@ const Admin = ({ history, ...rest }) => {
         }
         return null;
       })}
-      <Route exact path="/" {...rest} render={(props) => <Main {...props} />} />
+      <Route
+        exact
+        path="/"
+        {...rest}
+        render={(props) => <AutoMLProject {...props} route="train" />}
+      />
       <Route
         exact
         path="/admin"
         {...rest}
-        render={(props) => <Main {...props} />}
+        render={(props) => <AutoMLProject {...props} route="train" />}
       />
+      {/* <Route
+        path="/admin/flow"
+        {...rest}
+        render={(props) => <Flow {...props} />}
+      /> */}
       <Route
         path="/admin/setting"
         {...rest}
@@ -309,7 +319,7 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     console.log("amplitude init");
-    amplitude.getInstance().init("1cbafbadf45197fffec28396736998d7");
+    amplitude.getInstance().init("446d673fc8928366cc815f058ba93381");
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -366,27 +376,21 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     if (user.me && user.me.isAgreedBehaviorStatistics) {
-      setIsAgreedBehaviorStatistics(true);
-      const analytics = getAnalytics();
-      amplitude.getInstance().logEvent(window.location.pathname);
-      logEvent(analytics, "select_content", {
-        content_type: "page",
-        content_id: "1",
-        items: [{ name: "window.location.pathname" }],
-      });
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
-  }, [user]);
+  }, [user.me]);
 
   useEffect(() => {
-    if (isAgreedBehaviorStatistics) {
-      const analytics = getAnalytics();
-      logEvent(analytics, "select_content", {
-        content_type: "page",
-        content_id: "1",
-        items: [{ name: window.location.pathname }],
-      });
-      amplitude.getInstance().logEvent(window.location.pathname);
+    if (user.me && user.me.isAgreedBehaviorStatistics) {
+      amplitude
+        .getInstance()
+        .logEvent("solution : " + window.location.pathname);
     }
+  }, [window.location.href]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
 
     if (path.includes("admin/train/") || path.includes("admin/verifyproject/"))
@@ -423,10 +427,6 @@ const Admin = ({ history, ...rest }) => {
 
     if (!isLogined) history.push("/signout");
   });
-
-  useEffect(() => {
-    setLocalPath(window.location.pathname);
-  }, [window.location.pathname]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -466,9 +466,7 @@ const Admin = ({ history, ...rest }) => {
         } else {
           dispatch(
             openErrorSnackbarRequestAction(
-              t(
-                "죄송합니다. 일시적인 오류가 발생하였습니다. 다시 시도해주세요."
-              )
+              t("A temporary error has occurred. Please try again.")
             )
           );
         }
@@ -505,7 +503,6 @@ const Admin = ({ history, ...rest }) => {
             handleDrawerToggle={handleDrawerToggle}
             headerHeight={headerHeight}
             containerWidth={containerWidth}
-            localPath={localPath}
             {...rest}
           />
         )}

@@ -3,28 +3,22 @@ import { Grid } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const NavMenu = ({ localPath }) => {
+const NavMenu = () => {
   const { t } = useTranslation();
+  const localPath = window.location.pathname;
 
   const routes = [
-    {
-      id: "data",
-      path: "/dataconnector",
-      name: "Dataset",
-      layout: "/admin",
-      condition: true,
-    },
-    {
-      id: "label",
-      path: "/labelling?page=1&sorting=created_at&desc=true&rows=10",
-      name: "Labeling",
-      layout: "/admin",
-      condition: true,
-    },
     {
       id: "train",
       path: "/train",
       name: "Train",
+      layout: "/admin",
+      condition: true,
+    },
+    {
+      id: "verify",
+      path: "/verifyproject",
+      name: "Verify",
       layout: "/admin",
       condition: true,
     },
@@ -36,9 +30,9 @@ const NavMenu = ({ localPath }) => {
       condition: true,
     },
     {
-      id: "verify",
-      path: "/verifyproject",
-      name: "Verify",
+      id: "label",
+      path: "/labelling",
+      name: "Labeling",
       layout: "/admin",
       condition: true,
     },
@@ -58,7 +52,8 @@ const NavMenu = ({ localPath }) => {
     },
   ];
 
-  const navLinkClassName = "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
+  const navLinkClassName =
+    "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
   const navLinkActiveClassName = "navLinkActive";
 
   return (

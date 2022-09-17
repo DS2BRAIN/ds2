@@ -896,7 +896,7 @@ const MarketNewProject = (props) => {
     //   }
     // } else {
     //   history.push(
-    //     `/admin/labelling?page=1&sorting=created_at&desc=true&rows=10`
+    //     `/admin/labelling`
     //   );
     // }
   };

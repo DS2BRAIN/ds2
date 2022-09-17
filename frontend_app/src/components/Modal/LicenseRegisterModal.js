@@ -21,7 +21,7 @@ import InputBase from "@mui/material/InputBase";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import CloseIcon from "@mui/icons-material/Close";
 
-const LiscenseRegisterModal = () => {
+const LicenseRegisterModal = () => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ user: state.user }), []);
@@ -208,7 +208,7 @@ const LiscenseRegisterModal = () => {
                   variant={"body2"}
                   style={{ color: "var(--secondary1)" }}
                 >
-                  {t("Available after purchasing the liscense")}.
+                  {t("Available after purchasing the License")}.
                 </Typography>
               </Grid>
               <Grid
@@ -259,4 +259,4 @@ const LiscenseRegisterModal = () => {
   );
 };
 
-export default LiscenseRegisterModal;
+export default LicenseRegisterModal;

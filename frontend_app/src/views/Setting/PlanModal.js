@@ -520,7 +520,7 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
           target="_blank"
           className={classes.priceLink}
         >
-          {t(" Learn more about the pricing ")}
+          {t("Learn more about the pricing ")}
         </a>
       </GridItem>
       <GridItem xs={12}>
@@ -574,7 +574,7 @@ const PlanModal = ({ isFromSetting, onClosePlanModal }) => {
       >
         <div className={classes.payModalContent}>
           <div style={{ textAlign: "center", fontSize: "20px" }}>
-            <b> [ {t(" Change Plan")} ] </b>
+            <b> [ {t("Change Plan")} ] </b>
           </div>
           <div>{modalContents}</div>
           <div className={classes.buttonContainer}>

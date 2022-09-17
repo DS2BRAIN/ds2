@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
-import { askLabelProjectDetailRequestAction, askDeleteLabelProjectReqeustAction } from "redux/reducers/messages.js";
+import {
+  askLabelProjectDetailRequestAction,
+  askDeleteLabelProjectReqeustAction,
+} from "redux/reducers/messages.js";
 import { setIsProjectRefreshed } from "redux/reducers/labelprojects";
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
 import * as api from "controller/api.js";
@@ -11,7 +14,15 @@ import { linkDownloadUrl, openChat } from "components/Function/globalFunc";
 import { getNotificationText } from "components/Notifications/NotiText";
 import Button from "components/CustomButtons/Button";
 
-import { Grid, InputBase, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import {
+  Grid,
+  InputBase,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
 import { CircularProgress, IconButton, Tooltip } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
@@ -50,7 +61,6 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   const [historyPage, setHistoryPage] = useState(1);
   const [isUnableToChangeName, setIsUnableToChangeName] = useState(true);
   const [isUnableToChangeDescription, setIsUnableTochangeDescription] = useState(true);
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [hasReviewProcess, setHasReviewProcess] = useState(false);
 
   const changeProjectName = (e) => {
@@ -88,7 +98,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
     //       openSuccessSnackbarRequestAction(t("The project has been deleted."))
     //     );
     //     history.push(
-    //       "/admin/labelling?page=1&sorting=created_at&desc=true&rows=10"
+    //       "/admin/labelling"
     //     );
     //   })
     //   .catch((e) => {
@@ -151,9 +161,17 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   //   }
   // }, [messages.datas]);
 
-  const tableHeads = [{ value: "No", width: "10%" }, { value: "content", width: "40%" }, { value: "date", width: "25%" }, { value: "action", width: "25%" }];
+  const tableHeads = [
+    { value: "No", width: "10%" },
+    { value: "content", width: "40%" },
+    { value: "date", width: "25%" },
+    { value: "action", width: "25%" },
+  ];
 
-  const tableBodys = [{ value: "taskType", name: "content" }, { value: "created_at", name: "date" }];
+  const tableBodys = [
+    { value: "taskType", name: "content" },
+    { value: "created_at", name: "date" },
+  ];
 
   const taskTypes = {
     exportCoco: "COCO파일 변환",
@@ -172,24 +190,17 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
     importVoc: "VOC파일 업로드",
   };
 
-  const taskContents = {
-    "0": "시작되었습니다",
-    "1": "시작되었습니다",
-    "99": "에러가 발생하였습니다",
-    "100": "완료되었습니다",
-  };
-
   const buttonTask = Object.keys(taskTypes).slice(0, 6);
 
-  const buttonText = ["파일 다운받기", "파일 다운받기", "파일 다운받기", "라벨링 확인하기", "데이터 확인하기", "도움 요청하기"];
+  const buttonText = ["Download file", "Download file", "Download file", "Check labeling", "Check data", "Ask for help"];
 
   const workapp = {
-    object_detection: "물체인식",
-    voice: "음성",
-    normal_classification: "정형화 분류",
-    normal_regression: "정형화 회귀",
-    text: "자연어",
-    image: "이미지 분류",
+    object_detection: "Object Detection",
+    voice: "Voice",
+    normal_classification: "Normal classification",
+    normal_regression: "Normal regression",
+    text: "Natural Language Processing (NLP)",
+    image: "Image Classification",
   };
 
   useEffect(() => {
@@ -213,7 +224,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
   useEffect(() => {
     if (labelprojects.isDeleteLabelprojectsSuccess) {
-      history.push("/admin/labelling?page=1&sorting=created_at&desc=true&rows=10");
+      history.push("/admin/labelling");
     }
   }, [labelprojects.isDeleteLabelprojectsSuccess]);
 
@@ -279,7 +290,6 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         onSetSelectedPage("list");
         break;
       case "customAI":
-        //도움 요청하기 기능
         break;
     }
   };
@@ -300,269 +310,252 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
     await descriptionRef.current.focus();
   };
 
-  const renderProjectUpdateOrDelete = () => {
-    return (
-      <>
-        <div className={classes.title} style={{ marginBottom: "12px" }}>
-          {t("Project Information")}
+  const renderProjectUpdateOrDelete = () => (
+    <>
+      <div className={classes.title} style={{ marginBottom: "12px" }}>
+        {t("Project Information")}
+      </div>
+      <Grid item xs={9}>
+        <div
+          style={{
+            borderBottom: "1px solid " + currentThemeColor.textWhite87,
+            width: "100%",
+            marginBottom: "16px",
+            padding: "4px 8px",
+          }}
+        >
+          <div
+            style={{
+              display: "inline-block",
+              fontSize: 16,
+              width: "135px",
+              marginLeft: "10px",
+            }}
+          >
+            {t("Project Name")}*
+          </div>
+          <InputBase
+            id="project_name_input"
+            autoComplete
+            type="text"
+            variant="outlined"
+            margin="normal"
+            required
+            name="projectName"
+            placeholder={projectName}
+            label={projectName}
+            onChange={changeProjectName}
+            value={projectName}
+            style={{
+              color: currentThemeColor.textWhite87,
+              width: "calc(100% - 160px)",
+            }}
+            disabled={isUnableToChangeName}
+            onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
+            onBlur={() => setIsUnableToChangeName(true)}
+            inputRef={nameRef}
+            onClick={onLetAbleToChangeName}
+          />
+          {isUnableToChangeName && (
+            <IconButton id="change_project_name_btn" style={{ width: "15px", padding: "0" }} onClick={onLetAbleToChangeName}>
+              <Create />
+            </IconButton>
+          )}
         </div>
-        <Grid item xs={9}>
-          <div
-            style={{
-              borderBottom: "1px solid " + currentThemeColor.textWhite87,
-              width: "100%",
-              marginBottom: "16px",
-              padding: "4px 8px",
-            }}
-          >
-            <div
-              style={{
-                display: "inline-block",
-                fontSize: 16,
-                width: "135px",
-                marginLeft: "10px",
-              }}
-            >
-              {t("Project Name")}*
-            </div>
-            <InputBase
-              id="project_name_input"
-              autoComplete
-              type="text"
-              variant="outlined"
-              margin="normal"
-              required
-              name="projectName"
-              placeholder={projectName}
-              label={projectName}
-              onChange={changeProjectName}
-              value={projectName}
-              style={{
-                color: currentThemeColor.textWhite87,
-                width: "calc(100% - 160px)",
-              }}
-              disabled={isUnableToChangeName}
-              // autoFocus={true}
-              onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
-              onBlur={() => setIsUnableToChangeName(true)}
-              inputRef={nameRef}
-              onClick={onLetAbleToChangeName}
-            />
-            {isUnableToChangeName && (
-              <IconButton id="change_project_name_btn" style={{ width: "15px", padding: "0" }} onClick={onLetAbleToChangeName}>
-                <Create />
-              </IconButton>
-            )}
-          </div>
-        </Grid>
+      </Grid>
 
-        <Grid item xs={9}>
+      <Grid item xs={9}>
+        <div
+          style={{
+            borderBottom: "1px solid " + currentThemeColor.textWhite87,
+            width: "100%",
+            marginBottom: "16px",
+            padding: "4px 8px",
+          }}
+        >
           <div
             style={{
-              borderBottom: "1px solid " + currentThemeColor.textWhite87,
-              width: "100%",
-              marginBottom: "16px",
-              padding: "4px 8px",
+              display: "inline-block",
+              fontSize: 16,
+              width: "135px",
+              marginLeft: "10px",
             }}
           >
-            <div
-              style={{
-                display: "inline-block",
-                fontSize: 16,
-                width: "135px",
-                marginLeft: "10px",
-              }}
-            >
-              {t("Project Description")}
-            </div>
-            <InputBase
-              id="project_desc_input"
-              autoComplete
-              type="text"
-              variant="outlined"
-              margin="normal"
-              required
-              name="projectDescription"
-              placeholder={projectDescription}
-              label={projectDescription}
-              onChange={changeProjectDescription}
-              value={projectDescription}
-              style={{
-                color: currentThemeColor.textWhite87,
-                width: "calc(100% - 160px)",
-              }}
-              disabled={isUnableToChangeDescription}
-              // autoFocus={true}
-              onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
-              onBlur={() => setIsUnableTochangeDescription(true)}
-              inputRef={descriptionRef}
-              multiline={true}
-              maxRows={5}
-              onClick={onLetAbleToChangeDetail}
-            />
-            {isUnableToChangeDescription && (
-              <IconButton id="change_project_desc_btn" style={{ width: "15px", padding: "0" }} onClick={onLetAbleToChangeDetail}>
-                <Create />
-              </IconButton>
-            )}
+            {t("Project Description")}
           </div>
-        </Grid>
+          <InputBase
+            id="project_desc_input"
+            autoComplete
+            type="text"
+            variant="outlined"
+            margin="normal"
+            required
+            name="projectDescription"
+            placeholder={projectDescription}
+            label={projectDescription}
+            onChange={changeProjectDescription}
+            value={projectDescription}
+            style={{
+              color: currentThemeColor.textWhite87,
+              width: "calc(100% - 160px)",
+            }}
+            disabled={isUnableToChangeDescription}
+            onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
+            onBlur={() => setIsUnableTochangeDescription(true)}
+            inputRef={descriptionRef}
+            multiline={true}
+            maxRows={5}
+            onClick={onLetAbleToChangeDetail}
+          />
+          {isUnableToChangeDescription && (
+            <IconButton id="change_project_desc_btn" style={{ width: "15px", padding: "0" }} onClick={onLetAbleToChangeDetail}>
+              <Create />
+            </IconButton>
+          )}
+        </div>
+      </Grid>
 
-        <Grid item xs={9}>
+      <Grid item xs={9}>
+        <div
+          style={{
+            borderBottom: "1px solid " + currentThemeColor.textWhite87,
+            width: "100%",
+            marginBottom: "16px",
+            padding: "4px 8px",
+            cursor: "default",
+          }}
+        >
           <div
             style={{
-              borderBottom: "1px solid " + currentThemeColor.textWhite87,
-              width: "100%",
-              marginBottom: "16px",
-              padding: "4px 8px",
-              cursor: "default",
+              display: "inline-block",
+              width: "135px",
+              fontSize: 16,
+              marginLeft: "10px",
             }}
           >
-            <div
-              style={{
-                display: "inline-block",
-                width: "135px",
-                fontSize: 16,
-                marginLeft: "10px",
-              }}
-            >
-              {t("Category")}
-            </div>
-            <span style={{ fontSize: "16px", color: currentThemeColor.textWhite6 }}>{t(workapp[projectCategory])}</span>
-            {/* <FormControlLabel
+            {t("Category")}
+          </div>
+          <span style={{ fontSize: "16px", color: currentThemeColor.textWhite6 }}>{t(workapp[projectCategory])}</span>
+          {/* <FormControlLabel
               value={projectCategory}
               label={t(workapp[projectCategory])}
               control={<Radio color="primary" />}
               checked
               style={{ cursor: "default", marginBottom: "0" }}
             /> */}
-          </div>
-        </Grid>
-
-        <Grid item xs={9}>
-          <div style={{ margin: "0 0 10px 5px", textAlign: "right" }}>
-            <FormControlLabel control={<Switch id="inspection_switch_btn" checked={hasReviewProcess} onChange={changeHasReviewProcess} />} label={<span style={{ fontSize: 16, fontWeight: 600 }}>{`${t("Inspection progress")}`}</span>} style={{ margin: 0 }} />
-
-            <Tooltip title={t("It is decided whether to proceed with the inspection of the manual labeling case.")}>
-              <HelpOutlineOutlinedIcon fontSize="small" sx={{ fill: "var(--primary)", marginLeft: "4px" }} />
-            </Tooltip>
-          </div>
-        </Grid>
-
-        <Grid item xs={9}>
-          <div
-            style={{
-              width: "100%",
-              margin: "24px 0 16px",
-              padding: "4px 0",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Button id="delete_project_btn" shape="redOutlined" onClick={() => deleteProject(labelprojects.projectDetail.id)}>
-              {t("Delete Project")}
-            </Button>
-            <Button id="edit_project_info_btn" shape="whiteOutlined" onClick={() => updateProject(labelprojects.projectDetail.id)}>
-              {t("Edit")}
-            </Button>
-          </div>
-        </Grid>
-      </>
-    );
-  };
-
-  const renderProjectAsyncTaskHistory = () => {
-    return (
-      <>
-        <div className={classes.title} style={{ marginBottom: "12px" }}>
-          {t("Notification history")}
         </div>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              {tableHeads.map((tableHead, idx) => {
-                return (
-                  <TableCell id="mainHeader" key={idx} className={classes.tableHead} align="center" width={tableHead.width}>
-                    <b>{t(tableHead.value)}</b>
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {asynctasks && (
-              <>
-                {asynctasks.map((asynctask, idx) => (
-                  <TableRow key={asynctask.created_at + idx} className={classes.tableRow}>
-                    <TableCell className={classes.tableRowCell} align="center">
-                      <div className={classes.wordBreakDiv}>{totalLength - (idx + 5 * (historyPage - 1))}</div>
-                    </TableCell>
-                    {tableBodys.map((tableBody, idx) => {
-                      return (
-                        <TableCell key={tableBody.value} className={classes.tableRowCell} align={tableBody.name === "content" ? "left" : "center"}>
-                          <div>{tableBody.value === "taskType" ? <>{asynctask.taskName + " " + getNotificationText(asynctask.status, asynctask.taskType, asynctask.statusText, i18n?.language)}</> : <>{asynctask[tableBody.value].substring(0, 10)}</>}</div>
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell key={idx} className={classes.tableRowCell} align="center">
-                      <div className={classes.wordBreakDiv}>
-                        {buttonTask.indexOf(asynctask.taskType) > -1 ? (
-                          <>
-                            {buttonTask.indexOf(asynctask.taskType) < 4 ? (
-                              <>
-                                {asynctask.status === 100 && (
-                                  <Button
-                                    shape="greenOutlined"
-                                    onClick={() => {
-                                      onClickButtonAction(asynctask.taskType, asynctask.outputFilePath);
-                                    }}
-                                  >
-                                    {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
-                                  </Button>
-                                )}
-                                {asynctask.status === 99 && (
-                                  <Tooltip title={<span style={{ fontSize: "12px" }}>{t("When inquiring, please tell us the date of creation of the error and the name of the file.")}</span>} placement="bottom">
-                                    <div>
-                                      <Button shape="greenOutlined" onClick={() => openChat()}>
-                                        {t("Contact us")}
-                                      </Button>
-                                    </div>
-                                  </Tooltip>
-                                )}
-                              </>
-                            ) : (
-                              <>
-                                {asynctask.status === 99 && (
-                                  <Button shape="greenOutlined" onClick={() => onClickButtonAction(asynctask.taskType)}>
-                                    {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
-                                  </Button>
-                                )}
-                              </>
-                            )}
-                          </>
-                        ) : (
-                          "-"
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </>
-            )}
-          </TableBody>
-        </Table>
+      </Grid>
+
+      <Grid item xs={9}>
+        <div style={{ margin: "0 0 10px 5px", textAlign: "right" }}>
+          <FormControlLabel control={<Switch id="inspection_switch_btn" checked={hasReviewProcess} onChange={changeHasReviewProcess} />} label={<span style={{ fontSize: 16, fontWeight: 600 }}>{`${t("Inspection progress")}`}</span>} style={{ margin: 0 }} />
+
+          <Tooltip title={t("It is decided whether to proceed with the inspection of the manual labeling case.")}>
+            <HelpOutlineOutlinedIcon fontSize="small" sx={{ fill: "var(--primary)", marginLeft: "4px" }} />
+          </Tooltip>
+        </div>
+      </Grid>
+
+      <Grid item xs={9}>
         <div
           style={{
+            width: "100%",
+            margin: "24px 0 16px",
+            padding: "4px 0",
             display: "flex",
-            justifyContent: "center",
-            marginTop: "15px",
+            justifyContent: "space-between",
           }}
         >
-          <Pagination count={totalLength ? Math.ceil(totalLength / 5) : 0} page={historyPage} onChange={changePage} classes={{ ul: classes.paginationNum }} />
+          <Button id="delete_project_btn" shape="redOutlined" onClick={() => deleteProject(labelprojects.projectDetail.id)}>
+            {t("Delete Project")}
+          </Button>
+          <Button id="edit_project_info_btn" shape="whiteOutlined" onClick={() => updateProject(labelprojects.projectDetail.id)}>
+            {t("Edit")}
+          </Button>
         </div>
-      </>
-    );
-  };
+      </Grid>
+    </>
+  );
+
+  const renderProjectAsyncTaskHistory = () => (
+    <>
+      <div className={classes.title} style={{ marginBottom: "12px" }}>
+        {t("Notification history")}
+      </div>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            {tableHeads.map((tableHead, idx) => (
+              <TableCell id="mainHeader" key={idx} className={classes.tableHead} align="center" width={tableHead.width}>
+                <b>{t(tableHead.value)}</b>
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {asynctasks &&
+            asynctasks.map((asynctask, idx) => (
+              <TableRow key={asynctask.created_at + idx} className={classes.tableRow}>
+                <TableCell className={classes.tableRowCell} align="center">
+                  <div className={classes.wordBreakDiv}>{totalLength - (idx + 5 * (historyPage - 1))}</div>
+                </TableCell>
+                {tableBodys.map((tableBody) => (
+                  <TableCell key={tableBody.value} className={classes.tableRowCell} align={tableBody.name === "content" ? "left" : "center"}>
+                    <div>{tableBody.value === "taskType" ? asynctask.taskName + " " + getNotificationText(asynctask.status, asynctask.taskType, asynctask.statusText, i18n?.language) : asynctask[tableBody.value].substring(0, 10)}</div>
+                  </TableCell>
+                ))}
+                <TableCell key={idx} className={classes.tableRowCell} align="center">
+                  <div className={classes.wordBreakDiv}>
+                    {buttonTask.indexOf(asynctask.taskType) > -1 ? (
+                      buttonTask.indexOf(asynctask.taskType) < 4 ? (
+                        <>
+                          {asynctask.status === 100 && (
+                            <Button
+                              shape="greenOutlined"
+                              onClick={() => {
+                                onClickButtonAction(asynctask.taskType, asynctask.outputFilePath);
+                              }}
+                            >
+                              {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
+                            </Button>
+                          )}
+                          {asynctask.status === 99 && (
+                            <Tooltip title={<span style={{ fontSize: "12px" }}>{t("When inquiring, please tell us the date of creation of the error and the name of the file.")}</span>} placement="bottom">
+                              <div>
+                                <Button shape="greenOutlined" onClick={() => openChat()}>
+                                  {t("Contact us")}
+                                </Button>
+                              </div>
+                            </Tooltip>
+                          )}
+                        </>
+                      ) : (
+                        asynctask.status === 99 && (
+                          <Button shape="greenOutlined" onClick={() => onClickButtonAction(asynctask.taskType)}>
+                            {t(buttonText[buttonTask.indexOf(asynctask.taskType)])}
+                          </Button>
+                        )
+                      )
+                    ) : (
+                      "-"
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "15px",
+        }}
+      >
+        <Pagination count={totalLength ? Math.ceil(totalLength / 5) : 0} page={historyPage} onChange={changePage} classes={{ ul: classes.paginationNum }} />
+      </div>
+    </>
+  );
 
   return (
     <>
@@ -573,8 +566,12 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         </div>
       ) : (
         <>
-          <div style={{ marginTop: "30px" }}>{renderProjectUpdateOrDelete()}</div>
-          <div style={{ marginTop: "50px", width: "75%" }}>{renderProjectAsyncTaskHistory()}</div>
+          <div style={{ marginTop: "30px" }}>
+            {renderProjectUpdateOrDelete()}
+          </div>
+          <div style={{ marginTop: "50px", width: "75%" }}>
+            {renderProjectAsyncTaskHistory()}
+          </div>
         </>
       )}
     </>

@@ -434,3 +434,29 @@ class HelperSub():
     @wrapper
     def get_movie_statistics(self, marketprojectId):
         return movieStatisticsTable.select().where(movieStatisticsTable.marketproject == marketprojectId)
+
+    @wrapper
+    def getTrainingSubServers(self):
+        return trainingServerTable.select().where(((trainingServerTable.is_main == None) | (trainingServerTable.is_main == False)) & ((trainingServerTable.is_deleted == None) | (trainingServerTable.is_deleted == False)))
+
+    @wrapper
+    def getOneTrainingServer(self, rowId, raw=False):
+        data = trainingServerTable.get_or_none(trainingServerTable.id == rowId)
+        if data:
+            return data.__dict__['__data__'] if not raw else data
+        return data
+
+
+    @wrapper
+    def getOneTrainingServerByName(self, name, raw=False):
+        data = trainingServerTable.get_or_none((trainingServerTable.name == name & trainingServerTable.is_deleted != True))
+        if data:
+            return data.__dict__['__data__'] if not raw else data
+        return data
+
+    @wrapper
+    def getOneTrainingServerByIP(self, ip, raw=False):
+        data = trainingServerTable.get_or_none((trainingServerTable.ip == ip & trainingServerTable.is_deleted != True))
+        if data:
+            return data.__dict__['__data__'] if not raw else data
+        return data

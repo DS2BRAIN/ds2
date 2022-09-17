@@ -10,7 +10,6 @@ from starlette.status import HTTP_201_CREATED
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 from starlette.status import HTTP_503_SERVICE_UNAVAILABLE
 import os, io
-import boto3
 import urllib
 import urllib.request
 import json

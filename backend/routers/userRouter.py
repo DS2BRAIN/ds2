@@ -341,3 +341,53 @@ def get_usages(token: str, response: Response):
     response.status_code, result = manageUserClass.get_user_usage(token)
 
     return result
+
+class UserPropertyData(BaseModel):
+    user_property_name: str = None
+    user_property_info: dict = None
+
+@router.post("/user-properties/")
+def createFlow(response: Response, user_property_data: UserPropertyData, token: str):
+    response.status_code, result = manageUserClass.createUserProperty(token, user_property_data)
+
+    return result
+
+@router.get("/user-properties/")
+def readUserPropertys(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
+                 page: int = 0, desc: bool = False, searching: str = '', isVerify: bool = False):
+    response.status_code, result = manageUserClass.getUserPropertysById(token, sorting, page, count, tab,
+                                                                      desc, searching, isVerify)
+    return result
+
+@router.get("/user-properties/{user_property_id}/")
+async def readUserProperty(user_property_id: int, token: str, response: Response):
+    response.status_code, result = manageUserClass.getUserPropertyById(token, user_property_id)
+    return result
+
+@router.get("/user-properties/{user_property_id}/status")
+async def read_user_property_status(response: Response, token: str, user_property_id: str):
+    response.status_code, result = manageUserClass.get_user_property_status_by_id(token, user_property_id)
+    return result
+    flow_id: int = None
+    flow_node_id: int = None
+
+@router.get("/user-properties-async/{user_property_id}/")
+async def readUserPropertyasync(user_property_id: str, token: str, response: Response):
+    response.status_code, result = manageUserClass.getUserPropertyAsyncById(token, user_property_id)
+    return result
+
+@router.put("/user-properties/{user_property_id}/")
+async def updateUserProperty(user_property_id: str, token: str, user_propertyInfo: UserPropertyData, response: Response):
+    response.status_code, result = manageUserClass.putUserProperty(token, user_propertyInfo, user_property_id)
+
+    return result
+
+@router.delete("/user-properties/")
+async def deleteUserProperty(token: str, response: Response, user_property_id: List[str] = Form(...)):
+    response.status_code, result = manageUserClass.deleteUserPropertys(token, user_property_id)
+    return result
+
+@router.delete("/user-properties/{user_property_id}/")
+async def deleteUserProperty(token: str, response: Response, user_property_id):
+    response.status_code, result = manageUserClass.deleteUserProperty(token, user_property_id)
+    return result

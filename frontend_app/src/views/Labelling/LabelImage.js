@@ -6,7 +6,10 @@ import Loading from "components/Loading/Loading.js";
 import Cookies from "helpers/Cookies";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { openErrorSnackbarRequestAction, openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
+import {
+  openErrorSnackbarRequestAction,
+  openSuccessSnackbarRequestAction,
+} from "redux/reducers/messages.js";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 import { Container, Grid } from "@material-ui/core";
@@ -169,15 +172,18 @@ const LabelImage = ({ history }) => {
         switch (e.key) {
           case "a":
           case "ㅁ":
-            document.getElementById("prevBtn") && document.getElementById("prevBtn").click();
+            document.getElementById("prevBtn") &&
+              document.getElementById("prevBtn").click();
             break;
           case "s":
           case "ㄴ":
-            document.getElementById("saveBtn") && document.getElementById("saveBtn").click();
+            document.getElementById("saveBtn") &&
+              document.getElementById("saveBtn").click();
             break;
           case "d":
           case "ㅇ":
-            document.getElementById("nextBtn") && document.getElementById("nextBtn").click();
+            document.getElementById("nextBtn") &&
+              document.getElementById("nextBtn").click();
             break;
           default:
             break;
@@ -190,16 +196,31 @@ const LabelImage = ({ history }) => {
 
   useEffect(() => {
     if (qs.includes("start=true")) {
-      Cookies.setCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`, labelFileId, 1);
+      Cookies.setCookie(
+        `fileHistoryBy${labelProjectId}At${timeStamp}`,
+        labelFileId,
+        1
+      );
     } else {
-      let fileHistoryCookieArr = Cookies.getCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`).split(",");
+      let fileHistoryCookieArr = Cookies.getCookie(
+        `fileHistoryBy${labelProjectId}At${timeStamp}`
+      ).split(",");
 
-      if (fileHistoryCookieArr.indexOf(labelFileId) === -1 && labelFileId !== "" && labelFileId !== "null" && labelFileId !== "undefined") {
+      if (
+        fileHistoryCookieArr.indexOf(labelFileId) === -1 &&
+        labelFileId !== "" &&
+        labelFileId !== "null" &&
+        labelFileId !== "undefined"
+      ) {
         if (fileHistoryCookieArr.length >= 10) {
           fileHistoryCookieArr.shift();
         }
         fileHistoryCookieArr.push(labelFileId);
-        Cookies.setCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`, fileHistoryCookieArr, 1);
+        Cookies.setCookie(
+          `fileHistoryBy${labelProjectId}At${timeStamp}`,
+          fileHistoryCookieArr,
+          1
+        );
       }
     }
     setIsHistoryChanged(true);
@@ -207,7 +228,9 @@ const LabelImage = ({ history }) => {
 
   useEffect(() => {
     if (isHistoryChanged) {
-      let fileHistoryCookieArr = Cookies.getCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`).split(",");
+      let fileHistoryCookieArr = Cookies.getCookie(
+        `fileHistoryBy${labelProjectId}At${timeStamp}`
+      ).split(",");
       let fileIndex = fileHistoryCookieArr.indexOf(labelFileId);
 
       if (fileHistoryCookieArr[fileIndex - 1] === undefined) {
@@ -220,8 +243,26 @@ const LabelImage = ({ history }) => {
   }, [isHistoryChanged]);
 
   useEffect(() => {
-    let tmp = appStatus === "prepare" || appStatus === "working" ? "prepare" : appStatus === "review" ? "review" : appStatus === "done" ? "done" : appStatus === "reject" ? "reject" : "none";
-    let tmpTxt = appStatus === "prepare" || appStatus === "working" ? "시작 전" : appStatus === "review" ? "리뷰 중" : appStatus === "done" ? "완료" : appStatus === "reject" ? "반려" : "없음";
+    let tmp =
+      appStatus === "prepare" || appStatus === "working"
+        ? "prepare"
+        : appStatus === "review"
+        ? "review"
+        : appStatus === "done"
+        ? "done"
+        : appStatus === "reject"
+        ? "reject"
+        : "none";
+    let tmpTxt =
+      appStatus === "prepare" || appStatus === "working"
+        ? "시작 전"
+        : appStatus === "review"
+        ? "리뷰 중"
+        : appStatus === "done"
+        ? "완료"
+        : appStatus === "reject"
+        ? "반려"
+        : "없음";
 
     setAppStatusForRequestValue(tmp);
     setAppStatusTxt(tmpTxt);
@@ -259,7 +300,9 @@ const LabelImage = ({ history }) => {
 
           setTotalLength(res.data.totalCount);
           tempFiles.forEach((file) => {
-            if (/\.(jpg|jpeg|png)$/g.test(file.originalFileName.toLowerCase())) {
+            if (
+              /\.(jpg|jpeg|png)$/g.test(file.originalFileName.toLowerCase())
+            ) {
               labelFilesRaw.push(file);
               if (labelFileId === file.id) setSelectedLabelFile(file);
             }
@@ -322,7 +365,8 @@ const LabelImage = ({ history }) => {
       .getLabelAppData(labelProjectId, labelFileId)
       .then((res) => {
         const fileDetail = res.data.sthreefile;
-        const labelData = fileDetail.labelData === null ? {} : fileDetail.labelData;
+        const labelData =
+          fileDetail.labelData === null ? {} : fileDetail.labelData;
         const labelClasses = res.data.labelclass;
 
         setLabelFileDetail({
@@ -331,7 +375,10 @@ const LabelImage = ({ history }) => {
         });
         setLabelClasses(labelClasses);
         setWorkapp(fileDetail.workapp);
-        let isReviewTmp = fileDetail.status === "review" || (fileDetail.inspectionResult !== undefined && fileDetail.inspectionResult !== null);
+        let isReviewTmp =
+          fileDetail.status === "review" ||
+          (fileDetail.inspectionResult !== undefined &&
+            fileDetail.inspectionResult !== null);
 
         if (fileDetail && fileDetail.labelData !== undefined) {
           setSelectedValueName(fileDetail.labelData);
@@ -348,23 +395,39 @@ const LabelImage = ({ history }) => {
       })
       .catch((e) => {
         console.log(e);
-        dispatch(openErrorSnackbarRequestAction(t("The labeling data was not loaded due to a temporary error.")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("The labeling data was not loaded due to a temporary error.")
+          )
+        );
       });
   };
 
   const onGoToSelectedPage = (id) => {
-    if (window.confirm(t("Labeling information in progress is initialized. Are you sure you want to go to the selected image?"))) {
+    if (
+      window.confirm(
+        t(
+          "Labeling information in progress is initialized. Are you sure you want to go to the selected image?"
+        )
+      )
+    ) {
       setSelectedValueName("");
       setSelectedValueId(0);
       setFileStatus("");
-      history.push(`/admin/${labelFileType}/${labelProjectId}/${id}/?token=${Cookies.getCookie("jwt")}&appStatus=${appStatus}&timeStamp=${timeStamp}`);
+      history.push(
+        `/admin/${labelFileType}/${labelProjectId}/${id}/?token=${Cookies.getCookie(
+          "jwt"
+        )}&appStatus=${appStatus}&timeStamp=${timeStamp}`
+      );
       setIsListModalOpen(false);
     }
   };
 
   const getS3key = (key) => {
     if (key) {
-      return process.env.REACT_APP_ENTERPRISE === "true" ? `${fileurl}static/${key}` : key;
+      return process.env.REACT_APP_ENTERPRISE === "true"
+        ? `${fileurl}static/${key}`
+        : key;
       // return key;
     }
   };
@@ -406,7 +469,9 @@ const LabelImage = ({ history }) => {
     if (checkSaveNum === 0) {
       checkSaveNum++;
       if (selectedValueName === null) {
-        dispatch(openErrorSnackbarRequestAction(t("Select or enter a value to label.")));
+        dispatch(
+          openErrorSnackbarRequestAction(t("Select or enter a value to label."))
+        );
         checkSaveNum = 0;
         return;
       }
@@ -464,11 +529,21 @@ const LabelImage = ({ history }) => {
                   tempUrl = `${process.env.REACT_APP_FRONTEND_URL}`;
                 }
                 if (process.env.REACT_APP_ENTERPRISE) {
-                  tempUrl = "http://" + window.location.host.split(":")[0] + ":13000/";
+                  tempUrl =
+                    "http://" + window.location.host.split(":")[0] + ":13000/";
                 }
-                window.open(`${tempUrl}admin/setting/payment/?cardRequest=true`, "_blank");
+                window.open(
+                  `${tempUrl}admin/setting/payment/?cardRequest=true`,
+                  "_blank"
+                );
               }
-              dispatch(openErrorSnackbarRequestAction(t("The labeling data was not loaded due to a temporary error.")));
+              dispatch(
+                openErrorSnackbarRequestAction(
+                  t(
+                    "The labeling data was not loaded due to a temporary error."
+                  )
+                )
+              );
               return isSavingSuccess;
             });
         }
@@ -483,13 +558,18 @@ const LabelImage = ({ history }) => {
   const goToPrevOrNextFilePage = async (buttonType, res) => {
     setIsNextOrPrevLoading(true);
 
-    let fileHistoryCookieArr = Cookies.getCookie(`fileHistoryBy${labelProjectId}At${timeStamp}`).split(",");
+    let fileHistoryCookieArr = Cookies.getCookie(
+      `fileHistoryBy${labelProjectId}At${timeStamp}`
+    ).split(",");
     let currentFileIdx = fileHistoryCookieArr.indexOf(labelFileId);
     let nextFileId = "";
     let prevFileId = "";
 
     if (buttonType === "next") {
-      if (currentFileIdx !== -1 && currentFileIdx === fileHistoryCookieArr.length - 1) {
+      if (
+        currentFileIdx !== -1 &&
+        currentFileIdx === fileHistoryCookieArr.length - 1
+      ) {
         nextFileId = res.data.nextSthreeFile.id;
         // console.log("현재 아이디가 포함되어 있으면서 마지막 파일인 경우");
       } else {
@@ -502,9 +582,16 @@ const LabelImage = ({ history }) => {
       prevFileId = fileHistoryCookieArr[currentFileIdx - 1];
     }
 
-    let prevUrl = fileHistoryCookieArr[currentFileIdx - 1] !== undefined ? `/admin/${labelFileType}/${labelProjectId}/${prevFileId}/?token=${Cookies.getCookie("jwt")}&appStatus=${appStatus}&timeStamp=${timeStamp}` : "none";
+    let prevUrl =
+      fileHistoryCookieArr[currentFileIdx - 1] !== undefined
+        ? `/admin/${labelFileType}/${labelProjectId}/${prevFileId}/?token=${Cookies.getCookie(
+            "jwt"
+          )}&appStatus=${appStatus}&timeStamp=${timeStamp}`
+        : "none";
 
-    let nextUrl = `/admin/${labelFileType}/${labelProjectId}/${nextFileId}/?token=${Cookies.getCookie("jwt")}&appStatus=${appStatus}&timeStamp=${timeStamp}`;
+    let nextUrl = `/admin/${labelFileType}/${labelProjectId}/${nextFileId}/?token=${Cookies.getCookie(
+      "jwt"
+    )}&appStatus=${appStatus}&timeStamp=${timeStamp}`;
 
     if (fileHistoryCookieArr[currentFileIdx + 1] === undefined) {
       if (res.data.nextSthreeFile.id === null) {
@@ -519,13 +606,17 @@ const LabelImage = ({ history }) => {
       await setTimeout(() => {
         if (isSavingSuccess) {
           setFileStatus("");
-          dispatch(openErrorSnackbarRequestAction(t("There are no labelable files.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("There are no labelable files."))
+          );
           setIsSavingLoading(false);
           setIsNextOrPrevLoading(false);
           checkSaveNum = 0;
         } else {
           setFileStatus("");
-          dispatch(openErrorSnackbarRequestAction(t("Sorry. please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Sorry. please try again."))
+          );
           setIsSavingLoading(false);
           setIsNextOrPrevLoading(false);
           checkSaveNum = 0;
@@ -537,13 +628,19 @@ const LabelImage = ({ history }) => {
         if (isSavingSuccess) {
           let keyword = buttonType === "prev" ? "이전" : "다음";
 
-          dispatch(openSuccessSnackbarRequestAction(t(`${keyword} 이미지로 이동합니다.`)));
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t(`${keyword} 이미지로 이동합니다.`)
+            )
+          );
 
           history.push(url);
           // checkSaveNum = 0;
           setFileStatus("");
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Sorry. please try again.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Sorry. please try again."))
+          );
           setIsContentLoading(false);
           setIsNextOrPrevLoading(false);
           setIsSavingLoading(false);
@@ -602,7 +699,10 @@ const LabelImage = ({ history }) => {
     <>
       <ReactTitle title={"DS2.ai - " + t("Single Image Labelling")} />
       <Container maxWidth="lg" style={{ padding: "0px" }}>
-        {isNextOrPrevLoading || isContentLoading || isSavingLoading || isClassesLoading ? (
+        {isNextOrPrevLoading ||
+        isContentLoading ||
+        isSavingLoading ||
+        isClassesLoading ? (
           <div
             style={{
               width: "100%",
@@ -642,9 +742,19 @@ const LabelImage = ({ history }) => {
                   borderBottom: "1px solid rgba(255,255,255,.2)",
                 }}
               >
-                <Grid container item xs={7} justify="flex-start" alignItems="center" style={{ flexWrap: "nowrap" }}>
+                <Grid
+                  container
+                  item
+                  xs={7}
+                  justify="flex-start"
+                  alignItems="center"
+                  style={{ flexWrap: "nowrap" }}
+                >
                   <Grid item>
-                    <IconButton aria-label="파일리스트" onClick={onClickListButton}>
+                    <IconButton
+                      aria-label="파일리스트"
+                      onClick={onClickListButton}
+                    >
                       <ListIcon fontSize="large" />
                     </IconButton>
                   </Grid>
@@ -659,9 +769,20 @@ const LabelImage = ({ history }) => {
                     {t(`${labelFileDetail.originalFileName}`)}
                   </Grid>
                 </Grid>
-                <Grid container item xs={5} justify="flex-end" alignItems="center" style={{ flexWrap: "nowrap" }}>
+                <Grid
+                  container
+                  item
+                  xs={5}
+                  justify="flex-end"
+                  alignItems="center"
+                  style={{ flexWrap: "nowrap" }}
+                >
                   <Button
-                    className={prevButtonDisabled ? `${classes.defaultDisabledButton} ${classes.labeling_default_button}` : `${classes.defaultOutlineButton} ${classes.labeling_default_button}`}
+                    className={
+                      prevButtonDisabled
+                        ? `${classes.defaultDisabledButton} ${classes.labeling_default_button}`
+                        : `${classes.defaultOutlineButton} ${classes.labeling_default_button}`
+                    }
                     style={{
                       width: "25%",
                       textTransform: "none",
@@ -709,8 +830,21 @@ const LabelImage = ({ history }) => {
                   marginBottom: "60px",
                 }}
               >
-                <Grid container item xs={12} justify="space-between" alignItems="center" style={{ padding: "12px 0" }}>
-                  <Grid container item xs={4} justify="flex-start" alignItems="center">
+                <Grid
+                  container
+                  item
+                  xs={12}
+                  justify="space-between"
+                  alignItems="center"
+                  style={{ padding: "12px 0" }}
+                >
+                  <Grid
+                    container
+                    item
+                    xs={4}
+                    justify="flex-start"
+                    alignItems="center"
+                  >
                     <Grid item>
                       <PlaylistAddCheckIcon
                         style={{
@@ -722,9 +856,22 @@ const LabelImage = ({ history }) => {
                     </Grid>
                     <Grid item>{t("Inspection Result")}</Grid>
                   </Grid>
-                  <Grid container item xs justify="flex-end" alignItems="center">
+                  <Grid
+                    container
+                    item
+                    xs
+                    justify="flex-end"
+                    alignItems="center"
+                  >
                     <FormControl component="fieldset" style={{ width: "100%" }}>
-                      <RadioGroup aria-label="model-types" name="model-types" value={inspectionResult} onChange={handleChange} row style={{ justifyContent: "flex-end" }}>
+                      <RadioGroup
+                        aria-label="model-types"
+                        name="model-types"
+                        value={inspectionResult}
+                        onChange={handleChange}
+                        row
+                        style={{ justifyContent: "flex-end" }}
+                      >
                         <FormControlLabel
                           value="1"
                           control={
@@ -736,7 +883,11 @@ const LabelImage = ({ history }) => {
                               checked={inspectionResult === "1"}
                             />
                           }
-                          className={inspectionResult === "1" ? classes.defaultHighlightButton : classes.defaultOutlineButton}
+                          className={
+                            inspectionResult === "1"
+                              ? classes.defaultHighlightButton
+                              : classes.defaultOutlineButton
+                          }
                           style={{
                             justifyContent: "center",
                             height: "30px",
@@ -755,7 +906,11 @@ const LabelImage = ({ history }) => {
                               checked={inspectionResult === "2"}
                             />
                           }
-                          className={inspectionResult === "2" ? classes.defaultHighlightButton : classes.defaultOutlineButton}
+                          className={
+                            inspectionResult === "2"
+                              ? classes.defaultHighlightButton
+                              : classes.defaultOutlineButton
+                          }
                           style={{
                             justifyContent: "center",
                             height: "30px",
@@ -776,21 +931,49 @@ const LabelImage = ({ history }) => {
                       color: "red",
                     }}
                   >
-                    {t("* Please note that in case of 'reject', all existing label data is deleted and cannot be recovered.")}
+                    {t(
+                      "* Please note that in case of 'reject', all existing label data is deleted and cannot be recovered."
+                    )}
                   </Grid>
                 </Grid>
               </Grid>
             )}
-            <Grid container item xs={12} justify="center" style={{ marginBottom: "120px" }}>
-              <Grid container xs={10} justify="center" style={{ marginBottom: "20px" }}>
+            <Grid
+              container
+              item
+              xs={12}
+              justify="center"
+              style={{ marginBottom: "120px" }}
+            >
+              <Grid
+                container
+                xs={10}
+                justify="center"
+                style={{ marginBottom: "20px" }}
+              >
                 <Grid item xs={8} style={{ textAlign: "center" }}>
-                  <img src={getS3key(labelFileDetail.s3key)} alt="라벨링 할 이미지" style={{ maxHeight: 400 }} />
+                  <img
+                    src={getS3key(labelFileDetail.s3key)}
+                    alt="라벨링 할 이미지"
+                    style={{ maxHeight: 400 }}
+                  />
                 </Grid>
               </Grid>
-              <Grid container item xs={12} justify="center" alignItems="flex-start" style={{ marginTop: "45px" }}>
+              <Grid
+                container
+                item
+                xs={12}
+                justify="center"
+                alignItems="flex-start"
+                style={{ marginTop: "45px" }}
+              >
                 <Grid container spacing={3} justify="center">
                   {Object.entries(labelClasses).map((labelClass) => (
-                    <Grid item justify="center" style={{ marginBottom: "10px" }}>
+                    <Grid
+                      item
+                      justify="center"
+                      style={{ marginBottom: "10px" }}
+                    >
                       <Button
                         variant="outlined"
                         style={
@@ -822,7 +1005,13 @@ const LabelImage = ({ history }) => {
             </Grid>
           </Grid>
         )}
-        <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isListModalOpen} onClose={closeListModal} className={modalClasses.modalContainer}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={isListModalOpen}
+          onClose={closeListModal}
+          className={modalClasses.modalContainer}
+        >
           <div className={modalClasses.modalContent}>
             <div className={modalClasses.title}>
               <div>{t("file list")}</div>
@@ -845,12 +1034,17 @@ const LabelImage = ({ history }) => {
                           : null
                       }
                     >
-                      <img src={getS3key(file.s3key)} style={{ width: "40px", marginRight: "8px" }} />
+                      <img
+                        src={getS3key(file.s3key)}
+                        style={{ width: "40px", marginRight: "8px" }}
+                      />
                       <div>{file.originalFileName}</div>
                     </div>
                   );
                 })}
-              {labelFiles.length === 0 && <div>{t(`'${appStatusTxt}'인 상태의 파일이 없습니다.`)}</div>}
+              {labelFiles.length === 0 && (
+                <div>{t(`'${appStatusTxt}'인 상태의 파일이 없습니다.`)}</div>
+              )}
             </div>
             <div
               style={{
@@ -860,9 +1054,18 @@ const LabelImage = ({ history }) => {
                 zIndex: "1000",
               }}
             >
-              <Pagination count={totalLength ? Math.ceil(totalLength / listCnt) : 0} page={page} size="small" onChange={onChangeListPage} classes={{ ul: classes.paginationNum }} />
+              <Pagination
+                count={totalLength ? Math.ceil(totalLength / listCnt) : 0}
+                page={page}
+                size="small"
+                onChange={onChangeListPage}
+                classes={{ ul: classes.paginationNum }}
+              />
             </div>
-            <div className={modalClasses.title} style={{ justifyContent: "flex-end" }}>
+            <div
+              className={modalClasses.title}
+              style={{ justifyContent: "flex-end" }}
+            >
               <Button
                 onClick={() => {
                   setIsListModalOpen(false);

@@ -8,7 +8,11 @@ import Dropzone, { useDropzone } from "react-dropzone";
 import Cookies from "helpers/Cookies";
 import * as api from "controller/labelApi.js";
 import { fileurl } from "controller/api";
-import { askModalRequestAction, openErrorSnackbarRequestAction, askDeleteObjectListsReqeustAction } from "redux/reducers/messages.js";
+import {
+  askModalRequestAction,
+  openErrorSnackbarRequestAction,
+  askDeleteObjectListsReqeustAction,
+} from "redux/reducers/messages.js";
 import {
   getObjectListsRequestAction,
   postUploadFileRequestAction,
@@ -27,7 +31,23 @@ import {
 import { getLabelAppUrl } from "components/Function/globalFunc";
 import { IS_DEPLOY, IS_ENTERPRISE } from "variables/common.js";
 
-import { Checkbox, Container, InputBase, InputLabel, LinearProgress, ListItemText, Menu, MenuItem, Modal, Table, TableBody, TableCell, TableHead, TableRow, TablePagination } from "@material-ui/core";
+import {
+  Checkbox,
+  Container,
+  InputBase,
+  InputLabel,
+  LinearProgress,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+} from "@material-ui/core";
 import { CircularProgress, Grid } from "@mui/material";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
@@ -42,7 +62,12 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button";
 import LabelPreview from "./LabelPreview.js";
 
-const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) => {
+const LabelList = ({
+  history,
+  onSetSelectedPage,
+  labelProjectId,
+  labelChart,
+}) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { user, labelprojects, messages } = useSelector(
@@ -53,7 +78,7 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     }),
     []
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
   const [projectCheckedValue, setProjectCheckedValue] = useState({
@@ -73,7 +98,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   const [frameValue, setFrameValue] = useState(null);
   const [csvColumns, setCsvColumns] = useState(null);
   const [predictVal, setPredictVal] = useState("");
-  const [isDeIdentificationChecked, setIsDeIdentificationChecked] = useState(false);
+  const [isDeIdentificationChecked, setIsDeIdentificationChecked] = useState(
+    false
+  );
   const [clientIp, setClientIp] = useState("");
   const [isDataLoading, setIsDataLoading] = useState(true);
   const { getRootProps, getInputProps } = useDropzone({
@@ -89,13 +116,13 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   }, [labelprojects.isLoading]);
 
   const statusValue = {
-    prepare: "시작전",
-    working: "진행중",
-    review: "검수중",
-    ready: "오토라벨링중",
-    reject: "반려",
-    done: "완료",
-    all: "전체",
+    prepare: "In queue",
+    working: "In process",
+    review: "Under review",
+    ready: "Autolabeling",
+    reject: "Reject",
+    done: "Completed",
+    all: "All",
   };
 
   const routes = {
@@ -116,7 +143,6 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
 
   useEffect(() => {
     setShouldUpdateFrame(false);
-    // 첫렌더링시 미리보기 모달창 닫아주기
     dispatch(setIsPreviewClosed());
   }, []);
 
@@ -125,7 +151,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     sorting: labelChart.review ? "status" : "id",
     count: 10,
     page: 0,
-    isDesc: Boolean(labelChart.review) || (workapp !== "object_detection" && workapp !== "image"),
+    isDesc:
+      Boolean(labelChart.review) ||
+      (workapp !== "object_detection" && workapp !== "image"),
     labelprojectId: labelProjectId,
     tab: "all",
     workAssignee: "all",
@@ -140,8 +168,16 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   }, [labelprojects.isProjectRefreshed]);
 
   useEffect(() => {
-    if (labelprojects.projectDetail && (!labelprojects.objectLists || labelprojects.objectLists?.[0]?.labelproject !== parseInt(labelProjectId))) {
-      let workAssignee = user.me?.id === parseInt(labelprojects.projectDetail.user) ? "all" : user.me?.email;
+    if (
+      labelprojects.projectDetail &&
+      (!labelprojects.objectLists ||
+        labelprojects.objectLists?.[0]?.labelproject !==
+          parseInt(labelProjectId))
+    ) {
+      let workAssignee =
+        user.me?.id === parseInt(labelprojects.projectDetail.user)
+          ? "all"
+          : user.me?.email;
 
       dispatch(setObjectlistsValueForAsignee(workAssignee));
       dispatch(getObjectListsRequestAction(initialPaginationCondition));
@@ -149,15 +185,19 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   }, [labelprojects.projectDetail]);
 
   useEffect(() => {
-    // objectLists 바뀔때마다 초기값 세팅
     (async () => {
       if (labelprojects.objectLists) {
-        if (labelprojects.objectLists.length > 0 && FileTypeByworkapp[labelprojects.projectDetail.workapp] === "csv") {
+        if (
+          labelprojects.objectLists.length > 0 &&
+          FileTypeByworkapp[labelprojects.projectDetail.workapp] === "csv"
+        ) {
           const tmp = Object.keys(labelprojects.objectLists[0]);
           if (tmp.indexOf("rawData") > -1 && tmp.indexOf("labelData") > -1) {
             let columns = Object.keys(labelprojects.objectLists[0].rawData);
             if (labelprojects.objectLists[0].labelData) {
-              const predictValue = Object.keys(labelprojects.objectLists[0].labelData);
+              const predictValue = Object.keys(
+                labelprojects.objectLists[0].labelData
+              );
               setPredictVal(predictValue);
             }
             setCsvColumns(columns);
@@ -187,7 +227,6 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   }, [labelprojects.isPostSuccess]);
 
   useEffect(() => {
-    // 파일 업로드 모달창 닫아질때마다 초기값 세팅
     if (messages.shouldCloseModal) {
       setIsFileUploading(false);
       setCompleted(0);
@@ -382,13 +421,27 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     labelprojects.objectLists.forEach((data) => {
       if (data.id === id) {
         labelStatus = data.status === "working" ? "prepare" : data.status;
-        if ((data.status === "done" || data.status === "working") && data.workAssignee !== user.me.email && labelprojects.role !== "subadmin") {
-          dispatch(openErrorSnackbarRequestAction(t("You cannot label a file started by another user.")));
+        if (
+          (data.status === "done" || data.status === "working") &&
+          data.workAssignee !== user.me.email &&
+          labelprojects.role !== "subadmin"
+        ) {
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("You cannot label a file started by another user.")
+            )
+          );
           isAbleToProceed = false;
           return;
         }
         if (data.status === "ready") {
-          dispatch(openErrorSnackbarRequestAction(t("You cannot edit the labeling of files that are training auto-labeling.")));
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "You cannot edit the labeling of files that are training auto-labeling."
+              )
+            )
+          );
           return;
         }
         if (!data.status || data.status.length === 0) {
@@ -401,28 +454,69 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     if (!isAbleToProceed) return;
     if (category) {
       if (category === "normal_regression") {
-        window.open(`${tempLabellingUrl}admin/${routes[category]}/${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`, "_blank");
+        window.open(
+          `${tempLabellingUrl}admin/${routes[category]}/${
+            labelprojects.projectDetail.id
+          }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
+          "_blank"
+        );
       } else {
         if (!labelClasses || labelClasses.length === 0) {
-          if (labelprojects.projectDetail && labelprojects.projectDetail.isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Register a class through the group leader.")));
+          if (
+            labelprojects.projectDetail &&
+            labelprojects.projectDetail.isShared
+          ) {
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "Labeling cannot proceed because there is no registered class. Register a class through the group leader."
+                )
+              )
+            );
             return;
-          } else if (labelprojects.projectDetail && !labelprojects.projectDetail.isShared) {
-            dispatch(openErrorSnackbarRequestAction(t("You can view the label list after registering at least one label class")));
+          } else if (
+            labelprojects.projectDetail &&
+            !labelprojects.projectDetail.isShared
+          ) {
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "You can view the label list after registering at least one label class"
+                )
+              )
+            );
             onSetSelectedPage("class");
-            history.push(`/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`);
+            history.push(
+              `/admin/labelling/${labelprojects.projectDetail.id}?class_required=true`
+            );
 
             return;
           }
           if (user.me && user.me.isAiTrainer) {
-            dispatch(openErrorSnackbarRequestAction(t("Labeling cannot proceed because there is no registered class. Please contact us for further information.")));
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t(
+                  "Labeling cannot proceed because there is no registered class. Please contact us for further information."
+                )
+              )
+            );
             return;
           }
         } else {
           if (category !== "object_detection") {
-            window.open(`${tempLabellingUrl}admin/${routes[category]}/${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`, "_blank");
+            window.open(
+              `${tempLabellingUrl}admin/${routes[category]}/${
+                labelprojects.projectDetail.id
+              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
+              "_blank"
+            );
           } else {
-            window.open(`${tempLabellingUrl}${labelprojects.projectDetail.id}/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`, "_blank");
+            window.open(
+              `${tempLabellingUrl}${
+                labelprojects.projectDetail.id
+              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
+              "_blank"
+            );
           }
         }
       }
@@ -448,13 +542,28 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     if (projectDetail.isShared) {
       return (
         <div>
-          {count === 1 && (projectDetail.workapp === "object_detection" || projectDetail.workapp === "image") && (
-            <Button aria-controls="customized-menu" aria-haspopup="true" id="previewBtn" shape="greenOutlined" sx={{ mr: 1 }} onClick={onOpenPreviewModal}>
-              {t("Preview")}
-            </Button>
-          )}
+          {count === 1 &&
+            (projectDetail.workapp === "object_detection" ||
+              projectDetail.workapp === "image") && (
+              <Button
+                aria-controls="customized-menu"
+                aria-haspopup="true"
+                id="previewBtn"
+                shape="greenOutlined"
+                sx={{ mr: 1 }}
+                onClick={onOpenPreviewModal}
+              >
+                {t("Preview")}
+              </Button>
+            )}
           {count === 1 && (
-            <Button aria-controls="customized-menu" aria-haspopup="true" id="startLabelBtn" shape="greenOutlined" onClick={goToLabellingPage}>
+            <Button
+              aria-controls="customized-menu"
+              aria-haspopup="true"
+              id="startLabelBtn"
+              shape="greenOutlined"
+              onClick={goToLabellingPage}
+            >
               {t("Start labeling")}
             </Button>
           )}
@@ -476,17 +585,32 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
           {t("Add Files")}
         </Button>
         {count === 1 && (
-          <Button aria-controls="customized-menu" aria-haspopup="true" id="startLabelBtn" shape="greenOutlined" onClick={goToLabellingPage}>
+          <Button
+            aria-controls="customized-menu"
+            aria-haspopup="true"
+            id="startLabelBtn"
+            shape="greenOutlined"
+            onClick={goToLabellingPage}
+          >
             {t("Start labeling")}
           </Button>
         )}
 
-        <Menu id="addPopup" anchorEl={anchorElForOption} keepMounted open={Boolean(anchorElForOption)} onClose={handleCloseForOption}>
+        <Menu
+          id="addPopup"
+          anchorEl={anchorElForOption}
+          keepMounted
+          open={Boolean(anchorElForOption)}
+          onClose={handleCloseForOption}
+        >
           {count > 0 && (
             <>
               <MenuItem id="deleteMenu" onClick={onDeleteObjectLists}>
                 <DeleteForeverIcon fontSize="small" />
-                <ListItemText primary={t("Delete")} style={{ marginLeft: "10px" }} />
+                <ListItemText
+                  primary={t("Delete")}
+                  style={{ marginLeft: "10px" }}
+                />
               </MenuItem>
             </>
           )}
@@ -498,7 +622,8 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   const onDeleteObjectLists = async () => {
     const deleteFilesArr = [];
     for (let file in projectCheckedValue) {
-      if (file !== "all" && projectCheckedValue[file]) deleteFilesArr.push(file);
+      if (file !== "all" && projectCheckedValue[file])
+        deleteFilesArr.push(file);
     }
     if (deleteFilesArr.length > 0) {
       await handleCloseForOption();
@@ -519,7 +644,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       );
       await dispatch(setObjectlistsSearchedValue(null));
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("Please select a file to delete.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please select a file to delete."))
+      );
     }
   };
 
@@ -533,14 +660,36 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     let maximum = user.maximumFileSize;
     for (let idx = 0; idx < files.length; idx++) {
       if (files[idx].size > maximum) {
-        dispatch(openErrorSnackbarRequestAction(t(`${maximum / 1073741824}GB 크기이상의 파일은 업로드 불가합니다.`)));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t(
+              `${
+                i18n.language === "ko"
+                  ? maximum / 1073741824 +
+                    "GB 크기이상의 파일은 업로드 불가합니다."
+                  : `Files larger than ${maximum /
+                      1073741824}GB cannot be uploaded`
+              }`
+            )
+          )
+        );
       } else {
         const name = files[idx].name;
-        if (labelprojects.projectDetail.workapp === "object_detection" || labelprojects.projectDetail.workapp === "image") {
-          if (idx < 100 && /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())) {
+        if (
+          labelprojects.projectDetail.workapp === "object_detection" ||
+          labelprojects.projectDetail.workapp === "image"
+        ) {
+          if (
+            idx < 100 &&
+            /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())
+          ) {
             tmpFiles.push(files[idx]);
           }
-          if (files[idx].type === "video/mp4" || files[idx].type === "video/quicktime" || files[idx].type === "video/mov") {
+          if (
+            files[idx].type === "video/mp4" ||
+            files[idx].type === "video/quicktime" ||
+            files[idx].type === "video/mov"
+          ) {
             setShouldUpdateFrame(true);
             maximum = 5000000000;
           }
@@ -552,7 +701,7 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       }
     }
     if (tmpFiles.length === 0) {
-      dispatch(openErrorSnackbarRequestAction(t(" Please upload file again")));
+      dispatch(openErrorSnackbarRequestAction(t("Please upload file again")));
       setIsUploadLoading(false);
       return;
     }
@@ -600,11 +749,19 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       return;
     }
     if (shouldUpdateFrame && !frameValue) {
-      dispatch(openErrorSnackbarRequestAction(t("You must enter frames per minute to upload a video file.")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("You must enter frames per minute to upload a video file.")
+        )
+      );
       return;
     }
     if (frameValue !== null && (frameValue < 1 || frameValue > 600)) {
-      dispatch(openErrorSnackbarRequestAction(t("The number of frames must be between 1 and 600")));
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("The number of frames must be between 1 and 600")
+        )
+      );
       return;
     }
     await setIsFileUploading(true);
@@ -649,7 +806,14 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
   const renderProjectTable = () => {
     if (!labelprojects.objectLists?.length)
       return (
-        <div className="emptyListTable">{labelprojects.searchedValue ? (user.language === "ko" ? `"${labelprojects.searchedValue}" ` + "에 대한 검색 결과가 없습니다. 다시 검색해주세요." : `There were no results found for "${labelprojects.searchedValue}"`) : t("There is no labeling data.")}</div>
+        <div className="emptyListTable">
+          {labelprojects.searchedValue
+            ? user.language === "ko"
+              ? `"${labelprojects.searchedValue}" ` +
+                "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
+              : `There were no results found for "${labelprojects.searchedValue}"`
+            : t("There is no labeling data.")}
+        </div>
       );
 
     const partTableBottom = () => (
@@ -660,7 +824,13 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
           alignItems: "center",
         }}
       >
-        <Button id="delete_data_btn" shape="redOutlined" size="sm" disabled={!Object.values(projectCheckedValue).includes(true)} onClick={onDeleteObjectLists}>
+        <Button
+          id="delete_data_btn"
+          shape="redOutlined"
+          size="sm"
+          disabled={!Object.values(projectCheckedValue).includes(true)}
+          onClick={onDeleteObjectLists}
+        >
           {t("Delete selection")}
         </Button>
         <TablePagination
@@ -681,8 +851,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       </div>
     );
 
-    if (labelprojects.projectDetail.workapp) {
-      if (labelprojects.projectDetail.workapp === "object_detection" || labelprojects.projectDetail.workapp === "image") {
+    let tmpWorkapp = labelprojects.projectDetail.workapp;
+    if (tmpWorkapp) {
+      if (tmpWorkapp === "object_detection" || tmpWorkapp === "image") {
         return (
           <>
             <div
@@ -694,43 +865,112 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
               <Table className={classes.table} aria-label="simple table">
                 <TableHead style={{ height: "80px" }}>
                   <TableRow>
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "5%" }}>
-                      {user.me && !user.me.isAiTrainer && labelprojects.projectDetail && !labelprojects.projectDetail.isShared && <Checkbox value="all" checked={projectCheckedValue["all"]} onChange={onSetProjectCheckedValueAll} />}
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "5%" }}
+                    >
+                      {user.me &&
+                        !user.me.isAiTrainer &&
+                        labelprojects.projectDetail &&
+                        !labelprojects.projectDetail.isShared && (
+                          <Checkbox
+                            value="all"
+                            checked={projectCheckedValue["all"]}
+                            onChange={onSetProjectCheckedValueAll}
+                          />
+                        )}
                     </TableCell>
-                    <TableCell className={classes.tableHead} style={{ width: "5%" }} align="center">
-                      <b style={{ color: currentThemeColor.textMediumGrey }}>No</b>
+                    <TableCell
+                      className={classes.tableHead}
+                      style={{ width: "5%" }}
+                      align="center"
+                    >
+                      <b style={{ color: currentThemeColor.textMediumGrey }}>
+                        No
+                      </b>
                     </TableCell>
-                    <TableCell className={classes.tableHead} style={{ width: "10%" }} align="center">
-                      <b style={{ color: currentThemeColor.textMediumGrey }}>{t("Image")}</b>
+                    <TableCell
+                      className={classes.tableHead}
+                      style={{ width: "10%" }}
+                      align="center"
+                    >
+                      <b style={{ color: currentThemeColor.textMediumGrey }}>
+                        {t("Image")}
+                      </b>
                     </TableCell>
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "30%", cursor: "pointer" }} onClick={() => onSetSortValue("originalFileName")}>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "30%", cursor: "pointer" }}
+                      onClick={() => onSetSortValue("originalFileName")}
+                    >
                       <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "originalFileName" && (!labelprojects.isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                        {labelprojects.sortingValue === "originalFileName" &&
+                          (!labelprojects.isSortDesc ? (
+                            <ArrowUpwardIcon fontSize="small" />
+                          ) : (
+                            <ArrowDownwardIcon fontSize="small" />
+                          ))}
                         <b>{t("File name")}</b>
                       </div>
                     </TableCell>
                     {labelprojects.projectDetail.workapp === "image" && (
-                      <TableCell className={classes.tableHead} align="center" style={{ width: "15%", cursor: "pointer" }}>
+                      <TableCell
+                        className={classes.tableHead}
+                        align="center"
+                        style={{ width: "15%", cursor: "pointer" }}
+                      >
                         <div className={classes.tableHeader}>
                           <b>{t("Class")}</b>
                         </div>
                       </TableCell>
                     )}
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "10%", cursor: "pointer" }} onClick={() => onSetSortValue("created_at")}>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "10%", cursor: "pointer" }}
+                      onClick={() => onSetSortValue("created_at")}
+                    >
                       <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "created_at" && (!labelprojects.isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                        {labelprojects.sortingValue === "created_at" &&
+                          (!labelprojects.isSortDesc ? (
+                            <ArrowUpwardIcon fontSize="small" />
+                          ) : (
+                            <ArrowDownwardIcon fontSize="small" />
+                          ))}
                         <b>{t("Date created")}</b>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "20%", cursor: "pointer" }} onClick={() => onSetSortValue("workAssignee")}>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "20%", cursor: "pointer" }}
+                      onClick={() => onSetSortValue("workAssignee")}
+                    >
                       <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "workAssignee" && (!labelprojects.isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                        {labelprojects.sortingValue === "workAssignee" &&
+                          (!labelprojects.isSortDesc ? (
+                            <ArrowUpwardIcon fontSize="small" />
+                          ) : (
+                            <ArrowDownwardIcon fontSize="small" />
+                          ))}
                         <b>{t("Assignee ")}</b>
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "10%", cursor: "pointer" }} onClick={() => onSetSortValue("status")}>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "10%", cursor: "pointer" }}
+                      onClick={() => onSetSortValue("status")}
+                    >
                       <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "status" && (!labelprojects.isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                        {labelprojects.sortingValue === "status" &&
+                          (!labelprojects.isSortDesc ? (
+                            <ArrowUpwardIcon fontSize="small" />
+                          ) : (
+                            <ArrowDownwardIcon fontSize="small" />
+                          ))}
                         <b>{t("Status")}</b>
                       </div>
                     </TableCell>
@@ -743,27 +983,58 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                         key={idx}
                         className={classes.tableRow}
                         style={{
-                          background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                          background:
+                            idx % 2 === 0
+                              ? currentTheme.tableRow1
+                              : currentTheme.tableRow2,
                         }}
                       >
-                        <TableCell className={classes.tableRowCell} align="center">
-                          <Checkbox value={objectData.id} checked={projectCheckedValue[objectData.id] ? true : false} onChange={() => onSetProjectCheckedValue(objectData.id)} />
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                        >
+                          <Checkbox
+                            value={objectData.id}
+                            checked={
+                              projectCheckedValue[objectData.id] ? true : false
+                            }
+                            onChange={() =>
+                              onSetProjectCheckedValue(objectData.id)
+                            }
+                          />
                         </TableCell>
-                        <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
-                          {labelprojects.totalCount - (labelprojects.projectRowsPerPage * labelprojects.projectPage + idx)}
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(objectData.id)}
+                        >
+                          {labelprojects.totalCount -
+                            (labelprojects.projectRowsPerPage *
+                              labelprojects.projectPage +
+                              idx)}
                         </TableCell>
-                        <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(objectData.id)}
+                        >
                           <span
                             style={{
                               display: "inline-block",
                               width: "80px",
                               height: "80px",
                               overflow: "hidden",
-                              background: `center/cover no-repeat url(${getS3key(encodeURIComponent(objectData.s3key))})`,
+                              background: `center/cover no-repeat url(${getS3key(
+                                encodeURIComponent(objectData.s3key)
+                              )})`,
                             }}
                           ></span>
                         </TableCell>
-                        <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(objectData.id)}
+                        >
                           <div className={classes.defaultContainer}>
                             <div
                               style={{
@@ -771,12 +1042,18 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                                 marginLeft: "10px",
                               }}
                             >
-                              {objectData.originalFileName ? objectData.originalFileName : "-"}
+                              {objectData.originalFileName
+                                ? objectData.originalFileName
+                                : "-"}
                             </div>
                           </div>
                         </TableCell>
                         {labelprojects.projectDetail.workapp === "image" && (
-                          <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
+                          <TableCell
+                            className={classes.tableRowCell}
+                            align="center"
+                            onClick={() => goProjectDetail(objectData.id)}
+                          >
                             <div className={classes.defaultContainer}>
                               <div
                                 style={{
@@ -784,19 +1061,50 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                                   marginLeft: "10px",
                                 }}
                               >
-                                {objectData.labelData ? objectData.labelData : "-"}
+                                {objectData.labelData
+                                  ? objectData.labelData
+                                  : "-"}
                               </div>
                             </div>
                           </TableCell>
                         )}
-                        <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
-                          <div className={classes.wordBreakDiv}>{objectData.created_at && objectData.created_at.substring(0, 10)}</div>
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(objectData.id)}
+                        >
+                          <div className={classes.wordBreakDiv}>
+                            {objectData.created_at &&
+                              objectData.created_at.substring(0, 10)}
+                          </div>
                         </TableCell>
-                        <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
-                          <div className={classes.wordBreakDiv}>{objectData?.workAssignee ? objectData.workAssignee : objectData?.last_updated_by === "auto" ? "Auto Labeling" : t("None")}</div>
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(objectData.id)}
+                        >
+                          <div className={classes.wordBreakDiv}>
+                            {objectData?.workAssignee
+                              ? objectData.workAssignee
+                              : objectData?.last_updated_by === "auto"
+                              ? "Auto Labeling"
+                              : t("None")}
+                          </div>
                         </TableCell>
-                        <TableCell className={classes.tableRowCell} align="center" onClick={() => goProjectDetail(objectData.id)}>
-                          <div className={classes.wordBreakDiv}>{t(statusValue[objectData.status ? objectData.status : "prepare"])}</div>
+                        <TableCell
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(objectData.id)}
+                        >
+                          <div className={classes.wordBreakDiv}>
+                            {t(
+                              statusValue[
+                                objectData.status
+                                  ? objectData.status
+                                  : "prepare"
+                              ]
+                            )}
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -818,35 +1126,85 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
               <Table className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow style={{ height: "80px" }}>
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "5%" }}>
-                      {user.me && !user.me.isAiTrainer && labelprojects.projectDetail && !labelprojects.projectDetail.isShared && <Checkbox value="all" checked={projectCheckedValue["all"]} onChange={onSetProjectCheckedValueAll} />}
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "5%" }}
+                    >
+                      {user.me &&
+                        !user.me.isAiTrainer &&
+                        labelprojects.projectDetail &&
+                        !labelprojects.projectDetail.isShared && (
+                          <Checkbox
+                            value="all"
+                            checked={projectCheckedValue["all"]}
+                            onChange={onSetProjectCheckedValueAll}
+                          />
+                        )}
                     </TableCell>
-                    <TableCell className={classes.tableHead} style={{ width: "5%" }} align="center">
-                      <b style={{ color: currentThemeColor.textMediumGrey }}>No</b>
+                    <TableCell
+                      className={classes.tableHead}
+                      style={{ width: "5%" }}
+                      align="center"
+                    >
+                      <b style={{ color: currentThemeColor.textMediumGrey }}>
+                        No
+                      </b>
                     </TableCell>
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "5%", cursor: "pointer" }} onClick={() => onSetSortValue("status")}>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "5%", cursor: "pointer" }}
+                      onClick={() => onSetSortValue("status")}
+                    >
                       <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "status" && (!labelprojects.isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                        {labelprojects.sortingValue === "status" &&
+                          (!labelprojects.isSortDesc ? (
+                            <ArrowUpwardIcon fontSize="small" />
+                          ) : (
+                            <ArrowDownwardIcon fontSize="small" />
+                          ))}
                         <b>{t("Status")}</b>
                       </div>
                     </TableCell>
 
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "10%" }}>
-                      <div className={classes.tableHeader}>{predictVal && <b>{predictVal}</b>}</div>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "10%" }}
+                    >
+                      <div className={classes.tableHeader}>
+                        {predictVal && <b>{predictVal}</b>}
+                      </div>
                     </TableCell>
                     {csvColumns &&
                       csvColumns.map((csvColumn) => {
                         return (
-                          <TableCell key={csvColumn} className={classes.tableHead} align="center" style={{ width: "10%" }}>
+                          <TableCell
+                            key={csvColumn}
+                            className={classes.tableHead}
+                            align="center"
+                            style={{ width: "10%" }}
+                          >
                             <div className={classes.tableHeader}>
                               <b>{csvColumn}</b>
                             </div>
                           </TableCell>
                         );
                       })}
-                    <TableCell className={classes.tableHead} align="center" style={{ width: "10%", cursor: "pointer" }} onClick={() => onSetSortValue("workAssignee")}>
+                    <TableCell
+                      className={classes.tableHead}
+                      align="center"
+                      style={{ width: "10%", cursor: "pointer" }}
+                      onClick={() => onSetSortValue("workAssignee")}
+                    >
                       <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "workAssignee" && (!labelprojects.isSortDesc ? <ArrowUpwardIcon fontSize="small" /> : <ArrowDownwardIcon fontSize="small" />)}
+                        {labelprojects.sortingValue === "workAssignee" &&
+                          (!labelprojects.isSortDesc ? (
+                            <ArrowUpwardIcon fontSize="small" />
+                          ) : (
+                            <ArrowDownwardIcon fontSize="small" />
+                          ))}
                         <b>{t("Assignee ")}</b>
                       </div>
                     </TableCell>
@@ -861,16 +1219,39 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                             key={idx}
                             className={classes.tableRow}
                             style={{
-                              background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                              background:
+                                idx % 2 === 0
+                                  ? currentTheme.tableRow1
+                                  : currentTheme.tableRow2,
                             }}
                           >
-                            <TableCell className={classes.tableRowCell} align="center">
-                              <Checkbox value={project.id} checked={projectCheckedValue[project.id] ? true : false} onChange={() => onSetProjectCheckedValue(project.id)} />
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                            >
+                              <Checkbox
+                                value={project.id}
+                                checked={
+                                  projectCheckedValue[project.id] ? true : false
+                                }
+                                onChange={() =>
+                                  onSetProjectCheckedValue(project.id)
+                                }
+                              />
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center">
-                              {labelprojects.totalCount - (labelprojects.projectRowsPerPage * labelprojects.projectPage + idx)}
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                            >
+                              {labelprojects.totalCount -
+                                (labelprojects.projectRowsPerPage *
+                                  labelprojects.projectPage +
+                                  idx)}
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center">
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                            >
                               <div className={classes.defaultContainer}>
                                 <div
                                   style={{
@@ -879,12 +1260,24 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                                     whiteSpace: "nowrap",
                                   }}
                                 >
-                                  <>{!project.status ? <>{t("In queue")}</> : <>{t(statusValue[project["status"]])}</>}</>
+                                  <>
+                                    {!project.status ? (
+                                      <>{t("In queue")}</>
+                                    ) : (
+                                      <>{t(statusValue[project["status"]])}</>
+                                    )}
+                                  </>
                                 </div>
                               </div>
                             </TableCell>
-                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
-                              {project.labelData && <>{project.labelData[predictVal]}</>}
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ width: "10%" }}
+                            >
+                              {project.labelData && (
+                                <>{project.labelData[predictVal]}</>
+                              )}
                             </TableCell>
                             {csvColumns &&
                               csvColumns.map((csvColumn, idx) => {
@@ -917,9 +1310,19 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                                   </TableCell>
                                 );
                               })}
-                            <TableCell className={classes.tableRowCell} align="center" style={{ width: "10%" }}>
+                            <TableCell
+                              className={classes.tableRowCell}
+                              align="center"
+                              style={{ width: "10%" }}
+                            >
                               <div className={classes.defaultContainer}>
-                                <span>{project["workAssignee"] ? project["workAssignee"] : project.last_updated_by === "auto" ? "Auto Labeling" : t("None")}</span>
+                                <span>
+                                  {project["workAssignee"]
+                                    ? project["workAssignee"]
+                                    : project.last_updated_by === "auto"
+                                    ? "Auto Labeling"
+                                    : t("None")}
+                                </span>
                               </div>
                             </TableCell>
                           </TableRow>
@@ -1001,7 +1404,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
       );
       dispatch(setObjectlistsSearchedValue(searchedValue));
     } else {
-      dispatch(openErrorSnackbarRequestAction(t("Please enter a search term.")));
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter a search term."))
+      );
       return;
     }
   };
@@ -1029,9 +1434,13 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     if (type === "object_detection" || type === "image") {
       return (
         <>
-          {t("Only image files (png/jpg/jpeg), compressed image files (zip), and video files (mp4) can be uploaded.")}
+          {t(
+            "Only image files (png/jpg/jpeg), compressed image files (zip), and video files (mp4) can be uploaded."
+          )}
           <br />
-          {t(" You are able to upload up to 100 image files. Please compress your files if you need to upload more than that")}
+          {t(
+            "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
+          )}
         </>
       );
     } else {
@@ -1043,12 +1452,19 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
     <div className={classes.loading}>
       <CircularProgress />
 
-      {isFileUploading && <p>{t("The file is being uploaded. please wait for a moment.")}</p>}
+      {isFileUploading && (
+        <p>{t("The file is being uploaded. please wait for a moment.")}</p>
+      )}
     </div>
   ) : (
     <>
       <ReactTitle title={"DS2.ai - " + t("Labeling")} />
-      <Container component="main" maxWidth={false} className={classes.mainCard} style={{ padding: 0 }}>
+      <Container
+        component="main"
+        maxWidth={false}
+        className={classes.mainCard}
+        style={{ padding: 0 }}
+      >
         <GridContainer>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>{renderMenuButton()}</Grid>
@@ -1068,7 +1484,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                     }}
                   >
                     {user.me &&
-                    (parseInt(user.me.id) === parseInt(labelprojects.projectDetail.user) || labelprojects.role === "subadmin") && ( // 오이스터에이블 관련 임시 권한 추가
+                    (parseInt(user.me.id) ===
+                      parseInt(labelprojects.projectDetail.user) ||
+                      labelprojects.role === "subadmin") && ( // 오이스터에이블 관련 임시 권한 추가
                         <option
                           value="all"
                           style={{
@@ -1080,7 +1498,10 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                         </option>
                       )}
                     {user.me && !user.me.isAiTrainer && (
-                      <option value="null" style={{ background: "#2F3236", border: "none" }}>
+                      <option
+                        value="null"
+                        style={{ background: "#2F3236", border: "none" }}
+                      >
                         {t("None")}
                       </option>
                     )}
@@ -1088,12 +1509,17 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                       labelprojects.workAssignee &&
                       labelprojects.workAssignee.map((asignee) => {
                         if (
-                          parseInt(user.me.id) === parseInt(labelprojects.projectDetail.user) ||
+                          parseInt(user.me.id) ===
+                            parseInt(labelprojects.projectDetail.user) ||
                           user.me.email === asignee ||
                           labelprojects.role === "subadmin" // 오이스터에이블 관련 임시 권한 추가
                         ) {
                           return (
-                            <option key={asignee} value={asignee} style={{ background: "#2F3236", border: "none" }}>
+                            <option
+                              key={asignee}
+                              value={asignee}
+                              style={{ background: "#2F3236", border: "none" }}
+                            >
                               {asignee}
                             </option>
                           );
@@ -1144,7 +1570,9 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                   </span>
                 </Grid>
                 <Grid item sx={{ ml: 3 }}>
-                  {(labelprojects.projectDetail?.workapp === "object_detection" || labelprojects.projectDetail?.workapp === "image") && (
+                  {(labelprojects.projectDetail?.workapp ===
+                    "object_detection" ||
+                    labelprojects.projectDetail?.workapp === "image") && (
                     <form
                       id="label_file_search_form"
                       style={{
@@ -1178,7 +1606,13 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                         }}
                         id="search_file_input"
                       />
-                      {searchedValue && searchedValue.length > 0 && <CloseIcon id="delete_searching_value_btn" onClick={onGetDefaultFile} className={classes.pointerCursor} />}
+                      {searchedValue && searchedValue.length > 0 && (
+                        <CloseIcon
+                          id="delete_searching_value_btn"
+                          onClick={onGetDefaultFile}
+                          className={classes.pointerCursor}
+                        />
+                      )}
                     </form>
                   )}
                 </Grid>
@@ -1189,13 +1623,31 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
         {renderProjectTable()}
       </Container>
 
-      <Modal id="label_preivew_modal" aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isPreviewModalOpen} onClose={onClosePreviewModal} className={classes.modalContainer}>
+      <Modal
+        id="label_preivew_modal"
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isPreviewModalOpen}
+        onClose={onClosePreviewModal}
+        className={classes.modalContainer}
+      >
         <div className="label_preivew_container">
-          <LabelPreview history={history} selectedPreviewId={selectedPreviewId} onClosePreviewModal={onClosePreviewModal} onSetSelectedPage={onSetSelectedPage} />
+          <LabelPreview
+            history={history}
+            selectedPreviewId={selectedPreviewId}
+            onClosePreviewModal={onClosePreviewModal}
+            onSetSelectedPage={onSetSelectedPage}
+          />
         </div>
       </Modal>
 
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={openFileModal} onClose={closeFileModal} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={openFileModal}
+        onClose={closeFileModal}
+        className={classes.modalContainer}
+      >
         {isFileUploading || isUploadLoading ? (
           <div className={classes.cancelModalContent}>
             <div
@@ -1206,9 +1658,13 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                 alignItems: "center",
               }}
             >
-              <LinearProgress style={{ width: "100%", height: "50px", marginTop: "20px" }} variant="determinate" value={completed} />
+              <LinearProgress
+                style={{ width: "100%", height: "50px", marginTop: "20px" }}
+                variant="determinate"
+                value={completed}
+              />
               <p className={classes.settingFontWhite6}>
-                {t("Uploading")} {completed}% {t("완료")}...{" "}
+                {t("Uploading")} {completed}% {t("Completed")}...{" "}
               </p>
             </div>
           </div>
@@ -1249,7 +1705,11 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                             }}
                           >
                             <span>
-                              {t("Uploaded File")} : <span style={{ fontSize: 20, fontWeight: 600 }}>{uploadFile.length && uploadFile.length.toLocaleString()}</span>
+                              {t("Uploaded File")} :{" "}
+                              <span style={{ fontSize: 20, fontWeight: 600 }}>
+                                {uploadFile.length &&
+                                  uploadFile.length.toLocaleString()}
+                              </span>
                             </span>
                           </p>
                           <ul
@@ -1319,14 +1779,19 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
                                 padding: "0 12px",
                               }}
                             >
-                              <InputLabel id="demo-simple-select-label" style={{ marginBottom: 0 }}>
+                              <InputLabel
+                                id="demo-simple-select-label"
+                                style={{ marginBottom: 0 }}
+                              >
                                 {t("Enter frames per minute")}
                               </InputLabel>
                               <InputBase
                                 variant="outlined"
                                 required
                                 id="frameValue"
-                                placeholder={t("Enter only numbers from 1 to 600")}
+                                placeholder={t(
+                                  "Enter only numbers from 1 to 600"
+                                )}
                                 label={t("Enter frames per minute")}
                                 name="frameValue"
                                 autoComplete="frameValue"
@@ -1366,12 +1831,27 @@ const LabelList = ({ history, onSetSelectedPage, labelProjectId, labelChart }) =
             </Dropzone>
             <GridContainer style={{ marginTop: "36px" }}>
               <GridItem xs={6}>
-                <Button id="close_modal_btn" shape="whiteOutlined" style={{ width: "100%" }} onClick={closeFileModal}>
+                <Button
+                  id="close_modal_btn"
+                  shape="whiteOutlined"
+                  style={{ width: "100%" }}
+                  onClick={closeFileModal}
+                >
                   {t("Cancel")}
                 </Button>
               </GridItem>
               <GridItem xs={6}>
-                <Button id="submit_file_btn" shape={uploadFile && uploadFile.length > 0 ? "greenContained" : "greenOutlined"} disabled={!uploadFile || uploadFile?.length === 0} style={{ width: "100%" }} onClick={saveFiles}>
+                <Button
+                  id="submit_file_btn"
+                  shape={
+                    uploadFile && uploadFile.length > 0
+                      ? "greenContained"
+                      : "greenOutlined"
+                  }
+                  disabled={!uploadFile || uploadFile?.length === 0}
+                  style={{ width: "100%" }}
+                  onClick={saveFiles}
+                >
                   {t("Next")}
                 </Button>
               </GridItem>

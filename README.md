@@ -1,5 +1,8 @@
 <p align="center">
     <img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186134066-2b9b0e78-d0a5-43cb-ac75-ad2c1b33d21e.png">
+
+English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
+
 </p>
 
 ---
@@ -92,7 +95,7 @@ After clicking Labeling on the top menu, upload the dataset, and you can start l
 
 
 
-## 1) Easy to use SOTA models
+## 2) Easy to use SOTA models
 
 
 ### Image to Text

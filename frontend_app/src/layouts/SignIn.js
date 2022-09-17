@@ -1,27 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
 import * as api from "controller/api.js";
 import { fileurl } from "controller/api";
 import Cookies from "helpers/Cookies";
+import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
+import Language from "components/Language/Language";
+import checkHttps, {
+  sendErrorMessage,
+  toHome,
+} from "components/Function/globalFunc.js";
+import Copyright from "components/Footer/Copyright";
+import Button from "components/CustomButtons/Button";
 
-import { Box, Checkbox, CssBaseline, FormControlLabel, InputBase, Link, Snackbar } from "@material-ui/core";
+import {
+  Box,
+  Checkbox,
+  CssBaseline,
+  FormControlLabel,
+  InputBase,
+  Link,
+  Snackbar,
+} from "@material-ui/core";
 import { CircularProgress, Grid } from "@mui/material";
 import MySnackbar from "components/MySnackbar/MySnackbar.js";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
-import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
-import Language from "components/Language/Language";
-import checkHttps, { sendErrorMessage } from "components/Function/globalFunc.js";
-import Copyright from "components/Footer/Copyright";
-import Button from "components/CustomButtons/Button";
-
-export default function SignIn(props) {
+export default function SignIn() {
   const classes = currentTheme();
-  const { user } = useSelector((state) => ({ user: state.user, messages: state.messages }), []);
+  const history = useHistory();
+  const { t, i18n } = useTranslation();
+  const { user } = useSelector(
+    (state) => ({ user: state.user, messages: state.messages }),
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,31 +46,24 @@ export default function SignIn(props) {
     variant: "success",
     message: "",
   });
-  const [userId, setUserId] = useState(null);
   const [isRememberChecked, setIsRememberChecked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const queryString = require("query-string");
-  const parsed = queryString.parse(props.location.search);
-  const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
-  const [lang, setLang] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { t } = useTranslation();
+  const lang = i18n.language;
+  const queryString = require("query-string");
+  const parsed = queryString.parse(window.location.search);
+  const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
   const logo = fileurl + "asset/front/img/logo_transparent.png";
   const mainImage = fileurl + "asset/front/img/img_mainCircle.png";
-  const date = new Date();
-
-  let year = date.getFullYear().toString();
-  let month = (date.getMonth() + 1).toString();
-  let day = date.getDate().toString();
 
   useEffect(() => {
     if (Cookies.getCookie("jwt")) {
-      props.history.push("/admin");
+      toHome(history);
     } else {
       api.getUserCountInfo().then((res) => {
         if (!res.data) {
-          props.history.push("/signup");
+          history.push("/signup");
         }
       });
     }
@@ -67,10 +76,6 @@ export default function SignIn(props) {
     checkEmailVerify();
     checkPasswordChange();
   }, []);
-
-  useEffect(() => {
-    setLang(user.language);
-  }, [user.language]);
 
   const checkUtm = () => {
     if (parsed.utm_source) {
@@ -92,13 +97,18 @@ export default function SignIn(props) {
 
   const checkUserBrowser = () => {
     const userBrowser = navigator.userAgent.toLowerCase();
-    var isChrome = /chrome/.test(userBrowser) && userBrowser.indexOf("whale") === -1 && userBrowser.indexOf("edg") === -1;
-    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent.toLowerCase());
+    var isChrome =
+      /chrome/.test(userBrowser) &&
+      userBrowser.indexOf("whale") === -1 &&
+      userBrowser.indexOf("edg") === -1;
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent.toLowerCase()
+    );
 
     if (isMobile) {
       setMobileOpen(true);
     } else if (!isChrome) {
-      window.location.href = "/error";
+      history.push("/error");
     }
 
     if (localStorage.userId) {
@@ -112,7 +122,10 @@ export default function SignIn(props) {
       if (parsed.email_confirm.indexOf("true") > -1) {
         setSnackbarOption("success", t("Your e-mail has been verified."));
       } else {
-        setSnackbarOption("error", t("Error or expired email verification attempt."));
+        setSnackbarOption(
+          "error",
+          t("Error or expired email verification attempt.")
+        );
       }
     }
   };
@@ -120,7 +133,10 @@ export default function SignIn(props) {
   const checkPasswordChange = () => {
     if (parsed.passwordChange) {
       if (parsed.passwordChange.indexOf("true") > -1) {
-        setSnackbarOption("success", t("Your password has been changed. Please log in again."));
+        setSnackbarOption(
+          "success",
+          t("Your password has been changed. Please log in again.")
+        );
       }
     }
   };
@@ -130,14 +146,17 @@ export default function SignIn(props) {
     return api
       .Login(user)
       .then((res) => {
-        setUserId(res.data.user.id);
         Cookies.setCookie("jwt", res.data.jwt, 90);
         Cookies.setCookie("user", JSON.stringify(res.data.user), 90);
-        Cookies.setCookie("apptoken", JSON.stringify(res.data.user.appTokenCode), 90);
+        Cookies.setCookie(
+          "apptoken",
+          JSON.stringify(res.data.user.appTokenCode),
+          90
+        );
         return res.data.user.isAgreedWithPolicy;
       })
       .then(() => {
-        window.location.href = "/admin";
+        toHome(history);
       })
       .then(() => {
         if (isRememberChecked) {
@@ -153,10 +172,20 @@ export default function SignIn(props) {
             if (e.response.data.message.indexOf("not confirmed") > -1) {
               setSnackbarOption("error", t("Please verify your e-mail."));
             } else {
-              setSnackbarOption("error", sendErrorMessage(e.response.data.message, e.response.data.message_en, lang));
+              setSnackbarOption(
+                "error",
+                sendErrorMessage(
+                  e.response.data.message,
+                  e.response.data.message_en,
+                  lang
+                )
+              );
             }
           } else {
-            setSnackbarOption("error", t("Failed to log in. Please try again."));
+            setSnackbarOption(
+              "error",
+              t("Failed to log in. Please try again.")
+            );
           }
         } else {
           setSnackbarOption("error", t("Failed to log in. Please try again."));
@@ -201,7 +230,10 @@ export default function SignIn(props) {
 
     const handleEmailValue = (e) => {
       if (koreanRegExp.test(e.target.value)) {
-        setSnackbarOption("error", t("Please enter a valid email. (Only English input is allowed)"));
+        setSnackbarOption(
+          "error",
+          t("Please enter a valid email. (Only English input is allowed)")
+        );
         return;
       }
       setEmail(e.target.value);
@@ -224,7 +256,12 @@ export default function SignIn(props) {
     };
 
     return (
-      <form onSubmit={signInSubmit} style={{ flexDirection: "column", padding: "0 32px" }} className={classes.form} noValidate>
+      <form
+        onSubmit={signInSubmit}
+        style={{ flexDirection: "column", padding: "0 32px" }}
+        className={classes.form}
+        noValidate
+      >
         <div
           style={{
             borderBottom: "1px solid " + currentThemeColor.textWhite87,
@@ -298,7 +335,12 @@ export default function SignIn(props) {
             </div>
           )}
         </div>
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 5 }}>
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 5 }}
+        >
           <Grid item>
             <FormControlLabel
               style={{
@@ -307,7 +349,17 @@ export default function SignIn(props) {
                 marginBottom: 0,
                 color: currentThemeColor.textWhite87,
               }}
-              control={<Checkbox id="rememberEmailCheckBox" value={isRememberChecked} checked={isRememberChecked} onChange={changeRemember} color="primary" size="small" style={{ marginRight: "4px" }} />}
+              control={
+                <Checkbox
+                  id="rememberEmailCheckBox"
+                  value={isRememberChecked}
+                  checked={isRememberChecked}
+                  onChange={changeRemember}
+                  color="primary"
+                  size="small"
+                  style={{ marginRight: "4px" }}
+                />
+              }
               label={<span style={{ fontSize: "14px" }}>{t("Save ID")}</span>}
             />
           </Grid>
@@ -346,7 +398,12 @@ export default function SignIn(props) {
         <Grid container justifyContent="center">
           {process.env.REACT_APP_ENTERPRISE !== "true" && (
             <Grid item>
-              <Link href="../signup" variant="body2" id="signupPage" style={{ color: "#F0F0F0" }}>
+              <Link
+                href="../signup"
+                variant="body2"
+                id="signupPage"
+                style={{ color: "#F0F0F0" }}
+              >
                 {t("Signup")}
               </Link>
             </Grid>
@@ -357,8 +414,19 @@ export default function SignIn(props) {
   };
 
   const headerSignin = () => (
-    <Grid id="signInbar" container justifyContent="space-between" alignItems="center" sx={{ p: 4 }}>
-      <img src={logo} alt={"logo"} className={classes.logo} style={{ width: "140px" }} />
+    <Grid
+      id="signInbar"
+      container
+      justifyContent="space-between"
+      alignItems="center"
+      sx={{ p: 4 }}
+    >
+      <img
+        src={logo}
+        alt={"logo"}
+        className={classes.logo}
+        style={{ width: "140px" }}
+      />
       <Language />
     </Grid>
   );
@@ -382,7 +450,11 @@ export default function SignIn(props) {
           open={isSnackbarOpen}
           onClose={snackbarClose}
         >
-          <MySnackbar variant={snackbarContent.variant} className={classes.margin} message={snackbarContent.message} />
+          <MySnackbar
+            variant={snackbarContent.variant}
+            className={classes.margin}
+            message={snackbarContent.message}
+          />
         </Snackbar>
       </>
     );
@@ -392,7 +464,10 @@ export default function SignIn(props) {
     <div className={classes.mobileContainer}>
       <CssBaseline />
       {headerSignin()}
-      <div className={classes.paper} style={{ width: "100%", padding: "0 30px" }}>
+      <div
+        className={classes.paper}
+        style={{ width: "100%", padding: "0 30px" }}
+      >
         {isLoading ? compLoading() : formSignin()}
       </div>
       {footerSignin()}
@@ -418,17 +493,25 @@ export default function SignIn(props) {
               margin: "20px 0 50px",
             }}
           >
-            {t("DS2.ai is the MLOps platform that serves all processes of building your customized AI from automatic annotation to cloud deployment.")}
+            {t(
+              "DS2.ai is the MLOps platform that serves all processes of building your customized AI from automatic annotation to cloud deployment."
+            )}
           </div>
           <div className={classes.settingFontWhite87}>
-            <img src={mainImage} alt={"logo"} style={{ width: "80%", height: "50%" }} />
+            <img
+              src={mainImage}
+              alt={"logo"}
+              style={{ width: "80%", height: "50%" }}
+            />
           </div>
         </Grid>
       </div>
       <div className={classes.signInMainCard}>
         <CssBaseline />
         {headerSignin()}
-        <div className={classes.paper}>{isLoading ? compLoading() : formSignin()}</div>
+        <div className={classes.paper}>
+          {isLoading ? compLoading() : formSignin()}
+        </div>
         {footerSignin()}
       </div>
     </div>

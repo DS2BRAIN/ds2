@@ -188,9 +188,8 @@ export function getJupyterProjects(projectsInfo) {
   const token = Cookies.getCookie("jwt");
   let projectsUrl = `jupyterprojects/?token=${token}&sorting=${
     projectsInfo.sorting
-  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}&tab=${
-    projectsInfo.tab
-  }`;
+  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}`;
+  if (projectsInfo.tab) projectsUrl += `&tab=${projectsInfo.tab}`;
   if (projectsInfo.isDesc) projectsUrl += "&desc=true";
   if (projectsInfo.searching && projectsInfo.searching !== "")
     projectsUrl += `&searching=${encodeURIComponent(projectsInfo.searching)}`;
@@ -203,9 +202,8 @@ export function getRecentJupyterProjects(projectsInfo) {
   const token = Cookies.getCookie("jwt");
   let projectsUrl = `jupyterprojects/?token=${token}&sorting=${
     projectsInfo.sorting
-  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}&tab=${
-    projectsInfo.tab
-  }`;
+  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}`;
+  if (projectsInfo.tab) projectsUrl += `&tab=${projectsInfo.tab}`;
   if (projectsInfo.isDesc) projectsUrl += "&desc=true";
   if (projectsInfo.searching && projectsInfo.searching !== "")
     projectsUrl += `&searching=${encodeURIComponent(projectsInfo.searching)}`;
@@ -224,9 +222,8 @@ export function getOpsProjects(projectsInfo) {
   const token = Cookies.getCookie("jwt");
   let projectsUrl = `opsprojects/?token=${token}&sorting=${
     projectsInfo.sorting
-  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}&tab=${
-    projectsInfo.tab
-  }`;
+  }&count=${projectsInfo.count}&start=${projectsInfo.start + 1}`;
+  if (projectsInfo.tab) projectsUrl += `&tab=${projectsInfo.tab}`;
   if (projectsInfo.isDesc) projectsUrl += "&desc=true";
   if (projectsInfo.searching && projectsInfo.searching !== "")
     projectsUrl += `&searching=${encodeURIComponent(projectsInfo.searching)}`;
@@ -378,6 +375,30 @@ export function postAPI(params, isMarket, opsId) {
   return result;
 }
 
+export function predict_for_file_response(params, isMarket, opsId) {
+  const user = JSON.parse(Cookies.getCookie("user"));
+  const apptoken = Cookies.getCookie("apptoken");
+  params["apptoken"] = JSON.parse(apptoken);
+  let query = backendurl.concat(`predict/${user["id"]}/`);
+  if (isMarket) {
+    query = backendurl.concat("market/predict/");
+    params["userId"] = user["id"];
+  }
+  if (opsId) {
+    query = backendurl.concat(`inference/inferenceops${opsId}/`);
+    params["userId"] = user["id"];
+  }
+  let result = axios.post(query, params, {
+    responseType: "blob",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+      "access-control-allow-methods": "POST",
+    },
+  });
+  return result;
+}
+
 export async function predictImageForTextReturn(
   modelId,
   files,
@@ -505,6 +526,31 @@ export async function predictImage(modelId, files, isMarket, opsId) {
 
   return await axios.post(query, formData, {
     responseType: "blob",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      "Access-Control-Allow-Origin": "*",
+      "access-control-allow-methods": "POST",
+    },
+  });
+}
+
+export async function predictSpeechToText(modelId, files, isMarket, opsId) {
+  const user = JSON.parse(Cookies.getCookie("user"));
+  let query = backendurl.concat("market/predict-speech-to-text/");
+
+  const file = new Blob(files);
+  const apptoken = Cookies.getCookie("apptoken");
+  var formData = new FormData();
+  formData.append("file", file, encodeURIComponent(files[0].name));
+  formData.append("filename", encodeURIComponent(files[0].name));
+  formData.append("modelid", modelId);
+  formData.append("apptoken", JSON.parse(apptoken));
+  if (isMarket || opsId) {
+    formData.append("userId", user["id"]);
+  }
+
+  return await axios.post(query, formData, {
+    responseType: "json",
     headers: {
       "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
@@ -1972,4 +2018,24 @@ export function postFeedback(feedbackInfo) {
   const query = backendurl.concat(`feedback/`);
 
   return axios.post(query, feedbackInfo);
+}
+
+export function postAddServer(addServerInfo) {
+  const token = Cookies.getCookie("jwt");
+  const query = backendurl.concat(`training-servers/?token=${token}`);
+
+  return axios.post(query, addServerInfo);
+}
+
+export function deleteAddServer(name) {
+  const token = Cookies.getCookie("jwt");
+  const query = backendurl.concat(`training-servers/${name}/?token=${token}`);
+
+  return axios.delete(query);
+}
+
+export async function checkTritonHealth() {
+  const token = Cookies.getCookie("jwt");
+  const query = backendurl.concat(`triton-healty-check/?token=${token}`);
+  return axios.get(query);
 }

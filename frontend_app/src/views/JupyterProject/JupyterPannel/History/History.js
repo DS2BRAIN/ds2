@@ -154,7 +154,7 @@ const History = (props) => {
   if (monitoring_url[monitoring_url.length - 1] === "/") {
     monitoring_url = monitoring_url.slice(0, monitoring_url.length - 1);
   }
-  monitoring_url = monitoring_url.split(":13000")[0] + ":13003";
+  monitoring_url = monitoring_url.split(":13000")[0] + ":19999";
   monitoring_url = monitoring_url.replace("https", "http");
 
   //비동기 처라 useEffect
@@ -799,7 +799,7 @@ const History = (props) => {
                                 onClick={() => {
                                   if (process.env.REACT_APP_ENTERPRISE) {
                                     window.open(
-                                      backendurl.split(":13002")[0] + ":13003"
+                                      backendurl.split(":13002")[0] + ":19999"
                                     );
                                   } else {
                                     setSelectedIndex(idx);

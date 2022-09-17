@@ -201,29 +201,27 @@ export const openChat = () => {
   }
 };
 
-export const checkIsValidKey = async (user, dispatch, t) => {
+export async function checkIsValidKey(user, dispatch, t) {
   if (IS_ENTERPRISE) {
     if (user.isGetKeyStatusLoading) return;
 
-    dispatch(setIsGetKeyStatusLoadingRequestAction(true));
+    await dispatch(setIsGetKeyStatusLoadingRequestAction(true));
 
     let isValidUser = true;
     let keyInfo = null;
 
-    api
+    await api
       .getKeyStatus()
       .then((res) => {
         keyInfo = res.data;
-
         if (!keyInfo || !keyInfo.is_valid) {
           dispatch(
             openErrorSnackbarRequestAction(
-              t("Available after purchasing the liscense")
+              t("Available after purchasing the License")
             )
           );
 
           isValidUser = false;
-          return;
         }
 
         if (keyInfo.is_opensource) {
@@ -234,7 +232,6 @@ export const checkIsValidKey = async (user, dispatch, t) => {
           );
 
           isValidUser = false;
-          return;
         }
       })
       .catch((err) => {
@@ -247,13 +244,39 @@ export const checkIsValidKey = async (user, dispatch, t) => {
         dispatch(openErrorSnackbarRequestAction(errMsg));
 
         isValidUser = false;
-        return;
       })
       .finally(() => {
         dispatch(setIsValidUserRequestAction(isValidUser));
         dispatch(setIsGetKeyStatusLoadingRequestAction(false));
-
-        return isValidUser;
       });
+
+    return isValidUser;
   }
+}
+
+export const listPagination = (location) => {
+  let pagiDict = {};
+  const urlSP = new URLSearchParams(location.search);
+
+  let paramTab = urlSP.get("tab");
+  let paramPage = urlSP.get("page");
+  let paramSorting = urlSP.get("sorting");
+  let paramDesc = urlSP.get("desc");
+  let paramRows = urlSP.get("rows");
+  let paramSearch = urlSP.get("search");
+  let paramPublic = urlSP.get("public");
+
+  pagiDict["tab"] = paramTab ? paramTab : "all";
+  pagiDict["page"] = paramPage ? parseInt(paramPage) - 1 : 0;
+  pagiDict["sorting"] = paramSorting ? paramSorting : "created_at";
+  pagiDict["desc"] = paramDesc === "false" ? false : true;
+  pagiDict["rows"] = paramRows ? parseInt(paramRows) : 10;
+  pagiDict["search"] = paramSearch ? paramSearch : "";
+  pagiDict["public"] = paramPublic === "true" ? true : false;
+
+  return pagiDict;
+};
+
+export const toHome = (history) => {
+  history.push("/admin/train");
 };

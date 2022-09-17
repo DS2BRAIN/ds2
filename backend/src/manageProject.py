@@ -4237,6 +4237,7 @@ class ManageProject:
                 self.dbClass.delete_train_params_by_project_id(project['id'])
         else:
             require_gpus = project_info.get("require_gpus")
+            require_gpus_total = project_info.get("require_gpus_total")
             if require_gpus:
                 require_gpus = [gpu_dict.get('idx') for gpu_dict in require_gpus]
             task_type = 'train'
@@ -4252,6 +4253,7 @@ class ManageProject:
                 'status': 0,
                 'user': user['id'],
                 'require_gpus': require_gpus,
+                'require_gpus_total': require_gpus_total,
                 'outputFilePath': '',
                 'isChecked': 0
             })
@@ -4549,6 +4551,14 @@ class ManageProject:
                 })
             project['available_gpu_list'] = available_gpu_list
 
+        project['available_gpu_list_total'] = {
+          "localhost": project['available_gpu_list']
+        }
+        training_sub_servers = self.dbClass.getTrainingSubServers()
+        if training_sub_servers:
+            for training_sub_server in training_sub_servers:
+                project['available_gpu_list_total'][training_sub_server.name] = training_sub_server.gpu_info
+
         project['hasCustomTrainingServer'] = True if self.dbClass.getAliveJupyterServersByUserId(user['id']).count() else False
 
         if project['isShared']:
@@ -4629,6 +4639,9 @@ class ManageProject:
             for key, value in model['ap_info'].items():
                 if value is not None and np.isnan(value):
                     model['ap_info'][key] = None
+        if model.get("hyper_param_id"):
+          hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
+          model['hyper_param'] = hyper_param
 
         if isShared:
             return HTTP_200_OK, model

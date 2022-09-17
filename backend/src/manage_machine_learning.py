@@ -23,11 +23,8 @@ from machine_learning.keras_ann import KerasAnn
 from machine_learning.fastai_ann import FastAnn
 import json
 import os
-if os.path.exists('./src/training/predict.py'):
-    from src.training import predict
-    predictClass = predict.Predict(isLoadModel=True)
-else:
-    predictClass = None
+from src.managePredict import ManagePredict
+predictClass = ManagePredict()
 
 class ManageMachineLearning(ManageBaseClass):
     def __init__(self):
@@ -262,8 +259,8 @@ class ManageMachineLearning(ManageBaseClass):
             hyper_param = self.db_class.get_train_param_by_id(model_raw['hyper_param_id'])
             model_class = model_class(len(df.columns), model_raw['layerWidth'])
             model_class.load(hyper_param)
-            model_class.load_state_dict(torch.load(file_path))
-            model_class.eval()
+            # model_class.load_state_dict(torch.load(file_path))
+            # model_class.eval()
 
             if predict_column.type == 'object':
                 result = [predict_column.uniqueValues[int(temp[0]) - 1] for temp in
