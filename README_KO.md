@@ -1,5 +1,8 @@
 <p align="center">
     <img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186134066-2b9b0e78-d0a5-43cb-ac75-ad2c1b33d21e.png">
+
+[English](https://github.com/DS2BRAIN/ds2/blob/main/README.md) | 한글
+
 </p>
 
 ---
