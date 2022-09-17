@@ -9,7 +9,7 @@ English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
 
 Easy to build the customized AI model with SOTA algorithms by MLOps based active learning process and also Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations.
 
-<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187967599-32af37d0-4b2f-4444-ab14-c309df09be0a.png">
+[![Watch the video](https://assetdslab.s3.ap-southeast-1.amazonaws.com/video_loading.png)](https://d1w4uf5gel2p4w.cloudfront.net/autolabeling_process_en_high.mp4)
 
 DS2 is a data science platform that automates machine learning pipelines and prescriptive analytics.
 
