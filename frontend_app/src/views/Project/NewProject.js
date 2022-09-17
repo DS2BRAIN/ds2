@@ -108,12 +108,12 @@ export default function NewProject({ history }) {
   );
 
   let workapp = {
-    object_detection: "물체 인식",
+    object_detection: "Object Detection",
     // voice: "음성",
-    normal_classification: "정형 데이터 카테고리 분류 (Classification)",
-    normal_regression: "정형 데이터 연속값 예측 (Regression)",
-    text: "자연어",
-    image: "이미지 분류",
+    normal_classification: "Classification",
+    normal_regression: "Regression",
+    text: "Text",
+    image: "Image",
   };
 
   useEffect(() => {
@@ -373,7 +373,7 @@ export default function NewProject({ history }) {
   };
 
   function getSteps() {
-    return ["프로젝트 정보", "데이터 불러오기", "프로젝트 생성"];
+    return ["Project Information", "Upload Data", "Create Project"];
   }
 
   function getStepContent(stepIndex) {
