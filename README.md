@@ -4,9 +4,9 @@
 
 ---
 
-Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations, and also easy to build the customized AI model with SOTA algorithms by MLOps based active learning process.
+Easy to build the customized AI model with SOTA algorithms by MLOps based active learning process and also Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations.
 
-<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187056683-24458f1a-0b7c-45b4-b1f4-01f5908c6abc.png">
+<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187967599-32af37d0-4b2f-4444-ab14-c309df09be0a.png">
 
 DS2 is a data science platform that automates machine learning pipelines and prescriptive analytics.
 
@@ -33,36 +33,7 @@ DS2 is a data science platform that automates machine learning pipelines and pre
 
 ---
 
-## 1) Easy to use SOTA models
-
-
-### Image to Text
-
-![image-to-text](https://user-images.githubusercontent.com/60835181/187056114-a891abf0-0088-4a70-af18-95daf68675d6.gif)
-
-### Speech to Text (STT)
-
-![speech-to-text](https://user-images.githubusercontent.com/60835181/187056288-0d27df5e-75c0-4fe5-84db-f3a20a2294e4.gif)
-
-### GPT
-
-![GPT](https://user-images.githubusercontent.com/60835181/187056264-3db79b87-5656-4233-b23d-4ffa532ed557.gif)
-
-### Translation
-
-![translation](https://user-images.githubusercontent.com/60835181/187056261-8d558ca0-6c35-4081-808b-609871b1b74e.gif)
-
-
-### Text to Image
-
-![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
-
-
-and also you can use OCR, Text summary, fill mask, text to speech (TTS). In DS2, you can change the model to another one from Hugging face.
-
----
-
-## 2) Easy to build the customized AI model with SOTA algorithms
+## 1) Easy to build the customized AI model with SOTA algorithms
 
 ### DS2 provides active learning process based on an automated machine learning pipeline.
 
@@ -118,6 +89,37 @@ After clicking Labeling on the top menu, upload the dataset, and you can start l
 (Labeling tool type: Tablur(Classification, Regression), Text, Image, Object Detection)
 
 ![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
+
+
+
+## 2) Easy to use SOTA models
+
+
+### Image to Text
+
+![image-to-text](https://user-images.githubusercontent.com/60835181/187056114-a891abf0-0088-4a70-af18-95daf68675d6.gif)
+
+### Speech to Text (STT)
+
+![speech-to-text](https://user-images.githubusercontent.com/60835181/187056288-0d27df5e-75c0-4fe5-84db-f3a20a2294e4.gif)
+
+### GPT
+
+![GPT](https://user-images.githubusercontent.com/60835181/187056264-3db79b87-5656-4233-b23d-4ffa532ed557.gif)
+
+### Translation
+
+![translation](https://user-images.githubusercontent.com/60835181/187056261-8d558ca0-6c35-4081-808b-609871b1b74e.gif)
+
+
+### Text to Image
+
+![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
+
+
+and also you can use **OCR, Text summary, fill mask, text to speech (TTS)**. In DS2, you can change the model to another one from Hugging face.
+
+---
 
 
 ### Use Python SDK 
