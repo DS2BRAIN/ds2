@@ -332,11 +332,11 @@ const BestCustomAISelectModal = (props) => {
                             marginRight: 8,
                           }}
                         >
-                          {t("샘플 오토라벨링을 가장 잘한 모델을 선택해주세요.")}
+                          {t("Please select the model with the best sample auto-labeling.")}
                         </span>
                         <span>({t("Multiple selection possible")})</span>
                         <div className={classes.subHighlightText} style={{ marginTop: 8 }}>
-                          *{t("선택이 완료되면 가장 최적화된 모델로 오토라벨링이 진행됩니다.")}
+                          *{t("After selection is complete, auto-labeling is performed with the most accurate model.")}
                         </div>
                       </Grid>
                     </Grid>
@@ -412,7 +412,7 @@ const BestCustomAISelectModal = (props) => {
                           }
                         }}
                       >
-                        {step !== lastStep ? t("Choose") : t("선택완료")}
+                        {step !== lastStep ? t("Choose") : t("Finish")}
                       </Button>
                     </Grid>
                   </Grid>

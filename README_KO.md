@@ -12,7 +12,7 @@
 
 DS2.ai 를 사용하시면 OCR, GPT, STT, TTS, Image to Text, Translations를 포함한 SOTA 모델을 사용하기 쉽게 제공해드리고, MLOps 기반의 능동적 학습 프로세스에 의한 SOTA 알고리즘으로 맞춤형 AI 모델을 쉽게 구축할 수 있습니다.
 
-<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187056683-24458f1a-0b7c-45b4-b1f4-01f5908c6abc.png">
+[![Watch the video](https://assetdslab.s3.ap-southeast-1.amazonaws.com/video_loading.png)](https://d1w4uf5gel2p4w.cloudfront.net/autolabeling_process_ko_high.mp4)
 
  - 메뉴얼 & 오토 라벨링 툴 (정형화, 텍스트, 이미지, 추천시스템) 
 
