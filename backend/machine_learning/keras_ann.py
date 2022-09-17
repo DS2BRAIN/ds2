@@ -8,9 +8,9 @@ from tensorflow.keras.layers import Dense, LSTM
 from tensorflow.keras import optimizers, losses, activations
 from machine_learning import MachineLearning, SettingData
 from models.helper import Helper
+import tensorflow as tf
 
-
-class KerasAnn(MachineLearning, SettingData):
+class KerasAnn(MachineLearning, tf.Module, SettingData):
 
     def __init__(self):
         super().__init__()
@@ -56,6 +56,9 @@ class KerasAnn(MachineLearning, SettingData):
             "linear": activations.linear
         }
 
+    @tf.function
+    def __call__(self, x):
+        return self.model(x)
     def custom_standardization(self, input_data):
         lowercase = tf.strings.lower(input_data)
         stripped_html = tf.strings.regex_replace(lowercase, '<br />', ' ')

@@ -112,7 +112,7 @@ mysql
 
 ```bash
 cd /tmp
-curl -fsSL [https://www.mongodb.org/static/pgp/server-4.4.asc](https://www.mongodb.org/static/pgp/server-4.4.asc) | apt-key add -
+curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | apt-key add -
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.4.list
 
 apt-get update
@@ -190,6 +190,8 @@ conda activate p3.9
 
 pip install torch==1.10.1+cu111 torchvision torchaudio -f https://download.pytorch.org/whl/torch_stable.html
 python -m pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu113/torch1.10/index.html
+pip install tritonclient[all]
+
 # reinstall conflict libraries
 pip uninstall bson pymongo
 pip install bson

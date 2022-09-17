@@ -539,3 +539,9 @@ async def delete_training_servers(main_server_ip: str, access_token:str, respons
         return NO_SUPPORT_FOR_OPENSOURCE
     response.status_code, result = ManageTeam().delete_connected_training_server(access_token, main_server_ip, background_tasks)
     return result
+
+
+@router.get("/triton-healty-check/")
+async def check_triton_healty(response: Response, token: str):
+    response.status_code, result = manageEtcClass.check_triton_healty(token)
+    return result

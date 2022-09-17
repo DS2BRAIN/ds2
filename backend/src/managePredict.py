@@ -292,7 +292,7 @@ class ManagePredict:
             if isMarket:
                 result = self.predict_for_market(a, model, modelPath)
             else:
-                result = self.predictRow(a, model, modelPath)
+                result = self.predictRow(a, model, modelPath, modelId, parameter, appToken, userId)
 
 
             if opsId:
@@ -848,10 +848,14 @@ class ManagePredict:
         else:
             return None, None, None, None, None
 
-    def predictRow(self, a, model, modelPath, learn=None):
+    def predictRow(self, a, model, modelPath, modelId, parameter, appToken, userId, learn=None):
 
         if self.predict_class:
-            return self.predict_class.predictRow(a, model, modelPath, learn=learn)
+            if model['isModelDownloaded']:
+                return self.predict_class.predict_by_triton(a, model, modelPath, modelId, parameter, appToken, userId,
+                                                            learn=learn)
+            else:
+                return self.predict_class.predictRow(a, model, modelPath, learn=learn)
         else:
             return NO_SUPPORT_FOR_OPENSOURCE
 

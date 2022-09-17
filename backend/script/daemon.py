@@ -39,6 +39,7 @@ import sys
 import random
 from src.errors import exceptions as ex
 import numpy as np
+import tensorflow as tf
 
 class EnterpriseFailed(Exception):
     def __init__(self, m):
@@ -398,6 +399,13 @@ class Daemon():
         torch_model.set_train_data(df, dep_var, project["id"])
         torch_model.fit(hyper_param)
         torch.save(torch_model.state_dict(), model_file_path)
+        example = torch.zeros(len(df.columns) - 1, dtype=torch.float)  # bsz , seqlen
+        pt_model = torch_model.eval()
+        traced_script_module = torch.jit.trace(pt_model, example)
+        traced_script_module.save(model_file_path)
+        # torch.save(torch_model, model_file_path)
+        # torch.jit.save(torch_model, model_file_path)
+        # torch_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None
         try:
@@ -418,7 +426,8 @@ class Daemon():
         custom_model_class = custom_model_class()
         custom_model_class.set_train_data(df, dep_var, project["id"], is_fastai=True)
         trained_model = custom_model_class.train(hyper_param)
-        trained_model.export(model_file_path)
+        torch.jit.save(trained_model, model_file_path)
+        trained_model.export(model_file_path.replace("pt", "pkl"))
 
         importance_data = None
         try:
@@ -434,12 +443,17 @@ class Daemon():
         custom_model_class = train_params.get('custom_model_class')
         model_file_path = train_params.get('model_file_path')
         hyper_param = train_params.get('hyper_param')
+        model = train_params.get('model')
         dep_var = project["valueForPredict"]
 
         custom_model_class = custom_model_class()
         custom_model_class.set_train_data(df, dep_var, project["id"])
         custom_model_class.train(df, dep_var, hyper_param, project["id"])
         custom_model_class.save(model_file_path)
+        # tf.saved_model.save(custom_model_class, model_file_path)
+        call = custom_model_class.__call__.get_concrete_function(
+            tf.TensorSpec([None, None], tf.int32, name='input_0'))  # bsz x seqlen
+        tf.saved_model.save(custom_model_class, f'{self.utilClass.save_path}/models/{model["id"]}/1/model.savedmodel', signatures=call)
 
         importance_data = None
         try:
@@ -762,7 +776,7 @@ class Daemon():
 
         self.dbClass.updateProjectStatusById(project['id'], 11, "11 : 모델 학습이 시작되었습니다.")
 
-        model_dir_path = f'{self.utilClass.save_path}/project/{project["id"]}'
+        model_dir_path = f'{self.utilClass.save_path}/models'
         if not os.path.exists(model_dir_path):
             os.makedirs(model_dir_path)
         custom_model_class = None
@@ -874,11 +888,50 @@ class Daemon():
 
                 self.updateStatusForTraining(project, model, instancesUser, instanceId)
 
+                os.makedirs(f'{model_dir_path}/{model["id"]}/1/', exist_ok=True)
                 if 'custom' == project['option']:
                     status_text = None
                     importance_data = None
+                    platform = 'pytorch_libtorch'
+                    input_name = "input_0"
+                    output_name = "output_0"
                     model_file_name = f'{project["algorithm"]}_{str(model["id"]).zfill(2)}.dsm'
-                    model_file_path = f'{model_dir_path}/{model_file_name}'
+                    print("len(df.columns) - 1")
+                    print(len(df.columns) - 1)
+                    if custom_model_class == TorchAnn or custom_model_class == FastAnn:
+                        model_file_name = f'model.pt'
+                        input_name = "input__0"
+                        output_name = "output__0"
+
+                    elif custom_model_class == KerasAnn:
+                        # model_file_name = f'model.savedmodel'
+                        platform = 'tensorflow_savedmodel'
+
+                    with open(f'{model_dir_path}/{model["id"]}/config.pbtxt', 'w') as w:
+                        w.writelines([
+                            f'name: "{model["id"]}"\n',
+                            f'platform: "{platform}"\n',
+                            'max_batch_size: 100\n',
+                            'dynamic_batching { preferred_batch_size: [ 50 ]}\n',
+                            'optimization {  graph { level: 1 } }\n',
+                            #'instance_group [ { count: 2 }]\n',
+                            'input [\n',
+                            '  {\n',
+                            f'    name: "{input_name}"\n',
+                            '    data_type: TYPE_INT32\n',
+                            f'    dims: [ {len(df.columns) - 1} ]\n',
+                            '  }\n',
+                            ']\n',
+                            'output [\n',
+                            '  {\n',
+                            f'    name: "{output_name}"\n',
+                            '    data_type: TYPE_FP32\n',
+                            '    dims: [ 1 ]\n',
+                            '  }\n',
+                            ']\n',
+                        ])
+
+                    model_file_path = f'{model_dir_path}/{model["id"]}/1/{model_file_name}'
                     hyper_param = self.dbClass.get_train_param_by_id(model['hyper_param_id'])
                     train_custom_params = {
                         'df': df,
@@ -901,6 +954,7 @@ class Daemon():
                             'statusText': status_text,
                             'progress': status,
                             'featureImportance': importance_data,
+                            'isModelDownloaded': True,
                             'layerDeep': hyper_param.get('layer_deep'),
                             'layerWidth': hyper_param.get('layer_width')
                         }
