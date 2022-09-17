@@ -1,60 +1,67 @@
 <p align="center">
     <img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186134066-2b9b0e78-d0a5-43cb-ac75-ad2c1b33d21e.png">
 
-English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
+[English](https://github.com/DS2BRAIN/ds2/blob/main/README.md) | 한글
 
 </p>
 
 ---
 
-Easy to build the customized AI model with SOTA algorithms by MLOps based active learning process and also Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations.
 
-<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187967599-32af37d0-4b2f-4444-ab14-c309df09be0a.png">
+ 안녕하세요 👋 DS2.ai 는 인공지능 모델 개발과 운영을 한 곳에서 할 수 있는 MLOps 기반 데이터 과학 솔루션입니다. 
 
-DS2 is a data science platform that automates machine learning pipelines and prescriptive analytics.
+DS2.ai 를 사용하시면 OCR, GPT, STT, TTS, Image to Text, Translations를 포함한 SOTA 모델을 사용하기 쉽게 제공해드리고, MLOps 기반의 능동적 학습 프로세스에 의한 SOTA 알고리즘으로 맞춤형 AI 모델을 쉽게 구축할 수 있습니다.
 
- - Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations
+<img width="958" alt="pa" src="https://user-images.githubusercontent.com/60835181/187056683-24458f1a-0b7c-45b4-b1f4-01f5908c6abc.png">
 
- - Manual & Auto Annotation Tools (Tableur, Text, Image, Recommeder system)
+ - 메뉴얼 & 오토 라벨링 툴 (정형화, 텍스트, 이미지, 추천시스템) 
 
- - ML & DL Training (Pytorch, Tensorflow, XGboost, etc)
+ - 머신러닝 & 딥러닝 학습 (Pytorch, Tensorflow, XGboost, etc) 
 
- - AI Aalytics (Prescriptive analysis and Data analytics with Metabase)
+ - AI 분석 (처방적 분석과 데이터 분석 지원) 
 
- - AI Model Deployment and monitoring
+ - AI 모델 배포와 모니터링 
 
- - Use Active learning process
+ - 액티브 러닝 프로세스 지원
+
+ - 쉬운 SOTA 모델 사용 지원 (OCR, GPT, STT, TTS, Image to Text, 번역등)
  
  - API & Python SDK Support
- 
+
+1) 맞춤형 AI 개발 지원
+
+DS2는 자동화된 기계 학습 파이프라인을 기반으로 고정밀 처방적 분석을 제공합니다.
+처방적 분석을 실행하기 위한 딥러닝 모델은 시간이 지남에 따라 고도화를 하면서 정확도를 더 높여갈 수 있고, 그렇게 높아지는 정확도로 만들어지는 처방적 분석은 더 높은 정확도를 가지게 됩니다. DS2 는 기계 학습 파이프라인을 자동으로 설치하여 액티브 러닝 (Active Learning) 프로세스를 통해 [학습 - 분석 - 배포 - 수집] - [재학습 - 분석 - 배포 - 수집] - … 을 별다른 노력 없이 할 수 있게끔 도와드립니다.
+---
+
+### 설치하기
+
+[DS2 가이드](https://krdocs.ds2.ai)
 
 ---
 
-### Install
-
-[Extended documentation for DS2](https://docs.ds2.ai)
-
 ---
 
-## 1) Easy to build the customized AI model with SOTA algorithms
+## 1) SOTA 알고리즘과 함께 쉬운 AI 모델 생성
 
-### DS2 provides active learning process based on an automated machine learning pipeline.
+### DS2는 자동화된 기계 학습 파이프라인을 기반으로 하는 능동적 학습 프로세스를 제공합니다.
 
 <p align="center">
     <img width="50%" alt="pa" src="https://user-images.githubusercontent.com/60835181/186130479-584d0aa4-65fb-48ae-88dc-09ba9346256d.png">
 </p>
 
-### 1. Training AI models
+### 1. AI 모델 학습
 
-After labeling is complete, artificial intelligence can be developed using the learning data. Click the “Start AI Development” button on the dataset or labeling project screen to enter the setting screen for AI development. 
-On the setting screen, three types of development environments are supported.
-- Manual setting: Select the desired deep learning & machine learning library (Pytorch, Tensorflow, XGboost, etc.)
-- Fast learning speed (AutoML): A function that creates a model by speeding up the learning rate among AutoML learning techniques
-- High Accuracy (AutoML): A function that creates a model with high accuracy among AutoML learning techniques
+라벨링이 완료되면 학습 데이터를 사용하여 인공 지능을 개발할 수 있습니다. 데이터셋 또는 라벨링 프로젝트 화면에서 “AI 개발 시작” 버튼을 클릭하여 AI 개발 설정 화면으로 진입합니다.
+설정 화면에서는 3가지 유형의 개발 환경을 지원합니다.
 
-After selecting the desired learning method, click the Start button on the right to start learning. If you click the "Model" tab at the bottom after starting, you can check the progress of the model being developed. It provides the function of "distribute" and the function of "analyzing" through the data set of the prediction result created by the model.
+- 수동 설정: 딥러닝 & 머신러닝 라이브러리 및 하이퍼파라미터 직접 설정 (Pytorch, Tensorflow, XGboost, etc.)
+- 학습 속도를 빠르게 (AutoML): AutoML 학습 기법 중 학습 속도를 높여 모델을 생성하는 기능
+- 정확도를 놓게 (AutoML): AutoML 학습 기법 중 정확도가 높은 모델을 생성하는 기능
 
-* Setting Training Options
+원하는 학습 방법을 선택한 후 우측 시작 버튼을 클릭하면 학습이 시작됩니다. 시작 후 하단의 "모델" 탭을 클릭하면 개발 중인 모델의 진행 상황을 확인할 수 있습니다. 모델이 생성한 예측 결과의 데이터 세트를 통해 "배포" 기능과 "분석" 기능을 제공합니다.
+
+* 학습 방법 설정
 ![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FiTSJJ0Y7N8evuJlhSG4s%2FScreenshot%20from%202022-08-16%2016-55-26.png?alt=media&token=9858bd59-f47f-4c67-8cbc-ae6683e4c452)
 
 * Confusion Matrix
@@ -64,41 +71,43 @@ After selecting the desired learning method, click the Start button on the right
 ![Feature Importance](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FOi0m7F87Hvk4fz4sSNoI%2Ffeature_importance(1).png?alt=media&token=a8418d6c-1f51-46f6-b70c-e1e5eb25e940)
 
 
-### 2. Run prescriptive analytics
+### 2. 처방적 분석 실행하기
 
-Once the optimal model has been selected, prescriptive analysis can be run to gain insights from sentences built around explainable AI (XAI).
+최적의 모델이 선택되면 설명 가능한 AI(XAI)를 기반으로 구축된 문장에서 통찰력을 얻기 위해 처방적 분석을 실행할 수 있습니다.
 
 ![Prescriptive Analytics](https://user-images.githubusercontent.com/60835181/185800119-a2a48213-12aa-4e7a-a834-765c14613fb7.png)
 
 
-### 3. Deploy AI models
+### 3. AI 모델 배포하기
 
-You can use the Deploy Model function by completing training through DS2.ai or uploading a model you have already created to DS2.ai. (The ability to upload models directly supports Pytorch and Tensorflow2 models.)
+DS2.ai를 통해 교육을 완료하거나 이미 생성한 모델을 DS2.ai에 업로드하여 모델 배포 기능을 사용할 수 있습니다. (모델 업로드 기능은 Pytorch 및 Tensorflow2 모델을 직접 지원합니다.)
 
-You can upload by clicking the "Deploy" menu button at the top or distribute the developed model through the "Deploy" function in the "Learning" menu.
-The deployed model can be managed through a separate endpoint, and the number of API calls can be monitored.
+상단의 '배포' 메뉴 버튼을 클릭하여 업로드하거나 '학습' 메뉴의 '배포' 기능을 통해 개발된 모델을 배포할 수 있습니다.
+배포된 모델은 별도의 엔드포인트를 통해 관리할 수 있으며, API 호출 횟수를 모니터링할 수 있습니다.
 
 ![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2Fv8JfkiCs4YTajVEM7AvG%2Fdeploy.png?alt=media&token=437a4dda-5c58-40a6-8473-34e6e24c1e39)
 
-After the model is deployed, the input and output values used for prediction are automatically stored in the dataset, helping to quickly and easily create AI with higher accuracy through active learning.
+모델 배포 후 예측에 사용된 입력 및 출력 값이 자동으로 데이터셋에 저장되어 능동적 학습을 통해 보다 빠르고 쉽게 정확도가 높은 AI를 생성할 수 있습니다.
 
 ![](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FxLiSO1F6CFFId6rjd6Hg%2FScreenshot%20from%202022-08-14%2011-28-30.png?alt=media&token=59d7eb64-36a5-42f2-8968-a4238a66225d)
 
 
-### 4. Annotation for re-learning
+### 4. 재학습을 위한 라벨링
 
-Supports training data labeling tools needed to create artificial intelligence models. 
-After clicking Labeling on the top menu, upload the dataset, and you can start labeling by selecting the desired function between manual labeling and auto-labeling tool.
-(Labeling tool type: Tablur(Classification, Regression), Text, Image, Object Detection)
+인공 지능 모델을 생성하는 데 필요한 훈련 데이터 레이블링 도구를 지원합니다.
 
-![Watch the video](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
+상단 메뉴에서 Labeling을 클릭한 후 데이터셋을 업로드하면 수동 라벨링과 자동 라벨링 도구 중 원하는 기능을 선택하여 라벨링을 시작할 수 있습니다.
 
+(라벨링 툴 종류: 정형화(분류, 회귀), 텍스트, 이미지, 객체 감지)
 
-
-## 2) Easy to use SOTA models
+![비디오 보기](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
 
 
-### Image to Text
+
+## 2) SOTA 모델 이용하기
+
+
+### Image to Text (그림 설명 요약)
 
 ![image-to-text](https://user-images.githubusercontent.com/60835181/187056114-a891abf0-0088-4a70-af18-95daf68675d6.gif)
 
@@ -106,11 +115,11 @@ After clicking Labeling on the top menu, upload the dataset, and you can start l
 
 ![speech-to-text](https://user-images.githubusercontent.com/60835181/187056288-0d27df5e-75c0-4fe5-84db-f3a20a2294e4.gif)
 
-### GPT
+### GPT (문장 합성)
 
 ![GPT](https://user-images.githubusercontent.com/60835181/187056264-3db79b87-5656-4233-b23d-4ffa532ed557.gif)
 
-### Translation
+### 번역
 
 ![translation](https://user-images.githubusercontent.com/60835181/187056261-8d558ca0-6c35-4081-808b-609871b1b74e.gif)
 
@@ -120,18 +129,20 @@ After clicking Labeling on the top menu, upload the dataset, and you can start l
 ![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
 
 
-and also you can use **OCR, Text summary, fill mask, text to speech (TTS)**. In DS2, you can change the model to another one from Hugging face.
+또한 **OCR, 텍스트 요약, FILL MASK, TTS(텍스트 음성 변환)** 를 사용할 수도 있습니다. DS2 내에서 Hugging Face에서 제공하는 다른 모델로 변경해서 사용할 수도 있습니다.
 
 ---
 
 
 ### Use Python SDK 
 
-One of the powerful features of DS2.ai is the manual setting function that can easily set up learning under various conditions to derive an optimal artificial intelligence model.
+DS2.ai의 강력한 기능 중 하나는 최적의 인공지능 모델을 도출하기 위해 다양한 조건에서 학습을 쉽게 설정할 수 있는 수동 설정 기능입니다.
+
 ```bash
 pip install ds2ai
 ```
-After completing the installation of the ds2ai Python library, you can start learning using the example below.
+
+ds2ai Python 라이브러리 설치를 완료한 후 아래 예제를 사용하여 학습을 시작할 수 있습니다.
 
 ```python
 import ds2ai
@@ -167,22 +178,21 @@ project = ds2.train(
 )
 ```
 
-You can check the app code by clicking the user name in the upper right corner. You can start learning with the code above after putting this app code as shown below.
+우측 상단의 사용자 이름을 클릭하면 앱 코드를 확인할 수 있습니다. 아래와 같이 이 앱 코드를 입력한 후 위의 코드로 학습을 시작할 수 있습니다.
 ```python
 ds2 = ds2ai.DS2("Your App code")
 ```
-After the code is executed, the ability to predict or deploy the job situation and the trained model is available in ds2.ai as-is. For more information on how to use, refer to "SDK | PYTHON" in the left menu.
-
+코드가 실행된 후 작업 상황과 훈련된 모델을 예측하거나 배포하는 기능을 ds2.ai에서 있는 그대로 사용할 수 있습니다. 자세한 사용법은 가이드 왼쪽 메뉴의 "SDK | PYTHON"을 참고하세요.
 
 ### Use API
 
-After completing the installation, access to http://localhost:13002/skyhubredoc to check the API information.
+설치 완료 후 http://localhost:13002/skyhubredoc에 접속하여 API 정보를 확인할 수 있습니다.
 
 <p align="center">
     <img width="80%" alt="logo" src="https://user-images.githubusercontent.com/60835181/187060752-5c13324e-42e4-4a31-b96f-626c43515d32.png">
 </p>
 
-You can use all DS2 functions through API and Python SDK.
+API 및 Python SDK를 통해 모든 DS2 기능을 사용할 수 있습니다.
 
 ---
 
@@ -288,4 +298,3 @@ This project exists thanks to all the people who contribute.
 Please read the [contribution guidelines](https://github.com/DS2BRAIN/ds2/blob/main/CONTRIBUTING.md) before submitting a pull request.
 
 <img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186133830-22521078-6d9c-48e8-a45f-d78674b43b59.png">
-
