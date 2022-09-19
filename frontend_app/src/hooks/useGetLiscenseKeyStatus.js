@@ -8,7 +8,7 @@ import { IS_ENTERPRISE } from "variables/common";
 
 import { useTranslation } from "react-i18next";
 
-const useGetLiscenseKeyStatus = () => {
+const useGetLicenseKeyStatus = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -36,4 +36,4 @@ const useGetLiscenseKeyStatus = () => {
   return key;
 };
 
-export default useGetLiscenseKeyStatus;
+export default useGetLicenseKeyStatus;

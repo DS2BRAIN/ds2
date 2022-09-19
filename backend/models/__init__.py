@@ -804,7 +804,7 @@ class opsProjectsTable(MySQLModel):
     recommenderItemColumn = pw.CharField(null=True)
     inferenceCount = pw.IntegerField(null=True, default=0)
     server_size_changed_at = pw.DateTimeField(null=True)
-
+    algorithm = pw.CharField(null=True, default='auto')
 class opsModelsTable(MySQLModel):
     class Meta:
         db_table = 'opsmodels'

@@ -8,6 +8,25 @@ from torch.utils.data import TensorDataset
 class TorchAnn(torch.nn.Module, SettingData):
     def __init__(self, input_size, layer_width):
         super(TorchAnn, self).__init__()
+
+        try:
+            import horovod.torch as hvd
+            is_with_horovod = True
+        except:
+            is_with_horovod = False
+
+        if is_with_horovod:
+            print(is_with_horovod)
+            # Initialize Horovod
+            hvd.init()
+            # Pin GPU to be used to process local rank (one GPU per process)
+            if torch.cuda.is_available():
+                torch.cuda.set_device(hvd.local_rank())
+        else:
+
+            device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+            torch.cuda.set_device(device)
+
         self.input_size = input_size
         self.hidden_size = layer_width
         self.x_train = None
@@ -97,11 +116,7 @@ class TorchAnn(torch.nn.Module, SettingData):
         self.layer_deep = hyper_param.get('layer_deep', 3)
 
     def fit(self, hyper_param: dict):
-        try:
-            import horovod.torch as hvd
-            is_with_horovod = True
-        except:
-            is_with_horovod = False
+
 
         self.x_train = torch.from_numpy(self.x_train.values).float()
         self.x_test = torch.from_numpy(self.x_test.values).float()
@@ -119,14 +134,15 @@ class TorchAnn(torch.nn.Module, SettingData):
         loss_function = loss_function_name()
         optimizer = optimizer_function(self.parameters(), lr=hyper_param['optimizer'].get('learning_rate', 0.01))
 
-        if is_with_horovod:
-            print(is_with_horovod)
-            # Initialize Horovod
-            hvd.init()
+        try:
+            import horovod.torch as hvd
+            is_with_horovod = True
+        except:
+            is_with_horovod = False
 
-            # Pin GPU to be used to process local rank (one GPU per process)
-            if torch.cuda.is_available():
-                torch.cuda.set_device(hvd.local_rank())
+        if is_with_horovod:
+            print("is_with_horovod")
+            print(is_with_horovod)
             train_dataset = TensorDataset(self.x_train, self.y_train)
             # Partition dataset among workers using DistributedSampler
             train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, num_replicas=hvd.size(),

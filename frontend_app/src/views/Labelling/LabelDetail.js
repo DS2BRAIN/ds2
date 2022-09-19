@@ -56,7 +56,7 @@ import LabelSetting from "./LabelSetting.js";
 import LabelClass from "./LabelClass.js";
 import LabelMember from "./LabelMember.js";
 import BestCustomAISelectModal from "../../components/Modal/BestCustomAISelectModal";
-import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
+import LicenseRegisterModal from "components/Modal/LicenseRegisterModal";
 import Button from "components/CustomButtons/Button";
 
 import {
@@ -3223,7 +3223,7 @@ const LabelDetail = ({ history, match }) => {
         />
       </Modal>
 
-      <LiscenseRegisterModal />
+      <LicenseRegisterModal />
     </div>
   );
 };

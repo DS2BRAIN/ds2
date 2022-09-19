@@ -799,7 +799,7 @@ const ModelTable = React.memo(
                 tooltip: "Total_loss 입니다.",
               },
               accuracy: {
-                name: "정확도",
+                name: "Accuracy",
                 anchor: anchorAccuracy,
                 setAnchor: setAnchorAccuracy,
                 tooltip:

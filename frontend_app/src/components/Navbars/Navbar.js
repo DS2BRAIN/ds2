@@ -56,7 +56,8 @@ export default function Header(props) {
               item
               id="logoToAdmin"
               onClick={() => {
-                toHome(history);
+                // toHome(history);
+                window.location.href = "/admin/train";
               }}
               style={{ cursor: "pointer", lineHeight: "60px", marginRight: 48 }}
             >

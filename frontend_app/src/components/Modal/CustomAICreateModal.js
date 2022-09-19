@@ -343,7 +343,7 @@ const CustomAICreateModal = ({ history, isCustomAIModalOpen, setIsCustomAIModalO
               </>
             ) : (
               <>
-                <Tooltip title={<span style={{ fontSize: "11px" }}>{t("클래스당 라벨링 10개 이상 있어야 Custom AI 를 만들 수 있습니다.")}</span>} placement="top">
+                <Tooltip title={<span style={{ fontSize: "11px" }}>{t("You must have at least 10 labels per class to create a Custom AI.")}</span>} placement="top">
                   <div>
                     <Button id="start_customai_disabled_btn" shape="Contained" disabled style={{ width: "100%", textAlign: "center" }}>
                       {t("Getting Started with AI Development")}

@@ -11,7 +11,7 @@ import {
 import currentTheme from "assets/jss/custom.js";
 import { checkIsValidKey } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
-import LiscenseRegisterModal from "components/Modal/LiscenseRegisterModal";
+import LicenseRegisterModal from "components/Modal/LicenseRegisterModal";
 
 import {
   Container,
@@ -746,7 +746,7 @@ const Manager = ({ history }) => {
         </Grid>
       </Modal>
 
-      <LiscenseRegisterModal />
+      <LicenseRegisterModal />
     </Container>
   );
 };

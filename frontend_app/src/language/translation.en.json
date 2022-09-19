@@ -2194,7 +2194,7 @@
   "Buy License": "Buy License",
   "Available after license purchase": "Available after license purchase",
   "Available after purchasing the Enterprise plan": "Available after purchasing the Enterprise plan",
-  "Available after purchasing the liscense": "Available after purchasing the liscense",
+  "Available after purchasing the License": "Available after purchasing the License",
   "Available as a download version. Visit https://ds2.ai": "Available as a download version. Visit https://ds2.ai",
   "30 days free trial": "30 days free trial",
   "All agree": "All agree",
@@ -2326,5 +2326,6 @@
   "Please enter the host.": "Please enter the host.",
   "Enter the token": "Enter the token",
   "Please enter the token.": "Please enter the token.",
-  "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again."
+  "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
+  "Triton Config": "Triton Config"
 }

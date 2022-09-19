@@ -2189,7 +2189,7 @@
   "Buy License": "라이센스 구매하기",
   "Available after license purchase": "라이센스 구매 후 사용 가능합니다",
   "Available after purchasing the Enterprise plan": "엔터프라이즈 플랜 구매 후 이용 가능합니다",
-  "Available after purchasing the liscense": "라이센스 구매 후 이용 가능합니다.",
+  "Available after purchasing the License": "라이센스 구매 후 이용 가능합니다.",
   "Available as a download version. Visit https://ds2.ai": "다운로드 버전으로 이용 가능합니다",
   "30 days free trial": "30일 무료 사용",
   "All agree": "전체 동의",
@@ -2321,5 +2321,6 @@
   "Enter the token": "token을 입력하세요",
   "Please enter the token.": "token을 입력해주세요.",
   "Please check the connection.": "커넥션 정보를 확인해주세요.",
-  "Error setting the introduction page and language. Please refresh and try again.": "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요."
+  "Error setting the introduction page and language. Please refresh and try again.": "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요.",
+  "Triton Config": "Triton 설정"
 }
