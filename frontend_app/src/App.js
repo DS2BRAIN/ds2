@@ -97,9 +97,9 @@ const App = () => {
           }
         }
       );
-      window.ChannelIO("boot", {
-        pluginKey: "0215031b-7a8b-4225-a5f0-f59a49968e66",
-      });
+      // window.ChannelIO("boot", {
+      //   pluginKey: "0215031b-7a8b-4225-a5f0-f59a49968e66",
+      // });
     }
   }, [user.language]);
 
