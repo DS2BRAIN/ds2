@@ -20,3 +20,10 @@ export const TRAINING_METHOD = {
   recommender: "Recommendation System",
   image_classification: "Image Classification",
 };
+
+export const MODEL_STATUS_TEXT = {
+  "0": "Preparing to create a model.",
+  "1": "The model learning has started.",
+  "99": "An error has occurred.",
+  "100": "The model learning is complete.",
+};

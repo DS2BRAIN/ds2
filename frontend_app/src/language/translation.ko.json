@@ -2322,5 +2322,9 @@
   "Please enter the token.": "token을 입력해주세요.",
   "Please check the connection.": "커넥션 정보를 확인해주세요.",
   "Error setting the introduction page and language. Please refresh and try again.": "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요.",
-  "Triton Config": "Triton 설정"
+  "Triton Config": "Triton 설정",
+  "The model learning is complete.": "모델 학습이 완료되었습니다.",
+  "An error has occurred.": "에러가 발생하였습니다.",
+  "The model learning has started.": "모델 학습이 시작되었습니다.",
+  "Preparing to create a model.": "모델 생성 준비중입니다."
 }

@@ -20,6 +20,7 @@ import { setModelSSEDictRequestAction } from "redux/reducers/models";
 import { getModelRequestAction } from "redux/reducers/models.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import { IS_ENTERPRISE } from "variables/common";
+import { MODEL_STATUS_TEXT } from "variables/train";
 import { openChat } from "components/Function/globalFunc";
 
 import {
@@ -168,6 +169,8 @@ const ModelTable = React.memo(
     const [cmStatKeys, setCmStatKeys] = useState([]);
     const [substituteHead, setSubsituteHead] = useState({});
     const [isSseInitiated, setIsSseInitiated] = useState(false);
+    const [isLogMessageModalOpen, setIsLogMessageModalOpen] = useState(false);
+    const [selectedModel, setSelectedModel] = useState({});
 
     const sortValueRef = useRef(sortValue);
     sortValueRef.current = sortValue;
@@ -1148,6 +1151,24 @@ const ModelTable = React.memo(
                 );
               };
 
+              const bodyCellShowLogBtn = (model) => {
+                const openLogMessageModal = () => {
+                  setSelectedModel(model);
+                  setIsLogMessageModalOpen(true);
+                };
+
+                return (
+                  <Button
+                    id="show_log_btn"
+                    shape="blueOutlined"
+                    size="sm"
+                    onClick={openLogMessageModal}
+                  >
+                    {t("Show log")}
+                  </Button>
+                );
+              };
+
               const bodyCellStatus100 = (project) => {
                 const openDetailPage = (page, modelId, projectId) => {
                   if (!Cookies.getCookie("user")) {
@@ -1427,10 +1448,17 @@ const ModelTable = React.memo(
                     id="modelTable"
                     align="center"
                   >
-                    {model.status === 99 && "-"}
-                    {model.status === 100 &&
-                      project &&
-                      bodyCellStatus100(project)}
+                    <Grid
+                      container
+                      justifyContent="center"
+                      alignItems="center"
+                      wrap="nowrap"
+                    >
+                      {bodyCellShowLogBtn(model)}
+                      {model.status === 100 &&
+                        project &&
+                        bodyCellStatus100(project)}
+                    </Grid>
                   </TableCell>
                 </TableRow>
               );
@@ -1531,8 +1559,16 @@ const ModelTable = React.memo(
     const closeTooltipModalOpen = () => {
       setIsTooltipModalOpen(false);
     };
+
     const closeWebhooksModal = () => {
       setOpenWebhooksModal(false);
+    };
+
+    const closeLogMessageModal = () => {
+      setIsLogMessageModalOpen(false);
+      setTimeout(() => {
+        setSelectedModel({});
+      }, 300);
     };
 
     const getResult = (response) => {
@@ -2360,6 +2396,54 @@ const ModelTable = React.memo(
           api_type="AI"
           model_id={projects.project?.id}
         />
+
+        <Modal
+          open={isLogMessageModalOpen}
+          onClose={closeLogMessageModal}
+          className={classes.modalContainer}
+        >
+          <Grid
+            sx={{
+              py: 3.5,
+              px: 4,
+              width: "80%",
+              maxWidth: "1200px",
+              maxHeight: "800px",
+              overflowY: "auto",
+              background: "var(--background2)",
+              borderRadius: "4px",
+            }}
+          >
+            <Grid
+              sx={{
+                mb: 1,
+                ml: 0.5,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <p
+                style={{ fontSize: "20px", fontWeight: "bold", color: "white" }}
+              >
+                {selectedModel.name}
+              </p>
+              <CloseIcon
+                style={{ cursor: "pointer" }}
+                onClick={closeLogMessageModal}
+              />
+            </Grid>
+            <Grid sx={{ ml: 2 }}>
+              <pre style={{ color: "white" }}>
+                {`${selectedModel.status}: ${t(
+                  MODEL_STATUS_TEXT[(selectedModel?.status)]
+                    ? MODEL_STATUS_TEXT[selectedModel.status]
+                    : "-"
+                )}`}
+                {/* 전체 학습 로그 표현 필요 */}
+              </pre>
+            </Grid>
+          </Grid>
+        </Modal>
       </div>
     );
   }

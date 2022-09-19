@@ -2327,5 +2327,9 @@
   "Enter the token": "Enter the token",
   "Please enter the token.": "Please enter the token.",
   "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
-  "Triton Config": "Triton Config"
+  "Triton Config": "Triton Config",
+  "The model learning is complete.": "The model learning is complete.",
+  "An error has occurred.": "An error has occurred.",
+  "The model learning has started.": "The model learning has started.",
+  "Preparing to create a model.": "Preparing to create a model."
 }
