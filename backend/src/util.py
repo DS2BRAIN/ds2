@@ -113,9 +113,11 @@ class enterpriseBoto():
             except:
                 print(traceback.format_exc())
                 pass
-
+            alter_path = f"{self.save_path}/{s3_route}"
+            if 'ds2ai/ds2ai' in alter_path:
+                alter_path = alter_path.replace('ds2ai/ds2ai', 'ds2ai')
             try:
-                shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
+                shutil.copyfile(alter_path, file_route)
             except:
                 # print(traceback.format_exc())
                 pass

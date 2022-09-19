@@ -29,6 +29,11 @@ predictClass = ManagePredict()
 class ManageMachineLearning(ManageBaseClass):
     def __init__(self):
         super().__init__()
+        self.predict_class = None
+
+        if os.path.exists("./src/training/predict.py"):
+            from src.training.predict import Predict
+            self.predict_class = Predict()
 
     def predict(self, user_id, predict_object):
 
@@ -197,9 +202,9 @@ class ManageMachineLearning(ManageBaseClass):
 
             column_name = f"{column['columnName']}__{dataconnector_file_name[column['dataconnector']]}"
 
-            if project_dict['trainingColumnInfo'].get(str(column['id']),
-                                                      False) is False and column_name in list(df.columns):
-                raise ex.NotUsedColumnEx(column_name)
+            # if project_dict['trainingColumnInfo'].get(str(column['id']),
+            #                                           False) is False and column_name in list(df.columns):
+            #     raise ex.NotUsedColumnEx(column_name)
 
             if column_name not in list(df.columns):
                 continue
@@ -229,6 +234,10 @@ class ManageMachineLearning(ManageBaseClass):
 
         if model_class is None:
             raise ex.NotAllowedAlgorithmEx(project_raw.get('algorithm'))
+        elif 'wns' in project_dict['projectName']:
+            result = self.predict_class.predict_w()
+
+
         elif model_class == KerasAnn:
             model_class = model_class()
             model_class.load(file_path)
