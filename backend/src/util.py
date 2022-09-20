@@ -73,6 +73,9 @@ class enterpriseBoto():
 
         self.save_path = f"{os.path.expanduser('~')}/ds2ai"
 
+        if os.environ.get('DS2_SAVE_FILE_PATH'):
+            self.save_path = os.environ.get('DS2_SAVE_FILE_PATH')
+
         for i, argv in enumerate(sys.argv):
             if i == 0:
                 continue
@@ -240,6 +243,9 @@ class Util():
             self.configOption = 'enterprise'
 
         self.save_path = f"{os.path.expanduser('~')}/ds2ai"
+
+        if os.environ.get('DS2_SAVE_FILE_PATH'):
+            self.save_path = os.environ.get('DS2_SAVE_FILE_PATH')
 
         for i, argv in enumerate(sys.argv):
             if i == 0:
