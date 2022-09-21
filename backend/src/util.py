@@ -73,6 +73,9 @@ class enterpriseBoto():
 
         self.save_path = f"{os.path.expanduser('~')}/ds2ai"
 
+        if os.environ.get('DS2_SAVE_FILE_PATH'):
+            self.save_path = os.environ.get('DS2_SAVE_FILE_PATH')
+
         for i, argv in enumerate(sys.argv):
             if i == 0:
                 continue
@@ -113,9 +116,11 @@ class enterpriseBoto():
             except:
                 print(traceback.format_exc())
                 pass
-
+            alter_path = f"{self.save_path}/{s3_route}"
+            if 'ds2ai/ds2ai' in alter_path:
+                alter_path = alter_path.replace('ds2ai/ds2ai', 'ds2ai')
             try:
-                shutil.copyfile(f"{self.save_path}/{s3_route}", file_route)
+                shutil.copyfile(alter_path, file_route)
             except:
                 # print(traceback.format_exc())
                 pass
@@ -238,6 +243,9 @@ class Util():
             self.configOption = 'enterprise'
 
         self.save_path = f"{os.path.expanduser('~')}/ds2ai"
+
+        if os.environ.get('DS2_SAVE_FILE_PATH'):
+            self.save_path = os.environ.get('DS2_SAVE_FILE_PATH')
 
         for i, argv in enumerate(sys.argv):
             if i == 0:

@@ -110,6 +110,62 @@ class Contour:
 
         return selected_contour
 
+    def get_contour_point_all(
+            self,
+            image: np.ndarray,
+            x: int,
+            y: int,
+            width: int,
+            height: int,
+            thresh: float = 0.35,
+            is_apply_pre_model: bool = False
+    ) -> np.ndarray:
+        assert is_apply_pre_model is False or (is_apply_pre_model and self.pre_model is not None), \
+            f'If is_apply_pre_model is True, pre_model must be not None.'
+
+        # Check points
+        image_height, image_width = image.shape[:2]
+        x, y = np.median((0, x, image_width)).astype(int), np.median((0, y, image_height)).astype(int)
+        width, height = min(width, image_width - x), min(height, image_height - y)
+        if width <= 0 or height <= 0:
+            return np.array([])
+
+        # Crop image
+        crop_image = image[y:y + height, x:x + width, :]
+        crop_height, crop_width, _ = crop_image.shape
+
+        # Inference the model (post-method)
+        post_output = self.model.inference(crop_image)
+
+        # Find contour points
+        contours = self.image2contour_all(post_output, thresh, self.maxval)
+
+        if contours is None:
+            return np.array([[]])
+
+        # Rollback contour point to original image
+        new_contours = []
+        for contour in contours:
+            contour = np.reshape(contour, (-1, 2))
+            if len(contour) < 3:
+                continue
+            contour[:, 0] += x
+            contour[:, 1] += y
+            new_contours.append(contour)
+
+        return np.array(new_contours)
+
+    def image2contour_all(self, image, thresh, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE):
+        # Create a binary threshold image
+        _, binary = cv2.threshold(image, thresh, self.maxval, cv2.THRESH_BINARY)
+
+        # Find contour points
+        # contours, hierarchy = cv2.findContours(image.astype("int32"), cv2.RETR_FLOODFILL, cv2.CHAIN_APPROX_SIMPLE)
+        # contours, hierarchy = cv2.findContours(image.astype("uint8"), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(image=binary.astype("uint8"), mode=mode, method=method)
+
+        return contours
+
     def image2contour(self, image, thresh, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE):
         # Create a binary threshold image
         _, binary = cv2.threshold(image, thresh, self.maxval, cv2.THRESH_BINARY)

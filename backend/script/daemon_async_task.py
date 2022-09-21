@@ -209,7 +209,10 @@ class DaemonAsyncTask():
                 s3Url = self.utilClass.unquote_url(task.inputFilePath)
                 localFilePath = f"{self.utilClass.save_path}/" + s3Url.split("/")[-1]
                 if not os.path.isfile(localFilePath):
-                    self.s3.download_file(self.utilClass.bucket_name, "/".join(s3Url.split("/")[3:]), localFilePath)
+                    origin_file_path = "/".join(s3Url.split("/")[3:])
+                    if self.utilClass.configOption == "enterprise":
+                        origin_file_path = s3Url
+                    self.s3.download_file(self.utilClass.bucket_name, origin_file_path, localFilePath)
                 with open(localFilePath, 'rb') as r:
                     localFile = r.read()
             user = self.dbClass.getOneUserById(task.user, raw=True)
