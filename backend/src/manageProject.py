@@ -4259,7 +4259,7 @@ class ManageProject:
             })
 
             if rd:
-                rd.publish("broadcast", json.dumps(model_to_dict(async_task), default=json_util.default, ensure_ascii=False))
+                self.utilClass.send_asnyc_task(model_to_dict(async_task))
 
             if project_info.get('instanceType') or project.get('instanceType'):
                 try:

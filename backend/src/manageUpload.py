@@ -1457,7 +1457,7 @@ class ManageUpload:
                     })
 
                     if rd:
-                        rd.publish("broadcast", json.dumps(model_to_dict(async_task), default=json_util.default, ensure_ascii=False))
+                        self.utilClass.send_asnyc_task(model_to_dict(async_task))
 
 
             else:
@@ -1481,7 +1481,7 @@ class ManageUpload:
                 })
 
                 if rd:
-                    rd.publish("broadcast", json.dumps(model_to_dict(async_task), default=json_util.default, ensure_ascii=False))
+                    self.utilClass.send_asnyc_task(async_task.__dict__['__data__'])
 
             os.remove(temp_file)
 

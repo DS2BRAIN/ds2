@@ -206,7 +206,7 @@ class ManageLabeling:
         })
 
         if rd:
-            rd.publish("broadcast", json.dumps(model_to_dict(async_task), default=json_util.default, ensure_ascii=False))
+            self.utilClass.send_asnyc_task(model_to_dict(async_task))
 
         self.utilClass.sendSlackMessage(
             f"오토라벨링 프로젝트가 생성되었습니다. {user['email']} (ID: {user['id']}) , 오토 라벨링 프로젝트 (ID: {data.id}) , 모델 ID: {model_id}",
@@ -2374,7 +2374,7 @@ class ManageLabeling:
         async_task = self.dbClass.createAsyncTask(data)
 
         if rd:
-            rd.publish("broadcast", json.dumps(model_to_dict(async_task), default=json_util.default, ensure_ascii=False))
+            self.utilClass.send_asnyc_task(model_to_dict(async_task))
 
 
     def getS3FileFromData(self, labelproject_raw, ds2data):

@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import shutil
 import subprocess
@@ -16,6 +17,7 @@ import pandas as pd
 import requests
 from uuid import getnode as get_mac
 import torch.cuda
+from bson import json_util
 
 from src.errors import exceptions as ex
 
@@ -66,6 +68,31 @@ try:
     public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
 except:
     public_ip_address = "0.0.0.0"
+
+
+if not os.path.exists("region.txt"):
+    try:
+        r = requests.get("http://169.254.169.254/latest/dynamic/instance-identity/document", timeout=1)
+        response_json = r.json()
+        region_name = response_json.get('region')
+        with open("region.txt","w") as f:
+            f.write(region_name)
+    except:
+        with open("region.txt", "w") as f:
+            f.write("None")
+
+rd = None
+try:
+    import redis
+
+    with open("region.txt", "r") as r:
+        region = r.readlines()[0]
+        if 'None' == region:
+            rd = redis.StrictRedis(host='localhost', port=6379)
+        else:
+            rd = redis.StrictRedis(host='ds2cluster-001.ctuu0a.0001.apn2.cache.amazonaws.com', port=6379)
+except:
+    pass
 
 class enterpriseBoto():
 
@@ -186,7 +213,7 @@ class Util():
         }
 
         self.jupyterAMI = util_configs.get('jupyterAMI', {})
-
+        self.mac_address = get_mac()
 
         self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif']
         self.videoExtensionName = ['mp4', 'mov']
@@ -949,3 +976,16 @@ class Util():
 <br>
 </body><html>
     """
+    def send_asnyc_task(self, data):
+
+
+        try:
+            machine_list = json.loads(rd.get('machine_list'))
+            machine_list_wait_num = {}
+            for machine_name in machine_list:
+                machine_list_wait_num[machine_name] = len(json.loads(rd.get(machine_name))["/device:GPU:all"])
+            data['machine'] = min(machine_list_wait_num, key=machine_list_wait_num.get)
+        except:
+            data['machine'] = self.mac_address
+            pass
+        rd.publish("broadcast", json.dumps(data, default=json_util.default, ensure_ascii=False))

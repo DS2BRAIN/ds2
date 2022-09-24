@@ -121,8 +121,7 @@ class ManageJupyter:
         if rd:
             data = jupyter_server.__dict__['__data__']
             data['appTokenCode'] = user.appTokenCode
-            rd.publish("broadcast",
-                       json.dumps(data, default=json_util.default, ensure_ascii=False))
+            self.utilClass.send_asnyc_task(data)
 
         result["instances"] = jupyter_server.__dict__['__data__']
 

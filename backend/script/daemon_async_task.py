@@ -416,7 +416,7 @@ class DaemonAsyncTask():
                 del task_info['created_at']
                 del task_info['updated_at']
                 print(task.__dict__['__data__'])
-                rd.publish("broadcast", json.dumps(task.__dict__['__data__']), default=json_util.default, ensure_ascii=False)
+                self.utilClass.send_asnyc_task(task.__dict__['__data__'])
 
         except:
             print(traceback.format_exc())

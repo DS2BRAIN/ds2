@@ -15,6 +15,7 @@ from tensorflow.python.client import device_lib
 from models.helper import Helper
 from src.util import Util
 from models import skyhub
+from uuid import getnode as get_mac
 
 
 class DaemonSMS():
@@ -22,12 +23,21 @@ class DaemonSMS():
     def __init__(self):
 
         self.redis_conn = redis.Redis(charset="utf-8", decode_responses=True)
-
+        self.mac_address = get_mac()
         self.gpu_wait_list = {
             "/device:GPU:all": [],
             # "/device:GPU:0" : [],
             # "/device:GPU:1" : [],
         }
+        machine_list_old = self.redis_conn.get("machine_list")
+        if machine_list_old:
+            machine_list = json.loads(machine_list_old)
+            machine_list.append(self.mac_address)
+            self.redis_conn.set("machine_list", json.dumps([machine_list]))
+        else:
+            self.redis_conn.set("machine_list", json.dumps([self.mac_address]))
+
+        self.redis_conn.set(self.mac_address, json.dumps(self.gpu_wait_list))
 
         self.task_start_num = 0
         self.dbClass = Helper(init=True)
@@ -35,6 +45,7 @@ class DaemonSMS():
 
         for gpu_name in self.get_available_gpus():
             self.gpu_wait_list[gpu_name] = []
+            self.redis_conn.set(self.mac_address, json.dumps(self.gpu_wait_list))
 
         os.makedirs(self.utilClass.save_path, exist_ok=True)
 
@@ -51,6 +62,8 @@ class DaemonSMS():
             if message.get("type") == "message":
 
                 data = json.loads(message.get("data"))
+                if data.get("machine") and data["machine"] != self.mac_address:
+                    continue
                 data["task_start_num"] = self.task_start_num
                 self.task_start_num += 1
                 reqiure_gpus = data.get("reqiure_gpus", ["/device:GPU:all"]) # reqiure_gpus = [/device:GPU:0,/device:GPU:1,/device:GPU:2,/device:GPU:3]
@@ -72,10 +85,13 @@ class DaemonSMS():
                     if is_working_on_this_server:
 
                         for reqiure_gpu in reqiure_gpus:
+                            self.gpu_wait_list = json.loads(self.redis_conn.get(self.mac_address))
                             if self.gpu_wait_list.get(reqiure_gpu):
                                 self.gpu_wait_list[reqiure_gpu].append(data)
+                                self.redis_conn.set(self.mac_address, json.dumps(self.gpu_wait_list))
                             else:
                                 self.gpu_wait_list[reqiure_gpu] = [data]
+                                self.redis_conn.set(self.mac_address, json.dumps(self.gpu_wait_list))
 
                     if data["is_started"] or data.get('jupyterProject'):
                         self.start_daemon(data, reqiure_gpus)
@@ -96,11 +112,13 @@ class DaemonSMS():
 
         if reqiure_gpus:
             for reqiure_gpu in reqiure_gpus:
+                self.gpu_wait_list = json.loads(self.redis_conn.get(self.mac_address))
                 if type(self.gpu_wait_list.get(reqiure_gpu)) == None \
                         or len(self.gpu_wait_list.get(reqiure_gpu)) != 0:
                     is_available = False
         else:
             is_available_more_than_one = False
+            self.gpu_wait_list = json.loads(self.redis_conn.get(self.mac_address))
             for key, value in self.gpu_wait_list.items():
                 if key == "/device:GPU:all":
                     continue
@@ -136,6 +154,9 @@ class DaemonSMS():
             else:
                 my_env["CUDA_VISIBLE_DEVICES"] = "0"
 
+
+            if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
+                python_path = "/home/yeo/miniconda3/envs/p3.9/bin/python"
 
             if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):
                 python_path = "/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"
@@ -195,17 +216,22 @@ class DaemonSMS():
 
         for reqiure_gpu in reqiure_gpus:
             remove_task_num_list = []
+            self.gpu_wait_list = json.loads(self.redis_conn.get(self.mac_address))
+            print(self.gpu_wait_list)
             for gpu_wait_list_num, gpu_wait_task in enumerate(self.gpu_wait_list.get(reqiure_gpu, [])):
                 if data['id'] == gpu_wait_task['id']:
                     remove_task_num_list.append(gpu_wait_list_num)
             for remove_task_num in remove_task_num_list:
                 del self.gpu_wait_list[reqiure_gpu][remove_task_num]
+                self.redis_conn.set(self.mac_address, json.dumps(self.gpu_wait_list))
 
     def start_available_tasks(self):
         # if not reqiure_gpus:
         #     reqiure_gpus = ["/device:GPU:all"]
 
         available_gpu_list = []
+        self.gpu_wait_list = json.loads(self.redis_conn.get(self.mac_address))
+        print(self.gpu_wait_list)
         for key, gpu_wait_tasks in self.gpu_wait_list.items():
             is_available_gpu = True
             for gpu_wait_task in gpu_wait_tasks:
@@ -220,6 +246,7 @@ class DaemonSMS():
 
         available_tasks = []
         for available_gpu in available_gpu_list:
+            self.gpu_wait_list = json.loads(self.redis_conn.get(self.mac_address))
             available_tasks += self.gpu_wait_list[available_gpu]
 
         available_tasks = sorted(available_tasks, key=lambda d: d['task_start_num'])
