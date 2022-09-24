@@ -916,7 +916,10 @@ class ManagePredict:
 
         if 'text_to_image' in model['project']['trainingMethod']:
 
-            prediction_model = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=True)
+            token = True
+            if self.predict_class:
+                token = self.predict_class.token
+            prediction_model = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=token)
             prediction_model = prediction_model.to("cuda")
 
             result = None
