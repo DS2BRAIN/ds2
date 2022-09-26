@@ -666,6 +666,8 @@ class Helper():
                 task_list = ['model']
             elif tasktype == 'payment':
                 task_list = ['planPayment', 'postPayment']
+            else:
+                task_list = ['exportData']
             commonWhere = (asynctasksTable.user == userId) & (asynctasksTable.taskType.in_(task_list))
         if provider != 'DS2.ai':
             commonWhere = commonWhere & (asynctasksTable.provider == provider)
