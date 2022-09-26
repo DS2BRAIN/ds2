@@ -686,6 +686,15 @@ const UserInfo = ({ history }) => {
                 />
               </div>
             </Grid>
+
+            <Grid item xs={12}>
+              <div className={classes.settingFontWhite6}>
+                {t("Remain Credit")}
+              </div>
+              <div className={classes.settingFontWhite87} id="userCompany">
+                {user.me.deposit - user.me.usedPrice}
+              </div>
+            </Grid>
           </Grid>
           <Grid
             item
