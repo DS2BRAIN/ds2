@@ -236,6 +236,10 @@ class ManageMachineLearning(ManageBaseClass):
             raise ex.NotAllowedAlgorithmEx(project_raw.get('algorithm'))
         elif 'wns' in project_dict['projectName']:
             result = self.predict_class.predict_w()
+        elif 'drv' in project_dict['projectName']:
+            result = self.predict_class.predict_d()
+        elif 'tns' in project_dict['projectName']:
+            result = self.predict_class.predict_t()
 
 
         elif model_class == KerasAnn:
