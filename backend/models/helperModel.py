@@ -206,6 +206,7 @@ class HelperModel():
                 modelsTable.errorRate,
                 modelsTable.dice,
                 modelsTable.mase,
+                modelsTable.mape,
                 modelsTable.isFavorite,
                 modelsTable.token,
                 prescriptionAnalyticsInfo,
