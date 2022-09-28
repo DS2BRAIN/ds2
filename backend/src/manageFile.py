@@ -299,7 +299,7 @@ class ManageFile:
                         break
                     else:
                         raise ex.TooManyExistFileEx(user_id=user_id)
-            if len(files) > 0:
+            if len(files) > 1:
                 is_coco, json_data = self.check_exists_coco(root)
                 if is_coco is None:
                     raise ex.TooManyExistFileEx(user_id=user_id)
