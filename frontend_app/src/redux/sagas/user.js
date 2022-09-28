@@ -509,7 +509,7 @@ function* postCheckAllAsynctasks(action) {
       type: POST_CHECKALLASYNCTASKS_SUCCESS,
     });
     yield put({
-      REQUEST_SUCCESS_MESSAGE,
+      type: REQUEST_SUCCESS_MESSAGE,
       data: "All notifications have been marked as read.",
     });
   } catch (err) {

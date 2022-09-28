@@ -481,17 +481,17 @@ class HelperProject():
             user = self.getOneUserById(project.user, raw=True)
             user.cumulativeProjectCount = user.cumulativeProjectCount - 1
             user.save()
-        if status > 0:
-            asynctasksTable.create(**{
-                "taskName": project.projectName,
-                "taskNameEn": project.projectName,
-                "taskType": task_type,
-                "status": status,
-                'labelproject': project.labelproject,
-                "user": project.user,
-                "project": rowId,
-                'isChecked': 0
-            })
+        # if status > 0:
+        #     asynctasksTable.create(**{
+        #         "taskName": project.projectName,
+        #         "taskNameEn": project.projectName,
+        #         "taskType": task_type,
+        #         "status": status,
+        #         'labelproject': project.labelproject,
+        #         "user": project.user,
+        #         "project": rowId,
+        #         'isChecked': 0
+        #     })
             # try:
             #     asyncTaskId = self.getAsnycTaskByProjectId(rowId)
             #     asyncTaskId.status = status

@@ -119,10 +119,8 @@ const SettingGpuOption = ({
     let serverName = e.target.value;
     let tmpCheckedDict = checkedDict;
     if (isChecked) {
-      let filteredServer = serverDataList.filter((serverDict) => {
-        return serverDict.server_name === serverName;
-      });
-      tmpCheckedDict[serverName] = [...filteredServer[0].gpu_list];
+      let filteredServer = gpuList[serverName];
+      tmpCheckedDict[serverName] = [...filteredServer];
     } else {
       if (tmpCheckedDict[serverName]) delete tmpCheckedDict[serverName];
     }
