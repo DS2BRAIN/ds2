@@ -119,10 +119,10 @@ class DataAnalyze:
                     width = label_project_dict['temp'][0]['width']
                     height = label_project_dict['temp'][0]['height']
                     if label['labeltype'] == 'box':
-                        points = [round(width * label['x']), round(height * label['y']),
+                        points = [[round(width * label['x']), round(height * label['y']),
                                    round(width * label['x']), round(height * (label['y'] + label['h'])),
                                    round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h'])),
-                                   round(width * (label['x'] + label['w'])), round(height * label['y'])]
+                                   round(width * (label['x'] + label['w'])), round(height * label['y'])]]
                         numpyarray = np.array(points).reshape((-1, 2))
                         npmin = np.min(numpyarray, axis=0)
                         npmax = np.max(numpyarray, axis=0)
