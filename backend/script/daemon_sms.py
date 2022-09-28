@@ -140,8 +140,13 @@ class DaemonSMS():
             if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):
                 python_path = "/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"
                 jupyter_path = "/home/dslab/.local/bin/jupyter"
-                execute_path = "/var/lib/jenkins/projects/ds2/backend/"
+                execute_path = "/var/lib/jenkins/projects/ds2-staging/backend/"
                 my_env["DS2_DEV_TEST"] = "true"
+
+            if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
+                python_path = "/home/yeo/miniconda3/envs/p3.9/bin/python"
+                jupyter_path = "/home/yeo/.local/bin/jupyter"
+                execute_path = "/home/yeo/projects/ds2/backend/"
 
             if "jupyterProject" in data:
                 cmd = f"{jupyter_path} notebook --ip=0.0.0.0 --allow-root --notebook-dir=/opt --port {data.get('port')} --allow-root --NotebookApp.token='{data.get('appTokenCode')}'"
