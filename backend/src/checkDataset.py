@@ -471,11 +471,11 @@ class CheckDataset():
                         #            round(width * label['x']), round(height * (label['y'] + label['h'])),
                         #            round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h'])),
                         #            round(width * (label['x'] + label['w'])), round(height * label['y'])]]
-                        points = [[round(width * label['x']), round(height * label['y']),
+                        points = [round(width * label['x']), round(height * label['y']),
                                    round(width * (label['x'] + label['w'])), round(height * label['y']),
                                    round(width * (label['x'] + label['w'])), round(height * (label['y'] + label['h'])),
                                    round(width * label['x']), round(height * (label['y'] + label['h']))
-                                   ]]
+                                   ]
                         numpyarray = np.array(points).reshape((-1, 2))
                         npmin = np.min(numpyarray, axis=0)
                         npmax = np.max(numpyarray, axis=0)
