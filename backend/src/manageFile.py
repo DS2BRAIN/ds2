@@ -812,7 +812,7 @@ class ManageFile:
                         #     annotation['segmentation'] = [[x1, y1, x2, y1, x2, y2, x1, y2]]
                         bbox = {}
 
-                        if not annotation.get('segmentation') and annotation['bbox']:
+                        if annotation['bbox']:
                             bbox = {
                                 "x": annotation['bbox'][0] / width,
                                 "y": annotation['bbox'][1] / height,
@@ -821,7 +821,7 @@ class ManageFile:
                             }
                         # bbox = self.get_coco_segmentation(annotation['bbox'], width, height)
 
-                        labeltype = 'box'
+                        labeltype = 'polygon'
                         points = None
                         if annotation['segmentation']:
                             if type(annotation['segmentation'][0]) != list:
@@ -829,8 +829,8 @@ class ManageFile:
                             else:
                                 points = self.get_coco_segmentation(annotation['segmentation'][0], width, height)
 
-                        if points:
-                            labeltype = 'polygon'
+                        if bbox:
+                            labeltype = 'box'
 
                         label_data = {
                                           'labeltype': labeltype,
