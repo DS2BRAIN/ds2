@@ -1291,7 +1291,10 @@ class ManageFile:
             path = f'{file_path}'
             image_name = file_path.split("/")[-1]
             file_name, file_ext = os.path.splitext(image_name)
-            data = open(path, 'rb')
+            try:
+                data = open(path, 'rb')
+            except:
+                data = open(urllib.parse.quote(path), 'rb')
 
             if file_ext == '.svg':
                 file_ext = '.svg+xml'
