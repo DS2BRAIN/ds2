@@ -232,16 +232,17 @@ class ManageMachineLearning(ManageBaseClass):
         else:
             file_path = model_raw['filePath']
 
-        if model_class is None:
-            raise ex.NotAllowedAlgorithmEx(project_raw.get('algorithm'))
-        elif 'wns' in project_dict['projectName']:
-            result = self.predict_class.predict_w()
+        if 'wns' in project_dict['projectName']:
+            result = self.predict_class.predict_w(df, project_raw)
+            df[value_for_predict] = result
         elif 'drv' in project_dict['projectName']:
-            result = self.predict_class.predict_d()
+            result = self.predict_class.predict_d(df, project_raw)
+            df[value_for_predict] = result
         elif 'tns' in project_dict['projectName']:
-            result = self.predict_class.predict_t()
-
-
+            result = self.predict_class.predict_t(df, project_raw)
+            df[value_for_predict] = result
+        elif model_class is None:
+            raise ex.NotAllowedAlgorithmEx(project_raw.get('algorithm'))
         elif model_class == KerasAnn:
             model_class = model_class()
             model_class.load(file_path)
@@ -300,7 +301,8 @@ class ManageMachineLearning(ManageBaseClass):
             except:
                 raise ex.FailedPredictEx()
         code = HTTP_200_OK
-        df['predict_for_meta'] = df[value_for_predict]
+        # if value_for_predict in df.columns:
+        #     df['predict_for_meta'] = df[value_for_predict]
         if return_type == "file":
 
             predictedFilePath = f'temp/{model_id}_{project_raw["id"]}_{str(round(time.time() * 1000))}.csv'
