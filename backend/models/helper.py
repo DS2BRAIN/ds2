@@ -710,7 +710,7 @@ class Helper():
             elif taskType == 'labelingAi':
                 task_list = ['uploadLabelProjectData', 'addObject', 'autoLabeling', 'customAi', 'exportCoco', 'exportData', 'exportVoc']
             elif taskType == 'clickAi':
-                task_list = ['model']
+                task_list = ['train']
             elif taskType == 'payment':
                 task_list = ['planPayment', 'postPayment']
             commonWhere = (asynctasksTable.user == userId) & (asynctasksTable.taskType.in_(task_list))
