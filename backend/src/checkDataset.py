@@ -348,7 +348,7 @@ class CheckDataset():
     def exportCoCoData(self, labelProjectInfo, projectId=None, isAsync=False, is_get_image=False,
                        has_project_data=False, has_median_data=False, is_suffle=True, is_train_data=True,
                        asynctask=None):
-
+        print("exportCoCoData")
         trainannotation = []
         testannotations = []
         status = 0
