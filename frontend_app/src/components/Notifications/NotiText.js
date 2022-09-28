@@ -113,10 +113,17 @@ export const getNotificationText = (status, type, statText, lang) => {
       : `${statusText} ${typeText}`;
   } else {
     statusText =
-      status === 1 || status === 0
-        ? isKor
+      status === 1 ? isKor
           ? "시작되었습니다."
-          : "has started"
+          : "has started."
+        : status === 0
+        ? isKor
+          ? "시작 준비 중 입니다."
+          : "is getting ready."
+        : status === 10
+        ? isKor
+          ? "전처리 중 입니다."
+          : "is in progress for preprocessing."
         : status === 100
         ? isKor
           ? "완료되었습니다."
