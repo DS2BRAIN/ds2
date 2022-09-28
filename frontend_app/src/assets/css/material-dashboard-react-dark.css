@@ -61,6 +61,9 @@
 img {
   image-orientation: from-image;
 }
+input {
+  color: var(--textWhite87);
+}
 input:disabled {
   color: var(--textWhite87);
 }
@@ -1089,6 +1092,7 @@ td {
 }
 #labelclass_name_input {
   border-bottom: 1px solid var(--textWhite87);
+  color: var(--textWhite87) !important;
 }
 .primaryColorIcon > path {
   color: var(--primary1) !important;

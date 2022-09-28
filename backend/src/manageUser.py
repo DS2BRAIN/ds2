@@ -185,15 +185,18 @@ class ManageUser:
 
     def register_metabase_user(self, user: dict, raw_password: str):
 
-        meta_email = user.get('emailContent')
+        meta_email = user.get('email')
         meta_names = meta_email.split('@')
         meta_first_name = meta_names[0]
         meta_last_name = meta_names[1]
-        mb = self.utilClass.get_metabase_client()
-        if mb:
-            new_group = mb.add_group(user.get('id'))
-            new_meta_user = mb.add_user(meta_first_name, meta_last_name, meta_email, raw_password)
-            mb.add_user_to_group(new_meta_user.get('id'), new_group.get('id'))
+        try:
+            mb = self.utilClass.get_metabase_client()
+            if mb:
+                new_group = mb.add_group(user.get('id'))
+                new_meta_user = mb.add_user(meta_first_name, meta_last_name, meta_email, raw_password)
+                mb.add_user_to_group(new_meta_user.get('id'), new_group.get('id'))
+        except:
+            pass
 
     def admin_delete_user(self, token, user_id):
 

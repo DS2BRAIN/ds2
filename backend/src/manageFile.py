@@ -299,7 +299,7 @@ class ManageFile:
                         break
                     else:
                         raise ex.TooManyExistFileEx(user_id=user_id)
-            if len(files) > 0:
+            if len(files) > 1:
                 is_coco, json_data = self.check_exists_coco(root)
                 if is_coco is None:
                     raise ex.TooManyExistFileEx(user_id=user_id)
@@ -1291,7 +1291,10 @@ class ManageFile:
             path = f'{file_path}'
             image_name = file_path.split("/")[-1]
             file_name, file_ext = os.path.splitext(image_name)
-            data = open(path, 'rb')
+            try:
+                data = open(path, 'rb')
+            except:
+                data = open(urllib.parse.quote(path), 'rb')
 
             if file_ext == '.svg':
                 file_ext = '.svg+xml'
