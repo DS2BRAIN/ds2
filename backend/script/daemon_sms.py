@@ -63,7 +63,7 @@ class DaemonSMS():
 
                     is_working_on_this_server = True
 
-                    if data["require_gpus_total"]:
+                    if data.get("require_gpus_total"):
                         is_working_on_this_server = False
                         for key, value in data["require_gpus_total"].items():
                             if key == "localhost":
@@ -156,7 +156,7 @@ class DaemonSMS():
 
                 cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
 
-                if data['require_gpus_total']: #Temp
+                if data.get('require_gpus_total'): #Temp
                     try:
                         import horovod
                         training_server_total = 0
