@@ -398,6 +398,31 @@ class ManagePredict:
             trainingMethod = model['project']['trainingMethod']
             image = np.fromstring(file, dtype='uint8')
             im = cv2.imdecode(image, cv2.IMREAD_COLOR)
+
+            if 'ocr' in trainingMethod:
+                result = self.predict_image_class.getOCR(file, im, info)
+
+                try:
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                except:
+                    pass
+                return HTTP_200_OK, result
+
+            if 'image_to_text' in trainingMethod:
+                result = self.predict_image_class.get_image_to_text(file, im, info)
+
+                try:
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                except:
+                    pass
+
+                return HTTP_200_OK, result
+
+            if not model:
+                raise("No model file exist")
+
             if isMarket:
                 market_usage = self.dbClass.get_market_usage(user.id, model['id'], raw=True)
                 market_usage.inferenceCount += 1
@@ -443,27 +468,6 @@ class ManagePredict:
                     outputImage = self.predict_image_class.getFaceLandmark(im, info, predictor=self.predictor)
                     if info:
                         return HTTP_200_OK, outputImage
-
-            if 'ocr' in trainingMethod:
-                result = self.predict_image_class.getOCR(file, im, info)
-
-                try:
-                    gc.collect()
-                    torch.cuda.empty_cache()
-                except:
-                    pass
-                return HTTP_200_OK, result
-
-            if 'image_to_text' in trainingMethod:
-                result = self.predict_image_class.get_image_to_text(file, im, info)
-
-                try:
-                    gc.collect()
-                    torch.cuda.empty_cache()
-                except:
-                    pass
-
-                return HTTP_200_OK, result
 
             if self.predict_class:
                 return self.predict_class.runImage(modelId, file, filename, appToken, userId,
