@@ -339,7 +339,7 @@ class HelperSthreefile():
 
     @wrapper
     def getOneLabelprojectFileByCondition(self, condition):
-        result = mongoDb.get_one_document_by_condition(mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME, condition)
+        result = mongoDb.get_one_document_by_condition(mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME, condition=condition)
         return result
 
     @wrapper
@@ -391,7 +391,7 @@ class HelperSthreefile():
 
     @wrapper
     def get_csv_structure_by_labelproject_id(self, labelproject_id):
-        return mongoDb.get_one_document_by_condition(mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME, {"labelproject": labelproject_id})['rawData']
+        return mongoDb.get_one_document_by_condition(mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME, condition={"labelproject": labelproject_id})['rawData']
 
     @wrapper
     def getSthreeFilesByDataconnectors(self, dataconnectors):
