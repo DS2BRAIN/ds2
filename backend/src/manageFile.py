@@ -899,8 +899,11 @@ class ManageFile:
                 except Exception as e:
                     fail_file_list.append(image)
                     self.utilClass.sendSlackMessage(traceback.format_exc())
-        connector_raw.progress = 90
-        connector_raw.save()
+
+        if not is_labelproject:
+            connector_raw.progress = 90
+            connector_raw.save()
+
         if len(ds2datas) > 0:
             self.dbClass.createFile(ds2datas)
 
@@ -923,7 +926,7 @@ class ManageFile:
                 json_key = file_path_dict[data['fileName']]
                 json_key = json_key[1:] if json_key[0] == '/' else json_key
                 json_key = '/'.join(json_key.split('/')[1:])
-                for temp_folder_name in base_data['json_file_name'].split('/'):
+                for temp_folder_name in base_data['file_name'].split('/'):
                     if json_key.split('/')[0] == temp_folder_name:
                         json_key = '/'.join(json_key.split('/')[1:])
 
