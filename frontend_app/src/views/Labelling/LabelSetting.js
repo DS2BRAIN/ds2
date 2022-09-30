@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
 
 import {
-  askLabelProjectDetailRequestAction,
-  askDeleteLabelProjectReqeustAction,
+    askLabelProjectDetailRequestAction,
+    askDeleteLabelProjectReqeustAction, openErrorSnackbarRequestAction,
 } from "redux/reducers/messages.js";
 import { setIsProjectRefreshed } from "redux/reducers/labelprojects";
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
@@ -65,12 +65,20 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
   const changeProjectName = (e) => {
     e.preventDefault();
-    setProjectName(e.target.value);
+    if (e.target.value.length > 0) {
+        setProjectName(e.target.value);
+    } else {
+        dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+    }
   };
 
   const changeProjectDescription = (e) => {
     e.preventDefault();
-    setProjectDescription(e.target.value);
+    if (e.target.value.length > 0) {
+        setProjectDescription(e.target.value);
+    } else {
+        dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+    }
   };
 
   const changeHasReviewProcess = (e) => {
