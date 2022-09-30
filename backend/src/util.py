@@ -95,7 +95,7 @@ class enterpriseBoto():
 
     def download_file(self, bucket_name, s3_route, file_route, Config=None):
         print('download_file')
-        s3_route = s3_route.replace(" ","%20")
+        #s3_route = s3_route.replace(" ","%20")
         print(s3_route)
 
         print(self.save_path)
