@@ -162,7 +162,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   // }, [messages.datas]);
 
   const tableHeads = [
-    { value: "No", width: "10%" },
+    { value: "No.", width: "10%" },
     { value: "content", width: "40%" },
     { value: "date", width: "25%" },
     { value: "action", width: "25%" },
