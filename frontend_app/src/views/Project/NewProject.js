@@ -190,11 +190,21 @@ export default function NewProject({ history }) {
   };
 
   const changeProjectNameValue = (e) => {
-    setProjectNameValue(e.target.value);
+    console.log("e.target.value");
+    console.log(e.target.value);
+    if (e.target.value.length > 0) {
+        setProjectNameValue(e.target.value);
+    } else {
+        dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+    }
   };
 
   const changeProjectDescriptionValue = (e) => {
-    setProjectDescriptionValue(e.target.value);
+    if (e.target.value.length > 0) {
+        setProjectDescriptionValue(e.target.value);
+    } else {
+        dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+    }
   };
 
   const changeDataCategory = (event) => {

@@ -2436,23 +2436,35 @@ const Process = (props) => {
     };
 
     const saveProjectName = () => {
-      setIsUnableToChangeName(true);
-      dispatch(
-        askChangeProjectNameRequestAction({
-          id: projects.project.id,
-          name: nextProjectName,
-        })
-      );
+      console.log("nextProjectName");
+      console.log(nextProjectName);
+      if (nextProjectName.length > 0) {
+          setIsUnableToChangeName(true);
+          dispatch(
+            askChangeProjectNameRequestAction({
+              id: projects.project.id,
+              name: nextProjectName,
+            })
+          );
+      } else {
+          dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+      }
+
     };
 
     const saveProjectDetail = () => {
-      setIsUnableTochangeDetail(true);
+      if (nextProjectDetail.length > 0) {
+          setIsUnableTochangeDetail(true);
       dispatch(
         askChangeProjectDescriptionRequestAction({
           id: projects.project.id,
           description: nextProjectDetail,
         })
       );
+      } else {
+          dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+      }
+
     };
 
     return (
