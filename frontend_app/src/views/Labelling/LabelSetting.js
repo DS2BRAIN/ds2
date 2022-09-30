@@ -340,7 +340,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
               marginLeft: "10px",
             }}
           >
-            {t("Project Name")}*
+            {t("Project Name")}
           </div>
           <InputBase
             id="project_name_input"
