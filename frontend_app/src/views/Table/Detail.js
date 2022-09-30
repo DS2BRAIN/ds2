@@ -445,7 +445,7 @@ const Detail = React.memo(({ datacolumns }) => {
                       }}
                     >
                       {rowArr.map((each, idx) => {
-                        return <td className={classes.statTd}>{each}</td>;
+                        return <td className={classes.statTd}>{(typeof each === 'string' || each instanceof String) ? each.replaceAll('TPR Micro', 'Recall') : each}</td>;
                       })}
                     </tr>
                   );
@@ -471,7 +471,7 @@ const Detail = React.memo(({ datacolumns }) => {
                       }}
                     >
                       {rowArr.map((each, idx) => {
-                        return <td className={classes.statTd}>{each}</td>;
+                        return <td className={classes.statTd}>{(typeof each === 'string' || each instanceof String) ? each.replaceAll('TPR', 'Recall') : each}</td>;
                       })}
                     </tr>
                   );
@@ -790,7 +790,7 @@ const Detail = React.memo(({ datacolumns }) => {
                 Records
               </div>
             )}
-            {featureImportance && featureImportance.length > 0 && (
+            {featureImportance && projects.project.trainingMethod !== "normal_regression" && featureImportance.length > 0 && (
               <div
                 id="featureImportanceTab"
                 onClick={() => {

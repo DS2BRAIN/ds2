@@ -857,6 +857,7 @@ const OpsPannel = (props) => {
                     style={{
                       display: "flex",
                       fontSize: "12px",
+                      color: "white",
                       padding: "0px",
                       height: "20px",
                       justifyContent: "center",
@@ -1145,7 +1146,7 @@ const OpsPannel = (props) => {
                     xs={11}
                     justifyContent="flex-start"
                     alignItems="flex-start"
-                    style={{ margin: "10px" }}
+                    style={{ margin: "10px", color: "white" }}
                   >
                     {t("Submit Project Name")}
                   </Grid>

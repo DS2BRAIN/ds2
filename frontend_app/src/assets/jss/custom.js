@@ -739,7 +739,7 @@ const currentTheme = makeStyles((theme) => ({
     fontSize: "12px",
     marginLeft: "8px",
     borderRadius: "150px",
-    color: currentThemeColor.primary1,
+    color: "white !important",
     border: "1px solid " + currentThemeColor.primary1,
     margin: "10px 0",
     cursor: "pointer",

@@ -398,6 +398,31 @@ class ManagePredict:
             trainingMethod = model['project']['trainingMethod']
             image = np.fromstring(file, dtype='uint8')
             im = cv2.imdecode(image, cv2.IMREAD_COLOR)
+
+            if 'ocr' in trainingMethod:
+                result = self.predict_image_class.getOCR(file, im, info)
+
+                try:
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                except:
+                    pass
+                return HTTP_200_OK, result
+
+            if 'image_to_text' in trainingMethod:
+                result = self.predict_image_class.get_image_to_text(file, im, info)
+
+                try:
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                except:
+                    pass
+
+                return HTTP_200_OK, result
+
+            if not model:
+                raise("No model file exist")
+
             if isMarket:
                 market_usage = self.dbClass.get_market_usage(user.id, model['id'], raw=True)
                 market_usage.inferenceCount += 1
@@ -443,27 +468,6 @@ class ManagePredict:
                     outputImage = self.predict_image_class.getFaceLandmark(im, info, predictor=self.predictor)
                     if info:
                         return HTTP_200_OK, outputImage
-
-            if 'ocr' in trainingMethod:
-                result = self.predict_image_class.getOCR(file, im, info)
-
-                try:
-                    gc.collect()
-                    torch.cuda.empty_cache()
-                except:
-                    pass
-                return HTTP_200_OK, result
-
-            if 'image_to_text' in trainingMethod:
-                result = self.predict_image_class.get_image_to_text(file, im, info)
-
-                try:
-                    gc.collect()
-                    torch.cuda.empty_cache()
-                except:
-                    pass
-
-                return HTTP_200_OK, result
 
             if self.predict_class:
                 return self.predict_class.runImage(modelId, file, filename, appToken, userId,
@@ -862,6 +866,19 @@ class ManagePredict:
     def predict_for_market(self, a, model, modelPath, learn=None):
         model_name = a["model_name (Optional)"][0]
         if 'text_summarization' in model['project']['trainingMethod']:
+
+            if 'article' not in a.columns:
+                return {"missing_value": 'article'}
+
+            if 'summarization' not in a.columns:
+                return {"missing_value": 'summarization'}
+
+            if 'max_length' not in a.columns:
+                return {"missing_value": 'max_length'}
+
+            if 'min_length' not in a.columns:
+                return {"missing_value": 'min_length'}
+
             if not self.quickMarketModels.get("summarizer"):
                 self.quickMarketModels["summarizer"] = pipeline("summarization", model=model_name if model_name else "facebook/bart-large-cnn")
             result = self.quickMarketModels["summarizer"](a["article"][0], max_length=int(a["max_length"][0]),
@@ -869,6 +886,16 @@ class ManagePredict:
             return {"summary_text__predict_value": result}
 
         if 'translation' in model['project']['trainingMethod']:
+
+            if 'from' not in a.columns:
+                return {"missing_value": 'from'}
+
+            if 'to' not in a.columns:
+                return {"missing_value": 'to'}
+
+            if 'text' not in a.columns:
+                return {"missing_value": 'text'}
+
             if not self.quickMarketModels.get("translation"):
                 self.quickMarketModels["translation"] = {
                     "model": M2M100ForConditionalGeneration.from_pretrained(model_name if model_name else "facebook/m2m100_1.2B"),
@@ -884,6 +911,13 @@ class ManagePredict:
             return {"translated_text__predict_value": result}
 
         if 'gpt' in model['project']['trainingMethod']:
+
+            if 'max_length' not in a.columns:
+                return {"missing_value": 'max_length'}
+
+            if 'text' not in a.columns:
+                return {"missing_value": 'text'}
+
             if not self.quickMarketModels.get("gpt"):
                 self.quickMarketModels["gpt"] = pipeline('text-generation', model=model_name if model_name else 'gpt2')
             set_seed(42)
@@ -894,6 +928,10 @@ class ManagePredict:
             return {"generated_text__predict_value": generated_text}
 
         if 'fill_mask' in model['project']['trainingMethod']:
+
+            if 'text' not in a.columns:
+                return {"missing_value": 'text'}
+
             if not self.quickMarketModels.get("fill_mask"):
                 self.quickMarketModels["fill_mask"] = pipeline('fill-mask', model=model_name if model_name else 'bert-base-uncased')
             results = self.quickMarketModels["fill_mask"](a["text"][0])
@@ -903,6 +941,10 @@ class ManagePredict:
             return {"generated_text__predict_value": generated_text}
 
         if 'text_to_speech' in model['project']['trainingMethod']:
+
+            if 'text' not in a.columns:
+                return {"missing_value": 'text'}
+
             prediction_model = Text2Speech.from_pretrained(model_name if model_name else "espnet/kan-bayashi_ljspeech_vits")
 
             speech = prediction_model(a["text"][0])["wav"]
@@ -916,7 +958,12 @@ class ManagePredict:
 
         if 'text_to_image' in model['project']['trainingMethod']:
 
-            prediction_model = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=True)
+            if 'text' not in a.columns:
+                return {"missing_value": 'text'}
+            token = True
+            if self.predict_class:
+                token = self.predict_class.token
+            prediction_model = StableDiffusionPipeline.from_pretrained(model_name if model_name else "CompVis/stable-diffusion-v1-4", use_auth_token=token)
             prediction_model = prediction_model.to("cuda")
 
             result = None
