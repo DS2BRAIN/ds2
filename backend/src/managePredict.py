@@ -81,10 +81,13 @@ class ManagePredict:
         self.quickOpsModels = {}
         self.predict_class = None
         self.predict_image_class = PredictImage()
+        self.processing_service_class = None
 
         if os.path.exists("./src/training/predict.py"):
             from src.training.predict import Predict
             self.predict_class = Predict()
+            from src.training.processingService import ProcessingService
+            self.processing_service_class = ProcessingService()
 
         if self.utilClass.opsId:
             time.sleep(round(random.uniform(1, 5), 3))
@@ -110,14 +113,15 @@ class ManagePredict:
                     print(traceback.format_exc())
                     pass
 
-    def run(self, modelId, parameter, appToken, userId, background_tasks=None, isMarket=False, opsId=None, inputLoadedModel=None, modeltoken=None):
+    def run(self, modelId, parameter, appToken, userId, background_tasks=None, isMarket=False,
+            opsId=None, inputLoadedModel=None, modeltoken=None, slug=None):
 
-        if self.dbClass.isUserHavingExceedPredictCount(modelId):
-            return HTTP_503_SERVICE_UNAVAILABLE, {
-                        "statusCode": 503,
-                        "error": "Bad Request",
-                        "message": "예측 기능 사용량 초과입니다."
-                    }
+        # if self.dbClass.isUserHavingExceedPredictCount(modelId):
+        #     return HTTP_503_SERVICE_UNAVAILABLE, {
+        #                 "statusCode": 503,
+        #                 "error": "Bad Request",
+        #                 "message": "예측 기능 사용량 초과입니다."
+        #             }
 
         if modeltoken:
             user = self.dbClass.getUserByModelTokenAndModelId(modeltoken, modelId)
@@ -154,19 +158,29 @@ class ManagePredict:
                 return self.sendToOwnInferenceServer(url, 'inference', modelId, opsId, appToken, userId, parameter=parameter, inputLoadedModel=inputLoadedModel)
 
         print("inference by this server")
+        if slug:
+            result = self.run_by_slug(slug, parameter)
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
+            return HTTP_200_OK, result
         try:
             model, modelPath, learn, predictor, opt = self.loadModel(modelId, isMarket=isMarket, opsId=opsId)
 
-            try:
-                if "text_to_speech" not in model['project']['trainingMethod'] \
-                        and 'text_to_image' not in model['project']['trainingMethod']:
-                    data = rd.get(
-                        f"||{modelId}||{json.dumps(parameter)}||{userId}||{isMarket}||{inputLoadedModel}||{opsId}||{modeltoken}||")
-                    if data:
-                        return HTTP_200_OK, data
-            except:
-                print(traceback.format_exc())
-                pass
+            # try:
+            #     if "text_to_speech" not in model['project']['trainingMethod'] \
+            #             and 'text_to_image' not in model['project']['trainingMethod']:
+            #         data = rd.get(
+            #             f"||{modelId}||{json.dumps(parameter)}||{userId}||{isMarket}||{inputLoadedModel}||{opsId}||{modeltoken}||1")
+            #         if data:
+            #             return HTTP_200_OK, data
+            # except:
+            #     print(traceback.format_exc())
+            #     pass
 
             if "load_torch" in model['project']['option']:
 
@@ -359,7 +373,52 @@ class ManagePredict:
             self.utilClass.sendSlackMessage(str(traceback.format_exc()), appError=True)
             pass
 
-    def runImage(self, modelId, file, filename, appToken, userId, background_tasks=None, xai=False, info=False, returnImage=False, isMarket=False, opsId=None, modeltoken=None):
+    def runFile(self, modelId, file, filename, appToken, userId, background_tasks=None,
+                 xai=False, info=False, returnImage=False, isMarket=False, opsId=None, modeltoken=None, slug=None):
+        print("runFile start time : " + str(datetime.datetime.now()))
+        filename = self.utilClass.unquote_url(filename)
+
+        if modeltoken:
+            user = self.dbClass.getUserByModelTokenAndModelId(modeltoken, modelId)
+            if not user:
+                return HTTP_503_SERVICE_UNAVAILABLE, {
+                    "statusCode": 503,
+                    "error": "Bad Request",
+                    "message": "앱 토큰을 잘 못 입력하였습니다."
+                }
+            appToken = user.appTokenCode
+
+        user = self.dbClass.getUserByAppToken(appToken)
+
+        if not appToken:
+            return HTTP_503_SERVICE_UNAVAILABLE, {
+                "statusCode": 503,
+                "error": "Bad Request",
+                "message": "앱 토큰을 잘 못 입력하였습니다."
+            }
+
+        if self.utilClass.configOption != 'enterprise':
+            if user.deposit - user.usedPrice <= 0:
+                return HTTP_402_PAYMENT_REQUIRED, {'result': 'fail'}
+
+        if opsId and not self.utilClass.opsId and self.utilClass.configOption != 'enterprise':
+            url = self.getOpsURL(opsId)
+            if url:
+                return self.sendToOwnInferenceServer(url, 'inferenceimageinfo' if info else 'inferenceimage', modelId, opsId, appToken, userId, filename=filename, file=file)
+
+        if slug:
+            result = self.run_file_by_slug(slug, file, info, filename)
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
+            return HTTP_200_OK, result
+
+    def runImage(self, modelId, file, filename, appToken, userId, background_tasks=None,
+                 xai=False, info=False, returnImage=False, isMarket=False, opsId=None, modeltoken=None, slug=None):
         print("runImage start time : " + str(datetime.datetime.now()))
         filename = self.utilClass.unquote_url(filename)
 
@@ -506,8 +565,8 @@ class ManagePredict:
         return self.runImage(modelId, file, url.split("/")[-1], appToken, userId, xai=xai, info=info, background_tasks=background_tasks, modeltoken=modeltoken)
 
     def speect_to_text(self, modelId, file, filename, appToken, userId,
-                 isStreaming=True, isMarket=False, opsId=None, background_tasks=None,
-                 modeltoken=None, marketproject=None, movie_start_time=None, task=None, file_creation_time=None):
+                 isStreaming=True, isMarket=False, opsId=None, background_tasks=None, modeltoken=None,
+                       marketproject=None, movie_start_time=None, task=None, file_creation_time=None, slug=None):
 
         filename = self.utilClass.unquote_url(filename)
         if self.dbClass.isUserHavingExceedPredictCount(modelId):
@@ -542,17 +601,17 @@ class ManagePredict:
         if os.path.isfile(temp_file_path):
             os.remove(temp_file_path)
 
-        return HTTP_200_OK, {"predict_value": transcriptions}
+        return HTTP_200_OK, {"result": transcriptions}
 
     def runMovie(self, modelId, file, filename, appToken, userId,
-                 isStreaming=True, isMarket=False, opsId=None, background_tasks=None,
-                 modeltoken=None, marketproject=None, movie_start_time=None, task=None, file_creation_time=None):
+                 isStreaming=True, isMarket=False, opsId=None, background_tasks=None, modeltoken=None,
+                 marketproject=None, movie_start_time=None, task=None, file_creation_time=None, slug=None):
 
         if self.predict_class:
             return self.predict_class.runMovie(modelId, file, filename, appToken, userId,
                  isStreaming=isStreaming, isMarket=isMarket, opsId=opsId, background_tasks=background_tasks,
                  modeltoken=modeltoken, marketproject=marketproject, movie_start_time=movie_start_time,
-                                           task=task, file_creation_time=file_creation_time)
+                                           task=task, file_creation_time=file_creation_time, slug=slug)
         else:
             return NO_SUPPORT_FOR_OPENSOURCE
 
@@ -864,14 +923,11 @@ class ManagePredict:
             return NO_SUPPORT_FOR_OPENSOURCE
 
     def predict_for_market(self, a, model, modelPath, learn=None):
-        model_name = a["model_name (Optional)"][0]
+        model_name = a["model_name (Optional)"][0] if "model_name (Optional)" in a.columns else None
         if 'text_summarization' in model['project']['trainingMethod']:
 
-            if 'article' not in a.columns:
-                return {"missing_value": 'article'}
-
-            if 'summarization' not in a.columns:
-                return {"missing_value": 'summarization'}
+            if 'text' not in a.columns:
+                return {"missing_value": 'text'}
 
             if 'max_length' not in a.columns:
                 return {"missing_value": 'max_length'}
@@ -881,9 +937,17 @@ class ManagePredict:
 
             if not self.quickMarketModels.get("summarizer"):
                 self.quickMarketModels["summarizer"] = pipeline("summarization", model=model_name if model_name else "facebook/bart-large-cnn")
-            result = self.quickMarketModels["summarizer"](a["article"][0], max_length=int(a["max_length"][0]),
+            result = self.quickMarketModels["summarizer"](a["text"][0], max_length=int(a["max_length"][0]),
                                                  min_length=int(a["min_length"][0]), do_sample=False)[0]["summary_text"]
-            return {"summary_text__predict_value": result}
+
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
+            return {"result": result}
 
         if 'translation' in model['project']['trainingMethod']:
 
@@ -908,7 +972,14 @@ class ManagePredict:
                        forced_bos_token_id=self.quickMarketModels["translation"]["tokenizer"].get_lang_id(a["to"][0]))
             result = self.quickMarketModels["translation"]["tokenizer"].batch_decode(generated_tokens,
                                                                                      skip_special_tokens=True)
-            return {"translated_text__predict_value": result}
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
+            return {"result": result}
 
         if 'gpt' in model['project']['trainingMethod']:
 
@@ -925,7 +996,14 @@ class ManagePredict:
             results = self.quickMarketModels["gpt"](a["text"][0], max_length=a["max_length"][0], num_return_sequences=a["num_return_sequences"][0])
             for result in results:
                 generated_text.append(result["generated_text"])
-            return {"generated_text__predict_value": generated_text}
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
+            return {"result": generated_text}
 
         if 'fill_mask' in model['project']['trainingMethod']:
 
@@ -938,7 +1016,14 @@ class ManagePredict:
             generated_text = []
             for result in results:
                 generated_text.append(result["sequence"])
-            return {"generated_text__predict_value": generated_text}
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+
+            return {"result": generated_text}
 
         if 'text_to_speech' in model['project']['trainingMethod']:
 
@@ -953,6 +1038,12 @@ class ManagePredict:
             memory_file.name = "result.wav"
             soundfile.write(memory_file, speech.numpy(), prediction_model.fs, "PCM_16")
             memory_file.seek(0)
+
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
 
             return StreamingResponse(memory_file, media_type="audio/wav")
 
@@ -970,13 +1061,20 @@ class ManagePredict:
             with autocast("cuda"):
                 image = prediction_model(a["text"][0], guidance_scale=7.5)["sample"][0]
                 with io.BytesIO() as output:
-                    image.save(output, format="GIF")
+                    image.save(output, format="PNG")
                     # contents = output.getvalue()
-                    output.name = "result.gif"
+                    output.name = "result.png"
                     output.seek(0)
                     result = copy.deepcopy(output)
 
-            return StreamingResponse(result, media_type="image/gif")
+            try:
+                gc.collect()
+                torch.cuda.empty_cache()
+            except:
+                pass
+            return StreamingResponse(result, media_type="image/png")
+            # data = open('/home/yeo/Pictures/Screenshots/Screenshot from 2022-10-02 00-14-29.png', 'rb')
+            # return StreamingResponse(data, media_type="image/png")
 
     def reboot_instance(self, model={}, server_type=""):
         if self.utilClass.instanceId:
@@ -1031,6 +1129,90 @@ class ManagePredict:
         except:
             print(traceback.format_exc())
             pass
+    def run_by_slug(self, slug, parameter):
+
+        a = pd.DataFrame([parameter])
+        model_name = a["model_name (Optional)"][0] if "model_name (Optional)" in a.columns else None
+
+        if 'text-to-image' in slug:
+            result = self.processing_service_class.convert_text_to_image(a, model_name=model_name)
+            return StreamingResponse(result)
+
+        if 'text-summerization' in slug:
+            result = self.processing_service_class.text_summarization(a, model_name=model_name)
+            return result
+
+        if 'translation' in slug:
+            result = self.processing_service_class.translation(a, model_name=model_name)
+            return result
+
+        if 'text-to-speech' in slug:
+            result = self.processing_service_class.convert_text_to_speech(a, model_name=model_name)
+            return StreamingResponse(result)
+
+        if 'gpt' in slug:
+            result = self.processing_service_class.gpt(a, model_name=model_name)
+            return result
+
+        if 'fill-mask' in slug:
+            result = self.processing_service_class.fill_mask(a, model_name=model_name)
+            return result
+
+        if 'qr-code-generator' in slug:
+            result = self.processing_service_class.generate_qrcode(a['text'])
+            return StreamingResponse(result)
+
+    def run_file_by_slug(self, slug, file, info, filename=None):
+
+        result = None
+        if 'ocr' in slug:
+            result = self.predict_image_class.getOCR(file, info)
+            return result
+
+        if 'image-to-text' in slug:
+            result = self.predict_image_class.get_image_to_text(file, info)
+            return result
+
+        if 'png-to-jpg' in slug:
+            result = self.processing_service_class.convert_image_ext(file, 'jpg')
+            return StreamingResponse(result)
+
+        if 'webp-to-png' in slug:
+            result = self.processing_service_class.convert_image_ext(file, 'png')
+            return StreamingResponse(result)
+
+        if 'png-to-webp' in slug:
+            result = self.processing_service_class.convert_image_ext(file, 'webp')
+            return StreamingResponse(result)
+
+        if 'webp-to-jpg' in slug:
+            result = self.processing_service_class.convert_image_ext(file, 'jpg')
+            return StreamingResponse(result)
+
+        if 'speech-to-text' in slug:
+            result = self.processing_service_class.convert_speech_to_text(file, filename.split('.')[-1])
+            return result
+
+        if 'jpg-to-pdf' in slug:
+            result = self.processing_service_class.convert_images_to_pdf(file)
+            return StreamingResponse(result)
+
+        if 'pdf-to-jpg' in slug:
+            result = self.processing_service_class.convert_pdf_to_images(file, 'jpg')
+            return StreamingResponse(result)
+
+        if 'background-remover' in slug:
+            result = self.processing_service_class.remove_background(file, filename.split('.')[-1])
+            return StreamingResponse(result)
+
+        if 'favicon-generator' in slug:
+            result = self.processing_service_class.generate_favicon_images(file)
+            return StreamingResponse(result)
+
+        if 'video-to-gif' in slug:
+            result = self.processing_service_class.convert_video_to_gif(file, filename.split('.')[-1])
+            return StreamingResponse(result)
+
 
 
 if __name__ == "__main__" :

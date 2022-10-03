@@ -34,6 +34,7 @@ class PredictObject(BaseModel):
     apptoken: str = None
     modeltoken: str = None
     inputLoadedModel: str = None
+    slug: str = None
     parameter: dict
 
 @router.post("/predict/{userId}/")
@@ -49,25 +50,26 @@ def getPredict(response: Response, predictObject: PredictObject, userId):
 
 @router.post("/predictimage/{userId}/")
 def getPredictImage(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                    modelid: str = Form(None), slug: str = Form(None), apptoken: str = Form(None),
+                    modeltoken: str = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
     file = file.file.read()
-    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.imageExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
     if filename.split('.')[-1].lower() in utilClass.imageExtensionName:
 
-        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId, modeltoken=modeltoken)
+        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId,
+                                                             modeltoken=modeltoken, slug=slug)
 
     else:
 
-        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId, modeltoken=modeltoken)
-
-
+        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId,
+                                                             modeltoken=modeltoken, slug=slug)
     return result
 
 class PredictWithURLObject(BaseModel):
@@ -88,23 +90,25 @@ def getPredictImageByUrl(response: Response, predictObject: PredictWithURLObject
 
 @router.post("/predictimagexai/{userId}/")
 def getPredictImagexai(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                    modelid: str = Form(None), slug: str = Form(None), apptoken: str = Form(None), modeltoken: str = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
     file = file.file.read()
-    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.videoExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.documentExtensionName + utilClass.videoExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
     if filename.split('.')[-1].lower() in utilClass.imageExtensionName:
 
-        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId, xai=True, modeltoken=modeltoken)
+        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId,
+                                                             xai=True, modeltoken=modeltoken, slug=slug)
 
     else:
 
-        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId, modeltoken=modeltoken)
+        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId,
+                                                             modeltoken=modeltoken, slug=slug)
 
     return result
 
@@ -128,23 +132,25 @@ def getPredictImageByUrl(response: Response, predictObject: PredictWithURLObject
 
 @router.post("/predictimageinfo/{userId}/")
 def getPredictImageInfo(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                    modelid: str = Form(None), slug: str = Form(None), apptoken: str = Form(None), modeltoken: str = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
     file = file.file.read()
-    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.imageExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
     if filename.split('.')[-1].lower() in utilClass.imageExtensionName:
 
-        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId, info=True, modeltoken=modeltoken)
+        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId,
+                                                             info=True, modeltoken=modeltoken, slug=slug)
 
     else:
 
-        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId, modeltoken=modeltoken)
+        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId,
+                                                             modeltoken=modeltoken, slug=slug)
 
 
     return result
@@ -215,7 +221,7 @@ def getPredictAllImage(response: Response, userId, file: UploadFile = File(...),
     #     return 204
 
     file = file.file.read()
-    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.compressionExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.documentExtensionName + utilClass.compressionExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
