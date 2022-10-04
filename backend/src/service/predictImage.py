@@ -52,7 +52,6 @@ if "1.4.0" not in torch.__version__ and 'Darwin' not in platform.system():
     import matplotlib.pyplot as plt
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont
-    from cv2 import cv2
     from detectron2.config import get_cfg
     from detectron2.engine import DefaultPredictor
     from detectron2.model_zoo import model_zoo
