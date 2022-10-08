@@ -188,9 +188,10 @@ class Util():
         self.jupyterAMI = util_configs.get('jupyterAMI', {})
 
 
-        self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif']
-        self.videoExtensionName = ['mp4', 'mov']
-        self.soundExtensionName = ['mp4','mp3','wav','flac']
+        self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']
+        self.documentExtensionName = ['pdf', 'doc', 'docx', 'xlsx', 'xls']
+        self.videoExtensionName = ['mp4', 'mov', 'ogg', 'mkv', 'm4a']
+        self.soundExtensionName = ['mp4','mp3','wav','flac', 'mkv', 'm4a']
         self.compressionExtensionName = ['zip']
         self.textExtensionName = ['csv']
         self.read_permission_name = ['read']
@@ -680,7 +681,7 @@ class Util():
                          crawling=False, data_part=False, server_status=False, business_part=False,
                          is_agreed_behavior_statistics=False
                          ):
-        if self.configOption == "enterprise" and not is_agreed_behavior_statistics:
+        if self.configOption == "enterprise" and not is_agreed_behavior_statistics and not self.is_dev_test:
             return
         error = False
         try:

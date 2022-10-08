@@ -65,7 +65,7 @@ def getPredictImage(response: Response, background_tasks: BackgroundTasks, opsId
 
     file = file.file.read()
 
-    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.imageExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
@@ -105,7 +105,7 @@ def getPredictImagexai(response: Response, background_tasks: BackgroundTasks, op
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
-    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.videoExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.documentExtensionName + utilClass.videoExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
@@ -145,7 +145,7 @@ def getPredictImageInfo(response: Response, background_tasks: BackgroundTasks, o
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
-    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.imageExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
@@ -225,7 +225,7 @@ def getPredictAllImage(response: Response, opsId, userId: str = Form(...), file:
     #     return 204
 
     file = file.file.read()
-    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.compressionExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.documentExtensionName + utilClass.compressionExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 

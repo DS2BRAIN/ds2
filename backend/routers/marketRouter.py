@@ -37,18 +37,20 @@ class PredictObject(BaseModel):
     apptoken: str = None
     userId: str = None
     inputLoadedModel: str = None
-    parameter: dict
+    parameter: dict = None
+    slug: str = None
 
 
 @router.post("/market/predict/")
 def getPredict(response: Response, predictObject: PredictObject):
-    if not predictObject.modelid:
+    if not predictObject.modelid and not predictObject.slug:
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
     response.status_code, result = predictClass.run(predictObject.modelid, predictObject.parameter,
                                                     predictObject.apptoken, predictObject.userId,
-                                                    inputLoadedModel=predictObject.inputLoadedModel, isMarket=True)
+                                                    inputLoadedModel=predictObject.inputLoadedModel, isMarket=True,
+                                                    slug=predictObject.slug)
 
     return result
 
@@ -63,41 +65,43 @@ class MarketProjectObject(BaseModel):
 
 @router.post("/market/predictimage/")
 def getPredictImage(response: Response, userId: str = Form(...), file: UploadFile = File(...),
-                    filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(...)):
+                    filename: str = Form(...), modelid: str = Form(None),
+                     slug: str = Form(None), marketProjectId: str = Form(None), apptoken: str = Form(...)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
-    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.imageExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
     file = file.file.read()
     if filename.split('.')[-1].lower() in utilClass.imageExtensionName:
 
-        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId, isMarket=True)
+        response.status_code, result = predictClass.runImage(modelid, file, filename, apptoken, userId, isMarket=True, slug=slug)
 
     else:
 
-        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId, isMarket=True)
+        response.status_code, result = predictClass.runMovie(modelid, file, filename, apptoken, userId, isMarket=True, slug=slug)
 
     return result
 
-
-@router.post("/market/predict-speech-to-text/")
-def getPredictAudio(response: Response, userId: str = Form(...), file: UploadFile = File(...),
-                         filename: str = Form(...),
-                         modelid: str = Form(...), marketProjectId: str = Form(None), apptoken: str = Form(...),
-                         isStandardMovie: bool = Form(None), sync_cut_at: float = Form(0),
-                         creation_time: str = Form(None)):
-    file = file.file.read()
-    if filename.split('.')[-1].lower() in utilClass.soundExtensionName:
-        response.status_code, result = predictClass.speect_to_text(modelid, file, filename, apptoken, userId, isMarket=True)
+@router.post("/market/run-by-file/")
+def getPredictImage(response: Response, userId: str = Form(...), file: UploadFile = File(...),
+                    filename: str = Form(...), modelid: str = Form(None),
+                     slug: str = Form(None), marketProjectId: str = Form(None), apptoken: str = Form(...)):
+    if not modelid:
+        response.status_code, result = NOT_FOUND_ERROR
         return result
-    else:
+
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.soundExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
+
+    file = file.file.read()
+    response.status_code, result = predictClass.runFile(modelid, file, filename, apptoken, userId, isMarket=True, slug=slug)
+
+    return result
 
 
 class PredictWithURLObject(BaseModel):
@@ -127,7 +131,7 @@ def getPredictImagexai(response: Response, userId: str = Form(...), file: Upload
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
-    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.videoExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.documentExtensionName + utilClass.videoExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
@@ -177,7 +181,7 @@ def getPredictImageInfo(response: Response, userId: str = Form(...), file: Uploa
         response.status_code, result = NOT_FOUND_ERROR
         return result
 
-    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.imageExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.videoExtensionName + utilClass.documentExtensionName + utilClass.imageExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 
@@ -271,7 +275,7 @@ def getPredictAllImage(response: Response, userId: str = Form(...), file: Upload
     #     return 204
     file = file.file.read()
 
-    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.compressionExtensionName:
+    if filename.split('.')[-1].lower() not in utilClass.imageExtensionName + utilClass.documentExtensionName + utilClass.compressionExtensionName:
         response.status_code, result = EXTENSION_NAME_ERROR
         return result
 

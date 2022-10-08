@@ -300,7 +300,7 @@ class PredictImage:
         outputImage = image
         return outputImage
 
-    def getOCR(self, file, image, info=False):
+    def getOCR(self, file, image=None, info=False):
 
         if not self.models.get("OCR"):
             self.models["OCR"] = {
@@ -308,14 +308,22 @@ class PredictImage:
                 "model": VisionEncoderDecoderModel.from_pretrained('microsoft/trocr-base-printed')
             }
 
+        if not image:
+            image = np.fromstring(file, dtype='uint8')
+            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+
         pixel_values = self.models["OCR"]["processor"](images=image, return_tensors="pt").pixel_values
         generated_ids = self.models["OCR"]["model"].generate(pixel_values)
         generated_text = self.models["OCR"]["processor"].batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-        result = json.dumps({"predict_value": generated_text}, default=self.convert, ensure_ascii=False)
-        return result
+        # result = json.dumps({"result": generated_text}, default=self.convert, ensure_ascii=False)
+        return {"result": generated_text}
 
-    def get_image_to_text(self, file, image, info=False):
+    def get_image_to_text(self, file, image=None, info=False):
+
+        if not image:
+            image = np.fromstring(file, dtype='uint8')
+            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
         if not self.models.get("image_to_text"):
             self.models["image_to_text"] = {
@@ -336,10 +344,10 @@ class PredictImage:
         pixel_values = pixel_values.to(device)
         output_ids = self.models["image_to_text"]["model_image_to_text"].generate(pixel_values, **gen_kwargs)
         preds = self.models["image_to_text"]["tokenizer"].batch_decode(output_ids, skip_special_tokens=True)
-        generated_text = [pred.strip() for pred in preds]
+        generated_text = [pred.strip() for pred in preds][0]
 
-        result = json.dumps({"predict_value": generated_text}, default=self.convert, ensure_ascii=False)
-        return result
+        # result = json.dumps({"result": generated_text}, default=self.convert, ensure_ascii=False)
+        return {"result": generated_text}
 
     def getFaceLandmark(self, image, info=False, predictor=None):
         if not predictor:
