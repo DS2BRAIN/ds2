@@ -221,6 +221,19 @@ def add_contact_v2(response: Response, contactObject: ContactObject):
 
     return result
 
+@router.post("/contactv3/")
+def add_contact_v3(response: Response, contactObject: ContactObject):
+
+    KST = timezone('Asia/Seoul')
+    now = datetime.datetime.utcnow()
+    contactInfo = contactObject.__dict__
+    contactInfo['created_at'] = KST.localize(now)
+    contactInfo['updated_at'] = KST.localize(now)
+
+    response.status_code, result = manageEtcClass.add_contact_to_applog(contactInfo)
+
+    return result
+
 @router.get("/asynctask/")
 def getAsyncTask(response: Response, token: str, provider: str = 'DS2.ai'):
     response.status_code, result = manageTaskClass.getAsyncTasks(token, provider)

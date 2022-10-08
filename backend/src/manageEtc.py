@@ -458,6 +458,23 @@ class ManageEtc:
                 self.hbmp_premium_model = HbmpPremium(local_model_path)
                 print(f'hbmp premium model laod')
 
+
+    def add_contact_to_applog(self, contactInfo):
+        self.utilClass.sendSlackMessage(f'''
+    name: {contactInfo.get('name', '')}\n
+    email: {contactInfo.get('email', '')}\n
+    message: {contactInfo.get('message', '')}\n
+    company: {contactInfo.get('company', '')}\n
+    position: {contactInfo.get('position', '')}\n
+    phone: {contactInfo.get('phone', '')}\n
+    utm_source: {contactInfo.get('utmSource', '')}\n
+    utm_medium: {contactInfo.get('utmMedium', '')}\n
+    utm_campaign: {contactInfo.get('utmCampaign', '')}\n
+    utm_term: {contactInfo.get('utmTerm', '')}\n
+    utm_content: {contactInfo.get('utmContent', '')}\n
+    ''', appLog=True)
+
+        return HTTP_201_CREATED, self.dbClass.createContact(contactInfo)
     def addContact(self, contactInfo):
         self.utilClass.sendSlackMessage(f'''
     이름: {contactInfo.get('name', '')}\n
