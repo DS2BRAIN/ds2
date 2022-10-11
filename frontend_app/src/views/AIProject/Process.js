@@ -2209,9 +2209,9 @@ const Process = (props) => {
     if (!(groups.parentsGroup && groups.parentsGroup.length > 0)) {
       dispatch(
         openErrorSnackbarRequestAction(
-          t(
-            "Please create a group before sharing a project. You can create a group in Settings -> Sharing tab."
-          )
+          `${t("Please create a group before sharing a project.")} ${t(
+            "You can create a group in [ Account settings -> Group management tab ]."
+          )}`
         )
       );
       return;
