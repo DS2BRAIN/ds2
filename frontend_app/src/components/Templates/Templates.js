@@ -254,6 +254,31 @@ const Templates = ({ closeTemplateModal }) => {
     });
   };
 
+  const partTemplateList = (tab) => {
+    const isMethodTab = tab === "method";
+
+    const methodTabListStyle = {
+      margin: "10px 0",
+      alignSelf: "flex-start",
+      height: "400px",
+      minWidth: "300px",
+    };
+
+    const industryTabListStyle = {
+      margin: "10px 0",
+      alignSelf: "flex-start",
+      height: "400px",
+      width: "100%",
+      overflowY: "auto",
+    };
+
+    return (
+      <List style={isMethodTab ? methodTabListStyle : industryTabListStyle}>
+        {isMethodTab ? renderTemplateByMethod() : renderTemplateByIndustry()}
+      </List>
+    );
+  };
+
   const tabActiveStyle = {
     color: "#1BC6B4",
     borderBottom: "2px solid #1BC6B4",
@@ -318,30 +343,7 @@ const Templates = ({ closeTemplateModal }) => {
           )}
         </div>
       </Grid>
-      {selectedTab === "method" ? (
-        <List
-          style={{
-            margin: "10px 0",
-            alignSelf: "flex-start",
-            height: "400px",
-            minWidth: "300px",
-          }}
-        >
-          {renderTemplateByMethod()}
-        </List>
-      ) : (
-        <List
-          style={{
-            margin: "10px 0",
-            alignSelf: "flex-start",
-            height: "400px",
-            width: "100%",
-            overflowY: "auto",
-          }}
-        >
-          {renderTemplateByIndustry()}
-        </List>
-      )}
+      {partTemplateList(selectedTab)}
     </div>
   );
 };
