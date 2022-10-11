@@ -162,7 +162,7 @@ export default function SignUp() {
       setSnackbarOption(
         "error",
         t(
-          "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!."
+          "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"
         )
       );
     } else if (passwordCheck === "") {
