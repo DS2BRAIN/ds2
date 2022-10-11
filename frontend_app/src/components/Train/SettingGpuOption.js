@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useTranslation } from "react-i18next";
 
 import Button from "components/CustomButtons/Button";
@@ -8,9 +8,12 @@ import { Checkbox, Grid } from "@mui/material";
 import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
-import { openErrorSnackbarRequestAction } from "../../redux/reducers/messages";
+import {openErrorSnackbarRequestAction, setPlanModalOpenRequestAction} from "../../redux/reducers/messages";
 import * as api from "../../controller/api";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {IS_ENTERPRISE} from "../../variables/common";
+import {checkIsValidKey} from "../Function/globalFunc";
+import LicenseRegisterModal from "../Modal/LicenseRegisterModal";
 
 const SettingGpuOption = ({
   status,
@@ -24,6 +27,16 @@ const SettingGpuOption = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { user, projects, messages, models, groups } = useSelector(
+    (state) => ({
+      user: state.user,
+      projects: state.projects,
+      messages: state.messages,
+      models: state.models,
+      groups: state.groups,
+    }),
+    []
+  );
   const isStatusZero = status === 0;
   const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
@@ -32,6 +45,7 @@ const SettingGpuOption = ({
   const [hostValue, setHostValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
   const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList);
+
 
   const submitAddServer = () => {
     console.log("hostValue", hostValue);
@@ -45,33 +59,28 @@ const SettingGpuOption = ({
       return;
     }
 
-    api
-      .postAddServer({
-        ip: hostValue,
-        access_token: tokenValue,
-      })
-      .then((res) => {
+    api.postAddServer({
+      ip: hostValue,
+      access_token: tokenValue,
+    }).then((res) => {
         if (res.data?.gpu_info) {
-          setAvailableGpuListTotal(
-            Object.assign({}, availableGpuListTotal, {
-              [res.data.name]: res.data.gpu_info,
-            })
-          );
+          setAvailableGpuListTotal(Object.assign({}, availableGpuListTotal, {
+            [res.data.name]: res.data.gpu_info
+          }))
           closeAddServerModal();
         } else {
-          dispatch(
-            openErrorSnackbarRequestAction(t("Please check the connection."))
-          );
+          dispatch(openErrorSnackbarRequestAction(t("Please check the connection.")));
         }
       });
+
   };
 
   const submitDelete = () => {
     console.log("selectedServer");
     console.log(selectedServer);
     api.deleteAddServer(selectedServer).then((res) => {
-      window.location.reload();
-    });
+        window.location.reload();
+      });
   };
 
   const openAddServerModal = () => {
@@ -93,13 +102,25 @@ const SettingGpuOption = ({
   };
 
   const handleServerCheck = (e, isChecked) => {
+    let is_valid = true;
+    if (IS_ENTERPRISE) {
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        ) {
+          is_valid = false;
+        }
+      });
+    }
+    if (!is_valid) {
+      return;
+    }
     let serverName = e.target.value;
     let tmpCheckedDict = checkedDict;
     if (isChecked) {
-      let filteredServer = serverDataList.filter((serverDict) => {
-        return serverDict.server_name === serverName;
-      });
-      tmpCheckedDict[serverName] = [...filteredServer[0].gpu_list];
+      let filteredServer = gpuList[serverName];
+      tmpCheckedDict[serverName] = [...filteredServer];
     } else {
       if (tmpCheckedDict[serverName]) delete tmpCheckedDict[serverName];
     }
@@ -107,6 +128,21 @@ const SettingGpuOption = ({
   };
 
   const handleGpuCheck = (e, isChecked, serverName, gpuDict) => {
+    let is_valid = true;
+    if (IS_ENTERPRISE) {
+      checkIsValidKey(user, dispatch, t).then((result) => {
+        if (
+          (result !== undefined && result === false) ||
+          projects.project.status !== 0
+        ) {
+          is_valid = false;
+        }
+      });
+    }
+    if (!is_valid) {
+      return;
+    }
+
     let tmpCheckedDict = checkedDict;
     let gpuList = tmpCheckedDict[serverName];
 
@@ -146,33 +182,32 @@ const SettingGpuOption = ({
   //     />
   //   );
   // else
-  return (
-    <Grid sx={{ p: 1.5 }}>
-      {serverDataList ? (
+    return (
         <>
-          {isStatusZero && (
-            <Grid container justifyContent="flex-end">
-              <Grid sx={{ mt: -5 }}>
-                <Button
-                  id="add_server_btn"
-                  shape="greenOutlined"
-                  size="sm"
-                  onClick={openAddServerModal}
-                >
-                  {t("Add training server")}
-                </Button>
+      <Grid sx={{ p: 1.5 }}>
+        {serverDataList ? (
+          <>
+            {isStatusZero && (
+              <Grid container justifyContent="flex-end">
+                <Grid sx={{ mt: -5 }}>
+                  <Button
+                    id="add_server_btn"
+                    shape="greenOutlined"
+                    size="sm"
+                    onClick={openAddServerModal}
+                  >
+                    {t("Add training server")}
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-          <Grid container rowSpacing={1}>
-            {availableGpuListTotal &&
-              Object.keys(availableGpuListTotal).map((serverName) => {
+            )}
+            <Grid container rowSpacing={1}>
+              {Object.keys(availableGpuListTotal).map((serverName) => {
                 let serverId = serverName;
                 let serverDict = availableGpuListTotal[serverName];
                 // let serverName = serverDict.name;
                 let isLocalServer = serverName === "localhost";
-                let isChecked =
-                  serverDict?.length === checkedDict[serverName]?.length;
+                let isChecked = serverDict?.length === checkedDict[serverName]?.length;
 
                 return (
                   <Grid item xs={12}>
@@ -237,7 +272,9 @@ const SettingGpuOption = ({
                                 }
                               />
                             )}
-                            <span style={{ fontSize: "15px" }}>{gpuName}</span>
+                            <span style={{ fontSize: "15px" }}>
+                              {gpuName}
+                            </span>
                           </Grid>
                         );
                       })}
@@ -245,26 +282,30 @@ const SettingGpuOption = ({
                   </Grid>
                 );
               })}
-          </Grid>
-          <ModalAddServer
-            isAddServerModalOpen={isAddServerModalOpen}
-            closeAddServerModal={closeAddServerModal}
-            setHostValue={setHostValue}
-            setTokenValue={setTokenValue}
-            submitAddServer={submitAddServer}
-          />
-          <ModalDeleteServer
-            isDeleteServerModalOpen={isDeleteServerModalOpen}
-            closeDeleteServerModal={closeDeleteServerModal}
-            selectedServer={selectedServer}
-            submitDelete={submitDelete}
-          />
-        </>
-      ) : (
-        <p style={disabledTextStyle}>{t("There is no GPU to choose from.")}</p>
-      )}
-    </Grid>
-  );
+            </Grid>
+            <ModalAddServer
+              isAddServerModalOpen={isAddServerModalOpen}
+              closeAddServerModal={closeAddServerModal}
+              setHostValue={setHostValue}
+              setTokenValue={setTokenValue}
+              submitAddServer={submitAddServer}
+            />
+            <ModalDeleteServer
+              isDeleteServerModalOpen={isDeleteServerModalOpen}
+              closeDeleteServerModal={closeDeleteServerModal}
+              selectedServer={selectedServer}
+              submitDelete={submitDelete}
+            />
+          </>
+        ) : (
+          <p style={disabledTextStyle}>
+            {t("There is no GPU to choose from.")}
+          </p>
+        )}
+      </Grid>
+      <LicenseRegisterModal />
+      </>
+    );
 };
 
 export default SettingGpuOption;
