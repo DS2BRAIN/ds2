@@ -645,10 +645,10 @@ export default function SignUp() {
           func: inputPasswordValue,
           tip: true,
           tipTitle:
-            "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!.",
+            "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!",
         },
         passwordCheck: {
-          label: "Re-enter password",
+          label: "Please re-enter your password.",
           type: "password",
           value: passwordCheck,
           func: inputPasswordCheckValue,
@@ -826,7 +826,8 @@ export default function SignUp() {
                 cursor: "default",
               }}
             >
-              {" "}{t("I agree to the terms.")}
+              {" "}
+              {t("I agree to the terms.")}
             </span>
           </Grid>
           <Grid
@@ -932,7 +933,7 @@ export default function SignUp() {
               }}
               onClick={checkValidEmail}
             >
-              {isAbleEmail ? t("Checked") : t("Duplicate Check")}
+              {isAbleEmail ? t("Checked") : t("Duplicate check")}
             </Button>
           </Grid>
           <Grid item xs={12}>
