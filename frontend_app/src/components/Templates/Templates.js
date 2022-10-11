@@ -111,79 +111,93 @@ const Templates = ({ closeTemplateModal }) => {
     setSelectedTab(value);
   };
 
-  const renderTemplateByMethod = () => (
-    <Grid container columnSpacing={3}>
-      <Grid item xs={selectedMethod ? 3 : 11}>
-        {templateMethod.map((method) => (
-          <ListItem
-            button
-            id={method.templateCategory + method.id}
-            key={method.templateCategory + method.id}
-            style={
-              method.templateCategory === selectedMethod
-                ? { color: "white" }
-                : { color: "#D0D0D0" }
-            }
-            onClick={() =>
-              handleMethodListItemClick(
-                method.templateCategory,
-                method.templateDescription,
-                method.templateDescriptionEn
-              )
-            }
-          >
-            <ListItemText primary={t(method.templateName)} />
-          </ListItem>
-        ))}
-      </Grid>
-      <Grid
-        item
-        xs={selectedMethod ? 9 : 1}
-        style={{ height: "400px", overflowY: "auto" }}
+  const renderTemplateByMethod = () => {
+    const listTemplateMethod = templateMethod.map((method) => (
+      <ListItem
+        button
+        id={method.templateCategory + method.id}
+        key={method.templateCategory + method.id}
+        style={
+          method.templateCategory === selectedMethod
+            ? { color: "white" }
+            : { color: "#D0D0D0" }
+        }
+        onClick={() =>
+          handleMethodListItemClick(
+            method.templateCategory,
+            method.templateDescription,
+            method.templateDescriptionEn
+          )
+        }
       >
-        <div
-          id="description_div"
-          style={{ fontSize: "14px", marginTop: "10px" }}
-          dangerouslySetInnerHTML={{ __html: templateDescription }}
+        <ListItemText primary={t(method.templateName)} />
+      </ListItem>
+    ));
+
+    let selectedExampleList = [];
+    if (selectedMethod) {
+      templates.forEach((template) => {
+        if (template.templateCategory === selectedMethod) {
+          selectedExampleList.push(template);
+        }
+      });
+    }
+
+    const listTemplateExample = selectedExampleList.map((template) => (
+      <ListItem
+        button
+        className={classes.templateItem}
+        key={template.templateName + template.id}
+        style={{ cursor: "default" }}
+      >
+        <ListItemText
+          component="h1"
+          className={classes.templateItem}
+          primary={`${t(template.templateName)}`}
         />
-        {selectedMethod && (
-          <div style={{ fontWeight: "bold", margin: "30px 0 10px" }}>
-            EXAMPLE
-          </div>
-        )}
-        {templates.map((template) => {
-          if (template.templateCategory === selectedMethod)
-            return (
-              <ListItem
-                button
-                className={classes.templateItem}
-                key={template.templateName + template.id}
-                style={{ cursor: "default" }}
-              >
-                <ListItemText
-                  component="h1"
-                  className={classes.templateItem}
-                  primary={`${t(template.templateName)}`}
-                />
-                <Button
-                  id={`${template.templateCategory + template.id}_download_btn`}
-                  shape="greenOutlined"
-                  onClick={() => {
-                    // linkDownloadUrl(template.s3url);
-                    const link = document.createElement("a");
-                    link.href = template.s3url;
-                    link.download = "download";
-                    link.click();
-                  }}
-                >
-                  DownLoad
-                </Button>
-              </ListItem>
-            );
-        })}
+        <Button
+          id={`${template.templateCategory + template.id}_download_btn`}
+          shape="greenOutlined"
+          onClick={() => {
+            // linkDownloadUrl(template.s3url);
+            const link = document.createElement("a");
+            link.href = template.s3url;
+            link.download = "download";
+            link.click();
+          }}
+        >
+          DownLoad
+        </Button>
+      </ListItem>
+    ));
+
+    return (
+      <Grid container columnSpacing={3}>
+        <Grid item xs={selectedMethod ? 3 : 11}>
+          {listTemplateMethod}
+        </Grid>
+        <Grid
+          item
+          xs={selectedMethod ? 9 : 1}
+          style={{ height: "400px", overflowY: "auto" }}
+        >
+          <div
+            id="description_div"
+            style={{ fontSize: "14px", marginTop: "10px" }}
+            dangerouslySetInnerHTML={{ __html: templateDescription }}
+          />
+          {Boolean(selectedExampleList.length) && (
+            <>
+              <div style={{ fontWeight: "bold", margin: "30px 0 10px" }}>
+                EXAMPLE
+              </div>
+              {listTemplateExample}
+            </>
+          )}
+        </Grid>
       </Grid>
-    </Grid>
-  );
+    );
+  };
 
   const renderTemplateByIndustry = () => {
     const categories = user.category ? user.category : [];
@@ -254,7 +268,7 @@ const Templates = ({ closeTemplateModal }) => {
     });
   };
 
-  const partTemplateList = (tab) => {
+  const sectionTemplateList = (tab) => {
     const isMethodTab = tab === "method";
 
     const methodTabListStyle = {
@@ -343,7 +357,7 @@ const Templates = ({ closeTemplateModal }) => {
           )}
         </div>
       </Grid>
-      {partTemplateList(selectedTab)}
+      {sectionTemplateList(selectedTab)}
     </div>
   );
 };
