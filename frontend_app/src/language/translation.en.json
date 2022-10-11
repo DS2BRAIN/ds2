@@ -1519,6 +1519,8 @@
   "Enter 'Delete' correctly.": "Enter 'Delete' correctly.",
   "Deleting project": "Deleting project",
   "Enter a new project name.": "Enter a new project name.",
+  "Please enter a new project name.": "Please enter a new project name.",
+  "Please enter a new description.": "Please enter a new description.",
   "Are you sure you want to delete the server?": "Are you sure you want to delete the server?",
   "Deleting the server.": "Deleting the server.",
   "Updating project information": "Updating project information",
@@ -2327,5 +2329,6 @@
   "Enter the token": "Enter the token",
   "Please enter the token.": "Please enter the token.",
   "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
-  "Triton Config": "Triton Config"
+  "Triton Config": "Triton Config",
+  "No text detected.": "No text detected."
 }

@@ -1884,10 +1884,9 @@ const Process = (props) => {
     };
 
     if (!isDeviceAllSelected)
-      projectInfo["require_gpus"] = checkedDict['localhost'];
+      projectInfo["require_gpus"] = checkedDict["localhost"];
 
-    if (!isDeviceAllSelected)
-      projectInfo["require_gpus_total"] = checkedDict;
+    if (!isDeviceAllSelected) projectInfo["require_gpus_total"] = checkedDict;
 
     if (!project?.option || project?.option === "custom") {
       projectInfo.algorithm = !algorithmType
@@ -2436,23 +2435,39 @@ const Process = (props) => {
     };
 
     const saveProjectName = () => {
-      setIsUnableToChangeName(true);
-      dispatch(
-        askChangeProjectNameRequestAction({
-          id: projects.project.id,
-          name: nextProjectName,
-        })
-      );
+      if (nextProjectName) {
+        setIsUnableToChangeName(true);
+        dispatch(
+          askChangeProjectNameRequestAction({
+            id: projects.project.id,
+            name: nextProjectName,
+          })
+        );
+      } else {
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${t("No text detected.")} ${t("Please enter a new project name.")}`
+          )
+        );
+      }
     };
 
     const saveProjectDetail = () => {
-      setIsUnableTochangeDetail(true);
-      dispatch(
-        askChangeProjectDescriptionRequestAction({
-          id: projects.project.id,
-          description: nextProjectDetail,
-        })
-      );
+      if (nextProjectDetail) {
+        setIsUnableTochangeDetail(true);
+        dispatch(
+          askChangeProjectDescriptionRequestAction({
+            id: projects.project.id,
+            description: nextProjectDetail,
+          })
+        );
+      } else {
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${t("No text detected.")} ${t("Please enter a new description.")}`
+          )
+        );
+      }
     };
 
     return (

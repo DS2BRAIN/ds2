@@ -1519,6 +1519,8 @@
   "Enter 'Delete' correctly.": "'Delete'를 정확히 입력하세요.",
   "Deleting project": "프로젝트를 삭제하는 중입니다.",
   "Enter a new project name.": "새로운 프로젝트 이름을 입력하세요.",
+  "Please enter a new project name.": "새로운 프로젝트 이름을 입력해주세요.",
+  "Please enter a new description.": "새로운 프로젝트 설명을 입력해주세요.",
   "Are you sure you want to delete the server?": "서버를 삭제하겠습니까?",
   "Deleting the server.": "서버를 삭제하는 중입니다.",
   "Updating project information": "프로젝트 정보 갱신중",
@@ -2329,5 +2331,6 @@
   "Please enter the token.": "token을 입력해주세요.",
   "Please check the connection.": "커넥션 정보를 확인해주세요.",
   "Error setting the introduction page and language. Please refresh and try again.": "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요.",
-  "Triton Config": "Triton 설정"
+  "Triton Config": "Triton 설정",
+  "No text detected.": "인식된 텍스트가 없습니다."
 }
