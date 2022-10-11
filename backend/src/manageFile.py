@@ -325,6 +325,7 @@ class ManageFile:
         origin_dirs = []
         voc_dirs = ['annotations', 'jpegimages', 'imagesets']
         lower_dirs = [x.lower() for x in dirs]
+        has_images = False
         if set(voc_dirs).issubset(set(lower_dirs)):
             for tmp_dir in dirs:
                 if tmp_dir.lower() in voc_dirs:
@@ -337,9 +338,12 @@ class ManageFile:
                         root = f"{voc_path}/{tmp_dir}"
                         images = list(pathlib.Path(root).glob('*.jpg')) + list(
                             pathlib.Path(root).glob('*.jpeg')) + list(pathlib.Path(root).glob("*.png"))
-                        if len(images) == 0:
-                            raise ex.NotExistFileEx(user_id=user_id, obj=f"{file_name}에 이미지 파일")
+                        if len(images) > 0:
+                            has_images = True
                     origin_dirs.append(tmp_dir)
+
+            if not has_images:
+                raise ex.NotExistFileEx(user_id=user_id, obj=f"{file_name}에 이미지 파일")
             return True, voc_path, origin_dirs
         return False, None, None
 
@@ -933,6 +937,8 @@ class ManageFile:
                 if preprocessing_json_data.get("/" + json_key):
                     json_key = "/" + json_key
 
+                json_key = json_key.split('/')[-1]
+
                 if preprocessing_json_data.get(json_key):
                     [label_info.update({'labelproject': labelproject_id, 'sthreefile': data['id']}) for label_info
                      in preprocessing_json_data[json_key]['labels']]
@@ -1071,6 +1077,20 @@ class ManageFile:
                                           'workAssignee': user_id,
                                           'labelclass': categories_dict[object_dict_item['class']],
                                           'points': points}
+                            if object_dict_item.get('bbox'):
+
+                                bbox = {
+                                    "x": object_dict_item.get('bbox')[0] / width,
+                                    "y": object_dict_item.get('bbox')[1] / height,
+                                    "w": object_dict_item.get('bbox')[2] / width,
+                                    "h": object_dict_item.get('bbox')[3] / height
+                                }
+                                label_data['bbox'] = bbox
+                                label_data['labeltype'] = 'box'
+                                label_data['x'] = bbox['x']
+                                label_data['y'] = bbox['y']
+                                label_data['w'] = bbox['w']
+                                label_data['h'] = bbox['h']
                             self.dbClass.createLabel(label_data)
 
                             update_sthree_data = {'status': 'done', 'workAssignee': user_email}
@@ -1110,14 +1130,15 @@ class ManageFile:
             list_with_all_objects.append(voc_object.find('name').text)
 
             bndbox = voc_object.find('bndbox')
-            xmin = int(bndbox.findtext('xmin')) - 1
-            ymin = int(bndbox.findtext('ymin')) - 1
+            xmin = int(bndbox.findtext('xmin'))
+            ymin = int(bndbox.findtext('ymin'))
             xmax = int(bndbox.findtext('xmax'))
             ymax = int(bndbox.findtext('ymax'))
 
             object_dict['filename'] = file_name
             object_dict['class'] = voc_object.find('name').text
             object_dict['segmentation'] = [xmin, ymin, xmin, ymax, xmax, ymax, xmax, ymin]
+            object_dict['bbox'] = [xmin, ymin, xmax, ymax]
             object_dict['width'] = width
             object_dict['height'] = height
 
