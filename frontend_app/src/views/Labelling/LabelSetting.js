@@ -6,6 +6,7 @@ import { ReactTitle } from "react-meta-tags";
 import {
   askLabelProjectDetailRequestAction,
   askDeleteLabelProjectReqeustAction,
+  openErrorSnackbarRequestAction,
 } from "redux/reducers/messages.js";
 import { setIsProjectRefreshed } from "redux/reducers/labelprojects";
 import currentTheme, { currentThemeColor } from "assets/jss/custom";
@@ -129,7 +130,25 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
   };
 
   const updateProject = async () => {
-    await dispatch(
+    if (!projectName) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          `${t("No text detected.")} ${t("Please enter a new project name.")}`
+        )
+      );
+      return;
+    }
+
+    if (!projectDescription) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          `${t("No text detected.")} ${t("Please enter a new description.")}`
+        )
+      );
+      return;
+    }
+
+    dispatch(
       askLabelProjectDetailRequestAction({
         message: t("Are you sure you want to edit project information?"),
         requestAction: "putLabelProject",
@@ -143,8 +162,8 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
         },
       })
     );
-    await setIsUnableToChangeName(true);
-    await setIsUnableTochangeDescription(true);
+    setIsUnableToChangeName(true);
+    setIsUnableTochangeDescription(true);
   };
 
   // useEffect(() => {
@@ -352,7 +371,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
             margin="normal"
             required
             name="projectName"
-            placeholder={projectName}
+            placeholder={t("Please enter a new project name.")}
             label={projectName}
             onChange={changeProjectName}
             value={projectName}
@@ -410,7 +429,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
             margin="normal"
             required
             name="projectDescription"
-            placeholder={projectDescription}
+            placeholder={t("Please enter a new description.")}
             label={projectDescription}
             onChange={changeProjectDescription}
             value={projectDescription}
