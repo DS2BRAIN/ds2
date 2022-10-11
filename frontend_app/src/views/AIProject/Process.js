@@ -83,8 +83,8 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const PREFER_TYPE = [
-  { value: "custom", label: "Manual Setting" },
-  { value: "colab", label: "Code Generation" },
+  { value: "custom", label: "Manual setting" },
+  { value: "colab", label: "Generate code" },
   { value: "speed", label: "Faster training speed" },
   { value: "accuracy", label: "Higher accuracy" },
   { value: "labeling", label: "Auto Labeling" },
