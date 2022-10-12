@@ -2373,6 +2373,15 @@ const API = React.memo(
       );
     };
 
+    const renderDescription = (desc) =>
+      desc
+        ? desc.includes("\\n")
+          ? desc.split("\\n").map((sentence, idx) => {
+              return <div key={idx}>{sentence}</div>;
+            })
+          : desc
+        : "";
+
     return (
       <>
         {apiLoading === "loading" || isLoading || models.isLoading ? (
@@ -2414,15 +2423,8 @@ const API = React.memo(
                     overflowY: "auto",
                   }}
                 >
-                  {projects.project && projects.project.description
-                    ? projects.project.description.includes("\\n")
-                      ? projects.project.description
-                          .split("\\n")
-                          .map((sentence, idx) => {
-                            return <div key={idx}>{sentence}</div>;
-                          })
-                      : projects.project.description
-                    : ""}
+                  {projects.project &&
+                    renderDescription(projects.project.description)}
                 </GridItem>
                 <GridItem xs={12}>
                   {apiLoading === "done" ? renderApiResult() : renderContents()}
@@ -2450,15 +2452,8 @@ const API = React.memo(
                     overflowY: "auto",
                   }}
                 >
-                  {projects.project && projects.project.description
-                    ? projects.project.description.includes("\\n")
-                      ? projects.project.description
-                          .split("\\n")
-                          .map((sentence, idx) => {
-                            return <div key={idx}>{sentence}</div>;
-                          })
-                      : projects.project.description
-                    : ""}
+                  {projects.project &&
+                    renderDescription(projects.project.description)}
                 </GridItem>
                 <GridItem xs={apiLoading === "done" ? 5 : 8}>
                   <div className={classes.flexContent}>
