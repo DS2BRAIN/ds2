@@ -1531,7 +1531,7 @@ const API = React.memo(
               showPreviewsInDropzone={false}
               maxFileSize={2147483648}
               dialogTitle={
-                type === "image" ? t("Upload image") : t("비디오 업로드")
+                type === "image" ? t("Upload image") : t("Upload video")
               }
               dropzoneText={t(`Please upload your ${typeGuideText} file.`)}
               filesLimit={1}
@@ -1544,86 +1544,53 @@ const API = React.memo(
       };
 
       const caseApiSpeechToText = (acceptedFiles) => {
+        const showVideo = (srcFile) => (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "hidden",
+              marginTop: resultImageUrl && "44px",
+            }}
+          >
+            <video
+              ref={uploadVideoRef}
+              style={{ width: "100%", maxHeight: "24em" }}
+              controls
+              currentTime={0}
+              src={srcFile}
+              type="video/mp4"
+            ></video>
+          </div>
+        );
+
         if (files && files.length > 0) {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                overflow: "hidden",
-                marginTop: resultImageUrl && "44px",
-              }}
-            >
-              <video
-                ref={uploadVideoRef}
-                style={{ width: "100%", maxHeight: "24em" }}
-                controls
-                currentTime={0}
-                src={files[0].preview}
-                type="video/mp4"
-              ></video>
-            </div>
-          );
+          return showVideo(files[0].preview);
         } else if (randomFile) {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                overflow: "hidden",
-                marginTop: resultImageUrl && "44px",
-              }}
-            >
-              <video
-                ref={randomFile}
-                style={{ width: "100%", maxHeight: "24em" }}
-                controls
-                currentTime={0}
-                src={files[0].preview}
-                type="video/mp4"
-              ></video>
-            </div>
-          );
+          return showVideo(randomFile);
         } else return apiDropzone("audio", acceptedFiles);
       };
 
       const caseApiImage = (acceptedFiles) => {
+        const showImage = (srcFile) => (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              overflow: "hidden",
+              marginTop: resultImageUrl && "44px",
+            }}
+          >
+            <img src={srcFile} style={{ width: "100%", maxHeight: "24em" }} />
+          </div>
+        );
+
         if (files && files.length > 0) {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                overflow: "hidden",
-                marginTop: resultImageUrl && "44px",
-              }}
-            >
-              <img
-                src={files[0].preview}
-                style={{ width: "100%", maxHeight: "24em" }}
-              />
-            </div>
-          );
+          return showImage(files[0].preview);
         } else if (randomFile) {
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                overflow: "hidden",
-                marginTop: resultImageUrl && "44px",
-              }}
-            >
-              <img
-                src={randomFile}
-                style={{ width: "100%", maxHeight: "24em" }}
-              />
-            </div>
-          );
+          return showImage(randomFile);
         } else return apiDropzone("image", acceptedFiles);
       };
 
