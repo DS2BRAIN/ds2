@@ -83,8 +83,8 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const PREFER_TYPE = [
-  { value: "custom", label: "Manual Setting" },
-  { value: "colab", label: "Code Generation" },
+  { value: "custom", label: "Manual setting" },
+  { value: "colab", label: "Generate code" },
   { value: "speed", label: "Faster training speed" },
   { value: "accuracy", label: "Higher accuracy" },
   { value: "labeling", label: "Auto Labeling" },
@@ -1884,10 +1884,9 @@ const Process = (props) => {
     };
 
     if (!isDeviceAllSelected)
-      projectInfo["require_gpus"] = checkedDict['localhost'];
+      projectInfo["require_gpus"] = checkedDict["localhost"];
 
-    if (!isDeviceAllSelected)
-      projectInfo["require_gpus_total"] = checkedDict;
+    if (!isDeviceAllSelected) projectInfo["require_gpus_total"] = checkedDict;
 
     if (!project?.option || project?.option === "custom") {
       projectInfo.algorithm = !algorithmType
@@ -2210,9 +2209,9 @@ const Process = (props) => {
     if (!(groups.parentsGroup && groups.parentsGroup.length > 0)) {
       dispatch(
         openErrorSnackbarRequestAction(
-          t(
-            "Please create a group before sharing a project. You can create a group in Settings -> Sharing tab."
-          )
+          `${t("Please create a group before sharing a project.")} ${t(
+            "You can create a group in [ Account settings -> Group management tab ]."
+          )}`
         )
       );
       return;
@@ -2436,35 +2435,39 @@ const Process = (props) => {
     };
 
     const saveProjectName = () => {
-      console.log("nextProjectName");
-      console.log(nextProjectName);
-      if (nextProjectName.length > 0) {
-          setIsUnableToChangeName(true);
-          dispatch(
-            askChangeProjectNameRequestAction({
-              id: projects.project.id,
-              name: nextProjectName,
-            })
-          );
+      if (nextProjectName) {
+        setIsUnableToChangeName(true);
+        dispatch(
+          askChangeProjectNameRequestAction({
+            id: projects.project.id,
+            name: nextProjectName,
+          })
+        );
       } else {
-          dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${t("No text detected.")} ${t("Please enter a new project name.")}`
+          )
+        );
       }
-
     };
 
     const saveProjectDetail = () => {
-      if (nextProjectDetail.length > 0) {
-          setIsUnableTochangeDetail(true);
-      dispatch(
-        askChangeProjectDescriptionRequestAction({
-          id: projects.project.id,
-          description: nextProjectDetail,
-        })
-      );
+      if (nextProjectDetail) {
+        setIsUnableTochangeDetail(true);
+        dispatch(
+          askChangeProjectDescriptionRequestAction({
+            id: projects.project.id,
+            description: nextProjectDetail,
+          })
+        );
       } else {
-          dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${t("No text detected.")} ${t("Please enter a new description.")}`
+          )
+        );
       }
-
     };
 
     return (

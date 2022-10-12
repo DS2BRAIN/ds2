@@ -398,6 +398,7 @@
   "Sharing": "Sharing",
   "Please note that you will consume the same amount of prediction counting when you share.": "Please note that you will consume the same amount of prediction counting when you share.",
   "Confirm": "Confirm",
+  "Execute": "Execute",
   "All": "All",
   "Data is too large or in an invalid format.": "Data is too large or in an invalid format.",
   "There is no data.": "There is no data.",
@@ -1059,7 +1060,8 @@
   "Group deleted.": "Group deleted.",
   "Group information edited.": "Group information edited.",
   "Labeling cannot proceed because there is no registered class. Register a class through the group leader.": "Labeling cannot proceed because there is no registered class. Register a class through the group leader.",
-  "Please create a group before sharing a project. You can create a group in Settings -> Sharing tab.": "Please create a group before sharing a project. You can create a group in Settings -> Sharing tab.",
+  "Please create a group before sharing a project.": "Please create a group before sharing a project.",
+  "You can create a group in [ Account settings -> Group management tab ].": "You can create a group in [ Account settings -> Group management tab ].",
   "Box": "Box",
   "Polygon": "Polygon",
   "Magic": "Magic",
@@ -1519,6 +1521,8 @@
   "Enter 'Delete' correctly.": "Enter 'Delete' correctly.",
   "Deleting project": "Deleting project",
   "Enter a new project name.": "Enter a new project name.",
+  "Please enter a new project name.": "Please enter a new project name.",
+  "Please enter a new description.": "Please enter a new description.",
   "Are you sure you want to delete the server?": "Are you sure you want to delete the server?",
   "Deleting the server.": "Deleting the server.",
   "Updating project information": "Updating project information",
@@ -1953,6 +1957,7 @@
   "Video Upload": "Video Upload",
   "Standard Video Upload": "Standard Video Upload",
   "New Upload": "New Upload",
+  "New Prediction": "New Prediction",
   "Video Analysis": "Video Analysis",
   "General settings": "General settings",
   "Current Video": "Current Video",
@@ -2327,5 +2332,6 @@
   "Enter the token": "Enter the token",
   "Please enter the token.": "Please enter the token.",
   "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
-  "Triton Config": "Triton Config"
+  "Triton Config": "Triton Config",
+  "No text detected.": "No text detected."
 }

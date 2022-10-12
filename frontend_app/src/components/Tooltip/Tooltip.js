@@ -162,7 +162,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
                   }
                   className={classes.modelStatusImg}
                 />
-                <b>{t("Train")}</b>
+                <b>{t("In progress")}</b>
               </div>
               <div className={classes.modelStatusFont}>
                 {t("Number of models with training currently in progress.")}
@@ -181,7 +181,7 @@ const Tooltip = ({ tooltipCategory, closeTooltipModalOpen }) => {
                   src={fileurl + "asset/front/img/modelIcon/modelPause.png"}
                   className={classes.modelStatusImg}
                 />
-                <b>{t("Pending")}</b>
+                <b>{t("Waiting")}</b>
               </div>
               <div className={classes.modelStatusFont}>
                 {t("Number of models pending. Training will start again.")}
