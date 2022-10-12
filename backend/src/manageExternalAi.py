@@ -252,8 +252,8 @@ class ManageExternalAi:
                     except ValueError:
                         print('permission error')
                         continue
-        except Exception:
-            print('exception')
+        except Exception as e:
+            print(e.args[0].text)
             self.dbClass.delete_collection_by_name(table_name)
             # if collection_name:
             #     self.dbClass.delete_collection_by_name(collection_name)

@@ -2561,8 +2561,8 @@ class ManageFile:
             if mb is None:
                 asyncio.sleep(120)
                 mb = self.utilClass.get_metabase_client()
-        except:
-            pass
+        except Exception as e:
+            print(e.args[0].text)
 
         is_first = True
         while True:
