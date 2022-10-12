@@ -492,19 +492,19 @@ class HelperProject():
         #         "project": rowId,
         #         'isChecked': 0
         #     })
-            # try:
-            #     asyncTaskId = self.getAsnycTaskByProjectId(rowId)
-            #     asyncTaskId.status = status
-            #     asyncTaskId.save()
-            # except:
-            #     asynctasksTable.create(**{
-            #         "taskName": project.projectName,
-            #         "taskType": "develop",
-            #         "status": status,
-            #         "user": project.user,
-            #         "project": rowId
-            #     })
-            #     pass
+        try:
+            asyncTaskId = self.getAsnycTaskByProjectId(rowId)
+            asyncTaskId.status = status
+            asyncTaskId.save()
+        except:
+            asynctasksTable.create(**{
+                "taskName": project.projectName,
+                "taskType": "train",
+                "status": status,
+                "user": project.user,
+                "project": rowId
+            })
+            pass
 
         return projectsTable.update(**{"status": status, "statusText": statusText}) \
             .where(projectsTable.id == rowId).execute()
