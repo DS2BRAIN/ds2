@@ -91,7 +91,7 @@ const API = React.memo(
       }),
       []
     );
-    var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+    var tzoffset = new Date().getTimezoneOffset() * 60000;
     var localISOTime = new Date(Date.now() - tzoffset)
       .toISOString()
       .slice(0, -1)
@@ -128,7 +128,6 @@ const API = React.memo(
     const [validCsvCheck, setValidCsvCheck] = useState([]);
     const [localDateTime, setLocalDateTime] = useState("");
     const [vidCreatedDateTime, setVidCreatedDateTime] = useState(null);
-    // localISOTime.replace("T", " ") + ":00"
     const [isPredictImageDone, setIsPredictImageDone] = useState(false);
     const [isPredictImageInfoDone, setIsPredictImageInfoDone] = useState(false);
     const [vidCreatedSec, setVidCreatedSec] = useState("00");
@@ -138,19 +137,6 @@ const API = React.memo(
     ] = useState(false);
     const [multiplyAverage, setMultiplyAverage] = useState(true);
     const [outputResultText, setOutputResultText] = useState("");
-
-    // useEffect(()=>{
-    //     (async() => {
-    //         await setIsLoading(true);
-    //         await setHasRecordsData(false);
-    //         if(projects.project && models.chosenModel) await getRandomData();
-    //         await setIsLoading(false);
-    //     })();
-    // }, [])
-
-    // useEffect(() => {
-    //   setLocalDateTime(localISOTime);
-    // }, []);
 
     useEffect(() => {
       if (isPredictImageInfoDone && isPredictImageDone) {
@@ -182,16 +168,6 @@ const API = React.memo(
         setIsLoading(false);
       })();
     }, [trainingColumnInfo]);
-
-    // useEffect(()=>{
-    //     if(isPredictReset){
-    //         await setIsLoading(true);
-    //         await setHasRecordsData(false);
-    //         if(projects.project && models.chosenModel) await getRandomData();
-    //         await setIS
-    //         await setIsLoading(false);
-    //     }
-    // }, [isPredictReset])
 
     const getRandomData = () => {
       const tempParams = {};
@@ -803,13 +779,7 @@ const API = React.memo(
             })
             .then((blob) => {
               const url = window.URL.createObjectURL(new Blob([blob]));
-              // const link = document.createElement('a');
-              // link.href = url;
               setResultImageUrl(url);
-              // link.setAttribute('download', `download.jpg`);
-              // document.body.appendChild(link);
-              // link.click();
-              // link.parentNode.removeChild(link);
               return blob;
             })
             .then(() => {
@@ -896,13 +866,7 @@ const API = React.memo(
             })
             .then((blob) => {
               const url = window.URL.createObjectURL(new Blob([blob]));
-              // const link = document.createElement('a');
-              // link.href = url;
               setResultImageUrl(url);
-              // link.setAttribute('download', `download.jpg`);
-              // document.body.appendChild(link);
-              // link.click();
-              // link.parentNode.removeChild(link);
             })
             .then(() => {
               dispatch(getUserCountRequestAction());
@@ -1064,9 +1028,6 @@ const API = React.memo(
         setApiLoading("loading");
         setCompleted(5);
         let paramsValueForPredict = paramsValue;
-        // if (paramsValueOriginal){
-        //     paramsValueForPredict = paramsValueOriginal;
-        // }
         var paramsValueForPredictRaw = {};
         Object.keys(paramsValueForPredict).map((eachValue) => {
           paramsValueForPredictRaw[eachValue] =
@@ -1282,9 +1243,6 @@ const API = React.memo(
       if (traininMethodType.indexOf(projects.project.trainingMethod) > -1) {
         if (randomFiles.length > 0) {
           var newIndex = (randomFileIndex + 1) % randomFiles.length;
-          // if (randomFileIndex + 1 >= randomFiles.length){
-          //     newIndex = 0;
-          // }
           setRandomFileIndex(newIndex);
           setRandomFile(
             IS_ENTERPRISE
@@ -1418,7 +1376,6 @@ const API = React.memo(
             }}
             id={"edit"}
             onChange={onChangeText}
-            //placeholder="[]"
             ref={inputLoadedModelRef}
           >
             {/*{preview}*/}
@@ -1513,7 +1470,6 @@ const API = React.memo(
                             id={param}
                             value={paramsValue[param]}
                             onChange={changeParamValue}
-                            // multiline={true}
                             required
                             type={
                               paramsType[param] === "string"
@@ -2604,11 +2560,6 @@ const API = React.memo(
                                 ? "var(--secondary1)"
                                 : "var(--textWhite87)",
                           }}
-                          // className={
-                          //   selectedObjectTab === "image"
-                          //     ? classes.selectedTab
-                          //     : classes.notSelectedTab
-                          // }
                         >
                           {t("Image")}
                         </div>
