@@ -1903,7 +1903,7 @@ const API = React.memo(
                     )
                   : "*" +
                     t(
-                      "영상 시작점 기준으로 30분 길이에 해당되는 영상만 사용됩니다."
+                      "Only images that are 30 minutes long from the starting point of the video are used."
                     )}
               </Grid>
               <Grid item container xs={12} justify="center">
