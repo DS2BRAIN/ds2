@@ -4245,18 +4245,20 @@ class ManageProject:
                 task_type = 'verify'
             elif project.get('option') == "labeling":
                 task_type = 'labeling'
-            async_task = self.dbClass.createAsyncTask({
-                'taskName': project.get('projectName'),
-                'taskNameEn': project.get('projectName'),
-                'taskType': task_type,
-                'project': project.get("id"),
-                'status': 0,
-                'user': user['id'],
-                'require_gpus': require_gpus,
-                'require_gpus_total': require_gpus_total,
-                'outputFilePath': '',
-                'isChecked': 0
-            })
+
+
+            async_task = self.getAsnycTaskByProjectId(projectId)
+            async_task.taskName = project.get('projectName')
+            async_task.taskNameEn = project.get('projectName')
+            async_task.taskType = task_type
+            async_task.project = project.get("id")
+            async_task.status = 0
+            async_task.user = user['id']
+            async_task.require_gpus = require_gpus
+            async_task.require_gpus_total = require_gpus_total
+            async_task.outputFilePath = ''
+            async_task.isChecked = 0
+            async_task.save()
 
             if rd:
                 rd.publish("broadcast", json.dumps(model_to_dict(async_task), default=json_util.default, ensure_ascii=False))
