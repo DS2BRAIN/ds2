@@ -2218,7 +2218,11 @@ const API = React.memo(
                 }}
                 id="resultDiv"
               >
-                <b>{handleOutputResultText(predictedValue)}</b>
+                <b>
+                  {chosenItem === "apiImage"
+                    ? handleSelectedImageClass(predictedValue)
+                    : handleOutputResultText(predictedValue)}
+                </b>
               </div>
               {projects?.project?.valueForNorm ? (
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -2303,6 +2307,21 @@ const API = React.memo(
               )}
             </>
           );
+      }
+    };
+
+    const handleSelectedImageClass = (preVal) => {
+      if (preVal) return preVal;
+      else if (predictedInfo) {
+        let topValueLabel = "";
+        let topValue = 0;
+        predictedValue.forEach((data) => {
+          if (data.value > topValue) {
+            topValue = data.value;
+            topValueLabel = data.name;
+          }
+        });
+        return topValueLabel;
       }
     };
 
