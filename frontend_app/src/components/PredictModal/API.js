@@ -195,13 +195,12 @@ const API = React.memo(
       setParamsValue(tempParams);
       setParamsType(tempTypes);
 
-      let trainMethod = projects.project.trainingMethod;
-      if (
-        trainMethod === "image" ||
-        models.model.externalAiType === "image" ||
-        trainMethod === "object_detection" ||
-        trainMethod === "cycle_gan"
-      ) {
+      const trainMethod = projects.project.trainingMethod;
+      let isTrainOrAiTypeImage =
+        trainMethod === "image" || models.model.externalAiType === "image";
+      let isTrainMethodSampleAvailable =
+        trainMethod === "object_detection" || trainMethod === "cycle_gan";
+      if (isTrainOrAiTypeImage || isTrainMethodSampleAvailable) {
         api.getSampleDataByModelId(models.chosenModel).then((res) => {
           if (res.data) {
             setRandomFiles(res.data);
@@ -217,11 +216,12 @@ const API = React.memo(
           return;
         }
         if (completed < 40) {
+          const serviceType = projects.project?.service_type;
           if (
             completed >= 10 &&
-            projects.project.service_type &&
-            projects.project?.service_type.indexOf("_training") == -1 &&
-            projects.project?.service_type.indexOf("offline_") == -1
+            serviceType &&
+            serviceType.includes("_training") &&
+            serviceType.includes("offline_")
           )
             setLoadingMessage(
               t(
@@ -254,7 +254,6 @@ const API = React.memo(
     useEffect(() => {
       if (vidCreatedDateTime && vidCreatedSec) {
         const updatedStr = vidCreatedDateTime.slice(0, -2) + vidCreatedSec;
-
         setVidCreatedDateTime(updatedStr);
       }
     }, [vidCreatedSec]);
@@ -275,10 +274,11 @@ const API = React.memo(
 
     const sendAPI = (_, predictingCount = 0) => {
       const caseItemApiVideo = () => {
-        if (projects.project?.service_type !== undefined) {
+        const serviceType = projects.project?.service_type;
+        if (serviceType !== undefined) {
           if (
-            projects?.project?.service_type !== null &&
-            projects?.project?.service_type.indexOf("_training") !== -1 &&
+            serviceType !== null &&
+            serviceType.includes("_training") &&
             syncValue == ""
           ) {
             dispatch(
