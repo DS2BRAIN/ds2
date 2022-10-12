@@ -1248,21 +1248,19 @@ const API = React.memo(
           records = JSON.parse(records);
           const randomIdx = parseInt(Math.random() * records.length);
           const tempParams = {};
+          const randomRecord = records[randomIdx];
           for (let value in paramsValue) {
-            if (records[randomIdx][value] === undefined) {
+            if (randomRecord[value] === undefined) {
               tempParams[value] = "";
-            } else if (
-              !records[randomIdx][value] &&
-              records[randomIdx][value] !== 0
-            ) {
-              const month = records[randomIdx][value + "Month"];
-              const day = records[randomIdx][value + "Day"];
-              const year = records[randomIdx][value + "Year"];
+            } else if (!randomRecord[value] && randomRecord[value] !== 0) {
+              const month = randomRecord[value + "Month"];
+              const day = randomRecord[value + "Day"];
+              const year = randomRecord[value + "Year"];
               if (month && day && year) {
                 tempParams[value] = `${year}-${month}-${day}`;
               }
             } else {
-              tempParams[value] = records[randomIdx][value];
+              tempParams[value] = randomRecord[value];
             }
           }
           if (projects.project.trainingMethod.includes("time_series")) {
