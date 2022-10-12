@@ -721,7 +721,7 @@ class ManagePredict:
         height = image.height
         return width, height, image
 
-    def saveInferenceResultDict(self, opsId, parameter, user, fileType="csv"):
+    def saveInferenceResultDict(self, opsId, parameter, user, fileType="csv", result=None):
 
         opsProject = self.dbClass.getOneOpsProjectById(opsId)
         connector_id = opsProject['dataconnector']
@@ -732,16 +732,22 @@ class ManagePredict:
             parameter["inputData"] = parameter["inputData"].tolist()
 
         if not parameter.get("inputData"):
-            parameter["inputData"] = parameter
-
+            parameter["inputData"] = parameter.copy()
+        result = result.copy()
+        if result.get('predict_value'):
+            del result['predict_value']
+        if result.get('predict_value_info'):
+            del result['predict_value_info']
+        if result.get('이상값칼럼'):
+            del result['이상값칼럼']
         print(kst.localize(datetime.datetime.now()))
         new_object_dict = {
             "user": user_id,
             "created_at": kst.localize(datetime.datetime.now()),
             "updated_at": kst.localize(datetime.datetime.now()),
             "recordData": json.dumps(parameter, ensure_ascii=False, default=json_util.default),
-            "rawData": {"inputData": parameter["inputData"]},
-            "labelData": None,
+            "rawData": parameter["inputData"],
+            "labelData": result,
             "fileType": fileType,
             "dataconnector": connector_id
         }
@@ -756,7 +762,7 @@ class ManagePredict:
             "reviewer": None,
             "ds2data": ds2data_id,
             "recordData": json.dumps(parameter, ensure_ascii=False, default=json_util.default),
-            "rawData": {"inputData": parameter["inputData"]},
+            "rawData": parameter["inputData"],
             "labelproject": opsProject['labelproject']
         })
         ds2data_label = self.dbClass.createLabelprojectFile(new_object_dict)
@@ -801,8 +807,12 @@ class ManagePredict:
                 label_data = label_data.tolist()
             except:
                 pass
-            if "normal" in ds2data['fileType']:
-                label_data = {'result': label_data}
+            if label_data.get('predict_value'):
+                del label_data['predict_value']
+            if label_data.get('predict_value_info'):
+                del label_data['predict_value_info']
+            if label_data.get('이상값칼럼'):
+                del label_data['이상값칼럼']
             update_data = {'labelData': label_data}
             self.dbClass.updateSthreeFileById(ds2data_label_id, update_data)
 
@@ -820,7 +830,7 @@ class ManagePredict:
 
     def setInferenceResult(self, opsId, parameter, user, model, result):
         try:
-            ds2data_id = self.saveInferenceResultDict(opsId, parameter, user, model['project']['trainingMethod'])
+            ds2data_id = self.saveInferenceResultDict(opsId, parameter, user, model['project']['trainingMethod'], result)
             if 'recommender' in model['project']['trainingMethod']:
                 for recommendation in result:
                     self.saveInferenceResultLabel(opsId, ds2data_id, recommendation, user)
