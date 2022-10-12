@@ -629,21 +629,18 @@ export default function SignUp() {
           type: "text",
           value: userName,
           func: inputUserName,
-          tip: false,
         },
         email: {
           label: "Please enter your email.",
           type: "text",
           value: email,
           func: inputEmailValue,
-          tip: false,
         },
         password: {
           label: "Please enter your password.",
           type: "password",
           value: password,
           func: inputPasswordValue,
-          tip: true,
           tipTitle:
             "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!",
         },
@@ -652,21 +649,18 @@ export default function SignUp() {
           type: "password",
           value: passwordCheck,
           func: inputPasswordCheckValue,
-          tip: false,
         },
         company: {
           label: "(Optional) Please enter your company name.",
           type: "text",
           value: company,
           func: inputCompanyValue,
-          tip: false,
         },
         promotionCode: {
           label: "(Optional) Please enter the promotion code.",
           type: "text",
           value: promotionCode,
           func: inputPromotionCodeValue,
-          tip: false,
         },
       };
       let selected = comps[typeKey];
@@ -697,7 +691,7 @@ export default function SignUp() {
             padding: "4px 8px",
           }}
         >
-          {selected.tip ? (
+          {selected.tipTitle ? (
             <Tooltip
               title={
                 <span style={{ fontSize: "12px" }}>{t(selected.tipTitle)}</span>
