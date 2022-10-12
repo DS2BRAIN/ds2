@@ -794,6 +794,9 @@ class ManagePredict:
                 'isDeleted': False
             }
             self.dbClass.createLabel(label_data)
+        if ds2data and ds2data['fileType'] == 'image':
+            update_data = {'labelData': label_data['predict_value']}
+            self.dbClass.updateSthreeFileById(ds2data_label_id, update_data)
         else:
             # csv 는 {'result': True} , {'result': False} 이런식으로 label_data 주시면 될 듯 합니다!
             # 이미지 분류 같은 경우는 그냥 분류 결과 cat, dog 이런식으로 그냥 class 명을 string으로 주시면 될 거 같습니다!
