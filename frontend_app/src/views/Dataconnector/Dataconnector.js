@@ -28,7 +28,6 @@ import DataModalsFileAdd from "./DataModalsFileAdd";
 import {
   Checkbox,
   LinearProgress,
-  Modal,
   Table,
   TableBody,
   TableCell,
@@ -36,11 +35,17 @@ import {
   TablePagination,
   TableRow,
 } from "@material-ui/core";
-import { CircularProgress, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  Chip,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Modal,
+  Tooltip,
+} from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
-import Chip from "@mui/material/Chip";
 
 const Dataconnector = ({ history }) => {
   const classes = currentTheme();
@@ -1220,41 +1225,27 @@ const Dataconnector = ({ history }) => {
       };
 
       return (
-        <>
-          <Tooltip
-            title={
-              <div style={{ fontSize: "12px" }}>{`${t(
-                "Example templates are provided with brief explanations for each training type."
-              )} / ${t(
-                "Example templates are provided for each industry group."
-              )}`}</div>
-            }
-            placement="bottom"
-          >
-            <div>
-              <Button
-                id="sampleTemplateBtn"
-                shape="greenOutlined"
-                onClick={openTemplate}
-                style={{ minWidth: 150 }}
-              >
-                {t("Sample template")}
-              </Button>
-            </div>
-          </Tooltip>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={isTemplateModalOpen}
-            onClose={closeTemplateModal}
-            className={classes.modalContainer}
-          >
-            <Templates
-              className={classes.predictModalContent}
-              closeTemplateModal={closeTemplateModal}
-            />
-          </Modal>
-        </>
+        <Tooltip
+          title={
+            <div style={{ fontSize: "12px" }}>{`${t(
+              "Example templates are provided with brief explanations for each training type."
+            )} / ${t(
+              "Example templates are provided for each industry group."
+            )}`}</div>
+          }
+          placement="bottom"
+        >
+          <div>
+            <Button
+              id="sampleTemplateBtn"
+              shape="greenOutlined"
+              onClick={openTemplate}
+              style={{ minWidth: 150 }}
+            >
+              {t("Sample template")}
+            </Button>
+          </div>
+        </Tooltip>
       );
     };
 
@@ -1362,6 +1353,15 @@ const Dataconnector = ({ history }) => {
         isFileModalOpen={isFileModalOpen}
         setIsFileModalOpen={setIsFileModalOpen}
       />
+      <Modal
+        open={isTemplateModalOpen}
+        onClose={closeTemplateModal}
+        className={classes.modalContainer}
+      >
+        <>
+          <Templates closeTemplateModal={closeTemplateModal} />
+        </>
+      </Modal>
     </>
   );
 };
