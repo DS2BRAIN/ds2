@@ -404,9 +404,9 @@ const API = React.memo(
               if (key === "predict_value") {
                 var predictedValueRaw = responseJson[key];
                 setPredictedValue(predictedValueRaw);
-              } else if (key.indexOf("predict_value_info") > -1) {
+              } else if (key.includes("predict_value_info")) {
                 setPredictedInfo(responseJson[key]);
-              } else if (key.indexOf("이상값") > -1) {
+              } else if (key.includes("이상값")) {
                 setOutliarInfo(responseJson[key]);
               }
             });
@@ -501,9 +501,9 @@ const API = React.memo(
                       }
                     });
                   setPredictedValue(predictedValueRaw);
-                } else if (key.indexOf("predict_value_info") > -1) {
+                } else if (key.includes("predict_value_info")) {
                   setPredictedInfo(responseJson[key]);
-                } else if (key.indexOf("이상값") > -1) {
+                } else if (key.includes("이상값")) {
                   setOutliarInfo(responseJson[key]);
                 }
               });
@@ -618,9 +618,9 @@ const API = React.memo(
                       }
                     });
                   setPredictedValue(predictedValueRaw);
-                } else if (key.indexOf("predict_value_info") > -1) {
+                } else if (key.includes("predict_value_info")) {
                   setPredictedInfo(responseJson[key]);
-                } else if (key.indexOf("이상값") > -1) {
+                } else if (key.includes("이상값")) {
                   setOutliarInfo(responseJson[key]);
                 }
               });
@@ -1043,7 +1043,7 @@ const API = React.memo(
           inputLoadedModel: inputLoadedModel,
         };
         let isClear = false;
-        if (modelDetail?.outputData_en?.indexOf("Audio") > -1) {
+        if (modelDetail?.outputData_en?.includes("Audio")) {
           api
             .predict_for_file_response(parameter, isMarket, opsId)
             .then((response) => {
@@ -1061,7 +1061,7 @@ const API = React.memo(
               link.click();
               link.parentNode.removeChild(link);
             });
-        } else if (modelDetail?.outputData_en?.indexOf("Image") > -1) {
+        } else if (modelDetail?.outputData_en?.includes("Image")) {
           api
             .predict_for_file_response(parameter, isMarket, opsId)
             .then((response) => {
@@ -1092,12 +1092,12 @@ const API = React.memo(
               else if (typeof response === "object") responseJson = response;
               if (
                 projects.project.trainingMethod === "recommender" ||
-                projects.project.option.indexOf("load") > -1
+                projects.project.option.includes("load")
               ) {
                 setObjectJson(responseJson);
               }
               Object.keys(responseJson).map((key) => {
-                if (key.indexOf("__predict_value") > -1) {
+                if (key.includes("__predict_value")) {
                   var predictedValueRaw = String(responseJson[key]);
                   let tempMaxValue = 0;
                   responseJson["predict_value_info"] &&
@@ -1109,11 +1109,11 @@ const API = React.memo(
                       }
                     });
                   setPredictedValue(predictedValueRaw);
-                } else if (key.indexOf("predict_value_info") > -1) {
+                } else if (key.includes("predict_value_info")) {
                   setPredictedInfo(responseJson[key]);
-                } else if (key.indexOf("이상값") > -1) {
+                } else if (key.includes("이상값")) {
                   setOutliarInfo(responseJson[key]);
-                } else if (key.indexOf("result") > -1) {
+                } else if (key.includes("result")) {
                   setPredictedValue(responseJson[key]);
                 }
               });
@@ -1240,7 +1240,7 @@ const API = React.memo(
 
     const getRandomRecords = () => {
       const traininMethodType = ["image", "object_detection", "cycle_gan"];
-      if (traininMethodType.indexOf(projects.project.trainingMethod) > -1) {
+      if (traininMethodType.includes(projects.project.trainingMethod)) {
         if (randomFiles.length > 0) {
           var newIndex = (randomFileIndex + 1) % randomFiles.length;
           setRandomFileIndex(newIndex);
@@ -1423,8 +1423,7 @@ const API = React.memo(
                   (param, idx) =>
                     ((projects.project &&
                       projects.project.trainingMethod === "recommender" &&
-                      param.indexOf(projects.project.recommenderUserColumn) >
-                        -1) ||
+                      param.includes(projects.project.recommenderUserColumn)) ||
                       (projects.project &&
                         projects.project.trainingMethod !== "recommender")) && (
                       <TableRow key={param + idx} className={classes.tableRow}>
@@ -1780,7 +1779,7 @@ const API = React.memo(
                   t("The video start point exceeds the video length.")
                 )
               );
-            } else if (targetVal.indexOf(".") !== -1) {
+            } else if (targetVal.includes(".")) {
               if (
                 /^$|^[0-9]([.]\d{0,3})?$|^[1-9][0-9]*([.]\d{0,3})?$/.test(
                   targetVal
@@ -1896,7 +1895,7 @@ const API = React.memo(
                 {t("Select current frame")}
               </Button>
               <Grid style={{ fontSize: "8px" }} item container>
-                {projects.project?.service_type.indexOf("_training") !== -1
+                {projects.project?.service_type.includes("_training")
                   ? "*" +
                     t(
                       "Only images that are 10 minutes long from the starting point of the video are used."
@@ -2023,7 +2022,7 @@ const API = React.memo(
                   </Grid>
                 )}
                 {projects.project?.service_type !== undefined &&
-                  projects.project?.service_type.indexOf("_training") == -1 &&
+                  projects.project?.service_type.includes("_training") &&
                   secSetupVidCreationTime()}
               </Grid>
               {projects.project?.service_type !== undefined &&
@@ -2093,7 +2092,7 @@ const API = React.memo(
             )}
           </div>
         );
-      if (projects.project.option.indexOf("load") > -1)
+      if (projects.project.option.includes("load"))
         return (
           <>
             <div className={classes.content}>
@@ -2364,8 +2363,8 @@ const API = React.memo(
       let serviceType = projects.project?.service_type;
       let isNewUpload =
         serviceType &&
-        (serviceType.indexOf("_training") != -1 ||
-          serviceType.indexOf("offline_") != -1) &&
+        (serviceType.includes("_training") ||
+          serviceType.includes("offline_")) &&
         chosenItem == "apiVideo";
 
       return (
