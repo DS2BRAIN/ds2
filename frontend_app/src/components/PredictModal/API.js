@@ -1043,7 +1043,9 @@ const API = React.memo(
           inputLoadedModel: inputLoadedModel,
         };
         let isClear = false;
-        if (modelDetail?.outputData_en?.includes("Audio")) {
+        let isOutputDataAudio = modelDetail?.outputData_en?.includes("Audio");
+        let isOutputDataImage = modelDetail?.outputData_en?.includes("Image");
+        if (isOutputDataAudio || isOutputDataImage) {
           api
             .predict_for_file_response(parameter, isMarket, opsId)
             .then((response) => {
@@ -1051,30 +1053,20 @@ const API = React.memo(
             })
             .then((blob) => {
               const url = window.URL.createObjectURL(new Blob([blob]));
-              setResultAudioUrl(url);
+              let downloadFileName = "";
+              if (isOutputDataAudio) {
+                setResultAudioUrl(url);
+                downloadFileName = "result.wav";
+              }
+              if (isOutputDataImage) {
+                setResultImageUrl(url);
+                downloadFileName = "result.gif";
+              }
               setIsPredictImageDone(true);
               setApiLoading("done");
               const link = document.createElement("a");
               link.href = url;
-              link.setAttribute("download", `result.wav`);
-              document.body.appendChild(link);
-              link.click();
-              link.parentNode.removeChild(link);
-            });
-        } else if (modelDetail?.outputData_en?.includes("Image")) {
-          api
-            .predict_for_file_response(parameter, isMarket, opsId)
-            .then((response) => {
-              return new Blob([response.data]);
-            })
-            .then((blob) => {
-              const url = window.URL.createObjectURL(new Blob([blob]));
-              setResultImageUrl(url);
-              setIsPredictImageDone(true);
-              setApiLoading("done");
-              const link = document.createElement("a");
-              link.href = url;
-              link.setAttribute("download", `result.gif`);
+              link.setAttribute("download", downloadFileName);
               document.body.appendChild(link);
               link.click();
               link.parentNode.removeChild(link);
