@@ -1409,13 +1409,16 @@ const API = React.memo(
                 </TableRow>
               </TableHead>
               <TableBody>
-                {Object.keys(paramsValue).map(
-                  (param, idx) =>
-                    ((projects.project &&
-                      projects.project.trainingMethod === "recommender" &&
-                      param.includes(projects.project.recommenderUserColumn)) ||
-                      (projects.project &&
-                        projects.project.trainingMethod !== "recommender")) && (
+                {Object.keys(paramsValue).map((param, idx) => {
+                  const project = projects.project;
+                  let isTrainMethodRecommend =
+                    project.trainingMethod === "recommender";
+
+                  return (
+                    ((project &&
+                      isTrainMethodRecommend &&
+                      param.includes(project.recommenderUserColumn)) ||
+                      (project && !isTrainMethodRecommend)) && (
                       <TableRow key={param + idx} className={classes.tableRow}>
                         <TableCell
                           className={classes.tableRowCell}
@@ -1469,7 +1472,8 @@ const API = React.memo(
                         </TableCell>
                       </TableRow>
                     )
-                )}
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
