@@ -1090,7 +1090,7 @@ const UserInfo = ({ history }) => {
                           sx={{ minWidth: "160px" }}
                           onClick={withdrawSubmit}
                         >
-                          {t("Submit")}
+                          {t("Delete account")}
                         </Button>
                       </div>
                     </GridItem>
