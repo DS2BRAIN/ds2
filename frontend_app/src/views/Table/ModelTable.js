@@ -1759,7 +1759,7 @@ const ModelTable = React.memo(
                           <b>
                             [ERROR]{" "}
                             {t(
-                              "오류로 인하여 프로젝트가 중단되었습니다. 새로운 프로젝트로 다시 시도 부탁드립니다."
+                              "The project has been stopped due to an error. Please try again with a new project."
                             )}
                           </b>
                         )}
@@ -1838,7 +1838,7 @@ const ModelTable = React.memo(
                           )}{" "}
                           (
                           {t(
-                            "예를 들어, 한국 전기료를 학습데이터로 넣고 콜롬비아 집값을 라벨링 데이터로 넣으면, 이는 상관관계가 거의 없기 때문에 에러가 나오게 됩니다."
+                            "For example, if you put Korean electricity bills as training data and Colombian housing prices as labeling data, these are almost irrelevant, so you get an error."
                           )}
                           )
                         </div>
@@ -1872,7 +1872,7 @@ const ModelTable = React.memo(
                             "A sufficient amount of training data is required for AI training."
                           )}{" "}
                           {t(
-                            "연관성이 적을수록 더 많은 데이터가 있어야 인공지능 학습이 성공할 확률이 커집니다."
+                            "When the correlation between the dataset is low, you will need more data to make AI training more likely to succeed."
                           )}
                         </div>
                         <br />
