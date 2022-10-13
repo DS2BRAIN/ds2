@@ -624,6 +624,14 @@ class Daemon():
         project = self.dbClass.getOneProjectById(project_arg['id'])
         project_status = project['status']
         error_count_all = project['errorCountNotExpected']
+
+        try:
+            asyncTaskId = self.dbClass.getAsnycTaskByProjectId(project_arg['id'])
+            asyncTaskId.status = 100
+            asyncTaskId.save()
+        except:
+            pass
+
         if error_count_all > 25:
             self.dbClass.removeNotStartedModels(project)
             if project['successCount'] > 0:
@@ -1073,7 +1081,7 @@ class Daemon():
 
                 self.utilClass.sendSlackMessage(f"{instanceId} : 학습을 완료하였습니다. "
                                                 f"(Project ID: {project['id']}, Model ID: {model['id']} )", daemon=True)
-                self.finishProject(project)
+                # self.finishProject(project)
                 endTime = datetime.datetime.now()
                 print("endTime : " + str(endTime))
                 print("durationTime : " + str(endTime - startTime))
@@ -1160,13 +1168,7 @@ class Daemon():
             except:
                 pass
 
-            project_status = self.finishProject(project)
-            if project_status is None:
-                break
-            if project_status in [0, -1, 99]:
-                instancesUser.isDeleted = True
-                instancesUser.save()
-                sys.exit()
+        self.finishProject(project)
 
         if self.instancesUser:
             self.instancesUser.isDeleted = True

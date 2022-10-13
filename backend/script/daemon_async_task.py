@@ -219,6 +219,8 @@ class DaemonAsyncTask():
 
             if "train" in task.taskType or 'customAi' in task.taskType or 'verify' in task.taskType:
                 self.daemonClass.run(project_id=task.project)
+                task.status = 100
+                code = 200
             if "runAll" in task.taskType:
                 code, response = self.machine_learning_class.predict_all(user.appTokenCode, user.id, localFile, localFilePath, task.model, None, return_type="file")
                 task.status = 100
