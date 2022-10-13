@@ -216,7 +216,7 @@ const ModelTable = React.memo(
       let tempDefKeys = defaultStatKeys;
       if (Object.keys(hasDataObj).length) {
         Object.keys(hasDataObj).forEach((hasData) => {
-          if (hasDataObj[hasData]) {
+          if (hasDataObj[hasData] && !tempDefKeys.includes(hasData)) {
             tempDefKeys.push(hasData);
           }
         });
