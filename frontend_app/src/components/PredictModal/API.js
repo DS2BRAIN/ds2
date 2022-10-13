@@ -1374,10 +1374,16 @@ const API = React.memo(
       };
 
       const caseApi = () => {
-        const changeParamValue = (event) => {
+        const changeParamValue = (event, type) => {
           const tempParams = paramsValue;
           const tempId = event.target.id;
           const tempValue = event.target.value;
+
+          if (type === "number") {
+            const regExp = /[^0-9]/g;
+            if (regExp.test(tempValue)) return;
+          }
+
           for (const param in tempParams) {
             if (param === tempId) {
               tempParams[tempId] = tempValue;
@@ -1437,6 +1443,11 @@ const API = React.memo(
                           align="center"
                         >
                           <TextField
+                            id={param}
+                            fullWidth
+                            required
+                            autoFocus={idx === 0 ? true : false}
+                            value={paramsValue[param]}
                             placeholder={
                               user.language === "ko"
                                 ? `${paramsType[param]} ${t(
@@ -1457,16 +1468,8 @@ const API = React.memo(
                                 fontWeight: outliarInfo[param] ? "700" : "400",
                               },
                             }}
-                            autoFocus={idx === 0 ? true : false}
-                            fullWidth={true}
-                            id={param}
-                            value={paramsValue[param]}
-                            onChange={changeParamValue}
-                            required
-                            type={
-                              paramsType[param] === "string"
-                                ? "text"
-                                : paramsType[param]
+                            onChange={(e) =>
+                              changeParamValue(e, paramsType[param])
                             }
                           />
                         </TableCell>
