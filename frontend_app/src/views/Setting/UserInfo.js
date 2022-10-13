@@ -737,11 +737,14 @@ const UserInfo = ({ history }) => {
         >
           <Button
             id="withdrawUser"
-            shape="whiteOutlined"
+            shape={"whiteOutlined"}
             size="sm"
+            disabled={user.me && user.me.is_admin}
             onClick={openWithdrawModal}
           >
-            {t("Delete account")}
+            {user.me && user.me.is_admin
+              ? t("Admin account cannot be deleted")
+              : t("Delete account")}
           </Button>
         </Grid>
         <Modal

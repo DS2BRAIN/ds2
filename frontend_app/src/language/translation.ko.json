@@ -2328,6 +2328,7 @@
   "Delete server": "서버 삭제하기",
   "Add new server": "서버 추가하기",
   "Admin token": "관리 토큰",
+  "Admin account cannot be deleted": "관리자 계정 삭제 불가",
   "Enter the host": "host를 입력하세요",
   "Please enter the host.": "host를 입력해주세요.",
   "Enter the token": "token을 입력하세요",

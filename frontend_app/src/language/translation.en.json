@@ -2327,6 +2327,7 @@
   "Delete server": "Delete server",
   "Add new server": "Add new server",
   "Admin token": "Admin token",
+  "Admin account cannot be deleted": "Admin account cannot be deleted",
   "Enter the host": "Enter the host",
   "Please enter the host.": "Please enter the host.",
   "Enter the token": "Enter the token",
