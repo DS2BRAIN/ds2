@@ -372,7 +372,7 @@
   "Video prediction": "영상예측",
   "Analyze": "분석하기",
   "The project has been stopped due to exceeded GPU memory. Please reduce the size of your training data and try again with a new project": "GPU 메모리가 초과하여 중단되었습니다. 학습 데이터 크기를 줄인 후 새로운 프로젝트로 다시 시도 부탁드립니다.",
-  "The project has been stopped due to an error. Please try again with a new project": "오류로 인하여 프로젝트가 중단되었습니다. 새로운 프로젝트로 다시 시도 부탁드립니다.",
+  "The project has been stopped due to an error. Please try again with a new project.": "오류로 인하여 프로젝트가 중단되었습니다. 새로운 프로젝트로 다시 시도 부탁드립니다.",
   "There are four main situations in which an error can occur": "에러가 일어날 수 있는 상황은 크게 4가지로 나누어집니다.",
   "When training data is inserted in a wrong format, an error may occur": "양식에 맞지 않게 학습데이터를 넣었을 경우",
   "Please refer to the user guide for information on how to insert training data": "학습 데이터를 어떻게 넣어야 하는지에 대해서는 사용자 가이드를 꼭 참고해주세요.",

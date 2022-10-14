@@ -368,7 +368,7 @@
   "Video prediction": "Video prediction",
   "Analyze": "Analyze",
   "The project has been stopped due to exceeded GPU memory. Please reduce the size of your training data and try again with a new project": "The project has been stopped due to exceeded GPU memory. Please reduce the size of your training data and try again with a new project",
-  "The project has been stopped due to an error. Please try again with a new project": "The project has been stopped due to an error. Please try again with a new project",
+  "The project has been stopped due to an error. Please try again with a new project.": "The project has been stopped due to an error. Please try again with a new project.",
   "There are four main situations in which an error can occur": "There are four main situations in which an error can occur",
   "When training data is inserted in a wrong format, an error may occur": "When training data is inserted in a wrong format, an error may occur",
   "Please refer to the user guide for information on how to insert training data": "Please refer to the user guide for information on how to insert training data",
