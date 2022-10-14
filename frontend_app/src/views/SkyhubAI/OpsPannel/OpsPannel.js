@@ -1269,13 +1269,13 @@ const OpsPannel = (props) => {
             alignItems="center"
           >
             {/*상단 : 그래프, api 호출 수*/}
-            <iframe
+            {/* <iframe
               ref={graphIframeRef}
               src={monitoring_url + "/tv.html"}
               width="100%"
               height="400"
               style={{ zIndex: 0 }}
-            />
+            /> */}
             {IS_ENTERPRISE && (
               <>
                 <Grid
