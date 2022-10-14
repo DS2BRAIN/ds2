@@ -217,7 +217,9 @@ const Group = () => {
                         <GridItem xs={9}>
                           <TextField
                             id="change_group_name_input"
-                            placeholder={t("Please enter the group name to change.")}
+                            placeholder={t(
+                              "Please enter the group name to change."
+                            )}
                             onChange={onChangeNextGroupName}
                             value={groupNameForChange}
                             className={classes.textField}
@@ -312,7 +314,9 @@ const Group = () => {
                       <GridItem xs={9}>
                         <TextField
                           id="member_email_input"
-                          placeholder={t("Please enter e-mail address correctly.")}
+                          placeholder={t(
+                            "Please enter e-mail address correctly."
+                          )}
                           onChange={onChangeMemberEmail}
                           value={userEmailForAdd}
                           className={classes.textField}
@@ -422,15 +426,15 @@ const Group = () => {
                   <TableCell className={classes.tableRowCell} align="center">
                     {idx + 1}
                   </TableCell>
-                  <TableCell className={classes.tableRowCell} align="left">
+                  <TableCell className={classes.tableRowCell} align="center">
                     {group.groupname}
                   </TableCell>
-                  <TableCell className={classes.tableRowCell} align="left">
+                  <TableCell className={classes.tableRowCell} align="center">
                     {group.hostuserList && (
                       <div>{group.hostuserList.useremail}</div>
                     )}
                   </TableCell>
-                  <TableCell className={classes.tableRowCell}>
+                  <TableCell className={classes.tableRowCell} align="center">
                     <div style={{ display: "flex" }}>
                       <Button
                         id="accept_invitation_btn"
@@ -614,7 +618,9 @@ const Group = () => {
                 className={classes.tableRowCell}
                 style={{ width: "30%" }}
                 align="center"
-              ></TableCell>
+              >
+                <b>{t("Actions")}</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           {renderInviteLists()}
