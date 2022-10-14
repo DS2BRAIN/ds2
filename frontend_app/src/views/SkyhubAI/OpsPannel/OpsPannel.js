@@ -1137,6 +1137,8 @@ const OpsPannel = (props) => {
                       inputProps={{ className: newClasses.renameModalText }}
                       variant="outlined"
                       placeholder={t("Enter a new project name.")}
+                      defaultValue={projectName}
+                      autoFocus
                     />
                   </Grid>
                   <Grid
@@ -1166,6 +1168,15 @@ const OpsPannel = (props) => {
                           }
                           style={{ textAlign: "center" }}
                           onClick={() => {
+                            if (renameText.trim().length === 0) {
+                              dispatch(
+                                openErrorSnackbarRequestAction(
+                                  t("Enter the value.")
+                                )
+                              );
+                              return;
+                            }
+
                             if (!isRenameLoading) {
                               setIsRenameLoading(true);
                               //이름 변경 API
