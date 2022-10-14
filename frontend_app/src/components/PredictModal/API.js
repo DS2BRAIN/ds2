@@ -1482,7 +1482,7 @@ const API = React.memo(
 
       const apiDropzone = (type, acceptedFiles) => {
         let typeGuideText = null;
-        if (type === "image") typeGuideText = "png";
+        if (type === "image") typeGuideText = "png, jpg";
         else if (type === "video") typeGuideText = "mp4";
         else if (type === "audio") typeGuideText = "wav";
 
