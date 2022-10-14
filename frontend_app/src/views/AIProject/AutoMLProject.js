@@ -210,7 +210,7 @@ const AutoMLProject = ({ history, route }) => {
 
   const showMyProject = (projectArr) => {
     const tableHeads = [
-      { value: "No.", width: "5%", name: "" },
+      // { value: "No.", width: "5%", name: "" },
       { value: "Project name", width: "30%", name: "projectName" },
       { value: "Role", width: "10%", name: "role" },
       { value: "Option", width: "7.5%", name: "option" },
@@ -227,7 +227,7 @@ const AutoMLProject = ({ history, route }) => {
       tableHeads[3].name,
       tableHeads[4].name,
       tableHeads[5].name,
-      tableHeads[6].name,
+      // tableHeads[6].name,
     ];
 
     const projectTableHead = () => {
@@ -271,7 +271,7 @@ const AutoMLProject = ({ history, route }) => {
           {tableHeads.map((tableHead, idx) => (
             <TableCell
               id={tableHead.value + "mainHeader"}
-              key={idx}
+              key={`tableHead_${idx}`}
               className={classes.tableHead}
               align="center"
               width={tableHead.width}
@@ -320,7 +320,7 @@ const AutoMLProject = ({ history, route }) => {
 
         const project = [
           prj.id,
-          projects.totalLength - (projectRowsPerPage * projectPage + i),
+          // projects.totalLength - (projectRowsPerPage * projectPage + i),
           prj.projectName,
           prj.role,
           t(PREFERRED_OPTION[prj.option]),

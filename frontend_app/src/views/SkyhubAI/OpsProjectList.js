@@ -393,7 +393,7 @@ const Project = ({ history }) => {
       const prj = projects.projects[i];
       const project = [
         prj.id,
-        projectRowsPerPage * projectPage + (i + 1),
+        // projectRowsPerPage * projectPage + (i + 1),
         prj.projectName,
         projects.projects[i].created_at ? projects.projects[i].created_at : "",
         //isEnableToChange(prj.created_at, 1),
@@ -440,7 +440,7 @@ const Project = ({ history }) => {
                       /> */}
                     </TableCell>
                   )}
-                  <TableCell
+                  {/* <TableCell
                     className={classes.tableHead}
                     style={{ width: "5%" }}
                     align="center"
@@ -448,7 +448,7 @@ const Project = ({ history }) => {
                     <b style={{ color: currentThemeColor.textMediumGrey }}>
                       No.
                     </b>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell
                     className={classes.tableHead}
                     align="center"
