@@ -216,7 +216,7 @@ const ModelTable = React.memo(
       let tempDefKeys = defaultStatKeys;
       if (Object.keys(hasDataObj).length) {
         Object.keys(hasDataObj).forEach((hasData) => {
-          if (hasDataObj[hasData]) {
+          if (hasDataObj[hasData] && !tempDefKeys.includes(hasData)) {
             tempDefKeys.push(hasData);
           }
         });
@@ -1599,6 +1599,126 @@ const ModelTable = React.memo(
 
     if (selectedPage !== "model") return null;
 
+    const sectionModelProgress = () => {
+      let progressDenominator = modelStatus["total"];
+      let progressNumerator = modelStatus["done"] + modelStatus["error"];
+      let progressPercentage = (progressNumerator / progressDenominator) * 100;
+
+      const statusList = [
+        {
+          id: "error",
+          label: "Error",
+          img: modelError,
+        },
+        {
+          id: "processing",
+          label: "In progress",
+          img: modelProcessing,
+        },
+        {
+          id: "pausing",
+          label: "Waiting",
+          img: modelPause,
+        },
+        {
+          id: "done",
+          label: "Completed",
+          img: modelDone,
+        },
+      ];
+
+      return (
+        <GridContainer
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            flexWrap: "nowrap",
+          }}
+        >
+          <GridItem
+            xs={9}
+            style={{
+              display: "flex",
+              marginTop: "15px",
+              padding: "0",
+            }}
+          >
+            {modelStatus && (
+              <>
+                <div className={classes.modelCard}>
+                  <div
+                    style={{
+                      width: "100%",
+                      margin: " 5px 0 15px 0",
+                      position: "relative",
+                    }}
+                  >
+                    <BorderLinearProgress
+                      variant="determinate"
+                      value={
+                        modelStatus["total"] === 0 ? 0 : progressPercentage
+                      }
+                    />
+                    <b className={classes.modelProgressbar}>
+                      {modelStatus["total"] === 0
+                        ? "0 %"
+                        : progressPercentage.toFixed(1) + " %"}
+                    </b>
+                  </div>
+                  <GridContainer>
+                    {statusList.map((stat) => (
+                      <GridItem xs={3} key={stat.id}>
+                        <div className={classes.modelIconContainer}>
+                          <div style={{ display: "flex" }}>
+                            <img
+                              src={stat.img}
+                              className={classes.modelIconImg}
+                            />
+                            <b>{t(stat.label)}</b>
+                          </div>
+                          <div style={{ display: "flex" }}>
+                            <span className={classes.progressFont}>
+                              {modelStatus[stat.id]}
+                            </span>
+                            <span className={classes.progressSamllFont}>
+                              /{progressDenominator}
+                            </span>
+                          </div>
+                        </div>
+                      </GridItem>
+                    ))}
+                  </GridContainer>
+                </div>
+                <div style={{ maxWidth: "40px" }}>
+                  <HelpOutlineIcon
+                    fontSize="small"
+                    style={{ marginLeft: "4px", cursor: "pointer" }}
+                    id="helpIcon"
+                    onClick={() => {
+                      onOpenTooltipModal("modelStatus");
+                    }}
+                  />
+                </div>
+              </>
+            )}
+          </GridItem>
+          <GridItem xs={3}>
+            {!projects.project.isSample && (
+              <Button
+                id="use_webhooks_btn"
+                shape="whiteOutlined"
+                onClick={() => {
+                  setOpenWebhooksModal(true);
+                }}
+              >
+                {t("Use WEBHOOKS")}
+              </Button>
+            )}
+          </GridItem>
+        </GridContainer>
+      );
+    };
+
     return (
       <div style={{ width: "100%" }}>
         <div style={{ overflow: "auto" }}>
@@ -1618,127 +1738,8 @@ const ModelTable = React.memo(
             <>
               {sortedModels.length > 0 &&
                 (projects.project.status !== 99 ||
-                  (projects.project.status === 99 && isAnyModelFinished)) && (
-                  <GridContainer
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      flexWrap: "nowrap",
-                    }}
-                  >
-                    <GridItem
-                      xs={9}
-                      style={{
-                        display: "flex",
-                        marginTop: "15px",
-                        padding: "0",
-                      }}
-                    >
-                      {modelStatus && (
-                        <>
-                          <div className={classes.modelCard}>
-                            <div
-                              style={{
-                                width: "100%",
-                                margin: " 5px 0 15px 0",
-                                position: "relative",
-                              }}
-                            >
-                              <BorderLinearProgress
-                                variant="determinate"
-                                value={
-                                  modelStatus["total"] === 0
-                                    ? 0
-                                    : (modelStatus["done"] /
-                                        modelStatus["total"]) *
-                                      100
-                                }
-                              />
-                              <b className={classes.modelProgressbar}>
-                                {modelStatus["total"] === 0
-                                  ? "0 %"
-                                  : (
-                                      (modelStatus["done"] /
-                                        modelStatus["total"]) *
-                                      100
-                                    ).toFixed(1) + " %"}
-                              </b>
-                            </div>
-                            <GridContainer>
-                              {[
-                                {
-                                  id: "error",
-                                  label: "Error",
-                                  img: modelError,
-                                },
-                                {
-                                  id: "processing",
-                                  label: "In progress",
-                                  img: modelProcessing,
-                                },
-                                {
-                                  id: "pausing",
-                                  label: "Waiting",
-                                  img: modelPause,
-                                },
-                                {
-                                  id: "done",
-                                  label: "Completed",
-                                  img: modelDone,
-                                },
-                              ].map((stat) => (
-                                <GridItem xs={3} key={stat.id}>
-                                  <div className={classes.modelIconContainer}>
-                                    <div style={{ display: "flex" }}>
-                                      <img
-                                        src={stat.img}
-                                        className={classes.modelIconImg}
-                                      />
-                                      <b>{t(stat.label)}</b>
-                                    </div>
-                                    <div style={{ display: "flex" }}>
-                                      <span className={classes.progressFont}>
-                                        {modelStatus[stat.id]}
-                                      </span>
-                                      <span
-                                        className={classes.progressSamllFont}
-                                      >
-                                        /{modelStatus["total"]}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </GridItem>
-                              ))}
-                            </GridContainer>
-                          </div>
-                          <div style={{ maxWidth: "40px" }}>
-                            <HelpOutlineIcon
-                              fontSize="small"
-                              style={{ marginLeft: "4px", cursor: "pointer" }}
-                              id="helpIcon"
-                              onClick={() => {
-                                onOpenTooltipModal("modelStatus");
-                              }}
-                            />
-                          </div>
-                        </>
-                      )}
-                    </GridItem>
-                    <GridItem xs={3}>
-                      {!projects.project.isSample && (
-                        <Button
-                          id="use_webhooks_btn"
-                          shape="whiteOutlined"
-                          onClick={() => {
-                            setOpenWebhooksModal(true);
-                          }}
-                        >
-                          {t("Use WEBHOOKS")}
-                        </Button>
-                      )}
-                    </GridItem>
-                  </GridContainer>
-                )}
+                  (projects.project.status === 99 && isAnyModelFinished)) &&
+                sectionModelProgress()}
               <GridContainer>
                 {projects.project.status !== 99 ||
                 (projects.project.status === 99 && isAnyModelFinished) ? (
