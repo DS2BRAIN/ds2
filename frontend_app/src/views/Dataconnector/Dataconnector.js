@@ -1224,29 +1224,33 @@ const Dataconnector = ({ history }) => {
         setIsTemplateModalOpen(true);
       };
 
-      return (
-        <Tooltip
-          title={
-            <div style={{ fontSize: "12px" }}>{`${t(
-              "Example templates are provided with brief explanations for each training type."
-            )} / ${t(
-              "Example templates are provided for each industry group."
-            )}`}</div>
-          }
-          placement="bottom"
+      const openTemplateButton = (
+        <Button
+          id="sampleTemplateBtn"
+          shape="greenOutlined"
+          onClick={openTemplate}
+          style={{ minWidth: 150 }}
         >
-          <div>
-            <Button
-              id="sampleTemplateBtn"
-              shape="greenOutlined"
-              onClick={openTemplate}
-              style={{ minWidth: 150 }}
-            >
-              {t("Sample template")}
-            </Button>
-          </div>
-        </Tooltip>
+          {t("Sample template")}
+        </Button>
       );
+
+      if (isTemplateModalOpen) return openTemplateButton;
+      else
+        return (
+          <Tooltip
+            title={
+              <div style={{ fontSize: "12px" }}>{`${t(
+                "Example templates are provided with brief explanations for each training type."
+              )} / ${t(
+                "Example templates are provided for each industry group."
+              )}`}</div>
+            }
+            placement="bottom"
+          >
+            <div>{openTemplateButton}</div>
+          </Tooltip>
+        );
     };
 
     const reloadButton = (
