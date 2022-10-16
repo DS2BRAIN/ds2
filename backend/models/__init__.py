@@ -6,6 +6,9 @@ import traceback
 import os
 import peewee as pw
 import sys
+
+import requests
+
 from src.util import Util
 
 import os
@@ -73,8 +76,22 @@ else:
         mongodb = 'astore'
         quentdb = 'quent'
     elif utilClass.configOption in 'enterprise':
+        public_ip_address = "0.0.0.0"
+        user = "root"
+        passwd = "dslabglobal"
+
+        try:
+            public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
+            print("public_ip_address")
+            print(public_ip_address)
+            if aistore_configs['public_ip_address'] == public_ip_address:
+                user = aistore_configs['prod_db_user']
+                passwd = aistore_configs['prod_db_passwd']
+        except:
+            pass
+
         skyhub = pw.MySQLDatabase("astore", host=master_ip if master_ip else "0.0.0.0", port=13006 if check_open_new_port() else 3306,
-                                  user="root", passwd="dslabglobal")
+                                  user=user, passwd=passwd)
         mongodb = 'astoretest'
         quentdb = 'quent'
     elif utilClass.configOption in 'prod_test':
