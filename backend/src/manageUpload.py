@@ -306,8 +306,6 @@ class ManageUpload:
                 }
 
                 dataconnector = self.dbClass.createDataconnector(data)
-                print("dataconnector")
-                print(dataconnector)
 
                 data['id'] = dataconnector.id
                 data['datetimeUTC'] = datetime.datetime.utcnow().strftime("%Y/%m/%d %H:%M:%S")
@@ -315,12 +313,8 @@ class ManageUpload:
                 data['log_type'] = 'create-dataconnector-log'
 
                 self.dbClass.create_server_log(data)
-                print("create_server_log")
 
                 if background_tasks:
-                    print("background_tasks")
-                    print(background_tasks)
-                    print(df)
                     # background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
                     save_data_dict = {
                                         'userId': user_id,
@@ -338,10 +332,8 @@ class ManageUpload:
                                         'has_de_identification': has_de_identification,
                                         'total_img_count': data_cnt
                     }
-                    print(save_data_dict)
                     background_tasks.add_task(self.save_data, save_data_dict)
                 else:
-                    print("no background_tasks")
                     self.save_origin_data(origin_file, user_id, dataconnector.id)
                     dataconnector.status = 100
                     dataconnector.save()
@@ -567,11 +559,7 @@ class ManageUpload:
                     dataconnectorsList=str([connector_id]).replace(' ', ''),
                     visible=False
                 )
-                print("label_project_info")
-                print(label_project_info)
                 new_label_project = self.dbClass.createLabelProject(label_project_info)
-                print("new_label_project")
-                print(new_label_project)
                 connector_raw.originalLableproject = new_label_project.id
                 connector_raw.save()
 
