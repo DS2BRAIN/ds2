@@ -190,8 +190,8 @@ export const getLabelAppUrl = (category) => {
 
   if (window.location.href.indexOf("https") > -1) {
     labelAppUrl = category === "object_detection"
-      ? window.location.href
-      : window.location.href.replaceAll("console", "labelapp");
+      ? window.location.origin + "/"
+      : window.location.origin.replaceAll("console", "labelapp") + "/";
   }
 
   return labelAppUrl;
