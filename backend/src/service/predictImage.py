@@ -80,7 +80,8 @@ class PredictImage:
         self.f = None
         if not os.path.exists('./logo_258_94.png'):
             self.s3.download_file("aimakerdslab", 'asset/logo_258_94.png','./logo_258_94.png')
-        self.logo_image = cv2.imread('logo_258_94.png')
+        if os.path.exists('./logo_258_94.png'):
+            self.logo_image = cv2.imread('logo_258_94.png')
         self.models = {}
 
     def getKeypoint(self, image, info=False, isVideo=False, predictor=None, isAngleLabel=False, isGetPredictor=False,
