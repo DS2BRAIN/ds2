@@ -1248,7 +1248,7 @@ const LabelDetail = ({ history, match }) => {
   // };
   const getS3key = (key) => {
     if (key) {
-      return IS_ENTERPRISE ? `${fileurl}static/${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static/${key}` : key;
       // return key;
     }
   };
