@@ -320,7 +320,8 @@ class ManageUpload:
                 if background_tasks:
                     print("background_tasks")
                     print(background_tasks)
-                    background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
+                    print(df)
+                    # background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
                     save_data_dict = {
                                         'userId': user_id,
                                         'fileSize': file_size,
@@ -337,6 +338,7 @@ class ManageUpload:
                                         'has_de_identification': has_de_identification,
                                         'total_img_count': data_cnt
                     }
+                    print(save_data_dict)
                     background_tasks.add_task(self.save_data, save_data_dict)
                 else:
                     print("no background_tasks")
