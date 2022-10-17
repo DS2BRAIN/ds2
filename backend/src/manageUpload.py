@@ -305,6 +305,8 @@ class ManageUpload:
                 }
 
                 dataconnector = self.dbClass.createDataconnector(data)
+                print("dataconnector")
+                print(dataconnector)
 
                 data['id'] = dataconnector.id
                 data['datetimeUTC'] = datetime.datetime.utcnow().strftime("%Y/%m/%d %H:%M:%S")
@@ -312,8 +314,11 @@ class ManageUpload:
                 data['log_type'] = 'create-dataconnector-log'
 
                 self.dbClass.create_server_log(data)
+                print("create_server_log")
 
                 if background_tasks:
+                    print("background_tasks")
+                    print(background_tasks)
                     background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
                     save_data_dict = {
                                         'userId': user_id,
@@ -333,6 +338,7 @@ class ManageUpload:
                     }
                     background_tasks.add_task(self.save_data, save_data_dict)
                 else:
+                    print("no background_tasks")
                     self.save_origin_data(origin_file, user_id, dataconnector.id)
                     dataconnector.status = 100
                     dataconnector.save()
@@ -522,6 +528,7 @@ class ManageUpload:
                 appLog=True)
 
     def save_data(self, save_data_dict):
+        print("save_data")
 
         user_id = save_data_dict.get('userId')
         file_name = save_data_dict.get('newFileName')
@@ -546,7 +553,6 @@ class ManageUpload:
             if file_type == '.csv':
                 connector_raw.hasLabelData = True
                 file_data = data_frame.to_dict('records')
-
                 label_project_info = dict(
                     name=f"original_labelproject_{connector_id}",
                     description="original_data",
@@ -556,7 +562,11 @@ class ManageUpload:
                     dataconnectorsList=str([connector_id]).replace(' ', ''),
                     visible=False
                 )
+                print("label_project_info")
+                print(label_project_info)
                 new_label_project = self.dbClass.createLabelProject(label_project_info)
+                print("new_label_project")
+                print(new_label_project)
                 connector_raw.originalLableproject = new_label_project.id
                 connector_raw.save()
 
