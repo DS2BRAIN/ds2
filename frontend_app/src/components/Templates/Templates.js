@@ -150,14 +150,13 @@ const Templates = ({ closeTemplateModal }) => {
         key={template.templateName + template.id}
         style={{ cursor: "default" }}
       >
-        <ListItemText
-          component="h1"
-          className={classes.templateItem}
-          primary={`${t(template.templateName)}`}
-        />
+        <ListItemText>
+          <span style={{ fontSize: "14px" }}>{t(template.templateName)}</span>
+        </ListItemText>
         <Button
           id={`${template.templateCategory + template.id}_download_btn`}
           shape="greenOutlined"
+          size="sm"
           onClick={() => {
             // linkDownloadUrl(template.s3url);
             const link = document.createElement("a");
@@ -238,16 +237,18 @@ const Templates = ({ closeTemplateModal }) => {
                       button
                       className={classes.templateItem}
                       key={template.templateName + template.id}
+                      style={{ paddingLeft: "24px" }}
                     >
-                      <ListItemText
-                        component="h1"
-                        className={classes.templateItem}
-                        primary={t(`${template.templateName}`)}
-                      />
+                      <ListItemText>
+                        <span style={{ fontSize: "14px" }}>
+                          {t(template.templateName)}
+                        </span>
+                      </ListItemText>
                       <Button
                         id={`${template.templateCategory +
                           template.id}_download_btn`}
                         shape="greenOutlined"
+                        size="sm"
                         onClick={() => {
                           // linkDownloadUrl(template.s3url);
                           const link = document.createElement("a");
@@ -287,7 +288,10 @@ const Templates = ({ closeTemplateModal }) => {
     };
 
     return (
-      <List style={isMethodTab ? methodTabListStyle : industryTabListStyle}>
+      <List
+        key={`tab_${tab}`}
+        style={isMethodTab ? methodTabListStyle : industryTabListStyle}
+      >
         {isMethodTab ? renderTemplateByMethod() : renderTemplateByIndustry()}
       </List>
     );
