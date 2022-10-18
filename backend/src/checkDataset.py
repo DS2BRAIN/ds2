@@ -614,8 +614,17 @@ class CheckDataset():
 
             try:
                 temp_url = f'{sthreefile["s3key"]}' if self.utilClass.configOption == 'enterprise' else f"user/{sthreefile['s3key'].split('/user/')[1]}"
-                s3_download_url = urllib.parse.unquote_plus(temp_url)
-                self.s3.download_file(self.utilClass.bucket_name, s3_download_url, download_path)
+                if self.utilClass.save_path in temp_url:
+                    s3_download_url = urllib.parse.unquote_plus(temp_url)
+                    self.s3.download_file(self.utilClass.bucket_name, s3_download_url, download_path)
+                else:
+                    try:
+                        s3_download_url = urllib.parse.unquote_plus(temp_url)
+                        cloud_file_path = "/".join(s3_download_url.split("/")[3:])
+                        self.utilClass.s3_cloud.download_file('aimakerdslab', cloud_file_path, download_path)
+                    except:
+                        pass
+
             except:
                 self.utilClass.sendSlackMessage(
                     f"파일 : checkDataset\n 함수 : exportCoCo \n exportCoCo 파일 다운로드 에러 발생 - {sthreefile['fileName']}\n 에러 내용 = {traceback.format_exc()})",
