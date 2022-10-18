@@ -321,7 +321,14 @@ const Manager = ({ history }) => {
         console.log(res);
         closeSelectedUserModal("delete");
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        dispatch(
+          openSuccessSnackbarRequestAction(
+            t("An error occurred while deleting the user.")
+          )
+        );
+      });
   };
 
   const renderUserList = () => {
