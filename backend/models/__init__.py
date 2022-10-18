@@ -84,9 +84,9 @@ else:
             public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
             print("public_ip_address")
             print(public_ip_address)
-            if aistore_configs['public_ip_address'] == public_ip_address:
-                user = aistore_configs['prod_db_user']
-                passwd = aistore_configs['prod_db_passwd']
+            if aistore_configs.get("public_ip_address") == public_ip_address:
+                user = aistore_configs.get('prod_db_user')
+                passwd = aistore_configs.get('prod_db_passwd')
         except:
             pass
 
