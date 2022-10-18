@@ -110,7 +110,7 @@ class enterpriseBoto():
                 cmd = f"scp -P 13022 -i /root/.ssh/id_rsa root@{master_ip}:{s3_route} {s3_route}"
                 call(cmd.split(" "))
 
-        if not os.path.exists(file_route):
+        if not os.path.exists(file_route) and os.path.exists(s3_route):
             try:
                 shutil.copyfile(f"{s3_route}", file_route)
             except:
@@ -119,11 +119,13 @@ class enterpriseBoto():
             alter_path = f"{self.save_path}/{s3_route}"
             if 'ds2ai/ds2ai' in alter_path:
                 alter_path = alter_path.replace('ds2ai/ds2ai', 'ds2ai')
-            try:
-                shutil.copyfile(alter_path, file_route)
-            except:
-                # print(traceback.format_exc())
-                pass
+
+            if not os.path.exists(file_route) and os.path.exists(alter_path):
+                try:
+                    shutil.copyfile(alter_path, file_route)
+                except:
+                    print(traceback.format_exc())
+                    pass
         try:
 
             filePath = f"{os.getcwd()}/../aimaker-backend-deploy/data/{file_route.split('/')[-1]}"

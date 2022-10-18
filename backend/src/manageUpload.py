@@ -142,6 +142,7 @@ class ManageUpload:
             file_name, file_type = os.path.splitext(filename)
             file_name = file_name[:50] if len(file_name) > 50 else file_name
             new_file_name = f'{timestamp}{file_name}{file_type}'
+            df = None
 
             if file_type in ['.mp4', '.mov']:
                 sample_data = None
@@ -250,7 +251,7 @@ class ManageUpload:
                         appLog=True, userInfo=user)
                     return ENCODE_ERROR
 
-                origin_file = self.create_origin_csv(new_file_name, df)
+                origin_file = self.create_origin_csv(new_file_name, df, user_id)
             base_data['file_size'] = file_size
 
             if data_cnt < 10:
@@ -314,7 +315,7 @@ class ManageUpload:
                 self.dbClass.create_server_log(data)
 
                 if background_tasks:
-                    background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
+                    # background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
                     save_data_dict = {
                                         'userId': user_id,
                                         'fileSize': file_size,
@@ -509,11 +510,13 @@ class ManageUpload:
 
     def save_origin_data(self, origin_file, user_id, connector_id):
 
+        print("save_origin_data")
+        print(self.utilClass.configOption)
         try:
             if self.utilClass.configOption == 'enterprise':
                 save_dir_path = f"{self.utilClass.save_path}/user/{user_id}/raw"
                 os.makedirs(save_dir_path, exist_ok=True)
-                shutil.move(origin_file, save_dir_path)
+                shutil.copy(origin_file, save_dir_path)
 
         except Exception as e:
             print(traceback.format_exc())
@@ -522,6 +525,7 @@ class ManageUpload:
                 appLog=True)
 
     def save_data(self, save_data_dict):
+        print("save_data")
 
         user_id = save_data_dict.get('userId')
         file_name = save_data_dict.get('newFileName')
@@ -546,7 +550,6 @@ class ManageUpload:
             if file_type == '.csv':
                 connector_raw.hasLabelData = True
                 file_data = data_frame.to_dict('records')
-
                 label_project_info = dict(
                     name=f"original_labelproject_{connector_id}",
                     description="original_data",
@@ -1221,9 +1224,9 @@ class ManageUpload:
         with open(origin_file, 'wb') as open_file:
             open_file.write(file)
 
-    def create_origin_csv(self, new_file_name, df):
-
-        origin_file = f'temp/{new_file_name}'
+    def create_origin_csv(self, new_file_name, df, user_id):
+        os.makedirs(f'{self.utilClass.save_path}/user/{user_id}/raw/', exist_ok=True)
+        origin_file = f'{self.utilClass.save_path}/user/{user_id}/raw/{new_file_name}'
         df.to_csv(origin_file, index=False)
 
         return origin_file

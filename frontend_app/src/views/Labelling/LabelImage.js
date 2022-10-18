@@ -425,7 +425,7 @@ const LabelImage = ({ history }) => {
 
   const getS3key = (key) => {
     if (key) {
-      return process.env.REACT_APP_ENTERPRISE === "true"
+      return process.env.REACT_APP_ENTERPRISE === "true" && key.indexOf("http") === -1
         ? `${fileurl}static/${key}`
         : key;
       // return key;
