@@ -302,7 +302,9 @@ const Manager = ({ history }) => {
     setIsSelectedUserModalOpen(false);
     if (actionType === "delete") {
       setIsSelectedUserDelete(false);
-      dispatch(openSuccessSnackbarRequestAction(t("유저가 삭제되었습니다.")));
+      dispatch(
+        openSuccessSnackbarRequestAction(t("User deletion is complete."))
+      );
       getUserAction();
     }
     if (actionType === "reset") {
