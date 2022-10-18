@@ -15,6 +15,7 @@ from tensorflow.python.client import device_lib
 from models.helper import Helper
 from src.util import Util
 from models import skyhub
+import psutil
 
 
 class DaemonSMS():
@@ -42,7 +43,19 @@ class DaemonSMS():
         local_device_protos = device_lib.list_local_devices()
         return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
-
+    def checkIfProcessRunning(self, processName):
+        '''
+        Check if there is any running process that contains the given name processName.
+        '''
+        # Iterate over the all the running process
+        for proc in psutil.process_iter():
+            try:
+                # Check if process name contains the given name string.
+                if processName in proc.cmdline():
+                    return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
+        return False
 
     def sub(self, name: str):
         pubsub = self.redis_conn.pubsub()
@@ -58,27 +71,23 @@ class DaemonSMS():
                 print(f"got {data.get('status')} task")
                 if data.get("status") == 0 or data.get("status") == 21 or data.get("status") == 51:
 
-                    is_started = self.is_gpu_available(reqiure_gpus)
-                    data["is_started"] = is_started
+                    print("self.is_gpu_available(reqiure_gpus)")
+                    print(self.is_gpu_available(reqiure_gpus))
 
-                    is_working_on_this_server = True
-
-                    if data.get("require_gpus_total"):
-                        is_working_on_this_server = False
-                        for key, value in data["require_gpus_total"].items():
-                            if key == "localhost":
-                                is_working_on_this_server = True
-
-                    if is_working_on_this_server:
-
+                    if self.is_gpu_available(reqiure_gpus) or data.get('jupyterProject'):
+                        data["is_started"] = True
+                        self.start_daemon(data, reqiure_gpus)
+                    else:
                         for reqiure_gpu in reqiure_gpus:
                             if self.gpu_wait_list.get(reqiure_gpu):
                                 self.gpu_wait_list[reqiure_gpu].append(data)
                             else:
                                 self.gpu_wait_list[reqiure_gpu] = [data]
+                        if not reqiure_gpus:
+                            self.gpu_wait_list["/device:GPU:all"] = [data]
 
-                    if data["is_started"] or data.get('jupyterProject'):
-                        self.start_daemon(data, reqiure_gpus)
+                    print("self.gpu_wait_list")
+                    print(self.gpu_wait_list)
 
                 elif data.get("status") == 100:
                     self.remove_from_wait_list(data, reqiure_gpus)
@@ -94,19 +103,18 @@ class DaemonSMS():
 
         is_available = True
 
-        if reqiure_gpus:
-            for reqiure_gpu in reqiure_gpus:
-                if type(self.gpu_wait_list.get(reqiure_gpu)) == None \
-                        or len(self.gpu_wait_list.get(reqiure_gpu)) != 0:
-                    is_available = False
-        else:
-            is_available_more_than_one = False
-            for key, value in self.gpu_wait_list.items():
-                if key == "/device:GPU:all":
-                    continue
-                if len(value) == 0:
-                    is_available_more_than_one = True
-            is_available = is_available_more_than_one
+        execute_path = os.getcwd() + "/"
+        if os.path.exists("/root/ds2ai/aimaker-daemon-async-task-deploy/"):
+            execute_path = "/root/ds2ai/aimaker-daemon-async-task-deploy/"
+
+        if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
+            execute_path = "/home/yeo/projects/ds2/backend/"
+
+        if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):
+            execute_path = "/var/lib/jenkins/projects/ds2-staging/backend/"
+
+        if self.checkIfProcessRunning(f"{execute_path}daemon_async_task.py"):
+            is_available = False
 
         return is_available
 
@@ -123,8 +131,8 @@ class DaemonSMS():
                 gpu = None
 
             execute_path = os.getcwd() + "/"
-            if os.path.exists("/root/ds2ai/aimaker-sms-deploy/"):
-                execute_path = "/root/ds2ai/aimaker-sms-deploy/"
+            if os.path.exists("/root/ds2ai/aimaker-daemon-async-task-deploy/"):
+                execute_path = "/root/ds2ai/aimaker-daemon-async-task-deploy/"
 
             python_path = "/root/miniconda3/envs/p3.9/bin/python"
             jupyter_path = "/root/miniconda3/envs/p3.9/bin/jupyter"
@@ -158,7 +166,7 @@ class DaemonSMS():
                 my_env["DS2_TASK_ID"] = str(data['id'])
                 my_env["DS2_CONFIG_OPTION"] = "enterprise"
 
-                cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
+                cmd = f"{python_path} {execute_path}daemon_async_task.py prod business enterprise {data['id']}"
 
                 if data.get('require_gpus_total'): #Temp
                     try:
@@ -178,7 +186,8 @@ class DaemonSMS():
                             training_server_total = 1
                             training_server_info = f"localhost:{len(data['require_gpus_total'])}"
 
-                        cmd = f'''/usr/lib/openmpi/bin/mpirun --allow-run-as-root -v -np {training_server_total} -H {training_server_info} -bind-to none -map-by slot --prefix /usr/lib/openmpi --mca pml ob1 --mca btl ^openib --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" --mca plm_rsh_args "-F /root/.ssh/config" -x NCCL_SOCKET_IFNAME=^lo,docker0 -x DS2_TASK_ID={data['id']} -x DS2_CONFIG_OPTION=enterprise -x DS2_DAEMON_TASK_MODE=true -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
+                        # cmd = f'''/usr/lib/openmpi/bin/mpirun --allow-run-as-root -v -np {training_server_total} -H {training_server_info} -bind-to none -map-by slot --prefix /usr/lib/openmpi --mca pml ob1 --mca btl ^openib --mca btl_tcp_if_exclude "127.0.0.1/8,tun0,lo,docker0" --mca plm_rsh_args "-F /root/.ssh/config" -x NCCL_SOCKET_IFNAME=^lo,docker0 -x DS2_TASK_ID={data['id']} -x DS2_CONFIG_OPTION=enterprise -x DS2_DAEMON_TASK_MODE=true -x NCCL_DEBUG=INFO -x LD_LIBRARY_PATH -x PATH {python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}'''
+                        cmd = f"{python_path} {execute_path}daemon_async_task.py prod business enterprise {data['id']}"
                     except:
                         pass
 
@@ -208,7 +217,8 @@ class DaemonSMS():
     def start_available_tasks(self):
         # if not reqiure_gpus:
         #     reqiure_gpus = ["/device:GPU:all"]
-
+        print("self.gpu_wait_list")
+        print(self.gpu_wait_list)
         available_gpu_list = []
         for key, gpu_wait_tasks in self.gpu_wait_list.items():
             is_available_gpu = True
@@ -218,9 +228,12 @@ class DaemonSMS():
             if is_available_gpu:
                 available_gpu_list.append(key)
 
-            if key == "/device:GPU:all" and is_available_gpu is False:
-                available_gpu_list = []
-                break
+            # if key == "/device:GPU:all" and is_available_gpu is False:
+            #     available_gpu_list = []
+            #     break
+
+        print("available_gpu_list")
+        print(available_gpu_list)
 
         available_tasks = []
         for available_gpu in available_gpu_list:
@@ -240,6 +253,7 @@ class DaemonSMS():
             if reqiure_gpus == ["all"]:
                 is_available_task = True
                 available_gpu_list = []
+
 
             if is_available_task:
                 for reqiure_gpu in reqiure_gpus:
