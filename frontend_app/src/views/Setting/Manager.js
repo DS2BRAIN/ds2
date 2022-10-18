@@ -271,7 +271,7 @@ const Manager = ({ history }) => {
 
         dispatch(openSuccessSnackbarRequestAction(t(text)));
 
-        closeSelectedUserModal();
+        closeSelectedUserModal("reset");
 
         if (isMyAccount) history.push("/signout?passwordChange=true");
       })
@@ -298,10 +298,14 @@ const Manager = ({ history }) => {
     setSearchValueToPost("");
   };
 
-  const closeSelectedUserModal = () => {
+  const closeSelectedUserModal = (actionType) => {
     setIsSelectedUserModalOpen(false);
-    if (isSelectedUserDelete) setIsSelectedUserDelete(false);
-    else {
+    if (actionType === "delete") {
+      setIsSelectedUserDelete(false);
+      dispatch(openSuccessSnackbarRequestAction(t("유저가 삭제되었습니다.")));
+      getUserAction();
+    }
+    if (actionType === "reset") {
       setPasswordChange("");
       setPasswordVerifyChange("");
     }
@@ -313,7 +317,7 @@ const Manager = ({ history }) => {
       .deleteUserInfo(id)
       .then((res) => {
         console.log(res);
-        closeSelectedUserModal();
+        closeSelectedUserModal("delete");
       })
       .catch((e) => console.log(e));
   };
