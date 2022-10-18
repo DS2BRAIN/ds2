@@ -287,7 +287,10 @@ const Templates = ({ closeTemplateModal }) => {
     };
 
     return (
-      <List style={isMethodTab ? methodTabListStyle : industryTabListStyle}>
+      <List
+        key={`tab_${tab}`}
+        style={isMethodTab ? methodTabListStyle : industryTabListStyle}
+      >
         {isMethodTab ? renderTemplateByMethod() : renderTemplateByIndustry()}
       </List>
     );
