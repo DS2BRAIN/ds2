@@ -685,7 +685,7 @@ class Util():
                          crawling=False, data_part=False, server_status=False, business_part=False,
                          is_agreed_behavior_statistics=False
                          ):
-        if self.configOption == "enterprise" and not is_agreed_behavior_statistics:
+        if self.configOption == "enterprise" and not is_agreed_behavior_statistics and aistore_configs.get("public_ip_address") != public_ip_address:
             return
         error = False
         try:
