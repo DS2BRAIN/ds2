@@ -61,7 +61,17 @@ class ManageEtc:
         # print("self.utilClass.configOption")
         # print(self.utilClass.configOption)
         # if self.utilClass.configOption != "enterprise":
-        #     self.create_class()
+        try:
+            public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
+            if os.path.exists('./src/training/aistore_config.py'):
+                from src.training.aistore_config import aistore_configs
+            else:
+                aistore_configs = {}
+            if aistore_configs.get("public_ip_address") == public_ip_address:
+                self.create_class()
+        except:
+            pass
+        
 
 
     def create_report(self, token, project_id):
@@ -436,7 +446,7 @@ class ManageEtc:
 
             if not os.path.isfile(local_model_path):
                 os.makedirs(f'{self.utilClass.save_path}/user/{model_project_raw["user"]}/{model_project_raw["id"]}/{model_project_raw["service_type"]}', exist_ok=True)
-                self.s3.download_file(self.utilClass.bucket_name, model_project_raw["filePath"].split('com/')[1],
+                self.utilClass.s3_cloud.download_file('aimakerdslab', model_project_raw["filePath"].split('com/')[1],
                                       local_model_path)
 
             if market_project_id in hbmp_model_id_lst:
@@ -454,9 +464,9 @@ class ManageEtc:
             elif market_project_id in inno_speech_seeker_model_id_lst:
                 self.inno_speech_seeker_model = InnoSpeechSeeker(local_model_path)
                 print(f'inno speech seeker model laod')
-            elif market_project_id in hbmp_premium_model_ist:
-                self.hbmp_premium_model = HbmpPremium(local_model_path)
-                print(f'hbmp premium model laod')
+            # elif market_project_id in hbmp_premium_model_ist:
+            #     self.hbmp_premium_model = HbmpPremium(local_model_path)
+            #     print(f'hbmp premium model laod')
 
     def addContact(self, contactInfo):
         self.utilClass.sendSlackMessage(f'''
