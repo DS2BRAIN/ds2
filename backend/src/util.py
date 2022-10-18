@@ -47,6 +47,7 @@ from api_wrapper.metabase_wrapper import MetabaseAPI
 import urllib.parse
 
 import sys
+import boto3
 
 class Unbuffered(object):
    def __init__(self, stream):
@@ -209,6 +210,8 @@ class Util():
         self.passwd_dict = util_configs.get('passwd_dict', {})
         self.dot_encode_key = util_configs.get('dot_encode_key', '')
         self.public_ip_address = public_ip_address
+        self.s3_cloud = boto3.client('s3', aws_access_key_id=self.access_key,
+                                aws_secret_access_key=self.secret_key)
 
         self.ps_id = os.getpid()
         self.configOption = 'dev'
