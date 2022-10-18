@@ -240,7 +240,7 @@ const LabelprojectList = ({ history }) => {
   };
 
   const tableHeads = [
-    { value: "No.", width: "10%", name: "" },
+    // { value: "No.", width: "10%", name: "" },
     { value: "Project name", width: "25%", name: "name" },
     { value: "Role", width: "10%", name: "role" },
     { value: "Type", width: "15%", name: "workapp" },
@@ -327,14 +327,14 @@ const LabelprojectList = ({ history }) => {
                     onChange={() => onSetProjectCheckedValue(project.id)}
                   />
                 </TableCell>
-                <TableCell
+                {/* <TableCell
                   className={classes.tableRowCell}
                   align="center"
                   onClick={() => goProjectDetail(project)}
                 >
                   {labelprojects.totalLength -
                     (projectRowsPerPage * projectPage + idx)}
-                </TableCell>
+                </TableCell> */}
                 {tableBodys.map((tableBody, idx) => (
                   <TableCell
                     key={idx}

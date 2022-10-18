@@ -313,7 +313,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const privateTableHeads = [
-    { value: "No.", width: "5%", type: "dataNum" },
+    // { value: "No.", width: "5%", type: "dataNum" },
     { value: "Data name", width: "50%", type: "dataconnectorName" },
     { value: "Data type", width: "10%", type: "dataconnectortype" },
     { value: "Training availability", width: "10%", type: "hasLabelData" },
