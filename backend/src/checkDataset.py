@@ -544,6 +544,7 @@ class CheckDataset():
                     with open(f'{label_project_dir}/coco.json', 'w') as outfile:
                         json.dump(result, outfile, indent=4)
                     timestamp = time.strftime('%y%m%d%H%M%S')
+                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/', exist_ok=True)
                     zip_file_path = f'{self.utilClass.save_path}/user/{labelProject["user"]}/{labelProject["id"]}'
                     self.make_archive(label_project_dir, f'{zip_file_path}.zip')
                     self.s3.upload_file(f'{zip_file_path}.zip', self.utilClass.bucket_name,
