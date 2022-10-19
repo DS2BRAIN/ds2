@@ -435,7 +435,7 @@ const Group = () => {
                     )}
                   </TableCell>
                   <TableCell className={classes.tableRowCell} align="center">
-                    <div style={{ display: "flex" }}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
                       <Button
                         id="accept_invitation_btn"
                         shape="greenOutlined"
