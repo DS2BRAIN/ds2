@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
+import {
+  openSuccessSnackbarRequestAction,
+  openErrorSnackbarRequestAction,
+} from "redux/reducers/messages";
 
 import { Modal } from "@material-ui/core";
 import {
@@ -19,6 +24,7 @@ import Button from "components/CustomButtons/Button";
 
 const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
   const classes = currentTheme();
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const isKor = i18n.language === "ko";
 
@@ -80,9 +86,17 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
       .getDataMetabase(id)
       .then((res) => {
         console.log(res);
+        dispatch(
+          openSuccessSnackbarRequestAction(t("Metabase analysis has started."))
+        );
       })
       .catch((e) => {
         console.log("error", e);
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("An error occurred during the metabase analysis.")
+          )
+        );
       });
   };
 
