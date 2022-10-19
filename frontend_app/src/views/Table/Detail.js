@@ -457,6 +457,10 @@ const Detail = React.memo(({ datacolumns }) => {
       imp.forEach((impOne, idx) => {
         if (typeof impOne === "number") {
           sum += Math.abs(impOne);
+        }
+      });
+      imp.forEach((impOne, idx) => {
+        if (typeof impOne === "number") {
           const percentage = ((impOne * 100) / sum).toFixed(2);
           featureData.push({
             name: cols[idx],
