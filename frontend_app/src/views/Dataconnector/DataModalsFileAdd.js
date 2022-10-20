@@ -524,9 +524,10 @@ const DataModalFileAdd = ({
                       borderRadius: "4px",
                     }}
                     src={
-                      process.env.REACT_APP_ENTERPRISE
-                        ? fileurl + tile.logoUrl
-                        : tile.logoUrl
+                      tile.logoUrl.includes("http") ||
+                      !process.env.REACT_APP_ENTERPRISE
+                        ? tile.logoUrl
+                        : fileurl + tile.logoUrl
                     }
                     alt={tile.dataconnectortypeName}
                   />
