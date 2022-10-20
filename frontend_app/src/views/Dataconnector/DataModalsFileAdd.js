@@ -502,46 +502,49 @@ const DataModalFileAdd = ({
       return (
         <Grid container columnSpacing={2} rowSpacing={5} sx={{ p: 4 }}>
           {typeArr.length > 0 &&
-            typeArr.map((tile) => (
-              <Grid item xs={4} key={`typeTile_${tile.id}`}>
-                <div
-                  className={classes.dataconnectorTile}
-                  id={tile.dataconnectortypeName + "_container"}
-                  style={{
-                    border: datatypeCheckedValue[tile.id]
-                      ? "1px solid " + currentThemeColor.secondary1
-                      : "1px solid " + currentThemeColor.background2,
-                    cursor: "pointer",
-                  }}
-                  onClick={() =>
-                    onSetDatatypeCheckedValue(tile.id, tile.authType)
-                  }
-                >
-                  <img
-                    style={{
-                      width: "80px",
-                      height: "80px",
-                      borderRadius: "4px",
-                    }}
-                    src={
-                      tile.logoUrl.includes("http") ||
-                      !process.env.REACT_APP_ENTERPRISE
-                        ? tile.logoUrl
-                        : fileurl + tile.logoUrl
-                    }
-                    alt={tile.dataconnectortypeName}
-                  />
-                  <Grid
-                    container
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{ height: "56px", color: "var(--textWhite87)" }}
-                  >
-                    {t(tile.dataconnectortypeName)}
+            typeArr.map((tile) => {
+              if (tile.authType !== "db")
+                return (
+                  <Grid item xs={4} key={`typeTile_${tile.id}`}>
+                    <div
+                      className={classes.dataconnectorTile}
+                      id={tile.dataconnectortypeName + "_container"}
+                      style={{
+                        border: datatypeCheckedValue[tile.id]
+                          ? "1px solid " + currentThemeColor.secondary1
+                          : "1px solid " + currentThemeColor.background2,
+                        cursor: "pointer",
+                      }}
+                      onClick={() =>
+                        onSetDatatypeCheckedValue(tile.id, tile.authType)
+                      }
+                    >
+                      <img
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          borderRadius: "4px",
+                        }}
+                        src={
+                          tile.logoUrl.includes("http") ||
+                          !process.env.REACT_APP_ENTERPRISE
+                            ? tile.logoUrl
+                            : fileurl + tile.logoUrl
+                        }
+                        alt={tile.dataconnectortypeName}
+                      />
+                      <Grid
+                        container
+                        justifyContent="center"
+                        alignItems="center"
+                        style={{ height: "56px", color: "var(--textWhite87)" }}
+                      >
+                        {t(tile.dataconnectortypeName)}
+                      </Grid>
+                    </div>
                   </Grid>
-                </div>
-              </Grid>
-            ))}
+                );
+            })}
         </Grid>
       );
     };
