@@ -557,7 +557,7 @@ const Project = ({ history }) => {
                               >
                                 ⦁
                               </div>{" "}
-                              {i == 3 ? d.substring(0, 10) : d}
+                              {i == 2 ? d.substring(0, 10) : d}
                             </div>
                           </TableCell>
                         );
