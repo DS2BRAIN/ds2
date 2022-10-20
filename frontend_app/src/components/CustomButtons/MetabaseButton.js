@@ -92,6 +92,7 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
       })
       .catch((e) => {
         console.log("error", e);
+        setMetabaseStatus(99);
         dispatch(
           openErrorSnackbarRequestAction(
             t("An error occurred during the metabase analysis.")
