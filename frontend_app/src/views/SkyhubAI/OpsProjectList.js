@@ -577,22 +577,23 @@ const Project = ({ history }) => {
       ) : (
         <>
           <ReactTitle title={"DS2.AI - " + t("Deploy")} />
-          <GridItem xs={12} style={currentTheme.titleGridItem}>
+          <Grid style={currentTheme.titleGridItem}>
             <div className={classes.topTitle}>
               {t("Deploy to an inference server")}
             </div>
             <div className={classes.subTitleText}>
               {t("Deploy models with just one click.")}
             </div>
-          </GridItem>
-          <GridContainer style={{ display: "flex", alignItems: "center" }}>
-            <GridItem
+          </Grid>
+          <Grid container alignItems="center">
+            <Grid
+              item
               xs={8}
-              style={{
+              sx={{
                 display: "flex",
                 alignItems: "center",
-                marginTop: "1.5rem",
-                marginBottom: "1.5rem",
+                mt: 3.75,
+                mb: 3,
               }}
             >
               <Button
@@ -602,7 +603,7 @@ const Project = ({ history }) => {
                   if (projects?.projects?.length < projectCountLimit)
                     if (IS_ENTERPRISE) setIsLoadModelModalOpen(true);
                     else openStartProjectModal();
-                  else {
+                  else
                     dispatch(
                       openSuccessSnackbarRequestAction(
                         t(
@@ -610,27 +611,22 @@ const Project = ({ history }) => {
                         )
                       )
                     );
-                  }
                 }}
               >
                 {t("New Project")}
               </Button>
-            </GridItem>
-            <GridItem xs={4}>
+            </Grid>
+            <Grid item xs={4}>
               <SearchInputBox />
-            </GridItem>
-          </GridContainer>
-          <GridContainer>
-            {projects.isLoading || projects.projects == null ? (
-              <div className={classes.loading} style={{ marginTop: "-29px" }}>
-                <CircularProgress />
-              </div>
-            ) : (
-              <GridItem xs={12} sm={12} md={12}>
-                {showMyProject()}
-              </GridItem>
-            )}
-          </GridContainer>
+            </Grid>
+          </Grid>
+          {projects.isLoading || projects.projects == null ? (
+            <div className={classes.loading} style={{ marginTop: "-29px" }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <Grid>{showMyProject()}</Grid>
+          )}
         </>
       )}
       <Modal
