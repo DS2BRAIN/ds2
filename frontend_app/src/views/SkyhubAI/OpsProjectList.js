@@ -341,33 +341,40 @@ const Project = ({ history }) => {
       recommender: t("Recommendation system (matrix)"),
     };
 
-    for (let i = 0; projects.projects && i < projects.projects.length; i++) {
+    const tableHeads = [
+      // { value: "No.", width: "5%", type: "projectNum" },
+      { value: "Project name", width: "75%", type: "projectName" },
+      { value: "Date created", width: "20%", type: "created_at" },
+    ];
+
+    const pProjects = projects.projects;
+
+    for (let i = 0; pProjects && i < pProjects.length; i++) {
       let status = "";
-      if (projects.projects[i].status === 0) {
+      if (pProjects[i].status === 0) {
         status = t("Ready");
-      } else if (projects.projects[i].status === 100) {
+      } else if (pProjects[i].status === 100) {
         status = t("Completed");
       } else if (
-        projects.projects[i].status === 99 ||
-        projects.projects[i].status === 9 ||
-        projects.projects[i].status < 0
+        pProjects[i].status === 99 ||
+        pProjects[i].status === 9 ||
+        pProjects[i].status < 0
       ) {
         status = t("Error");
       } else {
         status = t("In progress");
       }
-      const prj = projects.projects[i];
+      const prj = pProjects[i];
       const project = [
         prj.id,
         // projectRowsPerPage * projectPage + (i + 1),
         prj.projectName,
-        projects.projects[i].created_at ? projects.projects[i].created_at : "",
+        pProjects[i].created_at ? pProjects[i].created_at : "",
         //isEnableToChange(prj.created_at, 1),
       ];
       datas.push(project);
     }
-    //if (!isLoading && (!projects.projects || projects.projects.length === 0)) {
-    if (!projects.projects || projects.projects.length === 0) {
+    if (!pProjects || pProjects.length === 0) {
       return (
         <div className="emptyListTable">
           {searchedValue
@@ -406,47 +413,29 @@ const Project = ({ history }) => {
                       /> */}
                     </TableCell>
                   )}
-                  {/* <TableCell
-                    className={classes.tableHead}
-                    style={{ width: "5%" }}
-                    align="center"
-                  >
-                    <b style={{ color: currentThemeColor.textMediumGrey }}>
-                      No.
-                    </b>
-                  </TableCell> */}
-                  <TableCell
-                    className={classes.tableHead}
-                    align="center"
-                    style={{ width: "40%", cursor: "pointer" }}
-                    onClick={() => onSetSortValue("projectName")}
-                  >
-                    <div className={classes.tableHeader}>
-                      {sortingValue === "projectName" &&
-                        (!isSortDesc ? (
-                          <ArrowUpwardIcon fontSize="small" />
-                        ) : (
-                          <ArrowDownwardIcon fontSize="small" />
-                        ))}
-                      <b>{t("Project name")}</b>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    className={classes.tableHead}
-                    align="center"
-                    style={{ width: "15%", cursor: "pointer" }}
-                    onClick={() => onSetSortValue("created_at")}
-                  >
-                    <div className={classes.tableHeader}>
-                      {sortingValue === "created_at" &&
-                        (!isSortDesc ? (
-                          <ArrowUpwardIcon fontSize="small" />
-                        ) : (
-                          <ArrowDownwardIcon fontSize="small" />
-                        ))}
-                      <b>{t("Date created")}</b>
-                    </div>
-                  </TableCell>
+                  {tableHeads.map((tableHead) => {
+                    return (
+                      <TableCell
+                        className={classes.tableHead}
+                        align="center"
+                        style={{ width: tableHead.width, cursor: "pointer" }}
+                        onClick={() => {
+                          if (tableHead.type !== "projectNum")
+                            onSetSortValue(tableHead.type);
+                        }}
+                      >
+                        <div className={classes.tableHeader}>
+                          {sortingValue === tableHead.type &&
+                            (!isSortDesc ? (
+                              <ArrowUpwardIcon fontSize="small" />
+                            ) : (
+                              <ArrowDownwardIcon fontSize="small" />
+                            ))}
+                          <b>{t(tableHead.value)}</b>
+                        </div>
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               </TableHead>
               <TableBody>
