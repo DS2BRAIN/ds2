@@ -784,238 +784,111 @@ const Project = ({ history }) => {
         className={classes.modalContainer}
         style={{ wordBreak: "keep-all" }}
       >
-        {isLoading ? (
-          <div className={classes.modalLoading}>
-            {/* <Tip /> */}
-            <LinearProgress variant="determinate" value={progress} />
-            <b style={{ alignSelf: "center" }}>{t("Please wait a moment.")}</b>
-          </div>
-        ) : (
-          <div className={classes.modalSkyhubStartContainer}>
-            <GridContainer xs={12}>
-              <GridItem xs={11} style={{ padding: "0px" }}>
-                <div className={classes.modalTitleText}>
-                  {t("Start SKYHUB AI")}
-                </div>
-              </GridItem>
-              <GridItem xs={1} style={{ padding: "0px" }}>
-                <CloseIcon
-                  id="closeStartSkyhubModal"
-                  onClick={closeStartProjectModal}
-                  className={classes.modalCloseIcon}
-                />
-              </GridItem>
-            </GridContainer>
-            <GridContainer style={{ marginTop: "10px" }}>
-              <GridItem
-                xs={12}
-                style={{
-                  marginBottom: "5px",
-                }}
-              >
-                <Table
-                  className={classes.table}
-                  aria-label="simple table"
-                  style={{ wordBreak: "keep-all" }}
+        <div className={classes.modalSkyhubStartContainer}>
+          <Grid container justifyContent="space-between">
+            <div className={classes.modalTitleText}>{t("Start SKYHUB AI")}</div>
+            <CloseIcon
+              id="closeStartSkyhubModal"
+              onClick={closeStartProjectModal}
+              className={classes.modalCloseIcon}
+            />
+          </Grid>
+          <Table
+            className={classes.table}
+            aria-label="simple table"
+            style={{ margin: "24px 0" }}
+          >
+            <TableHead>
+              <TableRow>
+                {["", "Click AI", "SKYHUB AI"].map((label) => (
+                  <TableCell
+                    className={classes.tableHead}
+                    align="center"
+                    style={{ width: "33%" }}
+                  >
+                    <div className={classes.tableHeader}>
+                      <b>{t(label)}</b>
+                    </div>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {[
+                ["Inference function availability", "O", "O"],
+                [
+                  "AI model mounted server",
+                  "Public Server (slow)",
+                  "Dedicated Server (fast)",
+                ],
+                ["Data accumulation function for re-training", "X", "O"],
+                ["region", "Korea", "Worldwide"],
+                [
+                  "cost",
+                  "Proportional to the number of API calls",
+                  "Proportional to the rental server size",
+                ],
+              ].map((labelArr) => (
+                <TableRow className={classes.tableRow}>
+                  {labelArr.map((label) => (
+                    <TableCell
+                      className={classes.tableRowCell}
+                      align="center"
+                      style={{ cursor: "default" }}
+                    >
+                      {t(label)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+              <TableRow>
+                <TableCell
+                  className={classes.tableRowCell}
+                  align="center"
+                  style={{ cursor: "default" }}
+                ></TableCell>
+                <TableCell
+                  className={classes.tableRowCell}
+                  align="center"
+                  style={{ cursor: "default" }}
+                  onClick={goClickAI}
                 >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell
-                        className={classes.tableHead}
-                        align="center"
-                        style={{ width: "33%" }}
-                      >
-                        <div className={classes.tableHeader}>
-                          <b>{t("")}</b>
-                        </div>
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableHead}
-                        align="center"
-                        style={{ width: "33%" }}
-                      >
-                        <div className={classes.tableHeader}>
-                          <b>{t("Click AI")}</b>
-                        </div>
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableHead}
-                        align="center"
-                        style={{ width: "33%" }}
-                      >
-                        <div className={classes.tableHeader}>
-                          <b>{t("SKYHUB AI")}</b>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow className={classes.tableRow}>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Inference function availability")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("O")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("O")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className={classes.tableRow}>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("AI model mounted server")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Public Server (slow)")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Dedicated Server (fast)")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className={classes.tableRow}>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Data accumulation function for re-training")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("X")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("O")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className={classes.tableRow}>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("region")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Korea")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Worldwide")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow className={classes.tableRow}>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("cost")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Proportional to the number of API calls")}
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        {t("Proportional to the rental server size")}
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      ></TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                        onClick={goClickAI}
-                      >
-                        <Button
-                          id="closeStartProject"
-                          style={{
-                            width: "70%",
-                            height: "30%",
-                            fontSize: "0.9rem",
-                          }}
-                          className={classes.defaultGreenOutlineButton}
-                        >
-                          {t("CLICK AI shortcut")}
-                        </Button>
-                      </TableCell>
-                      <TableCell
-                        className={classes.tableRowCell}
-                        align="center"
-                        style={{ cursor: "default" }}
-                      >
-                        <Button
-                          id="closeStartProject"
-                          style={{
-                            width: "70%",
-                            height: "30%",
-                            fontSize: "0.9rem",
-                          }}
-                          className={classes.defaultGreenOutlineButton}
-                          onClick={() => {
-                            setIsLoadModelModalOpen(true);
-                          }}
-                        >
-                          {t("Upload model")}
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </GridItem>
-            </GridContainer>
-          </div>
-        )}
+                  <Button
+                    id="closeStartProject"
+                    style={{
+                      width: "70%",
+                      height: "30%",
+                      fontSize: "0.9rem",
+                    }}
+                    className={classes.defaultGreenOutlineButton}
+                  >
+                    {t("CLICK AI shortcut")}
+                  </Button>
+                </TableCell>
+                <TableCell
+                  className={classes.tableRowCell}
+                  align="center"
+                  style={{ cursor: "default" }}
+                >
+                  <Button
+                    id="closeStartProject"
+                    style={{
+                      width: "70%",
+                      height: "30%",
+                      fontSize: "0.9rem",
+                    }}
+                    className={classes.defaultGreenOutlineButton}
+                    onClick={() => {
+                      setIsLoadModelModalOpen(true);
+                    }}
+                  >
+                    {t("Upload model")}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
       </Modal>
       <Modal
         aria-labelledby="simple-modal-title"
