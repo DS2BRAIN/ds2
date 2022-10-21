@@ -1279,7 +1279,7 @@ const OpsPannel = (props) => {
                       marginBottom: "20px",
                     }}
                   ></div>
-                  <Grid
+                  {/* <Grid
                     container
                     item
                     xs={4}
@@ -1300,7 +1300,7 @@ const OpsPannel = (props) => {
                     >
                       {t("Monitoring")}
                     </Button>
-                  </Grid>
+                  </Grid> */}
                   <Grid
                     container
                     item
