@@ -95,7 +95,10 @@ const Detail = React.memo(({ datacolumns }) => {
             confusionArr = JSON.parse(confusionArr);
           }
         } else if (JSON.parse(models.response).confusionMatrix) {
-          confusionString = JSON.parse(models.response).confusionMatrix.replace(/\\n/g, "");
+          confusionString = JSON.parse(models.response).confusionMatrix.replace(
+            /\\n/g,
+            ""
+          );
           confusionArr = JSON.parse(confusionString);
           if (typeof confusionArr !== "object") {
             confusionArr = JSON.parse(confusionArr);
@@ -136,8 +139,10 @@ const Detail = React.memo(({ datacolumns }) => {
 
   useEffect(() => {
     if (projects.project) {
-      if (projects.project.background) setBackgroundColor(projects.project.background);
-      if (projects.project.resultJson) setResultJson(projects.project.resultJson);
+      if (projects.project.background)
+        setBackgroundColor(projects.project.background);
+      if (projects.project.resultJson)
+        setResultJson(projects.project.resultJson);
     }
   }, [projects.project]);
 
@@ -180,7 +185,8 @@ const Detail = React.memo(({ datacolumns }) => {
         // console.log("columnInfo.columnName trainingColumnInfo");
         // console.log(projects.project.trainingColumnInfo);
         // console.log(columnInfo);
-        trainingColumnInfoRaw[+columnInfo] = projects.project.trainingColumnInfo[columnInfo];
+        trainingColumnInfoRaw[+columnInfo] =
+          projects.project.trainingColumnInfo[columnInfo];
       });
     } else if (projects.project.fileStructure) {
       JSON.parse(projects.project.fileStructure).map((columnInfo) => {
@@ -192,8 +198,14 @@ const Detail = React.memo(({ datacolumns }) => {
     }
 
     datacolumns.map((columnRaw) => {
-      var columnName = columnRaw["columnName"].indexOf(columnRaw["dataconnectorName"]) > -1 ? columnRaw["columnName"] : columnRaw["columnName"] + "__" + columnRaw["dataconnectorName"];
-      if (columnRaw["id"] !== projects.project.valueForPredictColumnId && trainingColumnInfoRaw[columnRaw["id"]] !== false) {
+      var columnName =
+        columnRaw["columnName"].indexOf(columnRaw["dataconnectorName"]) > -1
+          ? columnRaw["columnName"]
+          : columnRaw["columnName"] + "__" + columnRaw["dataconnectorName"];
+      if (
+        columnRaw["id"] !== projects.project.valueForPredictColumnId &&
+        trainingColumnInfoRaw[columnRaw["id"]] !== false
+      ) {
         if (columnRaw["type"] == "number") {
           parameterColumns[columnName] = 0;
         } else {
@@ -203,12 +215,18 @@ const Detail = React.memo(({ datacolumns }) => {
     });
     parameterColumns = JSON.stringify(parameterColumns);
     if (!models.model) return;
-    if (projects.project.trainingMethod.indexOf("normal") > -1 || projects.project.trainingMethod.indexOf("text") > -1 || projects.project.trainingMethod.indexOf("time_series") > -1) {
+    if (
+      projects.project.trainingMethod.indexOf("normal") > -1 ||
+      projects.project.trainingMethod.indexOf("text") > -1 ||
+      projects.project.trainingMethod.indexOf("time_series") > -1
+    ) {
       switch (chosenLanguage) {
         case "javascript":
           setApiContent(
             `
-                    var data = JSON.stringify({"modelid": ${models.model.id},"apptoken": ${apptoken},"parameter": ${parameterColumns}});
+                    var data = JSON.stringify({"modelid": ${
+                      models.model.id
+                    },"apptoken": ${apptoken},"parameter": ${parameterColumns}});
 
                     var xhr = new XMLHttpRequest();
                     xhr.withCredentials = true;
@@ -219,7 +237,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     }
                     });
 
-                    xhr.open("POST", "${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}predict/${userId}/");
+                    xhr.open("POST", "${
+                      process.env.REACT_APP_BACKEND_URL
+                        ? process.env.REACT_APP_BACKEND_URL
+                        : "https://dslabaa.clickai.ai/"
+                    }predict/${userId}/");
                     xhr.setRequestHeader("content-type", "application/json");
 
                     xhr.send(data);`
@@ -230,9 +252,15 @@ const Detail = React.memo(({ datacolumns }) => {
                     import requests
                     import json
 
-                    url = "${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}predict/${userId}/"
+                    url = "${
+                      process.env.REACT_APP_BACKEND_URL
+                        ? process.env.REACT_APP_BACKEND_URL
+                        : "https://dslabaa.clickai.ai/"
+                    }predict/${userId}/"
 
-                    payload = {"modelid":${models.model.id},"apptoken":${apptoken},"parameter": ${parameterColumns}}
+                    payload = {"modelid":${
+                      models.model.id
+                    },"apptoken":${apptoken},"parameter": ${parameterColumns}}
                     headers = {
                         'content-type': "application/json",
                         'cache-control': "no-cache",
@@ -247,18 +275,30 @@ const Detail = React.memo(({ datacolumns }) => {
                     wget \\
                     --method POST \\
                     --header 'content-type: application/json' \\
-                    --body-data '{"modelid":${models.model.id},"apptoken":${apptoken},"parameter": ${parameterColumns}'} \\
+                    --body-data '{"modelid":${
+                      models.model.id
+                    },"apptoken":${apptoken},"parameter": ${parameterColumns}'} \\
                     -O predict_result.txt \\
-                    - ${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}predict/${userId}/`);
+                    - ${
+                      process.env.REACT_APP_BACKEND_URL
+                        ? process.env.REACT_APP_BACKEND_URL
+                        : "https://dslabaa.clickai.ai/"
+                    }predict/${userId}/`);
           break;
         case "java":
           setApiContent(`
                     OkHttpClient client = new OkHttpClient();
 
                     MediaType mediaType = MediaType.parse("application/json");
-                    RequestBody body = RequestBody.create(mediaType, "{\"modelid\":${models.model.id},\"apptoken\":${apptoken},\"parameter\":${parameterColumns}}");
+                    RequestBody body = RequestBody.create(mediaType, "{\"modelid\":${
+                      models.model.id
+                    },\"apptoken\":${apptoken},\"parameter\":${parameterColumns}}");
                     Request request = new Request.Builder()
-                    .url("${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}predict/${userId}/")
+                    .url("${
+                      process.env.REACT_APP_BACKEND_URL
+                        ? process.env.REACT_APP_BACKEND_URL
+                        : "https://dslabaa.clickai.ai/"
+                    }predict/${userId}/")
                     .post(body)
                     .addHeader("content-type", "application/json")
                     .build();
@@ -275,7 +315,11 @@ const Detail = React.memo(({ datacolumns }) => {
         case "javascript":
           setApiContent(
             `
-                    var data = JSON.stringify({"modelid": ${models.model.id},"apptoken": ${apptoken},"file": "${t("Please upload the file data.")}""filename": "${t("Please write down the file name here.")}"});
+                    var data = JSON.stringify({"modelid": ${
+                      models.model.id
+                    },"apptoken": ${apptoken},"file": "${t(
+              "Please upload the file data."
+            )}""filename": "${t("Please write down the file name here.")}"});
 
                     var xhr = new XMLHttpRequest();
                     xhr.withCredentials = true;
@@ -286,7 +330,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     }
                     });
 
-                    xhr.open("POST", "${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/");
+                    xhr.open("POST", "${
+                      process.env.REACT_APP_BACKEND_URL
+                        ? process.env.REACT_APP_BACKEND_URL
+                        : "https://dslabaa.clickai.ai/"
+                    }${userId}/predictimage/");
 
                     xhr.send(data);`
           );
@@ -295,9 +343,19 @@ const Detail = React.memo(({ datacolumns }) => {
           setApiContent(`
                         import requests
 
-                        url = f"${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/"
-                        files = [('file', open("${t("파일경로를 여기에 적어주세요.")}", 'rb'))]  
-                        payload = {"modelid":${models.model.id},"apptoken":${apptoken}, "filename": "${t("Please write down the file name here.")}"}
+                        url = f"${
+                          process.env.REACT_APP_BACKEND_URL
+                            ? process.env.REACT_APP_BACKEND_URL
+                            : "https://dslabaa.clickai.ai/"
+                        }${userId}/predictimage/"
+                        files = [('file', open("${t(
+                          "파일경로를 여기에 적어주세요."
+                        )}", 'rb'))]  
+                        payload = {"modelid":${
+                          models.model.id
+                        },"apptoken":${apptoken}, "filename": "${t(
+            "Please write down the file name here."
+          )}"}
                         headers = {}
 
                         response = requests.request("POST", url, data=payload, headers=headers, files=files)
@@ -308,18 +366,36 @@ const Detail = React.memo(({ datacolumns }) => {
           setApiContent(`
                         wget \\
                         --method POST \\
-                        --body-data '{"modelid":${models.model.id},"apptoken":${apptoken},"parameter": ${parameterColumns}',"file": "${t("Please upload the file data.")}","filename": "${t("Please write down the file name here.")}" \\
+                        --body-data '{"modelid":${
+                          models.model.id
+                        },"apptoken":${apptoken},"parameter": ${parameterColumns}',"file": "${t(
+            "Please upload the file data."
+          )}","filename": "${t("Please write down the file name here.")}" \\
                         -O predict_result.txt \\
-                        - ${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/`);
+                        - ${
+                          process.env.REACT_APP_BACKEND_URL
+                            ? process.env.REACT_APP_BACKEND_URL
+                            : "https://dslabaa.clickai.ai/"
+                        }${userId}/predictimage/`);
           break;
         case "java":
           setApiContent(`
                         OkHttpClient client = new OkHttpClient();
 
                         MediaType mediaType = MediaType.parse("application/json");
-                        RequestBody body = RequestBody.create(mediaType, "{\"modelid\":${models.model.id},\"apptoken\":${apptoken},\"file\": \"${t("Please upload the file data.")}\",\"filename\": \"${t("Please write down the file name here.")}\"}");
+                        RequestBody body = RequestBody.create(mediaType, "{\"modelid\":${
+                          models.model.id
+                        },\"apptoken\":${apptoken},\"file\": \"${t(
+            "Please upload the file data."
+          )}\",\"filename\": \"${t(
+            "Please write down the file name here."
+          )}\"}");
                         Request request = new Request.Builder()
-                        .url("${process.env.REACT_APP_BACKEND_URL ? process.env.REACT_APP_BACKEND_URL : "https://dslabaa.clickai.ai/"}${userId}/predictimage/")
+                        .url("${
+                          process.env.REACT_APP_BACKEND_URL
+                            ? process.env.REACT_APP_BACKEND_URL
+                            : "https://dslabaa.clickai.ai/"
+                        }${userId}/predictimage/")
                         .post(body)
                         .build();
 
@@ -371,31 +447,35 @@ const Detail = React.memo(({ datacolumns }) => {
   };
 
   const getFeatureImportance = (modelDetail) => {
-      try {
-        const featureData = [];
-        let feature = modelDetail.featureImportance.replace(/NaN/g, '"NaN"');
-        feature = JSON.parse(feature);
-        let sum = 0;
-        const cols = feature.cols;
-        const imp = feature.imp;
-        imp.forEach((impOne, idx) => {
-          if (typeof impOne === "number") {
-            sum += Math.abs(impOne);
-            const percentage = ((impOne * 100) / sum).toFixed(2);
-            featureData.push({
-              name: cols[idx],
-              value: parseFloat(percentage),
-            });
-          }
-        });
-        featureData.sort((prev, next) => {
-          return next["value"] - prev["value"];
-        });
-        setFeatureImportance(featureData);
-      } catch {
-        setFeatureImportance(null);
-      }
-    };
+    try {
+      const featureData = [];
+      let feature = modelDetail.featureImportance.replace(/NaN/g, '"NaN"');
+      feature = JSON.parse(feature);
+      let sum = 0;
+      const cols = feature.cols;
+      const imp = feature.imp;
+      imp.forEach((impOne, idx) => {
+        if (typeof impOne === "number") {
+          sum += Math.abs(impOne);
+        }
+      });
+      imp.forEach((impOne, idx) => {
+        if (typeof impOne === "number") {
+          const percentage = ((impOne * 100) / sum).toFixed(2);
+          featureData.push({
+            name: cols[idx],
+            value: parseFloat(percentage),
+          });
+        }
+      });
+      featureData.sort((prev, next) => {
+        return next["value"] - prev["value"];
+      });
+      setFeatureImportance(featureData);
+    } catch {
+      setFeatureImportance(null);
+    }
+  };
 
   const renderStatistics = () => {
     if (modelDetail.cmStatistics !== null) {
@@ -441,11 +521,20 @@ const Detail = React.memo(({ datacolumns }) => {
                     <tr
                       className={classes.statTr}
                       style={{
-                        background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                        background:
+                          idx % 2 === 0
+                            ? currentTheme.tableRow1
+                            : currentTheme.tableRow2,
                       }}
                     >
                       {rowArr.map((each, idx) => {
-                        return <td className={classes.statTd}>{(typeof each === 'string' || each instanceof String) ? each.replaceAll('PPV Macro', 'Recall') : each}</td>;
+                        return (
+                          <td className={classes.statTd}>
+                            {typeof each === "string" || each instanceof String
+                              ? each.replaceAll("PPV Macro", "Recall")
+                              : each}
+                          </td>
+                        );
                       })}
                     </tr>
                   );
@@ -467,11 +556,20 @@ const Detail = React.memo(({ datacolumns }) => {
                     <tr
                       className={classes.statTr}
                       style={{
-                        background: idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
+                        background:
+                          idx % 2 === 0
+                            ? currentTheme.tableRow1
+                            : currentTheme.tableRow2,
                       }}
                     >
                       {rowArr.map((each, idx) => {
-                        return <td className={classes.statTd}>{(typeof each === 'string' || each instanceof String) ? each.replaceAll('PPV Macro', 'Recall') : each}</td>;
+                        return (
+                          <td className={classes.statTd}>
+                            {typeof each === "string" || each instanceof String
+                              ? each.replaceAll("PPV Macro", "Recall")
+                              : each}
+                          </td>
+                        );
                       })}
                     </tr>
                   );
@@ -496,12 +594,18 @@ const Detail = React.memo(({ datacolumns }) => {
     let isCycleChart = false;
     let isDetail = false;
 
-    if (projects.project.trainingMethod === "normal_regression" || projects.project.trainingMethod === "time_series_regression") {
-      if (modelDetail.mase || modelDetail.errorRate || modelDetail.rmse) isDetail = true;
+    if (
+      projects.project.trainingMethod === "normal_regression" ||
+      projects.project.trainingMethod === "time_series_regression"
+    ) {
+      if (modelDetail.mase || modelDetail.errorRate || modelDetail.rmse)
+        isDetail = true;
     } else if (projects.project.trainingMethod === "cycle_gan") {
-      if (modelDetail.dice || modelDetail.errorRate || modelDetail.totalLoss) isDetail = true;
+      if (modelDetail.dice || modelDetail.errorRate || modelDetail.totalLoss)
+        isDetail = true;
     } else {
-      if (modelDetail.dice || modelDetail.errorRate || modelDetail.accuracy) isDetail = true;
+      if (modelDetail.dice || modelDetail.errorRate || modelDetail.accuracy)
+        isDetail = true;
     }
 
     for (let idx = 0; idx < modelDetail.modelcharts.length; idx++) {
@@ -522,7 +626,8 @@ const Detail = React.memo(({ datacolumns }) => {
       let featureData = JSON.parse(tmpFeature);
       if (featureData.imp) {
         if (featureData.cols) {
-          if (featureData.cols.length !== 0 && featureData.imp.length !== 0) isFeatureImportance = true;
+          if (featureData.cols.length !== 0 && featureData.imp.length !== 0)
+            isFeatureImportance = true;
         }
       }
     }
@@ -646,7 +751,11 @@ const Detail = React.memo(({ datacolumns }) => {
                 onClick={() => {
                   setChosenChart("detail");
                 }}
-                className={chosenChart === "detail" ? classes.selectedListObject : classes.listObject}
+                className={
+                  chosenChart === "detail"
+                    ? classes.selectedListObject
+                    : classes.listObject
+                }
               >
                 Detail
               </div>
@@ -659,7 +768,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("dChart");
                     }}
-                    className={chosenChart === "dChart" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "dChart"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     D-Chart
                   </div>
@@ -670,7 +783,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("gChart");
                     }}
-                    className={chosenChart === "gChart" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "gChart"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     G-Chart
                   </div>
@@ -681,7 +798,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("idtChart");
                     }}
-                    className={chosenChart === "idtChart" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "idtChart"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     IDT-Chart
                   </div>
@@ -692,7 +813,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("cycleChart");
                     }}
-                    className={chosenChart === "cycleChart" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "cycleChart"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     Cycle-Chart
                   </div>
@@ -701,45 +826,65 @@ const Detail = React.memo(({ datacolumns }) => {
             )}
             {projects.project.trainingMethod !== "cycle_gan" && (
               <>
-                {isFeatureImportance && projects.project.trainingMethod !== "normal_regression" && (
-                  <div
-                    onClick={() => {
-                      setChosenChart("featureImportance");
-                    }}
-                    className={chosenChart === "featureImportance" ? classes.selectedListObject : classes.listObject}
-                  >
-                    Feature Importance
-                  </div>
-                )}
-                {modelDetail.cmStatistics && modelDetail.cmStatistics !== "null" && (
-                  <div
-                    id="statisticsTab"
-                    onClick={() => {
-                      setChosenChart("statistics");
-                    }}
-                    className={chosenChart === "statistics" ? classes.selectedListObject : classes.listObject}
-                  >
-                    {t("Precise analysis")}
-                  </div>
-                )}
-                {confusionMatrix && confusionMatrix.length !== 0 && (modelDetail.yClass && modelDetail.yClass.length < 10) && (
-                  <div
-                    id="confusionMatrixTab"
-                    onClick={() => {
-                      setChosenChart("matrix");
-                    }}
-                    className={chosenChart === "matrix" ? classes.selectedListObject : classes.listObject}
-                  >
-                    Confusion Matrix
-                  </div>
-                )}
+                {isFeatureImportance &&
+                  projects.project.trainingMethod !== "normal_regression" && (
+                    <div
+                      onClick={() => {
+                        setChosenChart("featureImportance");
+                      }}
+                      className={
+                        chosenChart === "featureImportance"
+                          ? classes.selectedListObject
+                          : classes.listObject
+                      }
+                    >
+                      Feature Importance
+                    </div>
+                  )}
+                {modelDetail.cmStatistics &&
+                  modelDetail.cmStatistics !== "null" && (
+                    <div
+                      id="statisticsTab"
+                      onClick={() => {
+                        setChosenChart("statistics");
+                      }}
+                      className={
+                        chosenChart === "statistics"
+                          ? classes.selectedListObject
+                          : classes.listObject
+                      }
+                    >
+                      {t("Precise analysis")}
+                    </div>
+                  )}
+                {confusionMatrix &&
+                  confusionMatrix.length !== 0 &&
+                  (modelDetail.yClass && modelDetail.yClass.length < 10) && (
+                    <div
+                      id="confusionMatrixTab"
+                      onClick={() => {
+                        setChosenChart("matrix");
+                      }}
+                      className={
+                        chosenChart === "matrix"
+                          ? classes.selectedListObject
+                          : classes.listObject
+                      }
+                    >
+                      Confusion Matrix
+                    </div>
+                  )}
                 {isLoss && (
                   <div
                     id="lossTab"
                     onClick={() => {
                       setChosenChart("loss");
                     }}
-                    className={chosenChart === "loss" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "loss"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     Loss
                   </div>
@@ -750,7 +895,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("precision-recall");
                     }}
-                    className={chosenChart === "precision-recall" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "precision-recall"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     Precision-Recall
                   </div>
@@ -761,7 +910,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("kappa-coeff");
                     }}
-                    className={chosenChart === "kappa-coeff" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "kappa-coeff"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     Kappa-Coeff
                   </div>
@@ -772,7 +925,11 @@ const Detail = React.memo(({ datacolumns }) => {
                     onClick={() => {
                       setChosenChart("auroc-fbeta");
                     }}
-                    className={chosenChart === "auroc-fbeta" ? classes.selectedListObject : classes.listObject}
+                    className={
+                      chosenChart === "auroc-fbeta"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
                   >
                     Auroc-FBeta
                   </div>
@@ -785,28 +942,42 @@ const Detail = React.memo(({ datacolumns }) => {
                 onClick={() => {
                   setChosenChart("records");
                 }}
-                className={chosenChart === "records" ? classes.selectedListObject : classes.listObject}
+                className={
+                  chosenChart === "records"
+                    ? classes.selectedListObject
+                    : classes.listObject
+                }
               >
                 Records
               </div>
             )}
-            {featureImportance && projects.project.trainingMethod !== "normal_regression" && featureImportance.length > 0 && (
-              <div
-                id="featureImportanceTab"
-                onClick={() => {
-                  setChosenChart("featureImportance");
-                }}
-                className={chosenChart === "featureImportance" ? classes.selectedListObject : classes.listObject}
-              >
-                Feature Importance
-              </div>
-            )}
+            {featureImportance &&
+              projects.project.trainingMethod !== "normal_regression" &&
+              featureImportance.length > 0 && (
+                <div
+                  id="featureImportanceTab"
+                  onClick={() => {
+                    setChosenChart("featureImportance");
+                  }}
+                  className={
+                    chosenChart === "featureImportance"
+                      ? classes.selectedListObject
+                      : classes.listObject
+                  }
+                >
+                  Feature Importance
+                </div>
+              )}
             <div
               id="apiTab"
               onClick={() => {
                 setChosenChart("export");
               }}
-              className={chosenChart === "export" ? classes.selectedListObject : classes.listObject}
+              className={
+                chosenChart === "export"
+                  ? classes.selectedListObject
+                  : classes.listObject
+              }
             >
               API
             </div>
@@ -828,7 +999,11 @@ const Detail = React.memo(({ datacolumns }) => {
                       {t("Actual values")} ↓ | {t("predict_value")} →
                     </th>
                     {modelDetail.yClass.map((yclass, index) => {
-                      return <th style={{ paddingBottom: "10px" }}>{modelDetail.yClass[index]}</th>;
+                      return (
+                        <th style={{ paddingBottom: "10px" }}>
+                          {modelDetail.yClass[index]}
+                        </th>
+                      );
                     })}
                   </tr>
                   {confusionMatrix.map((rows, index) => {
@@ -849,8 +1024,13 @@ const Detail = React.memo(({ datacolumns }) => {
                             <td
                               style={{
                                 border: "1px solid" + currentThemeColor.textSub,
-                                width: Math.round(100 / (rows.length + 1)) + "%",
-                                backgroundColor: "rgba(27, 198, 180," + Math.round((num / confusionMatrixSum) * 100) / 100 + ")",
+                                width:
+                                  Math.round(100 / (rows.length + 1)) + "%",
+                                backgroundColor:
+                                  "rgba(27, 198, 180," +
+                                  Math.round((num / confusionMatrixSum) * 100) /
+                                    100 +
+                                  ")",
                               }}
                             >
                               {num}
@@ -866,7 +1046,9 @@ const Detail = React.memo(({ datacolumns }) => {
             {chosenChart === "export" && (
               <>
                 <GridContainer style={{ height: "40px" }}></GridContainer>
-                <GridContainer style={{ padding: "0 15px", alignItems: "center" }}>
+                <GridContainer
+                  style={{ padding: "0 15px", alignItems: "center" }}
+                >
                   <GridItem xs={10}>
                     <div
                       className={classes.titleContainer}
@@ -1007,7 +1189,9 @@ const Detail = React.memo(({ datacolumns }) => {
                     >
                       <CheckIcon style={{ marginRight: "8px" }} />
                       <span style={{ fontSize: "18px" }}>
-                        {t("The top 5 highly relevant columns found by explainable AI")}
+                        {t(
+                          "The top 5 highly relevant columns found by explainable AI"
+                        )}
                       </span>
                     </GridItem>
                     {featureImportance.map((data, idx) => {
@@ -1043,7 +1227,9 @@ const Detail = React.memo(({ datacolumns }) => {
               </>
             )}
             {chosenChart === "statistics" && renderStatistics()}
-            {chosenChart !== null && <Chart chosenChart={chosenChart} modelDetail={modelDetail} />}
+            {chosenChart !== null && (
+              <Chart chosenChart={chosenChart} modelDetail={modelDetail} />
+            )}
           </div>
         </div>
       </div>
@@ -1078,12 +1264,22 @@ const Detail = React.memo(({ datacolumns }) => {
   ) : (
     <>
       {renderItem()}
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={isShareModalOpen} onClose={shareModalActionClose} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={isShareModalOpen}
+        onClose={shareModalActionClose}
+        className={classes.modalContainer}
+      >
         <div className={classes.shareModalContent} id="projectModal">
           <div className={classes.gridRoot} style={{ margin: "0 20px" }}>
             <div className={classes.titleContainer} style={{ width: "100%" }}>
               <b>{t("Sharing a service app")}</b>
-              <CloseIcon className={classes.closeImg} id="planModalCloseBtn" onClick={shareModalActionClose} />
+              <CloseIcon
+                className={classes.closeImg}
+                id="planModalCloseBtn"
+                onClick={shareModalActionClose}
+              />
             </div>
             <GridContainer style={{ margin: "0 20px", width: "100%" }}>
               <GridItem xs={12}>
@@ -1231,7 +1427,11 @@ const Detail = React.memo(({ datacolumns }) => {
                       overflow: "hidden",
                     }}
                     target={"_blank"}
-                    href={user.language === "ko" ? `https://ko.ds2.ai//instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}` : `https://ds2.ai/instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`}
+                    href={
+                      user.language === "ko"
+                        ? `https://ko.ds2.ai//instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`
+                        : `https://ds2.ai/instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`
+                    }
                   >
                     <u
                       style={{
@@ -1240,7 +1440,9 @@ const Detail = React.memo(({ datacolumns }) => {
                         overflow: "hidden",
                       }}
                     >
-                      {user.language === "ko" ? `https://ko.ds2.ai//instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}` : `https://ds2.ai/instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`}
+                      {user.language === "ko"
+                        ? `https://ko.ds2.ai//instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`
+                        : `https://ds2.ai/instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`}
                     </u>
                   </a>
                 </div>
@@ -1254,13 +1456,26 @@ const Detail = React.memo(({ datacolumns }) => {
                     fontWeight: "400",
                   }}
                 >
-                  {t("Please note that you will consume the same amount of prediction counting when you share link.")}
+                  {t(
+                    "Please note that you will consume the same amount of prediction counting when you share link."
+                  )}
                 </div>
               </GridItem>
               <GridItem xs={9}></GridItem>
               <GridItem xs={3} style={{ textAlign: "right" }}>
-                <CopyToClipboard text={user.language === "ko" ? `https://ko.ds2.ai//instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}` : `https://ds2.ai/instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`}>
-                  <Button id="copy_serviceappurl_btn" shape="greenOutlined" sx={{ minWidth: "160px" }} onClick={onCopyServiceAppLink}>
+                <CopyToClipboard
+                  text={
+                    user.language === "ko"
+                      ? `https://ko.ds2.ai//instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`
+                      : `https://ds2.ai/instant_use.html/?modeltoken=${models.model.token}&modelid=${models.model.id}`
+                  }
+                >
+                  <Button
+                    id="copy_serviceappurl_btn"
+                    shape="greenOutlined"
+                    sx={{ minWidth: "160px" }}
+                    onClick={onCopyServiceAppLink}
+                  >
                     {t("Copy link")}
                   </Button>
                 </CopyToClipboard>
@@ -1269,10 +1484,24 @@ const Detail = React.memo(({ datacolumns }) => {
           </div>
         </div>
       </Modal>
-      <Modal aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" open={colorPickerModal} onClose={closeColorPickerModal} className={classes.modalContainer}>
+      <Modal
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        open={colorPickerModal}
+        onClose={closeColorPickerModal}
+        className={classes.modalContainer}
+      >
         <div style={{ height: "200px" }}>
-          <ChromePicker color={backgroundColor} onChangeComplete={onChangeBackgroundColor} disableAlpha={true} />
-          <CloseIcon className={classes.closeImg} id="planModalCloseBtn" onClick={closeColorPickerModal} />
+          <ChromePicker
+            color={backgroundColor}
+            onChangeComplete={onChangeBackgroundColor}
+            disableAlpha={true}
+          />
+          <CloseIcon
+            className={classes.closeImg}
+            id="planModalCloseBtn"
+            onClick={closeColorPickerModal}
+          />
         </div>
       </Modal>
     </>
