@@ -367,6 +367,7 @@ const Project = ({ history }) => {
                   {tableHeads.map((tableHead) => {
                     return (
                       <TableCell
+                        key={`tablehead_${tableHead.type}`}
                         className={classes.tableHead}
                         align="center"
                         style={{ width: tableHead.width, cursor: "pointer" }}
@@ -627,7 +628,6 @@ const Project = ({ history }) => {
             ) : (
               <GridItem xs={12} sm={12} md={12}>
                 {showMyProject()}
-                {/*tableData*/}
               </GridItem>
             )}
           </GridContainer>
@@ -646,210 +646,138 @@ const Project = ({ history }) => {
             <b style={{ alignSelf: "center" }}>{t("Please wait a moment.")}</b>
           </div>
         ) : (
-          <div className={classes.modalDataconnectorContent} id="projectModal">
-            <div
-              className={classes.gridRoot}
-              style={{
-                height: "100%",
-              }}
-            >
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <GridItem xs={11}>
-                  <div>
-                    {t("Model loading supports Pytorch and tensorflow2.")}
-                  </div>
-                </GridItem>
-                <CloseIcon
-                  xs={1}
-                  id="deleteLabelIcon"
-                  className={classes.pointerCursor}
-                  onClick={closeLoadModelModal}
-                />
-              </div>
-              <>
-                <div style={{ width: "100%", textAlign: "center" }}>
-                  <GridContainer
-                    style={{
-                      width: "100%",
-                      height: "50%",
-                      textAlign: "center",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+          <Grid
+            sx={{
+              p: 3,
+              backgroundColor: "var(--surface1)",
+              borderRadius: "4px",
+              width: "50%",
+              minWidth: "550px",
+            }}
+          >
+            <Grid container justifyContent="space-between" sx={{ mb: 3 }}>
+              <Grid sx={{ px: 1 }}>
+                <span style={{ fontWeight: 600, fontSize: "18px" }}>
+                  {t("Model loading supports Pytorch and tensorflow2.")}
+                </span>
+              </Grid>
+              <CloseIcon
+                id="deleteLabelIcon"
+                className={classes.pointerCursor}
+                onClick={closeLoadModelModal}
+              />
+            </Grid>
+            <Grid sx={{ px: 3, textAlign: "center" }}>
+              {isPreviewLoading ? (
+                <Grid sx={{ textAlign: "center", py: 5 }}>
+                  <CircularProgress size={40} sx={{ mb: 1 }} />
+                  <Grid>
+                    <b className={classes.text87}>
+                      {t("Uploading file. Please wait a moment.")}
+                    </b>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Dropzone onDrop={dropFiles}>
+                  {({ getRootProps, getInputProps }) => (
+                    <>
+                      {!files && (
+                        <div className="dropzoneSolidSquareBorder">
+                          <div
+                            {...getRootProps({
+                              className: "container",
+                            })}
+                            style={{ borderRadius: "20px" }}
+                          >
+                            <input {...getInputProps()} />
+                            <p
+                              className={classes.dropzoneText}
+                              style={{ marginTop: "8px", marginBottom: "8px" }}
+                            >
+                              {t(
+                                "Drag the file or click the box to upload it!"
+                              )}
+                              <br />
+                              {t(
+                                "Only PTH and ZIP files under 5GB are supported."
+                              )}
+                              <br />
+                            </p>
+                            <CloudUploadIcon fontSize="large" />
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </Dropzone>
+              )}
+              {previewText ? (
+                <Grid sx={{ mt: 4, mb: 2 }}>
+                  <FileCopyIcon fontSize="large" />
+                  <Grid>
+                    <span className={classes.text87}>{previewText}</span>
+                  </Grid>
+                  <Button
+                    id="uploadFileAgain"
+                    shape="green"
+                    sx={{ mt: 1.5 }}
+                    onClick={() => {
+                      deleteFiles();
                     }}
                   >
-                    <>
-                      <div
-                        className={classes.uploadContent}
-                        style={{ width: "95%" }}
-                      >
-                        {isPreviewLoading ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              marginTop: "20px",
-                            }}
-                          >
-                            <CircularProgress size={20} style={{ mb: 2 }} />
-                            <b className={classes.text87}>
-                              {t("Uploading file. Please wait a moment.")}
-                            </b>
-                          </div>
-                        ) : (
-                          <Dropzone onDrop={dropFiles}>
-                            {({ getRootProps, getInputProps }) => (
-                              <>
-                                {!files && (
-                                  <div className="dropzoneSolidSquareBorder">
-                                    <div
-                                      {...getRootProps({
-                                        className: "container",
-                                      })}
-                                      style={{ borderRadius: "20px" }}
-                                    >
-                                      <input {...getInputProps()} />
-                                      <p className={classes.dropzoneText}>
-                                        {t(
-                                          "Drag the file or click the box to upload it!"
-                                        )}
-                                        <br />
-                                        {t(
-                                          "Only PTH and ZIP files under 5GB are supported."
-                                        )}
-                                        <br />
-                                      </p>
-                                      <CloudUploadIcon fontSize="large" />
-                                    </div>
-                                  </div>
-                                )}
-                              </>
-                            )}
-                          </Dropzone>
-                        )}
-                        {previewText ? (
-                          <div
-                            style={{
-                              marginTop: "40px",
-                              marginBottom: "10px",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <div>
-                              <FileCopyIcon fontSize="large" />
-                              <DeleteIcon
-                                fontSize="small"
-                                style={{ cursor: "pointer" }}
-                                onClick={() => {
-                                  deleteFiles();
-                                }}
-                              />
-                            </div>
-                            <div>
-                              {previewText.split("\n").map((item, key) => {
-                                return (
-                                  <span key={key} className={classes.text87}>
-                                    {item}
-                                    <br />
-                                    <br />
-                                  </span>
-                                );
-                              })}
-                            </div>
-                            <div>
-                              <span
-                                id="uploadFileAgain"
-                                style={{
-                                  borderBottom:
-                                    "2px solid " + currentThemeColor.secondary1,
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => {
-                                  deleteFiles();
-                                }}
-                              >
-                                {t("Re-upload")}
-                              </span>
-                            </div>
-                          </div>
-                        ) : (
-                          <div
-                            style={{ marginTop: "40px" }}
-                            className={classes.text87}
-                            id="informText"
-                          >
-                            {t(
-                              "No files uploaded. Please upload your data file."
-                            )}{" "}
-                            <br />
-                          </div>
-                        )}
-                      </div>
-                    </>
-                  </GridContainer>
-                </div>
-              </>
-            </div>
-            <GridContainer>
-              <GridItem xs={12}>
-                <GridContainer style={{ width: "100%" }}>
-                  <>
-                    <GridItem xs={6}></GridItem>
-                    <GridItem xs={3}>
-                      <Button
-                        id="closeLoadModelModal"
-                        style={{ width: "100%", height: "1.7rem" }}
-                        className={classes.defaultF0F0OutlineButton}
-                        onClick={closeLoadModelModal}
-                      >
-                        {t("Cancel")}
+                    <span style={{ textDecoration: "underline" }}>
+                      {t("Re-upload")}
+                    </span>
+                  </Button>
+                </Grid>
+              ) : (
+                <Grid sx={{ my: 2 }} id="informText">
+                  <span className={classes.text87}>
+                    {t("No files uploaded. Please upload your data file.")}
+                  </span>
+                </Grid>
+              )}
+            </Grid>
+            <Grid container justifyContent="flex-end" spacing={1} sx={{ p: 1 }}>
+              <Grid item>
+                <Button
+                  id="closeLoadModelModal"
+                  shape="whiteOutlined"
+                  onClick={closeLoadModelModal}
+                >
+                  {t("Cancel")}
+                </Button>
+              </Grid>
+              <Grid item>
+                {files && isFilesUploadLoading == false ? (
+                  <Button
+                    id="nextLoadModelModal"
+                    shape="greenOutlined"
+                    onClick={confirmLoadModelModal}
+                  >
+                    {t("Confirm")}
+                  </Button>
+                ) : (
+                  <Tooltip
+                    title={
+                      <span style={{ fontSize: "11px" }}>
+                        {t("Upload file")}
+                      </span>
+                    }
+                    placement="bottom"
+                  >
+                    <div>
+                      <Button id="nextLoadModelModal" disabled>
+                        {isFilesUploadLoading == false
+                          ? t("Confirm")
+                          : t("Loading")}
                       </Button>
-                    </GridItem>
-                    <GridItem xs={3}>
-                      {files && isFilesUploadLoading == false ? (
-                        <Button
-                          id="nextLoadModelModal"
-                          style={{ width: "100%", height: "1.7rem" }}
-                          className={classes.defaultGreenOutlineButton}
-                          onClick={confirmLoadModelModal}
-                        >
-                          {t("Confirm")}
-                        </Button>
-                      ) : (
-                        <Tooltip
-                          title={
-                            <span style={{ fontSize: "11px" }}>
-                              {t("Upload file")}
-                            </span>
-                          }
-                          placement="bottom"
-                        >
-                          <Button
-                            id="nextLoadModelModal"
-                            style={{ width: "100%", height: "1.7rem" }}
-                            className={classes.defaultDisabledButton}
-                            disabled
-                          >
-                            {isFilesUploadLoading == false
-                              ? t("Confirm")
-                              : t("Loading")}
-                          </Button>
-                        </Tooltip>
-                      )}
-                    </GridItem>
-                  </>
-                </GridContainer>
-              </GridItem>
-            </GridContainer>
-          </div>
+                    </div>
+                  </Tooltip>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
         )}
       </Modal>
       <Modal
