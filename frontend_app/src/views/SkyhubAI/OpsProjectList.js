@@ -79,7 +79,6 @@ const Project = ({ history }) => {
 
   const [isLoadModelModalOpen, setIsLoadModelModalOpen] = useState(false);
   const [isOpenStartModalOpen, setIsOpenStartModalOpen] = useState(false);
-  const [openFileModal, setOpenFileModal] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [previewText, setPreviewText] = useState(null);
   const [files, setFiles] = useState(null);
@@ -184,7 +183,6 @@ const Project = ({ history }) => {
       setIsFileUploading(false);
       setCompleted(0);
       setUploadFile(null);
-      setOpenFileModal(false);
       setIsLoading(false);
       setIsLoadModelModalOpen(false);
     }
@@ -889,173 +887,6 @@ const Project = ({ history }) => {
             </TableBody>
           </Table>
         </div>
-      </Modal>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={openFileModal}
-        onClose={closeFileModal}
-        className={classes.modalContainer}
-      >
-        {isFileUploading || isUploadLoading ? (
-          <div className={classes.cancelModalContent}>
-            {/* <Tip /> */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <LinearProgress
-                style={{ width: "100%", height: "50px", marginTop: "20px" }}
-                variant="determinate"
-                value={completed}
-              />
-              <p className={classes.settingFontWhite6}>
-                {t("Uploading")} {completed}% {t("완료")}...{" "}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className={classes.cancelModalContent} id="file_upload_modal">
-            <Dropzone onDrop={dropFiles}>
-              {({ getRootProps, getInputProps }) => (
-                <section className="container">
-                  <GridItem xs={12} style={{ margin: "10px" }}>
-                    <div className={classes.highlightText}>
-                      <b>{t("Upload SKYHUB AI model")}</b>
-                    </div>
-                  </GridItem>
-                  {(!uploadFile || uploadFile.length === 0) && (
-                    <div
-                      {...getRootProps({ className: "dropzoneArea" })}
-                      style={{ margin: "10px" }}
-                    >
-                      <input {...getInputProps()} />
-                      <p className={classes.settingFontWhite6}>
-                        {t("Drag the file or click the box to upload it!")}
-                        <br />
-                        {t(
-                          "Only image files (png/jpg/jpeg) or image compression files (zip) can be uploaded"
-                        )}
-                        <br />
-                        {t(
-                          "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
-                        )}
-                        <br />
-                        {t(
-                          "Uploading large-size files may take more than 5 minutes"
-                        )}
-                      </p>
-                      <CloudUploadIcon fontSize="large" />
-                    </div>
-                  )}
-                  <aside>
-                    {!isUploadLoading &&
-                      (uploadFile && uploadFile.length > 0 && (
-                        <>
-                          <p
-                            style={{
-                              marginTop: "20px",
-                              fontSize: "20px",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                              color: currentThemeColor.textWhite87,
-                            }}
-                          >
-                            <span>
-                              {t("Upload file")} : {t("총")} {uploadFile.length}
-                              {t("")}
-                            </span>
-                          </p>
-                          <ul>
-                            {uploadFile.map((file, idx) => {
-                              if (idx === 10) {
-                                return (
-                                  <li style={{ listStyle: "none" }}>.......</li>
-                                );
-                              }
-                              if (idx >= 10) {
-                                return null;
-                              }
-                              return (
-                                <li key={file.name}>
-                                  <div className={classes.alignCenterDiv}>
-                                    <div
-                                      style={{
-                                        overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        whiteSpace: "nowrap",
-                                        color: currentThemeColor.textWhite6,
-                                      }}
-                                    >
-                                      {file.name}
-                                    </div>
-                                    <CloseIcon
-                                      className={classes.pointerCursor}
-                                      style={{ marginLeft: "10px" }}
-                                      onClick={() => {
-                                        deleteUploadedFile(file.path);
-                                      }}
-                                    />
-                                  </div>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                          <span
-                            id="uploadFileAgain"
-                            className={classes.labelUploadBtn}
-                            onClick={() => {
-                              setUploadFile(null);
-                            }}
-                          >
-                            {t("Re-upload")}
-                          </span>
-                        </>
-                      ))}
-                  </aside>
-                </section>
-              )}
-            </Dropzone>
-            <GridContainer style={{ paddingTop: "20px" }}>
-              <GridItem xs={6}>
-                <Button
-                  id="close_modal_btn"
-                  style={{ width: "100%" }}
-                  className={classes.defaultOutlineButton}
-                  onClick={closeFileModal}
-                >
-                  {t("Cancel")}
-                </Button>
-              </GridItem>
-              <GridItem xs={6}>
-                {uploadFile ? (
-                  <Button
-                    id="submitBtn"
-                    style={{ width: "100%" }}
-                    className={classes.defaultHighlightButton}
-                    onClick={saveFiles}
-                  >
-                    {t("Next")}
-                  </Button>
-                ) : (
-                  <Button
-                    id="submitBtn"
-                    style={{ width: "100%" }}
-                    className={classes.defaultDisabledButton}
-                    disabled
-                  >
-                    {t("Next")}
-                  </Button>
-                )}
-              </GridItem>
-            </GridContainer>
-          </div>
-        )}
       </Modal>
     </div>
   );
