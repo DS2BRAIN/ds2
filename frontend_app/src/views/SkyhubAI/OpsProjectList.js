@@ -183,7 +183,6 @@ const Project = ({ history }) => {
   }, [isCategoryClicked]);
 
   useEffect(() => {
-    // 파일 업로드 모달창 닫아질때마다 초기값 세팅
     if (messages.shouldCloseModal) {
       setIsFileUploading(false);
       setCompleted(0);
@@ -195,7 +194,6 @@ const Project = ({ history }) => {
   }, [messages.shouldCloseModal]);
 
   const setProjectSettings = () => {
-    //프로젝트 체크박스 value 세팅
     setProjectCheckedValue({ all: false });
     for (let i = 0; i < projects.projects.length; i++) {
       const value = projects.projects[i].id;
@@ -207,15 +205,10 @@ const Project = ({ history }) => {
   };
 
   const openStartProjectModal = () => {
-    // if(parseInt(user.me.cumulativeProjectCount) >= parseInt(user.me.usageplan.projects) + parseInt(user.me.remainProjectCount)){
-    //   dispatch(openErrorSnackbarRequestAction(`${t('You can’t add a new project. You’ve reached the maximum number of projects allowed for your account')} ${t('계속 진행하시려면 이용플랜을 변경해주세요.')}`));
-    //   return;
-    // }
     if (user.cardInfo?.cardName && user.cardInfo?.created) {
       setIsOpenStartModalOpen(true);
     } else {
       setIsOpenStartModalOpen(true);
-      //window.location.href = "/admin/setting/payment/?cardRequest=true";
       return;
     }
   };
@@ -265,7 +258,6 @@ const Project = ({ history }) => {
 
   const onSetProjectCheckedValue = (data) => {
     let value = data[0];
-    //if (isEnableToChange(data[3])) {
     setProjectCheckedValue((prevState) => {
       return {
         ...prevState,
@@ -273,43 +265,17 @@ const Project = ({ history }) => {
         [value]: !projectCheckedValue[value],
       };
     });
-    // } else {
-    //   dispatch(
-    //     openErrorSnackbarRequestAction(
-    //       `${t("")}
-    //       ${isEnableToChange(data[3], true)}
-    //       ${t("minutes left")}
-    //       `
-    //     )
-    //   );
-    // }
   };
 
   const onSetProjectCheckedValueAll = () => {
     const result = projectCheckedValue["all"] ? false : true;
     const tmpObject = { all: result };
-    //let isAllEnabled = true;
     for (let i = 0; i < projects.projects.length; i++) {
-      //if (isEnableToChange(projects.projects[i].created_at)) {
       const id = projects.projects[i].id;
       tmpObject[id] = result;
-      //} else {
-      //  isAllEnabled = false;
-      //}
     }
-    // if (isAllEnabled == false && result == true) {
-    //   dispatch(
-    //     openSuccessSnackbarRequestAction(
-    //       t("Projects created less than 10 minutes ago are excluded from selection.")
-    //     )
-    //   );
-    // }
     setProjectCheckedValue(tmpObject);
   };
-
-  // useEffect(() => {
-  //   setIsLoading(messages.isAskSnackbarOpen);
-  // }, [messages.isAskSnackbarOpen]);
 
   const deleteProject = async () => {
     const deleteProjectsArr = [];
@@ -795,7 +761,6 @@ const Project = ({ history }) => {
       >
         {isLoading ? (
           <div className={classes.modalLoading}>
-            {/* <Tip /> */}
             <LinearProgress variant="determinate" value={progress} />
             <b style={{ alignSelf: "center" }}>{t("Please wait a moment.")}</b>
           </div>
