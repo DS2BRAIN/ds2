@@ -256,8 +256,8 @@ const Project = ({ history }) => {
     else return 10 - Math.floor(nowTime - updatedAt);
   };
 
-  const onSetProjectCheckedValue = (data) => {
-    let value = data[0];
+  const onSetProjectCheckedValue = (project) => {
+    let value = project.id;
     setProjectCheckedValue((prevState) => {
       return {
         ...prevState,
@@ -321,8 +321,6 @@ const Project = ({ history }) => {
   };
 
   const showMyProject = () => {
-    let datas = [];
-
     const tableHeads = [
       // { value: "No.", width: "5%", type: "projectNum" },
       { value: "Project name", width: "75%", type: "projectName" },
@@ -330,19 +328,6 @@ const Project = ({ history }) => {
     ];
 
     const pProjects = projects.projects;
-    console.log(pProjects);
-
-    for (let i = 0; pProjects && i < pProjects.length; i++) {
-      const prj = pProjects[i];
-      const project = [
-        prj.id,
-        // projectRowsPerPage * projectPage + (i + 1),
-        prj.projectName,
-        pProjects[i].created_at ? pProjects[i].created_at : "",
-        //isEnableToChange(prj.created_at, 1),
-      ];
-      datas.push(project);
-    }
     if (!pProjects || pProjects.length === 0) {
       return (
         <div className="emptyListTable">
@@ -408,46 +393,42 @@ const Project = ({ history }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {datas.map((data, idx) => (
+                {pProjects.map((project, idx) => (
                   <TableRow
                     key={`tableRow_${idx}`}
                     className={classes.tableRow}
-                    style={{
-                      background:
-                        idx % 2 === 0
-                          ? currentTheme.tableRow1
-                          : currentTheme.tableRow2,
-                    }}
                   >
                     {!isShared && (
                       <TableCell align="left" className={classes.tableRowCell}>
                         <Checkbox
-                          value={data[0]}
-                          checked={projectCheckedValue[data[0]] ? true : false}
-                          onChange={() => onSetProjectCheckedValue(data)}
+                          value={project.id}
+                          checked={
+                            projectCheckedValue[project.id] ? true : false
+                          }
+                          onChange={() => onSetProjectCheckedValue(project)}
                           className={classes.tableCheckBox}
                         />
                       </TableCell>
                     )}
-                    {data.map((d, i) => {
-                      if (i > 0) {
-                        return (
-                          <TableCell
-                            key={`tableRow_${idx}_tableCell_${i}`}
-                            className={classes.tableRowCell}
-                            align="center"
-                            onClick={() => goProjectDetail(data[0])}
+                    {tableHeads.map((tableHead, i) => {
+                      return (
+                        <TableCell
+                          key={`tableRow_${idx}_tableCell_${i}`}
+                          className={classes.tableRowCell}
+                          align="center"
+                          onClick={() => goProjectDetail(project.id)}
+                        >
+                          <div
+                            style={{
+                              wordBreak: "break-all",
+                            }}
                           >
-                            <div
-                              style={{
-                                wordBreak: "break-all",
-                              }}
-                            >
-                              {i == 2 ? d.substring(0, 10) : d}
-                            </div>
-                          </TableCell>
-                        );
-                      }
+                            {tableHead.type === "created_at"
+                              ? project[tableHead.type].substring(0, 10)
+                              : project[tableHead.type]}
+                          </div>
+                        </TableCell>
+                      );
                     })}
                   </TableRow>
                 ))}
