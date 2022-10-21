@@ -566,7 +566,7 @@ const currentTheme = makeStyles((theme) => ({
     ...currentDefaultTheme.defaultRoot,
   },
   dropzoneText: {
-    fontSize: "10px",
+    fontSize: "11px",
     color: currentThemeColor.textMediumGrey2,
   },
   input: {
