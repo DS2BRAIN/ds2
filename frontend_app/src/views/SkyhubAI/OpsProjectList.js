@@ -129,9 +129,7 @@ const Project = ({ history }) => {
 
   useEffect(() => {
     if (url && projects.projects) {
-      (async () => {
-        await setProjectSettings();
-      })();
+      setProjectSettings();
     }
   }, [projects.projects]);
 
@@ -234,8 +232,8 @@ const Project = ({ history }) => {
       openErrorSnackbarRequestAction(t("Upload file"));
       return;
     }
-    await setIsFileUploading(true);
-    await setCompleted(5);
+    setIsFileUploading(true);
+    setCompleted(5);
     await dispatch(
       postUploadFileRequestAction({
         labelprojectId: labelprojects.projectDetail.id,
@@ -559,15 +557,15 @@ const Project = ({ history }) => {
         setIsFilesUploadLoading(false);
       });
     let oldProgress = progress;
-    await setProgress(oldProgress + (100 - oldProgress) / 5);
+    setProgress(oldProgress + (100 - oldProgress) / 5);
     await sleep(5000);
-    await setProgress(oldProgress + ((100 - oldProgress) * 2) / 5);
+    setProgress(oldProgress + ((100 - oldProgress) * 2) / 5);
     await sleep(5000);
-    await setProgress(oldProgress + ((100 - oldProgress) * 3) / 5);
+    setProgress(oldProgress + ((100 - oldProgress) * 3) / 5);
     await sleep(5000);
-    await setProgress(oldProgress + ((100 - oldProgress) * 4) / 5);
+    setProgress(oldProgress + ((100 - oldProgress) * 4) / 5);
     await sleep(5000);
-    await setProgress(oldProgress + ((100 - oldProgress) * 4.5) / 5);
+    setProgress(oldProgress + ((100 - oldProgress) * 4.5) / 5);
     await sleep(10000);
   };
 
