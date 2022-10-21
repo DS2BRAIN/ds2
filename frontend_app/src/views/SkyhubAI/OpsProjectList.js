@@ -69,7 +69,6 @@ const Project = ({ history }) => {
     all: false,
   });
   const [isCategoryClicked, setIsCategoryClicked] = useState(false);
-  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   const [projectPage, setProjectPage] = useState(0);
   const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
@@ -465,10 +464,6 @@ const Project = ({ history }) => {
     }
   };
 
-  const closeTemplateModal = () => {
-    setIsTemplateModalOpen(false);
-  };
-
   const closeLoadModelModal = () => {
     // setIsLoadModelModalOpen(false);
     dispatch(askModalRequestAction());
@@ -638,19 +633,6 @@ const Project = ({ history }) => {
           </GridContainer>
         </>
       )}
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={isTemplateModalOpen}
-        onClose={closeTemplateModal}
-        className={classes.modalContainer}
-      >
-        <Samples
-          className={classes.predictModalContent}
-          closeTemplateModal={closeTemplateModal}
-          history={history}
-        />
-      </Modal>
       <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
