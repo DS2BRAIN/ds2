@@ -566,9 +566,19 @@ const ModelTable = React.memo(
         .getModelMetabase(id)
         .then((res) => {
           console.log(res);
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t("Metabase analysis has started.")
+            )
+          );
         })
         .catch((e) => {
           console.log("error", e);
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("An error occurred during the metabase analysis.")
+            )
+          );
         });
     };
 
