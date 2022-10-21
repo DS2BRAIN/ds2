@@ -271,7 +271,7 @@ const Manager = ({ history }) => {
 
         dispatch(openSuccessSnackbarRequestAction(t(text)));
 
-        closeSelectedUserModal();
+        closeSelectedUserModal("reset");
 
         if (isMyAccount) history.push("/signout?passwordChange=true");
       })
@@ -298,10 +298,16 @@ const Manager = ({ history }) => {
     setSearchValueToPost("");
   };
 
-  const closeSelectedUserModal = () => {
+  const closeSelectedUserModal = (actionType) => {
     setIsSelectedUserModalOpen(false);
-    if (isSelectedUserDelete) setIsSelectedUserDelete(false);
-    else {
+    if (actionType === "delete") {
+      setIsSelectedUserDelete(false);
+      dispatch(
+        openSuccessSnackbarRequestAction(t("User deletion is complete."))
+      );
+      getUserAction();
+    }
+    if (actionType === "reset") {
       setPasswordChange("");
       setPasswordVerifyChange("");
     }
@@ -313,9 +319,16 @@ const Manager = ({ history }) => {
       .deleteUserInfo(id)
       .then((res) => {
         console.log(res);
-        closeSelectedUserModal();
+        closeSelectedUserModal("delete");
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        dispatch(
+          openSuccessSnackbarRequestAction(
+            t("An error occurred while deleting the user.")
+          )
+        );
+      });
   };
 
   const renderUserList = () => {
