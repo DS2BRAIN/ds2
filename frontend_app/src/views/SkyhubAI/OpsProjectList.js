@@ -10,23 +10,16 @@ import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
 } from "redux/reducers/messages.js";
-import {
-  postUploadFileRequestAction,
-  setObjectlistsSearchedValue,
-} from "redux/reducers/labelprojects.js";
 import { getOpsProjectsRequestAction } from "redux/reducers/projects";
 import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
 
 import * as api from "controller/api";
-import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
+import currentTheme from "assets/jss/custom.js";
 import { IS_ENTERPRISE } from "variables/common";
 import { listPagination } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
 import SearchInputBox from "components/Table/SearchInputBox";
 import SkyhubIntro from "components/Guide/SkyhubIntro";
-import Samples from "components/Templates/Samples.js";
 
 import {
   Checkbox,
@@ -46,13 +39,12 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import CloseIcon from "@material-ui/icons/Close";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 const Project = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { user, projects, labelprojects, messages } = useSelector(
+  const { user, projects, messages } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
@@ -75,7 +67,6 @@ const Project = ({ history }) => {
   const [sortingValue, setSortingValue] = useState("created_at");
   const [searchedValue, setSearchedValue] = useState("");
   const [isSortDesc, setIsSortDesc] = useState(true);
-  const [isShared, setIsShared] = useState(false);
 
   const [isLoadModelModalOpen, setIsLoadModelModalOpen] = useState(false);
   const [isOpenStartModalOpen, setIsOpenStartModalOpen] = useState(false);
@@ -83,11 +74,6 @@ const Project = ({ history }) => {
   const [previewText, setPreviewText] = useState(null);
   const [files, setFiles] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [completed, setCompleted] = useState(0);
-  const [isFileUploading, setIsFileUploading] = useState(false);
-  const [uploadFile, setUploadFile] = useState(null);
-  const [isUploadFileChanged, setIsUploadFileChanged] = useState(false);
-  const [isUploadLoading, setIsUploadLoading] = useState(false);
   const [isFilesUploadLoading, setIsFilesUploadLoading] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
@@ -180,9 +166,6 @@ const Project = ({ history }) => {
 
   useEffect(() => {
     if (messages.shouldCloseModal) {
-      setIsFileUploading(false);
-      setCompleted(0);
-      setUploadFile(null);
       setIsLoading(false);
       setIsLoadModelModalOpen(false);
     }
@@ -212,43 +195,12 @@ const Project = ({ history }) => {
     setIsOpenStartModalOpen(false);
   };
 
-  const closeFileModal = () => {
-    dispatch(askModalRequestAction());
-  };
-
   const goClickAI = () => {
     history.push("/admin/project");
   };
 
   const goProjectDetail = (id) => {
     history.push(`/admin/skyhubai/${id}`);
-  };
-
-  const saveFiles = async () => {
-    if (!uploadFile || uploadFile.length === 0) {
-      openErrorSnackbarRequestAction(t("Upload file"));
-      return;
-    }
-    setIsFileUploading(true);
-    setCompleted(5);
-    await dispatch(
-      postUploadFileRequestAction({
-        labelprojectId: labelprojects.projectDetail.id,
-        files: uploadFile,
-      })
-    );
-    await dispatch(setObjectlistsSearchedValue(null));
-  };
-
-  const isEnableToChange = (time, option = null) => {
-    let updatedAt = new Date(time).getTime() / 60000;
-    let nowTime = new Date();
-    nowTime =
-      new Date(
-        nowTime.getTime() + nowTime.getTimezoneOffset() * 60000
-      ).getTime() / 60000;
-    if (option == null) return nowTime - updatedAt > 10;
-    else return 10 - Math.floor(nowTime - updatedAt);
   };
 
   const onSetProjectCheckedValue = (project) => {
@@ -340,28 +292,24 @@ const Project = ({ history }) => {
       return (
         <div>
           {projects.isLoading ? (
-            <GridItem xs={12}>
-              <div className={classes.loading} style={{ marginTop: "-29px" }}>
-                <CircularProgress />
-              </div>
-            </GridItem>
+            <div className={classes.loading} style={{ marginTop: "-29px" }}>
+              <CircularProgress />
+            </div>
           ) : (
             <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  {!isShared && (
-                    <TableCell
-                      className={classes.tableHead}
-                      align="left"
-                      style={{ width: "5%" }}
-                    >
-                      {/* <Checkbox
+                  <TableCell
+                    className={classes.tableHead}
+                    align="left"
+                    style={{ width: "5%" }}
+                  >
+                    {/* <Checkbox
                         value="all"
                         checked={projectCheckedValue["all"]}
                         onChange={onSetProjectCheckedValueAll}
                       /> */}
-                    </TableCell>
-                  )}
+                  </TableCell>
                   {tableHeads.map((tableHead) => {
                     return (
                       <TableCell
@@ -394,18 +342,14 @@ const Project = ({ history }) => {
                     key={`tableRow_${idx}`}
                     className={classes.tableRow}
                   >
-                    {!isShared && (
-                      <TableCell align="left" className={classes.tableRowCell}>
-                        <Checkbox
-                          value={project.id}
-                          checked={
-                            projectCheckedValue[project.id] ? true : false
-                          }
-                          onChange={() => onSetProjectCheckedValue(project)}
-                          className={classes.tableCheckBox}
-                        />
-                      </TableCell>
-                    )}
+                    <TableCell align="left" className={classes.tableRowCell}>
+                      <Checkbox
+                        value={project.id}
+                        checked={projectCheckedValue[project.id] ? true : false}
+                        onChange={() => onSetProjectCheckedValue(project)}
+                        className={classes.tableCheckBox}
+                      />
+                    </TableCell>
                     {tableHeads.map((tableHead, i) => {
                       return (
                         <TableCell
@@ -502,17 +446,6 @@ const Project = ({ history }) => {
     dispatch(
       openSuccessSnackbarRequestAction(t("The file(s) has been deleted"))
     );
-  };
-
-  const deleteUploadedFile = (files) => {
-    const tempFiles = uploadFile;
-    for (let idx = 0; idx < uploadFile.length; idx++) {
-      if (uploadFile[idx].path === files) {
-        tempFiles.splice(idx, 1);
-      }
-    }
-    setUploadFile(tempFiles);
-    setIsUploadFileChanged(true);
   };
 
   function sleep(ms) {
