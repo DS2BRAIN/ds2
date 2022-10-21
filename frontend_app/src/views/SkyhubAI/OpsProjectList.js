@@ -322,24 +322,6 @@ const Project = ({ history }) => {
 
   const showMyProject = () => {
     let datas = [];
-    const optionObj = {
-      speed: t("Speed"),
-      accuracy: t("Accuracy"),
-      colab: t("Generate code"),
-    };
-    const methodObj = {
-      normal: t("General"),
-      text: t("Natural Language Processing (NLP)"),
-      image: t("Image"),
-      normal_regression: t("General Regression"),
-      normal_classification: t("General Category Classification"),
-      object_detection: t("Object Detection"),
-      cycle_gan: t("Generative Adversarial Network (GAN)"),
-      time_series: t("Time Series Prediction"),
-      time_series_classification: t("Time Series Prediction"),
-      time_series_regression: t("Time Series Prediction"),
-      recommender: t("Recommendation system (matrix)"),
-    };
 
     const tableHeads = [
       // { value: "No.", width: "5%", type: "projectNum" },
@@ -348,22 +330,9 @@ const Project = ({ history }) => {
     ];
 
     const pProjects = projects.projects;
+    console.log(pProjects);
 
     for (let i = 0; pProjects && i < pProjects.length; i++) {
-      let status = "";
-      if (pProjects[i].status === 0) {
-        status = t("Ready");
-      } else if (pProjects[i].status === 100) {
-        status = t("Completed");
-      } else if (
-        pProjects[i].status === 99 ||
-        pProjects[i].status === 9 ||
-        pProjects[i].status < 0
-      ) {
-        status = t("Error");
-      } else {
-        status = t("In progress");
-      }
       const prj = pProjects[i];
       const project = [
         prj.id,
@@ -462,36 +431,6 @@ const Project = ({ history }) => {
                     )}
                     {data.map((d, i) => {
                       if (i > 0) {
-                        var statusColor = currentTheme.text1;
-                        var isStatus = "";
-                        if (
-                          typeof d === "string" &&
-                          d.indexOf(t("Ready")) > -1
-                        ) {
-                          statusColor = "#6B6B6B";
-                          isStatus = true;
-                        }
-                        if (
-                          typeof d === "string" &&
-                          d.indexOf(t("In progress")) > -1
-                        ) {
-                          statusColor = "#1BC6B4";
-                          isStatus = true;
-                        }
-                        if (
-                          typeof d === "string" &&
-                          d.indexOf(t("Error")) > -1
-                        ) {
-                          statusColor = "#BD2020";
-                          isStatus = true;
-                        }
-                        if (
-                          typeof d === "string" &&
-                          d.indexOf(t("Completed")) > -1
-                        ) {
-                          statusColor = "#0A84FF";
-                          isStatus = true;
-                        }
                         return (
                           <TableCell
                             key={`tableRow_${idx}_tableCell_${i}`}
@@ -502,16 +441,8 @@ const Project = ({ history }) => {
                             <div
                               style={{
                                 wordBreak: "break-all",
-                                color: statusColor,
                               }}
                             >
-                              <div
-                                style={{
-                                  display: isStatus ? "inline" : "none",
-                                }}
-                              >
-                                ⦁
-                              </div>{" "}
                               {i == 2 ? d.substring(0, 10) : d}
                             </div>
                           </TableCell>
