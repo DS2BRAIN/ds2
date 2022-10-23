@@ -427,7 +427,7 @@ class Util():
 
         if aistore_configs.get("public_ip_address") == public_ip_address:
             self.backendURL = f"https://api.ds2.ai"
-            self.frontendURL = f"https://servant.ai"
+            self.frontendURL = f"https://servant-ai.com"
             self.is_prod_server = True
 
         if type(self.payplePayload) == dict:
