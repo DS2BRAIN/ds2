@@ -2602,6 +2602,31 @@ class trainingServerTable(MySQLModel):
     is_deleted = pw.BooleanField(null=True)
     access_token = pw.CharField(null=True)
 
+class commandTable(MySQLModel):
+    class Meta:
+        db_table = 'command'
+
+    id = pw.AutoField()
+    command = pw.CharField(null=True)
+    url = pw.CharField(null=True)
+    short_description = pw.TextField(null=True)
+    description = pw.TextField(null=True)
+    option = pw.TextField(null=True)
+    method = pw.TextField(null=True)
+    category = pw.CharField(null=True)
+    categories = JSONField(null=True)
+    rating = pw.IntegerField(null=True)
+    status = pw.CharField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    thumbnail = pw.TextField(null=True)
+    thumbnail_32 = pw.TextField(null=True)
+    thumbnail_256 = pw.TextField(null=True)
+    is_accept_iframe = pw.BooleanField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    command_token = pw.TextField(null=True)
+    is_private = pw.BooleanField(null=True)
 
 class MongoDb():
     def __init__(self):
