@@ -215,6 +215,7 @@ class Util():
 
         self.ps_id = os.getpid()
         self.configOption = 'dev'
+        self.is_prod_server = False
 
         if len(sys.argv) > 1 and 'prod' in sys.argv[1]:
             self.configOption = 'prod'
@@ -426,6 +427,7 @@ class Util():
         if aistore_configs.get("public_ip_address") == public_ip_address:
             self.backendURL = f"https://api.ds2.ai"
             self.frontendURL = f"https://servant.ai"
+            self.is_prod_server = True
 
         if type(self.payplePayload) == dict:
             self.payplePayload["PCD_PAY_TYPE"] = "card"
