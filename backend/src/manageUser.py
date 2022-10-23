@@ -114,7 +114,7 @@ class ManageUser:
         usagePlan = self.dbClass.getOneUsageplanByPlanName('business')
         if self.utilClass.configOption == 'enterprise':
             key = self.dbClass.getAdminKey()
-            if key and self.utilClass.isValidKey(key) and not self.utilClass.is_prod_server:
+            if key and self.utilClass.isValidKey(key):
                 key_info = self.utilClass.get_key_info(key)
                 if self.dbClass.getUserCount() >= key_info["maxuser"]:
                     return EXCEED_USER_ERROR

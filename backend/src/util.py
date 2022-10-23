@@ -782,6 +782,10 @@ class Util():
         return float(result.stdout)
 
     def isValidKey(self, key):
+
+        if self.is_prod_server:
+            return True
+        
         try:
             result = jwt.decode(key, self.enterprise_key, algorithms=["HS256"])
         except:
