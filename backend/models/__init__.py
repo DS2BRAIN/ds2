@@ -2629,6 +2629,7 @@ class commandTable(MySQLModel):
     is_private = pw.BooleanField(null=True)
     is_shared = pw.BooleanField(null=True)
     sharedgroup = LongTextField(null=True)
+    slug = pw.CharField(null=True)
 
 class MongoDb():
     def __init__(self):
