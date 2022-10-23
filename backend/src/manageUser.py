@@ -124,6 +124,7 @@ class ManageUser:
 
             userInit = {
                 "confirmed": True,
+                "emailTokenCode": uuid.uuid4().hex,
                 "appTokenCode": uuid.uuid4().hex,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
@@ -171,7 +172,7 @@ class ManageUser:
 
         # if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
         if not userInfo['socialID']:
-            self.utilClass.sendRegistrationEmail(userInfo, languageCode)
+            self.utilClass.sendRegistrationEmail(userInfo, 'en')
         try:
             self.register_metabase_user(userInfo, raw_password)
         except:
