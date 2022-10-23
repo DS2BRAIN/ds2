@@ -52,6 +52,7 @@ class ManageCommand:
         command = self.dbClass.createCommand({
             "command": command_data.command,
             "url": command_data.url,
+            "slug": command_data.command.lower().replace(' ', '-'),
             "category": command_data.category,
             "short_description": command_data.short_description,
             "description": command_data.description,
