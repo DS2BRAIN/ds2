@@ -138,8 +138,7 @@ class HelperCommand():
             sorting = sorting.desc()
         common_where = ((commandTable.is_deleted == None) | (commandTable.is_deleted == False)) & (
                     (commandTable.user == user_id) | (commandTable.id.in_(command_ids)))
-        command_query = commandTable.select(commandTable.id, commandTable.command, commandTable.created_at,
-                                            commandTable.updated_at, commandTable.status, commandTable.option)
+        command_query = commandTable.select()
 
         if tab == 'ready':
             status_list = [0]
