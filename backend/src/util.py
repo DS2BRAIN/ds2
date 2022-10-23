@@ -423,6 +423,10 @@ class Util():
             self.backendURL = f"http://{self.public_ip_address}:13002"
             self.frontendURL = f"http://{self.public_ip_address}:13000"
 
+        if aistore_configs.get("public_ip_address") == public_ip_address:
+            self.backendURL = f"https://api.ds2.ai"
+            self.frontendURL = f"https://servant.ai"
+
         if type(self.payplePayload) == dict:
             self.payplePayload["PCD_PAY_TYPE"] = "card"
             self.payplePayload["PCD_SIMPLE_FLAG"] = "Y"
@@ -544,22 +548,22 @@ class Util():
                  </body><html>
                      """
 
-    def sendRegistrationEmail(self, user, languageCode = 'ko'):
+    def sendRegistrationEmail(self, user, languageCode = 'en'):
 
         provider = user.get('provider')
         link = self.backendURL + f"/email-confirm/?token={user['emailTokenCode']}&user={user['id']}&provider={provider}"
         To = user['email']
         Content = self.get_email_confirm_contents(link, languageCode, provider)
 
-        Subject = f'[DS2.AI] 회원가입 인증 메일입니다.' if languageCode == 'ko' else '[DS2.AI] Please complete your account verification.'
+        Subject = f'[{provider}] 회원가입 인증 메일입니다.' if languageCode == 'ko' else f'[{provider}] Please complete your account verification.'
 
         result = self.sendEmail(To, Subject, Content, provider=provider)
 
         return result
 
-    def sendResetPasswordEmail(self, email, code, provider, languageCode = 'ko'):
+    def sendResetPasswordEmail(self, email, code, provider, languageCode = 'en'):
 
-        Subject = f'[DS2.AI] 비밀번호 초기화 메일입니다.' if languageCode == 'ko' else '[DS2.AI] Please complete your password reset.'
+        Subject = f'[{provider}] 비밀번호 초기화 메일입니다.' if languageCode == 'ko' else f'[{provider}] Please complete your password reset.'
         front_url = self.frontendURL
 
         link = front_url + f"/resetpassword?code={code}"
@@ -572,8 +576,8 @@ class Util():
 
     def sendEmail(self, To, Subject, Content, provider='DS2.ai'):
 
-        if self.configOption in "enterprise":
-            return
+        # if self.configOption in "enterprise":
+        #     return
 
         FROM = formataddr((str(Header(provider, 'utf-8')), 'noreply@dslab.global'))
         msg = MIMEMultipart('alternative')
