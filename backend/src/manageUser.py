@@ -677,7 +677,7 @@ class ManageUser:
         code = jwt.encode({'email': email + str(datetime.datetime.utcnow())}, 'aistorealwayswinning',
                            algorithm='HS256')
 
-        self.utilClass.sendResetPasswordEmail(email, code, provider, language_code)
+        self.utilClass.sendResetPasswordEmail(email, code, provider, 'en')
 
         self.dbClass.updateUser(user["id"], {
             "resetPasswordVerifyTokenID": code,
