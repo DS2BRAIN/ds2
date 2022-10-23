@@ -73,7 +73,7 @@ class UserInfo(BaseModel):
     isAgreedMarketing: bool = False
     isAgreedBehaviorStatistics: bool = False
     isAgreedDataAcquisition: bool = False
-    languageCode: str = 'ko'
+    languageCode: str = 'en'
     socialType: str = 'DS2.ai'
     googleIdToken: str = None
     tokenType: str = None
@@ -160,7 +160,7 @@ def forgotPassword(reset_info: ResetInfo, response: Response):
 
 class ResetPasswordInfo(BaseModel):
     token: str
-    user_id: int
+    user_id: int = None
     password: str
     password_confirm: str
 
@@ -171,6 +171,12 @@ def post_reset_password(reset_password_info: ResetPasswordInfo, response: Respon
 
     return result
 
+@router.post("/reset-password-by-token/")
+def post_reset_password(reset_password_info: ResetPasswordInfo, response: Response):
+
+    response.status_code, result = manageUserClass.resetPassword(reset_password_info.token, reset_password_info.password, reset_password_info.password_confirm)
+
+    return result
 @router.get("/email-confirm/")
 def emailConfirm(token: str, user: str, provider: str, response: Response):
 
