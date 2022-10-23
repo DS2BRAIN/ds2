@@ -169,7 +169,8 @@ class ManageUser:
         # self.dbClass.createTeamUser(data)
         # self.dbClass.createTeamUserHistory(data)
 
-        if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
+        # if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
+        if not userInfo['socialID']:
             self.utilClass.sendRegistrationEmail(userInfo, languageCode)
         try:
             self.register_metabase_user(userInfo, raw_password)

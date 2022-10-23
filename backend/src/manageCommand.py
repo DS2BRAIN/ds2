@@ -49,18 +49,25 @@ class ManageCommand:
                 appError=True, userInfo=user)
             return NOT_FOUND_USER_ERROR
 
-        command_raw = self.dbClass.createCommand({
+        command = self.dbClass.createCommand({
             "command": command_data.command,
             "url": command_data.url,
+            "category": command_data.category,
             "short_description": command_data.short_description,
             "description": command_data.description,
             "is_private": command_data.is_private,
             "user": user.id,
+            "status": 'Completed' if command_data.is_private else 'Under Review',
         })
 
-        return HTTP_200_OK, command_raw.__dict__['__data__']
+        self.utilClass.sendSlackMessage(
+            f"Command를 등록하였습니다. {user.email} (ID: {user.id}) , {command.command} (is_private: {command.is_private})\n" +
+            json.dumps(command.__dict__['__data__'], indent=4, ensure_ascii=False, default=str),
+            appLog=True, userInfo=user)
 
-    def getCommandsById(self, token, sorting, page, count, tab, desc, searching, is_verify=False):
+        return HTTP_200_OK, command.__dict__['__data__']
+
+    def getCommandsById(self, token, sorting, page, count, tab, desc, searching):
         user = self.dbClass.getUser(token)
 
         if not user:
@@ -69,11 +76,11 @@ class ManageCommand:
             return NOT_FOUND_USER_ERROR
 
         shared_commands = []
-        for temp in self.dbClass.getSharedCommandIdByUserId(user['id']):
-            if temp.commandsid:
-                shared_commands = list(set(shared_commands + ast.literal_eval(temp.commandsid)))
+        # for temp in self.dbClass.getSharedCommandIdByUserId(user['id']):
+        #     if temp.commandsid:
+        #         shared_commands = list(set(shared_commands + ast.literal_eval(temp.commandsid)))
         commands, totalLength = self.dbClass.getAllCommandByUserId(user['id'], shared_commands, sorting, tab, desc,
-                                                                   searching, page, count, is_verify)
+                                                                   searching, page, count)
 
         result_commands = []
         for command in commands:
@@ -112,7 +119,7 @@ class ManageCommand:
                 pass
 
         self.utilClass.sendSlackMessage(
-            f"Command를 삭제하였습니다. {user['email']} (ID: {user['id']}) , {command.name} (ID: {command.id})",
+            f"Command를 삭제하였습니다. {user['email']} (ID: {user['id']}) , {command.command} (ID: {command.id})",
             appLog=True, userInfo=user)
 
         return HTTP_204_NO_CONTENT, {}
@@ -149,13 +156,13 @@ class ManageCommand:
                         pass
 
                 self.utilClass.sendSlackMessage(
-                    f"Command를 삭제하였습니다. {user['email']} (ID: {user['id']}) , {command.name} (ID: {command.id})",
+                    f"Command를 삭제하였습니다. {user['email']} (ID: {user['id']}) , {command.command} (ID: {command.id})",
                     appLog=True, userInfo=user)
                 successList.append(command_id)
             except:
                 failList.append(command_id)
                 self.utilClass.sendSlackMessage(
-                    f"Command 삭제 중 실패하였습니다. {user['email']} (ID: {user['id']}) , {command.name} (ID: {command.id})",
+                    f"Command 삭제 중 실패하였습니다. {user['email']} (ID: {user['id']}) , {command.command} (ID: {command.id})",
                     appLog=True, userInfo=user)
 
         return HTTP_200_OK, {'successList': successList, 'failList': failList}
@@ -181,7 +188,7 @@ class ManageCommand:
         command_info = {k: v for k, v in command_info.items() if v is not None}
 
         self.utilClass.sendSlackMessage(
-            f"Command 상태가 변경되었습니다. {user['email']} (ID: {user['id']}) , {command['name']} (ID: {command_id})\n" +
+            f"Command 상태가 변경되었습니다. {user['email']} (ID: {user['id']}) , {command['command']} (ID: {command_id})\n" +
             json.dumps(command_info, indent=4, ensure_ascii=False, default=str),
             appLog=True, userInfo=user)
 
@@ -238,13 +245,13 @@ class ManageCommand:
             if int(command_id) not in shared_commands:
                 raise ex.NotAllowedTokenEx(user['email'])
             
-        command['is_shared'] = False
-        if command['sharedgroup']:
-            for temp in ast.literal_eval(command['sharedgroup']):
-                groupMember = self.dbClass.getMemberByUserIdAndGroupId(user['id'], temp)
-                if groupMember:
-                    if groupMember.role == 'member' and groupMember.acceptcode == 1:
-                        command['is_shared'] = True
+        # command['is_shared'] = False
+        # if command['sharedgroup']:
+        #     for temp in ast.literal_eval(command['sharedgroup']):
+        #         groupMember = self.dbClass.getMemberByUserIdAndGroupId(user['id'], temp)
+        #         if groupMember:
+        #             if groupMember.role == 'member' and groupMember.acceptcode == 1:
+        #                 command['is_shared'] = True
 
         command = self.dbClass.getOneCommandById(command_id)
 

@@ -91,15 +91,15 @@ class HelperCommand():
             sorting = commandTable.updated_at
         elif sorting == 'option':
             sorting = commandTable.option
-        elif sorting == 'name':
-            sorting = commandTable.name
+        elif sorting == 'command':
+            sorting = commandTable.command
         elif sorting == 'status':
             sorting = commandTable.status
 
         if desc:
             sorting = sorting.desc()
         common_where = ((commandTable.is_deleted == None) | (commandTable.is_deleted == False)) & (commandTable.user != user_id)
-        command_query = commandTable.select(commandTable.id, commandTable.name, commandTable.created_at,
+        command_query = commandTable.select(commandTable.id, commandTable.command, commandTable.created_at,
                                             commandTable.updated_at, commandTable.status, commandTable.option)
 
         if tab == 'ready':
@@ -110,25 +110,25 @@ class HelperCommand():
             status_list = [1, 10, 11, 20, 21, 31, 60, 61]
         elif tab == 'all':
             return command_query.where(
-                (commandTable.name.contains(searching)) & (
+                (commandTable.command.contains(searching)) & (
                         common_where) & (commandTable.id.in_(commandId))).order_by(sorting).paginate(start, count).execute()
 
         return command_query.where(
-            (commandTable.name.contains(searching)) & (commandTable.id.in_(commandId)) & (commandTable.status.in_(status_list)
+            (commandTable.command.contains(searching)) & (commandTable.id.in_(commandId)) & (commandTable.status.in_(status_list)
                                                                ) & (
                 common_where)).order_by(sorting).paginate(start, count).execute()
 
     @wrapper
     def getAllCommandByUserId(self, user_id, command_ids, sorting='created_at', tab='all', desc=False, searching='',
-                              page=0, count=10, isVerify=False):
+                              page=0, count=10):
         if sorting == 'created_at':
             sorting = commandTable.created_at
         elif sorting == 'updated_at':
             sorting = commandTable.updated_at
         elif sorting == 'option':
             sorting = commandTable.option
-        elif sorting == 'name':
-            sorting = commandTable.name
+        elif sorting == 'command':
+            sorting = commandTable.command
         elif sorting == 'status':
             sorting = peewee.Case(commandTable.status, (
             (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
@@ -138,11 +138,7 @@ class HelperCommand():
             sorting = sorting.desc()
         common_where = ((commandTable.is_deleted == None) | (commandTable.is_deleted == False)) & (
                     (commandTable.user == user_id) | (commandTable.id.in_(command_ids)))
-        if isVerify:
-            common_where = common_where & (commandTable.isVerify == True)
-        else:
-            common_where = common_where & ((commandTable.isVerify == False) | (commandTable.isVerify == None))
-        command_query = commandTable.select(commandTable.id, commandTable.name, commandTable.created_at,
+        command_query = commandTable.select(commandTable.id, commandTable.command, commandTable.created_at,
                                             commandTable.updated_at, commandTable.status, commandTable.option)
 
         if tab == 'ready':
@@ -152,10 +148,10 @@ class HelperCommand():
         elif tab == 'developing':
             status_list = [1, 10, 11, 20, 21, 30, 31, 40, 41, 60, 61]
         elif tab == 'all':
-            query = command_query.where((commandTable.name.contains(searching)) & (common_where))
+            query = command_query.where((commandTable.command.contains(searching)) & (common_where))
             return query.order_by(sorting).paginate(page, count).execute(), query.count()
         query = command_query.where(
-            (commandTable.name.contains(searching)) & (commandTable.status.in_(status_list)) & (common_where))
+            (commandTable.command.contains(searching)) & (commandTable.status.in_(status_list)) & (common_where))
         return query.order_by(sorting).paginate(page, count).execute(), query.count()
 
     @wrapper
@@ -166,15 +162,15 @@ class HelperCommand():
             sorting = tableInstance.updated_at
         elif sorting == 'option':
             sorting = tableInstance.option
-        elif sorting == 'name':
-            sorting = tableInstance.name
+        elif sorting == 'command':
+            sorting = tableInstance.command
         elif sorting == 'status':
             sorting = tableInstance.status
 
         if desc:
             sorting = sorting.desc()
         common_where = (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False)
-        command_query = tableInstance.select(tableInstance.id, tableInstance.name, tableInstance.created_at,tableInstance.updated_at, tableInstance.status, tableInstance.option)
+        command_query = tableInstance.select(tableInstance.id, tableInstance.command, tableInstance.created_at,tableInstance.updated_at, tableInstance.status, tableInstance.option)
 
         if tab == 'ready':
             status_list = [0]
@@ -183,10 +179,10 @@ class HelperCommand():
         elif tab == 'developing':
             status_list = [1, 10, 11, 20, 21, 30, 31, 60, 61]
         elif tab == 'all':
-            return command_query.where((tableInstance.name.contains(searching)) & (tableInstance.user == user_id) & (
+            return command_query.where((tableInstance.command.contains(searching)) & (tableInstance.user == user_id) & (
                         (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False))).order_by(sorting).paginate(start,count).execute()
 
-        return command_query.where((tableInstance.name.contains(searching)) & (tableInstance.status.in_(status_list)
+        return command_query.where((tableInstance.command.contains(searching)) & (tableInstance.status.in_(status_list)
                         ) & (tableInstance.user == user_id) & (
                 common_where)).order_by(sorting).paginate(start, count).execute()
 
@@ -197,7 +193,7 @@ class HelperCommand():
         common_where = (commandTable.status.not_in([100, 0, 99, 9])) & (commandTable.user == user_id) & ((commandTable.is_deleted == None) | (commandTable.is_deleted == False))
 
         commandsInfo = [x.__dict__['__data__'] for x in
-                        commandTable.select(commandTable.id, commandTable.name, commandTable.status,
+                        commandTable.select(commandTable.id, commandTable.command, commandTable.status,
                                             commandTable.updated_at,
                                              commandTable.option).where(common_where).order_by(orderBy,
                                                                                                commandTable.created_at.desc()).limit(3).execute()]
@@ -210,32 +206,32 @@ class HelperCommand():
         if isShared:
             common_where = ((tableInstance.is_deleted == None) | (tableInstance.is_deleted == False)) & tableInstance.user != user_id
             result['ready'] = tableInstance.select().where(
-                    (tableInstance.name.contains(searching)) & (tableInstance.user != user_id) & (tableInstance.status == 'ready') & (tableInstance.id.in_(shared)) & (
+                    (tableInstance.command.contains(searching)) & (tableInstance.user != user_id) & (tableInstance.status == 'ready') & (tableInstance.id.in_(shared)) & (
                                 common_where)).count()
             result['developing'] = tableInstance.select().where(
-                    (tableInstance.name.contains(searching)) & (tableInstance.user != user_id) & (tableInstance.id.in_(shared)) & (tableInstance.status.in_([1, 10, 11, 20, 21, 30, 31])) & (
+                    (tableInstance.command.contains(searching)) & (tableInstance.user != user_id) & (tableInstance.id.in_(shared)) & (tableInstance.status.in_([1, 10, 11, 20, 21, 30, 31])) & (
                                 common_where)).count()
             result['done'] = tableInstance.select().where(
-                    (tableInstance.name.contains(searching)) & (tableInstance.user != user_id) & (tableInstance.id.in_(shared)) & (tableInstance.status.in_([9,99,100])) & (
+                    (tableInstance.command.contains(searching)) & (tableInstance.user != user_id) & (tableInstance.id.in_(shared)) & (tableInstance.status.in_([9,99,100])) & (
                                 common_where)).count()
-            result['all'] = tableInstance.select().where((tableInstance.user != user_id) & (tableInstance.id.in_(shared)) & (tableInstance.name.contains(searching)) & (
+            result['all'] = tableInstance.select().where((tableInstance.user != user_id) & (tableInstance.id.in_(shared)) & (tableInstance.command.contains(searching)) & (
                             common_where)).count()
         else:
             common_where = (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False)
             result['ready'] = tableInstance.select().where(
-                (tableInstance.name.contains(searching)) & (tableInstance.status == 'ready') & (
+                (tableInstance.command.contains(searching)) & (tableInstance.status == 'ready') & (
                             tableInstance.user == user_id) & (
                         (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False))).count()
             result['developing'] = tableInstance.select().where(
-                (tableInstance.name.contains(searching)) & (tableInstance.status.in_([1, 10, 11, 20, 21, 30, 31])) & (
+                (tableInstance.command.contains(searching)) & (tableInstance.status.in_([1, 10, 11, 20, 21, 30, 31])) & (
                             tableInstance.user == user_id) & (
                         (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False))).count()
             result['done'] = tableInstance.select().where(
-                (tableInstance.name.contains(searching)) & (tableInstance.status.in_([9,99,100])) & (
+                (tableInstance.command.contains(searching)) & (tableInstance.status.in_([9,99,100])) & (
                             tableInstance.user == user_id) & (
                         (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False))).count()
             result['all'] = tableInstance.select().where(
-                (tableInstance.user == user_id) & (tableInstance.name.contains(searching)) & (
+                (tableInstance.user == user_id) & (tableInstance.command.contains(searching)) & (
                         (tableInstance.is_deleted == None) | (tableInstance.is_deleted == False))).count()
         return result
 
@@ -278,8 +274,8 @@ class HelperCommand():
             user.save()
         if status > 0:
             asynctasksTable.create(**{
-                "taskName": command.name,
-                "taskNameEn": command.name,
+                "taskName": command.command,
+                "taskNameEn": command.command,
                 "taskType": task_type,
                 "status": status,
                 "user": command.user,
@@ -292,7 +288,7 @@ class HelperCommand():
             #     asyncTaskId.save()
             # except:
             #     asynctasksTable.create(**{
-            #         "taskName": command.name,
+            #         "taskName": command.command,
             #         "taskType": "develop",
             #         "status": status,
             #         "user": command.user,

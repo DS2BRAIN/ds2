@@ -2627,6 +2627,8 @@ class commandTable(MySQLModel):
     is_deleted = pw.IntegerField(null=True)
     command_token = pw.TextField(null=True)
     is_private = pw.BooleanField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
 
 class MongoDb():
     def __init__(self):

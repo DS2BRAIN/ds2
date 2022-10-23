@@ -35,9 +35,9 @@ def createCommand(response: Response, command_data: CommandData, token: str):
 
 @router.get("/commands/")
 def readCommands(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
-                 page: int = 0, desc: bool = False, searching: str = '', isVerify: bool = False):
+                 page: int = 0, desc: bool = False, searching: str = ''):
     response.status_code, result = manageCommandClass.getCommandsById(token, sorting, page, count, tab,
-                                                                      desc, searching, isVerify)
+                                                                      desc, searching)
     return result
 
 @router.get("/commands/{command_id}/")
