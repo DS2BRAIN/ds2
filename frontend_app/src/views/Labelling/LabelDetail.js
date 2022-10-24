@@ -1248,7 +1248,9 @@ const LabelDetail = ({ history, match }) => {
   // };
   const getS3key = (key) => {
     if (key) {
-      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static/${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1
+        ? `${fileurl}static/${key}`
+        : key;
       // return key;
     }
   };
@@ -2437,7 +2439,13 @@ const LabelDetail = ({ history, match }) => {
                                         style={{ width: v.width }}
                                         align="center"
                                       >
-                                        <b>{t(v.title)}</b>
+                                        <b
+                                          style={{
+                                            color: "var(--textWhite87)",
+                                          }}
+                                        >
+                                          {t(v.title)}
+                                        </b>
                                       </TableCell>
                                     );
                                   })}
