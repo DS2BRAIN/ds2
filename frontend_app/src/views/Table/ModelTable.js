@@ -119,7 +119,6 @@ const ModelTable = React.memo(
         user: state.user,
         projects: state.projects,
         models: state.models,
-        // labelprojects: state.labelprojects,
         messages: state.messages,
       }),
       []
@@ -258,40 +257,6 @@ const ModelTable = React.memo(
       }
     }, [projects.project && projects.project.trainingMethod]);
 
-    // useEffect(() => {
-    //   if (projects.project.labelproject) {
-    //     setIsLoading(true);
-    //     dispatch(getLabelProjectRequestAction(projects.project.labelproject));
-    //   }
-    // }, [projects.project && projects.project.labelproject]);
-
-    // useEffect(() => {
-    //   if (labelprojects.projectDetail) {
-    //     const labelClasses = labelprojects.projectDetail.labelclasses;
-    //     const autolabelingprojects = labelprojects.projectDetail.asynctasks;
-
-    //     const tempClasses = [];
-    //     const labelClassDictRaw = {};
-    //     for (let idx = 0; idx < labelClasses.length; idx++) {
-    //       const name = labelClasses[idx].name;
-    //       labelClassDictRaw[labelClasses[idx].id] =
-    //         labelClasses[idx].completedLabelCount;
-    //       if (tempClasses.indexOf(name) === -1)
-    //         tempClasses.push(labelClasses[idx]);
-    //     }
-    //     setLabelClassDict(labelClassDictRaw);
-    //     setLabelClasses(tempClasses);
-
-    //     // autolabelingprojects && autolabelingprojects.map( (autolabelingproject) => {
-    //     //     if (!isAutoLabelingRunning && (autolabelingproject.status === 1 || autolabelingproject.status === 11 )){
-    //     //         setIsAutoLabelingRunning(true);
-    //     //     }
-    //     // });
-    //     setAutoLabeingProjects(autolabelingprojects);
-    //     setIsLoading(false);
-    //   }
-    // }, [labelprojects.projectDetail]);
-
     useEffect(() => {
       if (projects.project.webhookMethod)
         setWebhooksMethod(projects.project.webhookMethod);
@@ -309,7 +274,6 @@ const ModelTable = React.memo(
     useEffect(() => {
       if (messages.shouldCloseModal) {
         setIsModalOpen(false);
-        // setIsAutoLabelingModalOpen(false);
         setOpenWebhooksModal(false);
         setIsPrescriptiveAnalyticsModalOpen(false);
       }
@@ -644,91 +608,6 @@ const ModelTable = React.memo(
       setIsPrescriptiveAnalyticsModalOpen(true);
       setChosenItem(item);
     };
-
-    // const onOpenAutoLabellingForObjectDetect = (id) => {
-    //   if (!has100LabelingPerLabelClasses()) {
-    //     dispatch(
-    //       openErrorSnackbarRequestAction(
-    //         t(
-    //           "오토 라벨링을 시작하기 위해서는 학습 데이터로 쓰일 라벨 클래스당 100개의 라벨이 필요합니다."
-    //         )
-    //       )
-    //     );
-    //     return;
-    //   }
-    //   setChosenModel(id);
-    //   // if(isAutoLabelingRunning){
-    //   //     dispatch(openErrorSnackbarRequestAction(t('Auto-labeling is currently in progress. We’ll e-mail you when auto-labeling is completed')));
-    //   //     return;
-    //   // }
-    //   setIsAutoLabelingModalOpen(true);
-    // };
-
-    // const has100LabelingPerLabelClasses = () => {
-    //   var hasLessThan100LabelInLabelClass = false;
-    //   labelClassDict &&
-    //     Object.values(labelClassDict).map((value) => {
-    //       if (value < 100) {
-    //         hasLessThan100LabelInLabelClass = true;
-    //       }
-    //     });
-    //   return !hasLessThan100LabelInLabelClass;
-    // };
-
-    // const autoLabelingModalClose = () => {
-    //   setIsAutoLabelingModalOpen(false);
-    // };
-
-    // const startAutoLabelling = async () => {
-    //   await setIsAutoLabelingLoading(true);
-    //   await api
-    //     .postAutoLabeling(
-    //       labelprojects.projectDetail.id,
-    //       projects.project.id,
-    //       chosenModel
-    //     )
-    //     .then((res) => {
-    //       dispatch(
-    //         openSuccessSnackbarRequestAction(
-    //           t("Auto-labeling will start now. We’ll e-mail you when auto-labeling is complete")
-    //         )
-    //       );
-    //     })
-    //     .then(() => {
-    //       window.location.reload();
-    //     })
-    //     .catch((e) => {
-    //       if (e.response && e.response.status === 401) {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(
-    //             t("You have been logged out automatically, please log in again")
-    //           )
-    //         );
-    //         setTimeout(() => {
-    //           Cookies.deleteAllCookies();
-    //           history.push("/signin/");
-    //         }, 2000);
-    //         return;
-    //       }
-    //       if (e.response && e.response.data[1].message) {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(t(e.response.data[1].message))
-    //         );
-    //       } else {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(
-    //             t(
-    //               "학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요."
-    //             )
-    //           )
-    //         );
-    //       }
-    //     })
-    //     .finally(() => {
-    //       setIsAutoLabelingModalOpen(false);
-    //       setIsAutoLabelingLoading(false);
-    //     });
-    // };
 
     const onOpenTooltipModal = (category) => {
       setTooltipCategory(category);
@@ -1272,9 +1151,6 @@ const ModelTable = React.memo(
                               {t("Collective prediction")}
                             </Button>
                           )}
-                          {/*<div onClick={() => openModal(id, 'autolabelling')} className={`${classes.modelTab} autoLabellingBtn ${classes.modelTabButton}`}>*/}
-                          {/*    {t('Auto-labeling')}*/}
-                          {/*</div>*/}
                         </>
                       )}
                       {isVideo && (
@@ -1377,24 +1253,6 @@ const ModelTable = React.memo(
                             {t("Sell")}
                           </Button>
                         )} */}
-                      {/* {projectTrainMethod ===
-                          "object_detection" &&
-                          project.labelproject && (
-                            <>
-                              <div
-                                onClick={() => {
-                                  onOpenAutoLabellingForObjectDetect(id);
-                                }}
-                                className={
-                                  has100LabelingPerLabelClasses
-                                    ? `${classes.modelTab} autoLabellingForObjectDetectBtn ${classes.modelTabHighlightButton}`
-                                    : `${classes.modelTab} autoLabellingForObjectDetectBtn ${classes.defaultDisabledButton}`
-                                }
-                              >
-                                {t("Auto-labeling")}
-                              </div>
-                            </>
-                          )} */}
                     </>
                   );
                 };
@@ -2250,92 +2108,6 @@ const ModelTable = React.memo(
             </GridContainer>
           </div>
         </Modal>
-        {/* <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={isAutoLabelingModalOpen}
-          onClose={closeModal}
-          className={classes.modalContainer}
-        >
-          <div className={classes.autoLabelingContent}>
-            {isAutoLabelingLoading ? (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  minHeight: "220px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Loading />
-              </div>
-            ) : (
-              <>
-                <div style={{ textAlign: "center", fontSize: "20px" }}>
-                  <b> [ {t("Start auto-labeling")} ] </b>
-                </div>
-                <div>
-                  <br />
-                  {t(
-                    "오토라벨링은 준비, 1차, 2차, 3차로 순으로 진행되며, 단계가 올라갈 수록 정확도가 높아집니다."
-                  )}
-                  <br />
-                  {t(
-                    "오토라벨링 준비단계는 오토라벨링 진행시 정확한 라벨링을 위하여 준비하는 단계로 생각할 수 있습니다."
-                  )}
-                  <br />
-                  {t(
-                    "2차 오토라벨링은 평균 정확도 80%이상, 3차 오토라벨링은 평균 정확도 90% 이상을 기대할 수 있습니다."
-                  )}
-                  <br />
-                  <br />
-                  {t("** step by step")}
-                  <br />
-                  {t("Ready=Test the feasibility of 100 labeling data")}
-                  <br />
-                  {t(
-                    "1차= 100개 라벨링 데이터로 인공지능 개발 및 900개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  {t(
-                    "2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  {t(
-                    "2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  <br />
-                  {t(
-                    "오토라벨링 결과를 검수하면 그의 10배 라벨링을 다시 오토라벨링을 통해 하실 수 있습니다. 진행하시겠습니까?"
-                  )}
-                </div>
-                <div className={classes.buttonContainer}>
-                  <GridItem xs={6}>
-                    <Button
-                      id="closeCancelModalBtn"
-                      className={classes.defaultOutlineButton}
-                      onClick={closeModal}
-                    >
-                      {t("Return")}
-                    </Button>
-                  </GridItem>
-                  <GridItem xs={6}>
-                    <Button
-                      id="payBtn"
-                      className={classes.defaultHighlightButton}
-                      onClick={startAutoLabelling}
-                    >
-                      {t("Start auto-labeling")}
-                    </Button>
-                  </GridItem>
-                </div>
-              </>
-            )}
-          </div>
-        </Modal> */}
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
