@@ -739,7 +739,9 @@ const LabelList = ({
       // });
       // const newKey = key.split(".com/")[1];
       // parseUrl = encodeURI(parseUrl);
-      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1
+        ? `${fileurl}static${key}`
+        : key;
       // return key;
     }
   };
@@ -920,6 +922,7 @@ const LabelList = ({
                         className={classes.tableHead}
                         align="center"
                         style={{ width: "15%", cursor: "pointer" }}
+                        onClick={() => onSetSortValue("class")}
                       >
                         <div className={classes.tableHeader}>
                           <b>{t("Class")}</b>
