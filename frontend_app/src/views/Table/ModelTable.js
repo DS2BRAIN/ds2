@@ -904,24 +904,6 @@ const ModelTable = React.memo(
 
               const bodyCellsBase = (model, modelDict, rowNum) => (
                 <>
-                  {/* <TableCell className="tableRowCell">
-                      <IconButton aria-label="add to favorites">
-                        {model.status === 100 &&
-                          (model.isFavorite ? (
-                            <StarIcon
-                              id="modelStarIcon"
-                              className="favoriteIcon"
-                              onClick={() => onClickForFavorite(false, id)}
-                            />
-                          ) : (
-                            <StarIcon
-                              id="unFavoritemodelStarIcon"
-                              className="favoriteIcon"
-                              onClick={() => onClickForFavorite(true, id)}
-                            />
-                          ))}
-                      </IconButton>
-                    </TableCell> */}
                   <TableCell
                     className="tableRowCell"
                     id="modelTable"
@@ -1075,22 +1057,6 @@ const ModelTable = React.memo(
                   let isRecommender = method === "recommender";
 
                   const openModal = async (id, item) => {
-                    // if (
-                    //   user.me &&
-                    //   parseInt(user.me.cumulativePredictCount) >=
-                    //     parseInt(
-                    //       +user.me.remainPredictCount + +user.me.usageplan.noOfPrediction
-                    //     )
-                    // ) {
-                    //   dispatch(
-                    //     openErrorSnackbarRequestAction(
-                    //       t(
-                    //         "예측횟수를 초과하여 새로운 프로젝트를 추가할 수 없습니다. 계속 진행하시려면 이용플랜을 변경해주세요."
-                    //       )
-                    //     )
-                    //   );
-                    //   return;
-                    // }
                     await dispatch(getModelRequestAction(id));
                     setIsModalOpen(true);
                     setChosenItem(item);
