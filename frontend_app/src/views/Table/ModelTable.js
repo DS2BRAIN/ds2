@@ -58,7 +58,6 @@ import ModalTooltip from "components/Tooltip/Tooltip.js";
 import SalesModal from "../SkyhubAI/SalesModal";
 import MetabaseButton from "components/CustomButtons/MetabaseButton";
 import Button from "components/CustomButtons/Button";
-import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Analytics from "./Analytics";
 
 let sortObj = {
@@ -114,11 +113,10 @@ const ModelTable = React.memo(
   }) => {
     const classes = currentTheme();
     const dispatch = useDispatch();
-    const { user, projects, models, messages } = useSelector(
+    const { user, projects, messages } = useSelector(
       (state) => ({
         user: state.user,
         projects: state.projects,
-        models: state.models,
         messages: state.messages,
       }),
       []
@@ -134,7 +132,6 @@ const ModelTable = React.memo(
       isPrescriptiveAnalyticsModalOpen,
       setIsPrescriptiveAnalyticsModalOpen,
     ] = useState(false);
-    const [chosenModel, setChosenModel] = useState(null);
     const [chosenItem, setChosenItem] = useState(null);
 
     const [sortValue, setSortValue] = useState("");
@@ -153,7 +150,6 @@ const ModelTable = React.memo(
     const [tooltipCategory, setTooltipCategory] = useState("");
     const [isSalesModalOpen, setIsSalesModalOpen] = useState(false);
     const [downloadOff, setDownloadOff] = useState(false);
-    const [objDetectAPModel, setObjDetectAPModel] = useState({});
     const [updatedSSEDict, setUpdatedSSEDict] = useState({});
     const [modelSSEDict, setModelSSEDict] = useState({});
     const [anchorRmse, setAnchorRmse] = useState(null);
@@ -278,16 +274,6 @@ const ModelTable = React.memo(
         setIsPrescriptiveAnalyticsModalOpen(false);
       }
     }, [messages.shouldCloseModal]);
-
-    // const getUpdatedSSEDict = (projectId) => {
-    //   let SSEapi = api.getModelsInfoViaSSE2(projectId);
-    //   SSEapi.addEventListener("new_message", (event) => {
-    //     const response = JSON.parse(event.data);
-    //     if (typeof response === "object" && Object.keys(response).length) {
-    //       setUpdatedSSEDict(response);
-    //     }
-    //   });
-    // };
 
     const getModelSSEDict = (updatedDict) => {
       let tempModel = { ...modelSSEDict };
