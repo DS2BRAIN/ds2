@@ -475,15 +475,18 @@ const ModelTable = React.memo(
           if (models[idx].mape) mapeData = true;
         } else if (projects.project.trainingMethod === "cycle_gan") {
           if (models[idx].totalLoss) totalLossData = true;
-          if (models[idx].errorRate) errorRateData = true;
+          if (models[idx].errorRate || models[idx].errorRate === 0)
+            errorRateData = true;
           if (models[idx].dice) diceData = true;
         } else if (projects.project.trainingMethod === "object_detection") {
           if (models[idx].ap_info?.APm) mAPData = true;
           if (models[idx].ap_info?.AP50) AP50Data = true;
           if (models[idx].ap_info?.AP75) AP75Data = true;
         } else {
-          if (models[idx].accuracy) accuracyData = true;
-          if (models[idx].errorRate) errorRateData = true;
+          if (models[idx].accuracy || models[idx].accuracy === 0)
+            accuracyData = true;
+          if (models[idx].errorRate || models[idx].errorRate === 0)
+            errorRateData = true;
           if (models[idx].dice) diceData = true;
         }
       }
