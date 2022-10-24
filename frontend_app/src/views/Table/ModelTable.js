@@ -950,6 +950,11 @@ const ModelTable = React.memo(
                   let resValue = substituteHead[defaultKey]
                     ? model[substituteHead[defaultKey]]
                     : defaultValue;
+                  if (defaultKey === "accuracy" || defaultKey === "errorRate") {
+                    if (resValue === 0 || resValue === 1)
+                      resValue = `${resValue * 100}%`;
+                    else resValue = `${(resValue * 100).toFixed(4)}%`;
+                  }
                   return (
                     <TableCell className="tableRowCell" align="center">
                       {model.status === 100 ? resValue : "-"}
@@ -967,7 +972,7 @@ const ModelTable = React.memo(
                     ? model.totalLoss
                     : "-";
                 let accuracy = model.accuracy
-                  ? `${(model.accuracy * 100).toFixed(4)}%`
+                  ? model.accuracy
                   : model.accuracy === 0
                   ? 0
                   : "-";
