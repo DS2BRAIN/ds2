@@ -1573,38 +1573,6 @@ const ModelTable = React.memo(
           amount: price,
         })
       );
-      // Cookies.setCookieSecure("Samesite", "None");
-      // const user = JSON.parse(Cookies.getCookie("user"));
-      // const userid = user["id"];
-      // var obj = new Object();
-
-      // obj.PCD_CPAY_VER = "1.0.1";
-      // obj.PCD_PAY_TYPE = "card";
-      // obj.PCD_PAY_WORK = "PAY";
-      // // obj.PCD_PAY_WORK = "AUTH";
-      // obj.PCD_CARD_VER = "01";
-      // /* (필수) 가맹점 인증요청 파일 (Node.JS : auth => [app.js] app.post('/pg/auth', ...) */
-      // obj.payple_auth_file = api.backendurl + "payple-auth-file"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // /* End : 가맹점 인증요청 파일 */
-      // obj.payple_auth_file = api.backendurl + "payple-auth-file/"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // obj.PCD_RST_URL = api.backendurl + "pgregistration/"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // /* 결과를 콜백 함수로 받고자 하는 경우 함수 설정 추가 */
-      // obj.callbackFunction = getResult; // getResult : 콜백 함수명
-      // /* End : 결과를 콜백 함수로 받고자 하는 경우 함수 설정 추가 */
-      // obj.PCD_PAYER_NO = userid;
-      // obj.PCD_PAYER_NAME = user.username;
-      // obj.PCD_PAYER_EMAIL = user.email;
-      // obj.PCD_PAY_GOODS = selectedModelId + " 모델 라이센스 구매";
-      // obj.PCD_PAY_TOTAL = price;
-      // obj.PCD_PAY_ISTAX = "Y";
-      // obj.PCD_PAY_TAXTOTAL = price / 10;
-      // obj.PCD_PAY_OID =
-      //   "payment_" + api.frontendurl + "_model_" + `${Date.now()}`;
-      // obj.PCD_SIMPLE_FLAG = "Y";
-      // obj.PCD_USER_DEFINE2 = isBuyingJetson;
-      // const PaypleCpayAuthCheck = window.PaypleCpayAuthCheck;
-      // PaypleCpayAuthCheck(obj);
-      // return;
     };
 
     if (selectedPage !== "model") return null;
