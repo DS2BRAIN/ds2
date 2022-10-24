@@ -586,8 +586,10 @@ const Manager = ({ history }) => {
                   textTransform: "capitalize",
                 }}
                 onClick={() => {
-                  if (sortingValue === tableHead.value) setIsDesc(!isDesc);
-                  else setSortingValue(tableHead.value);
+                  if (tableHead.sorting) {
+                    if (sortingValue === tableHead.value) setIsDesc(!isDesc);
+                    else setSortingValue(tableHead.value);
+                  }
                 }}
               >
                 <Grid
