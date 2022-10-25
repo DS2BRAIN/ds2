@@ -373,7 +373,7 @@ export default function NewProject({ history }) {
   };
 
   function getSteps() {
-    return ["Project Information", "Upload Data", "Create Project"];
+    return ["Project Information", "Load Data", "Create Project"];
   }
 
   function getStepContent(stepIndex) {
