@@ -240,10 +240,18 @@ export default function MarketList({ history }) {
       <>
         <div style={{ minHeight: "400px", borderBottom: "1px solid #F0F0F0" }}>
           <Table className={classes.table} aria-label="simple table">
-            <TableHead style={{ borderTop: "1px solid #F0F0F0" }}>
+            <TableHead style={{ borderTop: "1px solid var(--textWhite38)" }}>
               <TableRow>
                 {tableHeads.map((tableHead, idx) => (
-                  <TableCell key={idx} align="center" width={tableHead.width}>
+                  <TableCell
+                    key={idx}
+                    align="center"
+                    width={tableHead.width}
+                    style={{
+                      color: "var(--textWhite6)",
+                      borderColor: "var(--textWhite38)",
+                    }}
+                  >
                     {t(tableHead.value)}
                   </TableCell>
                 ))}
