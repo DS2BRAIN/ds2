@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 
@@ -7,8 +6,6 @@ import { Grid } from "@mui/material";
 
 const NavMenu = () => {
   const { t } = useTranslation();
-  const history = useHistory();
-  const localPath = window.location.pathname;
 
   const routes = [
     {
@@ -67,27 +64,18 @@ const NavMenu = () => {
 
         if (route.condition)
           return (
-            <a
+            <NavLink
               key={route.id}
               id={`${route.id}_link`}
-              href={path}
-              className={
-                history.location.pathname === route.layout + route.path
-                  ? defaultClassName + " " + navLinkActiveClassName
-                  : defaultClassName
-              }
+              to={route.layout ? route.layout + route.path : route.path}
+              className={defaultClassName}
+              activeClassName={navLinkActiveClassName}
+              onClick={() => {
+                window.location.href = path;
+              }}
             >
               {t(route.name)}
-            </a>
-            // <NavLink
-            //   key={route.id}
-            //   id={`${route.id}_link`}
-            //   to={route.layout ? route.layout + route.path : route.path}
-            //   className={defaultClassName}
-            //   activeClassName={navLinkActiveClassName}
-            // >
-            //   {t(route.name)}
-            // </NavLink>
+            </NavLink>
           );
       })}
     </Grid>
