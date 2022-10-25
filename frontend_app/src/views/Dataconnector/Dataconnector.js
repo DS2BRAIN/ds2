@@ -108,7 +108,6 @@ const Dataconnector = ({ history }) => {
 
   useEffect(() => {
     dispatch(getDataconnectortypeRequestAction());
-    getDataByDispatch();
   }, []);
 
   useEffect(() => {
@@ -279,8 +278,6 @@ const Dataconnector = ({ history }) => {
   }, [datasetList, selectedDataIdList]);
 
   const getDataByDispatch = (valueChangeObject) => {
-    if (projects.isDatasetLoading) return;
-
     let payloadJson = {
       sorting: sortDataValue,
       count: datatableRowsPerPage,
