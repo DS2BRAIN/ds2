@@ -739,7 +739,7 @@ const LabelList = ({
       // });
       // const newKey = key.split(".com/")[1];
       // parseUrl = encodeURI(parseUrl);
-      return IS_ENTERPRISE ? `${fileurl}static${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static${key}` : key;
       // return key;
     }
   };

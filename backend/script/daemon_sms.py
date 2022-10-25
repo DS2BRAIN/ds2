@@ -63,7 +63,7 @@ class DaemonSMS():
 
                     is_working_on_this_server = True
 
-                    if data["require_gpus_total"]:
+                    if data.get("require_gpus_total"):
                         is_working_on_this_server = False
                         for key, value in data["require_gpus_total"].items():
                             if key == "localhost":
@@ -136,11 +136,15 @@ class DaemonSMS():
             else:
                 my_env["CUDA_VISIBLE_DEVICES"] = "0"
 
+            if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
+                python_path = "/home/yeo/miniconda3/envs/p3.9/bin/python"
+                jupyter_path = "/home/yeo/.local/bin/jupyter"
+                execute_path = "/home/yeo/projects/ds2/backend/"
 
             if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):
                 python_path = "/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"
                 jupyter_path = "/home/dslab/.local/bin/jupyter"
-                execute_path = "/var/lib/jenkins/projects/aistore-daemon/"
+                execute_path = "/var/lib/jenkins/projects/ds2-staging/backend/"
                 my_env["DS2_DEV_TEST"] = "true"
 
             if "jupyterProject" in data:
@@ -156,7 +160,7 @@ class DaemonSMS():
 
                 cmd = f"{python_path} {execute_path}daemon_sms.py prod business enterprise {data['id']}"
 
-                if data['require_gpus_total']: #Temp
+                if data.get('require_gpus_total'): #Temp
                     try:
                         import horovod
                         training_server_total = 0

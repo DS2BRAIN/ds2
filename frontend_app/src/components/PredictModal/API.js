@@ -897,7 +897,7 @@ const API = React.memo(({ isStandard, chosenItem, csv, trainingColumnInfo, model
     if (chosenItem === "apiVideo")
     {caseItemApiVideo();}
     else if (chosenItem === "ApiSpeechToText") {caseItemApiSpeechToText();}
-    else if (trainMethod === "image" || models.model.externalAiType === "image") {caseTrainMethodImage();}
+    else if (trainMethod === "image" || trainMethod === "ocr" || models.model.externalAiType === "image") {caseTrainMethodImage();}
     else if (trainMethod === "object_detection" || trainMethod === "cycle_gan") {caseTrainMethodObjectCycle();}
     else {caseTrainMethodEtc();}
   };

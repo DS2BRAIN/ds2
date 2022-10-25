@@ -164,6 +164,7 @@ const ModelTable = React.memo(
     const [anchorDice, setAnchorDice] = useState(null);
     const [anchorR2Score, setAnchorR2Score] = useState(null);
     const [anchorMase, setAnchorMase] = useState(null);
+    const [anchorMAE, setAnchorMAE] = useState(null);
     const [defaultStatKeys, setDefaultStatKeys] = useState([]);
     const [cmStatKeys, setCmStatKeys] = useState([]);
     const [substituteHead, setSubsituteHead] = useState({});
@@ -504,6 +505,7 @@ const ModelTable = React.memo(
       let totalLossData = false;
       let accuracyData = false;
       let maseData = false;
+      let mapeData = false;
       let diceData = false;
       let errorRateData = false;
       let mAPData = false;
@@ -516,9 +518,11 @@ const ModelTable = React.memo(
           if (models[idx].rmse) rmseData = true;
           if (models[idx].r2score) r2scoreData = true;
           if (models[idx].mase) maseData = true;
+          if (models[idx].mape) mapeData = true;
         } else if (projects.project.trainingMethod === "normal_regression") {
           if (models[idx].r2score !== null) r2scoreData = true;
           if (models[idx].mase) maseData = true;
+          if (models[idx].mape) mapeData = true;
         } else if (projects.project.trainingMethod === "cycle_gan") {
           if (models[idx].totalLoss) totalLossData = true;
           if (models[idx].errorRate) errorRateData = true;
@@ -539,6 +543,7 @@ const ModelTable = React.memo(
         totalLoss: totalLossData,
         accuracy: accuracyData,
         mase: maseData,
+        mape: mapeData,
         dice: diceData,
         errorRate: errorRateData,
         mAP: mAPData,
@@ -827,9 +832,16 @@ const ModelTable = React.memo(
                   "모델이 데이터를 얼마나 잘 설명하는지 나타내는 지표입니다. 0~1 값을 가질 수 있으며, 1에 가까울수록 모델이 데이터와 연관성이 높다고 할 수 있습니다.",
               },
               mase: {
-                name: "MAE",
+                name: "MSE",
                 anchor: anchorMase,
                 setAnchor: setAnchorMase,
+                tooltip:
+                  "예측값과 실제값의 제곱을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+              },
+              mape: {
+                name: "MAE",
+                anchor: anchorMAE,
+                setAnchor: setAnchorMAE,
                 tooltip:
                   "예측값과 실제값의 차이의 절대 값을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
               },
@@ -988,6 +1000,7 @@ const ModelTable = React.memo(
                   projectTrainMethod === "time_series_regression") &&
                 renderDataHead("r2score")}
               {data.mase && renderDataHead("mase")}
+              {data.mape && renderDataHead("mape")}
               {data.mAP && renderDataHead(null, "mAP")}
               {data.AP50 && renderDataHead(null, "AP50")}
               {data.AP75 && renderDataHead(null, "AP75")}
@@ -1110,6 +1123,7 @@ const ModelTable = React.memo(
                   ? 0
                   : "-";
                 let mase = model.mase ? model.mase : model.mase === 0 ? 0 : "-";
+                let mae = model.mape ? model.mape : model.mape === 0 ? 0 : "-";
 
                 return (
                   <>
@@ -1129,6 +1143,7 @@ const ModelTable = React.memo(
                         projectTrainMethod === "time_series_regression") &&
                       renderDataBody("r2score", r2score, model)}
                     {data.mase && renderDataBody("mase", mase, model)}
+                    {data.mape && renderDataBody("mae", mae, model)}
                     {data.mAP && (
                       <TableCell className="tableRowCell" align="center">
                         {model?.ap_info?.APm ? model.ap_info?.APm : "-"}

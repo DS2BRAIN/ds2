@@ -1581,13 +1581,20 @@ class ManageLabeling:
         prepare_files = self.dbClass.getOneSthreeFilesByLabelprojectId(labelProject['id'], workAssignee=user.email, app_status='prepare')
         review_files = self.dbClass.getOneSthreeFilesByLabelprojectId(labelProject['id'], workAssignee=user.email, app_status='review')
         done_files = self.dbClass.getOneSthreeFilesByLabelprojectId(labelProject['id'], workAssignee=user.email, app_status='done')
+        prepare_files_own = self.dbClass.getOneSthreeFilesByLabelprojectId(labelProject['id'], app_status='prepare')
+        done_files_own = self.dbClass.getOneSthreeFilesByLabelprojectId(labelProject['id'], app_status='done')
 
         if len(done_files) > 0:
             ds2data = done_files[0]
         elif len(review_files) > 0:
             ds2data = review_files[0]
-        else:
+        elif len(prepare_files) > 0:
             ds2data = prepare_files[0]
+        elif len(done_files_own) > 0:
+            ds2data = done_files_own[0]
+        else:
+            ds2data = prepare_files_own[0]
+
 
         if not labelProject['predictColumnName'] and ds2data.get('labelData'):
             if type(ds2data['labelData']) == str:

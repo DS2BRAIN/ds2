@@ -686,6 +686,15 @@ const UserInfo = ({ history }) => {
                 />
               </div>
             </Grid>
+
+            <Grid item xs={12}>
+              <div className={classes.settingFontWhite6}>
+                {t("Remain Credit")}
+              </div>
+              <div className={classes.settingFontWhite87} id="userCompany">
+                {user.me.deposit - user.me.usedPrice}
+              </div>
+            </Grid>
           </Grid>
           <Grid
             item
@@ -1037,11 +1046,6 @@ const UserInfo = ({ history }) => {
                           <GridItem xs={12} style={{ marginBottom: "10px" }}>
                             <div>
                               {t(
-                                "According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination."
-                              )}
-                            </div>
-                            <div>
-                              {t(
                                 "You will be automatically logged out in 10 seconds. Thank you for using our services."
                               )}
                             </div>
@@ -1049,11 +1053,6 @@ const UserInfo = ({ history }) => {
                         ) : (
                           <>
                             <GridItem xs={12} style={{ marginBottom: "10px" }}>
-                              <div>
-                                {t(
-                                  "According to the Privacy Policy, all data will be permanently deleted 90 days after your account termination."
-                                )}
-                              </div>
                               <div>
                                 {t(
                                   "It is impossible to restore the account after your account is deleted. Please enter your password if you want to continue."

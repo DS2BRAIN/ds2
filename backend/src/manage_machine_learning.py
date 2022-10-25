@@ -29,6 +29,11 @@ predictClass = ManagePredict()
 class ManageMachineLearning(ManageBaseClass):
     def __init__(self):
         super().__init__()
+        self.predict_class = None
+
+        if os.path.exists("./src/training/predict.py"):
+            from src.training.predict import Predict
+            self.predict_class = Predict()
 
     def predict(self, user_id, predict_object):
 
@@ -197,9 +202,9 @@ class ManageMachineLearning(ManageBaseClass):
 
             column_name = f"{column['columnName']}__{dataconnector_file_name[column['dataconnector']]}"
 
-            if project_dict['trainingColumnInfo'].get(str(column['id']),
-                                                      False) is False and column_name in list(df.columns):
-                raise ex.NotUsedColumnEx(column_name)
+            # if project_dict['trainingColumnInfo'].get(str(column['id']),
+            #                                           False) is False and column_name in list(df.columns):
+            #     raise ex.NotUsedColumnEx(column_name)
 
             if column_name not in list(df.columns):
                 continue
@@ -227,7 +232,16 @@ class ManageMachineLearning(ManageBaseClass):
         else:
             file_path = model_raw['filePath']
 
-        if model_class is None:
+        if 'wns' in project_dict['instanceType']:
+            result = self.predict_class.predict_w(df, project_raw)
+            df[value_for_predict] = result
+        elif 'drv' in project_dict['instanceType']:
+            result = self.predict_class.predict_d(df, project_raw)
+            df[value_for_predict] = result
+        elif 'tns' in project_dict['instanceType']:
+            result = self.predict_class.predict_t(df, project_raw)
+            df[value_for_predict] = result
+        elif model_class is None:
             raise ex.NotAllowedAlgorithmEx(project_raw.get('algorithm'))
         elif model_class == KerasAnn:
             model_class = model_class()
@@ -287,7 +301,6 @@ class ManageMachineLearning(ManageBaseClass):
             except:
                 raise ex.FailedPredictEx()
         code = HTTP_200_OK
-        df['predict_for_meta'] = df[value_for_predict]
         if return_type == "file":
 
             predictedFilePath = f'temp/{model_id}_{project_raw["id"]}_{str(round(time.time() * 1000))}.csv'

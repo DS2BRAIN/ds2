@@ -108,7 +108,7 @@ try:
         try:
             copy_tree(f"/opt/deepsort/", f"{os.getcwd()}/src/training/deepsort/")
         except:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             pass
 
     if not os.path.exists('./asset/object_detection_configs/COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml'):
@@ -116,7 +116,7 @@ try:
         try:
             copy_tree(f"{os.getcwd()}/../astore-rcnn/object_detection_configs/", f"{os.getcwd()}/asset/object_detection_configs/")
         except:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             pass
 
     if not os.path.exists('./asset/h.xml'):
@@ -127,7 +127,7 @@ try:
                 urllib.request.urlretrieve("https://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/h.xml", "/opt/h.xml")
             shutil.copyfile(f"/opt/h.xml", f"{os.getcwd()}/asset/h.xml")
         except:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             pass
 
 except:

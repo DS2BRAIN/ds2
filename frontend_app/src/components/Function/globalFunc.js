@@ -188,6 +188,12 @@ export const getLabelAppUrl = (category) => {
     }
   }
 
+  if (window.location.href.indexOf("https") > -1) {
+    labelAppUrl = category === "object_detection"
+      ? window.location.origin.replaceAll("console", "labelapp") + "/"
+      : window.location.origin + "/";
+  }
+
   return labelAppUrl;
 };
 

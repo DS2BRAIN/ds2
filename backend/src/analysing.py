@@ -258,6 +258,12 @@ class Analysing():
 
         yClass = [x.split('__label__')[1] for x in learn.labels]
 
+        try:
+            if learn.dls.vocab and yClass:
+                yClass = learn.dls.vocab
+        except:
+            pass
+
         print("diffRows")
         print(diffRows)
 

@@ -250,7 +250,7 @@ export default function SignUp() {
             setSnackbarOption(
               "success",
               `${t("Thank you for creating an account")} ${t(
-                "이메일 인증 후 이용이 가능합니다."
+                "Please verify your e-mail."
               )} ${t(
                 "The e-mail may take up to 10 minutes to arrive in your inbox"
               )}`

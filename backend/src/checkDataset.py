@@ -268,8 +268,9 @@ class CheckDataset():
                 timestamp = time.strftime('%y%m%d%H%M%S')
                 zip_dir_path = f'{self.utilClass.save_path}/user/{labelproject_raw.user}/{timestamp}{labelproject_raw.id}'
                 for data in ds2data:
-                    s3key = data['s3key'] if self.utilClass.configOption == "enterprise" else \
-                            urllib.parse.unquote(data['s3key'].split('amazonaws.com/')[1])
+                    s3key = urllib.parse.unquote_plus(data['s3key']) if self.utilClass.configOption == "enterprise" else \
+                            urllib.parse.unquote_plus(data['s3key'].split('amazonaws.com/')[1])
+                    s3key = urllib.parse.unquote_plus(s3key)
                     class_name = data.get('labelData', 'non_class')
                     dir_name = f'{self.utilClass.save_path}/user/{labelproject_raw.user}/{timestamp}{labelproject_raw.id}/{class_name}'
                     if not is_for_client:
@@ -347,7 +348,7 @@ class CheckDataset():
     def exportCoCoData(self, labelProjectInfo, projectId=None, isAsync=False, is_get_image=False,
                        has_project_data=False, has_median_data=False, is_suffle=True, is_train_data=True,
                        asynctask=None):
-
+        print("exportCoCoData")
         trainannotation = []
         testannotations = []
         status = 0
@@ -543,6 +544,7 @@ class CheckDataset():
                     with open(f'{label_project_dir}/coco.json', 'w') as outfile:
                         json.dump(result, outfile, indent=4)
                     timestamp = time.strftime('%y%m%d%H%M%S')
+                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/', exist_ok=True)
                     zip_file_path = f'{self.utilClass.save_path}/user/{labelProject["user"]}/{labelProject["id"]}'
                     self.make_archive(label_project_dir, f'{zip_file_path}.zip')
                     self.s3.upload_file(f'{zip_file_path}.zip', self.utilClass.bucket_name,
@@ -550,8 +552,9 @@ class CheckDataset():
                     outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/coco.zip'
                     status = 100
                     shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
-                    if os.path.isdir(label_project_dir):
-                        shutil.rmtree(label_project_dir)
+                    os.remove(f'{label_project_dir}/coco.json')
+                    # if os.path.isdir(label_project_dir):
+                    #     shutil.rmtree(label_project_dir)
             except:
                 print(traceback.format_exc())
                 outputFilePath = ''
@@ -590,11 +593,13 @@ class CheckDataset():
         process = subprocess.Popen('/bin/bash', stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         out, err = process.communicate(commands.encode('utf-8'))
 
-    def download_sthreefile(self, sthreefiles, labelproject_id, project_id=None):
+    def download_sthreefile(self, sthreefiles, labelproject_id, project_id=None, is_voc=False):
         for sthreefile in tqdm(sthreefiles):
 
             if project_id:
                 folder_path = f'{self.utilClass.save_path}/{project_id}'
+            elif is_voc:
+                folder_path = f'{self.utilClass.save_path}/labelproject/{labelproject_id}/JPEGImages'
             elif self.utilClass.configOption == 'enterprise':
                 folder_path = f'{self.utilClass.save_path}/labelproject/{labelproject_id}'
             else:
@@ -606,16 +611,25 @@ class CheckDataset():
 
             try:
                 temp_url = f'{sthreefile["s3key"]}' if self.utilClass.configOption == 'enterprise' else f"user/{sthreefile['s3key'].split('/user/')[1]}"
-                s3_download_url = urllib.parse.unquote_plus(temp_url)
-                self.s3.download_file(self.utilClass.bucket_name, s3_download_url, download_path)
+                if self.utilClass.save_path in temp_url:
+                    s3_download_url = urllib.parse.unquote_plus(temp_url)
+                    self.s3.download_file(self.utilClass.bucket_name, s3_download_url, download_path)
+                else:
+                    try:
+                        s3_download_url = urllib.parse.unquote_plus(temp_url)
+                        cloud_file_path = "/".join(s3_download_url.split("/")[3:])
+                        self.utilClass.s3_cloud.download_file('aimakerdslab', cloud_file_path, download_path)
+                    except:
+                        pass
+
             except:
                 self.utilClass.sendSlackMessage(
                     f"파일 : checkDataset\n 함수 : exportCoCo \n exportCoCo 파일 다운로드 에러 발생 - {sthreefile['fileName']}\n 에러 내용 = {traceback.format_exc()})",
                     appError=True)
                 print(traceback.format_exc())
                 pass
-            if not os.path.isfile(download_path):
-                sthreefiles.remove(sthreefile)
+            # if not os.path.isfile(download_path):
+            #     sthreefiles.remove(sthreefile)
         return sthreefiles
 
     def calcPolygonArea(self, points):
@@ -671,6 +685,7 @@ class CheckDataset():
             if is_get_image:
                 os.makedirs(f"{folder_url}/JPEGImages", exist_ok=True)
                 os.makedirs(f"{folder_url}/ImageSets/Main", exist_ok=True)
+                os.makedirs(f"{folder_url}/Annotations/", exist_ok=True)
                 shuffle(label_project['sthreefile'])
                 image_sets_idx = (len(label_project["sthreefile"]) // 5) + 1
                 test_filenames = []
@@ -696,7 +711,7 @@ class CheckDataset():
                 root = Element('annotation')
 
                 SubElement(root, "folder").text = "VOC2007"
-                SubElement(root, "filename").text = img['originalFileName']
+                SubElement(root, "filename").text = img['fileName']
 
                 source = SubElement(root, "source")
                 SubElement(source, "database").text = "The VOC2007 Database"
@@ -745,6 +760,17 @@ class CheckDataset():
                         'ymax': str(int(npmax[1])),
                     }
 
+                    points = [[round(img['width'] * label['x']), round(img['height'] * label['y']),
+                               round(img['width'] * (label['x'] + label['w'])), round(img['height'] * label['y']),
+                               round(img['width'] * (label['x'] + label['w'])), round(img['height'] * (label['y'] + label['h'])),
+                               round(img['width'] * label['x']), round(img['height'] * (label['y'] + label['h']))
+                               ]]
+                    numpyarray = np.array(points).reshape((-1, 2))
+                    npmin = np.min(numpyarray, axis=0)
+                    npmax = np.max(numpyarray, axis=0)
+                    area = label['w'] * label['h']
+                    bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
+
                     label_class = self.dbClass.getOneLabelclassById(label['labelclass']).__dict__['__data__']
 
                     obj = SubElement(root, "object")
@@ -754,10 +780,10 @@ class CheckDataset():
                     SubElement(obj, 'difficult').text = "0"
 
                     bndbox = SubElement(obj, "bndbox")
-                    SubElement(bndbox, 'xmin').text = bndbox_info['xmin']
-                    SubElement(bndbox, 'ymin').text = bndbox_info['ymin']
-                    SubElement(bndbox, 'xmax').text = bndbox_info['xmax']
-                    SubElement(bndbox, 'ymax').text = bndbox_info['ymax']
+                    SubElement(bndbox, 'xmin').text = f"{bbox[0]}"
+                    SubElement(bndbox, 'ymin').text = f"{bbox[1]}"
+                    SubElement(bndbox, 'xmax').text = f"{bbox[2]}"
+                    SubElement(bndbox, 'ymax').text = f"{bbox[3]}"
 
                 only_file_name, file_ext = os.path.splitext(img['originalFileName'])
                 ElementTree(root).write(f"{folder_url}/Annotations/{only_file_name}.xml")
@@ -769,6 +795,12 @@ class CheckDataset():
                 with open(f"{folder_url}/ImageSets/Main/trainval.txt", "w") as text:
                     text.writelines(trainval_filenames)
 
+
+            if label_project['id'] or is_get_image:
+                label_project['sthreefile'] = self.download_sthreefile(
+                    label_project['sthreefile'], label_project['id'], is_voc=True)
+
+
             self.make_archive(folder_url, f'{folder_url}.zip')
 
             timestamp = time.strftime('%y%m%d%H%M%S')
@@ -777,14 +809,21 @@ class CheckDataset():
 
             output_file_path = f'{self.utilClass.save_path}/user/{user["id"]}/labelproject/{label_project["id"]}/{timestamp}/xml.zip'
 
+            if os.path.isdir(f"{folder_url}/JPEGImages"):
+                shutil.rmtree(f"{folder_url}/JPEGImages")
+            if os.path.isdir(f"{folder_url}/ImageSets"):
+                shutil.rmtree(f"{folder_url}/ImageSets")
+            if os.path.isdir(f"{folder_url}/Annotations"):
+                shutil.rmtree(f"{folder_url}/Annotations")
+
             status = 100
         except:
             print(traceback.format_exc())
             output_file_path = ''
             status = 99
 
-        if os.path.isdir(folder_url):
-            shutil.rmtree(folder_url)
+        # if os.path.isdir(folder_url):
+        #     shutil.rmtree(folder_url)
 
         if os.path.isfile(f"{folder_url}.zip"):
             os.remove(f"{folder_url}.zip")

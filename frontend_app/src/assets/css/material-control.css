@@ -89,4 +89,5 @@
 
 .MuiInputBase-input {
   caret-color: var(--textWhite87);
+  color: var(--textWhite87) !important;
 }

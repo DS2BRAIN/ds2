@@ -299,7 +299,7 @@ class ManageFile:
                         break
                     else:
                         raise ex.TooManyExistFileEx(user_id=user_id)
-            if len(files) > 0:
+            if len(files) > 1:
                 is_coco, json_data = self.check_exists_coco(root)
                 if is_coco is None:
                     raise ex.TooManyExistFileEx(user_id=user_id)
@@ -325,6 +325,7 @@ class ManageFile:
         origin_dirs = []
         voc_dirs = ['annotations', 'jpegimages', 'imagesets']
         lower_dirs = [x.lower() for x in dirs]
+        has_images = False
         if set(voc_dirs).issubset(set(lower_dirs)):
             for tmp_dir in dirs:
                 if tmp_dir.lower() in voc_dirs:
@@ -337,9 +338,12 @@ class ManageFile:
                         root = f"{voc_path}/{tmp_dir}"
                         images = list(pathlib.Path(root).glob('*.jpg')) + list(
                             pathlib.Path(root).glob('*.jpeg')) + list(pathlib.Path(root).glob("*.png"))
-                        if len(images) == 0:
-                            raise ex.NotExistFileEx(user_id=user_id, obj=f"{file_name}에 이미지 파일")
+                        if len(images) > 0:
+                            has_images = True
                     origin_dirs.append(tmp_dir)
+
+            if not has_images:
+                raise ex.NotExistFileEx(user_id=user_id, obj=f"{file_name}에 이미지 파일")
             return True, voc_path, origin_dirs
         return False, None, None
 
@@ -812,7 +816,7 @@ class ManageFile:
                         #     annotation['segmentation'] = [[x1, y1, x2, y1, x2, y2, x1, y2]]
                         bbox = {}
 
-                        if not annotation.get('segmentation') and annotation['bbox']:
+                        if annotation['bbox']:
                             bbox = {
                                 "x": annotation['bbox'][0] / width,
                                 "y": annotation['bbox'][1] / height,
@@ -821,7 +825,7 @@ class ManageFile:
                             }
                         # bbox = self.get_coco_segmentation(annotation['bbox'], width, height)
 
-                        labeltype = 'box'
+                        labeltype = 'polygon'
                         points = None
                         if annotation['segmentation']:
                             if type(annotation['segmentation'][0]) != list:
@@ -829,8 +833,8 @@ class ManageFile:
                             else:
                                 points = self.get_coco_segmentation(annotation['segmentation'][0], width, height)
 
-                        if points:
-                            labeltype = 'polygon'
+                        if bbox:
+                            labeltype = 'box'
 
                         label_data = {
                                           'labeltype': labeltype,
@@ -899,8 +903,11 @@ class ManageFile:
                 except Exception as e:
                     fail_file_list.append(image)
                     self.utilClass.sendSlackMessage(traceback.format_exc())
-        connector_raw.progress = 90
-        connector_raw.save()
+
+        if not is_labelproject:
+            connector_raw.progress = 90
+            connector_raw.save()
+
         if len(ds2datas) > 0:
             self.dbClass.createFile(ds2datas)
 
@@ -923,12 +930,14 @@ class ManageFile:
                 json_key = file_path_dict[data['fileName']]
                 json_key = json_key[1:] if json_key[0] == '/' else json_key
                 json_key = '/'.join(json_key.split('/')[1:])
-                for temp_folder_name in base_data['json_file_name'].split('/'):
+                for temp_folder_name in base_data['file_name'].split('/'):
                     if json_key.split('/')[0] == temp_folder_name:
                         json_key = '/'.join(json_key.split('/')[1:])
 
                 if preprocessing_json_data.get("/" + json_key):
                     json_key = "/" + json_key
+
+                json_key = json_key.split('/')[-1]
 
                 if preprocessing_json_data.get(json_key):
                     [label_info.update({'labelproject': labelproject_id, 'sthreefile': data['id']}) for label_info
@@ -1068,6 +1077,20 @@ class ManageFile:
                                           'workAssignee': user_id,
                                           'labelclass': categories_dict[object_dict_item['class']],
                                           'points': points}
+                            if object_dict_item.get('bbox'):
+
+                                bbox = {
+                                    "x": object_dict_item.get('bbox')[0] / width,
+                                    "y": object_dict_item.get('bbox')[1] / height,
+                                    "w": object_dict_item.get('bbox')[2] / width,
+                                    "h": object_dict_item.get('bbox')[3] / height
+                                }
+                                label_data['bbox'] = bbox
+                                label_data['labeltype'] = 'box'
+                                label_data['x'] = bbox['x']
+                                label_data['y'] = bbox['y']
+                                label_data['w'] = bbox['w']
+                                label_data['h'] = bbox['h']
                             self.dbClass.createLabel(label_data)
 
                             update_sthree_data = {'status': 'done', 'workAssignee': user_email}
@@ -1107,14 +1130,15 @@ class ManageFile:
             list_with_all_objects.append(voc_object.find('name').text)
 
             bndbox = voc_object.find('bndbox')
-            xmin = int(bndbox.findtext('xmin')) - 1
-            ymin = int(bndbox.findtext('ymin')) - 1
+            xmin = int(bndbox.findtext('xmin'))
+            ymin = int(bndbox.findtext('ymin'))
             xmax = int(bndbox.findtext('xmax'))
             ymax = int(bndbox.findtext('ymax'))
 
             object_dict['filename'] = file_name
             object_dict['class'] = voc_object.find('name').text
             object_dict['segmentation'] = [xmin, ymin, xmin, ymax, xmax, ymax, xmax, ymin]
+            object_dict['bbox'] = [xmin, ymin, xmax, ymax]
             object_dict['width'] = width
             object_dict['height'] = height
 
@@ -1291,7 +1315,10 @@ class ManageFile:
             path = f'{file_path}'
             image_name = file_path.split("/")[-1]
             file_name, file_ext = os.path.splitext(image_name)
-            data = open(path, 'rb')
+            try:
+                data = open(path, 'rb')
+            except:
+                data = open(urllib.parse.quote(path), 'rb')
 
             if file_ext == '.svg':
                 file_ext = '.svg+xml'

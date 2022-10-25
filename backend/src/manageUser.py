@@ -116,14 +116,15 @@ class ManageUser:
             key = self.dbClass.getAdminKey()
             if key and self.utilClass.isValidKey(key):
                 key_info = self.utilClass.get_key_info(key)
-                if self.dbClass.getUserCount() >= key_info["maxuser"]:
+                if self.dbClass.getUserCount() >= key_info["maxuser"] and not self.utilClass.is_prod_server:
                     return EXCEED_USER_ERROR
             else:
-                if self.dbClass.getUserCount() > 1:
+                if self.dbClass.getUserCount() > 1 and not self.utilClass.is_prod_server:
                     return EXCEED_USER_ERROR
 
             userInit = {
                 "confirmed": True,
+                "emailTokenCode": uuid.uuid4().hex,
                 "appTokenCode": uuid.uuid4().hex,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
@@ -169,8 +170,9 @@ class ManageUser:
         # self.dbClass.createTeamUser(data)
         # self.dbClass.createTeamUserHistory(data)
 
-        if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
-            self.utilClass.sendRegistrationEmail(userInfo, languageCode)
+        # if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
+        if not userInfo['socialID']:
+            self.utilClass.sendRegistrationEmail(userInfo, 'en')
         try:
             self.register_metabase_user(userInfo, raw_password)
         except:
@@ -185,15 +187,18 @@ class ManageUser:
 
     def register_metabase_user(self, user: dict, raw_password: str):
 
-        meta_email = user.get('emailContent')
+        meta_email = user.get('email')
         meta_names = meta_email.split('@')
         meta_first_name = meta_names[0]
         meta_last_name = meta_names[1]
-        mb = self.utilClass.get_metabase_client()
-        if mb:
-            new_group = mb.add_group(user.get('id'))
-            new_meta_user = mb.add_user(meta_first_name, meta_last_name, meta_email, raw_password)
-            mb.add_user_to_group(new_meta_user.get('id'), new_group.get('id'))
+        try:
+            mb = self.utilClass.get_metabase_client()
+            if mb:
+                new_group = mb.add_group(user.get('id'))
+                new_meta_user = mb.add_user(meta_first_name, meta_last_name, meta_email, raw_password)
+                mb.add_user_to_group(new_meta_user.get('id'), new_group.get('id'))
+        except:
+            pass
 
     def admin_delete_user(self, token, user_id):
 
@@ -672,7 +677,7 @@ class ManageUser:
         code = jwt.encode({'email': email + str(datetime.datetime.utcnow())}, 'aistorealwayswinning',
                            algorithm='HS256')
 
-        self.utilClass.sendResetPasswordEmail(email, code, provider, language_code)
+        self.utilClass.sendResetPasswordEmail(email, code, provider, 'en')
 
         self.dbClass.updateUser(user["id"], {
             "resetPasswordVerifyTokenID": code,

@@ -481,30 +481,30 @@ class HelperProject():
             user = self.getOneUserById(project.user, raw=True)
             user.cumulativeProjectCount = user.cumulativeProjectCount - 1
             user.save()
-        if status > 0:
+        # if status > 0:
+        #     asynctasksTable.create(**{
+        #         "taskName": project.projectName,
+        #         "taskNameEn": project.projectName,
+        #         "taskType": task_type,
+        #         "status": status,
+        #         'labelproject': project.labelproject,
+        #         "user": project.user,
+        #         "project": rowId,
+        #         'isChecked': 0
+        #     })
+        try:
+            asyncTaskId = self.getAsnycTaskByProjectId(rowId)
+            asyncTaskId.status = status
+            asyncTaskId.save()
+        except:
             asynctasksTable.create(**{
                 "taskName": project.projectName,
-                "taskNameEn": project.projectName,
-                "taskType": task_type,
+                "taskType": "train",
                 "status": status,
-                'labelproject': project.labelproject,
                 "user": project.user,
-                "project": rowId,
-                'isChecked': 0
+                "project": rowId
             })
-            # try:
-            #     asyncTaskId = self.getAsnycTaskByProjectId(rowId)
-            #     asyncTaskId.status = status
-            #     asyncTaskId.save()
-            # except:
-            #     asynctasksTable.create(**{
-            #         "taskName": project.projectName,
-            #         "taskType": "develop",
-            #         "status": status,
-            #         "user": project.user,
-            #         "project": rowId
-            #     })
-            #     pass
+            pass
 
         return projectsTable.update(**{"status": status, "statusText": statusText}) \
             .where(projectsTable.id == rowId).execute()

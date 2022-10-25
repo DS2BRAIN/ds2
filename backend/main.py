@@ -24,7 +24,7 @@ try:
         try:
             copy_tree(f"/opt/deepsort/", f"{os.getcwd()}/src/training/deepsort/")
         except:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             pass
 
     if not os.path.exists('./asset/object_detection_configs/COCO-InstanceSegmentation/mask_rcnn_X_101_32x8d_FPN_3x.yaml'):
@@ -32,7 +32,7 @@ try:
         try:
             copy_tree(f"{os.getcwd()}/../astore-rcnn/object_detection_configs/", f"{os.getcwd()}/asset/object_detection_configs/")
         except:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             pass
 
     if not os.path.exists('./asset/h.xml'):
@@ -43,7 +43,7 @@ try:
                 urllib.request.urlretrieve("https://aimakerdslab.s3.ap-northeast-2.amazonaws.com/asset/h.xml", "/opt/h.xml")
             shutil.copyfile(f"/opt/h.xml", f"{os.getcwd()}/asset/h.xml")
         except:
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             pass
 
 except:
@@ -59,7 +59,8 @@ from middelwares.token_validator import access_control
 from starlette.responses import Response, JSONResponse
 from starlette.status import HTTP_200_OK
 from routers import apiRouter, dataconnectorRouter, etcRouter, fileRouter, modelsRouter, marketRouter, projectsRouter, \
-    flowRouter, flowNodeRouter, monitoringAlertRouter, predictRouter, labelRouter, userRouter, paymentRouter, jupyterRouter, opsRouter
+    flowRouter, flowNodeRouter, monitoringAlertRouter, predictRouter, labelRouter, userRouter, paymentRouter, \
+    jupyterRouter, opsRouter, commandRouter
 from fastapi import Depends
 from fastapi.security import APIKeyHeader
 from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
@@ -127,6 +128,7 @@ app.include_router(opsRouter.router, tags=["Ops Router"])
 app.include_router(flowRouter.router, tags=["Flow Router"])
 app.include_router(flowNodeRouter.router, tags=["Flow Node Router"])
 app.include_router(monitoringAlertRouter.router, tags=["Monitoring Alert Router"])
+app.include_router(commandRouter.router, tags=["Command Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)

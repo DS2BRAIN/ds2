@@ -52,7 +52,6 @@ if "1.4.0" not in torch.__version__ and 'Darwin' not in platform.system():
     import matplotlib.pyplot as plt
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont
-    from cv2 import cv2
     from detectron2.config import get_cfg
     from detectron2.engine import DefaultPredictor
     from detectron2.model_zoo import model_zoo
@@ -81,7 +80,8 @@ class PredictImage:
         self.f = None
         if not os.path.exists('./logo_258_94.png'):
             self.s3.download_file("aimakerdslab", 'asset/logo_258_94.png','./logo_258_94.png')
-        self.logo_image = cv2.imread('logo_258_94.png')
+        if os.path.exists('./logo_258_94.png'):
+            self.logo_image = cv2.imread('logo_258_94.png')
         self.models = {}
 
     def getKeypoint(self, image, info=False, isVideo=False, predictor=None, isAngleLabel=False, isGetPredictor=False,
