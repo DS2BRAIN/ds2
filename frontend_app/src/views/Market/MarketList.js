@@ -286,58 +286,52 @@ export default function MarketList({ history }) {
                             cursor: "default",
                           }}
                         >
-                          <>
-                            {tableBody.value === "thumbnail" ? (
-                              <>
-                                <img
-                                  src={marketModel[tableBody.value]}
-                                  style={{ width: "80px", height: "80px" }}
-                                />
-                              </>
-                            ) : (
-                              <>
-                                {tableBody.value === "type" ? (
-                                  <span
-                                    style={{
-                                      border: "1px solid #B5C4E1",
-                                      borderRadius: "28px",
-                                      padding: "4px 8px",
-                                    }}
-                                  >
-                                    {marketModel.service_type ? (
-                                      <>Service</>
-                                    ) : marketModel[tableBody.value] !==
-                                      "CustomAi" ? (
-                                      <>Quick Start</>
-                                    ) : (
-                                      <>Custom AI</>
-                                    )}
-                                  </span>
-                                ) : (
-                                  <>
-                                    {tableBody.value == "category"
-                                      ? t(marketModel[tableBody.value])
-                                      : user.language == "ko"
-                                      ? marketModel[tableBody.value]
-                                      : marketModel[
-                                          `${tableBody.value.split("_")[0]}_en`
-                                        ]}
-                                  </>
-                                )}
-                                {tableBody.value === "price" ? t("KRW") : ""}
-                              </>
-                            )}
-                          </>
+                          {tableBody.value === "thumbnail" ? (
+                            <img
+                              src={marketModel[tableBody.value]}
+                              style={{ width: "80px", height: "80px" }}
+                            />
+                          ) : (
+                            <>
+                              {tableBody.value === "type" ? (
+                                <span
+                                  style={{
+                                    border: "1px solid #B5C4E1",
+                                    borderRadius: "28px",
+                                    padding: "4px 8px",
+                                  }}
+                                >
+                                  {marketModel.service_type
+                                    ? "Service"
+                                    : marketModel[tableBody.value] !==
+                                      "CustomAi"
+                                    ? "Quick Start"
+                                    : "Custom AI"}
+                                </span>
+                              ) : (
+                                <>
+                                  {tableBody.value == "category"
+                                    ? t(marketModel[tableBody.value])
+                                    : user.language == "ko"
+                                    ? marketModel[tableBody.value]
+                                    : marketModel[
+                                        `${tableBody.value.split("_")[0]}_en`
+                                      ]}
+                                </>
+                              )}
+                              {tableBody.value === "price" ? t("KRW") : ""}
+                            </>
+                          )}
                         </div>
                         {/* {tableBody.value === "section" && (
-                        <Button
-                          onClick={() => {
-                            window.open(marketModel.url, "_blank");
-                          }}
-                        >
-                          상세보기
-                        </Button>
-                      )} */}
+                          <Button
+                            onClick={() => {
+                              window.open(marketModel.url, "_blank");
+                            }}
+                          >
+                            상세보기
+                          </Button>
+                        )} */}
                       </TableCell>
                     );
                   })}
@@ -664,195 +658,187 @@ export default function MarketList({ history }) {
                 <CircularProgress />
               </div>
             ) : (
-              <>
-                <div>
-                  {t(`${requestAITitle}`)} {t("Select AI")}
-                  <div style={{ margin: "30px 0" }}>
-                    <span>{t("Upload training data")}</span>
-                    <Dropzone onDrop={dropFiles}>
-                      {({ getRootProps, getInputProps }) => (
-                        <>
-                          {(!uploadFile || uploadFile.length === 0) && (
-                            <div
-                              {...getRootProps({ className: "dropzoneArea" })}
-                            >
-                              <input {...getInputProps()} />
-                              <p className={classes.settingFontWhite6}>
-                                {t(
-                                  "Drag the file or click the box to upload it!"
-                                )}
-                                <br />
-                                {t(
-                                  "이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다."
-                                )}
-                                <br />
-                                {t(
-                                  "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
-                                )}
-                                <br />
-                                {t(
-                                  "Uploading large-size files may take more than 5 minutes"
-                                )}
-                              </p>
-                              <CloudUploadIcon fontSize="large" />
-                            </div>
-                          )}
-                          <aside>
-                            {!isUploadLoading &&
-                              (uploadFile && uploadFile.length > 0 && (
-                                <>
-                                  <p
-                                    style={{
-                                      marginTop: "10px",
-                                      fontSize: "15px",
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                      whiteSpace: "nowrap",
-                                      color: currentThemeColor.textWhite87,
-                                    }}
-                                  >
-                                    <span>
-                                      {t("Upload file")} : {t("총")}{" "}
-                                      {uploadFile.length}
-                                      {t("")}
-                                    </span>
-                                  </p>
-                                  <ul>
-                                    {uploadFile.map((file, idx) => {
-                                      if (idx === 10) {
-                                        return (
-                                          <li style={{ listStyle: "none" }}>
-                                            .......
-                                          </li>
-                                        );
-                                      }
-                                      if (idx >= 10) {
-                                        return null;
-                                      }
+              <div>
+                {t(`${requestAITitle}`)} {t("Select AI")}
+                <div style={{ margin: "30px 0" }}>
+                  <span>{t("Upload training data")}</span>
+                  <Dropzone onDrop={dropFiles}>
+                    {({ getRootProps, getInputProps }) => (
+                      <>
+                        {(!uploadFile || uploadFile.length === 0) && (
+                          <div {...getRootProps({ className: "dropzoneArea" })}>
+                            <input {...getInputProps()} />
+                            <p className={classes.settingFontWhite6}>
+                              {t(
+                                "Drag the file or click the box to upload it!"
+                              )}
+                              <br />
+                              {t(
+                                "이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다."
+                              )}
+                              <br />
+                              {t(
+                                "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
+                              )}
+                              <br />
+                              {t(
+                                "Uploading large-size files may take more than 5 minutes"
+                              )}
+                            </p>
+                            <CloudUploadIcon fontSize="large" />
+                          </div>
+                        )}
+                        <aside>
+                          {!isUploadLoading &&
+                            (uploadFile && uploadFile.length > 0 && (
+                              <>
+                                <p
+                                  style={{
+                                    marginTop: "10px",
+                                    fontSize: "15px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    color: currentThemeColor.textWhite87,
+                                  }}
+                                >
+                                  <span>
+                                    {t("Upload file")} : {t("총")}{" "}
+                                    {uploadFile.length}
+                                    {t("")}
+                                  </span>
+                                </p>
+                                <ul>
+                                  {uploadFile.map((file, idx) => {
+                                    if (idx === 10) {
                                       return (
-                                        <li key={file.name}>
-                                          <div
-                                            className={classes.alignCenterDiv}
-                                          >
-                                            <div
-                                              style={{
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                whiteSpace: "nowrap",
-                                                color:
-                                                  currentThemeColor.textWhite6,
-                                              }}
-                                            >
-                                              {file.name}
-                                            </div>
-                                            <CloseIcon
-                                              style={{
-                                                marginLeft: "10px",
-                                                cursor: "pointer",
-                                              }}
-                                              onClick={() => {
-                                                deleteUploadedFile(file.path);
-                                              }}
-                                            />
-                                          </div>
+                                        <li style={{ listStyle: "none" }}>
+                                          .......
                                         </li>
                                       );
-                                    })}
-                                  </ul>
-                                  <span
-                                    id="uploadFileAgain"
-                                    className={classes.labelUploadBtn}
-                                    onClick={() => {
-                                      setUploadFile(null);
-                                    }}
-                                  >
-                                    {t("Re-upload")}
-                                  </span>
-                                </>
-                              ))}
-                          </aside>
-                        </>
-                      )}
-                    </Dropzone>
-                  </div>
-                  <div>
-                    <label
-                      for="requestContent"
-                      style={{
-                        fontFamily:
-                          "'Roboto', 'Helvetica', 'Arial', sans-serif",
-                        fontSize: "18px",
-                        display: "block",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      {t("Enter the details of your request")}
-                    </label>
-                    <TextField
-                      id="requestContent"
-                      placeholder={t(
-                        "ex. 신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이있다면 다른물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다."
-                      )}
-                      style={{
-                        wordBreak: "keep-all",
-                        padding: "16px 26px",
-                        border: "1px solid #999999",
-                        color: "var(--textWhite87)",
-                        height: "100px",
-                        overflow: "auto",
-                      }}
-                      fullWidth={true}
-                      value={requestContent}
-                      onChange={changeRequestContent}
-                      multiline={true}
-                    />
-                  </div>
-                  <div style={{ margin: "30px 0" }}>
-                    <label
-                      for="requestPhoneNumber"
-                      style={{
-                        fontFamily:
-                          "'Roboto', 'Helvetica', 'Arial', sans-serif",
-                        fontSize: "18px",
-                        display: "block",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      {t("Enter your phone number*")}
-                    </label>
-                    <InputBase
-                      label={t("Enter your phone number*")}
-                      value={requestPhoneNumber}
-                      onChange={changeRequestPhoneNumber}
-                      placeholder={t("")}
-                      id="requestPhoneNumber"
-                      fullWidth
-                      style={{
-                        padding: "16px 26px",
-                        border: "1px solid #999999",
-                        color: "var(--textWhite87)",
-                      }}
-                    />
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      id="requestModalCancelBtn"
-                      className={classes.defaultGreenOutlineButton}
-                      onClick={closeIsRequestIndustryAIModal}
-                      style={{ marginRight: "10px" }}
-                    >
-                      {t("cancel")}
-                    </Button>
-                    <Button
-                      id="requestModalRequestBtn"
-                      onClick={postRequestMarketModelAI}
-                      className={classes.defaultGreenOutlineButton}
-                    >
-                      {t("Apply")}
-                    </Button>
-                  </div>
+                                    }
+                                    if (idx >= 10) {
+                                      return null;
+                                    }
+                                    return (
+                                      <li key={file.name}>
+                                        <div className={classes.alignCenterDiv}>
+                                          <div
+                                            style={{
+                                              overflow: "hidden",
+                                              textOverflow: "ellipsis",
+                                              whiteSpace: "nowrap",
+                                              color:
+                                                currentThemeColor.textWhite6,
+                                            }}
+                                          >
+                                            {file.name}
+                                          </div>
+                                          <CloseIcon
+                                            style={{
+                                              marginLeft: "10px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              deleteUploadedFile(file.path);
+                                            }}
+                                          />
+                                        </div>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                                <span
+                                  id="uploadFileAgain"
+                                  className={classes.labelUploadBtn}
+                                  onClick={() => {
+                                    setUploadFile(null);
+                                  }}
+                                >
+                                  {t("Re-upload")}
+                                </span>
+                              </>
+                            ))}
+                        </aside>
+                      </>
+                    )}
+                  </Dropzone>
                 </div>
-              </>
+                <div>
+                  <label
+                    for="requestContent"
+                    style={{
+                      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                      fontSize: "18px",
+                      display: "block",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {t("Enter the details of your request")}
+                  </label>
+                  <TextField
+                    id="requestContent"
+                    placeholder={t(
+                      "ex. 신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이있다면 다른물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다."
+                    )}
+                    style={{
+                      wordBreak: "keep-all",
+                      padding: "16px 26px",
+                      border: "1px solid #999999",
+                      color: "var(--textWhite87)",
+                      height: "100px",
+                      overflow: "auto",
+                    }}
+                    fullWidth={true}
+                    value={requestContent}
+                    onChange={changeRequestContent}
+                    multiline={true}
+                  />
+                </div>
+                <div style={{ margin: "30px 0" }}>
+                  <label
+                    for="requestPhoneNumber"
+                    style={{
+                      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                      fontSize: "18px",
+                      display: "block",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {t("Enter your phone number*")}
+                  </label>
+                  <InputBase
+                    label={t("Enter your phone number*")}
+                    value={requestPhoneNumber}
+                    onChange={changeRequestPhoneNumber}
+                    placeholder={t("")}
+                    id="requestPhoneNumber"
+                    fullWidth
+                    style={{
+                      padding: "16px 26px",
+                      border: "1px solid #999999",
+                      color: "var(--textWhite87)",
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    id="requestModalCancelBtn"
+                    className={classes.defaultGreenOutlineButton}
+                    onClick={closeIsRequestIndustryAIModal}
+                    style={{ marginRight: "10px" }}
+                  >
+                    {t("cancel")}
+                  </Button>
+                  <Button
+                    id="requestModalRequestBtn"
+                    onClick={postRequestMarketModelAI}
+                    className={classes.defaultGreenOutlineButton}
+                  >
+                    {t("Apply")}
+                  </Button>
+                </div>
+              </div>
             )}
           </div>
         </Modal>
