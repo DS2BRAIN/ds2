@@ -21,6 +21,7 @@ import {
   InputBase,
   MenuItem,
   Modal,
+  TablePagination,
   TextField,
   Select,
 } from "@material-ui/core";
@@ -31,7 +32,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TablePagination,
 } from "@mui/material";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
@@ -77,14 +77,14 @@ export default function MarketList({ history }) {
   const [isKor, setIsKor] = useState(false);
 
   const tableHeads = [
-    { value: "Category", width: "15%" },
-    { value: "Preview", width: "7.5%" },
+    { value: "Category", width: "12%" },
+    { value: "Preview", width: "8%" },
     { value: "Title", width: "20%" },
     { value: "Input data", width: "20%" },
-    { value: "Output data", width: "20%" },
+    { value: "Output data", width: "24%" },
     // { value: "Price", width: "11%" },
-    { value: "Type", width: "10%" },
-    { value: "Action", width: "7.5%" },
+    { value: "Type", width: "8%" },
+    { value: "Action", width: "8%" },
   ];
 
   const tableBodys = [
@@ -238,7 +238,12 @@ export default function MarketList({ history }) {
   const renderMarketProjects = () => {
     return (
       <>
-        <div style={{ minHeight: "400px", borderBottom: "1px solid #F0F0F0" }}>
+        <div
+          style={{
+            minHeight: "400px",
+            borderBottom: "1px solid var(--textWhite38)",
+          }}
+        >
           <Table className={classes.table} aria-label="simple table">
             <TableHead style={{ borderTop: "1px solid var(--textWhite38)" }}>
               <TableRow>
@@ -280,14 +285,10 @@ export default function MarketList({ history }) {
                       <div
                         className={classes.wordBreakDiv}
                         style={{
-                          textDecoration:
+                          fontWeight:
                             (tableBody.value === "name_kr" ||
                               tableBody.value === "name_en") &&
-                            "underline",
-                          textUnderlinePosition:
-                            (tableBody.value === "name_kr" ||
-                              tableBody.value === "name_en") &&
-                            "under",
+                            500,
                           cursor: "default",
                         }}
                       >
@@ -299,13 +300,7 @@ export default function MarketList({ history }) {
                         ) : (
                           <>
                             {tableBody.value === "type" ? (
-                              <span
-                                style={{
-                                  border: "1px solid #B5C4E1",
-                                  borderRadius: "28px",
-                                  padding: "4px 8px",
-                                }}
-                              >
+                              <span style={{ fontWeight: 500 }}>
                                 {marketModel.service_type
                                   ? "Service"
                                   : marketModel[tableBody.value] !== "CustomAi"
