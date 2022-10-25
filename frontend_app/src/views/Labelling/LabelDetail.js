@@ -1210,7 +1210,7 @@ const LabelDetail = ({ history, match }) => {
   const onChangeAutoLabelingAmount = (e) => {
     const amount = e.target.value / 1;
     const prepare = labelChart.prepare;
-    const tmpAmount = amount > prepare ? prepare : amount;
+    const tmpAmount = amount > prepare ? prepare : amount < 0 ? 1 : amount;
 
     setAutoLabelingAmount(tmpAmount);
     labelingCountRef.current.value = tmpAmount;
@@ -1248,7 +1248,9 @@ const LabelDetail = ({ history, match }) => {
   // };
   const getS3key = (key) => {
     if (key) {
-      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static/${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1
+        ? `${fileurl}static/${key}`
+        : key;
       // return key;
     }
   };
