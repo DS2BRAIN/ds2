@@ -420,32 +420,30 @@ export default function MarketList({ history }) {
   };
 
   const onClickButtonAction = async (marketModel) => {
-    await setChosenItem(null);
+    setChosenItem(null);
     console.log(marketModel);
     if (marketModel["service_type"]) {
       history.push(`/admin/marketNewProject?id=${marketModel["id"]}`);
     } else if (marketModel["type"] !== "CustomAi") {
-      await setRequestMarketModelId(marketModel.id);
+      setRequestMarketModelId(marketModel.id);
       await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
       if (
         marketModel?.externalAiType?.indexOf("image") > -1 ||
         marketModel?.externalAiType?.indexOf("object_detection") > -1
       ) {
-        await setChosenItem("apiImage");
+        setChosenItem("apiImage");
       } else if (marketModel?.externalAiType?.indexOf("audio") > -1) {
-        await setChosenItem("ApiSpeechToText");
+        setChosenItem("ApiSpeechToText");
       } else {
-        await setChosenItem("api");
+        setChosenItem("api");
       }
 
-      await setIsPredictModalOpen(true);
+      setIsPredictModalOpen(true);
     } else {
-      await setRequestAITitle(
-        isKor ? marketModel.name_kr : marketModel.name_en
-      );
-      await setRequestMarketModelId(marketModel.id); //id => model
-      await setIsRequestIndustryAIModalOpen(true);
+      setRequestAITitle(isKor ? marketModel.name_kr : marketModel.name_en);
+      setRequestMarketModelId(marketModel.id); //id => model
+      setIsRequestIndustryAIModalOpen(true);
     }
   };
 
@@ -502,8 +500,8 @@ export default function MarketList({ history }) {
       dispatch(openErrorSnackbarRequestAction(t("Upload file")));
       return;
     }
-    await setIsFileUploading(true);
-    await setCompleted(5);
+    setIsFileUploading(true);
+    setCompleted(5);
   };
 
   const changeRequestPhoneNumber = (e) => {
