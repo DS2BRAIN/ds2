@@ -31,7 +31,6 @@ import {
   Select,
 } from "@material-ui/core";
 import { CircularProgress } from "@mui/material";
-import Pagination from "@material-ui/lab/Pagination";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -39,12 +38,10 @@ export default function MarketList({ history }) {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const { user, projects, models, labelprojects, messages } = useSelector(
+  const { user, projects, messages } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
-      models: state.models,
-      labelprojects: state.labelprojects,
       messages: state.messages,
     }),
     []
@@ -71,9 +68,7 @@ export default function MarketList({ history }) {
   const [isUploadFileChanged, setIsUploadFileChanged] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
   const [completed, setCompleted] = useState(0);
-  const [selectedPreviewId, setSelectedPreviewId] = useState(null);
   const [isPredictModalOpen, setIsPredictModalOpen] = useState(false);
-  const [selectedMarketModel, setSelectedMarketModel] = useState(null);
   const [chosenItem, setChosenItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [rowsPerModelPage, setRowsPerModelPage] = useState(10);
@@ -431,7 +426,6 @@ export default function MarketList({ history }) {
   };
 
   const onClickButtonAction = async (marketModel) => {
-    await setSelectedMarketModel(null);
     await setChosenItem(null);
     console.log(marketModel);
     if (marketModel["service_type"]) {
@@ -440,7 +434,6 @@ export default function MarketList({ history }) {
       await setRequestMarketModelId(marketModel.id);
       await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
-      // await setSelectedMarketModel(marketModel);
       if (
         marketModel?.externalAiType?.indexOf("image") > -1 ||
         marketModel?.externalAiType?.indexOf("object_detection") > -1
@@ -517,14 +510,6 @@ export default function MarketList({ history }) {
     }
     await setIsFileUploading(true);
     await setCompleted(5);
-
-    // await dispatch(
-    //   postUploadFileRequestAction({
-    //     labelprojectId: labelprojects.projectDetail.id,
-    //     files: uploadFile,
-    //   })
-    // );
-    // await dispatch(setObjectlistsSearchedValue(null));
   };
 
   const changeRequestPhoneNumber = (e) => {
