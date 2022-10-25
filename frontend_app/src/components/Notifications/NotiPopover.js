@@ -15,8 +15,8 @@ import {
 } from "redux/reducers/user.js";
 import { IS_ENTERPRISE } from "variables/common";
 
-import { Badge, Popover, Tooltip } from "@material-ui/core";
-import { CircularProgress, Grid, IconButton } from "@mui/material";
+import { Popover, Tooltip } from "@material-ui/core";
+import { Badge, CircularProgress, Grid, IconButton } from "@mui/material";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
@@ -69,7 +69,7 @@ const NotiPopover = () => {
       >
         <Badge
           badgeContent={notis ? (notis.length >= 29 ? "30+" : notis.length) : 0}
-          color="secondary"
+          color="error"
         >
           <NotificationsIcon className={classes.fillBDhoverFF} />
         </Badge>
