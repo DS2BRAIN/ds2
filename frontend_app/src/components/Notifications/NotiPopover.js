@@ -203,18 +203,9 @@ const NotiPopover = () => {
           isButton = isDownload || isDownload || isDevelop;
 
           let notiBtnText = "";
-          if (isDownload) {
-            if (tempType === "runAll") notiBtnText = "일괄예측 다운받기";
-            else if (tempType === "runMovie") notiBtnText = "영상예측 다운받기";
-            else if (tempType === "autoLabeling")
-              notiBtnText = "오토라벨링 다운받기";
-            else if (tempType === "exportCoco")
-              notiBtnText = "COCO파일 다운받기";
-            else if (tempType === "exportVoc") notiBtnText = "VOC파일 다운받기";
-            else if (tempType === "exportData") notiBtnText = "파일 다운받기";
-            else notiBtnText = "다운받기";
-          } else if (isLabelling) notiBtnText = "라벨링 프로젝트 바로가기";
-          else if (isDevelop) notiBtnText = "프로젝트 바로가기";
+          if (isDownload) notiBtnText = "Download file";
+          else if (isLabelling) notiBtnText = "to Labeling projects";
+          else if (isDevelop) notiBtnText = "to Projects";
 
           return (
             <Grid
