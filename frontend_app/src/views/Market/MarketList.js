@@ -1,50 +1,39 @@
 import React, { useState, useEffect } from "react";
-import Modal from "@material-ui/core/Modal";
-import currentTheme from "assets/jss/custom.js";
-import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import InputBase from "@material-ui/core/InputBase";
-import { currentThemeColor } from "assets/jss/custom";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Dropzone from "react-dropzone";
-import { useDropzone } from "react-dropzone";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import CloseIcon from "@material-ui/icons/Close";
-import { NavLink } from "react-router-dom";
-import Cookies from "helpers/Cookies";
-import Link from "@material-ui/core/Link";
-import * as api from "controller/api.js";
+import { useTranslation } from "react-i18next";
+import Dropzone, { useDropzone } from "react-dropzone";
+import { ReactTitle } from "react-meta-tags";
+
 import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
-  askGoToMainPageRequestAction,
-  askChangeProjectNameRequestAction,
-  askChangeProjectDescriptionRequestAction,
-  askStopProjectRequestAction,
-  askStartProjectRequestAction,
-  setMainPageSettingRequestAction,
-  setPlanModalOpenRequestAction,
   askModalRequestAction,
 } from "redux/reducers/messages.js";
-import TextField from "@material-ui/core/TextField";
-import Pagination from "@material-ui/lab/Pagination";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import {
-  getMarketModelRequestAction,
-  getModelRequestAction,
-} from "../../redux/reducers/models";
+import { getMarketModelRequestAction } from "redux/reducers/models";
+import { getMarketProjectRequestAction } from "redux/reducers/projects";
+import * as api from "controller/api.js";
+import currentTheme, { currentThemeColor } from "assets/jss/custom";
 import ModalPage from "components/PredictModal/ModalPage";
-import { getMarketProjectRequestAction } from "../../redux/reducers/projects";
-import TablePagination from "@material-ui/core/TablePagination";
-import { ReactTitle } from "react-meta-tags";
-import { CircularProgress } from "@mui/material";
 import Button from "components/CustomButtons/Button";
 import { openChat } from "components/Function/globalFunc";
+
+import {
+  InputBase,
+  MenuItem,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TablePagination,
+  TextField,
+  Select,
+} from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
+import Pagination from "@material-ui/lab/Pagination";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import CloseIcon from "@material-ui/icons/Close";
 
 export default function MarketList({ history }) {
   const classes = currentTheme();
