@@ -240,90 +240,86 @@ export default function MarketList({ history }) {
           <Table className={classes.table} aria-label="simple table">
             <TableHead style={{ borderTop: "1px solid #F0F0F0" }}>
               <TableRow>
-                {tableHeads.map((tableHead, idx) => {
-                  return (
-                    <TableCell
-                      key={idx}
-                      className={classes.tableHeadMarketList}
-                      align="center"
-                      width={tableHead.width}
-                    >
-                      {t(tableHead.value)}
-                    </TableCell>
-                  );
-                })}
+                {tableHeads.map((tableHead, idx) => (
+                  <TableCell
+                    key={idx}
+                    className={classes.tableHeadMarketList}
+                    align="center"
+                    width={tableHead.width}
+                  >
+                    {t(tableHead.value)}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody id="marketTable">
               {marketModels.map((marketModel, idx) => (
                 <TableRow key={idx} className={classes.tableRow}>
-                  {tableBodys.map((tableBody, idx) => {
-                    return (
-                      <TableCell
-                        key={marketModel.id}
-                        className={classes.tableRowCell}
-                        align="center"
-                        // onClick={() => {
-                        //   goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
-                        // }}
+                  {tableBodys.map((tableBody, idx) => (
+                    <TableCell
+                      key={marketModel.id}
+                      className={classes.tableRowCell}
+                      align="center"
+                      // onClick={() => {
+                      //   goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
+                      // }}
+                      style={{
+                        cursor: "default",
+                        padding:
+                          tableBody.value === "thumbnail" && "0 !important",
+                      }}
+                    >
+                      <div
+                        className={classes.wordBreakDiv}
                         style={{
+                          textDecoration:
+                            (tableBody.value === "name_kr" ||
+                              tableBody.value === "name_en") &&
+                            "underline",
+                          textUnderlinePosition:
+                            (tableBody.value === "name_kr" ||
+                              tableBody.value === "name_en") &&
+                            "under",
                           cursor: "default",
-                          padding:
-                            tableBody.value === "thumbnail" && "0 !important",
                         }}
                       >
-                        <div
-                          className={classes.wordBreakDiv}
-                          style={{
-                            textDecoration:
-                              (tableBody.value === "name_kr" ||
-                                tableBody.value === "name_en") &&
-                              "underline",
-                            textUnderlinePosition:
-                              (tableBody.value === "name_kr" ||
-                                tableBody.value === "name_en") &&
-                              "under",
-                            cursor: "default",
-                          }}
-                        >
-                          {tableBody.value === "thumbnail" ? (
-                            <img
-                              src={marketModel[tableBody.value]}
-                              style={{ width: "80px", height: "80px" }}
-                            />
-                          ) : (
-                            <>
-                              {tableBody.value === "type" ? (
-                                <span
-                                  style={{
-                                    border: "1px solid #B5C4E1",
-                                    borderRadius: "28px",
-                                    padding: "4px 8px",
-                                  }}
-                                >
-                                  {marketModel.service_type
-                                    ? "Service"
-                                    : marketModel[tableBody.value] !==
-                                      "CustomAi"
-                                    ? "Quick Start"
-                                    : "Custom AI"}
-                                </span>
-                              ) : (
-                                <>
-                                  {tableBody.value == "category"
-                                    ? t(marketModel[tableBody.value])
-                                    : user.language == "ko"
-                                    ? marketModel[tableBody.value]
-                                    : marketModel[
-                                        `${tableBody.value.split("_")[0]}_en`
-                                      ]}
-                                </>
-                              )}
-                              {tableBody.value === "price" ? t("KRW") : ""}
-                            </>
-                          )}
-                        </div>
-                        {/* {tableBody.value === "section" && (
+                        {tableBody.value === "thumbnail" ? (
+                          <img
+                            src={marketModel[tableBody.value]}
+                            style={{ width: "80px", height: "80px" }}
+                          />
+                        ) : (
+                          <>
+                            {tableBody.value === "type" ? (
+                              <span
+                                style={{
+                                  border: "1px solid #B5C4E1",
+                                  borderRadius: "28px",
+                                  padding: "4px 8px",
+                                }}
+                              >
+                                {marketModel.service_type
+                                  ? "Service"
+                                  : marketModel[tableBody.value] !== "CustomAi"
+                                  ? "Quick Start"
+                                  : "Custom AI"}
+                              </span>
+                            ) : (
+                              <>
+                                {tableBody.value == "category"
+                                  ? t(marketModel[tableBody.value])
+                                  : user.language == "ko"
+                                  ? marketModel[tableBody.value]
+                                  : marketModel[
+                                      `${tableBody.value.split("_")[0]}_en`
+                                    ]}
+                              </>
+                            )}
+                            {tableBody.value === "price" ? t("KRW") : ""}
+                          </>
+                        )}
+                      </div>
+                      {/* {tableBody.value === "section" && (
                           <Button
                             onClick={() => {
                               window.open(marketModel.url, "_blank");
@@ -332,9 +328,8 @@ export default function MarketList({ history }) {
                             상세보기
                           </Button>
                         )} */}
-                      </TableCell>
-                    );
-                  })}
+                    </TableCell>
+                  ))}
                   <TableCell className={classes.tableRowCell} align="center">
                     <Button
                       id={`${idx}_start_button`}
