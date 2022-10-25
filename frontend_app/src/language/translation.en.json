@@ -837,6 +837,8 @@
   "이미지분류": "Image classification",
   "Object detection": "Object detection",
   "물체인식": "Object detection",
+  "Classification": "Classification",
+  "Regression": "Regression",
   "Delete rows with less than n unique values.": "Delete rows with less than n unique values.",
   "Delete columns in which unique values account for n% or more of the total number of data.": "Delete columns in which unique values account for n% or more of the total number of data.",
   "Fill empty values with n.": "Fill empty values with n.",
