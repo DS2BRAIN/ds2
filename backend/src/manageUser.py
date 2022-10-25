@@ -211,7 +211,7 @@ class ManageUser:
         if not user_info:
             raise ex.NotFoundUserEx()
 
-        self.dbClass.deleteOneRow(user_raw)
+        self.dbClass.deleteOneRow(user_info)
 
         return HTTP_200_OK, {}
 
