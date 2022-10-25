@@ -21,16 +21,18 @@ import {
   InputBase,
   MenuItem,
   Modal,
+  TextField,
+  Select,
+} from "@material-ui/core";
+import {
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   TablePagination,
-  TextField,
-  Select,
-} from "@material-ui/core";
-import { CircularProgress } from "@mui/material";
+} from "@mui/material";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -241,23 +243,21 @@ export default function MarketList({ history }) {
             <TableHead style={{ borderTop: "1px solid #F0F0F0" }}>
               <TableRow>
                 {tableHeads.map((tableHead, idx) => (
-                  <TableCell
-                    key={idx}
-                    className={classes.tableHeadMarketList}
-                    align="center"
-                    width={tableHead.width}
-                  >
+                  <TableCell key={idx} align="center" width={tableHead.width}>
                     {t(tableHead.value)}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody id="marketTable">
-              {marketModels.map((marketModel, idx) => (
-                <TableRow key={idx} className={classes.tableRow}>
+              {marketModels.map((marketModel) => (
+                <TableRow
+                  key={`marketModelRow_${marketModel.id}`}
+                  className={classes.tableRow}
+                >
                   {tableBodys.map((tableBody, idx) => (
                     <TableCell
-                      key={marketModel.id}
+                      key={`marketModelCell_${marketModel.id}_${idx}`}
                       className={classes.tableRowCell}
                       align="center"
                       // onClick={() => {
@@ -332,7 +332,7 @@ export default function MarketList({ history }) {
                   ))}
                   <TableCell className={classes.tableRowCell} align="center">
                     <Button
-                      id={`${idx}_start_button`}
+                      id={`${marketModel.id}_start_button`}
                       className={
                         (classes.wordBreakDiv, classes.defaultHighlightButton)
                       }
@@ -406,8 +406,8 @@ export default function MarketList({ history }) {
             nextIconButtonProps={{
               "aria-label": "next page",
             }}
-            onChangePage={changePage}
-            onChangeRowsPerPage={changeRowsPerModelPage}
+            onPageChange={changePage}
+            onRowsPerPageChange={changeRowsPerModelPage}
           />
         </div>
       </>
