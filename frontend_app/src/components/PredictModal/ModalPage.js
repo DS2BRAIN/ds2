@@ -315,25 +315,25 @@ const ModalPage = React.memo(
                   </div>
                   <div style={{ alignSelf: "flex-end" }}>
                     <Button
+                      id="goto_notifications_button"
+                      shape="whiteOutlined"
                       style={{
                         width: "240px",
                         alignSelf: "flex-end",
                         margin: "30px 15px 15px",
                       }}
-                      id="uploadPredictAgain"
-                      className={`${classes.defaultF0F0OutlineButton} ${classes.neoBtnH30}`}
                       onClick={goToAlarmHistory}
                     >
                       {t("See all notifications")}
                     </Button>
                     <Button
+                      id="reupload_predict_button"
+                      shape="greenOutlined"
                       style={{
                         width: "240px",
                         alignSelf: "flex-end",
                         margin: "30px 15px 15px",
                       }}
-                      id="uploadPredictAgain"
-                      className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH30}`}
                       onClick={goToUploadPage}
                     >
                       {t("Re-upload")}
@@ -368,13 +368,13 @@ const ModalPage = React.memo(
                     </p>
                   </div>
                   <Button
+                    id="uploadPredictAgain"
+                    shape="greenOutlined"
                     style={{
                       width: "240px",
                       alignSelf: "flex-end",
                       margin: "30px 15px 15px",
                     }}
-                    id="uploadPredictAgain"
-                    className={`${classes.defaultGreenOutlineButton} ${classes.neoBtnH30}`}
                     onClick={goToUploadPage}
                   >
                     {t("Re-upload")}
@@ -394,8 +394,8 @@ const ModalPage = React.memo(
                 </div>
                 <div style={{ marginBottom: "15px" }}>
                   <Button
-                    style={{ width: "200px " }}
-                    className={`${classes.defaultF0F0OutlineButton} ${classes.neoBtnH30}`}
+                    id="download_template_button"
+                    shape="whiteOutlined"
                     onClick={downloadTemplate}
                   >
                     {t("Download template")}
