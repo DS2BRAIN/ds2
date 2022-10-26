@@ -172,10 +172,7 @@ const Manager = ({ history }) => {
   useEffect(() => {
     if (messages.shouldCloseModal) {
       setIsAddModalOpen(false);
-      setUserAdd("");
-      setEmailAdd("");
-      setPasswordAdd("");
-      setPasswordVerifyAdd("");
+      resetAddUserState();
     }
   }, [messages.shouldCloseModal]);
 
@@ -185,6 +182,13 @@ const Manager = ({ history }) => {
         setIsAddModalOpen(Boolean(user.isValidUser));
       });
     } else setIsAddModalOpen(true);
+  };
+
+  const resetAddUserState = () => {
+    setUserAdd("");
+    setEmailAdd("");
+    setPasswordAdd("");
+    setPasswordVerifyAdd("");
   };
 
   const closeModalOpen = () => {
@@ -236,6 +240,7 @@ const Manager = ({ history }) => {
           openSuccessSnackbarRequestAction(t("User addition is complete."))
         );
         getUserAction();
+        resetAddUserState();
         setIsAddModalOpen(false);
       })
       .catch((e) => {
