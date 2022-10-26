@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Grid } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
+
+import { Grid } from "@mui/material";
 
 const NavMenu = () => {
   const { t } = useTranslation();
-  const localPath = window.location.pathname;
 
   const routes = [
     {
@@ -56,24 +56,6 @@ const NavMenu = () => {
     "navLinkDefault hoverTextColorSubPoint focusTextColorLightGray";
   const navLinkActiveClassName = "navLinkActive";
 
-  const [selectedMenu, setSelectedMenu] = useState("");
-
-  useEffect(() => {
-    routes.map((route) => {
-      const path = route.layout ? route.layout + route.path : route.path;
-
-      if (
-        route.condition &&
-        ["/admin", "/setting/userinfo", "/setting/notilist"].indexOf(
-          localPath
-        ) === -1 &&
-        localPath.includes(path.split("?")[0])
-      ) {
-        setSelectedMenu(route.id);
-      }
-    });
-  });
-
   return (
     <Grid className="flex fullHeight" style={{ height: "60px", ml: 3 }}>
       {routes.map((route) => {
@@ -82,27 +64,18 @@ const NavMenu = () => {
 
         if (route.condition)
           return (
-            <a
+            <NavLink
               key={route.id}
               id={`${route.id}_link`}
-              href={path}
-              className={
-                selectedMenu === route.id
-                  ? defaultClassName + " " + navLinkActiveClassName
-                  : defaultClassName
-              }
+              to={route.layout ? route.layout + route.path : route.path}
+              className={defaultClassName}
+              activeClassName={navLinkActiveClassName}
+              onClick={() => {
+                window.location.href = path;
+              }}
             >
               {t(route.name)}
-            </a>
-            // <NavLink
-            //   key={route.id}
-            //   id={`${route.id}_link`}
-            //   to={route.layout ? route.layout + route.path : route.path}
-            //   className={defaultClassName}
-            //   activeClassName={navLinkActiveClassName}
-            // >
-            //   {t(route.name)}
-            // </NavLink>
+            </NavLink>
           );
       })}
     </Grid>
