@@ -451,60 +451,49 @@ const ModelTable = React.memo(
     };
 
     const checkHasData = (models) => {
-      let rmseData = false;
-      let totalLossData = false;
-      let accuracyData = false;
-      let maseData = false;
-      let mapeData = false;
-      let diceData = false;
-      let errorRateData = false;
-      let mAPData = false;
-      let AP50Data = false;
-      let AP75Data = false;
-      let r2scoreData = false;
-
-      for (let idx = 0; idx < models.length; idx++) {
-        if (projects.project.trainingMethod === "time_series_regression") {
-          if (models[idx].rmse) rmseData = true;
-          if (models[idx].r2score) r2scoreData = true;
-          if (models[idx].mase) maseData = true;
-          if (models[idx].mape) mapeData = true;
-        } else if (projects.project.trainingMethod === "normal_regression") {
-          if (models[idx].r2score !== null) r2scoreData = true;
-          if (models[idx].mase) maseData = true;
-          if (models[idx].mape) mapeData = true;
-        } else if (projects.project.trainingMethod === "cycle_gan") {
-          if (models[idx].totalLoss) totalLossData = true;
-          if (models[idx].errorRate || models[idx].errorRate === 0)
-            errorRateData = true;
-          if (models[idx].dice) diceData = true;
-        } else if (projects.project.trainingMethod === "object_detection") {
-          if (models[idx].ap_info?.APm) mAPData = true;
-          if (models[idx].ap_info?.AP50) AP50Data = true;
-          if (models[idx].ap_info?.AP75) AP75Data = true;
-        } else {
-          if (models[idx].accuracy || models[idx].accuracy === 0)
-            accuracyData = true;
-          if (models[idx].errorRate || models[idx].errorRate === 0)
-            errorRateData = true;
-          if (models[idx].dice) diceData = true;
-        }
-      }
-
-      const tempObj = {
-        rmse: rmseData,
-        totalLoss: totalLossData,
-        accuracy: accuracyData,
-        mase: maseData,
-        mape: mapeData,
-        dice: diceData,
-        errorRate: errorRateData,
-        mAP: mAPData,
-        AP50: AP50Data,
-        AP75: AP75Data,
-        r2score: r2scoreData,
+      const trainMethod = projects.project.trainingMethod;
+      let hasData = {
+        rmse: false,
+        totalLoss: false,
+        accuracy: false,
+        mase: false,
+        mape: false,
+        dice: false,
+        errorRate: false,
+        mAP: false,
+        AP50: false,
+        AP75: false,
+        r2score: false,
       };
-      setHasDataObj(tempObj);
+
+      models.forEach((model) => {
+        if (trainMethod === "time_series_regression") {
+          if (model.rmse) hasData.rmse = true;
+          if (model.r2score) hasData.r2score = true;
+          if (model.mase) hasData.mase = true;
+          if (model.mape) hasData.mape = true;
+        } else if (trainMethod === "normal_regression") {
+          if (model.r2score !== null) hasData.r2score = true;
+          if (model.mase) hasData.mase = true;
+          if (model.mape) hasData.mape = true;
+        } else if (trainMethod === "cycle_gan") {
+          if (model.totalLoss) hasData.totalLoss = true;
+          if (model.errorRate || model.errorRate === 0)
+            hasData.errorRate = true;
+          if (model.dice) hasData.dice = true;
+        } else if (trainMethod === "object_detection") {
+          if (model.ap_info?.APm) hasData.mAP = true;
+          if (model.ap_info?.AP50) hasData.AP50 = true;
+          if (model.ap_info?.AP75) hasData.AP75 = true;
+        } else {
+          if (model.accuracy || model.accuracy === 0) hasData.accuracy = true;
+          if (model.errorRate || model.errorRate === 0)
+            hasData.errorRate = true;
+          if (model.dice) hasData.dice = true;
+        }
+      });
+
+      setHasDataObj(hasData);
     };
 
     const initiateMetabase = (id) => {
