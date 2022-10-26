@@ -1,24 +1,28 @@
 import React, { useState, useEffect, PureComponent, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { DropzoneArea } from "material-ui-dropzone";
+import JSONPretty from "react-json-pretty";
 
-import Cookies from "helpers/Cookies";
-import * as api from "controller/api.js";
-import { fileurl } from "controller/api";
 import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
 } from "redux/reducers/messages.js";
 import { getUserCountRequestAction } from "redux/reducers/user.js";
+import Cookies from "helpers/Cookies";
+import * as api from "controller/api.js";
+import { fileurl } from "controller/api";
+import {
+  predict_for_file_response,
+  predictSpeechToText,
+} from "controller/api.js";
+import { IS_ENTERPRISE } from "variables/common";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button";
 import { sendErrorMessage } from "components/Function/globalFunc.js";
-import { IS_ENTERPRISE } from "variables/common";
 
-import { useTranslation } from "react-i18next";
-import { DropzoneArea } from "material-ui-dropzone";
-import JSONPretty from "react-json-pretty";
 import {
   Bar,
   BarChart,
@@ -48,10 +52,6 @@ import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import {
-  predict_for_file_response,
-  predictSpeechToText,
-} from "controller/api.js";
 
 class CustomizedAxisTick extends PureComponent {
   render() {
@@ -136,7 +136,6 @@ const API = React.memo(
       setIsCheckedForSettingCreation,
     ] = useState(false);
     const [multiplyAverage, setMultiplyAverage] = useState(true);
-    const [outputResultText, setOutputResultText] = useState("");
 
     useEffect(() => {
       if (isPredictImageInfoDone && isPredictImageDone) {
@@ -154,7 +153,9 @@ const API = React.memo(
           setValidCsvCheck(
             csv?.filter((c) => trainingColumnInfo[c.id + ""] == true)
           );
-        } catch (err) {}
+        } catch (err) {
+          console.log("validCsvCheckError", err);
+        }
       }
     }, [csv, trainingColumnInfo]);
 
@@ -202,9 +203,7 @@ const API = React.memo(
         trainMethod === "object_detection" || trainMethod === "cycle_gan";
       if (isTrainOrAiTypeImage || isTrainMethodSampleAvailable) {
         api.getSampleDataByModelId(models.chosenModel).then((res) => {
-          if (res.data) {
-            setRandomFiles(res.data);
-          }
+          if (res.data) setRandomFiles(res.data);
         });
       }
     };
@@ -286,7 +285,6 @@ const API = React.memo(
             );
             return;
           }
-
           if (isCheckedForSettingCreation && !vidCreatedDateTime) {
             dispatch(
               openErrorSnackbarRequestAction(
