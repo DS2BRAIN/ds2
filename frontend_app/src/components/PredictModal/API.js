@@ -36,7 +36,6 @@ import {
 } from "recharts";
 import {
   Checkbox,
-  Grid,
   LinearProgress,
   Table,
   TableBody,
@@ -46,7 +45,7 @@ import {
   TablePagination,
   TextField,
 } from "@material-ui/core";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import ForwardIcon from "@material-ui/icons/Forward";
 import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
@@ -1646,12 +1645,10 @@ const API = React.memo(
 
           const onChangeVidCreationSec = (e) => {
             let sec = e.target.value;
-
             if (sec < 10) {
               if (sec < 0) {
                 e.target.value = 0;
                 setVidCreatedSec("00");
-
                 return;
               }
               if (String(sec).length > 1) {
@@ -2349,47 +2346,40 @@ const API = React.memo(
         chosenItem == "apiVideo";
 
       return (
-        <GridContainer
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "flex-end",
-            paddingTop: "20px",
-          }}
-        >
-          <GridItem xs={4}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
             <Button
               id="cancelBtn"
-              className={classes.defaultF0F0OutlineButton}
-              style={{ width: "100%", height: "35px", marginRight: "20px" }}
+              shape="whiteOutlined"
+              style={{ width: "100%", height: "35px" }}
               onClick={closeModal}
             >
               {t("Cancel")}
             </Button>
-          </GridItem>
-          <GridItem xs={4}>
+          </Grid>
+          <Grid item xs={4}>
             <Button
               id="resetData"
-              className={classes.defaultF0F0OutlineButton}
-              style={{ width: "100%", height: "35px", marginRight: "20px" }}
+              shape="whiteOutlined"
+              style={{ width: "100%", height: "35px" }}
               onClick={resetImage}
             >
               {isNewUpload ? t("New Upload") : t("New Prediction")}
             </Button>
-          </GridItem>
-          <GridItem xs={4}>
+          </Grid>
+          <Grid item xs={4}>
             {apiLoading === "done" ? null : (
               <Button
-                className={classes.defaultGreenOutlineButton}
+                id="sendApiBtn"
+                shape="greenOutlined"
                 style={{ width: "100%", height: "35px" }}
                 onClick={sendAPI}
-                id="sendApiBtn"
               >
                 {isNewUpload ? t("Confirm") : t("Execute")}
               </Button>
             )}
-          </GridItem>
-        </GridContainer>
+          </Grid>
+        </Grid>
       );
     };
 
