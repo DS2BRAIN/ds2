@@ -15,7 +15,7 @@ import Button from "components/CustomButtons/Button";
 import { sendErrorMessage } from "components/Function/globalFunc";
 import { IS_ENTERPRISE } from "variables/common";
 
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid, IconButton } from "@mui/material";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -266,6 +266,24 @@ const ModalPage = React.memo(
     };
 
     const renderItem = () => {
+      const partItemTitle = () => (
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 3 }}
+        >
+          <div>
+            <span style={{ fontSize: "20px" }}>
+              {modelDetail.name.toUpperCase()} ({t(category)})
+            </span>
+          </div>
+          <IconButton onClick={closeModalAction}>
+            <CloseIcon />
+          </IconButton>
+        </Grid>
+      );
+
       let category = "";
       if (chosenItem === "predict") category = "Collective Prediction";
       if (chosenItem === "autolabelling") category = "Auto Labeling";
@@ -296,15 +314,9 @@ const ModalPage = React.memo(
                 className={classes.fileModalContainer}
                 style={{ minHeight: "250px" }}
               >
-                <CloseIcon
-                  className={classes.closeImg}
-                  onClick={closeModalAction}
-                />
-                <div style={{ fontSize: "25px", marginBottom: "30px" }}>
-                  {modelDetail.name.toUpperCase()} ({t(category)})
-                </div>
+                {partItemTitle()}
                 <div className={classes.predictContainer}>
-                  <div style={{ fontSize: "20px", margin: "20px 0" }}>
+                  <div style={{ fontSize: "18px", margin: "20px 0" }}>
                     <div>
                       {t(`${category} has started.`)}
                       <br />
@@ -348,15 +360,9 @@ const ModalPage = React.memo(
                 className={classes.fileModalContainer}
                 style={{ minHeight: "250px" }}
               >
-                <CloseIcon
-                  className={classes.closeImg}
-                  onClick={closeModalAction}
-                />
-                <div style={{ fontSize: "25px", marginBottom: "30px" }}>
-                  {modelDetail.name.toUpperCase()} ({t(category)})
-                </div>
+                {partItemTitle()}
                 <div className={classes.predictContainer}>
-                  <div style={{ fontSize: "20px", marginTop: "20px" }}>
+                  <div style={{ fontSize: "18px", marginTop: "20px" }}>
                     <div>
                       {t("Collective prediction failed due to an error.")}
                     </div>
@@ -385,13 +391,7 @@ const ModalPage = React.memo(
           } else {
             return (
               <div className={classes.fileModalContainer}>
-                <CloseIcon
-                  className={classes.closeImg}
-                  onClick={closeModalAction}
-                />
-                <div style={{ fontSize: "25px", marginBottom: "30px" }}>
-                  {modelDetail.name.toUpperCase()} ({t(category)})
-                </div>
+                {partItemTitle()}
                 <div style={{ marginBottom: "15px" }}>
                   <Button
                     id="download_template_button"
@@ -424,11 +424,8 @@ const ModalPage = React.memo(
                   />
                   <Button
                     id="clickPredict"
-                    className={
-                      files.length < 1
-                        ? `${classes.defaultDisabledButton} ${classes.neoBtnH30}`
-                        : `${classes.defaultGreenOutlineButton} ${classes.neoBtnH30}`
-                    }
+                    shape="greenOutlined"
+                    disabled={files.length < 1}
                     style={{
                       width: "240px",
                       alignSelf: "flex-end",
