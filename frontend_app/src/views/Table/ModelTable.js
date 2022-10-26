@@ -452,6 +452,8 @@ const ModelTable = React.memo(
 
     const checkHasData = (models) => {
       const trainMethod = projects.project.trainingMethod;
+      if (!models.length && !trainMethod) return;
+
       let hasData = {
         rmse: false,
         totalLoss: false,
@@ -1304,7 +1306,7 @@ const ModelTable = React.memo(
         <>
           <Table
             className={classes.table}
-            style={{ marginTop: "60px", width: "98%" }}
+            style={{ marginTop: "40px", width: "98%" }}
             stickyheader="true"
             aria-label="sticky table"
           >
