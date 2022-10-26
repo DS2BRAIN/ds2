@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
+import { DropzoneArea } from "material-ui-dropzone";
 
-import * as api from "controller/api.js";
-import currentTheme from "assets/jss/custom.js";
 import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
 } from "redux/reducers/messages.js";
 import { getUserCountRequestAction } from "redux/reducers/user.js";
+import * as api from "controller/api.js";
+import currentTheme from "assets/jss/custom.js";
 import API from "components/PredictModal/API.js";
 import Button from "components/CustomButtons/Button";
 import { sendErrorMessage } from "components/Function/globalFunc";
 import { IS_ENTERPRISE } from "variables/common";
 
-import { useTranslation } from "react-i18next";
-import { DropzoneArea } from "material-ui-dropzone";
-import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress } from "@mui/material";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CloseIcon from "@material-ui/icons/Close";
-
-const mainColor = currentTheme.background2;
 
 const ModalPage = React.memo(
   ({
@@ -39,9 +35,8 @@ const ModalPage = React.memo(
     const classes = currentTheme();
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const { projects, models, user } = useSelector(
+    const { models, user } = useSelector(
       (state) => ({
-        projects: state.projects,
         models: state.models,
         user: state.user,
       }),
@@ -139,7 +134,6 @@ const ModalPage = React.memo(
                 document.body.appendChild(link);
                 link.click();
                 link.parentNode.removeChild(link);
-                //files && addPredictCount(files.length);
                 closeModal();
                 dispatch(
                   openSuccessSnackbarRequestAction(t("Successfully predicted."))
