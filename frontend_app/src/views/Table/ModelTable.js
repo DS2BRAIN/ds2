@@ -58,7 +58,6 @@ import ModalTooltip from "components/Tooltip/Tooltip.js";
 import SalesModal from "../SkyhubAI/SalesModal";
 import MetabaseButton from "components/CustomButtons/MetabaseButton";
 import Button from "components/CustomButtons/Button";
-import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Analytics from "./Analytics";
 
 let sortObj = {
@@ -114,12 +113,10 @@ const ModelTable = React.memo(
   }) => {
     const classes = currentTheme();
     const dispatch = useDispatch();
-    const { user, projects, models, messages } = useSelector(
+    const { user, projects, messages } = useSelector(
       (state) => ({
         user: state.user,
         projects: state.projects,
-        models: state.models,
-        // labelprojects: state.labelprojects,
         messages: state.messages,
       }),
       []
@@ -135,7 +132,6 @@ const ModelTable = React.memo(
       isPrescriptiveAnalyticsModalOpen,
       setIsPrescriptiveAnalyticsModalOpen,
     ] = useState(false);
-    const [chosenModel, setChosenModel] = useState(null);
     const [chosenItem, setChosenItem] = useState(null);
 
     const [sortValue, setSortValue] = useState("");
@@ -154,7 +150,6 @@ const ModelTable = React.memo(
     const [tooltipCategory, setTooltipCategory] = useState("");
     const [isSalesModalOpen, setIsSalesModalOpen] = useState(false);
     const [downloadOff, setDownloadOff] = useState(false);
-    const [objDetectAPModel, setObjDetectAPModel] = useState({});
     const [updatedSSEDict, setUpdatedSSEDict] = useState({});
     const [modelSSEDict, setModelSSEDict] = useState({});
     const [anchorRmse, setAnchorRmse] = useState(null);
@@ -258,40 +253,6 @@ const ModelTable = React.memo(
       }
     }, [projects.project && projects.project.trainingMethod]);
 
-    // useEffect(() => {
-    //   if (projects.project.labelproject) {
-    //     setIsLoading(true);
-    //     dispatch(getLabelProjectRequestAction(projects.project.labelproject));
-    //   }
-    // }, [projects.project && projects.project.labelproject]);
-
-    // useEffect(() => {
-    //   if (labelprojects.projectDetail) {
-    //     const labelClasses = labelprojects.projectDetail.labelclasses;
-    //     const autolabelingprojects = labelprojects.projectDetail.asynctasks;
-
-    //     const tempClasses = [];
-    //     const labelClassDictRaw = {};
-    //     for (let idx = 0; idx < labelClasses.length; idx++) {
-    //       const name = labelClasses[idx].name;
-    //       labelClassDictRaw[labelClasses[idx].id] =
-    //         labelClasses[idx].completedLabelCount;
-    //       if (tempClasses.indexOf(name) === -1)
-    //         tempClasses.push(labelClasses[idx]);
-    //     }
-    //     setLabelClassDict(labelClassDictRaw);
-    //     setLabelClasses(tempClasses);
-
-    //     // autolabelingprojects && autolabelingprojects.map( (autolabelingproject) => {
-    //     //     if (!isAutoLabelingRunning && (autolabelingproject.status === 1 || autolabelingproject.status === 11 )){
-    //     //         setIsAutoLabelingRunning(true);
-    //     //     }
-    //     // });
-    //     setAutoLabeingProjects(autolabelingprojects);
-    //     setIsLoading(false);
-    //   }
-    // }, [labelprojects.projectDetail]);
-
     useEffect(() => {
       if (projects.project.webhookMethod)
         setWebhooksMethod(projects.project.webhookMethod);
@@ -309,21 +270,10 @@ const ModelTable = React.memo(
     useEffect(() => {
       if (messages.shouldCloseModal) {
         setIsModalOpen(false);
-        // setIsAutoLabelingModalOpen(false);
         setOpenWebhooksModal(false);
         setIsPrescriptiveAnalyticsModalOpen(false);
       }
     }, [messages.shouldCloseModal]);
-
-    // const getUpdatedSSEDict = (projectId) => {
-    //   let SSEapi = api.getModelsInfoViaSSE2(projectId);
-    //   SSEapi.addEventListener("new_message", (event) => {
-    //     const response = JSON.parse(event.data);
-    //     if (typeof response === "object" && Object.keys(response).length) {
-    //       setUpdatedSSEDict(response);
-    //     }
-    //   });
-    // };
 
     const getModelSSEDict = (updatedDict) => {
       let tempModel = { ...modelSSEDict };
@@ -525,15 +475,18 @@ const ModelTable = React.memo(
           if (models[idx].mape) mapeData = true;
         } else if (projects.project.trainingMethod === "cycle_gan") {
           if (models[idx].totalLoss) totalLossData = true;
-          if (models[idx].errorRate) errorRateData = true;
+          if (models[idx].errorRate || models[idx].errorRate === 0)
+            errorRateData = true;
           if (models[idx].dice) diceData = true;
         } else if (projects.project.trainingMethod === "object_detection") {
           if (models[idx].ap_info?.APm) mAPData = true;
           if (models[idx].ap_info?.AP50) AP50Data = true;
           if (models[idx].ap_info?.AP75) AP75Data = true;
         } else {
-          if (models[idx].accuracy) accuracyData = true;
-          if (models[idx].errorRate) errorRateData = true;
+          if (models[idx].accuracy || models[idx].accuracy === 0)
+            accuracyData = true;
+          if (models[idx].errorRate || models[idx].errorRate === 0)
+            errorRateData = true;
           if (models[idx].dice) diceData = true;
         }
       }
@@ -644,91 +597,6 @@ const ModelTable = React.memo(
       setIsPrescriptiveAnalyticsModalOpen(true);
       setChosenItem(item);
     };
-
-    // const onOpenAutoLabellingForObjectDetect = (id) => {
-    //   if (!has100LabelingPerLabelClasses()) {
-    //     dispatch(
-    //       openErrorSnackbarRequestAction(
-    //         t(
-    //           "오토 라벨링을 시작하기 위해서는 학습 데이터로 쓰일 라벨 클래스당 100개의 라벨이 필요합니다."
-    //         )
-    //       )
-    //     );
-    //     return;
-    //   }
-    //   setChosenModel(id);
-    //   // if(isAutoLabelingRunning){
-    //   //     dispatch(openErrorSnackbarRequestAction(t('Auto-labeling is currently in progress. We’ll e-mail you when auto-labeling is completed')));
-    //   //     return;
-    //   // }
-    //   setIsAutoLabelingModalOpen(true);
-    // };
-
-    // const has100LabelingPerLabelClasses = () => {
-    //   var hasLessThan100LabelInLabelClass = false;
-    //   labelClassDict &&
-    //     Object.values(labelClassDict).map((value) => {
-    //       if (value < 100) {
-    //         hasLessThan100LabelInLabelClass = true;
-    //       }
-    //     });
-    //   return !hasLessThan100LabelInLabelClass;
-    // };
-
-    // const autoLabelingModalClose = () => {
-    //   setIsAutoLabelingModalOpen(false);
-    // };
-
-    // const startAutoLabelling = async () => {
-    //   await setIsAutoLabelingLoading(true);
-    //   await api
-    //     .postAutoLabeling(
-    //       labelprojects.projectDetail.id,
-    //       projects.project.id,
-    //       chosenModel
-    //     )
-    //     .then((res) => {
-    //       dispatch(
-    //         openSuccessSnackbarRequestAction(
-    //           t("Auto-labeling will start now. We’ll e-mail you when auto-labeling is complete")
-    //         )
-    //       );
-    //     })
-    //     .then(() => {
-    //       window.location.reload();
-    //     })
-    //     .catch((e) => {
-    //       if (e.response && e.response.status === 401) {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(
-    //             t("You have been logged out automatically, please log in again")
-    //           )
-    //         );
-    //         setTimeout(() => {
-    //           Cookies.deleteAllCookies();
-    //           history.push("/signin/");
-    //         }, 2000);
-    //         return;
-    //       }
-    //       if (e.response && e.response.data[1].message) {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(t(e.response.data[1].message))
-    //         );
-    //       } else {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(
-    //             t(
-    //               "학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요."
-    //             )
-    //           )
-    //         );
-    //       }
-    //     })
-    //     .finally(() => {
-    //       setIsAutoLabelingModalOpen(false);
-    //       setIsAutoLabelingLoading(false);
-    //     });
-    // };
 
     const onOpenTooltipModal = (category) => {
       setTooltipCategory(category);
@@ -1039,24 +907,6 @@ const ModelTable = React.memo(
 
               const bodyCellsBase = (model, modelDict, rowNum) => (
                 <>
-                  {/* <TableCell className="tableRowCell">
-                      <IconButton aria-label="add to favorites">
-                        {model.status === 100 &&
-                          (model.isFavorite ? (
-                            <StarIcon
-                              id="modelStarIcon"
-                              className="favoriteIcon"
-                              onClick={() => onClickForFavorite(false, id)}
-                            />
-                          ) : (
-                            <StarIcon
-                              id="unFavoritemodelStarIcon"
-                              className="favoriteIcon"
-                              onClick={() => onClickForFavorite(true, id)}
-                            />
-                          ))}
-                      </IconButton>
-                    </TableCell> */}
                   <TableCell
                     className="tableRowCell"
                     id="modelTable"
@@ -1100,6 +950,11 @@ const ModelTable = React.memo(
                   let resValue = substituteHead[defaultKey]
                     ? model[substituteHead[defaultKey]]
                     : defaultValue;
+                  if (defaultKey === "accuracy" || defaultKey === "errorRate") {
+                    if (resValue === 0 || resValue === 1)
+                      resValue = `${resValue * 100}%`;
+                    else resValue = `${(resValue * 100).toFixed(4)}%`;
+                  }
                   return (
                     <TableCell className="tableRowCell" align="center">
                       {model.status === 100 ? resValue : "-"}
@@ -1117,7 +972,7 @@ const ModelTable = React.memo(
                     ? model.totalLoss
                     : "-";
                 let accuracy = model.accuracy
-                  ? `${(model.accuracy * 100).toFixed(4)}%`
+                  ? model.accuracy
                   : model.accuracy === 0
                   ? 0
                   : "-";
@@ -1210,22 +1065,6 @@ const ModelTable = React.memo(
                   let isRecommender = method === "recommender";
 
                   const openModal = async (id, item) => {
-                    // if (
-                    //   user.me &&
-                    //   parseInt(user.me.cumulativePredictCount) >=
-                    //     parseInt(
-                    //       +user.me.remainPredictCount + +user.me.usageplan.noOfPrediction
-                    //     )
-                    // ) {
-                    //   dispatch(
-                    //     openErrorSnackbarRequestAction(
-                    //       t(
-                    //         "예측횟수를 초과하여 새로운 프로젝트를 추가할 수 없습니다. 계속 진행하시려면 이용플랜을 변경해주세요."
-                    //       )
-                    //     )
-                    //   );
-                    //   return;
-                    // }
                     await dispatch(getModelRequestAction(id));
                     setIsModalOpen(true);
                     setChosenItem(item);
@@ -1272,9 +1111,6 @@ const ModelTable = React.memo(
                               {t("Collective prediction")}
                             </Button>
                           )}
-                          {/*<div onClick={() => openModal(id, 'autolabelling')} className={`${classes.modelTab} autoLabellingBtn ${classes.modelTabButton}`}>*/}
-                          {/*    {t('Auto-labeling')}*/}
-                          {/*</div>*/}
                         </>
                       )}
                       {isVideo && (
@@ -1377,24 +1213,6 @@ const ModelTable = React.memo(
                             {t("Sell")}
                           </Button>
                         )} */}
-                      {/* {projectTrainMethod ===
-                          "object_detection" &&
-                          project.labelproject && (
-                            <>
-                              <div
-                                onClick={() => {
-                                  onOpenAutoLabellingForObjectDetect(id);
-                                }}
-                                className={
-                                  has100LabelingPerLabelClasses
-                                    ? `${classes.modelTab} autoLabellingForObjectDetectBtn ${classes.modelTabHighlightButton}`
-                                    : `${classes.modelTab} autoLabellingForObjectDetectBtn ${classes.defaultDisabledButton}`
-                                }
-                              >
-                                {t("Auto-labeling")}
-                              </div>
-                            </>
-                          )} */}
                     </>
                   );
                 };
@@ -1573,38 +1391,6 @@ const ModelTable = React.memo(
           amount: price,
         })
       );
-      // Cookies.setCookieSecure("Samesite", "None");
-      // const user = JSON.parse(Cookies.getCookie("user"));
-      // const userid = user["id"];
-      // var obj = new Object();
-
-      // obj.PCD_CPAY_VER = "1.0.1";
-      // obj.PCD_PAY_TYPE = "card";
-      // obj.PCD_PAY_WORK = "PAY";
-      // // obj.PCD_PAY_WORK = "AUTH";
-      // obj.PCD_CARD_VER = "01";
-      // /* (필수) 가맹점 인증요청 파일 (Node.JS : auth => [app.js] app.post('/pg/auth', ...) */
-      // obj.payple_auth_file = api.backendurl + "payple-auth-file"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // /* End : 가맹점 인증요청 파일 */
-      // obj.payple_auth_file = api.backendurl + "payple-auth-file/"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // obj.PCD_RST_URL = api.backendurl + "pgregistration/"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // /* 결과를 콜백 함수로 받고자 하는 경우 함수 설정 추가 */
-      // obj.callbackFunction = getResult; // getResult : 콜백 함수명
-      // /* End : 결과를 콜백 함수로 받고자 하는 경우 함수 설정 추가 */
-      // obj.PCD_PAYER_NO = userid;
-      // obj.PCD_PAYER_NAME = user.username;
-      // obj.PCD_PAYER_EMAIL = user.email;
-      // obj.PCD_PAY_GOODS = selectedModelId + " 모델 라이센스 구매";
-      // obj.PCD_PAY_TOTAL = price;
-      // obj.PCD_PAY_ISTAX = "Y";
-      // obj.PCD_PAY_TAXTOTAL = price / 10;
-      // obj.PCD_PAY_OID =
-      //   "payment_" + api.frontendurl + "_model_" + `${Date.now()}`;
-      // obj.PCD_SIMPLE_FLAG = "Y";
-      // obj.PCD_USER_DEFINE2 = isBuyingJetson;
-      // const PaypleCpayAuthCheck = window.PaypleCpayAuthCheck;
-      // PaypleCpayAuthCheck(obj);
-      // return;
     };
 
     if (selectedPage !== "model") return null;
@@ -2282,92 +2068,6 @@ const ModelTable = React.memo(
             </GridContainer>
           </div>
         </Modal>
-        {/* <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={isAutoLabelingModalOpen}
-          onClose={closeModal}
-          className={classes.modalContainer}
-        >
-          <div className={classes.autoLabelingContent}>
-            {isAutoLabelingLoading ? (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  minHeight: "220px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Loading />
-              </div>
-            ) : (
-              <>
-                <div style={{ textAlign: "center", fontSize: "20px" }}>
-                  <b> [ {t("Start auto-labeling")} ] </b>
-                </div>
-                <div>
-                  <br />
-                  {t(
-                    "오토라벨링은 준비, 1차, 2차, 3차로 순으로 진행되며, 단계가 올라갈 수록 정확도가 높아집니다."
-                  )}
-                  <br />
-                  {t(
-                    "오토라벨링 준비단계는 오토라벨링 진행시 정확한 라벨링을 위하여 준비하는 단계로 생각할 수 있습니다."
-                  )}
-                  <br />
-                  {t(
-                    "2차 오토라벨링은 평균 정확도 80%이상, 3차 오토라벨링은 평균 정확도 90% 이상을 기대할 수 있습니다."
-                  )}
-                  <br />
-                  <br />
-                  {t("** step by step")}
-                  <br />
-                  {t("Ready=Test the feasibility of 100 labeling data")}
-                  <br />
-                  {t(
-                    "1차= 100개 라벨링 데이터로 인공지능 개발 및 900개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  {t(
-                    "2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  {t(
-                    "2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  <br />
-                  {t(
-                    "오토라벨링 결과를 검수하면 그의 10배 라벨링을 다시 오토라벨링을 통해 하실 수 있습니다. 진행하시겠습니까?"
-                  )}
-                </div>
-                <div className={classes.buttonContainer}>
-                  <GridItem xs={6}>
-                    <Button
-                      id="closeCancelModalBtn"
-                      className={classes.defaultOutlineButton}
-                      onClick={closeModal}
-                    >
-                      {t("Return")}
-                    </Button>
-                  </GridItem>
-                  <GridItem xs={6}>
-                    <Button
-                      id="payBtn"
-                      className={classes.defaultHighlightButton}
-                      onClick={startAutoLabelling}
-                    >
-                      {t("Start auto-labeling")}
-                    </Button>
-                  </GridItem>
-                </div>
-              </>
-            )}
-          </div>
-        </Modal> */}
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
