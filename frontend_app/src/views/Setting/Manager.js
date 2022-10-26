@@ -16,6 +16,7 @@ import LicenseRegisterModal from "components/Modal/LicenseRegisterModal";
 import {
   Container,
   Grid,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -623,25 +624,31 @@ const Manager = ({ history }) => {
             background: "var(--background2)",
           }}
         >
-          <CloseIcon
-            style={{
-              fill: "var(--textWhite6)",
-              float: "right",
-              margin: "20px",
-            }}
-            onClick={closeModalOpen}
-          />
-          <Grid sx={{ p: 4 }}>
-            <p
-              style={{
-                fontSize: "22px",
-                color: "var(--textWhite87)",
-                fontWeight: 700,
-                textTransform: "capitalize",
-              }}
-            >
-              {t("new user")}
-            </p>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ p: 2 }}
+          >
+            <Grid sx={{ p: 1 }}>
+              <span
+                style={{
+                  fontSize: "20px",
+                  color: "var(--textWhite87)",
+                  fontWeight: 700,
+                  textTransform: "capitalize",
+                }}
+              >
+                {t("new user")}
+              </span>
+            </Grid>
+            <IconButton onClick={closeModalOpen}>
+              <CloseIcon
+                style={{
+                  fill: "var(--textWhite6)",
+                }}
+              />
+            </IconButton>
           </Grid>
           <Grid sx={{ pl: 5, pr: 5 }}>
             {addUserInfo.map((user) => (
