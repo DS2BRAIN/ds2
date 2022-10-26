@@ -182,7 +182,7 @@ const Manager = ({ history }) => {
   const onAddUser = () => {
     if (totalUserNum >= 1) {
       checkIsValidKey(user, dispatch, t).then(() => {
-        setIsAddModalOpen(user.isValidUser);
+        setIsAddModalOpen(Boolean(user.isValidUser));
       });
     } else setIsAddModalOpen(true);
   };
@@ -612,7 +612,7 @@ const Manager = ({ history }) => {
       </Table>
       <div className={classes.settingTitle}></div>
       <Modal
-        open={isAddModalOpen && user.isValidUser}
+        open={isAddModalOpen}
         onClose={closeModalOpen}
         className={classes.modalContainer}
       >
