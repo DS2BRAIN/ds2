@@ -332,8 +332,7 @@ const ModelTable = React.memo(
         total: models.length,
       };
 
-      for (let idx = 0; idx < models.length; idx++) {
-        const model = models[idx];
+      models.forEach((model) => {
         let updatedDate = new Date(model.updated_at);
         let diffDate = currentDate.getTime() - updatedDate.getTime();
         let diffDays = diffDate / (1000 * 3600 * 24);
@@ -352,7 +351,7 @@ const ModelTable = React.memo(
         }
         // if (model.status !== 99) tempModels.push(model);
         if (!isModelHidden) tempModels.push(model);
-      }
+      });
       setModelStatus(modelStatus);
       if (sortObj[sortValueRef.current] === "up") {
         if (sortValueRef.current === "name") {
@@ -402,10 +401,10 @@ const ModelTable = React.memo(
       let checkYclass = false;
       let checkRmse = false;
 
-      for (let idx = 0; idx < tempModels.length; idx++) {
-        if (tempModels[idx].yClass) checkYclass = true;
-        if (tempModels[idx].rmse) checkRmse = true;
-      }
+      tempModels.forEach((tempModel) => {
+        if (tempModel.yClass) checkYclass = true;
+        if (tempModel.rmse) checkRmse = true;
+      });
       // if(projects.project.trainingMethod === 'normal_regression' || projects.project.trainingMethod === 'time_series_regression') {
       //     setIsForRegression(true);
       //     checkRegression();
@@ -451,60 +450,51 @@ const ModelTable = React.memo(
     };
 
     const checkHasData = (models) => {
-      let rmseData = false;
-      let totalLossData = false;
-      let accuracyData = false;
-      let maseData = false;
-      let mapeData = false;
-      let diceData = false;
-      let errorRateData = false;
-      let mAPData = false;
-      let AP50Data = false;
-      let AP75Data = false;
-      let r2scoreData = false;
+      const trainMethod = projects.project.trainingMethod;
+      if (!models.length && !trainMethod) return;
 
-      for (let idx = 0; idx < models.length; idx++) {
-        if (projects.project.trainingMethod === "time_series_regression") {
-          if (models[idx].rmse) rmseData = true;
-          if (models[idx].r2score) r2scoreData = true;
-          if (models[idx].mase) maseData = true;
-          if (models[idx].mape) mapeData = true;
-        } else if (projects.project.trainingMethod === "normal_regression") {
-          if (models[idx].r2score !== null) r2scoreData = true;
-          if (models[idx].mase) maseData = true;
-          if (models[idx].mape) mapeData = true;
-        } else if (projects.project.trainingMethod === "cycle_gan") {
-          if (models[idx].totalLoss) totalLossData = true;
-          if (models[idx].errorRate || models[idx].errorRate === 0)
-            errorRateData = true;
-          if (models[idx].dice) diceData = true;
-        } else if (projects.project.trainingMethod === "object_detection") {
-          if (models[idx].ap_info?.APm) mAPData = true;
-          if (models[idx].ap_info?.AP50) AP50Data = true;
-          if (models[idx].ap_info?.AP75) AP75Data = true;
-        } else {
-          if (models[idx].accuracy || models[idx].accuracy === 0)
-            accuracyData = true;
-          if (models[idx].errorRate || models[idx].errorRate === 0)
-            errorRateData = true;
-          if (models[idx].dice) diceData = true;
-        }
-      }
-
-      const tempObj = {
-        rmse: rmseData,
-        totalLoss: totalLossData,
-        accuracy: accuracyData,
-        mase: maseData,
-        mape: mapeData,
-        dice: diceData,
-        errorRate: errorRateData,
-        mAP: mAPData,
-        AP50: AP50Data,
-        AP75: AP75Data,
-        r2score: r2scoreData,
+      let hasData = {
+        rmse: false,
+        totalLoss: false,
+        accuracy: false,
+        mase: false,
+        mape: false,
+        dice: false,
+        errorRate: false,
+        mAP: false,
+        AP50: false,
+        AP75: false,
+        r2score: false,
       };
-      setHasDataObj(tempObj);
+
+      models.forEach((model) => {
+        if (trainMethod === "time_series_regression") {
+          if (model.rmse) hasData.rmse = true;
+          if (model.r2score) hasData.r2score = true;
+          if (model.mase) hasData.mase = true;
+          if (model.mape) hasData.mape = true;
+        } else if (trainMethod === "normal_regression") {
+          if (model.r2score !== null) hasData.r2score = true;
+          if (model.mase) hasData.mase = true;
+          if (model.mape) hasData.mape = true;
+        } else if (trainMethod === "cycle_gan") {
+          if (model.totalLoss) hasData.totalLoss = true;
+          if (model.errorRate || model.errorRate === 0)
+            hasData.errorRate = true;
+          if (model.dice) hasData.dice = true;
+        } else if (trainMethod === "object_detection") {
+          if (model.ap_info?.APm) hasData.mAP = true;
+          if (model.ap_info?.AP50) hasData.AP50 = true;
+          if (model.ap_info?.AP75) hasData.AP75 = true;
+        } else {
+          if (model.accuracy || model.accuracy === 0) hasData.accuracy = true;
+          if (model.errorRate || model.errorRate === 0)
+            hasData.errorRate = true;
+          if (model.dice) hasData.dice = true;
+        }
+      });
+
+      setHasDataObj(hasData);
     };
 
     const initiateMetabase = (id) => {
@@ -673,55 +663,54 @@ const ModelTable = React.memo(
                 anchor: anchorRmse,
                 setAnchor: setAnchorRmse,
                 tooltip:
-                  "평균 제곱근 오차로써 연속값을 예측할때 사용되는 지표입니다. RMSE 값이 낮을수록 근접하게 예측합니다.",
+                  "An indicator used to predict continuous values (ex: between 1 and 1000) as a root mean square error. The lower the RMSE value, the more accurate the prediction is.",
               },
               totalLoss: {
                 name: "Total_loss",
                 anchor: anchorTotalLoss,
                 setAnchor: setAnchorTotalLoss,
-                tooltip: "Total_loss 입니다.",
               },
               accuracy: {
                 name: "Accuracy",
                 anchor: anchorAccuracy,
                 setAnchor: setAnchorAccuracy,
                 tooltip:
-                  "모델의 정확도를 나타냅니다. ACCURACY 값이 높을수록 정확하게 예측합니다.",
+                  "Indicates the accuracy of the model. The higher the ACCURACY value, the more accurate the prediction is.",
               },
               errorRate: {
                 name: "Error Rate",
                 anchor: anchorErrorRate,
                 setAnchor: setAnchorErrorRate,
                 tooltip:
-                  "샘플링을 할 때 생긴 오류의 비율을 나타냅니다. 값이 낮을수록 예측 오류가 나올 확률이 낮아집니다.",
+                  "Indicates the percentage of errors that occurred when sampling. The lower the value, the lower the probability of an error.",
               },
               dice: {
                 name: "Dice",
                 anchor: anchorDice,
                 setAnchor: setAnchorDice,
                 tooltip:
-                  "실제 값과 예측 값의 유사성을 측정하기 위해 사용되는 샘플 계수입니다. DICE 값이 높을수록 유사성이 높습니다.",
+                  "A sample coefficient used to measure the similarity between the actual and predicted value. The higher the value of the DICE, the higher the similarity.",
               },
               r2score: {
                 name: "R2",
                 anchor: anchorR2Score,
                 setAnchor: setAnchorR2Score,
                 tooltip:
-                  "모델이 데이터를 얼마나 잘 설명하는지 나타내는 지표입니다. 0~1 값을 가질 수 있으며, 1에 가까울수록 모델이 데이터와 연관성이 높다고 할 수 있습니다.",
+                  "It is an indicator of how well the model explains the data. It can have a value of 0 to 1, and the closer it is to 1, the higher the model is related to the data.",
               },
               mase: {
                 name: "MSE",
                 anchor: anchorMase,
                 setAnchor: setAnchorMase,
                 tooltip:
-                  "예측값과 실제값의 제곱을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+                  "Measures the error of that evaluation prediction by taking the square of the predicted value and the actual value.",
               },
               mape: {
                 name: "MAE",
                 anchor: anchorMAE,
                 setAnchor: setAnchorMAE,
                 tooltip:
-                  "예측값과 실제값의 차이의 절대 값을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+                  "It is the difference between the predicted value and the actual value divided by the average variation.",
               },
             };
 
@@ -1315,7 +1304,7 @@ const ModelTable = React.memo(
         <>
           <Table
             className={classes.table}
-            style={{ marginTop: "60px", width: "98%" }}
+            style={{ marginTop: "40px", width: "98%" }}
             stickyheader="true"
             aria-label="sticky table"
           >
@@ -1424,14 +1413,16 @@ const ModelTable = React.memo(
       ];
 
       return (
-        <GridContainer
+        <Grid
+          container
           style={{
             display: "flex",
             alignItems: "flex-end",
             flexWrap: "nowrap",
           }}
         >
-          <GridItem
+          <Grid
+            item
             xs={9}
             style={{
               display: "flex",
@@ -1455,15 +1446,17 @@ const ModelTable = React.memo(
                         modelStatus["total"] === 0 ? 0 : progressPercentage
                       }
                     />
-                    <b className={classes.modelProgressbar}>
-                      {modelStatus["total"] === 0
-                        ? "0 %"
-                        : progressPercentage.toFixed(1) + " %"}
-                    </b>
+                    <Grid className={classes.modelProgressbar} sx={{ pt: 0.5 }}>
+                      <b>
+                        {modelStatus["total"] === 0
+                          ? "0 %"
+                          : progressPercentage.toFixed(1) + " %"}
+                      </b>
+                    </Grid>
                   </div>
-                  <GridContainer>
+                  <Grid container sx={{ pt: 0.5 }}>
                     {statusList.map((stat) => (
-                      <GridItem xs={3} key={stat.id}>
+                      <Grid item xs={3} key={stat.id} sx={{ px: 1 }}>
                         <div className={classes.modelIconContainer}>
                           <div style={{ display: "flex" }}>
                             <img
@@ -1481,9 +1474,9 @@ const ModelTable = React.memo(
                             </span>
                           </div>
                         </div>
-                      </GridItem>
+                      </Grid>
                     ))}
-                  </GridContainer>
+                  </Grid>
                 </div>
                 <div style={{ maxWidth: "40px" }}>
                   <HelpOutlineIcon
@@ -1497,8 +1490,8 @@ const ModelTable = React.memo(
                 </div>
               </>
             )}
-          </GridItem>
-          <GridItem xs={3}>
+          </Grid>
+          <Grid item xs={3}>
             {!projects.project.isSample && (
               <Button
                 id="use_webhooks_btn"
@@ -1510,8 +1503,8 @@ const ModelTable = React.memo(
                 {t("Use WEBHOOKS")}
               </Button>
             )}
-          </GridItem>
-        </GridContainer>
+          </Grid>
+        </Grid>
       );
     };
 

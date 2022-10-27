@@ -1,24 +1,28 @@
 import React, { useState, useEffect, PureComponent, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { DropzoneArea } from "material-ui-dropzone";
+import JSONPretty from "react-json-pretty";
 
-import Cookies from "helpers/Cookies";
-import * as api from "controller/api.js";
-import { fileurl } from "controller/api";
 import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
 } from "redux/reducers/messages.js";
 import { getUserCountRequestAction } from "redux/reducers/user.js";
+import Cookies from "helpers/Cookies";
+import * as api from "controller/api.js";
+import { fileurl } from "controller/api";
+import {
+  predict_for_file_response,
+  predictSpeechToText,
+} from "controller/api.js";
+import { IS_ENTERPRISE } from "variables/common";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import GridContainer from "components/Grid/GridContainer";
 import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button";
 import { sendErrorMessage } from "components/Function/globalFunc.js";
-import { IS_ENTERPRISE } from "variables/common";
 
-import { useTranslation } from "react-i18next";
-import { DropzoneArea } from "material-ui-dropzone";
-import JSONPretty from "react-json-pretty";
 import {
   Bar,
   BarChart,
@@ -32,7 +36,6 @@ import {
 } from "recharts";
 import {
   Checkbox,
-  Grid,
   LinearProgress,
   Table,
   TableBody,
@@ -42,16 +45,12 @@ import {
   TablePagination,
   TextField,
 } from "@material-ui/core";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import ForwardIcon from "@material-ui/icons/Forward";
 import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import {
-  predict_for_file_response,
-  predictSpeechToText,
-} from "controller/api.js";
 
 class CustomizedAxisTick extends PureComponent {
   render() {
@@ -136,7 +135,6 @@ const API = React.memo(
       setIsCheckedForSettingCreation,
     ] = useState(false);
     const [multiplyAverage, setMultiplyAverage] = useState(true);
-    const [outputResultText, setOutputResultText] = useState("");
 
     useEffect(() => {
       if (isPredictImageInfoDone && isPredictImageDone) {
@@ -154,7 +152,9 @@ const API = React.memo(
           setValidCsvCheck(
             csv?.filter((c) => trainingColumnInfo[c.id + ""] == true)
           );
-        } catch (err) {}
+        } catch (err) {
+          console.log("validCsvCheckError", err);
+        }
       }
     }, [csv, trainingColumnInfo]);
 
@@ -202,9 +202,7 @@ const API = React.memo(
         trainMethod === "object_detection" || trainMethod === "cycle_gan";
       if (isTrainOrAiTypeImage || isTrainMethodSampleAvailable) {
         api.getSampleDataByModelId(models.chosenModel).then((res) => {
-          if (res.data) {
-            setRandomFiles(res.data);
-          }
+          if (res.data) setRandomFiles(res.data);
         });
       }
     };
@@ -286,7 +284,6 @@ const API = React.memo(
             );
             return;
           }
-
           if (isCheckedForSettingCreation && !vidCreatedDateTime) {
             dispatch(
               openErrorSnackbarRequestAction(
@@ -1648,12 +1645,10 @@ const API = React.memo(
 
           const onChangeVidCreationSec = (e) => {
             let sec = e.target.value;
-
             if (sec < 10) {
               if (sec < 0) {
                 e.target.value = 0;
                 setVidCreatedSec("00");
-
                 return;
               }
               if (String(sec).length > 1) {
@@ -2351,47 +2346,40 @@ const API = React.memo(
         chosenItem == "apiVideo";
 
       return (
-        <GridContainer
-          style={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "flex-end",
-            paddingTop: "20px",
-          }}
-        >
-          <GridItem xs={4}>
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
             <Button
               id="cancelBtn"
-              className={classes.defaultF0F0OutlineButton}
-              style={{ width: "100%", height: "35px", marginRight: "20px" }}
+              shape="whiteOutlined"
+              style={{ width: "100%", height: "35px" }}
               onClick={closeModal}
             >
               {t("Cancel")}
             </Button>
-          </GridItem>
-          <GridItem xs={4}>
+          </Grid>
+          <Grid item xs={4}>
             <Button
               id="resetData"
-              className={classes.defaultF0F0OutlineButton}
-              style={{ width: "100%", height: "35px", marginRight: "20px" }}
+              shape="whiteOutlined"
+              style={{ width: "100%", height: "35px" }}
               onClick={resetImage}
             >
               {isNewUpload ? t("New Upload") : t("New Prediction")}
             </Button>
-          </GridItem>
-          <GridItem xs={4}>
+          </Grid>
+          <Grid item xs={4}>
             {apiLoading === "done" ? null : (
               <Button
-                className={classes.defaultGreenOutlineButton}
+                id="sendApiBtn"
+                shape="greenOutlined"
                 style={{ width: "100%", height: "35px" }}
                 onClick={sendAPI}
-                id="sendApiBtn"
               >
                 {isNewUpload ? t("Confirm") : t("Execute")}
               </Button>
             )}
-          </GridItem>
-        </GridContainer>
+          </Grid>
+        </Grid>
       );
     };
 
