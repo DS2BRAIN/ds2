@@ -926,9 +926,15 @@ const LabelList = ({
                         className={classes.tableHead}
                         align="center"
                         style={{ width: "15%", cursor: "pointer" }}
-                        onClick={() => onSetSortValue("class")}
+                        onClick={() => onSetSortValue("labelData")}
                       >
                         <div className={classes.tableHeader}>
+                          {labelprojects.sortingValue === "labelData" &&
+                            (!labelprojects.isSortDesc ? (
+                              <ArrowUpwardIcon fontSize="small" />
+                            ) : (
+                              <ArrowDownwardIcon fontSize="small" />
+                            ))}
                           <b>{t("Class")}</b>
                         </div>
                       </TableCell>
