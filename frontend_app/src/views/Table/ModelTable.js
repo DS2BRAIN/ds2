@@ -332,8 +332,7 @@ const ModelTable = React.memo(
         total: models.length,
       };
 
-      for (let idx = 0; idx < models.length; idx++) {
-        const model = models[idx];
+      models.forEach((model) => {
         let updatedDate = new Date(model.updated_at);
         let diffDate = currentDate.getTime() - updatedDate.getTime();
         let diffDays = diffDate / (1000 * 3600 * 24);
@@ -352,7 +351,7 @@ const ModelTable = React.memo(
         }
         // if (model.status !== 99) tempModels.push(model);
         if (!isModelHidden) tempModels.push(model);
-      }
+      });
       setModelStatus(modelStatus);
       if (sortObj[sortValueRef.current] === "up") {
         if (sortValueRef.current === "name") {
