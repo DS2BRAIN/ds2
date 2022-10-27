@@ -905,88 +905,69 @@ const LabelList = ({
                         {t("Image")}
                       </b>
                     </TableCell>
-                    <TableCell
-                      className={classes.tableHead}
-                      align="center"
-                      style={{ width: "30%", cursor: "pointer" }}
-                      onClick={() => onSetSortValue("originalFileName")}
-                    >
-                      <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "originalFileName" &&
-                          (!labelprojects.isSortDesc ? (
-                            <ArrowUpwardIcon fontSize="small" />
-                          ) : (
-                            <ArrowDownwardIcon fontSize="small" />
-                          ))}
-                        <b>{t("File name")}</b>
-                      </div>
-                    </TableCell>
-                    {labelprojects.projectDetail.workapp === "image" && (
-                      <TableCell
-                        className={classes.tableHead}
-                        align="center"
-                        style={{ width: "15%", cursor: "pointer" }}
-                        onClick={() => onSetSortValue("labelData")}
-                      >
-                        <div className={classes.tableHeader}>
-                          {labelprojects.sortingValue === "labelData" &&
-                            (!labelprojects.isSortDesc ? (
-                              <ArrowUpwardIcon fontSize="small" />
-                            ) : (
-                              <ArrowDownwardIcon fontSize="small" />
-                            ))}
-                          <b>{t("Class")}</b>
-                        </div>
-                      </TableCell>
-                    )}
-                    <TableCell
-                      className={classes.tableHead}
-                      align="center"
-                      style={{ width: "10%", cursor: "pointer" }}
-                      onClick={() => onSetSortValue("created_at")}
-                    >
-                      <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "created_at" &&
-                          (!labelprojects.isSortDesc ? (
-                            <ArrowUpwardIcon fontSize="small" />
-                          ) : (
-                            <ArrowDownwardIcon fontSize="small" />
-                          ))}
-                        <b>{t("Date created")}</b>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableHead}
-                      align="center"
-                      style={{ width: "20%", cursor: "pointer" }}
-                      onClick={() => onSetSortValue("workAssignee")}
-                    >
-                      <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "workAssignee" &&
-                          (!labelprojects.isSortDesc ? (
-                            <ArrowUpwardIcon fontSize="small" />
-                          ) : (
-                            <ArrowDownwardIcon fontSize="small" />
-                          ))}
-                        <b>{t("Assignee")}</b>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      className={classes.tableHead}
-                      align="center"
-                      style={{ width: "10%", cursor: "pointer" }}
-                      onClick={() => onSetSortValue("status")}
-                    >
-                      <div className={classes.tableHeader}>
-                        {labelprojects.sortingValue === "status" &&
-                          (!labelprojects.isSortDesc ? (
-                            <ArrowUpwardIcon fontSize="small" />
-                          ) : (
-                            <ArrowDownwardIcon fontSize="small" />
-                          ))}
-                        <b>{t("Status")}</b>
-                      </div>
-                    </TableCell>
+                    {[
+                      {
+                        align: "left",
+                        width: "30%",
+                        cursor: "pointer",
+                        value: "originalFileName",
+                        label: "File name",
+                        condition: true,
+                      },
+                      {
+                        align: "center",
+                        width: "15%",
+                        cursor: "pointer",
+                        value: "labelData",
+                        label: "Class",
+                        condition:
+                          labelprojects.projectDetail.workapp === "image",
+                      },
+                      {
+                        align: "center",
+                        width: "10%",
+                        cursor: "pointer",
+                        value: "created_at",
+                        label: "Date created",
+                        condition: true,
+                      },
+                      {
+                        align: "center",
+                        width: "20%",
+                        cursor: "pointer",
+                        value: "workAssignee",
+                        label: "Assignee",
+                        condition: true,
+                      },
+                      {
+                        align: "center",
+                        width: "10%",
+                        cursor: "pointer",
+                        value: "status",
+                        label: "Status",
+                        condition: true,
+                      },
+                    ].map((head) => {
+                      if (head.condition)
+                        return (
+                          <TableCell
+                            className={classes.tableHead}
+                            align={head.align}
+                            style={{ width: head.width, cursor: head.cursor }}
+                            onClick={() => onSetSortValue(head.value)}
+                          >
+                            <div className={classes.tableHeader}>
+                              {labelprojects.sortingValue === head.value &&
+                                (labelprojects.isSortDesc ? (
+                                  <ArrowDownwardIcon fontSize="small" />
+                                ) : (
+                                  <ArrowUpwardIcon fontSize="small" />
+                                ))}
+                              <b>{t(head.label)}</b>
+                            </div>
+                          </TableCell>
+                        );
+                    })}
                   </TableRow>
                 </TableHead>
                 <TableBody>
