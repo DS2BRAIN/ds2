@@ -1413,14 +1413,16 @@ const ModelTable = React.memo(
       ];
 
       return (
-        <GridContainer
+        <Grid
+          container
           style={{
             display: "flex",
             alignItems: "flex-end",
             flexWrap: "nowrap",
           }}
         >
-          <GridItem
+          <Grid
+            item
             xs={9}
             style={{
               display: "flex",
@@ -1444,15 +1446,17 @@ const ModelTable = React.memo(
                         modelStatus["total"] === 0 ? 0 : progressPercentage
                       }
                     />
-                    <b className={classes.modelProgressbar}>
-                      {modelStatus["total"] === 0
-                        ? "0 %"
-                        : progressPercentage.toFixed(1) + " %"}
-                    </b>
+                    <Grid className={classes.modelProgressbar} sx={{ pt: 0.5 }}>
+                      <b>
+                        {modelStatus["total"] === 0
+                          ? "0 %"
+                          : progressPercentage.toFixed(1) + " %"}
+                      </b>
+                    </Grid>
                   </div>
-                  <GridContainer>
+                  <Grid container sx={{ pt: 0.5 }}>
                     {statusList.map((stat) => (
-                      <GridItem xs={3} key={stat.id}>
+                      <Grid item xs={3} key={stat.id} sx={{ px: 1 }}>
                         <div className={classes.modelIconContainer}>
                           <div style={{ display: "flex" }}>
                             <img
@@ -1470,9 +1474,9 @@ const ModelTable = React.memo(
                             </span>
                           </div>
                         </div>
-                      </GridItem>
+                      </Grid>
                     ))}
-                  </GridContainer>
+                  </Grid>
                 </div>
                 <div style={{ maxWidth: "40px" }}>
                   <HelpOutlineIcon
@@ -1486,8 +1490,8 @@ const ModelTable = React.memo(
                 </div>
               </>
             )}
-          </GridItem>
-          <GridItem xs={3}>
+          </Grid>
+          <Grid item xs={3}>
             {!projects.project.isSample && (
               <Button
                 id="use_webhooks_btn"
@@ -1499,8 +1503,8 @@ const ModelTable = React.memo(
                 {t("Use WEBHOOKS")}
               </Button>
             )}
-          </GridItem>
-        </GridContainer>
+          </Grid>
+        </Grid>
       );
     };
 
