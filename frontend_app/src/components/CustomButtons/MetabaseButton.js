@@ -109,78 +109,78 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
 
   return (
     <>
-      {metabaseStatus === 0 || metabaseStatus === 100 ? (
-        <Button
-          id={`metabase_${type}_${
-            metabaseStatus === 100 ? "check" : "start"
-          }_btn`}
-          shape={type === "data" ? "whiteOutlined" : "blue"}
-          size={type === "data" ? "md" : "sm"}
-          style={{
-            marginLeft: type === "data" ? "16px" : "4px",
-            marginRight: type === "data" ? 0 : "4px",
-            fontWeight: metabaseStatus === 100 && "bold",
-          }}
-          onClick={() => {
-            if (metabaseStatus === 100) openMetabaseResult(metabaseInfo);
-            else {
-              if (type === "data") initiateDataMetabase(id);
-              else if (type === "model") initiateMetabase(id);
-            }
-          }}
-        >
-          {type === "data" && isKor ? "데이터 " : null}
-          {metabaseStatus === 100 ? t("Check analysis") : t("Start analysis")}
-          {type === "data" && !isKor ? " on data" : null}
-          {type === "data" ? " (Prod.By METABASE)" : null}
-        </Button>
-      ) : metabaseStatus === 1 || metabaseStatus === 99 ? (
-        <Tooltip
-          title={
-            <span style={{ fontSize: "11px" }}>
-              {metabaseStatus === 1
-                ? t("Analyzing...")
-                : t("Not available now.")}
-            </span>
-          }
-          placement="bottom"
-        >
-          <div>
-            <Button
-              id={`metabase_${type}_${
-                metabaseStatus === 1 ? "processing" : "start"
-              }_btn`}
-              shape={type === "data" ? "whiteOutlined" : "blue"}
-              size={type === "data" ? "md" : "sm"}
-              disabled
-              style={{
-                marginLeft: type === "data" ? "16px" : "4px",
-                marginRight: type === "data" ? 0 : "4px",
-              }}
-            >
-              {metabaseStatus === 1 ? (
-                <CircularProgress
-                  size={15}
-                  color="inherit"
-                  sx={{
-                    ml: -0.5,
-                    mr: 0.5,
-                    color: "var(--gray)",
-                  }}
-                />
-              ) : null}
-              {type === "data" && isKor ? "데이터 " : null}
-              {metabaseStatus === 1 ? t("Analyzing") : t("Start analysis")}
-              {type === "data" && !isKor
-                ? metabaseStatus === 1
-                  ? " data"
-                  : " on data"
-                : null}
-              {type === "data" ? " (Prod.By METABASE)" : null}
-            </Button>
-          </div>
-        </Tooltip>
-      ) : null}
+      {/*{metabaseStatus === 0 || metabaseStatus === 100 ? (*/}
+      {/*  <Button*/}
+      {/*    id={`metabase_${type}_${*/}
+      {/*      metabaseStatus === 100 ? "check" : "start"*/}
+      {/*    }_btn`}*/}
+      {/*    shape={type === "data" ? "whiteOutlined" : "blue"}*/}
+      {/*    size={type === "data" ? "md" : "sm"}*/}
+      {/*    style={{*/}
+      {/*      marginLeft: type === "data" ? "16px" : "4px",*/}
+      {/*      marginRight: type === "data" ? 0 : "4px",*/}
+      {/*      fontWeight: metabaseStatus === 100 && "bold",*/}
+      {/*    }}*/}
+      {/*    onClick={() => {*/}
+      {/*      if (metabaseStatus === 100) openMetabaseResult(metabaseInfo);*/}
+      {/*      else {*/}
+      {/*        if (type === "data") initiateDataMetabase(id);*/}
+      {/*        else if (type === "model") initiateMetabase(id);*/}
+      {/*      }*/}
+      {/*    }}*/}
+      {/*  >*/}
+      {/*    {type === "data" && isKor ? "데이터 " : null}*/}
+      {/*    {metabaseStatus === 100 ? t("Check analysis") : t("Start analysis")}*/}
+      {/*    {type === "data" && !isKor ? " on data" : null}*/}
+      {/*    {type === "data" ? " (Prod.By METABASE)" : null}*/}
+      {/*  </Button>*/}
+      {/*) : metabaseStatus === 1 || metabaseStatus === 99 ? (*/}
+      {/*  <Tooltip*/}
+      {/*    title={*/}
+      {/*      <span style={{ fontSize: "11px" }}>*/}
+      {/*        {metabaseStatus === 1*/}
+      {/*          ? t("Analyzing...")*/}
+      {/*          : t("Not available now.")}*/}
+      {/*      </span>*/}
+      {/*    }*/}
+      {/*    placement="bottom"*/}
+      {/*  >*/}
+      {/*    <div>*/}
+      {/*      <Button*/}
+      {/*        id={`metabase_${type}_${*/}
+      {/*          metabaseStatus === 1 ? "processing" : "start"*/}
+      {/*        }_btn`}*/}
+      {/*        shape={type === "data" ? "whiteOutlined" : "blue"}*/}
+      {/*        size={type === "data" ? "md" : "sm"}*/}
+      {/*        disabled*/}
+      {/*        style={{*/}
+      {/*          marginLeft: type === "data" ? "16px" : "4px",*/}
+      {/*          marginRight: type === "data" ? 0 : "4px",*/}
+      {/*        }}*/}
+      {/*      >*/}
+      {/*        {metabaseStatus === 1 ? (*/}
+      {/*          <CircularProgress*/}
+      {/*            size={15}*/}
+      {/*            color="inherit"*/}
+      {/*            sx={{*/}
+      {/*              ml: -0.5,*/}
+      {/*              mr: 0.5,*/}
+      {/*              color: "var(--gray)",*/}
+      {/*            }}*/}
+      {/*          />*/}
+      {/*        ) : null}*/}
+      {/*        {type === "data" && isKor ? "데이터 " : null}*/}
+      {/*        {metabaseStatus === 1 ? t("Analyzing") : t("Start analysis")}*/}
+      {/*        {type === "data" && !isKor*/}
+      {/*          ? metabaseStatus === 1*/}
+      {/*            ? " data"*/}
+      {/*            : " on data"*/}
+      {/*          : null}*/}
+      {/*        {type === "data" ? " (Prod.By METABASE)" : null}*/}
+      {/*      </Button>*/}
+      {/*    </div>*/}
+      {/*  </Tooltip>*/}
+      {/*) : null}*/}
       <Modal
         open={isAnalysisModalOpen}
         onClose={closeAnalysisModal}
