@@ -73,7 +73,7 @@ class HelperProject():
 
     @wrapper
     def get_all_project_in_ids(self, ids, raw=False):
-        result = projectsTable.select().where(projectsTable.id.in_(ids)).execute()
+        result = projectsTable.select().where((projectsTable.id.in_(ids)) & (labelprojectsTable.isDeleted != True)).execute()
         if raw:
             return [raw for raw in result]
         else:
@@ -81,7 +81,7 @@ class HelperProject():
 
     @wrapper
     def get_all_labelproject_in_ids(self, ids, raw=False):
-        result = labelprojectsTable.select().where(labelprojectsTable.id.in_(ids)).execute()
+        result = labelprojectsTable.select().where((labelprojectsTable.id.in_(ids)) & (labelprojectsTable.isDeleted != True)).execute()
         if raw:
             return [raw for raw in result]
         else:
