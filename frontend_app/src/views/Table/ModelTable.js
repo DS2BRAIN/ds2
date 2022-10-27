@@ -401,10 +401,10 @@ const ModelTable = React.memo(
       let checkYclass = false;
       let checkRmse = false;
 
-      for (let idx = 0; idx < tempModels.length; idx++) {
-        if (tempModels[idx].yClass) checkYclass = true;
-        if (tempModels[idx].rmse) checkRmse = true;
-      }
+      tempModels.forEach((tempModel) => {
+        if (tempModel.yClass) checkYclass = true;
+        if (tempModel.rmse) checkRmse = true;
+      });
       // if(projects.project.trainingMethod === 'normal_regression' || projects.project.trainingMethod === 'time_series_regression') {
       //     setIsForRegression(true);
       //     checkRegression();
@@ -663,55 +663,54 @@ const ModelTable = React.memo(
                 anchor: anchorRmse,
                 setAnchor: setAnchorRmse,
                 tooltip:
-                  "평균 제곱근 오차로써 연속값을 예측할때 사용되는 지표입니다. RMSE 값이 낮을수록 근접하게 예측합니다.",
+                  "An indicator used to predict continuous values (ex: between 1 and 1000) as a root mean square error. The lower the RMSE value, the more accurate the prediction is.",
               },
               totalLoss: {
                 name: "Total_loss",
                 anchor: anchorTotalLoss,
                 setAnchor: setAnchorTotalLoss,
-                tooltip: "Total_loss 입니다.",
               },
               accuracy: {
                 name: "Accuracy",
                 anchor: anchorAccuracy,
                 setAnchor: setAnchorAccuracy,
                 tooltip:
-                  "모델의 정확도를 나타냅니다. ACCURACY 값이 높을수록 정확하게 예측합니다.",
+                  "Indicates the accuracy of the model. The higher the ACCURACY value, the more accurate the prediction is.",
               },
               errorRate: {
                 name: "Error Rate",
                 anchor: anchorErrorRate,
                 setAnchor: setAnchorErrorRate,
                 tooltip:
-                  "샘플링을 할 때 생긴 오류의 비율을 나타냅니다. 값이 낮을수록 예측 오류가 나올 확률이 낮아집니다.",
+                  "Indicates the percentage of errors that occurred when sampling. The lower the value, the lower the probability of an error.",
               },
               dice: {
                 name: "Dice",
                 anchor: anchorDice,
                 setAnchor: setAnchorDice,
                 tooltip:
-                  "실제 값과 예측 값의 유사성을 측정하기 위해 사용되는 샘플 계수입니다. DICE 값이 높을수록 유사성이 높습니다.",
+                  "A sample coefficient used to measure the similarity between the actual and predicted value. The higher the value of the DICE, the higher the similarity.",
               },
               r2score: {
                 name: "R2",
                 anchor: anchorR2Score,
                 setAnchor: setAnchorR2Score,
                 tooltip:
-                  "모델이 데이터를 얼마나 잘 설명하는지 나타내는 지표입니다. 0~1 값을 가질 수 있으며, 1에 가까울수록 모델이 데이터와 연관성이 높다고 할 수 있습니다.",
+                  "It is an indicator of how well the model explains the data. It can have a value of 0 to 1, and the closer it is to 1, the higher the model is related to the data.",
               },
               mase: {
                 name: "MSE",
                 anchor: anchorMase,
                 setAnchor: setAnchorMase,
                 tooltip:
-                  "예측값과 실제값의 제곱을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+                  "Measures the error of that evaluation prediction by taking the square of the predicted value and the actual value.",
               },
               mape: {
                 name: "MAE",
                 anchor: anchorMAE,
                 setAnchor: setAnchorMAE,
                 tooltip:
-                  "예측값과 실제값의 차이의 절대 값을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+                  "It is the difference between the predicted value and the actual value divided by the average variation.",
               },
             };
 

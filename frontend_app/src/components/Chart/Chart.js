@@ -456,7 +456,7 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                   <div>
                     RMSE :{" "}
                     {t(
-                      "This is an index used when predicting continuous values ​​(e.g., between 1 and 1000) as the root mean square error. The lower the RMSE value, the more accurate the prediction is."
+                      "An indicator used to predict continuous values (ex: between 1 and 1000) as a root mean square error. The lower the RMSE value, the more accurate the prediction is."
                     )}{" "}
                     <a
                       href={
