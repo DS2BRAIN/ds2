@@ -16,6 +16,7 @@ import LicenseRegisterModal from "components/Modal/LicenseRegisterModal";
 import {
   Container,
   Grid,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -171,19 +172,23 @@ const Manager = ({ history }) => {
   useEffect(() => {
     if (messages.shouldCloseModal) {
       setIsAddModalOpen(false);
-      setUserAdd("");
-      setEmailAdd("");
-      setPasswordAdd("");
-      setPasswordVerifyAdd("");
+      resetAddUserState();
     }
   }, [messages.shouldCloseModal]);
 
   const onAddUser = () => {
     if (totalUserNum >= 1) {
       checkIsValidKey(user, dispatch, t).then(() => {
-        setIsAddModalOpen(user.isValidUser);
+        setIsAddModalOpen(Boolean(user.isValidUser));
       });
     } else setIsAddModalOpen(true);
+  };
+
+  const resetAddUserState = () => {
+    setUserAdd("");
+    setEmailAdd("");
+    setPasswordAdd("");
+    setPasswordVerifyAdd("");
   };
 
   const closeModalOpen = () => {
@@ -235,6 +240,7 @@ const Manager = ({ history }) => {
           openSuccessSnackbarRequestAction(t("User addition is complete."))
         );
         getUserAction();
+        resetAddUserState();
         setIsAddModalOpen(false);
       })
       .catch((e) => {
@@ -611,7 +617,7 @@ const Manager = ({ history }) => {
       </Table>
       <div className={classes.settingTitle}></div>
       <Modal
-        open={isAddModalOpen && user.isValidUser}
+        open={isAddModalOpen}
         onClose={closeModalOpen}
         className={classes.modalContainer}
       >
@@ -623,25 +629,31 @@ const Manager = ({ history }) => {
             background: "var(--background2)",
           }}
         >
-          <CloseIcon
-            style={{
-              fill: "var(--textWhite6)",
-              float: "right",
-              margin: "20px",
-            }}
-            onClick={closeModalOpen}
-          />
-          <Grid sx={{ p: 4 }}>
-            <p
-              style={{
-                fontSize: "22px",
-                color: "var(--textWhite87)",
-                fontWeight: 700,
-                textTransform: "capitalize",
-              }}
-            >
-              {t("new user")}
-            </p>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ p: 2 }}
+          >
+            <Grid sx={{ p: 1 }}>
+              <span
+                style={{
+                  fontSize: "20px",
+                  color: "var(--textWhite87)",
+                  fontWeight: 700,
+                  textTransform: "capitalize",
+                }}
+              >
+                {t("new user")}
+              </span>
+            </Grid>
+            <IconButton onClick={closeModalOpen}>
+              <CloseIcon
+                style={{
+                  fill: "var(--textWhite6)",
+                }}
+              />
+            </IconButton>
           </Grid>
           <Grid sx={{ pl: 5, pr: 5 }}>
             {addUserInfo.map((user) => (
