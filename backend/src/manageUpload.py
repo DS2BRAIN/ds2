@@ -332,6 +332,7 @@ class ManageUpload:
                                         'has_de_identification': has_de_identification,
                                         'total_img_count': data_cnt
                     }
+                    background_tasks.add_task(self.save_origin_data, origin_file, user_id, dataconnector.id)
                     background_tasks.add_task(self.save_data, save_data_dict)
                 else:
                     self.save_origin_data(origin_file, user_id, dataconnector.id)

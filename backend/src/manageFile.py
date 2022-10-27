@@ -2092,7 +2092,7 @@ class ManageFile:
         value_for_predict = ''
         has_image_Data = False
         if ".zip" in file_name:
-            temp_file, file_size, new_file_name = self.getConnectorTempFileAndSize(file_name, file=file, isZip=True)
+            temp_file, file_size, new_file_name = self.getConnectorTempFileAndSize(file_name, file=file, isZip=True, user=user)
             has_image_Data = True
 
             try:
@@ -2160,7 +2160,7 @@ class ManageFile:
 
             df, dataCnt, file_size, req = self.readFile(file)
 
-            temp_file, file_size, new_file_name = self.getConnectorTempFileAndSize(file_name, df=df, file=file)
+            temp_file, file_size, new_file_name = self.getConnectorTempFileAndSize(file_name, df=df, file=file, user=user)
         else:
             fileCounts = {}
             fileTops = {}
@@ -2353,10 +2353,14 @@ class ManageFile:
             df.drop(df.columns[-1], axis=1, inplace=True)
         return df
 
-    def getConnectorTempFileAndSize(self, filename, df=None, file=None, isZip=False):
+    def getConnectorTempFileAndSize(self, filename, df=None, file=None, isZip=False, user=None):
 
         newFileName = filename
         tempFile = f'temp/{newFileName}'
+        if user and user.get('id'):
+            tempFolder = f"{self.utilClass.save_path}/user/{user.get('id')}/raw"
+            os.makedirs(tempFolder, exist_ok=True)
+            tempFile = f'{tempFolder}/{newFileName}'
         fileSize = len(file)
 
         if isZip:
