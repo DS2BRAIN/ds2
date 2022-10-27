@@ -274,8 +274,7 @@ const Dataconnector = ({ history }) => {
   }, [projects.dataconnectors]);
 
   useEffect(() => {
-    if (datasetList?.length && selectedDataIdList?.length)
-      checkNewPageAllSelected(datasetList, selectedDataIdList);
+    checkNewPageAllSelected(datasetList, selectedDataIdList);
   }, [datasetList, selectedDataIdList]);
 
   const getDataByDispatch = (valueChangeObject) => {
@@ -304,7 +303,6 @@ const Dataconnector = ({ history }) => {
 
   const checkNewPageAllSelected = (dataset, selIdList) => {
     let isAllSelected = true;
-
     if (selIdList.length < dataset.length) isAllSelected = false;
     dataset.forEach((data) => {
       if (!selIdList.includes(data.id)) isAllSelected = false;
