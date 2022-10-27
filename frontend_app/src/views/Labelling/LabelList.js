@@ -810,6 +810,49 @@ const LabelList = ({
   };
 
   const renderProjectTable = () => {
+    const tableHead = [
+      {
+        align: "left",
+        width: "30%",
+        cursor: "pointer",
+        value: "originalFileName",
+        label: "File name",
+        condition: true,
+      },
+      {
+        align: "center",
+        width: "15%",
+        cursor: "pointer",
+        value: "labelData",
+        label: "Class",
+        condition: labelprojects.projectDetail.workapp === "image",
+      },
+      {
+        align: "center",
+        width: "10%",
+        cursor: "pointer",
+        value: "created_at",
+        label: "Date created",
+        condition: true,
+      },
+      {
+        align: "center",
+        width: "20%",
+        cursor: "pointer",
+        value: "workAssignee",
+        label: "Assignee",
+        condition: true,
+      },
+      {
+        align: "center",
+        width: "10%",
+        cursor: "pointer",
+        value: "status",
+        label: "Status",
+        condition: true,
+      },
+    ];
+
     if (!labelprojects.objectLists?.length)
       return (
         <div className="emptyListTable">
@@ -905,49 +948,7 @@ const LabelList = ({
                         {t("Image")}
                       </b>
                     </TableCell>
-                    {[
-                      {
-                        align: "left",
-                        width: "30%",
-                        cursor: "pointer",
-                        value: "originalFileName",
-                        label: "File name",
-                        condition: true,
-                      },
-                      {
-                        align: "center",
-                        width: "15%",
-                        cursor: "pointer",
-                        value: "labelData",
-                        label: "Class",
-                        condition:
-                          labelprojects.projectDetail.workapp === "image",
-                      },
-                      {
-                        align: "center",
-                        width: "10%",
-                        cursor: "pointer",
-                        value: "created_at",
-                        label: "Date created",
-                        condition: true,
-                      },
-                      {
-                        align: "center",
-                        width: "20%",
-                        cursor: "pointer",
-                        value: "workAssignee",
-                        label: "Assignee",
-                        condition: true,
-                      },
-                      {
-                        align: "center",
-                        width: "10%",
-                        cursor: "pointer",
-                        value: "status",
-                        label: "Status",
-                        condition: true,
-                      },
-                    ].map((head) => {
+                    {tableHead.map((head) => {
                       if (head.condition)
                         return (
                           <TableCell
@@ -1024,82 +1025,45 @@ const LabelList = ({
                             }}
                           ></span>
                         </TableCell>
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          onClick={() => goProjectDetail(objectData.id)}
-                        >
-                          <div className={classes.defaultContainer}>
-                            <div
-                              style={{
-                                wordBreak: "break-all",
-                                marginLeft: "10px",
-                              }}
-                            >
-                              {objectData.originalFileName
-                                ? objectData.originalFileName
-                                : "-"}
-                            </div>
-                          </div>
-                        </TableCell>
-                        {labelprojects.projectDetail.workapp === "image" && (
-                          <TableCell
-                            className={classes.tableRowCell}
-                            align="center"
-                            onClick={() => goProjectDetail(objectData.id)}
-                          >
-                            <div className={classes.defaultContainer}>
-                              <div
-                                style={{
-                                  wordBreak: "break-all",
-                                  marginLeft: "10px",
-                                }}
+                        {tableHead.map((head) => {
+                          let content = objectData[head.value];
+
+                          if (head.value === "created_at" && content)
+                            content = content.substring(0, 10);
+
+                          if (head.value === "workAssignee" && !content) {
+                            if (objectData?.last_updated_by === "auto")
+                              content = "Auto Labeling";
+                            else content = t("None");
+                          }
+
+                          if (head.value === "status") {
+                            if (content) content = t(statusValue[content]);
+                            else content = t(statusValue["prepare"]);
+                          }
+
+                          if (!content) content = "-";
+
+                          if (head.condition)
+                            return (
+                              <TableCell
+                                className={classes.tableRowCell}
+                                align={head.align}
+                                onClick={() => goProjectDetail(objectData.id)}
                               >
-                                {objectData.labelData
-                                  ? objectData.labelData
-                                  : "-"}
-                              </div>
-                            </div>
-                          </TableCell>
-                        )}
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          onClick={() => goProjectDetail(objectData.id)}
-                        >
-                          <div className={classes.wordBreakDiv}>
-                            {objectData.created_at &&
-                              objectData.created_at.substring(0, 10)}
-                          </div>
-                        </TableCell>
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          onClick={() => goProjectDetail(objectData.id)}
-                        >
-                          <div className={classes.wordBreakDiv}>
-                            {objectData?.workAssignee
-                              ? objectData.workAssignee
-                              : objectData?.last_updated_by === "auto"
-                              ? "Auto Labeling"
-                              : t("None")}
-                          </div>
-                        </TableCell>
-                        <TableCell
-                          className={classes.tableRowCell}
-                          align="center"
-                          onClick={() => goProjectDetail(objectData.id)}
-                        >
-                          <div className={classes.wordBreakDiv}>
-                            {t(
-                              statusValue[
-                                objectData.status
-                                  ? objectData.status
-                                  : "prepare"
-                              ]
-                            )}
-                          </div>
-                        </TableCell>
+                                <div className={classes.defaultContainer}>
+                                  <div
+                                    style={{
+                                      wordBreak: "break-all",
+                                      marginLeft: "10px",
+                                    }}
+                                  >
+                                    {content}
+                                  </div>
+                                </div>
+                              </TableCell>
+                            );
+                        })}
                       </TableRow>
                     ))}
                 </TableBody>
