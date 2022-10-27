@@ -571,7 +571,7 @@ class Processing():
                 if self.utilClass.configOption == 'enterprise':
                     s3Url = f"{self.utilClass.save_path}/user/{project['user']}/{project['id']}.zip"
                 if not project.get('yClass'):
-                    yClass = str([x.name for x in self.dbClass.getLabelClassesByLabelProjectId(project.get('labelproject'))])
+                    yClass = [x.name for x in self.dbClass.getLabelClassesByLabelProjectId(project.get('labelproject'))]
 
         elif trainingMethod in ['cycle_gan']:
             dataColumns = self.dbClass.getDatacolumnsByDataconnectorId(dataconnectorsRaw[0].id)
