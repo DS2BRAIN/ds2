@@ -3096,16 +3096,18 @@ const Process = (props) => {
                             parseInt(user.me.id) ===
                               parseInt(projects.project.user) && (
                               <>
-                                <div onClick={handleClickForShare}>
-                                  <Button
-                                    id="share_project_btn"
-                                    shape="whiteOutlined"
-                                    sx={{ ml: 1 }}
-                                    onClick={() => {}}
-                                  >
-                                    {t("Share your project")}
-                                  </Button>
-                                </div>
+                                {user.me?.is_admin && (
+                                  <div onClick={handleClickForShare}>
+                                    <Button
+                                      id="share_project_btn"
+                                      shape="whiteOutlined"
+                                      sx={{ ml: 1 }}
+                                      onClick={() => {}}
+                                    >
+                                      {t("Share your project")}
+                                    </Button>
+                                  </div>
+                                )}
                                 <Menu
                                   id="simple-menu"
                                   anchorEl={anchorEl}
