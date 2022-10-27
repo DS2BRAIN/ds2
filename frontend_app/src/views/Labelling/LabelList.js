@@ -968,7 +968,7 @@ const LabelList = ({
                           ) : (
                             <ArrowDownwardIcon fontSize="small" />
                           ))}
-                        <b>{t("Assignee ")}</b>
+                        <b>{t("Assignee")}</b>
                       </div>
                     </TableCell>
                     <TableCell
@@ -1218,7 +1218,7 @@ const LabelList = ({
                           ) : (
                             <ArrowDownwardIcon fontSize="small" />
                           ))}
-                        <b>{t("Assignee ")}</b>
+                        <b>{t("Assignee")}</b>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -1547,7 +1547,7 @@ const LabelList = ({
                       left: 0,
                     }}
                   >
-                    {t("Assignee ")}
+                    {t("Assignee")}
                   </span>
                 </Grid>
                 <Grid item sx={{ position: "relative" }}>
