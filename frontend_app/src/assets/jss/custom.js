@@ -707,13 +707,6 @@ const currentTheme = makeStyles((theme) => ({
     borderBottom:
       "0.75px solid " + currentThemeColor.tableBorderBottom + "!important",
   },
-  tableHeadMarketList: {
-    height: "45px",
-    fontWeight: "400 !important",
-    fontSize: "0.95rem !important",
-    color: "#F0F0F0 !important",
-    lineHeight: "21px",
-  },
   tablePagination: {
     color: currentThemeColor.textLightGrey + "!important",
   },
