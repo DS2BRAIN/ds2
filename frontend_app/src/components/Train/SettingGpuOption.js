@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import Button from "components/CustomButtons/Button";
@@ -8,11 +8,14 @@ import { Checkbox, Grid } from "@mui/material";
 import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
-import {openErrorSnackbarRequestAction, setPlanModalOpenRequestAction} from "../../redux/reducers/messages";
+import {
+  openErrorSnackbarRequestAction,
+  setPlanModalOpenRequestAction,
+} from "../../redux/reducers/messages";
 import * as api from "../../controller/api";
-import {useDispatch, useSelector} from "react-redux";
-import {IS_ENTERPRISE} from "../../variables/common";
-import {checkIsValidKey} from "../Function/globalFunc";
+import { useDispatch, useSelector } from "react-redux";
+import { IS_ENTERPRISE } from "../../variables/common";
+import { checkIsValidKey } from "../Function/globalFunc";
 import LicenseRegisterModal from "../Modal/LicenseRegisterModal";
 
 const SettingGpuOption = ({
@@ -46,7 +49,6 @@ const SettingGpuOption = ({
   const [tokenValue, setTokenValue] = useState("");
   const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList);
 
-
   const submitAddServer = () => {
     console.log("hostValue", hostValue);
     console.log("tokenValue", tokenValue);
@@ -59,28 +61,33 @@ const SettingGpuOption = ({
       return;
     }
 
-    api.postAddServer({
-      ip: hostValue,
-      access_token: tokenValue,
-    }).then((res) => {
+    api
+      .postAddServer({
+        ip: hostValue,
+        access_token: tokenValue,
+      })
+      .then((res) => {
         if (res.data?.gpu_info) {
-          setAvailableGpuListTotal(Object.assign({}, availableGpuListTotal, {
-            [res.data.name]: res.data.gpu_info
-          }))
+          setAvailableGpuListTotal(
+            Object.assign({}, availableGpuListTotal, {
+              [res.data.name]: res.data.gpu_info,
+            })
+          );
           closeAddServerModal();
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Please check the connection.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please check the connection."))
+          );
         }
       });
-
   };
 
   const submitDelete = () => {
     console.log("selectedServer");
     console.log(selectedServer);
     api.deleteAddServer(selectedServer).then((res) => {
-        window.location.reload();
-      });
+      window.location.reload();
+    });
   };
 
   const openAddServerModal = () => {
@@ -182,8 +189,8 @@ const SettingGpuOption = ({
   //     />
   //   );
   // else
-    return (
-        <>
+  return (
+    <>
       <Grid sx={{ p: 1.5 }}>
         {serverDataList ? (
           <>
@@ -207,7 +214,8 @@ const SettingGpuOption = ({
                 let serverDict = availableGpuListTotal[serverName];
                 // let serverName = serverDict.name;
                 let isLocalServer = serverName === "localhost";
-                let isChecked = serverDict?.length === checkedDict[serverName]?.length;
+                let isChecked =
+                  serverDict?.length === checkedDict[serverName]?.length;
 
                 return (
                   <Grid item xs={12}>
@@ -272,9 +280,7 @@ const SettingGpuOption = ({
                                 }
                               />
                             )}
-                            <span style={{ fontSize: "15px" }}>
-                              {gpuName}
-                            </span>
+                            <span style={{ fontSize: "15px" }}>{gpuName}</span>
                           </Grid>
                         );
                       })}
@@ -304,8 +310,8 @@ const SettingGpuOption = ({
         )}
       </Grid>
       <LicenseRegisterModal />
-      </>
-    );
+    </>
+  );
 };
 
 export default SettingGpuOption;
