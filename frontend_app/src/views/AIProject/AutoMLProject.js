@@ -303,111 +303,84 @@ const AutoMLProject = ({ history, route }) => {
     };
 
     const projectTableBody = (prjArr) => {
-      let datas = [];
-      for (let i = 0; prjArr && i < prjArr.length; i++) {
-        const prj = prjArr[i];
-
-        let status = "";
-        if (prj.status === 0) {
-          status = "Ready";
-        } else if (prj.status === 100) {
-          status = "Completed";
-        } else if (prj.status === 99 || prj.status === 9 || prj.status < 0) {
-          status = "Error";
-        } else {
-          status = "In progress";
-        }
-
-        const project = [
-          prj.id,
-          // projects.totalLength - (projectRowsPerPage * projectPage + i),
-          prj.projectName,
-          prj.role,
-          t(PREFERRED_OPTION[prj.option]),
-          t(TRAINING_METHOD[prj.trainingMethod]),
-          prj.created_at ? prj.created_at.substring(0, 10) : "",
-          status,
-        ];
-
-        datas.push(project);
-      }
-
-      const onSetColor = (d) => {
-        switch (d) {
-          case "Ready":
-            return "#6B6B6B";
-          case "In progress":
-            return "#1BC6B4";
-          case "Error":
-            return "#BD2020";
-          case "Completed":
-            return "#0A84FF";
-        }
-      };
-
       const goProjectDetail = (id) => {
         if (route === "train") history.push(`/admin/train/${id}`);
         if (route === "verifyproject")
           history.push(`/admin/verifyproject/${id}`);
       };
 
-      return datas.map((data, idx) => (
-        <TableRow
-          id={"tr_" + data[0]}
-          key={idx}
-          className={classes.tableRow}
-          style={{
-            background:
-              idx % 2 === 0 ? currentTheme.tableRow1 : currentTheme.tableRow2,
-          }}
-        >
-          {!isShared && (
-            <TableCell align="left" className={classes.tableRowCell}>
-              <Checkbox
-                value={data[0]}
-                checked={projectCheckedValue[data[0]] ? true : false}
-                onChange={() => onSetProjectCheckedValue(data[0])}
-                className={classes.tableCheckBox}
-              />
-            </TableCell>
-          )}
-          {data.map((d, i) => {
-            if (i > 0) {
-              let statusColor = currentTheme.text1;
-              let isStatus = false;
-              if (tableBodys[i] === "status" && typeof d === "string") {
-                statusColor = onSetColor(d);
-                isStatus = true;
-              }
+      const onRenderContents = (type, value) => {
+        let cont = value;
+
+        const onSetStatusDisplay = (stat) => {
+          let statText = "";
+          let statColor = "";
+          if (stat === 0) {
+            statText = "Ready";
+            statColor = "#6B6B6B";
+          } else if (stat === 100) {
+            statText = "Completed";
+            statColor = "#0A84FF";
+          } else if (stat === 99 || stat === 9 || stat < 0) {
+            statText = "Error";
+            statColor = "#BD2020";
+          } else {
+            statText = "In progress";
+            statColor = "#1BC6B4";
+          }
+          return [statText, statColor];
+        };
+
+        if (type === "option") cont = t(PREFERRED_OPTION[cont]);
+        else if (type === "trainingMethod") cont = t(TRAINING_METHOD[cont]);
+        else if (type === "created_at")
+          cont = cont ? cont.substring(0, 10) : "";
+        else if (type === "status") {
+          let [text, color] = onSetStatusDisplay(cont);
+          cont = <span style={{ color: color }}>{`⦁ ${text}`}</span>;
+        }
+
+        if (!cont) cont = "-";
+
+        return cont;
+      };
+
+      return prjArr.map((prj, idx) => {
+        let projectId = prj.id;
+        return (
+          <TableRow
+            id={`tableRow_${idx}_${projectId}`}
+            key={idx}
+            className={classes.tableRow}
+          >
+            {!isShared && (
+              <TableCell align="left" className={classes.tableRowCell}>
+                <Checkbox
+                  value={projectId}
+                  checked={projectCheckedValue[projectId] ? true : false}
+                  onChange={() => onSetProjectCheckedValue(projectId)}
+                  className={classes.tableCheckBox}
+                />
+              </TableCell>
+            )}
+            {tableHeads.map((head) => {
+              let hType = head.type;
+              let content = onRenderContents(hType, prj[hType]);
 
               return (
                 <TableCell
-                  key={`tableCell_${i}_${d}`}
+                  key={`tableCell_${projectId}_${hType}`}
                   className={classes.tableRowCell}
                   align="center"
-                  onClick={() => goProjectDetail(data[0])}
+                  onClick={() => goProjectDetail(projectId)}
                 >
-                  <div
-                    style={{
-                      wordBreak: "break-all",
-                      color: statusColor,
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: isStatus ? "inline" : "none",
-                      }}
-                    >
-                      {isStatus ? "⦁" : ""}
-                    </div>{" "}
-                    {d || isStatus ? t(d) : "-"}
-                  </div>
+                  {content}
                 </TableCell>
               );
-            }
-          })}
-        </TableRow>
-      ));
+            })}
+          </TableRow>
+        );
+      });
     };
 
     return (
