@@ -210,24 +210,24 @@ const AutoMLProject = ({ history, route }) => {
 
   const showMyProject = (projectArr) => {
     const tableHeads = [
-      // { value: "No.", width: "5%", name: "" },
-      { value: "Project name", width: "30%", name: "projectName" },
-      { value: "Role", width: "10%", name: "role" },
-      { value: "Option", width: "7.5%", name: "option" },
-      { value: "Training method", width: "17.5%", name: "trainingMethod" },
-      { value: "Date created", width: "15%", name: "created_at" },
-      { value: "Training status", width: "15%", name: "status" },
+      // { label: "No.", width: "5%", name: "" },
+      { label: "Project name", width: "30%", type: "projectName" },
+      { label: "Role", width: "10%", type: "role" },
+      { label: "Option", width: "7.5%", type: "option" },
+      { label: "Training method", width: "17.5%", type: "trainingMethod" },
+      { label: "Date created", width: "15%", type: "created_at" },
+      { label: "Training status", width: "15%", type: "status" },
     ];
 
     const tableBodys = [
       "id",
       "no",
-      tableHeads[1].name,
-      tableHeads[2].name,
-      tableHeads[3].name,
-      tableHeads[4].name,
-      tableHeads[5].name,
-      // tableHeads[6].name,
+      tableHeads[1].type,
+      tableHeads[2].type,
+      tableHeads[3].type,
+      tableHeads[4].type,
+      tableHeads[5].type,
+      // tableHeads[6].type,
     ];
 
     const projectTableHead = () => {
@@ -270,31 +270,31 @@ const AutoMLProject = ({ history, route }) => {
           )}
           {tableHeads.map((tableHead, idx) => (
             <TableCell
-              id={tableHead.value + "mainHeader"}
+              id={tableHead.label + "mainHeader"}
               key={`tableHead_${idx}`}
               className={classes.tableHead}
               align="center"
               width={tableHead.width}
               style={{
                 cursor: !(
-                  tableHead.value === "No." || tableHead.value === "Role"
+                  tableHead.label === "No." || tableHead.label === "Role"
                 )
                   ? "pointer"
                   : "default",
               }}
               onClick={() =>
-                !(tableHead.value === "No." || tableHead.value === "Role") &&
-                onSetSortValue(tableHead.name)
+                !(tableHead.label === "No." || tableHead.label === "Role") &&
+                onSetSortValue(tableHead.type)
               }
             >
               <div className={classes.tableHeader}>
-                {sortingValue === tableHead.name &&
+                {sortingValue === tableHead.type &&
                   (!isSortDesc ? (
                     <ArrowUpwardIcon fontSize="small" />
                   ) : (
                     <ArrowDownwardIcon fontSize="small" />
                   ))}
-                <b>{t(tableHead.value)}</b>
+                <b>{t(tableHead.label)}</b>
               </div>
             </TableCell>
           ))}
