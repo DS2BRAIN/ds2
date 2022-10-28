@@ -3097,7 +3097,10 @@ const Process = (props) => {
                               parseInt(projects.project.user) && (
                               <>
                                 {user.me?.is_admin && (
-                                  <div onClick={handleClickForShare}>
+                                  <div
+                                    style={{ display: "inline" }}
+                                    onClick={handleClickForShare}
+                                  >
                                     <Button
                                       id="share_project_btn"
                                       shape="whiteOutlined"
