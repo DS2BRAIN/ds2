@@ -5,7 +5,6 @@ import Button from "components/CustomButtons/Button";
 import { serverDataList } from "./mockupGPUData";
 
 import { Checkbox, Grid } from "@mui/material";
-import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
 import {
@@ -177,18 +176,6 @@ const SettingGpuOption = ({
     fontWeight: 400,
   };
 
-  // if (isPastVersion)
-  //   return (
-  //     <LagacySettingGpuOption
-  //       status={status}
-  //       gpuList={gpuList}
-  //       isDeviceAllSelected={isDeviceAllSelected}
-  //       setIsDeviceAllSelected={setIsDeviceAllSelected}
-  //       selectedDeviceArr={selectedDeviceArr}
-  //       setSelectedDeviceArr={setSelectedDeviceArr}
-  //     />
-  //   );
-  // else
   return (
     <>
       <Grid sx={{ p: 1.5 }}>
