@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import Button from "components/CustomButtons/Button";
@@ -7,40 +7,24 @@ import { serverDataList } from "./mockupGPUData";
 import { Checkbox, Grid } from "@mui/material";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
-import {
-  openErrorSnackbarRequestAction,
-  setPlanModalOpenRequestAction,
-} from "../../redux/reducers/messages";
-import * as api from "../../controller/api";
+import { openErrorSnackbarRequestAction } from "redux/reducers/messages";
+import * as api from "controller/api";
 import { useDispatch, useSelector } from "react-redux";
-import { IS_ENTERPRISE } from "../../variables/common";
+import { IS_ENTERPRISE } from "variables/common";
 import { checkIsValidKey } from "../Function/globalFunc";
 import LicenseRegisterModal from "../Modal/LicenseRegisterModal";
 
-const SettingGpuOption = ({
-  status,
-  gpuList,
-  isDeviceAllSelected,
-  setIsDeviceAllSelected,
-  selectedDeviceArr,
-  setSelectedDeviceArr,
-  checkedDict,
-  setCheckedDict,
-}) => {
+const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { user, projects, messages, models, groups } = useSelector(
+  const { user, projects } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
-      messages: state.messages,
-      models: state.models,
-      groups: state.groups,
     }),
     []
   );
   const isStatusZero = status === 0;
-  const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
   const [isDeleteServerModalOpen, setIsDeleteServerModalOpen] = useState(false);
   const [selectedServer, setSelectedServer] = useState({});
