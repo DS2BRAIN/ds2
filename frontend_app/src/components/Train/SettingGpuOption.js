@@ -189,7 +189,7 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
                   serverDict?.length === checkedDict[serverName]?.length;
 
                 return (
-                  <Grid item xs={12}>
+                  <Grid item xs={12} key={`server_${serverId}`}>
                     <Grid container sx={{ mb: 1 }}>
                       <span
                         style={{
@@ -233,7 +233,11 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
                             : false;
 
                         return (
-                          <Grid container sx={{ mb: 0.5 }}>
+                          <Grid
+                            container
+                            key={`gpu_${gpuDict.idx}`}
+                            sx={{ mb: 0.5 }}
+                          >
                             {isStatusZero && (
                               <Checkbox
                                 id={`gpu_${gpuId}_checkbox`}
