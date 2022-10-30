@@ -47,6 +47,7 @@ from api_wrapper.metabase_wrapper import MetabaseAPI
 import urllib.parse
 
 import sys
+import boto3
 
 class Unbuffered(object):
    def __init__(self, stream):
@@ -110,7 +111,7 @@ class enterpriseBoto():
                 cmd = f"scp -P 13022 -i /root/.ssh/id_rsa root@{master_ip}:{s3_route} {s3_route}"
                 call(cmd.split(" "))
 
-        if not os.path.exists(file_route):
+        if not os.path.exists(file_route) and os.path.exists(s3_route):
             try:
                 shutil.copyfile(f"{s3_route}", file_route)
             except:
@@ -119,11 +120,13 @@ class enterpriseBoto():
             alter_path = f"{self.save_path}/{s3_route}"
             if 'ds2ai/ds2ai' in alter_path:
                 alter_path = alter_path.replace('ds2ai/ds2ai', 'ds2ai')
-            try:
-                shutil.copyfile(alter_path, file_route)
-            except:
-                # print(traceback.format_exc())
-                pass
+
+            if not os.path.exists(file_route) and os.path.exists(alter_path):
+                try:
+                    shutil.copyfile(alter_path, file_route)
+                except:
+                    print(traceback.format_exc())
+                    pass
         try:
 
             filePath = f"{os.getcwd()}/../aimaker-backend-deploy/data/{file_route.split('/')[-1]}"
@@ -208,9 +211,12 @@ class Util():
         self.passwd_dict = util_configs.get('passwd_dict', {})
         self.dot_encode_key = util_configs.get('dot_encode_key', '')
         self.public_ip_address = public_ip_address
+        self.s3_cloud = boto3.client('s3', aws_access_key_id=self.access_key,
+                                aws_secret_access_key=self.secret_key)
 
         self.ps_id = os.getpid()
         self.configOption = 'dev'
+        self.is_prod_server = False
 
         if len(sys.argv) > 1 and 'prod' in sys.argv[1]:
             self.configOption = 'prod'
@@ -414,11 +420,15 @@ class Util():
             self.tradier_client_id = aistore_configs.get('tradier_client_id', '')
             self.tradier_client_secret = aistore_configs.get('tradier_client_secret', '')
             self.tradier_access_token = aistore_configs.get('tradier_access_token', '')
-            self.metabase_admin_password = aistore_configs.get('metabase_admin_pw', '')
             self.enterprise_key = aistore_configs.get('enterprisekey12', '')
         if self.configOption in "enterprise":
             self.backendURL = f"http://{self.public_ip_address}:13002"
             self.frontendURL = f"http://{self.public_ip_address}:13000"
+
+        if aistore_configs.get("public_ip_address") == public_ip_address:
+            self.backendURL = f"https://api.ds2.ai"
+            self.frontendURL = f"https://servant-ai.com"
+            self.is_prod_server = True
 
         if type(self.payplePayload) == dict:
             self.payplePayload["PCD_PAY_TYPE"] = "card"
@@ -541,22 +551,22 @@ class Util():
                  </body><html>
                      """
 
-    def sendRegistrationEmail(self, user, languageCode = 'ko'):
+    def sendRegistrationEmail(self, user, languageCode = 'en'):
 
         provider = user.get('provider')
         link = self.backendURL + f"/email-confirm/?token={user['emailTokenCode']}&user={user['id']}&provider={provider}"
         To = user['email']
         Content = self.get_email_confirm_contents(link, languageCode, provider)
 
-        Subject = f'[DS2.AI] 회원가입 인증 메일입니다.' if languageCode == 'ko' else '[DS2.AI] Please complete your account verification.'
+        Subject = f'[{provider}] 회원가입 인증 메일입니다.' if languageCode == 'ko' else f'[{provider}] Please complete your account verification.'
 
         result = self.sendEmail(To, Subject, Content, provider=provider)
 
         return result
 
-    def sendResetPasswordEmail(self, email, code, provider, languageCode = 'ko'):
+    def sendResetPasswordEmail(self, email, code, provider, languageCode = 'en'):
 
-        Subject = f'[DS2.AI] 비밀번호 초기화 메일입니다.' if languageCode == 'ko' else '[DS2.AI] Please complete your password reset.'
+        Subject = f'[{provider}] 비밀번호 초기화 메일입니다.' if languageCode == 'ko' else f'[{provider}] Please complete your password reset.'
         front_url = self.frontendURL
 
         link = front_url + f"/resetpassword?code={code}"
@@ -569,8 +579,8 @@ class Util():
 
     def sendEmail(self, To, Subject, Content, provider='DS2.ai'):
 
-        if self.configOption in "enterprise":
-            return
+        # if self.configOption in "enterprise":
+        #     return
 
         FROM = formataddr((str(Header(provider, 'utf-8')), 'noreply@dslab.global'))
         msg = MIMEMultipart('alternative')
@@ -681,7 +691,7 @@ class Util():
                          crawling=False, data_part=False, server_status=False, business_part=False,
                          is_agreed_behavior_statistics=False
                          ):
-        if self.configOption == "enterprise" and not is_agreed_behavior_statistics and not self.is_dev_test:
+        if self.configOption == "enterprise" and not is_agreed_behavior_statistics and aistore_configs.get("public_ip_address") != public_ip_address:
             return
         error = False
         try:
@@ -772,6 +782,10 @@ class Util():
         return float(result.stdout)
 
     def isValidKey(self, key):
+
+        if self.is_prod_server:
+            return True
+        
         try:
             result = jwt.decode(key, self.enterprise_key, algorithms=["HS256"])
         except:

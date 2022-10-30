@@ -169,3 +169,13 @@ class HelperCreate():
     @wrapper
     def createTrainingServer(self, data):
         return trainingServerTable.create(**(data))
+
+    @wrapper
+    def createCommand(self, data):
+        return commandTable.create(**(data))
+    @wrapper
+    def createCommandCollection(self, data):
+        return commandCollectionTable.create(**(data))
+    @wrapper
+    def createCommandReview(self, data):
+        return commandReviewTable.create(**(data))

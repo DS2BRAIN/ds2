@@ -59,7 +59,8 @@ from middelwares.token_validator import access_control
 from starlette.responses import Response, JSONResponse
 from starlette.status import HTTP_200_OK
 from routers import apiRouter, dataconnectorRouter, etcRouter, fileRouter, modelsRouter, marketRouter, projectsRouter, \
-    flowRouter, flowNodeRouter, monitoringAlertRouter, predictRouter, labelRouter, userRouter, paymentRouter, jupyterRouter, opsRouter
+    flowRouter, flowNodeRouter, monitoringAlertRouter, predictRouter, labelRouter, userRouter, paymentRouter, \
+    jupyterRouter, opsRouter, commandRouter, commandCollectionRouter, commandReviewRouter
 from fastapi import Depends
 from fastapi.security import APIKeyHeader
 from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
@@ -127,6 +128,9 @@ app.include_router(opsRouter.router, tags=["Ops Router"])
 app.include_router(flowRouter.router, tags=["Flow Router"])
 app.include_router(flowNodeRouter.router, tags=["Flow Node Router"])
 app.include_router(monitoringAlertRouter.router, tags=["Monitoring Alert Router"])
+app.include_router(commandRouter.router, tags=["Command Router"])
+app.include_router(commandCollectionRouter.router, tags=["Command Collection Router"])
+app.include_router(commandReviewRouter.router, tags=["Command Review Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)

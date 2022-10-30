@@ -252,7 +252,7 @@ const Project = ({ history }) => {
   };
 
   const tableHeads = [
-    { value: "No.", width: "10%", name: "" },
+    // { value: "No.", width: "10%", name: "" },
     { value: "Project name", width: "40%", name: "projectName" },
     //{ value: "Role", width: "10%", name: "role" },
     { value: "", width: "10%", name: "" },
@@ -305,7 +305,7 @@ const Project = ({ history }) => {
       const prj = projects.jupyterProjects[i];
       const project = [
         prj.id,
-        projectRowsPerPage * projectPage + (i + 1),
+        // projectRowsPerPage * projectPage + (i + 1),
         prj.projectName,
         prj.role,
         projects.jupyterProjects[i].created_at

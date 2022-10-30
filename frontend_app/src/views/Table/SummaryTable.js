@@ -700,7 +700,7 @@ const SummaryTable = React.memo(
                 whiteSpace: "nowrap",
               }}
             >
-              {column
+              {column || column === 0
                 ? column.format && typeof column === "number"
                   ? column.format(column)
                   : column

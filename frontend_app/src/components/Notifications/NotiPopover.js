@@ -15,8 +15,8 @@ import {
 } from "redux/reducers/user.js";
 import { IS_ENTERPRISE } from "variables/common";
 
-import { Badge, Popover, Tooltip } from "@material-ui/core";
-import { CircularProgress, Grid, IconButton } from "@mui/material";
+import { Popover, Tooltip } from "@material-ui/core";
+import { Badge, CircularProgress, Grid, IconButton } from "@mui/material";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
@@ -29,7 +29,6 @@ const NotiPopover = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [isNotiLoading, setIsNotiLoading] = useState(false);
-  const [isRefreshAbuse, setIsRefreshAbuse] = useState(false);
 
   useEffect(() => {
     window.ChannelIO("onShow", function() {
@@ -69,8 +68,8 @@ const NotiPopover = () => {
         onClick={handleNotiPopOpen}
       >
         <Badge
-          badgeContent={notis ? (notis.length >= 30 ? "30+" : notis.length) : 0}
-          color="secondary"
+          badgeContent={notis ? (notis.length >= 29 ? "30+" : notis.length) : 0}
+          color="error"
         >
           <NotificationsIcon className={classes.fillBDhoverFF} />
         </Badge>
@@ -204,18 +203,9 @@ const NotiPopover = () => {
           isButton = isDownload || isDownload || isDevelop;
 
           let notiBtnText = "";
-          if (isDownload) {
-            if (tempType === "runAll") notiBtnText = "일괄예측 다운받기";
-            else if (tempType === "runMovie") notiBtnText = "영상예측 다운받기";
-            else if (tempType === "autoLabeling")
-              notiBtnText = "오토라벨링 다운받기";
-            else if (tempType === "exportCoco")
-              notiBtnText = "COCO파일 다운받기";
-            else if (tempType === "exportVoc") notiBtnText = "VOC파일 다운받기";
-            else if (tempType === "exportData") notiBtnText = "파일 다운받기";
-            else notiBtnText = "다운받기";
-          } else if (isLabelling) notiBtnText = "라벨링 프로젝트 바로가기";
-          else if (isDevelop) notiBtnText = "프로젝트 바로가기";
+          if (isDownload) notiBtnText = "Download file";
+          else if (isLabelling) notiBtnText = "to Labeling projects";
+          else if (isDevelop) notiBtnText = "to Projects";
 
           return (
             <Grid

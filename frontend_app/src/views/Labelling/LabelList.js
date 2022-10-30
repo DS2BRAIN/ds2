@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
@@ -709,26 +709,30 @@ const LabelList = ({
     setIsUploadLoading(false);
   };
 
-  const deleteUploadedFile = (files) => {
-    const tempFiles = uploadFile;
-    for (let idx = 0; idx < uploadFile.length; idx++) {
-      if (uploadFile[idx].path === files) {
-        tempFiles.splice(idx, 90);
+  const deleteUploadedFile = useCallback(
+    (files) => {
+      const tempFiles = [...uploadFile];
+      for (let idx = 0; idx < uploadFile.length; idx++) {
+        if (uploadFile[idx].path === files) {
+          tempFiles.splice(idx, 1);
+        }
       }
-    }
-    setUploadFile(tempFiles);
-    setIsUploadFileChanged(true);
-    let flag = true;
-    tempFiles.map((tempFile) => {
-      const name = tempFile.name;
-      if (/\.(mp4|quicktime|mov)$/g.test(name.toLowerCase())) {
-        flag = false;
+
+      setUploadFile(tempFiles);
+      setIsUploadFileChanged(true);
+      let flag = true;
+      tempFiles.map((tempFile) => {
+        const name = tempFile.name;
+        if (/\.(mp4|quicktime|mov)$/g.test(name.toLowerCase())) {
+          flag = false;
+        }
+      });
+      if (tempFiles.length === 0 || flag) {
+        setShouldUpdateFrame(false);
       }
-    });
-    if (tempFiles.length === 0 || flag) {
-      setShouldUpdateFrame(false);
-    }
-  };
+    },
+    [uploadFile, setUploadFile, setIsUploadFileChanged]
+  );
 
   const getS3key = (key) => {
     if (key) {
@@ -739,7 +743,9 @@ const LabelList = ({
       // });
       // const newKey = key.split(".com/")[1];
       // parseUrl = encodeURI(parseUrl);
-      return IS_ENTERPRISE ? `${fileurl}static${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1
+        ? `${fileurl}static${key}`
+        : key;
       // return key;
     }
   };
@@ -920,6 +926,7 @@ const LabelList = ({
                         className={classes.tableHead}
                         align="center"
                         style={{ width: "15%", cursor: "pointer" }}
+                        onClick={() => onSetSortValue("class")}
                       >
                         <div className={classes.tableHeader}>
                           <b>{t("Class")}</b>
@@ -1721,7 +1728,10 @@ const LabelList = ({
                           >
                             {uploadFile.map((file, idx) => {
                               return (
-                                <li key={file.name} style={{ marginBottom: 8 }}>
+                                <li
+                                  key={file.name + idx}
+                                  style={{ marginBottom: 8 }}
+                                >
                                   <div className={classes.alignCenterDiv}>
                                     <div
                                       style={{

@@ -116,14 +116,15 @@ class ManageUser:
             key = self.dbClass.getAdminKey()
             if key and self.utilClass.isValidKey(key):
                 key_info = self.utilClass.get_key_info(key)
-                if self.dbClass.getUserCount() >= key_info["maxuser"]:
+                if self.dbClass.getUserCount() >= key_info["maxuser"] and not self.utilClass.is_prod_server:
                     return EXCEED_USER_ERROR
             else:
-                if self.dbClass.getUserCount() > 1:
+                if self.dbClass.getUserCount() > 1 and not self.utilClass.is_prod_server:
                     return EXCEED_USER_ERROR
 
             userInit = {
                 "confirmed": True,
+                "emailTokenCode": uuid.uuid4().hex,
                 "appTokenCode": uuid.uuid4().hex,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
@@ -169,18 +170,17 @@ class ManageUser:
         # self.dbClass.createTeamUser(data)
         # self.dbClass.createTeamUserHistory(data)
 
-        if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
-            self.utilClass.sendRegistrationEmail(userInfo, languageCode)
+        # if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
+        if not userInfo['socialID']:
+            self.utilClass.sendRegistrationEmail(userInfo, 'en')
         try:
             self.register_metabase_user(userInfo, raw_password)
-        except:
-            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
-        try:
             self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
                                             appLog=True, is_agreed_behavior_statistics=True)
-        except:
-            pass
-        
+        except Exception as e:
+            print(e.args[0].text)
+            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
+
         return HTTP_201_CREATED, userInfo
 
     def register_metabase_user(self, user: dict, raw_password: str):
@@ -205,11 +205,11 @@ class ManageUser:
         if not user or not user.get('is_admin'):
             raise ex.NotFoundAdminEx(token)
 
-        user_info = self.dbClass.get_user_by_id(user_id)
+        user_info = self.dbClass.get_user_by_id(user_id, raw=True)
         if not user_info:
             raise ex.NotFoundUserEx()
 
-        self.dbClass.deleteOneRow(user_raw)
+        self.dbClass.deleteOneRow(user_info)
 
         return HTTP_200_OK, {}
 
@@ -277,9 +277,14 @@ class ManageUser:
         userInfo = {**userInfo, **userInit}
 
         self.dbClass.updateUser(userInfo['id'], userInit)
-
-        self.register_metabase_user(userInfo, raw_password)
-
+        try:
+            self.register_metabase_user(userInfo, raw_password)
+            self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
+                                            appLog=True, is_agreed_behavior_statistics=True)
+        except Exception as e:
+            print(e.args[0].text)
+            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})",
+                                            appLog=True)
         return HTTP_201_CREATED, userInfo
 
     def getUserSettingInfo(self, token):
@@ -356,7 +361,7 @@ class ManageUser:
                 self.utilClass.sendSlackMessage(f"로그인하였습니다. {userInfo['user']['email']} (ID: {userInfo['user']['id']})", appLog=True)
                 appTokenCode = userInfo['user']['appTokenCode']
                 isAgreedWithPolicy = userInfo['user']['isAgreedWithPolicy']
-                userInfo['user'] = {"id": userInfo['user']['id'], 'appTokenCode': appTokenCode, 'isAgreedWithPolicy': isAgreedWithPolicy}
+                userInfo['user'] = {"id": userInfo['user']['id'], 'tokenCode': userInfo['user']['token'], 'appTokenCode': appTokenCode, 'isAgreedWithPolicy': isAgreedWithPolicy}
                 return HTTP_200_OK, userInfo
             else:
                 self.utilClass.sendSlackMessage(f"이메일 확인되지 않은 로그인 시도입니다. " + json.dumps(userLoginInfo.identifier, indent=4, ensure_ascii=False),
@@ -675,7 +680,7 @@ class ManageUser:
         code = jwt.encode({'email': email + str(datetime.datetime.utcnow())}, 'aistorealwayswinning',
                            algorithm='HS256')
 
-        self.utilClass.sendResetPasswordEmail(email, code, provider, language_code)
+        self.utilClass.sendResetPasswordEmail(email, code, provider, 'en')
 
         self.dbClass.updateUser(user["id"], {
             "resetPasswordVerifyTokenID": code,

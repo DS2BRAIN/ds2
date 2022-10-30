@@ -6,6 +6,9 @@ import traceback
 import os
 import peewee as pw
 import sys
+
+import requests
+
 from src.util import Util
 
 import os
@@ -73,8 +76,22 @@ else:
         mongodb = 'astore'
         quentdb = 'quent'
     elif utilClass.configOption in 'enterprise':
+        public_ip_address = "0.0.0.0"
+        user = "root"
+        passwd = "dslabglobal"
+
+        try:
+            public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
+            print("public_ip_address")
+            print(public_ip_address)
+            if aistore_configs.get("public_ip_address") == public_ip_address:
+                user = aistore_configs.get('prod_db_user')
+                passwd = aistore_configs.get('prod_db_passwd')
+        except:
+            pass
+
         skyhub = pw.MySQLDatabase("astore", host=master_ip if master_ip else "0.0.0.0", port=13006 if check_open_new_port() else 3306,
-                                  user="root", passwd="dslabglobal")
+                                  user=user, passwd=passwd)
         mongodb = 'astoretest'
         quentdb = 'quent'
     elif utilClass.configOption in 'prod_test':
@@ -2585,6 +2602,83 @@ class trainingServerTable(MySQLModel):
     is_deleted = pw.BooleanField(null=True)
     access_token = pw.CharField(null=True)
 
+class commandTable(MySQLModel):
+    class Meta:
+        db_table = 'command'
+
+    id = pw.AutoField()
+    command = pw.CharField(null=True)
+    url = pw.CharField(null=True)
+    short_description = pw.TextField(null=True)
+    description = pw.TextField(null=True)
+    option = pw.TextField(null=True)
+    method = pw.TextField(null=True)
+    category = pw.CharField(null=True)
+    categories = pw.TextField(null=True)
+    rating = pw.FloatField(null=True)
+    status = pw.CharField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    thumbnail = pw.TextField(null=True)
+    thumbnail_32 = pw.TextField(null=True)
+    thumbnail_256 = pw.TextField(null=True)
+    is_accept_iframe = pw.BooleanField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    command_token = pw.TextField(null=True)
+    is_private = pw.BooleanField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
+    slug = pw.CharField(null=True)
+    upvote = pw.IntegerField(null=True)
+    watch = pw.IntegerField(null=True)
+    reviewsCount = pw.IntegerField(null=True)
+    inputType = pw.CharField(null=True)
+    outputType = pw.CharField(null=True)
+    outputExt = pw.CharField(null=True)
+    trainingColumnInfo = pw.CharField(null=True)
+    useFrontendOnly = pw.BooleanField(null=True)
+    useInstantly = pw.BooleanField(null=True)
+class commandCollectionTable(MySQLModel):
+    class Meta:
+        db_table = 'command_collection'
+
+    id = pw.AutoField()
+    command = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    is_deleted = pw.IntegerField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
+    collection_group = pw.IntegerField(null=True)
+
+class commandReviewTable(MySQLModel):
+    class Meta:
+        db_table = 'command_review'
+
+    id = pw.AutoField()
+    command = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    status = pw.TextField(null=True)
+    rating = pw.IntegerField(null=True)
+    review = LongTextField(null=True)
+    is_checked_positive_ease_of_use = pw.BooleanField(null=True)
+    is_checked_positive_great_customer_support = pw.BooleanField(null=True)
+    is_checked_positive_strong_feature_set = pw.BooleanField(null=True)
+    is_checked_positive_cost_effective = pw.BooleanField(null=True)
+    is_checked_positive_strong_community = pw.BooleanField(null=True)
+    is_checked_positive_positive_company_mission = pw.BooleanField(null=True)
+    is_checked_positive_clear_benefits = pw.BooleanField(null=True)
+    is_checked_negative_ease_of_use = pw.BooleanField(null=True)
+    is_checked_negative_great_customer_support = pw.BooleanField(null=True)
+    is_checked_negative_strong_feature_set = pw.BooleanField(null=True)
+    is_checked_negative_cost_effective = pw.BooleanField(null=True)
+    is_checked_negative_strong_community = pw.BooleanField(null=True)
+    is_checked_negative_positive_company_mission = pw.BooleanField(null=True)
+    is_checked_negative_clear_benefits = pw.BooleanField(null=True)
 
 class MongoDb():
     def __init__(self):

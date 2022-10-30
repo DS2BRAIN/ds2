@@ -190,21 +190,11 @@ export default function NewProject({ history }) {
   };
 
   const changeProjectNameValue = (e) => {
-    console.log("e.target.value");
-    console.log(e.target.value);
-    if (e.target.value.length > 0) {
-        setProjectNameValue(e.target.value);
-    } else {
-        dispatch(openErrorSnackbarRequestAction(t("No text detected")));
-    }
+    setProjectNameValue(e.target.value);
   };
 
   const changeProjectDescriptionValue = (e) => {
-    if (e.target.value.length > 0) {
-        setProjectDescriptionValue(e.target.value);
-    } else {
-        dispatch(openErrorSnackbarRequestAction(t("No text detected")));
-    }
+    setProjectDescriptionValue(e.target.value);
   };
 
   const changeDataCategory = (event) => {
@@ -383,7 +373,7 @@ export default function NewProject({ history }) {
   };
 
   function getSteps() {
-    return ["Project Information", "Upload Data", "Create Project"];
+    return ["Project Information", "Load Data", "Create Project"];
   }
 
   function getStepContent(stepIndex) {

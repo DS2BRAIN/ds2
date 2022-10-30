@@ -58,7 +58,6 @@ import ModalTooltip from "components/Tooltip/Tooltip.js";
 import SalesModal from "../SkyhubAI/SalesModal";
 import MetabaseButton from "components/CustomButtons/MetabaseButton";
 import Button from "components/CustomButtons/Button";
-import AnnouncementIcon from "@mui/icons-material/Announcement";
 import Analytics from "./Analytics";
 
 let sortObj = {
@@ -114,12 +113,10 @@ const ModelTable = React.memo(
   }) => {
     const classes = currentTheme();
     const dispatch = useDispatch();
-    const { user, projects, models, messages } = useSelector(
+    const { user, projects, messages } = useSelector(
       (state) => ({
         user: state.user,
         projects: state.projects,
-        models: state.models,
-        // labelprojects: state.labelprojects,
         messages: state.messages,
       }),
       []
@@ -135,7 +132,6 @@ const ModelTable = React.memo(
       isPrescriptiveAnalyticsModalOpen,
       setIsPrescriptiveAnalyticsModalOpen,
     ] = useState(false);
-    const [chosenModel, setChosenModel] = useState(null);
     const [chosenItem, setChosenItem] = useState(null);
 
     const [sortValue, setSortValue] = useState("");
@@ -154,7 +150,6 @@ const ModelTable = React.memo(
     const [tooltipCategory, setTooltipCategory] = useState("");
     const [isSalesModalOpen, setIsSalesModalOpen] = useState(false);
     const [downloadOff, setDownloadOff] = useState(false);
-    const [objDetectAPModel, setObjDetectAPModel] = useState({});
     const [updatedSSEDict, setUpdatedSSEDict] = useState({});
     const [modelSSEDict, setModelSSEDict] = useState({});
     const [anchorRmse, setAnchorRmse] = useState(null);
@@ -216,7 +211,7 @@ const ModelTable = React.memo(
       let tempDefKeys = defaultStatKeys;
       if (Object.keys(hasDataObj).length) {
         Object.keys(hasDataObj).forEach((hasData) => {
-          if (hasDataObj[hasData]) {
+          if (hasDataObj[hasData] && !tempDefKeys.includes(hasData)) {
             tempDefKeys.push(hasData);
           }
         });
@@ -258,40 +253,6 @@ const ModelTable = React.memo(
       }
     }, [projects.project && projects.project.trainingMethod]);
 
-    // useEffect(() => {
-    //   if (projects.project.labelproject) {
-    //     setIsLoading(true);
-    //     dispatch(getLabelProjectRequestAction(projects.project.labelproject));
-    //   }
-    // }, [projects.project && projects.project.labelproject]);
-
-    // useEffect(() => {
-    //   if (labelprojects.projectDetail) {
-    //     const labelClasses = labelprojects.projectDetail.labelclasses;
-    //     const autolabelingprojects = labelprojects.projectDetail.asynctasks;
-
-    //     const tempClasses = [];
-    //     const labelClassDictRaw = {};
-    //     for (let idx = 0; idx < labelClasses.length; idx++) {
-    //       const name = labelClasses[idx].name;
-    //       labelClassDictRaw[labelClasses[idx].id] =
-    //         labelClasses[idx].completedLabelCount;
-    //       if (tempClasses.indexOf(name) === -1)
-    //         tempClasses.push(labelClasses[idx]);
-    //     }
-    //     setLabelClassDict(labelClassDictRaw);
-    //     setLabelClasses(tempClasses);
-
-    //     // autolabelingprojects && autolabelingprojects.map( (autolabelingproject) => {
-    //     //     if (!isAutoLabelingRunning && (autolabelingproject.status === 1 || autolabelingproject.status === 11 )){
-    //     //         setIsAutoLabelingRunning(true);
-    //     //     }
-    //     // });
-    //     setAutoLabeingProjects(autolabelingprojects);
-    //     setIsLoading(false);
-    //   }
-    // }, [labelprojects.projectDetail]);
-
     useEffect(() => {
       if (projects.project.webhookMethod)
         setWebhooksMethod(projects.project.webhookMethod);
@@ -309,21 +270,10 @@ const ModelTable = React.memo(
     useEffect(() => {
       if (messages.shouldCloseModal) {
         setIsModalOpen(false);
-        // setIsAutoLabelingModalOpen(false);
         setOpenWebhooksModal(false);
         setIsPrescriptiveAnalyticsModalOpen(false);
       }
     }, [messages.shouldCloseModal]);
-
-    // const getUpdatedSSEDict = (projectId) => {
-    //   let SSEapi = api.getModelsInfoViaSSE2(projectId);
-    //   SSEapi.addEventListener("new_message", (event) => {
-    //     const response = JSON.parse(event.data);
-    //     if (typeof response === "object" && Object.keys(response).length) {
-    //       setUpdatedSSEDict(response);
-    //     }
-    //   });
-    // };
 
     const getModelSSEDict = (updatedDict) => {
       let tempModel = { ...modelSSEDict };
@@ -382,8 +332,7 @@ const ModelTable = React.memo(
         total: models.length,
       };
 
-      for (let idx = 0; idx < models.length; idx++) {
-        const model = models[idx];
+      models.forEach((model) => {
         let updatedDate = new Date(model.updated_at);
         let diffDate = currentDate.getTime() - updatedDate.getTime();
         let diffDays = diffDate / (1000 * 3600 * 24);
@@ -402,7 +351,7 @@ const ModelTable = React.memo(
         }
         // if (model.status !== 99) tempModels.push(model);
         if (!isModelHidden) tempModels.push(model);
-      }
+      });
       setModelStatus(modelStatus);
       if (sortObj[sortValueRef.current] === "up") {
         if (sortValueRef.current === "name") {
@@ -452,10 +401,10 @@ const ModelTable = React.memo(
       let checkYclass = false;
       let checkRmse = false;
 
-      for (let idx = 0; idx < tempModels.length; idx++) {
-        if (tempModels[idx].yClass) checkYclass = true;
-        if (tempModels[idx].rmse) checkRmse = true;
-      }
+      tempModels.forEach((tempModel) => {
+        if (tempModel.yClass) checkYclass = true;
+        if (tempModel.rmse) checkRmse = true;
+      });
       // if(projects.project.trainingMethod === 'normal_regression' || projects.project.trainingMethod === 'time_series_regression') {
       //     setIsForRegression(true);
       //     checkRegression();
@@ -501,57 +450,51 @@ const ModelTable = React.memo(
     };
 
     const checkHasData = (models) => {
-      let rmseData = false;
-      let totalLossData = false;
-      let accuracyData = false;
-      let maseData = false;
-      let mapeData = false;
-      let diceData = false;
-      let errorRateData = false;
-      let mAPData = false;
-      let AP50Data = false;
-      let AP75Data = false;
-      let r2scoreData = false;
+      const trainMethod = projects.project.trainingMethod;
+      if (!models.length && !trainMethod) return;
 
-      for (let idx = 0; idx < models.length; idx++) {
-        if (projects.project.trainingMethod === "time_series_regression") {
-          if (models[idx].rmse) rmseData = true;
-          if (models[idx].r2score) r2scoreData = true;
-          if (models[idx].mase) maseData = true;
-          if (models[idx].mape) mapeData = true;
-        } else if (projects.project.trainingMethod === "normal_regression") {
-          if (models[idx].r2score !== null) r2scoreData = true;
-          if (models[idx].mase) maseData = true;
-          if (models[idx].mape) mapeData = true;
-        } else if (projects.project.trainingMethod === "cycle_gan") {
-          if (models[idx].totalLoss) totalLossData = true;
-          if (models[idx].errorRate) errorRateData = true;
-          if (models[idx].dice) diceData = true;
-        } else if (projects.project.trainingMethod === "object_detection") {
-          if (models[idx].ap_info?.APm) mAPData = true;
-          if (models[idx].ap_info?.AP50) AP50Data = true;
-          if (models[idx].ap_info?.AP75) AP75Data = true;
-        } else {
-          if (models[idx].accuracy) accuracyData = true;
-          if (models[idx].errorRate) errorRateData = true;
-          if (models[idx].dice) diceData = true;
-        }
-      }
-
-      const tempObj = {
-        rmse: rmseData,
-        totalLoss: totalLossData,
-        accuracy: accuracyData,
-        mase: maseData,
-        mape: mapeData,
-        dice: diceData,
-        errorRate: errorRateData,
-        mAP: mAPData,
-        AP50: AP50Data,
-        AP75: AP75Data,
-        r2score: r2scoreData,
+      let hasData = {
+        rmse: false,
+        totalLoss: false,
+        accuracy: false,
+        mase: false,
+        mape: false,
+        dice: false,
+        errorRate: false,
+        mAP: false,
+        AP50: false,
+        AP75: false,
+        r2score: false,
       };
-      setHasDataObj(tempObj);
+
+      models.forEach((model) => {
+        if (trainMethod === "time_series_regression") {
+          if (model.rmse) hasData.rmse = true;
+          if (model.r2score) hasData.r2score = true;
+          if (model.mase) hasData.mase = true;
+          if (model.mape) hasData.mape = true;
+        } else if (trainMethod === "normal_regression") {
+          if (model.r2score !== null) hasData.r2score = true;
+          if (model.mase) hasData.mase = true;
+          if (model.mape) hasData.mape = true;
+        } else if (trainMethod === "cycle_gan") {
+          if (model.totalLoss) hasData.totalLoss = true;
+          if (model.errorRate || model.errorRate === 0)
+            hasData.errorRate = true;
+          if (model.dice) hasData.dice = true;
+        } else if (trainMethod === "object_detection") {
+          if (model.ap_info?.APm) hasData.mAP = true;
+          if (model.ap_info?.AP50) hasData.AP50 = true;
+          if (model.ap_info?.AP75) hasData.AP75 = true;
+        } else {
+          if (model.accuracy || model.accuracy === 0) hasData.accuracy = true;
+          if (model.errorRate || model.errorRate === 0)
+            hasData.errorRate = true;
+          if (model.dice) hasData.dice = true;
+        }
+      });
+
+      setHasDataObj(hasData);
     };
 
     const initiateMetabase = (id) => {
@@ -566,9 +509,19 @@ const ModelTable = React.memo(
         .getModelMetabase(id)
         .then((res) => {
           console.log(res);
+          dispatch(
+            openSuccessSnackbarRequestAction(
+              t("Metabase analysis has started.")
+            )
+          );
         })
         .catch((e) => {
           console.log("error", e);
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("An error occurred during the metabase analysis.")
+            )
+          );
         });
     };
 
@@ -634,91 +587,6 @@ const ModelTable = React.memo(
       setIsPrescriptiveAnalyticsModalOpen(true);
       setChosenItem(item);
     };
-
-    // const onOpenAutoLabellingForObjectDetect = (id) => {
-    //   if (!has100LabelingPerLabelClasses()) {
-    //     dispatch(
-    //       openErrorSnackbarRequestAction(
-    //         t(
-    //           "오토 라벨링을 시작하기 위해서는 학습 데이터로 쓰일 라벨 클래스당 100개의 라벨이 필요합니다."
-    //         )
-    //       )
-    //     );
-    //     return;
-    //   }
-    //   setChosenModel(id);
-    //   // if(isAutoLabelingRunning){
-    //   //     dispatch(openErrorSnackbarRequestAction(t('Auto-labeling is currently in progress. We’ll e-mail you when auto-labeling is completed')));
-    //   //     return;
-    //   // }
-    //   setIsAutoLabelingModalOpen(true);
-    // };
-
-    // const has100LabelingPerLabelClasses = () => {
-    //   var hasLessThan100LabelInLabelClass = false;
-    //   labelClassDict &&
-    //     Object.values(labelClassDict).map((value) => {
-    //       if (value < 100) {
-    //         hasLessThan100LabelInLabelClass = true;
-    //       }
-    //     });
-    //   return !hasLessThan100LabelInLabelClass;
-    // };
-
-    // const autoLabelingModalClose = () => {
-    //   setIsAutoLabelingModalOpen(false);
-    // };
-
-    // const startAutoLabelling = async () => {
-    //   await setIsAutoLabelingLoading(true);
-    //   await api
-    //     .postAutoLabeling(
-    //       labelprojects.projectDetail.id,
-    //       projects.project.id,
-    //       chosenModel
-    //     )
-    //     .then((res) => {
-    //       dispatch(
-    //         openSuccessSnackbarRequestAction(
-    //           t("Auto-labeling will start now. We’ll e-mail you when auto-labeling is complete")
-    //         )
-    //       );
-    //     })
-    //     .then(() => {
-    //       window.location.reload();
-    //     })
-    //     .catch((e) => {
-    //       if (e.response && e.response.status === 401) {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(
-    //             t("You have been logged out automatically, please log in again")
-    //           )
-    //         );
-    //         setTimeout(() => {
-    //           Cookies.deleteAllCookies();
-    //           history.push("/signin/");
-    //         }, 2000);
-    //         return;
-    //       }
-    //       if (e.response && e.response.data[1].message) {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(t(e.response.data[1].message))
-    //         );
-    //       } else {
-    //         dispatch(
-    //           openErrorSnackbarRequestAction(
-    //             t(
-    //               "학습을 시작하는 과정에서 오류가 발생했습니다. 잠시후 다시 시도해주세요."
-    //             )
-    //           )
-    //         );
-    //       }
-    //     })
-    //     .finally(() => {
-    //       setIsAutoLabelingModalOpen(false);
-    //       setIsAutoLabelingLoading(false);
-    //     });
-    // };
 
     const onOpenTooltipModal = (category) => {
       setTooltipCategory(category);
@@ -795,55 +663,54 @@ const ModelTable = React.memo(
                 anchor: anchorRmse,
                 setAnchor: setAnchorRmse,
                 tooltip:
-                  "평균 제곱근 오차로써 연속값을 예측할때 사용되는 지표입니다. RMSE 값이 낮을수록 근접하게 예측합니다.",
+                  "An indicator used to predict continuous values (ex: between 1 and 1000) as a root mean square error. The lower the RMSE value, the more accurate the prediction is.",
               },
               totalLoss: {
                 name: "Total_loss",
                 anchor: anchorTotalLoss,
                 setAnchor: setAnchorTotalLoss,
-                tooltip: "Total_loss 입니다.",
               },
               accuracy: {
                 name: "Accuracy",
                 anchor: anchorAccuracy,
                 setAnchor: setAnchorAccuracy,
                 tooltip:
-                  "모델의 정확도를 나타냅니다. ACCURACY 값이 높을수록 정확하게 예측합니다.",
+                  "Indicates the accuracy of the model. The higher the ACCURACY value, the more accurate the prediction is.",
               },
               errorRate: {
                 name: "Error Rate",
                 anchor: anchorErrorRate,
                 setAnchor: setAnchorErrorRate,
                 tooltip:
-                  "샘플링을 할 때 생긴 오류의 비율을 나타냅니다. 값이 낮을수록 예측 오류가 나올 확률이 낮아집니다.",
+                  "Indicates the percentage of errors that occurred when sampling. The lower the value, the lower the probability of an error.",
               },
               dice: {
                 name: "Dice",
                 anchor: anchorDice,
                 setAnchor: setAnchorDice,
                 tooltip:
-                  "실제 값과 예측 값의 유사성을 측정하기 위해 사용되는 샘플 계수입니다. DICE 값이 높을수록 유사성이 높습니다.",
+                  "A sample coefficient used to measure the similarity between the actual and predicted value. The higher the value of the DICE, the higher the similarity.",
               },
               r2score: {
                 name: "R2",
                 anchor: anchorR2Score,
                 setAnchor: setAnchorR2Score,
                 tooltip:
-                  "모델이 데이터를 얼마나 잘 설명하는지 나타내는 지표입니다. 0~1 값을 가질 수 있으며, 1에 가까울수록 모델이 데이터와 연관성이 높다고 할 수 있습니다.",
+                  "It is an indicator of how well the model explains the data. It can have a value of 0 to 1, and the closer it is to 1, the higher the model is related to the data.",
               },
               mase: {
                 name: "MSE",
                 anchor: anchorMase,
                 setAnchor: setAnchorMase,
                 tooltip:
-                  "예측값과 실제값의 제곱을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+                  "Measures the error of that evaluation prediction by taking the square of the predicted value and the actual value.",
               },
               mape: {
                 name: "MAE",
                 anchor: anchorMAE,
                 setAnchor: setAnchorMAE,
                 tooltip:
-                  "예측값과 실제값의 차이의 절대 값을 취하여 해당 평가 예측에 대한 오차를 측정합니다.",
+                  "It is the difference between the predicted value and the actual value divided by the average variation.",
               },
             };
 
@@ -1029,24 +896,6 @@ const ModelTable = React.memo(
 
               const bodyCellsBase = (model, modelDict, rowNum) => (
                 <>
-                  {/* <TableCell className="tableRowCell">
-                      <IconButton aria-label="add to favorites">
-                        {model.status === 100 &&
-                          (model.isFavorite ? (
-                            <StarIcon
-                              id="modelStarIcon"
-                              className="favoriteIcon"
-                              onClick={() => onClickForFavorite(false, id)}
-                            />
-                          ) : (
-                            <StarIcon
-                              id="unFavoritemodelStarIcon"
-                              className="favoriteIcon"
-                              onClick={() => onClickForFavorite(true, id)}
-                            />
-                          ))}
-                      </IconButton>
-                    </TableCell> */}
                   <TableCell
                     className="tableRowCell"
                     id="modelTable"
@@ -1090,6 +939,11 @@ const ModelTable = React.memo(
                   let resValue = substituteHead[defaultKey]
                     ? model[substituteHead[defaultKey]]
                     : defaultValue;
+                  if (defaultKey === "accuracy" || defaultKey === "errorRate") {
+                    if (resValue === 0 || resValue === 1)
+                      resValue = `${resValue * 100}%`;
+                    else resValue = `${(resValue * 100).toFixed(4)}%`;
+                  }
                   return (
                     <TableCell className="tableRowCell" align="center">
                       {model.status === 100 ? resValue : "-"}
@@ -1107,7 +961,7 @@ const ModelTable = React.memo(
                     ? model.totalLoss
                     : "-";
                 let accuracy = model.accuracy
-                  ? `${(model.accuracy * 100).toFixed(4)}%`
+                  ? model.accuracy
                   : model.accuracy === 0
                   ? 0
                   : "-";
@@ -1200,22 +1054,6 @@ const ModelTable = React.memo(
                   let isRecommender = method === "recommender";
 
                   const openModal = async (id, item) => {
-                    // if (
-                    //   user.me &&
-                    //   parseInt(user.me.cumulativePredictCount) >=
-                    //     parseInt(
-                    //       +user.me.remainPredictCount + +user.me.usageplan.noOfPrediction
-                    //     )
-                    // ) {
-                    //   dispatch(
-                    //     openErrorSnackbarRequestAction(
-                    //       t(
-                    //         "예측횟수를 초과하여 새로운 프로젝트를 추가할 수 없습니다. 계속 진행하시려면 이용플랜을 변경해주세요."
-                    //       )
-                    //     )
-                    //   );
-                    //   return;
-                    // }
                     await dispatch(getModelRequestAction(id));
                     setIsModalOpen(true);
                     setChosenItem(item);
@@ -1262,9 +1100,6 @@ const ModelTable = React.memo(
                               {t("Collective prediction")}
                             </Button>
                           )}
-                          {/*<div onClick={() => openModal(id, 'autolabelling')} className={`${classes.modelTab} autoLabellingBtn ${classes.modelTabButton}`}>*/}
-                          {/*    {t('Auto-labeling')}*/}
-                          {/*</div>*/}
                         </>
                       )}
                       {isVideo && (
@@ -1367,24 +1202,6 @@ const ModelTable = React.memo(
                             {t("Sell")}
                           </Button>
                         )} */}
-                      {/* {projectTrainMethod ===
-                          "object_detection" &&
-                          project.labelproject && (
-                            <>
-                              <div
-                                onClick={() => {
-                                  onOpenAutoLabellingForObjectDetect(id);
-                                }}
-                                className={
-                                  has100LabelingPerLabelClasses
-                                    ? `${classes.modelTab} autoLabellingForObjectDetectBtn ${classes.modelTabHighlightButton}`
-                                    : `${classes.modelTab} autoLabellingForObjectDetectBtn ${classes.defaultDisabledButton}`
-                                }
-                              >
-                                {t("Auto-labeling")}
-                              </div>
-                            </>
-                          )} */}
                     </>
                   );
                 };
@@ -1487,7 +1304,7 @@ const ModelTable = React.memo(
         <>
           <Table
             className={classes.table}
-            style={{ marginTop: "60px", width: "98%" }}
+            style={{ marginTop: "40px", width: "98%" }}
             stickyheader="true"
             aria-label="sticky table"
           >
@@ -1563,41 +1380,133 @@ const ModelTable = React.memo(
           amount: price,
         })
       );
-      // Cookies.setCookieSecure("Samesite", "None");
-      // const user = JSON.parse(Cookies.getCookie("user"));
-      // const userid = user["id"];
-      // var obj = new Object();
-
-      // obj.PCD_CPAY_VER = "1.0.1";
-      // obj.PCD_PAY_TYPE = "card";
-      // obj.PCD_PAY_WORK = "PAY";
-      // // obj.PCD_PAY_WORK = "AUTH";
-      // obj.PCD_CARD_VER = "01";
-      // /* (필수) 가맹점 인증요청 파일 (Node.JS : auth => [app.js] app.post('/pg/auth', ...) */
-      // obj.payple_auth_file = api.backendurl + "payple-auth-file"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // /* End : 가맹점 인증요청 파일 */
-      // obj.payple_auth_file = api.backendurl + "payple-auth-file/"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // obj.PCD_RST_URL = api.backendurl + "pgregistration/"; // 절대경로 포함 파일명 (예: /절대경로/payple_auth_file)
-      // /* 결과를 콜백 함수로 받고자 하는 경우 함수 설정 추가 */
-      // obj.callbackFunction = getResult; // getResult : 콜백 함수명
-      // /* End : 결과를 콜백 함수로 받고자 하는 경우 함수 설정 추가 */
-      // obj.PCD_PAYER_NO = userid;
-      // obj.PCD_PAYER_NAME = user.username;
-      // obj.PCD_PAYER_EMAIL = user.email;
-      // obj.PCD_PAY_GOODS = selectedModelId + " 모델 라이센스 구매";
-      // obj.PCD_PAY_TOTAL = price;
-      // obj.PCD_PAY_ISTAX = "Y";
-      // obj.PCD_PAY_TAXTOTAL = price / 10;
-      // obj.PCD_PAY_OID =
-      //   "payment_" + api.frontendurl + "_model_" + `${Date.now()}`;
-      // obj.PCD_SIMPLE_FLAG = "Y";
-      // obj.PCD_USER_DEFINE2 = isBuyingJetson;
-      // const PaypleCpayAuthCheck = window.PaypleCpayAuthCheck;
-      // PaypleCpayAuthCheck(obj);
-      // return;
     };
 
     if (selectedPage !== "model") return null;
+
+    const sectionModelProgress = () => {
+      let progressDenominator = modelStatus["total"];
+      let progressNumerator = modelStatus["done"] + modelStatus["error"];
+      let progressPercentage = (progressNumerator / progressDenominator) * 100;
+
+      const statusList = [
+        {
+          id: "error",
+          label: "Error",
+          img: modelError,
+        },
+        {
+          id: "processing",
+          label: "In progress",
+          img: modelProcessing,
+        },
+        {
+          id: "pausing",
+          label: "Waiting",
+          img: modelPause,
+        },
+        {
+          id: "done",
+          label: "Completed",
+          img: modelDone,
+        },
+      ];
+
+      return (
+        <Grid
+          container
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            flexWrap: "nowrap",
+          }}
+        >
+          <Grid
+            item
+            xs={9}
+            style={{
+              display: "flex",
+              marginTop: "15px",
+              padding: "0",
+            }}
+          >
+            {modelStatus && (
+              <>
+                <div className={classes.modelCard}>
+                  <div
+                    style={{
+                      width: "100%",
+                      margin: " 5px 0 15px 0",
+                      position: "relative",
+                    }}
+                  >
+                    <BorderLinearProgress
+                      variant="determinate"
+                      value={
+                        modelStatus["total"] === 0 ? 0 : progressPercentage
+                      }
+                    />
+                    <Grid className={classes.modelProgressbar} sx={{ pt: 0.5 }}>
+                      <b>
+                        {modelStatus["total"] === 0
+                          ? "0 %"
+                          : progressPercentage.toFixed(1) + " %"}
+                      </b>
+                    </Grid>
+                  </div>
+                  <Grid container sx={{ pt: 0.5 }}>
+                    {statusList.map((stat) => (
+                      <Grid item xs={3} key={stat.id} sx={{ px: 1 }}>
+                        <div className={classes.modelIconContainer}>
+                          <div style={{ display: "flex" }}>
+                            <img
+                              src={stat.img}
+                              className={classes.modelIconImg}
+                            />
+                            <b>{t(stat.label)}</b>
+                          </div>
+                          <div style={{ display: "flex" }}>
+                            <span className={classes.progressFont}>
+                              {modelStatus[stat.id]}
+                            </span>
+                            <span className={classes.progressSamllFont}>
+                              /{progressDenominator}
+                            </span>
+                          </div>
+                        </div>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </div>
+                <div style={{ maxWidth: "40px" }}>
+                  <HelpOutlineIcon
+                    fontSize="small"
+                    style={{ marginLeft: "4px", cursor: "pointer" }}
+                    id="helpIcon"
+                    onClick={() => {
+                      onOpenTooltipModal("modelStatus");
+                    }}
+                  />
+                </div>
+              </>
+            )}
+          </Grid>
+          <Grid item xs={3}>
+            {!projects.project.isSample && (
+              <Button
+                id="use_webhooks_btn"
+                shape="whiteOutlined"
+                onClick={() => {
+                  setOpenWebhooksModal(true);
+                }}
+              >
+                {t("Use WEBHOOKS")}
+              </Button>
+            )}
+          </Grid>
+        </Grid>
+      );
+    };
 
     return (
       <div style={{ width: "100%" }}>
@@ -1618,127 +1527,8 @@ const ModelTable = React.memo(
             <>
               {sortedModels.length > 0 &&
                 (projects.project.status !== 99 ||
-                  (projects.project.status === 99 && isAnyModelFinished)) && (
-                  <GridContainer
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-end",
-                      flexWrap: "nowrap",
-                    }}
-                  >
-                    <GridItem
-                      xs={9}
-                      style={{
-                        display: "flex",
-                        marginTop: "15px",
-                        padding: "0",
-                      }}
-                    >
-                      {modelStatus && (
-                        <>
-                          <div className={classes.modelCard}>
-                            <div
-                              style={{
-                                width: "100%",
-                                margin: " 5px 0 15px 0",
-                                position: "relative",
-                              }}
-                            >
-                              <BorderLinearProgress
-                                variant="determinate"
-                                value={
-                                  modelStatus["total"] === 0
-                                    ? 0
-                                    : (modelStatus["done"] /
-                                        modelStatus["total"]) *
-                                      100
-                                }
-                              />
-                              <b className={classes.modelProgressbar}>
-                                {modelStatus["total"] === 0
-                                  ? "0 %"
-                                  : (
-                                      (modelStatus["done"] /
-                                        modelStatus["total"]) *
-                                      100
-                                    ).toFixed(1) + " %"}
-                              </b>
-                            </div>
-                            <GridContainer>
-                              {[
-                                {
-                                  id: "error",
-                                  label: "Error",
-                                  img: modelError,
-                                },
-                                {
-                                  id: "processing",
-                                  label: "In progress",
-                                  img: modelProcessing,
-                                },
-                                {
-                                  id: "pausing",
-                                  label: "Waiting",
-                                  img: modelPause,
-                                },
-                                {
-                                  id: "done",
-                                  label: "Completed",
-                                  img: modelDone,
-                                },
-                              ].map((stat) => (
-                                <GridItem xs={3} key={stat.id}>
-                                  <div className={classes.modelIconContainer}>
-                                    <div style={{ display: "flex" }}>
-                                      <img
-                                        src={stat.img}
-                                        className={classes.modelIconImg}
-                                      />
-                                      <b>{t(stat.label)}</b>
-                                    </div>
-                                    <div style={{ display: "flex" }}>
-                                      <span className={classes.progressFont}>
-                                        {modelStatus[stat.id]}
-                                      </span>
-                                      <span
-                                        className={classes.progressSamllFont}
-                                      >
-                                        /{modelStatus["total"]}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </GridItem>
-                              ))}
-                            </GridContainer>
-                          </div>
-                          <div style={{ maxWidth: "40px" }}>
-                            <HelpOutlineIcon
-                              fontSize="small"
-                              style={{ marginLeft: "4px", cursor: "pointer" }}
-                              id="helpIcon"
-                              onClick={() => {
-                                onOpenTooltipModal("modelStatus");
-                              }}
-                            />
-                          </div>
-                        </>
-                      )}
-                    </GridItem>
-                    <GridItem xs={3}>
-                      {!projects.project.isSample && (
-                        <Button
-                          id="use_webhooks_btn"
-                          shape="whiteOutlined"
-                          onClick={() => {
-                            setOpenWebhooksModal(true);
-                          }}
-                        >
-                          {t("Use WEBHOOKS")}
-                        </Button>
-                      )}
-                    </GridItem>
-                  </GridContainer>
-                )}
+                  (projects.project.status === 99 && isAnyModelFinished)) &&
+                sectionModelProgress()}
               <GridContainer>
                 {projects.project.status !== 99 ||
                 (projects.project.status === 99 && isAnyModelFinished) ? (
@@ -1759,7 +1549,7 @@ const ModelTable = React.memo(
                           <b>
                             [ERROR]{" "}
                             {t(
-                              "오류로 인하여 프로젝트가 중단되었습니다. 새로운 프로젝트로 다시 시도 부탁드립니다."
+                              "The project has been stopped due to an error. Please try again with a new project."
                             )}
                           </b>
                         )}
@@ -1838,7 +1628,7 @@ const ModelTable = React.memo(
                           )}{" "}
                           (
                           {t(
-                            "예를 들어, 한국 전기료를 학습데이터로 넣고 콜롬비아 집값을 라벨링 데이터로 넣으면, 이는 상관관계가 거의 없기 때문에 에러가 나오게 됩니다."
+                            "For example, if you put Korean electricity bills as training data and Colombian housing prices as labeling data, these are almost irrelevant, so you get an error."
                           )}
                           )
                         </div>
@@ -1872,7 +1662,7 @@ const ModelTable = React.memo(
                             "A sufficient amount of training data is required for AI training."
                           )}{" "}
                           {t(
-                            "연관성이 적을수록 더 많은 데이터가 있어야 인공지능 학습이 성공할 확률이 커집니다."
+                            "When the correlation between the dataset is low, you will need more data to make AI training more likely to succeed."
                           )}
                         </div>
                         <br />
@@ -2271,92 +2061,6 @@ const ModelTable = React.memo(
             </GridContainer>
           </div>
         </Modal>
-        {/* <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={isAutoLabelingModalOpen}
-          onClose={closeModal}
-          className={classes.modalContainer}
-        >
-          <div className={classes.autoLabelingContent}>
-            {isAutoLabelingLoading ? (
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  minHeight: "220px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Loading />
-              </div>
-            ) : (
-              <>
-                <div style={{ textAlign: "center", fontSize: "20px" }}>
-                  <b> [ {t("Start auto-labeling")} ] </b>
-                </div>
-                <div>
-                  <br />
-                  {t(
-                    "오토라벨링은 준비, 1차, 2차, 3차로 순으로 진행되며, 단계가 올라갈 수록 정확도가 높아집니다."
-                  )}
-                  <br />
-                  {t(
-                    "오토라벨링 준비단계는 오토라벨링 진행시 정확한 라벨링을 위하여 준비하는 단계로 생각할 수 있습니다."
-                  )}
-                  <br />
-                  {t(
-                    "2차 오토라벨링은 평균 정확도 80%이상, 3차 오토라벨링은 평균 정확도 90% 이상을 기대할 수 있습니다."
-                  )}
-                  <br />
-                  <br />
-                  {t("** step by step")}
-                  <br />
-                  {t("Ready=Test the feasibility of 100 labeling data")}
-                  <br />
-                  {t(
-                    "1차= 100개 라벨링 데이터로 인공지능 개발 및 900개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  {t(
-                    "2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  {t(
-                    "2차= 1,000개 라벨링 데이터로 인공지능 개발 및 9,000개 라벨링 데이터 결과 확인 및 검수"
-                  )}
-                  <br />
-                  <br />
-                  {t(
-                    "오토라벨링 결과를 검수하면 그의 10배 라벨링을 다시 오토라벨링을 통해 하실 수 있습니다. 진행하시겠습니까?"
-                  )}
-                </div>
-                <div className={classes.buttonContainer}>
-                  <GridItem xs={6}>
-                    <Button
-                      id="closeCancelModalBtn"
-                      className={classes.defaultOutlineButton}
-                      onClick={closeModal}
-                    >
-                      {t("Return")}
-                    </Button>
-                  </GridItem>
-                  <GridItem xs={6}>
-                    <Button
-                      id="payBtn"
-                      className={classes.defaultHighlightButton}
-                      onClick={startAutoLabelling}
-                    >
-                      {t("Start auto-labeling")}
-                    </Button>
-                  </GridItem>
-                </div>
-              </>
-            )}
-          </div>
-        </Modal> */}
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"

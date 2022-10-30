@@ -425,7 +425,8 @@ const LabelImage = ({ history }) => {
 
   const getS3key = (key) => {
     if (key) {
-      return process.env.REACT_APP_ENTERPRISE === "true"
+      return process.env.REACT_APP_ENTERPRISE === "true" &&
+        key.indexOf("http") === -1
         ? `${fileurl}static/${key}`
         : key;
       // return key;
@@ -626,12 +627,10 @@ const LabelImage = ({ history }) => {
       // 다음 파일이 존재하는 경우
       await setTimeout(() => {
         if (isSavingSuccess) {
-          let keyword = buttonType === "prev" ? "이전" : "다음";
+          let keyword = buttonType === "prev" ? "previous" : "next";
 
           dispatch(
-            openSuccessSnackbarRequestAction(
-              t(`${keyword} 이미지로 이동합니다.`)
-            )
+            openSuccessSnackbarRequestAction(t(`Go to the ${keyword} image.`))
           );
 
           history.push(url);
@@ -798,6 +797,7 @@ const LabelImage = ({ history }) => {
                     style={{
                       width: "25%",
                       textTransform: "none",
+                      margin: "0 16px",
                     }}
                     onClick={() => saveLabel("save")}
                     id="saveBtn"
