@@ -119,6 +119,45 @@ class HelperCommand():
                 common_where)).order_by(sorting).paginate(start, count).execute()
 
     @wrapper
+    def getAllCommand(self, sorting='created_at', tab='all', desc=False, searching='',
+                              page=0, count=10):
+        if sorting == 'created_at':
+            sorting = commandTable.created_at
+        elif sorting == 'updated_at':
+            sorting = commandTable.updated_at
+        elif sorting == 'option':
+            sorting = commandTable.option
+        elif sorting == 'command':
+            sorting = commandTable.command
+        elif sorting == 'status':
+            sorting = peewee.Case(commandTable.status, (
+            (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
+            (61, 12)), 0)
+        else:
+            sorting = commandTable.watch
+
+        # if desc and sorting == 'status':
+        sorting = sorting.desc()
+        common_where = ((commandTable.is_deleted == None) | (commandTable.is_deleted == False)) & (commandTable.status != "Under Review")
+        command_query = commandTable.select()
+        status_list = []
+        if tab == 'ready':
+            status_list = [0]
+        elif tab == 'done':
+            status_list = [100, 99, 9]
+        elif tab == 'developing':
+            status_list = [1, 10, 11, 20, 21, 30, 31, 40, 41, 60, 61]
+        elif tab == 'all':
+            status_list = []
+
+        if not status_list:
+            query = command_query
+        else:
+            query = command_query.where(
+                (commandTable.command.contains(searching)) & (commandTable.status.in_(status_list)) & (common_where))
+        return query.order_by(commandTable.is_accept_iframe.desc(), sorting).paginate(page, count).execute(), query.count()
+
+    @wrapper
     def getAllCommandByUserId(self, user_id, command_ids, sorting='created_at', tab='all', desc=False, searching='',
                               page=0, count=10):
         if sorting == 'created_at':
