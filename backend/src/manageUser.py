@@ -361,7 +361,7 @@ class ManageUser:
                 self.utilClass.sendSlackMessage(f"로그인하였습니다. {userInfo['user']['email']} (ID: {userInfo['user']['id']})", appLog=True)
                 appTokenCode = userInfo['user']['appTokenCode']
                 isAgreedWithPolicy = userInfo['user']['isAgreedWithPolicy']
-                userInfo['user'] = {"id": userInfo['user']['id'], 'appTokenCode': appTokenCode, 'isAgreedWithPolicy': isAgreedWithPolicy}
+                userInfo['user'] = {"id": userInfo['user']['id'], 'tokenCode': userInfo['user']['token'], 'appTokenCode': appTokenCode, 'isAgreedWithPolicy': isAgreedWithPolicy}
                 return HTTP_200_OK, userInfo
             else:
                 self.utilClass.sendSlackMessage(f"이메일 확인되지 않은 로그인 시도입니다. " + json.dumps(userLoginInfo.identifier, indent=4, ensure_ascii=False),
