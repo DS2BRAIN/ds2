@@ -8,6 +8,8 @@ import functools
 from internal.base_object import noneObject
 from models.helperClient import HelperClient
 from models.helperCommand import HelperCommand
+from models.helperCommandCollection import HelperCommandCollection
+from models.helperCommandReview import HelperCommandReview
 from models.helperFlow import HelperFlow
 from models.helperFlowNode import HelperFlowNode
 from models.helperMonitoringAlert import HelperMonitoringAlert
@@ -833,7 +835,8 @@ class Helper():
 
 for helperClass in [HelperSub, HelperInstance, HelperCreate, HelperCRU, HelperLabel, HelperDataconnector,
                     HelperModel, HelperPayment, HelperUser, HelperProject, HelperSthreefile, HelperClient,
-                    HelperFlow, HelperFlowNode, HelperMonitoringAlert, HelperCommand]:
+                    HelperFlow, HelperFlowNode, HelperMonitoringAlert,
+                    HelperCommand, HelperCommandCollection, HelperCommandReview]:
     methodList = [func for func in dir(helperClass) if callable(getattr(helperClass, func)) and '__' not in func]
     for i, methodRaw in enumerate(methodList):
         setattr(Helper, methodRaw, classmethod(getattr(helperClass, methodRaw)))
