@@ -2614,8 +2614,8 @@ class commandTable(MySQLModel):
     option = pw.TextField(null=True)
     method = pw.TextField(null=True)
     category = pw.CharField(null=True)
-    categories = JSONField(null=True)
-    rating = pw.IntegerField(null=True)
+    categories = pw.TextField(null=True)
+    rating = pw.FloatField(null=True)
     status = pw.CharField(null=True)
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
@@ -2630,6 +2630,55 @@ class commandTable(MySQLModel):
     is_shared = pw.BooleanField(null=True)
     sharedgroup = LongTextField(null=True)
     slug = pw.CharField(null=True)
+    upvote = pw.IntegerField(null=True)
+    watch = pw.IntegerField(null=True)
+    reviewsCount = pw.IntegerField(null=True)
+    inputType = pw.CharField(null=True)
+    outputType = pw.CharField(null=True)
+    outputExt = pw.CharField(null=True)
+    trainingColumnInfo = pw.CharField(null=True)
+    useFrontendOnly = pw.BooleanField(null=True)
+    useInstantly = pw.BooleanField(null=True)
+class commandCollectionTable(MySQLModel):
+    class Meta:
+        db_table = 'command_collection'
+
+    id = pw.AutoField()
+    command = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    is_deleted = pw.IntegerField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
+    collection_group = pw.IntegerField(null=True)
+
+class commandReviewTable(MySQLModel):
+    class Meta:
+        db_table = 'command_review'
+
+    id = pw.AutoField()
+    command = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    status = pw.TextField(null=True)
+    rating = pw.IntegerField(null=True)
+    review = LongTextField(null=True)
+    is_checked_positive_ease_of_use = pw.BooleanField(null=True)
+    is_checked_positive_great_customer_support = pw.BooleanField(null=True)
+    is_checked_positive_strong_feature_set = pw.BooleanField(null=True)
+    is_checked_positive_cost_effective = pw.BooleanField(null=True)
+    is_checked_positive_strong_community = pw.BooleanField(null=True)
+    is_checked_positive_positive_company_mission = pw.BooleanField(null=True)
+    is_checked_positive_clear_benefits = pw.BooleanField(null=True)
+    is_checked_negative_ease_of_use = pw.BooleanField(null=True)
+    is_checked_negative_great_customer_support = pw.BooleanField(null=True)
+    is_checked_negative_strong_feature_set = pw.BooleanField(null=True)
+    is_checked_negative_cost_effective = pw.BooleanField(null=True)
+    is_checked_negative_strong_community = pw.BooleanField(null=True)
+    is_checked_negative_positive_company_mission = pw.BooleanField(null=True)
+    is_checked_negative_clear_benefits = pw.BooleanField(null=True)
 
 class MongoDb():
     def __init__(self):

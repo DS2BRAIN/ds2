@@ -1,22 +1,27 @@
 from typing import List
-from fastapi import APIRouter, Form, Request, Depends
+from fastapi import APIRouter, Form, Request
 from fastapi.security import APIKeyHeader
 from src.util import Util
 from src.manageUser import ManageUser
-from src.manageCommand import ManageCommand
 from starlette.responses import Response
 from pydantic import BaseModel
 from models.helper import Helper
 from src.errorResponseList import ErrorResponseList
 from sse_starlette.sse import EventSourceResponse
+import os
 
 dbClass = Helper(init=True)
 router = APIRouter()
 utilClass = Util()
 manageUserClass = ManageUser()
-manageCommandClass = ManageCommand()
 errorResponseList = ErrorResponseList()
 API_KEY_HEADER = APIKeyHeader(name="Authorization", auto_error=True)
+
+if os.path.exists("./src/creating/manageCommandReview.py"):
+    from src.creating.manageCommand import ManageCommand
+    manageCommandClass = ManageCommand()
+else:
+    manageCommandClass = None
 
 
 class CommandData(BaseModel):
@@ -33,6 +38,11 @@ def createCommand(response: Response, command_data: CommandData, token: str):
 
     return result
 
+@router.get("/all-commands/")
+def readCommands(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
+                 page: int = 0, desc: bool = False, searching: str = ''):
+    response.status_code, result = manageCommandClass.getAllCommands(sorting, page, count, tab, desc, searching)
+    return result
 @router.get("/commands/")
 def readCommands(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = ''):
@@ -61,6 +71,11 @@ async def updateCommand(command_id: str, token: str, commandInfo: CommandData, r
 
     return result
 
+@router.post("/watch/commands/{command_id}/")
+async def updateCommand(command_id: str, command_data: CommandData, response: Response):
+    response.status_code, result = manageCommandClass.watchCommand(command_id)
+
+    return result
 @router.delete("/commands/")
 async def deleteCommand(token: str, response: Response, command_id: List[str] = Form(...)):
     response.status_code, result = manageCommandClass.deleteCommands(token, command_id)
