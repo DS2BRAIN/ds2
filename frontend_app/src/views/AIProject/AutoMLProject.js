@@ -219,17 +219,6 @@ const AutoMLProject = ({ history, route }) => {
       { label: "Training status", width: "15%", type: "status" },
     ];
 
-    const tableBodys = [
-      "id",
-      "no",
-      tableHeads[1].type,
-      tableHeads[2].type,
-      tableHeads[3].type,
-      tableHeads[4].type,
-      tableHeads[5].type,
-      // tableHeads[6].type,
-    ];
-
     const projectTableHead = () => {
       const onSetProjectCheckedValueAll = () => {
         const result = projectCheckedValue["all"] ? false : true;
