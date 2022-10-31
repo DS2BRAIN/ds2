@@ -22,6 +22,7 @@ export const initialState = {
   categoryRestrict: "",
   // project
   isProjectStarted: false,
+  isProjectDeleted: false,
   isGroupError: false,
   projects: null,
   project: null,
@@ -550,11 +551,11 @@ const reducer = (state = initialState, action) => {
       return { ...state, isLoading: false, isSuccess: false };
 
     case DELETE_PROJECTS_REQUEST:
-      return { ...state, isLoading: true, isSuccess: false };
+      return { ...state, isLoading: true, isProjectDeleted: false };
     case DELETE_PROJECTS_SUCCESS:
-      return { ...state, isLoading: false, isSuccess: true };
+      return { ...state, isLoading: false, isProjectDeleted: true };
     case DELETE_PROJECTS_FAILURE:
-      return { ...state, isLoading: false, isSuccess: false };
+      return { ...state, isLoading: false, isProjectDeleted: false };
 
     case DELETE_DATACONNECTORS_REQUEST:
       return { ...state, isDatasetLoading: true, isDatasetSuccess: false };

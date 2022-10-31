@@ -136,6 +136,13 @@ const AutoMLProject = ({ history, route }) => {
   }, [searchedProjectValue]);
 
   useEffect(() => {
+    if (projects.isProjectDeleted) {
+      setSelectedProjectIdList([]);
+      projects.isProjectDeleted = false;
+    }
+  }, [projects.isProjectDeleted]);
+
+  useEffect(() => {
     if (isProjectRequested) {
       getProjectByDispatch();
       setIsProjectRequested(false);
