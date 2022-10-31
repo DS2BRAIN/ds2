@@ -61,6 +61,8 @@ const AutoMLProject = ({ history, route }) => {
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
+  const [selectedProjectIdList, setSelectedProjectIdList] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
   const [isProjectRequested, setIsProjectRequested] = useState(false);
 
   const url = window.location.href;
@@ -168,10 +170,57 @@ const AutoMLProject = ({ history, route }) => {
     }
   };
 
-  const onSetProjectCheckedValue = (value) => {
-    setProjectCheckedValue((prevState) => {
-      return { ...prevState, all: false, [value]: !projectCheckedValue[value] };
+  const onChangeSelectedProject = (projectId) => {
+    let idList = [...selectedProjectIdList];
+    let idIndex = idList.indexOf(projectId);
+
+    if (idIndex === -1) {
+      idList.push(projectId);
+    } else {
+      idList.splice(idIndex, 1);
+    }
+
+    setSelectedProjectIdList(idList);
+  };
+
+  const onChangeSelectedAll = () => {
+    let isChecked = !allSelected;
+    let idList = [...selectedProjectIdList];
+
+    projects.projects.forEach((project) => {
+      let projectId = project.id;
+      let idIndex = idList.indexOf(projectId);
+
+      if (isChecked) {
+        if (idIndex === -1) {
+          idList.push(projectId);
+        } else {
+          idList.splice(idIndex, 1);
+          idList.push(projectId);
+        }
+      } else {
+        if (idIndex > -1) {
+          idList.splice(idIndex, 1);
+        }
+      }
     });
+
+    setAllSelected(isChecked);
+    setSelectedProjectIdList(idList);
+  };
+
+  useEffect(() => {
+    if (projects.projects?.length)
+      checkNewPageAllSelected(projects.projects, selectedProjectIdList);
+  }, [projects.projects, selectedProjectIdList]);
+
+  const checkNewPageAllSelected = (projects, selIdList) => {
+    let isAllSelected = true;
+    if (selIdList.length < projects.length) isAllSelected = false;
+    projects.forEach((data) => {
+      if (!selIdList.includes(data.id)) isAllSelected = false;
+    });
+    setAllSelected(isAllSelected);
   };
 
   const deleteProject = async () => {
@@ -220,16 +269,6 @@ const AutoMLProject = ({ history, route }) => {
     ];
 
     const projectTableHead = () => {
-      const onSetProjectCheckedValueAll = () => {
-        const result = projectCheckedValue["all"] ? false : true;
-        const tmpObject = { all: result };
-        for (let i = 0; i < projects.projects.length; i++) {
-          const id = projects.projects[i].id;
-          tmpObject[id] = result;
-        }
-        setProjectCheckedValue(tmpObject);
-      };
-
       const onSetSortValue = async (value) => {
         let urlSP = urlSearchParams;
         if (value === sortingValue) {
@@ -252,8 +291,8 @@ const AutoMLProject = ({ history, route }) => {
             >
               <Checkbox
                 value="all"
-                checked={projectCheckedValue["all"]}
-                onChange={onSetProjectCheckedValueAll}
+                checked={allSelected}
+                onChange={onChangeSelectedAll}
               />
             </TableCell>
           )}
@@ -346,8 +385,8 @@ const AutoMLProject = ({ history, route }) => {
               <TableCell align="left" className={classes.tableRowCell}>
                 <Checkbox
                   value={projectId}
-                  checked={projectCheckedValue[projectId] ? true : false}
-                  onChange={() => onSetProjectCheckedValue(projectId)}
+                  checked={selectedProjectIdList.includes(projectId)}
+                  onChange={() => onChangeSelectedProject(projectId)}
                   className={classes.tableCheckBox}
                 />
               </TableCell>
