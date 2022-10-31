@@ -116,7 +116,6 @@ const AutoMLProject = ({ history, route }) => {
   useEffect(() => {
     if (url && projects.projects) {
       (async () => {
-        setProjectSettings();
         setIsLoading(false);
       })();
     }
@@ -158,16 +157,6 @@ const AutoMLProject = ({ history, route }) => {
 
   const handleSearchParams = (searchPar) => {
     history.push(urlPath + "?" + searchPar);
-  };
-
-  const setProjectSettings = () => {
-    setProjectCheckedValue({ all: false });
-    for (let i = 0; i < projects.projects.length; i++) {
-      const value = projects.projects[i].id;
-      setProjectCheckedValue((prevState) => {
-        return { ...prevState, [value]: false };
-      });
-    }
   };
 
   const onChangeSelectedProject = (projectId) => {
@@ -224,12 +213,6 @@ const AutoMLProject = ({ history, route }) => {
   };
 
   const deleteProject = async () => {
-    const deleteProjectsArr = [];
-    for (let project in projectCheckedValue) {
-      if (project !== "all" && projectCheckedValue[project]) {
-        deleteProjectsArr.push(project);
-      }
-    }
     let sortInfoJson = {
       sorting: sortingValue,
       count: projectRowsPerPage,
@@ -240,7 +223,7 @@ const AutoMLProject = ({ history, route }) => {
     if (isVerify) sortInfoJson["isVerify"] = true;
     dispatch(
       askDeleteProjectsReqeustAction({
-        projects: deleteProjectsArr,
+        projects: selectedProjectIdList,
         sortInfo: sortInfoJson,
       })
     );
@@ -441,7 +424,7 @@ const AutoMLProject = ({ history, route }) => {
             id="deleteProject"
             shape="redOutlined"
             size="sm"
-            disabled={!Object.values(projectCheckedValue).includes(true)}
+            disabled={!selectedProjectIdList.length}
             onClick={deleteProject}
           >
             {t("Delete selection")}
