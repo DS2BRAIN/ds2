@@ -1,10 +1,5 @@
-/*eslint-disable*/
 import React, { useState, useEffect } from "react";
-// @material-ui/core components
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-// core components
+
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "helpers/Cookies";
@@ -14,6 +9,11 @@ import {
 } from "redux/reducers/user.js";
 
 import Copyright from "components/Footer/Copyright";
+
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 export default function Footer({ footerHeight, containerWidth }) {
   const { user } = useSelector((state) => ({ user: state.user }), []);
@@ -242,25 +242,43 @@ export default function Footer({ footerHeight, containerWidth }) {
     );
 
     return (
-      <Grid
-        container
-        sx={{ width: "auto", justifyContent: "flex-start", fontSize: "12px" }}
-      >
-        <Grid item>
-          {terms}
-          {divider}
-        </Grid>
-        <Grid item>
-          {privacy}
-          {divider}
-        </Grid>
-        <Grid item sx={{ mr: 0.5 }}>
-          <Grid className="flex itemsCenter">
-            <Copyright isKor={isKor} />
+      <Grid container justifyContent="flex-start" sx={{ fontSize: "12px" }}>
+        <Grid item xs={10} container>
+          <Grid item>
+            {terms}
+            {divider}
+          </Grid>
+          <Grid item>
+            {privacy}
+            {divider}
+          </Grid>
+          <Grid item sx={{ mr: 0.5 }}>
+            <Grid className="flex itemsCenter">
+              <Copyright isKor={isKor} />
+            </Grid>
+          </Grid>
+          <Grid item>
+            <span>all rights reserved.</span>
           </Grid>
         </Grid>
-        <Grid item>
-          <span>all rights reserved.</span>
+        <Grid
+          item
+          xs={2}
+          container
+          justifyContent="flex-end"
+          alignItems="center"
+          sx={{ pr: 1 }}
+        >
+          <HelpOutlineIcon
+            fontSize="small"
+            sx={{ mt: "1px", mr: "4px", fill: "var(--textWhite)" }}
+          />
+          <span
+            className="noUnderlineHoverUnderline cursorPointer"
+            style={{ fontSize: "15px", fontWeight: 700 }}
+          >
+            {isKor ? "도움말" : "Help"}
+          </span>
         </Grid>
       </Grid>
     );
