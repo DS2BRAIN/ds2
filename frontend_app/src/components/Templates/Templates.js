@@ -6,7 +6,7 @@ import * as api from "controller/api.js";
 import { openErrorSnackbarRequestAction } from "redux/reducers/messages.js";
 
 import { Collapse, List, ListItem, ListItemText } from "@material-ui/core";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, Grid, Tooltip } from "@mui/material";
 import CloseIcon from "@material-ui/icons/Close";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -111,6 +111,35 @@ const Templates = ({ closeTemplateModal }) => {
     setSelectedTab(value);
   };
 
+  const downloadTemplateButton = (template) => {
+    let fileName = "";
+    if (template.s3url) {
+      let urlSplitedArr = template.s3url.split("/");
+      fileName = urlSplitedArr[urlSplitedArr.length - 1];
+    }
+
+    return (
+      <Tooltip title={fileName} placement="right">
+        <div>
+          <Button
+            id={`${template.templateCategory + template.id}_download_btn`}
+            shape="greenOutlined"
+            size="sm"
+            onClick={() => {
+              // linkDownloadUrl(template.s3url);
+              const link = document.createElement("a");
+              link.href = template.s3url;
+              link.download = "download";
+              link.click();
+            }}
+          >
+            DownLoad
+          </Button>
+        </div>
+      </Tooltip>
+    );
+  };
+
   const renderTemplateByMethod = () => {
     const listTemplateMethod = templateMethod.map((method) => (
       <ListItem
@@ -153,20 +182,7 @@ const Templates = ({ closeTemplateModal }) => {
         <ListItemText>
           <span style={{ fontSize: "14px" }}>{t(template.templateName)}</span>
         </ListItemText>
-        <Button
-          id={`${template.templateCategory + template.id}_download_btn`}
-          shape="greenOutlined"
-          size="sm"
-          onClick={() => {
-            // linkDownloadUrl(template.s3url);
-            const link = document.createElement("a");
-            link.href = template.s3url;
-            link.download = "download";
-            link.click();
-          }}
-        >
-          DownLoad
-        </Button>
+        {downloadTemplateButton(template)}
       </ListItem>
     ));
 
@@ -244,21 +260,7 @@ const Templates = ({ closeTemplateModal }) => {
                           {t(template.templateName)}
                         </span>
                       </ListItemText>
-                      <Button
-                        id={`${template.templateCategory +
-                          template.id}_download_btn`}
-                        shape="greenOutlined"
-                        size="sm"
-                        onClick={() => {
-                          // linkDownloadUrl(template.s3url);
-                          const link = document.createElement("a");
-                          link.href = template.s3url;
-                          link.download = "download";
-                          link.click();
-                        }}
-                      >
-                        <span style={{ wordBreak: "keep-all" }}>DownLoad</span>
-                      </Button>
+                      {downloadTemplateButton(template)}
                     </ListItem>
                   );
               }
