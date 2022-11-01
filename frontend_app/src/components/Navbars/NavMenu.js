@@ -36,20 +36,20 @@ const NavMenu = () => {
       layout: "/admin",
       condition: true,
     },
-    {
-      id: "market",
-      path: "/marketList",
-      name: "AI Market",
-      layout: "/admin",
-      condition: true,
-    },
-    {
-      id: "jupyter",
-      path: "/jupyterproject",
-      name: "Jupyter",
-      layout: "/admin",
-      condition: true,
-    },
+    // {
+    //   id: "market",
+    //   path: "/marketList",
+    //   name: "AI Market",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
+    // {
+    //   id: "jupyter",
+    //   path: "/jupyterproject",
+    //   name: "Jupyter",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
   ];
 
   const navLinkClassName =

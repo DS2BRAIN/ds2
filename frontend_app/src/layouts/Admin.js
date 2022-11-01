@@ -187,7 +187,7 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <Sample {...props} />}
       />
-      <Route
+      {/* <Route
         exact
         path="/admin/marketNewProject/"
         {...rest}
@@ -234,7 +234,7 @@ const Admin = ({ history, ...rest }) => {
         path="/admin/jupyterproject/:id"
         {...rest}
         render={(props) => <JupyterPannel {...props} />}
-      />
+      /> */}
       <Route
         exact
         path="/admin/train"
@@ -247,7 +247,7 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <AutoMLProject {...props} route="verifyproject" />}
       />
-      <Route
+      {/* <Route
         exact
         path="/admin/newjupyterproject"
         {...rest}
@@ -258,7 +258,7 @@ const Admin = ({ history, ...rest }) => {
         path="/admin/newjupyterproject/:id"
         {...rest}
         render={(props) => <NewJupyterProject {...props} />}
-      />
+      /> */}
       <Route
         exact
         path="/admin/newProject"
