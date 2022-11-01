@@ -167,7 +167,7 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
           <>
             {isStatusZero && (
               <Grid container justifyContent="flex-end">
-                <Grid sx={{ mt: -5 }}>
+                <Grid sx={{ mt: -9, mr: -2 }}>
                   <Button
                     id="add_server_btn"
                     shape="greenOutlined"
