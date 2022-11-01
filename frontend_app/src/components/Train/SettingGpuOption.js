@@ -15,7 +15,7 @@ import { checkIsValidKey } from "../Function/globalFunc";
 import LicenseRegisterModal from "../Modal/LicenseRegisterModal";
 
 const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const { user, projects } = useSelector(
     (state) => ({
@@ -62,6 +62,11 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
             openErrorSnackbarRequestAction(t("Please check the connection."))
           );
         }
+      })
+      .catch((err) => {
+        let data = err.response.data;
+        let errMsg = i18n.language === "ko" ? data.message : data.message_en;
+        dispatch(openErrorSnackbarRequestAction(errMsg));
       });
   };
 
