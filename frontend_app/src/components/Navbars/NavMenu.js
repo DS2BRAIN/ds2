@@ -22,13 +22,13 @@ const NavMenu = () => {
       layout: "/admin",
       condition: true,
     },
-    {
-      id: "skyhub",
-      path: "/skyhubai",
-      name: "Deploy",
-      layout: "/admin",
-      condition: true,
-    },
+    // {
+    //   id: "skyhub",
+    //   path: "/skyhubai",
+    //   name: "Deploy",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
     {
       id: "label",
       path: "/labelling",
