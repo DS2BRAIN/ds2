@@ -243,42 +243,34 @@ export default function Footer({ footerHeight, containerWidth }) {
 
     return (
       <Grid container justifyContent="flex-start" sx={{ fontSize: "12px" }}>
-        <Grid item xs={10} container>
-          <Grid item>
-            {terms}
-            {divider}
-          </Grid>
-          <Grid item>
-            {privacy}
-            {divider}
-          </Grid>
-          <Grid item sx={{ mr: 0.5 }}>
-            <Grid className="flex itemsCenter">
-              <Copyright isKor={isKor} />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <span>all rights reserved.</span>
-          </Grid>
+        <Grid item>
+          {terms}
+          {divider}
         </Grid>
-        <Grid
-          item
-          xs={2}
-          container
-          justifyContent="flex-end"
-          alignItems="center"
-          sx={{ pr: 1 }}
-        >
+        <Grid item>
+          {privacy}
+          {divider}
+        </Grid>
+        <Grid item sx={{ display: "flex", alignItems: "center" }}>
           <HelpOutlineIcon
             fontSize="small"
-            sx={{ mt: "1px", mr: "4px", fill: "var(--textWhite)" }}
+            sx={{ mr: "4px", fill: "var(--textWhite)", fontSize: "16px" }}
           />
           <span
             className="noUnderlineHoverUnderline cursorPointer"
-            style={{ fontSize: "15px", fontWeight: 700 }}
+            style={{ fontWeight: 700 }}
           >
             {isKor ? "도움말" : "Help"}
           </span>
+          {divider}
+        </Grid>
+        <Grid item sx={{ mr: 0.5 }}>
+          <Grid className="flex itemsCenter">
+            <Copyright isKor={isKor} />
+          </Grid>
+        </Grid>
+        <Grid item>
+          <span>all rights reserved.</span>
         </Grid>
       </Grid>
     );
