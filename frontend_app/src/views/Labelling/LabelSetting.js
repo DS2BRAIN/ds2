@@ -139,14 +139,14 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
       return;
     }
 
-    if (!projectDescription) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          `${t("No text detected.")} ${t("Please enter a new description.")}`
-        )
-      );
-      return;
-    }
+    // if (!projectDescription) {
+    //   dispatch(
+    //     openErrorSnackbarRequestAction(
+    //       `${t("No text detected.")} ${t("Please enter a new description.")}`
+    //     )
+    //   );
+    //   return;
+    // }
 
     dispatch(
       askLabelProjectDetailRequestAction({
