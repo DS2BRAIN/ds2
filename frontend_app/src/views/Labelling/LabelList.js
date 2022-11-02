@@ -48,7 +48,7 @@ import {
   TableRow,
   TablePagination,
 } from "@material-ui/core";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, Grid, Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
@@ -1580,47 +1580,49 @@ const LabelList = ({
                   {(labelprojects.projectDetail?.workapp ===
                     "object_detection" ||
                     labelprojects.projectDetail?.workapp === "image") && (
-                    <form
-                      id="label_file_search_form"
-                      style={{
-                        background: "#424242",
-                        width: "190px",
-                        borderRadius: "50px",
-                        height: "32px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: "0 5px",
-                      }}
-                      //noValidate
-                    >
-                      <input
+                    <Tooltip title={t("Enter the file name")}>
+                      <form
+                        id="label_file_search_form"
                         style={{
-                          background: "transparent",
-                          color: currentThemeColor.textWhite87,
-                          border: "none",
-                          width: "100%",
-                          fontSize: "15px",
-                          padding: "0 12px",
+                          background: "#424242",
+                          width: "190px",
+                          borderRadius: "50px",
+                          height: "32px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "0 5px",
                         }}
-                        placeholder={t("Search")}
-                        value={searchedValue}
-                        onChange={onChangeSearchedValue}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            onGetSearchedFile(e);
-                          }
-                        }}
-                        id="search_file_input"
-                      />
-                      {searchedValue && searchedValue.length > 0 && (
-                        <CloseIcon
-                          id="delete_searching_value_btn"
-                          onClick={onGetDefaultFile}
-                          className={classes.pointerCursor}
+                        //noValidate
+                      >
+                        <input
+                          style={{
+                            background: "transparent",
+                            color: currentThemeColor.textWhite87,
+                            border: "none",
+                            width: "100%",
+                            fontSize: "15px",
+                            padding: "0 12px",
+                          }}
+                          placeholder={t("Search")}
+                          value={searchedValue}
+                          onChange={onChangeSearchedValue}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              onGetSearchedFile(e);
+                            }
+                          }}
+                          id="search_file_input"
                         />
-                      )}
-                    </form>
+                        {searchedValue && searchedValue.length > 0 && (
+                          <CloseIcon
+                            id="delete_searching_value_btn"
+                            onClick={onGetDefaultFile}
+                            className={classes.pointerCursor}
+                          />
+                        )}
+                      </form>
+                    </Tooltip>
                   )}
                 </Grid>
               </Grid>
