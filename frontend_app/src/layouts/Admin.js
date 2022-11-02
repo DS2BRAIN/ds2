@@ -537,7 +537,7 @@ const Admin = ({ history, ...rest }) => {
         }}
       >
         <MySnackbar
-          variant={messages.category}
+          variant={messages.category ?? "success"}
           className={classes.margin}
           message={t(messages.message)}
         />
@@ -553,7 +553,7 @@ const Admin = ({ history, ...rest }) => {
       >
         <MySnackbarAction
           classFrom="sample"
-          variant={messages.category}
+          variant={messages.category ?? "success"}
           className={classes.margin}
           message={t(messages.message)}
         />

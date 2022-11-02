@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useTranslation } from "react-i18next";
@@ -369,35 +369,65 @@ const HyperParametersForm = ({
     );
   };
 
-  const onChangeRangeValue = (e, option, key, valueType) => {
-    const value = e.target.value;
-    let tmpType =
-      valueType === "Min" ? "min" : valueType === "Max" ? "max" : "split";
+  const setAlgorithmValue = useCallback(
+    (option, key, valueType, value) => {
+      let tmpType =
+        valueType === "Min" ? "min" : valueType === "Max" ? "max" : "split";
 
-    if (subParamsKey)
       setAlgorithmInfo(
         produce((draft) => {
-          const info =
-            draft[option].parameter[subParamsKey.key].subParameter[
-              subParamsKey.key2
-            ].parameter[key];
+          const info = subParamsKey
+            ? draft[option].parameter[subParamsKey.key].subParameter[
+                subParamsKey.key2
+              ].parameter[key]
+            : draft[option].parameter[key];
 
           info.range = info.range ? info.range : {};
-
-          info.range[tmpType] = Number(value);
+          info.range[tmpType] = value !== "" ? Number(value) : "";
         })
       );
-    else
-      setAlgorithmInfo(
-        produce((draft) => {
-          draft[option].parameter[key].range = draft[option].parameter[key]
-            .range
-            ? draft[option].parameter[key].range
-            : {};
+    },
+    [setAlgorithmInfo, subParamsKey]
+  );
 
-          draft[option].parameter[key].range[tmpType] = Number(value);
-        })
+  const onBlurRangeInput = (e, option, key, valueType, info) => {
+    const value = e.target.value;
+    const notAllowedRange =
+      (typeof info[key].min === "number" &&
+        valueType === "Min" &&
+        (Number(value) < info[key].min ||
+          (info[key].between && Number(value) <= info[key].min))) ||
+      (typeof info[key].max === "number" &&
+        valueType === "Max" &&
+        (Number(value) < info[key].max ||
+          (info[key].between && Number(value) <= info[key].max))) ||
+      (valueType === "Max" && Number(value) < info[key].min);
+
+    if (notAllowedRange) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please enter a parameter value suitable for the range.") +
+            ` ( ${key} )`
+        )
       );
+
+      const tmpValue =
+        typeof info[key].min === "number"
+          ? info[key].between
+            ? info[key].min + 0.1
+            : info[key].min
+          : 0;
+
+      setAlgorithmValue(option, key, valueType, tmpValue);
+    }
+  };
+
+  const onChangeRangeValue = (e, option, key, valueType) => {
+    const value = e.target.value;
+
+    if (isNaN(value) || !value) return;
+
+    setAlgorithmValue(option, key, valueType, value);
   };
 
   const onClickSubValChkBox = (e, option, key, subValue) => {
@@ -629,10 +659,6 @@ const HyperParametersForm = ({
       setSubParams(projects.subHyperParameters);
   }, [projects.subHyperParameters, hyperParamsData]);
 
-  // useEffect(() => {
-  //   setDisabled();
-  // }, [algorithmInfo, option]);
-
   return (
     <Grid
       ref={parameterFormContainerRef}
@@ -734,8 +760,8 @@ const HyperParametersForm = ({
                           <Switch
                             className={switchDisabled ? "disabled" : "normal"}
                             value="all"
-                            checked={info[key].checked}
-                            disabled={info[key].disabled || switchDisabled}
+                            checked={info[key].checked ?? false}
+                            disabled={info[key].disabled && switchDisabled}
                             color="primary"
                             inputProps={{ "aria-label": "primary checkbox" }}
                             onChange={(e) => onChangeIsSetRange(e, option, key)}
@@ -828,7 +854,7 @@ const HyperParametersForm = ({
                                       type="number"
                                       label={v}
                                       disabled={info[key].disabled}
-                                      defaultValue={
+                                      value={
                                         info[key].range
                                           ? v === "Min"
                                             ? info[key].range.min
@@ -845,8 +871,17 @@ const HyperParametersForm = ({
                                       InputProps={rangeInputProps}
                                       InputLabelProps={rangeInputLabelProps}
                                       sx={rangeInputStyle}
-                                      onBlur={(e) =>
+                                      onChange={(e) =>
                                         onChangeRangeValue(e, option, key, v)
+                                      }
+                                      onBlur={(e) =>
+                                        onBlurRangeInput(
+                                          e,
+                                          option,
+                                          key,
+                                          v,
+                                          info
+                                        )
                                       }
                                     />
                                   </Grid>
@@ -880,7 +915,8 @@ const HyperParametersForm = ({
                                         e,
                                         option,
                                         key,
-                                        "Split"
+                                        "Split",
+                                        info
                                       )
                                     }
                                   />

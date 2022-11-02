@@ -2395,5 +2395,6 @@
   "Please enter the token.": "Please enter the token.",
   "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
   "Triton Config": "Triton Config",
-  "No text detected.": "No text detected."
+  "No text detected.": "No text detected.",
+  "required": "required"
 }

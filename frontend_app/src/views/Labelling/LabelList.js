@@ -54,6 +54,7 @@ import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
 import "assets/css/material-control.css";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
@@ -952,6 +953,7 @@ const LabelList = ({
                       if (head.condition)
                         return (
                           <TableCell
+                            key={head.value}
                             className={classes.tableHead}
                             align={head.align}
                             style={{ width: head.width, cursor: head.cursor }}
@@ -1047,6 +1049,7 @@ const LabelList = ({
                           if (head.condition)
                             return (
                               <TableCell
+                                key={head.value}
                                 className={classes.tableRowCell}
                                 align={head.align}
                                 onClick={() => goProjectDetail(objectData.id)}
@@ -1680,6 +1683,11 @@ const LabelList = ({
                             }}
                           >
                             {uploadFile.map((file, idx) => {
+                              const isKB = file.size / (1024 * 1024) < 1;
+                              const fileSize = isKB
+                                ? file.size / 1024
+                                : file.size / (1024 * 1024);
+
                               return (
                                 <li
                                   key={file.name + idx}
@@ -1695,8 +1703,19 @@ const LabelList = ({
                                       }}
                                     >
                                       {file.name}
+                                      <span
+                                        style={{
+                                          marginLeft: 16,
+                                          fontSize: 14,
+                                          textDecoration: "underline",
+                                        }}
+                                      >
+                                        {`Size:
+                                        ${fileSize.toFixed(1).toLocaleString()}
+                                        ${isKB ? "KB" : "MB"}`}
+                                      </span>
                                     </div>
-                                    <CloseIcon
+                                    <CancelRoundedIcon
                                       style={{
                                         marginLeft: "12px",
                                         cursor: "pointer",
