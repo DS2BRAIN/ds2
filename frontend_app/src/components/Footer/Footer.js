@@ -9,6 +9,7 @@ import {
 } from "redux/reducers/user.js";
 
 import Copyright from "components/Footer/Copyright";
+import GuidePDF from "assets/empty.pdf";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -241,6 +242,13 @@ export default function Footer({ footerHeight, containerWidth }) {
       </span>
     );
 
+    const downloadGuide = () => {
+      const downloadElement = document.createElement("a");
+      downloadElement.href = GuidePDF;
+      downloadElement.download = "DS2_Guide";
+      downloadElement.click();
+    };
+
     return (
       <Grid container justifyContent="flex-start" sx={{ fontSize: "12px" }}>
         <Grid item>
@@ -259,8 +267,9 @@ export default function Footer({ footerHeight, containerWidth }) {
           <span
             className="noUnderlineHoverUnderline cursorPointer"
             style={{ fontWeight: 700 }}
+            onClick={downloadGuide}
           >
-            {isKor ? "도움말" : "Help"}
+            {isKor ? "도움말" : "Guide"}
           </span>
           {divider}
         </Grid>
