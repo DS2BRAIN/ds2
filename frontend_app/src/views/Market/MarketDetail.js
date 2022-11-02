@@ -1467,7 +1467,7 @@ const MarketDetail = ({ history, match }) => {
                                   style={{ width: "35%" }}
                                   align="center"
                                 >
-                                  <b>{t("Assignee ")}</b>
+                                  <b>{t("Assignee")}</b>
                                 </TableCell>
                                 {projects.project &&
                                   projects.project.workapp ===
