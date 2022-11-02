@@ -1128,6 +1128,7 @@
   "Magic Tool": "Magic Tool",
   "Code copied": "Code copied",
   "Refresh": "Refresh",
+  "Refresh data list": "Refresh data list",
   "Begin your AI model development with your own dataset.": "Begin your AI model development with your own dataset.",
   "An error occurred during auto-labeling.": "An error occurred during auto-labeling.",
   "An error occurred while training the labeling project.": "An error occurred while training the labeling project.",
