@@ -161,7 +161,6 @@ const LicenseRegisterModal = () => {
                 >
                   <InputBase
                     variant="outlined"
-                    margin="normal"
                     required
                     fullWidth
                     name="enterpriseKey"
@@ -220,7 +219,7 @@ const LicenseRegisterModal = () => {
                 <Link
                   target="_blank"
                   color="inherit"
-                  href="https://ds2.ai/buy-license/"
+                  to="https://ds2.ai/buy-license/"
                   style={{ color: "var(--secondary1)" }}
                 >
                   <u>{t("Buy License")}</u>

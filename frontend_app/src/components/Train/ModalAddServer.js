@@ -9,9 +9,13 @@ import Button from "components/CustomButtons/Button";
 import { Box, Divider, Grid, IconButton, Modal, Input } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-const ModalAddServer = ({ isAddServerModalOpen, closeAddServerModal,
-                          setHostValue, setTokenValue,
-                          submitAddServer }) => {
+const ModalAddServer = ({
+  isAddServerModalOpen,
+  closeAddServerModal,
+  setHostValue,
+  setTokenValue,
+  submitAddServer,
+}) => {
   const classes = currentTheme();
   const { t } = useTranslation();
 

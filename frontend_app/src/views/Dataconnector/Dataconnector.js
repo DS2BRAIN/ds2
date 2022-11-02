@@ -75,7 +75,9 @@ const Dataconnector = ({ history }) => {
   const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(10);
   const [sortDataValue, setSortDataValue] = useState("created_at");
   const [isSortDesc, setIsSortDesc] = useState(true);
-  const [isPublicData, setIsPublicData] = useState(false);
+  const [isPublicData, setIsPublicData] = useState(
+    urlSearchParams.has("public")
+  );
   const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
     false
@@ -108,7 +110,6 @@ const Dataconnector = ({ history }) => {
 
   useEffect(() => {
     dispatch(getDataconnectortypeRequestAction());
-    getDataByDispatch();
   }, []);
 
   useEffect(() => {
@@ -271,15 +272,13 @@ const Dataconnector = ({ history }) => {
       }
       if (!isProjectStartLoading) setIsLoading(false);
     }
-  }, [projects.dataconnectors]);
+  }, [projects.dataconnectors, isProjectStartLoading]);
 
   useEffect(() => {
     checkNewPageAllSelected(datasetList, selectedDataIdList);
   }, [datasetList, selectedDataIdList]);
 
   const getDataByDispatch = (valueChangeObject) => {
-    if (projects.isDatasetLoading) return;
-
     let payloadJson = {
       sorting: sortDataValue,
       count: datatableRowsPerPage,
