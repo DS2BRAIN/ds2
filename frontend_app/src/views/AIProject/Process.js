@@ -255,7 +255,7 @@ const Process = (props) => {
       if (state.modelid !== models.chosenModel) {
         state.modelid && dispatch(getModelRequestAction(state.modelid));
       }
-    } else props.history.push("/admin/train");
+    }
   }, [path]);
 
   useEffect(() => {

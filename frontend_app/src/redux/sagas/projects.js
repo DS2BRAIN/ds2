@@ -817,6 +817,7 @@ function* getProject(action) {
     yield put({
       type: GET_PROJECT_FAILURE,
     });
+    window.location.href = "/admin/train";
   }
 }
 function* watchGetProject() {
