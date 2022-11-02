@@ -9,6 +9,13 @@ const NavMenu = () => {
 
   const routes = [
     {
+      id: "data",
+      path: "/dataconnector",
+      name: "Dataset",
+      layout: "/admin",
+      condition: true,
+    },
+    {
       id: "train",
       path: "/train",
       name: "Train",
