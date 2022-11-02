@@ -286,7 +286,7 @@ const Process = (props) => {
         );
         onSetSampleData();
         setIsVerify(project.isVerify);
-        if (groups.parentsGroup) onSetShareGroupDict();
+        if (groups.childrenGroup) onSetShareGroupDict();
         setHyperParamsData(
           project.hyper_params?.length > 0 ? project.hyper_params : null
         );
@@ -417,14 +417,14 @@ const Process = (props) => {
   };
 
   useEffect(() => {
-    if (groups.parentsGroup && projects.project) {
+    if (groups.childrenGroup && projects.project) {
       (async () => {
         // await setIsLoading(true);
         await onSetShareGroupDict();
         // await setIsLoading(false);
       })();
     }
-  }, [groups.parentsGroup]);
+  }, [groups.childrenGroup]);
 
   useEffect(() => {
     if (nameRef.current) setNameInputSize();
@@ -510,7 +510,7 @@ const Process = (props) => {
   }, [isParameterChanged]);
 
   // useEffect(()=>{
-  //     if(groups.parentsGroup && projects.project) {
+  //     if(groups.childrenGroup && projects.project) {
   //         onSetShareGroupDict();
   //     }
   // }, [projects.project])
@@ -584,7 +584,7 @@ const Process = (props) => {
     // }catch{
     //     sharedgroup = [];
     // }
-    groups.parentsGroup.forEach((group) => {
+    groups.childrenGroup.forEach((group) => {
       if (sharedgroup.indexOf(group.id) > -1) {
         tempGroupDict[group.id] = true;
       } else {
@@ -2206,7 +2206,7 @@ const Process = (props) => {
   };
 
   const handleClickForShare = (event) => {
-    if (!(groups.parentsGroup && groups.parentsGroup.length > 0)) {
+    if (!(groups.childrenGroup && groups.childrenGroup.length > 0)) {
       dispatch(
         openErrorSnackbarRequestAction(
           `${t("Please create a group before sharing a project.")} ${t(
@@ -3096,14 +3096,21 @@ const Process = (props) => {
                             parseInt(user.me.id) ===
                               parseInt(projects.project.user) && (
                               <>
-                                <Button
-                                  id="share_project_btn"
-                                  shape="whiteOutlined"
-                                  sx={{ ml: 1 }}
-                                  onClick={handleClickForShare}
-                                >
-                                  {t("Share your project")}
-                                </Button>
+                                {user.me?.is_admin && (
+                                  <div
+                                    style={{ display: "inline" }}
+                                    onClick={handleClickForShare}
+                                  >
+                                    <Button
+                                      id="share_project_btn"
+                                      shape="whiteOutlined"
+                                      sx={{ ml: 1 }}
+                                      onClick={() => {}}
+                                    >
+                                      {t("Share your project")}
+                                    </Button>
+                                  </div>
+                                )}
                                 <Menu
                                   id="simple-menu"
                                   anchorEl={anchorEl}
@@ -3131,8 +3138,8 @@ const Process = (props) => {
                                       <b>Share to All Group</b>
                                     </div>
                                   </MenuItem>
-                                  {groups.parentsGroup &&
-                                    groups.parentsGroup.map((group) => {
+                                  {groups.childrenGroup &&
+                                    groups.childrenGroup.map((group) => {
                                       var isChecked = groupCheckboxDict[
                                         group.id
                                       ]

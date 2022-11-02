@@ -418,7 +418,9 @@ const LabelPreview = ({
   // };
   const getS3key = (key) => {
     if (key) {
-      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1
+        ? `${fileurl}static${key}`
+        : key;
     }
   };
 
@@ -637,7 +639,7 @@ const LabelPreview = ({
                     </div>
                   </Grid>
                   <Grid item xs={4} className={classes.text}>
-                    {t("Assignee ")}
+                    {t("Assignee")}
                   </Grid>
                   <Grid item xs={8} className={classes.text}>
                     <div

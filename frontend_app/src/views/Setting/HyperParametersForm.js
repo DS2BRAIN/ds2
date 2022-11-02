@@ -1543,7 +1543,7 @@ const HyperParametersForm = ({
                       }
                     >
                       {subParams &&
-                        Object.keys(info[key].subParameter).map((key2, i) => {
+                        subParams[key].map((key2, i) => {
                           const subInfo = info[key].subParameter;
                           const subKey = { key, key2 };
 
@@ -1585,6 +1585,7 @@ const HyperParametersForm = ({
                                         </Tooltip>
                                       </ListItemIcon>
                                     )}
+
                                   <ListItemText
                                     primary={`${
                                       subParams[key]
@@ -1592,12 +1593,14 @@ const HyperParametersForm = ({
                                         : ""
                                     } ${subInfo[key2].label}`}
                                   />
+
                                   {subListsOpen && subListsOpen[key2] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
                                   )}
                                 </ListItemButton>
+
                                 <Collapse
                                   in={subListsOpen ? subListsOpen[key2] : false}
                                   timeout="auto"
