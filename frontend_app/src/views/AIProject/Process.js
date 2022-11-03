@@ -1912,7 +1912,16 @@ const Process = (props) => {
       ];
     }
 
-    console.log(projectInfo);
+    let totalFileSize = 0;
+    project.dataconnectorsList.map((dataconnector) => {
+      if (dataconnector.fileSize) totalFileSize += dataconnector.fileSize;
+    });
+    console.log(totalFileSize);
+
+    let totalHour = totalFileSize / (1024 * 1024 * 100);
+    totalHour = totalHour.toFixed(0);
+    if (totalHour < 1) totalHour = 1;
+
     if (
       valueForPredictInfo["unique"] > 250 &&
       (project.trainingMethod === "text" ||
@@ -1937,7 +1946,9 @@ const Process = (props) => {
         askStartProjectRequestAction({
           message: `${t(
             "If there are more than 25 unique values that you want to predict, the accuracy may decrease. If preprocessing is not performed, the rows with missing values will be removed."
-          )} ${t("Would you like to proceed?")}`,
+          )} (${t("Estimated time")}: ${totalHour + t("hour")}) ${t(
+            "Would you like to proceed?"
+          )}`,
           project: projectInfo,
         })
       );
@@ -1952,7 +1963,9 @@ const Process = (props) => {
         askStartProjectRequestAction({
           message: `${t(
             "If preprocessing is not performed, the rows with missing values will be removed."
-          )} ${t("Would you like to proceed?")}`,
+          )} (${t("Estimated time")}: ${totalHour + t("hour")}) ${t(
+            "Would you like to proceed?"
+          )}`,
           project: projectInfo,
         })
       );
@@ -1965,15 +1978,18 @@ const Process = (props) => {
         askStartProjectRequestAction({
           message: `${t(
             "If there are more than 25 unique values that you want to predict, the accuracy may decrease."
-          )} ${t("Would you like to proceed?")}`,
+          )} (${t("Estimated time")}: ${totalHour + t("hour")}) ${t(
+            "Would you like to proceed?"
+          )}`,
           project: projectInfo,
         })
       );
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message:
-            "Would you like to start modeling your project with the selected options?",
+          message: `${t(
+            "Would you like to start modeling your project with the selected options?"
+          )} (${t("Estimated time")}: ${totalHour + t("hour")})`,
           project: projectInfo,
         })
       );
