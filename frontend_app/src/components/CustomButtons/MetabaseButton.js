@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
-import { backendurl } from "controller/api.js";
+import {
+  openSuccessSnackbarRequestAction,
+  openErrorSnackbarRequestAction,
+} from "redux/reducers/messages";
 
 import { Modal } from "@material-ui/core";
 import {
@@ -20,6 +24,7 @@ import Button from "components/CustomButtons/Button";
 
 const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
   const classes = currentTheme();
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const isKor = i18n.language === "ko";
 
@@ -39,7 +44,6 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
         }
       }
       const SSEapi = api.getDataInfoViaSSE(id);
-
       SSEapi.addEventListener("new_message", getDataInfo);
       return () => {
         SSEapi.close();
@@ -82,14 +86,23 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
       .getDataMetabase(id)
       .then((res) => {
         console.log(res);
+        dispatch(
+          openSuccessSnackbarRequestAction(t("Metabase analysis has started."))
+        );
       })
       .catch((e) => {
         console.log("error", e);
+        setMetabaseStatus(99);
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("An error occurred during the metabase analysis.")
+          )
+        );
       });
   };
 
   const openMetabaseTab = (metabaseUrl) => {
-    let newUrl = new URL(backendurl);
+    let newUrl = new URL(window.location.href);
     let fullUrl = "http://" + newUrl.hostname + metabaseUrl;
     window.open(fullUrl);
   };
@@ -103,9 +116,9 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
           }_btn`}
           shape={type === "data" ? "whiteOutlined" : "blue"}
           size={type === "data" ? "md" : "sm"}
-          sx={{
-            ml: type === "data" && 2,
-            mx: type === "model" && 0.5,
+          style={{
+            marginLeft: type === "data" ? "16px" : "4px",
+            marginRight: type === "data" ? 0 : "4px",
             fontWeight: metabaseStatus === 100 && "bold",
           }}
           onClick={() => {
@@ -140,7 +153,10 @@ const MetabaseButton = ({ id, type, metabase, initiateMetabase }) => {
               shape={type === "data" ? "whiteOutlined" : "blue"}
               size={type === "data" ? "md" : "sm"}
               disabled
-              sx={{ ml: type === "data" && 2, mx: type === "model" && 0.5 }}
+              style={{
+                marginLeft: type === "data" ? "16px" : "4px",
+                marginRight: type === "data" ? 0 : "4px",
+              }}
             >
               {metabaseStatus === 1 ? (
                 <CircularProgress

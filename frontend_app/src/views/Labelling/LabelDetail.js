@@ -1210,7 +1210,7 @@ const LabelDetail = ({ history, match }) => {
   const onChangeAutoLabelingAmount = (e) => {
     const amount = e.target.value / 1;
     const prepare = labelChart.prepare;
-    const tmpAmount = amount > prepare ? prepare : amount;
+    const tmpAmount = amount > prepare ? prepare : amount < 0 ? 1 : amount;
 
     setAutoLabelingAmount(tmpAmount);
     labelingCountRef.current.value = tmpAmount;
@@ -1248,7 +1248,9 @@ const LabelDetail = ({ history, match }) => {
   // };
   const getS3key = (key) => {
     if (key) {
-      return IS_ENTERPRISE && key.indexOf("http") === -1 ? `${fileurl}static/${key}` : key;
+      return IS_ENTERPRISE && key.indexOf("http") === -1
+        ? `${fileurl}static/${key}`
+        : key;
       // return key;
     }
   };
@@ -1983,44 +1985,6 @@ const LabelDetail = ({ history, match }) => {
                               inputRef={titleRef}
                             />
                           </Grid>
-                          <Grid item style={{ marginLeft: "auto" }}>
-                            {user.me &&
-                              !user.me.isAiTrainer &&
-                              !isShared &&
-                              (isUnableToChangeName ? (
-                                <Button
-                                  id="change_name_btn"
-                                  shape="blue"
-                                  size="xs"
-                                  onClick={onLetAbleToChangeName}
-                                >
-                                  {t("Edit")}
-                                </Button>
-                              ) : (
-                                <div
-                                  style={{
-                                    display: "flex",
-                                  }}
-                                >
-                                  <Button
-                                    id="change_name_confirm_btn"
-                                    shape="blue"
-                                    size="xs"
-                                    onClick={saveProjectName}
-                                  >
-                                    {t("Save")}
-                                  </Button>
-                                  <Button
-                                    id="change_name_cancel_btn"
-                                    shape="blue"
-                                    size="xs"
-                                    onClick={onCancelChangeName}
-                                  >
-                                    {t("Cancel")}
-                                  </Button>
-                                </div>
-                              ))}
-                          </Grid>
                         </Grid>
                         <Grid container alignItems="center" sx={{ mb: 2 }}>
                           <Grid item xs={4} className={classes.mainCardTitle}>
@@ -2057,44 +2021,6 @@ const LabelDetail = ({ history, match }) => {
                               }
                               inputRef={detailRef}
                             />
-                          </Grid>
-                          <Grid item style={{ marginLeft: "auto" }}>
-                            {user.me &&
-                              !user.me.isAiTrainer &&
-                              !isShared &&
-                              (isUnableToChangeDetail ? (
-                                <Button
-                                  id="change_detail_btn"
-                                  shape="blue"
-                                  size="xs"
-                                  onClick={onLetAbleToChangeDetail}
-                                >
-                                  {t("Edit")}
-                                </Button>
-                              ) : (
-                                <div
-                                  style={{
-                                    display: "flex",
-                                  }}
-                                >
-                                  <Button
-                                    id="change_detail_confirm_btn"
-                                    shape="blue"
-                                    size="xs"
-                                    onClick={saveProjectDetail}
-                                  >
-                                    {t("Save")}
-                                  </Button>
-                                  <Button
-                                    id="change_detail_cancel_btn"
-                                    shape="blue"
-                                    size="xs"
-                                    onClick={onCancelChangeDetail}
-                                  >
-                                    {t("Cancel")}
-                                  </Button>
-                                </div>
-                              ))}
                           </Grid>
                         </Grid>
                         <Grid container alignItems="center" sx={{ mb: 2 }}>
@@ -2437,7 +2363,13 @@ const LabelDetail = ({ history, match }) => {
                                         style={{ width: v.width }}
                                         align="center"
                                       >
-                                        <b>{t(v.title)}</b>
+                                        <b
+                                          style={{
+                                            color: "var(--textWhite87)",
+                                          }}
+                                        >
+                                          {t(v.title)}
+                                        </b>
                                       </TableCell>
                                     );
                                   })}

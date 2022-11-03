@@ -175,14 +175,12 @@ class ManageUser:
             self.utilClass.sendRegistrationEmail(userInfo, 'en')
         try:
             self.register_metabase_user(userInfo, raw_password)
-        except:
-            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
-        try:
             self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
                                             appLog=True, is_agreed_behavior_statistics=True)
-        except:
-            pass
-        
+        except Exception as e:
+            print(e.args[0].text)
+            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
+
         return HTTP_201_CREATED, userInfo
 
     def register_metabase_user(self, user: dict, raw_password: str):
@@ -207,7 +205,7 @@ class ManageUser:
         if not user or not user.get('is_admin'):
             raise ex.NotFoundAdminEx(token)
 
-        user_info = self.dbClass.get_user_by_id(user_id)
+        user_info = self.dbClass.get_user_by_id(user_id, raw=True)
         if not user_info:
             raise ex.NotFoundUserEx()
 
@@ -279,9 +277,14 @@ class ManageUser:
         userInfo = {**userInfo, **userInit}
 
         self.dbClass.updateUser(userInfo['id'], userInit)
-
-        self.register_metabase_user(userInfo, raw_password)
-
+        try:
+            self.register_metabase_user(userInfo, raw_password)
+            self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
+                                            appLog=True, is_agreed_behavior_statistics=True)
+        except Exception as e:
+            print(e.args[0].text)
+            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})",
+                                            appLog=True)
         return HTTP_201_CREATED, userInfo
 
     def getUserSettingInfo(self, token):
@@ -795,12 +798,16 @@ class ManageUser:
         for group in adminGroup:
             group['member'] = [x.__dict__['__data__'] for x in self.dbClass.getMembersByGroupId(group['id'], True)]
 
-        memberGroup = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId)]
+        memberGroup = []
+        memberGroup_raw = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId)]
 
-        for group in memberGroup:
+        for group in memberGroup_raw:
             group['member'] = [x.__dict__['__data__'] for x in self.dbClass.getMembersByGroupId(group['id'], False)]
             group['hostuserList'] = self.dbClass.getHostUsersByGroupId(group['id']).__dict__['__data__']
             group['acceptcode'] = self.dbClass.getMemberByUserIdAndGroupId(userId, group['id']).__dict__['__data__']['acceptcode']
+            host_user = self.dbClass.getOneUserById(group['hostuserList']['user'], raw=True)
+            if host_user and host_user.isDeleteRequested != True:
+                memberGroup.append(group)
 
         result = {'parentsGroup' : adminGroup, 'childrenGroup' : memberGroup}
 
@@ -846,6 +853,10 @@ class ManageUser:
 
         userId = user.__dict__['__data__']['id']
         userEmail = user.__dict__['__data__']['email']
+        adminGroup = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId, 'admin')]
+        for group in adminGroup:
+            if groupName == group['groupname']:
+                raise ex.NotValidGroupNameEx()
 
         group = {'groupname': groupName, 'created_at': datetime.datetime.now(), 'updated_at': datetime.datetime.now(), 'provider': provider}
 
@@ -899,7 +910,7 @@ class ManageUser:
 
         inviteUser = self.dbClass.getUserByEmail(email)
 
-        if not inviteUser:
+        if not inviteUser or inviteUser['isDeleteRequested']:
             self.utilClass.sendSlackMessage(
                 f"파일 : manageUser\n 함수 : inviteGroupByEmail \n초대하려는 이메일이 유효하지 않습니다. user = {user['id']} groupId = {groupId} email = {email})",
                 appError=True, userInfo=user)

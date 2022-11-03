@@ -162,7 +162,7 @@ export default function SignUp() {
       setSnackbarOption(
         "error",
         t(
-          "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!."
+          "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"
         )
       );
     } else if (passwordCheck === "") {
@@ -629,44 +629,38 @@ export default function SignUp() {
           type: "text",
           value: userName,
           func: inputUserName,
-          tip: false,
         },
         email: {
           label: "Please enter your email.",
           type: "text",
           value: email,
           func: inputEmailValue,
-          tip: false,
         },
         password: {
           label: "Please enter your password.",
           type: "password",
           value: password,
           func: inputPasswordValue,
-          tip: true,
           tipTitle:
-            "our password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!.",
+            "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!",
         },
         passwordCheck: {
-          label: "Re-enter password",
+          label: "Please re-enter your password.",
           type: "password",
           value: passwordCheck,
           func: inputPasswordCheckValue,
-          tip: false,
         },
         company: {
           label: "(Optional) Please enter your company name.",
           type: "text",
           value: company,
           func: inputCompanyValue,
-          tip: false,
         },
         promotionCode: {
           label: "(Optional) Please enter the promotion code.",
           type: "text",
           value: promotionCode,
           func: inputPromotionCodeValue,
-          tip: false,
         },
       };
       let selected = comps[typeKey];
@@ -697,7 +691,7 @@ export default function SignUp() {
             padding: "4px 8px",
           }}
         >
-          {selected.tip ? (
+          {selected.tipTitle ? (
             <Tooltip
               title={
                 <span style={{ fontSize: "12px" }}>{t(selected.tipTitle)}</span>
@@ -826,7 +820,8 @@ export default function SignUp() {
                 cursor: "default",
               }}
             >
-              {" "}{t("I agree to the terms.")}
+              {" "}
+              {t("I agree to the terms.")}
             </span>
           </Grid>
           <Grid
@@ -932,7 +927,7 @@ export default function SignUp() {
               }}
               onClick={checkValidEmail}
             >
-              {isAbleEmail ? t("Checked") : t("Duplicate Check")}
+              {isAbleEmail ? t("Checked") : t("Duplicate check")}
             </Button>
           </Grid>
           <Grid item xs={12}>

@@ -1,61 +1,49 @@
 import React, { useState, useEffect } from "react";
-import Modal from "@material-ui/core/Modal";
-import currentTheme from "assets/jss/custom.js";
-import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import InputBase from "@material-ui/core/InputBase";
-import { currentThemeColor } from "assets/jss/custom";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Dropzone from "react-dropzone";
-import { useDropzone } from "react-dropzone";
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import CloseIcon from "@material-ui/icons/Close";
-import { NavLink } from "react-router-dom";
-import Cookies from "helpers/Cookies";
-import Link from "@material-ui/core/Link";
-import * as api from "controller/api.js";
+import { useTranslation } from "react-i18next";
+import Dropzone, { useDropzone } from "react-dropzone";
+import { ReactTitle } from "react-meta-tags";
+
 import {
   openErrorSnackbarRequestAction,
   openSuccessSnackbarRequestAction,
-  askGoToMainPageRequestAction,
-  askChangeProjectNameRequestAction,
-  askChangeProjectDescriptionRequestAction,
-  askStopProjectRequestAction,
-  askStartProjectRequestAction,
-  setMainPageSettingRequestAction,
-  setPlanModalOpenRequestAction,
   askModalRequestAction,
 } from "redux/reducers/messages.js";
-import TextField from "@material-ui/core/TextField";
-import Pagination from "@material-ui/lab/Pagination";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import {
-  getMarketModelRequestAction,
-  getModelRequestAction,
-} from "../../redux/reducers/models";
+import { getMarketModelRequestAction } from "redux/reducers/models";
+import { getMarketProjectRequestAction } from "redux/reducers/projects";
+import * as api from "controller/api.js";
+import currentTheme, { currentThemeColor } from "assets/jss/custom";
 import ModalPage from "components/PredictModal/ModalPage";
-import { getMarketProjectRequestAction } from "../../redux/reducers/projects";
-import TablePagination from "@material-ui/core/TablePagination";
-import { ReactTitle } from "react-meta-tags";
-import { CircularProgress } from "@mui/material";
 import Button from "components/CustomButtons/Button";
 import { openChat } from "components/Function/globalFunc";
+
+import {
+  InputBase,
+  MenuItem,
+  Modal,
+  TablePagination,
+  TextField,
+  Select,
+} from "@material-ui/core";
+import {
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import CloseIcon from "@material-ui/icons/Close";
 
 export default function MarketList({ history }) {
   const classes = currentTheme();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const { user, projects, models, labelprojects, messages } = useSelector(
+  const { user, projects, messages } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
-      models: state.models,
-      labelprojects: state.labelprojects,
       messages: state.messages,
     }),
     []
@@ -82,23 +70,21 @@ export default function MarketList({ history }) {
   const [isUploadFileChanged, setIsUploadFileChanged] = useState(false);
   const [isUploadLoading, setIsUploadLoading] = useState(false);
   const [completed, setCompleted] = useState(0);
-  const [selectedPreviewId, setSelectedPreviewId] = useState(null);
   const [isPredictModalOpen, setIsPredictModalOpen] = useState(false);
-  const [selectedMarketModel, setSelectedMarketModel] = useState(null);
   const [chosenItem, setChosenItem] = useState(null);
   const [categories, setCategories] = useState([]);
   const [rowsPerModelPage, setRowsPerModelPage] = useState(10);
   const [isKor, setIsKor] = useState(false);
 
   const tableHeads = [
-    { value: "Category", width: "15%" },
-    { value: "Preview", width: "7.5%" },
+    { value: "Category", width: "12%" },
+    { value: "Preview", width: "8%" },
     { value: "Title", width: "20%" },
     { value: "Input data", width: "20%" },
-    { value: "Output data", width: "20%" },
+    { value: "Output data", width: "24%" },
     // { value: "Price", width: "11%" },
-    { value: "Type", width: "10%" },
-    { value: "Action", width: "7.5%" },
+    { value: "Type", width: "8%" },
+    { value: "Action", width: "8%" },
   ];
 
   const tableBodys = [
@@ -252,114 +238,104 @@ export default function MarketList({ history }) {
   const renderMarketProjects = () => {
     return (
       <>
-        <div style={{ minHeight: "400px", borderBottom: "1px solid #F0F0F0" }}>
+        <div
+          style={{
+            minHeight: "400px",
+            borderBottom: "1px solid var(--textWhite38)",
+          }}
+        >
           <Table className={classes.table} aria-label="simple table">
-            <TableHead style={{ borderTop: "1px solid #F0F0F0" }}>
+            <TableHead style={{ borderTop: "1px solid var(--textWhite38)" }}>
               <TableRow>
-                {tableHeads.map((tableHead, idx) => {
-                  return (
-                    <TableCell
-                      key={idx}
-                      className={classes.tableHeadMarketList}
-                      align="center"
-                      width={tableHead.width}
-                    >
-                      {t(tableHead.value)}
-                    </TableCell>
-                  );
-                })}
+                {tableHeads.map((tableHead, idx) => (
+                  <TableCell
+                    key={idx}
+                    align="center"
+                    width={tableHead.width}
+                    style={{
+                      color: "var(--textWhite6)",
+                      borderColor: "var(--textWhite38)",
+                    }}
+                  >
+                    {t(tableHead.value)}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody id="marketTable">
-              {marketModels.map((marketModel, idx) => (
-                <TableRow key={idx} className={classes.tableRow}>
-                  {tableBodys.map((tableBody, idx) => {
-                    return (
-                      <TableCell
-                        key={marketModel.id}
-                        className={classes.tableRowCell}
-                        align="center"
-                        // onClick={() => {
-                        //   goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
-                        // }}
+              {marketModels.map((marketModel) => (
+                <TableRow
+                  key={`marketModelRow_${marketModel.id}`}
+                  className={classes.tableRow}
+                >
+                  {tableBodys.map((tableBody, idx) => (
+                    <TableCell
+                      key={`marketModelCell_${marketModel.id}_${idx}`}
+                      className={classes.tableRowCell}
+                      align="center"
+                      // onClick={() => {
+                      //   goNewPage(tableBody.value, user.language == "ko" ? marketModel.url : marketModel.url_en);
+                      // }}
+                      style={{
+                        cursor: "default",
+                        padding:
+                          tableBody.value === "thumbnail" && "0 !important",
+                      }}
+                    >
+                      <div
+                        className={classes.wordBreakDiv}
                         style={{
+                          fontWeight:
+                            (tableBody.value === "name_kr" ||
+                              tableBody.value === "name_en") &&
+                            500,
                           cursor: "default",
-                          padding:
-                            tableBody.value === "thumbnail" && "0 !important",
                         }}
                       >
-                        <div
-                          className={classes.wordBreakDiv}
-                          style={{
-                            textDecoration:
-                              (tableBody.value === "name_kr" ||
-                                tableBody.value === "name_en") &&
-                              "underline",
-                            textUnderlinePosition:
-                              (tableBody.value === "name_kr" ||
-                                tableBody.value === "name_en") &&
-                              "under",
-                            cursor: "default",
-                          }}
-                        >
+                        {tableBody.value === "thumbnail" ? (
+                          <img
+                            src={marketModel[tableBody.value]}
+                            style={{ width: "80px", height: "80px" }}
+                          />
+                        ) : (
                           <>
-                            {tableBody.value === "thumbnail" ? (
-                              <>
-                                <img
-                                  src={marketModel[tableBody.value]}
-                                  style={{ width: "80px", height: "80px" }}
-                                />
-                              </>
+                            {tableBody.value === "type" ? (
+                              <span style={{ fontWeight: 500 }}>
+                                {marketModel.service_type
+                                  ? "Service"
+                                  : marketModel[tableBody.value] !== "CustomAi"
+                                  ? "Quick Start"
+                                  : "Custom AI"}
+                              </span>
                             ) : (
                               <>
-                                {tableBody.value === "type" ? (
-                                  <span
-                                    style={{
-                                      border: "1px solid #B5C4E1",
-                                      borderRadius: "28px",
-                                      padding: "4px 8px",
-                                    }}
-                                  >
-                                    {marketModel.service_type ? (
-                                      <>Service</>
-                                    ) : marketModel[tableBody.value] !==
-                                      "CustomAi" ? (
-                                      <>Quick Start</>
-                                    ) : (
-                                      <>Custom AI</>
-                                    )}
-                                  </span>
-                                ) : (
-                                  <>
-                                    {tableBody.value == "category"
-                                      ? t(marketModel[tableBody.value])
-                                      : user.language == "ko"
-                                      ? marketModel[tableBody.value]
-                                      : marketModel[
-                                          `${tableBody.value.split("_")[0]}_en`
-                                        ]}
-                                  </>
-                                )}
-                                {tableBody.value === "price" ? t("KRW") : ""}
+                                {tableBody.value == "category"
+                                  ? t(marketModel[tableBody.value])
+                                  : user.language == "ko"
+                                  ? marketModel[tableBody.value]
+                                  : marketModel[
+                                      `${tableBody.value.split("_")[0]}_en`
+                                    ]}
                               </>
                             )}
+                            {tableBody.value === "price" ? t("KRW") : ""}
                           </>
-                        </div>
-                        {/* {tableBody.value === "section" && (
-                        <Button
-                          onClick={() => {
-                            window.open(marketModel.url, "_blank");
-                          }}
-                        >
-                          상세보기
-                        </Button>
-                      )} */}
-                      </TableCell>
-                    );
-                  })}
+                        )}
+                      </div>
+                      {/* {tableBody.value === "section" && (
+                          <Button
+                            onClick={() => {
+                              window.open(marketModel.url, "_blank");
+                            }}
+                          >
+                            상세보기
+                          </Button>
+                        )} */}
+                    </TableCell>
+                  ))}
                   <TableCell className={classes.tableRowCell} align="center">
                     <Button
-                      id={`${idx}_start_button`}
+                      id={`${marketModel.id}_start_button`}
                       className={
                         (classes.wordBreakDiv, classes.defaultHighlightButton)
                       }
@@ -433,8 +409,8 @@ export default function MarketList({ history }) {
             nextIconButtonProps={{
               "aria-label": "next page",
             }}
-            onChangePage={changePage}
-            onChangeRowsPerPage={changeRowsPerModelPage}
+            onPageChange={changePage}
+            onRowsPerPageChange={changeRowsPerModelPage}
           />
         </div>
       </>
@@ -442,34 +418,30 @@ export default function MarketList({ history }) {
   };
 
   const onClickButtonAction = async (marketModel) => {
-    await setSelectedMarketModel(null);
-    await setChosenItem(null);
+    setChosenItem(null);
     console.log(marketModel);
     if (marketModel["service_type"]) {
       history.push(`/admin/marketNewProject?id=${marketModel["id"]}`);
     } else if (marketModel["type"] !== "CustomAi") {
-      await setRequestMarketModelId(marketModel.id);
+      setRequestMarketModelId(marketModel.id);
       await dispatch(getMarketProjectRequestAction(marketModel.project.id));
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
-      // await setSelectedMarketModel(marketModel);
       if (
         marketModel?.externalAiType?.indexOf("image") > -1 ||
         marketModel?.externalAiType?.indexOf("object_detection") > -1
       ) {
-        await setChosenItem("apiImage");
+        setChosenItem("apiImage");
       } else if (marketModel?.externalAiType?.indexOf("audio") > -1) {
-        await setChosenItem("ApiSpeechToText");
+        setChosenItem("ApiSpeechToText");
       } else {
-        await setChosenItem("api");
+        setChosenItem("api");
       }
 
-      await setIsPredictModalOpen(true);
+      setIsPredictModalOpen(true);
     } else {
-      await setRequestAITitle(
-        isKor ? marketModel.name_kr : marketModel.name_en
-      );
-      await setRequestMarketModelId(marketModel.id); //id => model
-      await setIsRequestIndustryAIModalOpen(true);
+      setRequestAITitle(isKor ? marketModel.name_kr : marketModel.name_en);
+      setRequestMarketModelId(marketModel.id); //id => model
+      setIsRequestIndustryAIModalOpen(true);
     }
   };
 
@@ -526,16 +498,8 @@ export default function MarketList({ history }) {
       dispatch(openErrorSnackbarRequestAction(t("Upload file")));
       return;
     }
-    await setIsFileUploading(true);
-    await setCompleted(5);
-
-    // await dispatch(
-    //   postUploadFileRequestAction({
-    //     labelprojectId: labelprojects.projectDetail.id,
-    //     files: uploadFile,
-    //   })
-    // );
-    // await dispatch(setObjectlistsSearchedValue(null));
+    setIsFileUploading(true);
+    setCompleted(5);
   };
 
   const changeRequestPhoneNumber = (e) => {
@@ -690,195 +654,187 @@ export default function MarketList({ history }) {
                 <CircularProgress />
               </div>
             ) : (
-              <>
-                <div>
-                  {t(`${requestAITitle}`)} {t("Select AI")}
-                  <div style={{ margin: "30px 0" }}>
-                    <span>{t("Upload training data")}</span>
-                    <Dropzone onDrop={dropFiles}>
-                      {({ getRootProps, getInputProps }) => (
-                        <>
-                          {(!uploadFile || uploadFile.length === 0) && (
-                            <div
-                              {...getRootProps({ className: "dropzoneArea" })}
-                            >
-                              <input {...getInputProps()} />
-                              <p className={classes.settingFontWhite6}>
-                                {t(
-                                  "Drag the file or click the box to upload it!"
-                                )}
-                                <br />
-                                {t(
-                                  "이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다."
-                                )}
-                                <br />
-                                {t(
-                                  "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
-                                )}
-                                <br />
-                                {t(
-                                  "Uploading large-size files may take more than 5 minutes"
-                                )}
-                              </p>
-                              <CloudUploadIcon fontSize="large" />
-                            </div>
-                          )}
-                          <aside>
-                            {!isUploadLoading &&
-                              (uploadFile && uploadFile.length > 0 && (
-                                <>
-                                  <p
-                                    style={{
-                                      marginTop: "10px",
-                                      fontSize: "15px",
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                      whiteSpace: "nowrap",
-                                      color: currentThemeColor.textWhite87,
-                                    }}
-                                  >
-                                    <span>
-                                      {t("Upload file")} : {t("총")}{" "}
-                                      {uploadFile.length}
-                                      {t("")}
-                                    </span>
-                                  </p>
-                                  <ul>
-                                    {uploadFile.map((file, idx) => {
-                                      if (idx === 10) {
-                                        return (
-                                          <li style={{ listStyle: "none" }}>
-                                            .......
-                                          </li>
-                                        );
-                                      }
-                                      if (idx >= 10) {
-                                        return null;
-                                      }
+              <div>
+                {t(`${requestAITitle}`)} {t("Select AI")}
+                <div style={{ margin: "30px 0" }}>
+                  <span>{t("Upload training data")}</span>
+                  <Dropzone onDrop={dropFiles}>
+                    {({ getRootProps, getInputProps }) => (
+                      <>
+                        {(!uploadFile || uploadFile.length === 0) && (
+                          <div {...getRootProps({ className: "dropzoneArea" })}>
+                            <input {...getInputProps()} />
+                            <p className={classes.settingFontWhite6}>
+                              {t(
+                                "Drag the file or click the box to upload it!"
+                              )}
+                              <br />
+                              {t(
+                                "이미지 파일(png/jpg/jpeg), csv파일, 이미지 압축파일(zip)만 업로드 가능합니다."
+                              )}
+                              <br />
+                              {t(
+                                "You are able to upload up to 100 image files. Please compress your files if you need to upload more than that"
+                              )}
+                              <br />
+                              {t(
+                                "Uploading large-size files may take more than 5 minutes"
+                              )}
+                            </p>
+                            <CloudUploadIcon fontSize="large" />
+                          </div>
+                        )}
+                        <aside>
+                          {!isUploadLoading &&
+                            (uploadFile && uploadFile.length > 0 && (
+                              <>
+                                <p
+                                  style={{
+                                    marginTop: "10px",
+                                    fontSize: "15px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                    color: currentThemeColor.textWhite87,
+                                  }}
+                                >
+                                  <span>
+                                    {t("Upload file")} : {t("총")}{" "}
+                                    {uploadFile.length}
+                                    {t("")}
+                                  </span>
+                                </p>
+                                <ul>
+                                  {uploadFile.map((file, idx) => {
+                                    if (idx === 10) {
                                       return (
-                                        <li key={file.name}>
-                                          <div
-                                            className={classes.alignCenterDiv}
-                                          >
-                                            <div
-                                              style={{
-                                                overflow: "hidden",
-                                                textOverflow: "ellipsis",
-                                                whiteSpace: "nowrap",
-                                                color:
-                                                  currentThemeColor.textWhite6,
-                                              }}
-                                            >
-                                              {file.name}
-                                            </div>
-                                            <CloseIcon
-                                              style={{
-                                                marginLeft: "10px",
-                                                cursor: "pointer",
-                                              }}
-                                              onClick={() => {
-                                                deleteUploadedFile(file.path);
-                                              }}
-                                            />
-                                          </div>
+                                        <li style={{ listStyle: "none" }}>
+                                          .......
                                         </li>
                                       );
-                                    })}
-                                  </ul>
-                                  <span
-                                    id="uploadFileAgain"
-                                    className={classes.labelUploadBtn}
-                                    onClick={() => {
-                                      setUploadFile(null);
-                                    }}
-                                  >
-                                    {t("Re-upload")}
-                                  </span>
-                                </>
-                              ))}
-                          </aside>
-                        </>
-                      )}
-                    </Dropzone>
-                  </div>
-                  <div>
-                    <label
-                      for="requestContent"
-                      style={{
-                        fontFamily:
-                          "'Roboto', 'Helvetica', 'Arial', sans-serif",
-                        fontSize: "18px",
-                        display: "block",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      {t("Enter the details of your request")}
-                    </label>
-                    <TextField
-                      id="requestContent"
-                      placeholder={t(
-                        "ex. 신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이있다면 다른물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다."
-                      )}
-                      style={{
-                        wordBreak: "keep-all",
-                        padding: "16px 26px",
-                        border: "1px solid #999999",
-                        color: "var(--textWhite87)",
-                        height: "100px",
-                        overflow: "auto",
-                      }}
-                      fullWidth={true}
-                      value={requestContent}
-                      onChange={changeRequestContent}
-                      multiline={true}
-                    />
-                  </div>
-                  <div style={{ margin: "30px 0" }}>
-                    <label
-                      for="requestPhoneNumber"
-                      style={{
-                        fontFamily:
-                          "'Roboto', 'Helvetica', 'Arial', sans-serif",
-                        fontSize: "18px",
-                        display: "block",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      {t("Enter your phone number*")}
-                    </label>
-                    <InputBase
-                      label={t("Enter your phone number*")}
-                      value={requestPhoneNumber}
-                      onChange={changeRequestPhoneNumber}
-                      placeholder={t("")}
-                      id="requestPhoneNumber"
-                      fullWidth
-                      style={{
-                        padding: "16px 26px",
-                        border: "1px solid #999999",
-                        color: "var(--textWhite87)",
-                      }}
-                    />
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      id="requestModalCancelBtn"
-                      className={classes.defaultGreenOutlineButton}
-                      onClick={closeIsRequestIndustryAIModal}
-                      style={{ marginRight: "10px" }}
-                    >
-                      {t("cancel")}
-                    </Button>
-                    <Button
-                      id="requestModalRequestBtn"
-                      onClick={postRequestMarketModelAI}
-                      className={classes.defaultGreenOutlineButton}
-                    >
-                      {t("Apply")}
-                    </Button>
-                  </div>
+                                    }
+                                    if (idx >= 10) {
+                                      return null;
+                                    }
+                                    return (
+                                      <li key={file.name}>
+                                        <div className={classes.alignCenterDiv}>
+                                          <div
+                                            style={{
+                                              overflow: "hidden",
+                                              textOverflow: "ellipsis",
+                                              whiteSpace: "nowrap",
+                                              color:
+                                                currentThemeColor.textWhite6,
+                                            }}
+                                          >
+                                            {file.name}
+                                          </div>
+                                          <CloseIcon
+                                            style={{
+                                              marginLeft: "10px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              deleteUploadedFile(file.path);
+                                            }}
+                                          />
+                                        </div>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                                <span
+                                  id="uploadFileAgain"
+                                  className={classes.labelUploadBtn}
+                                  onClick={() => {
+                                    setUploadFile(null);
+                                  }}
+                                >
+                                  {t("Re-upload")}
+                                </span>
+                              </>
+                            ))}
+                        </aside>
+                      </>
+                    )}
+                  </Dropzone>
                 </div>
-              </>
+                <div>
+                  <label
+                    for="requestContent"
+                    style={{
+                      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                      fontSize: "18px",
+                      display: "block",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {t("Enter the details of your request")}
+                  </label>
+                  <TextField
+                    id="requestContent"
+                    placeholder={t(
+                      "ex. 신청한 라벨클래스 중 car, pannel은 각각 자동차와 보행자를 의미합니다.\n라벨링을 할 때 잘리는 부분이나 겹치는 부분이있다면 다른물체와 겹치더라도 풀 샷으로 라벨링 부탁드립니다."
+                    )}
+                    style={{
+                      wordBreak: "keep-all",
+                      padding: "16px 26px",
+                      border: "1px solid #999999",
+                      color: "var(--textWhite87)",
+                      height: "100px",
+                      overflow: "auto",
+                    }}
+                    fullWidth={true}
+                    value={requestContent}
+                    onChange={changeRequestContent}
+                    multiline={true}
+                  />
+                </div>
+                <div style={{ margin: "30px 0" }}>
+                  <label
+                    for="requestPhoneNumber"
+                    style={{
+                      fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+                      fontSize: "18px",
+                      display: "block",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {t("Enter your phone number*")}
+                  </label>
+                  <InputBase
+                    label={t("Enter your phone number*")}
+                    value={requestPhoneNumber}
+                    onChange={changeRequestPhoneNumber}
+                    placeholder={t("")}
+                    id="requestPhoneNumber"
+                    fullWidth
+                    style={{
+                      padding: "16px 26px",
+                      border: "1px solid #999999",
+                      color: "var(--textWhite87)",
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Button
+                    id="requestModalCancelBtn"
+                    className={classes.defaultGreenOutlineButton}
+                    onClick={closeIsRequestIndustryAIModal}
+                    style={{ marginRight: "10px" }}
+                  >
+                    {t("cancel")}
+                  </Button>
+                  <Button
+                    id="requestModalRequestBtn"
+                    onClick={postRequestMarketModelAI}
+                    className={classes.defaultGreenOutlineButton}
+                  >
+                    {t("Apply")}
+                  </Button>
+                </div>
+              </div>
             )}
           </div>
         </Modal>

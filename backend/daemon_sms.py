@@ -145,10 +145,3 @@ if __name__ == "__main__":
     time.sleep(3)
     if models.rd:
         print("rd ready")
-        models.rd.publish("broadcast", json.dumps({
-            "id": 0,
-            "taskName": f'start SMS server',
-            "taskNameEn": f'start SMS server',
-            "taskType": "init",
-            "status": 100
-        }), default=json_util.default, ensure_ascii=False)

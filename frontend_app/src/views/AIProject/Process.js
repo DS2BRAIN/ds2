@@ -83,8 +83,8 @@ import {
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 const PREFER_TYPE = [
-  { value: "custom", label: "Manual Setting" },
-  { value: "colab", label: "Code Generation" },
+  { value: "custom", label: "Manual setting" },
+  { value: "colab", label: "Generate code" },
   { value: "speed", label: "Faster training speed" },
   { value: "accuracy", label: "Higher accuracy" },
   { value: "labeling", label: "Auto Labeling" },
@@ -286,7 +286,7 @@ const Process = (props) => {
         );
         onSetSampleData();
         setIsVerify(project.isVerify);
-        if (groups.parentsGroup) onSetShareGroupDict();
+        if (groups.childrenGroup || groups.parentsGroup) onSetShareGroupDict();
         setHyperParamsData(
           project.hyper_params?.length > 0 ? project.hyper_params : null
         );
@@ -417,14 +417,14 @@ const Process = (props) => {
   };
 
   useEffect(() => {
-    if (groups.parentsGroup && projects.project) {
+    if ((groups.childrenGroup || groups.parentsGroup) && projects.project) {
       (async () => {
         // await setIsLoading(true);
         await onSetShareGroupDict();
         // await setIsLoading(false);
       })();
     }
-  }, [groups.parentsGroup]);
+  }, [groups.childrenGroup]);
 
   useEffect(() => {
     if (nameRef.current) setNameInputSize();
@@ -510,7 +510,7 @@ const Process = (props) => {
   }, [isParameterChanged]);
 
   // useEffect(()=>{
-  //     if(groups.parentsGroup && projects.project) {
+  //     if(groups.childrenGroup && projects.project) {
   //         onSetShareGroupDict();
   //     }
   // }, [projects.project])
@@ -585,6 +585,14 @@ const Process = (props) => {
     //     sharedgroup = [];
     // }
     groups.parentsGroup.forEach((group) => {
+      if (sharedgroup.indexOf(group.id) > -1) {
+        tempGroupDict[group.id] = true;
+      } else {
+        tempGroupDict[group.id] = false;
+        isAllTrue = false;
+      }
+    });
+    groups.childrenGroup.forEach((group) => {
       if (sharedgroup.indexOf(group.id) > -1) {
         tempGroupDict[group.id] = true;
       } else {
@@ -1884,10 +1892,9 @@ const Process = (props) => {
     };
 
     if (!isDeviceAllSelected)
-      projectInfo["require_gpus"] = checkedDict['localhost'];
+      projectInfo["require_gpus"] = checkedDict["localhost"];
 
-    if (!isDeviceAllSelected)
-      projectInfo["require_gpus_total"] = checkedDict;
+    if (!isDeviceAllSelected) projectInfo["require_gpus_total"] = checkedDict;
 
     if (!project?.option || project?.option === "custom") {
       projectInfo.algorithm = !algorithmType
@@ -2207,12 +2214,12 @@ const Process = (props) => {
   };
 
   const handleClickForShare = (event) => {
-    if (!(groups.parentsGroup && groups.parentsGroup.length > 0)) {
+    if (!(groups.childrenGroup && groups.childrenGroup.length > 0) && (!(groups.parentsGroup && groups.parentsGroup.length > 0))) {
       dispatch(
         openErrorSnackbarRequestAction(
-          t(
-            "Please create a group before sharing a project. You can create a group in Settings -> Sharing tab."
-          )
+          `${t("Please create a group before sharing a project.")} ${t(
+            "You can create a group in [ Account settings -> Group management tab ]."
+          )}`
         )
       );
       return;
@@ -2436,35 +2443,39 @@ const Process = (props) => {
     };
 
     const saveProjectName = () => {
-      console.log("nextProjectName");
-      console.log(nextProjectName);
-      if (nextProjectName.length > 0) {
-          setIsUnableToChangeName(true);
-          dispatch(
-            askChangeProjectNameRequestAction({
-              id: projects.project.id,
-              name: nextProjectName,
-            })
-          );
+      if (nextProjectName) {
+        setIsUnableToChangeName(true);
+        dispatch(
+          askChangeProjectNameRequestAction({
+            id: projects.project.id,
+            name: nextProjectName,
+          })
+        );
       } else {
-          dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${t("No text detected.")} ${t("Please enter a new project name.")}`
+          )
+        );
       }
-
     };
 
     const saveProjectDetail = () => {
-      if (nextProjectDetail.length > 0) {
-          setIsUnableTochangeDetail(true);
-      dispatch(
-        askChangeProjectDescriptionRequestAction({
-          id: projects.project.id,
-          description: nextProjectDetail,
-        })
-      );
+      if (nextProjectDetail) {
+        setIsUnableTochangeDetail(true);
+        dispatch(
+          askChangeProjectDescriptionRequestAction({
+            id: projects.project.id,
+            description: nextProjectDetail,
+          })
+        );
       } else {
-          dispatch(openErrorSnackbarRequestAction(t("No text detected")));
+        dispatch(
+          openErrorSnackbarRequestAction(
+            `${t("No text detected.")} ${t("Please enter a new description.")}`
+          )
+        );
       }
-
     };
 
     return (
@@ -3093,14 +3104,21 @@ const Process = (props) => {
                             parseInt(user.me.id) ===
                               parseInt(projects.project.user) && (
                               <>
-                                <Button
-                                  id="share_project_btn"
-                                  shape="whiteOutlined"
-                                  sx={{ ml: 1 }}
-                                  onClick={handleClickForShare}
-                                >
-                                  {t("Share your project")}
-                                </Button>
+                                {user.me?.is_admin && (
+                                  <div
+                                    style={{ display: "inline" }}
+                                    onClick={handleClickForShare}
+                                  >
+                                    <Button
+                                      id="share_project_btn"
+                                      shape="whiteOutlined"
+                                      sx={{ ml: 1 }}
+                                      onClick={() => {}}
+                                    >
+                                      {t("Share your project")}
+                                    </Button>
+                                  </div>
+                                )}
                                 <Menu
                                   id="simple-menu"
                                   anchorEl={anchorEl}
@@ -3130,6 +3148,39 @@ const Process = (props) => {
                                   </MenuItem>
                                   {groups.parentsGroup &&
                                     groups.parentsGroup.map((group) => {
+                                      var isChecked = groupCheckboxDict[
+                                        group.id
+                                      ]
+                                        ? true
+                                        : false;
+                                      return (
+                                        <MenuItem
+                                          key={`parentGroup_${group.id}`}
+                                          style={{
+                                            padding: "4px 24px 4px 16px",
+                                          }}
+                                        >
+                                          <div
+                                            className={classes.defaultContainer}
+                                          >
+                                            <Switch
+                                              className="sharegroupswitch"
+                                              value={group.id}
+                                              checked={isChecked}
+                                              color="primary"
+                                              inputProps={{
+                                                "aria-label":
+                                                  "primary checkbox",
+                                              }}
+                                              onChange={onChangeShareGroup}
+                                            />
+                                            <b>Share to {group.groupname}</b>
+                                          </div>
+                                        </MenuItem>
+                                      );
+                                    })}
+                                  {groups.childrenGroup &&
+                                    groups.childrenGroup.map((group) => {
                                       var isChecked = groupCheckboxDict[
                                         group.id
                                       ]

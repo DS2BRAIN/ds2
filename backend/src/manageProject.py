@@ -3850,17 +3850,21 @@ class ManageProject:
                                             appError=True, userInfo=user)
             return NOT_FOUND_USER_ERROR
 
-        sharedProjects = []
-        for temp in self.dbClass.getSharedProjectIdByUserId(user['id']):
+        sharedProjectsAsAdmin = []
+        for temp in self.dbClass.getGroupsByUserIdAndRoles(user['id'], 'admin'):
             if temp.projectsid:
-                sharedProjects = list(set(sharedProjects + ast.literal_eval(temp.projectsid)))
-        projects, totalLength = self.dbClass.getAllProjectByUserId(user['id'], sharedProjects, sorting, tab, desc,
+                sharedProjectsAsAdmin = list(set(sharedProjectsAsAdmin + ast.literal_eval(temp.projectsid)))
+        sharedProjectsAsMember = []
+        for temp in self.dbClass.getGroupsByUserIdAndRoles(user['id'], 'member'):
+            if temp.projectsid:
+                sharedProjectsAsMember = list(set(sharedProjectsAsMember + ast.literal_eval(temp.projectsid)))
+        projects, totalLength = self.dbClass.getAllProjectByUserId(user['id'], sharedProjectsAsAdmin + sharedProjectsAsMember, sorting, tab, desc,
                                                                    searching, page, count, is_verify)
 
         result_projects = []
         for project in projects:
             project = model_to_dict(project)
-            project['role'] = 'member' if project['id'] in sharedProjects else 'admin'
+            project['role'] = 'member' if project['id'] in sharedProjectsAsMember else 'admin'
             result_projects.append(project)
 
         priority = self.dbClass.getProjectsPriorityByUserId(user['id'])
@@ -4389,7 +4393,7 @@ class ManageProject:
                             colab_model['objectDetectionModel'] = index
                             break
                 self.dbClass.createModel(colab_model)
-            project_info['status'] = 11
+            # project_info['status'] = 11
 
         self.dbClass.updateProject(projectId, project_info)
         project_info = self.dbClass.getOneProjectById(projectId)

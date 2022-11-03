@@ -831,6 +831,7 @@ const OpsPannel = (props) => {
               xs={12}
               justifyContent="flex-start"
               alignItems="center"
+              style={{ padding: "28px 0" }}
             >
               <div
                 style={{
@@ -838,39 +839,24 @@ const OpsPannel = (props) => {
                   borderRadius: "4px",
                   paddingRight: "5px",
                   paddingLeft: "5px",
+                  fontSize: 20,
                 }}
               >
                 {projects !== undefined && `${projectName}`}
               </div>
-              <div style={{ wordBreak: "break-all" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Button
-                    className={`${classes.modelTab}
-                      analyticsBtn
-                      ${classes.modelTabHighlightButton}`}
-                    style={{
-                      display: "flex",
-                      fontSize: "12px",
-                      color: "white",
-                      padding: "0px",
-                      height: "20px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    onClick={() => setRenameServerModal(true)}
-                  >
-                    {t("Change")}
-                  </Button>
-                </div>
-              </div>
+
+              <Button
+                shape="greenOutlined"
+                sx={{ ml: "auto" }}
+                onClick={() => setRenameServerModal(true)}
+              >
+                {t("Change")}
+              </Button>
+
               <Button
                 id="skyhubDelete"
+                shape="redOutlined"
+                sx={{ mx: 1.5 }}
                 onClick={() => {
                   if (
                     IS_ENTERPRISE ||
@@ -889,18 +875,6 @@ const OpsPannel = (props) => {
                       )
                     );
                   }
-                }}
-                className={`${classes.modelTab} analyticsBtn ${classes.modelTabHighlightButton}`}
-                style={{
-                  width: user.language == "ko" ? "80px" : "120px",
-                  color: "red",
-                  borderColor: "red",
-                  fontSize: "12px",
-                  padding: "0px",
-                  display: "flex",
-                  height: "20px",
-                  justifyContent: "center",
-                  alignItems: "center",
                 }}
               >
                 {t("Delete Project")}
@@ -1163,6 +1137,8 @@ const OpsPannel = (props) => {
                       inputProps={{ className: newClasses.renameModalText }}
                       variant="outlined"
                       placeholder={t("Enter a new project name.")}
+                      defaultValue={projectName}
+                      autoFocus
                     />
                   </Grid>
                   <Grid
@@ -1192,6 +1168,15 @@ const OpsPannel = (props) => {
                           }
                           style={{ textAlign: "center" }}
                           onClick={() => {
+                            if (renameText.trim().length === 0) {
+                              dispatch(
+                                openErrorSnackbarRequestAction(
+                                  t("Enter the value.")
+                                )
+                              );
+                              return;
+                            }
+
                             if (!isRenameLoading) {
                               setIsRenameLoading(true);
                               //이름 변경 API
@@ -1269,13 +1254,13 @@ const OpsPannel = (props) => {
             alignItems="center"
           >
             {/*상단 : 그래프, api 호출 수*/}
-            <iframe
+            {/* <iframe
               ref={graphIframeRef}
               src={monitoring_url + "/tv.html"}
               width="100%"
               height="400"
               style={{ zIndex: 0 }}
-            />
+            /> */}
             {IS_ENTERPRISE && (
               <>
                 <Grid
@@ -1294,7 +1279,7 @@ const OpsPannel = (props) => {
                       marginBottom: "20px",
                     }}
                   ></div>
-                  <Grid
+                  {/* <Grid
                     container
                     item
                     xs={4}
@@ -1315,7 +1300,7 @@ const OpsPannel = (props) => {
                     >
                       {t("Monitoring")}
                     </Button>
-                  </Grid>
+                  </Grid> */}
                   <Grid
                     container
                     item
@@ -1366,17 +1351,17 @@ const OpsPannel = (props) => {
                       </Button>
                     </Tooltip>
                   </Grid>
-                  {(projects.opsProject?.algorithm?.indexOf('keras') > -1 )
-                      && <Grid
-                        container
-                        item
-                        xs={4}
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        <TritonConfig newClasses={newClasses} />
-                      </Grid>}
-
+                  {projects.opsProject?.algorithm?.indexOf("keras") > -1 && (
+                    <Grid
+                      container
+                      item
+                      xs={4}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <TritonConfig newClasses={newClasses} />
+                    </Grid>
+                  )}
                 </Grid>
               </>
             )}

@@ -28,7 +28,6 @@ import DataModalsFileAdd from "./DataModalsFileAdd";
 import {
   Checkbox,
   LinearProgress,
-  Modal,
   Table,
   TableBody,
   TableCell,
@@ -36,11 +35,17 @@ import {
   TablePagination,
   TableRow,
 } from "@material-ui/core";
-import { CircularProgress, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  Chip,
+  CircularProgress,
+  Grid,
+  IconButton,
+  Modal,
+  Tooltip,
+} from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
-import Chip from "@mui/material/Chip";
 
 const Dataconnector = ({ history }) => {
   const classes = currentTheme();
@@ -70,7 +75,9 @@ const Dataconnector = ({ history }) => {
   const [datatableRowsPerPage, setDatatableRowsPerPage] = useState(10);
   const [sortDataValue, setSortDataValue] = useState("created_at");
   const [isSortDesc, setIsSortDesc] = useState(true);
-  const [isPublicData, setIsPublicData] = useState(false);
+  const [isPublicData, setIsPublicData] = useState(
+    urlSearchParams.has("public")
+  );
   const [searchedDataValue, setSearchedDataValue] = useState("");
   const [isSearchHiddenForRefresh, setIsSearchHiddenForRefresh] = useState(
     false
@@ -103,7 +110,6 @@ const Dataconnector = ({ history }) => {
 
   useEffect(() => {
     dispatch(getDataconnectortypeRequestAction());
-    getDataByDispatch();
   }, []);
 
   useEffect(() => {
@@ -266,16 +272,13 @@ const Dataconnector = ({ history }) => {
       }
       if (!isProjectStartLoading) setIsLoading(false);
     }
-  }, [projects.dataconnectors]);
+  }, [projects.dataconnectors, isProjectStartLoading]);
 
   useEffect(() => {
-    if (datasetList?.length && selectedDataIdList?.length)
-      checkNewPageAllSelected(datasetList, selectedDataIdList);
+    checkNewPageAllSelected(datasetList, selectedDataIdList);
   }, [datasetList, selectedDataIdList]);
 
   const getDataByDispatch = (valueChangeObject) => {
-    if (projects.isDatasetLoading) return;
-
     let payloadJson = {
       sorting: sortDataValue,
       count: datatableRowsPerPage,
@@ -299,7 +302,6 @@ const Dataconnector = ({ history }) => {
 
   const checkNewPageAllSelected = (dataset, selIdList) => {
     let isAllSelected = true;
-
     if (selIdList.length < dataset.length) isAllSelected = false;
     dataset.forEach((data) => {
       if (!selIdList.includes(data.id)) isAllSelected = false;
@@ -308,7 +310,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const privateTableHeads = [
-    { value: "No.", width: "5%", type: "dataNum" },
+    // { value: "No.", width: "5%", type: "dataNum" },
     { value: "Data name", width: "50%", type: "dataconnectorName" },
     { value: "Data type", width: "10%", type: "dataconnectortype" },
     { value: "Training availability", width: "10%", type: "hasLabelData" },
@@ -1219,8 +1221,20 @@ const Dataconnector = ({ history }) => {
         setIsTemplateModalOpen(true);
       };
 
-      return (
-        <>
+      const openTemplateButton = (
+        <Button
+          id="sampleTemplateBtn"
+          shape="greenOutlined"
+          onClick={openTemplate}
+          style={{ minWidth: 150 }}
+        >
+          {t("Sample template")}
+        </Button>
+      );
+
+      if (isTemplateModalOpen) return openTemplateButton;
+      else
+        return (
           <Tooltip
             title={
               <div style={{ fontSize: "12px" }}>{`${t(
@@ -1231,31 +1245,9 @@ const Dataconnector = ({ history }) => {
             }
             placement="bottom"
           >
-            <div>
-              <Button
-                id="sampleTemplateBtn"
-                shape="greenOutlined"
-                onClick={openTemplate}
-                style={{ minWidth: 150 }}
-              >
-                {t("Sample template")}
-              </Button>
-            </div>
+            <div>{openTemplateButton}</div>
           </Tooltip>
-          <Modal
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            open={isTemplateModalOpen}
-            onClose={closeTemplateModal}
-            className={classes.modalContainer}
-          >
-            <Templates
-              className={classes.predictModalContent}
-              closeTemplateModal={closeTemplateModal}
-            />
-          </Modal>
-        </>
-      );
+        );
     };
 
     const reloadButton = (
@@ -1362,6 +1354,15 @@ const Dataconnector = ({ history }) => {
         isFileModalOpen={isFileModalOpen}
         setIsFileModalOpen={setIsFileModalOpen}
       />
+      <Modal
+        open={isTemplateModalOpen}
+        onClose={closeTemplateModal}
+        className={classes.modalContainer}
+      >
+        <>
+          <Templates closeTemplateModal={closeTemplateModal} />
+        </>
+      </Modal>
     </>
   );
 };

@@ -277,7 +277,8 @@ const HyperParametersForm = ({
         if (isNotAllowedRange) {
           dispatch(
             openErrorSnackbarRequestAction(
-              t("Please enter a parameter value suitable for the range.") + `( ${key} )`
+              t("Please enter a parameter value suitable for the range.") +
+                `( ${key} )`
             )
           );
 
@@ -370,7 +371,6 @@ const HyperParametersForm = ({
 
   const onChangeRangeValue = (e, option, key, valueType) => {
     const value = e.target.value;
-    // console.log(e.target.value, option, key, valueType);
     let tmpType =
       valueType === "Min" ? "min" : valueType === "Max" ? "max" : "split";
 
@@ -724,7 +724,9 @@ const HyperParametersForm = ({
                       <Tooltip
                         title={
                           switchDisabled
-                            ? t("Range setting is not supported for this parameter.")
+                            ? t(
+                                "Range setting is not supported for this parameter."
+                              )
                             : ""
                         }
                       >
@@ -1505,7 +1507,7 @@ const HyperParametersForm = ({
                       }
                     >
                       {subParams &&
-                        Object.keys(info[key].subParameter).map((key2, i) => {
+                        subParams[key].map((key2, i) => {
                           const subInfo = info[key].subParameter;
                           const subKey = { key, key2 };
 
@@ -1547,6 +1549,7 @@ const HyperParametersForm = ({
                                         </Tooltip>
                                       </ListItemIcon>
                                     )}
+
                                   <ListItemText
                                     primary={`${
                                       subParams[key]
@@ -1554,12 +1557,14 @@ const HyperParametersForm = ({
                                         : ""
                                     } ${subInfo[key2].label}`}
                                   />
+
                                   {subListsOpen && subListsOpen[key2] ? (
                                     <ExpandLess />
                                   ) : (
                                     <ExpandMore />
                                   )}
                                 </ListItemButton>
+
                                 <Collapse
                                   in={subListsOpen ? subListsOpen[key2] : false}
                                   timeout="auto"

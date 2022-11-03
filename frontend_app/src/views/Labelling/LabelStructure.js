@@ -646,10 +646,10 @@ const LabelStructure = ({ history }) => {
       // 다음 파일이 존재하는 경우
       await setTimeout(() => {
         if (isSavingSuccess) {
-          let keyword = buttonType === "prev" ? "이전" : "다음";
+          let keyword = buttonType === "prev" ? "previous" : "next";
 
           dispatch(
-            openSuccessSnackbarRequestAction(t(`${keyword} 행으로 이동합니다.`))
+            openSuccessSnackbarRequestAction(t(`Move to the ${keyword} row.`))
           );
 
           history.push(url);
@@ -831,6 +831,7 @@ const LabelStructure = ({ history }) => {
                     style={{
                       width: "25%",
                       textTransform: "none",
+                      margin: "0 16px",
                     }}
                     onClick={() => saveLabel("save")}
                     id="saveBtn"

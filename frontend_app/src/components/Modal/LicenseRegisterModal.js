@@ -95,13 +95,14 @@ const LicenseRegisterModal = () => {
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
       open={user.isValidUser === false}
-      //   onClose={onCloseLicenseModal}
+      // onClose={onCloseLicenseModal}
       className={classes.modalContainer}
     >
       <div
         style={{
           width: !isKeyError ? "50vh" : "30vh",
-          height: !isKeyError ? "50vh" : "20vh",
+          minHeight: !isKeyError ? "50vh" : "20vh",
+          paddingBottom: "24px",
           border: "3px solid var(--secondary1)",
           borderRadius: "5px",
           backgroundColor: "#1D1F1F",
@@ -160,7 +161,6 @@ const LicenseRegisterModal = () => {
                 >
                   <InputBase
                     variant="outlined"
-                    margin="normal"
                     required
                     fullWidth
                     name="enterpriseKey"
@@ -219,7 +219,7 @@ const LicenseRegisterModal = () => {
                 <Link
                   target="_blank"
                   color="inherit"
-                  href="https://ds2.ai/buy-license/"
+                  to="https://ds2.ai/buy-license/"
                   style={{ color: "var(--secondary1)" }}
                 >
                   <u>{t("Buy License")}</u>

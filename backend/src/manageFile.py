@@ -299,17 +299,23 @@ class ManageFile:
                         break
                     else:
                         raise ex.TooManyExistFileEx(user_id=user_id)
-            if len(files) > 1:
-                is_coco, json_data = self.check_exists_coco(root)
-                if is_coco is None:
-                    raise ex.TooManyExistFileEx(user_id=user_id)
-                if is_coco:
-                    if base_data['data_type'] is None:
-                        base_data['data_type'] = 'coco'
-                        base_data['json_data'] = json_data
-                        break
-                    else:
+
+            if len(files) > 0:
+                has_json = False
+                for file in files:
+                    if file.lower().endswith(".json"):
+                        has_json = True
+                if has_json:
+                    is_coco, json_data = self.check_exists_coco(root)
+                    if is_coco is None:
                         raise ex.TooManyExistFileEx(user_id=user_id)
+                    if is_coco:
+                        if base_data['data_type'] is None:
+                            base_data['data_type'] = 'coco'
+                            base_data['json_data'] = json_data
+                            break
+                        else:
+                            raise ex.TooManyExistFileEx(user_id=user_id)
 
         if base_data['data_type'] is None:
             if img_path is None:
@@ -802,8 +808,8 @@ class ManageFile:
             for idx, json_image in enumerate(json_data['images']):
                 width = json_image['width']
                 height = json_image['height']
-                preprocessing_json_data[json_image['file_name']] = json_image
-                preprocessing_json_data[json_image['file_name']]['labels'] = []
+                preprocessing_json_data[json_image['file_name'].split("/")[-1] if "/" in json_image['file_name'] else json_image['file_name']] = json_image
+                preprocessing_json_data[json_image['file_name'].split("/")[-1] if "/" in json_image['file_name'] else json_image['file_name']]['labels'] = []
 
                 for annotation in json_data['annotations']:
                     if annotation.get('iscrowd') == 1:
@@ -816,18 +822,23 @@ class ManageFile:
                         #     y2 = annotation['bbox'][1] + annotation['bbox'][3]
                         #     annotation['segmentation'] = [[x1, y1, x2, y1, x2, y2, x1, y2]]
                         bbox = {}
-
+                        points = None
                         if annotation['bbox']:
+                            x = annotation['bbox'][0] / width
+                            y = annotation['bbox'][1] / height
+                            w = annotation['bbox'][2] / width
+                            h = annotation['bbox'][3] / height
                             bbox = {
-                                "x": annotation['bbox'][0] / width,
-                                "y": annotation['bbox'][1] / height,
-                                "w": annotation['bbox'][2] / width,
-                                "h": annotation['bbox'][3] / height
+                                "x": x,
+                                "y": y,
+                                "w": w,
+                                "h": h
                             }
+                            points = json.dumps([[x, y], [x + w, y], [x + w, y + h], [x, y + h]])
                         # bbox = self.get_coco_segmentation(annotation['bbox'], width, height)
 
                         labeltype = 'polygon'
-                        points = None
+
                         if annotation['segmentation']:
                             if type(annotation['segmentation'][0]) != list:
                                 points = self.get_coco_segmentation(annotation['segmentation'], width, height)
@@ -849,7 +860,7 @@ class ManageFile:
                         if labeltype == "box":
                             label_data.update(bbox)
 
-                        preprocessing_json_data[json_image['file_name']]['labels'].append(label_data)
+                        preprocessing_json_data[json_image['file_name'].split("/")[-1] if "/" in json_image['file_name'] else json_image['file_name']]['labels'].append(label_data)
                 if not is_labelproject:
                     new_progress = int(((idx + 1) / (total_progress)) * 8) * 10
                     if progress != new_progress:
@@ -928,18 +939,19 @@ class ManageFile:
             self.dbClass.createLabelprojectFile(labelproject_ds2datas)
 
             for data in labelproject_ds2datas:
-                json_key = file_path_dict[data['fileName']]
-                json_key = json_key[1:] if json_key[0] == '/' else json_key
-                json_key = '/'.join(json_key.split('/')[1:])
-                for temp_folder_name in base_data['file_name'].split('/'):
-                    if json_key.split('/')[0] == temp_folder_name:
-                        json_key = '/'.join(json_key.split('/')[1:])
+                json_key = data['originalFileName']
+                # json_key = file_path_dict[data['fileName']]
+                # json_key = json_key[1:] if json_key[0] == '/' else json_key
+                # json_key = '/'.join(json_key.split('/')[1:])
+                # for temp_folder_name in base_data['file_name'].split('/'):
+                #     if json_key.split('/')[0] == temp_folder_name:
+                #         json_key = '/'.join(json_key.split('/')[1:])
+                #
+                # if preprocessing_json_data.get("/" + json_key):
+                #     json_key = "/" + json_key
 
-                if preprocessing_json_data.get("/" + json_key):
-                    json_key = "/" + json_key
-
-                json_key = json_key.split('/')[-1]
-
+                # json_key = json_key.split('/')[-1]
+                #
                 if preprocessing_json_data.get(json_key):
                     [label_info.update({'labelproject': labelproject_id, 'sthreefile': data['id']}) for label_info
                      in preprocessing_json_data[json_key]['labels']]
@@ -2562,8 +2574,8 @@ class ManageFile:
             if mb is None:
                 asyncio.sleep(120)
                 mb = self.utilClass.get_metabase_client()
-        except:
-            pass
+        except Exception as e:
+            print(e.args[0].text)
 
         is_first = True
         while True:

@@ -491,6 +491,10 @@ class CheckDataset():
                         numpyarray = np.array(basiclist)
                         points = ast.literal_eval(str(basiclist).replace('], [', ', '))
                         area = int(self.calcPolygonArea(numpyarray))
+                        numpyarray = np.array(points).reshape((-1, 2))
+                        npmin = np.min(numpyarray, axis=0)
+                        npmax = np.max(numpyarray, axis=0)
+                        bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
 
                     data = {
                         "segmentation": points,

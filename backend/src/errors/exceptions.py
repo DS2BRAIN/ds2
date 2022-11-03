@@ -577,9 +577,9 @@ class NotValidGroupNameEx(APIException):
     def __init__(self, ex: Exception = None):
         super().__init__(
             status_code=StatusCode.HTTP_503,
-            message="해당 그룹명을 가진 그룹이 이미 존재하거나 다른 사용자에서 해당 그룹명을 이미 사용중입니다.",
-            message_en="A group with that group name already exists, or the group name is already in use by another user.",
-            detail=f"해당 그룹명을 가진 그룹이 이미 존재하거나 다른 사용자에서 해당 그룹명을 이미 사용중입니다.",
+            message="해당 그룹명을 가진 그룹이 이미 사용중입니다.",
+            message_en="A group with that group name already exists.",
+            detail=f"해당 그룹명을 가진 그룹이 이미 사용중입니다.",
             code=f"{StatusCode.HTTP_503}{'1'.zfill(4)}",
             ex=ex,
         )

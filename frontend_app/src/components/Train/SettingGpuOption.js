@@ -1,51 +1,36 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import Button from "components/CustomButtons/Button";
 import { serverDataList } from "./mockupGPUData";
 
 import { Checkbox, Grid } from "@mui/material";
-import LagacySettingGpuOption from "./LegacySettingGpuOption";
 import ModalAddServer from "./ModalAddServer";
 import ModalDeleteServer from "./ModalDeleteServer";
-import {openErrorSnackbarRequestAction, setPlanModalOpenRequestAction} from "../../redux/reducers/messages";
-import * as api from "../../controller/api";
-import {useDispatch, useSelector} from "react-redux";
-import {IS_ENTERPRISE} from "../../variables/common";
-import {checkIsValidKey} from "../Function/globalFunc";
+import { openErrorSnackbarRequestAction } from "redux/reducers/messages";
+import * as api from "controller/api";
+import { useDispatch, useSelector } from "react-redux";
+import { IS_ENTERPRISE } from "variables/common";
+import { checkIsValidKey } from "../Function/globalFunc";
 import LicenseRegisterModal from "../Modal/LicenseRegisterModal";
 
-const SettingGpuOption = ({
-  status,
-  gpuList,
-  isDeviceAllSelected,
-  setIsDeviceAllSelected,
-  selectedDeviceArr,
-  setSelectedDeviceArr,
-  checkedDict,
-  setCheckedDict,
-}) => {
-  const { t } = useTranslation();
+const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
-  const { user, projects, messages, models, groups } = useSelector(
+  const { user, projects } = useSelector(
     (state) => ({
       user: state.user,
       projects: state.projects,
-      messages: state.messages,
-      models: state.models,
-      groups: state.groups,
     }),
     []
   );
   const isStatusZero = status === 0;
-  const [isPastVersion, setIsPastVersion] = useState(false);
   const [isAddServerModalOpen, setIsAddServerModalOpen] = useState(false);
   const [isDeleteServerModalOpen, setIsDeleteServerModalOpen] = useState(false);
   const [selectedServer, setSelectedServer] = useState({});
   const [hostValue, setHostValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
   const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList);
-
 
   const submitAddServer = () => {
     console.log("hostValue", hostValue);
@@ -59,28 +44,38 @@ const SettingGpuOption = ({
       return;
     }
 
-    api.postAddServer({
-      ip: hostValue,
-      access_token: tokenValue,
-    }).then((res) => {
+    api
+      .postAddServer({
+        ip: hostValue,
+        access_token: tokenValue,
+      })
+      .then((res) => {
         if (res.data?.gpu_info) {
-          setAvailableGpuListTotal(Object.assign({}, availableGpuListTotal, {
-            [res.data.name]: res.data.gpu_info
-          }))
+          setAvailableGpuListTotal(
+            Object.assign({}, availableGpuListTotal, {
+              [res.data.name]: res.data.gpu_info,
+            })
+          );
           closeAddServerModal();
         } else {
-          dispatch(openErrorSnackbarRequestAction(t("Please check the connection.")));
+          dispatch(
+            openErrorSnackbarRequestAction(t("Please check the connection."))
+          );
         }
+      })
+      .catch((err) => {
+        let data = err.response.data;
+        let errMsg = i18n.language === "ko" ? data.message : data.message_en;
+        dispatch(openErrorSnackbarRequestAction(errMsg));
       });
-
   };
 
   const submitDelete = () => {
     console.log("selectedServer");
     console.log(selectedServer);
     api.deleteAddServer(selectedServer).then((res) => {
-        window.location.reload();
-      });
+      window.location.reload();
+    });
   };
 
   const openAddServerModal = () => {
@@ -170,26 +165,14 @@ const SettingGpuOption = ({
     fontWeight: 400,
   };
 
-  // if (isPastVersion)
-  //   return (
-  //     <LagacySettingGpuOption
-  //       status={status}
-  //       gpuList={gpuList}
-  //       isDeviceAllSelected={isDeviceAllSelected}
-  //       setIsDeviceAllSelected={setIsDeviceAllSelected}
-  //       selectedDeviceArr={selectedDeviceArr}
-  //       setSelectedDeviceArr={setSelectedDeviceArr}
-  //     />
-  //   );
-  // else
-    return (
-        <>
+  return (
+    <>
       <Grid sx={{ p: 1.5 }}>
         {serverDataList ? (
           <>
             {isStatusZero && (
               <Grid container justifyContent="flex-end">
-                <Grid sx={{ mt: -5 }}>
+                <Grid sx={{ mt: -9, mr: -2 }}>
                   <Button
                     id="add_server_btn"
                     shape="greenOutlined"
@@ -207,10 +190,11 @@ const SettingGpuOption = ({
                 let serverDict = availableGpuListTotal[serverName];
                 // let serverName = serverDict.name;
                 let isLocalServer = serverName === "localhost";
-                let isChecked = serverDict?.length === checkedDict[serverName]?.length;
+                let isChecked =
+                  serverDict?.length === checkedDict[serverName]?.length;
 
                 return (
-                  <Grid item xs={12}>
+                  <Grid item xs={12} key={`server_${serverId}`}>
                     <Grid container sx={{ mb: 1 }}>
                       <span
                         style={{
@@ -254,7 +238,11 @@ const SettingGpuOption = ({
                             : false;
 
                         return (
-                          <Grid container sx={{ mb: 0.5 }}>
+                          <Grid
+                            container
+                            key={`gpu_${gpuDict.idx}`}
+                            sx={{ mb: 0.5 }}
+                          >
                             {isStatusZero && (
                               <Checkbox
                                 id={`gpu_${gpuId}_checkbox`}
@@ -272,9 +260,7 @@ const SettingGpuOption = ({
                                 }
                               />
                             )}
-                            <span style={{ fontSize: "15px" }}>
-                              {gpuName}
-                            </span>
+                            <span style={{ fontSize: "15px" }}>{gpuName}</span>
                           </Grid>
                         );
                       })}
@@ -304,8 +290,8 @@ const SettingGpuOption = ({
         )}
       </Grid>
       <LicenseRegisterModal />
-      </>
-    );
+    </>
+  );
 };
 
 export default SettingGpuOption;

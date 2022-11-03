@@ -666,7 +666,7 @@ class Helper():
                 task_list = ['uploadLabelProjectData', 'addObject', 'autoLabeling', 'customAi', 'exportCoco',
                              'exportData', 'exportVoc']
             elif tasktype == 'clickAi':
-                task_list = ['model']
+                task_list = ['train']
             elif tasktype == 'payment':
                 task_list = ['planPayment', 'postPayment']
             else:

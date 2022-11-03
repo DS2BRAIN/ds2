@@ -705,12 +705,36 @@ const History = (props) => {
               )}
             </Grid>
           </Grid>
-          <Grid container item xs={12} justifyContent="center" alignItems="flex-start" style={defaultStyles.Grid_bottom}>
+          <Grid
+            container
+            item
+            xs={12}
+            justifyContent="center"
+            alignItems="flex-start"
+            style={defaultStyles.Grid_bottom}
+          >
             {/*하단 : 서버 인터페이스 */}
 
-            <iframe src={monitoring_url + "/tv.html"} width="100%" height="400" />
-            <Grid container item xs={12} justifyContent="center" alignItems="flex-start" className={process.env.REACT_APP_ENTERPRISE ? classes.bottomServer_enterprise : classes.bottomServer}>
-              <Grid container item xs={12} justifyContent="center" alignItems="center">
+            {/* <iframe src={monitoring_url + "/tv.html"} width="100%" height="400" /> */}
+            <Grid
+              container
+              item
+              xs={12}
+              justifyContent="center"
+              alignItems="flex-start"
+              className={
+                process.env.REACT_APP_ENTERPRISE
+                  ? classes.bottomServer_enterprise
+                  : classes.bottomServer
+              }
+            >
+              <Grid
+                container
+                item
+                xs={12}
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Table
                   style={{
                     width: "100%",
