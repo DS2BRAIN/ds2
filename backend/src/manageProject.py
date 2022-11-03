@@ -4231,6 +4231,9 @@ class ManageProject:
         project_info = {k: v for k, v in project_info.items() if v is not None}
         models_of_project = self.dbClass.getModelsByProjectId(projectId, isSimplified=True)
 
+        if project.get('option') != 'custom' and not self.dbClass.get_enterprise_key_or_none():
+            raise ex.LicenseErrorEx()
+
         if project_info.get('status') == 0:
             self.valid_project_stop_condition(models_of_project)
             if project.get('option') == 'custom':
