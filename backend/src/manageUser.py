@@ -910,7 +910,7 @@ class ManageUser:
 
         inviteUser = self.dbClass.getUserByEmail(email)
 
-        if not inviteUser:
+        if not inviteUser or inviteUser['isDeleteRequested']:
             self.utilClass.sendSlackMessage(
                 f"파일 : manageUser\n 함수 : inviteGroupByEmail \n초대하려는 이메일이 유효하지 않습니다. user = {user['id']} groupId = {groupId} email = {email})",
                 appError=True, userInfo=user)
