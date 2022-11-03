@@ -67,11 +67,11 @@ class HelperUser():
     @wrapper
     def getMembersByGroupId(self, groupId, isAdmin = False):
         if not isAdmin:
-            commonWhere = (groupUsersTable.groupId == groupId) & (groupUsersTable.acceptcode == 1)
+            commonWhere = (groupUsersTable.groupId == groupId) & (groupUsersTable.acceptcode == 1) & ((usersTable.isDeleteRequested == False) | (usersTable.isDeleteRequested == None))
         else:
-            commonWhere = groupUsersTable.groupId == groupId
+            commonWhere = (groupUsersTable.groupId == groupId) & ((usersTable.isDeleteRequested == False) | (usersTable.isDeleteRequested == None))
         return groupUsersTable.select(groupUsersTable.id, groupUsersTable.user, groupUsersTable.acceptcode, groupUsersTable.useremail,
-                                      groupUsersTable.role, usersTable.name).join(usersTable, join_type='LEFT OUTER',
+                                      groupUsersTable.role, usersTable.name).join(usersTable, join_type='RIGHT OUTER',
                                                                  on=(usersTable.id == groupUsersTable.user)).where(
             commonWhere).order_by(groupUsersTable.id.desc(), groupUsersTable.role).execute()
 
