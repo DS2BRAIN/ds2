@@ -459,11 +459,11 @@ const LabelprojectList = ({ history }) => {
               >
                 <Button
                   id="add_project_btn"
-                  shape="greenOutlined"
+                  shape="greenContained"
                   style={{ height: 32 }}
                   onClick={onStartLabelProject}
                 >
-                  {t("Start labeling")}
+                  {t("Upload data")}
                 </Button>
 
                 <Tooltip
