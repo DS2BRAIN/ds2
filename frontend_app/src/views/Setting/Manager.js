@@ -261,6 +261,22 @@ const Manager = ({ history }) => {
       return;
     }
 
+    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{3,50}$/;
+    if (passwordChange.match(passwordRegExp) === null) {
+      if (user.language === "en")
+        dispatch(
+          openErrorSnackbarRequestAction(
+            "Password must contain at least one letter, number, and special character."
+          )
+        );
+      else
+        dispatch(
+          openErrorSnackbarRequestAction(
+            "영어, 숫자, 특수기호가 최소 1개이상 포함되어야 합니다."
+          )
+        );
+    }
+
     let tempChangePasswordRequest = {
       user_id: selectedUser.id,
       password: passwordChange,
