@@ -646,7 +646,7 @@ const DataModalFileAdd = ({
             t("Each column requires at least 10 rows of data.") +
             " " +
             t(
-              "Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)"
+              "Only CSV files of 1GB or less are supported. (Only 1 upload is allowed)"
             )
           );
         } else if (type === "zip") {
@@ -655,7 +655,7 @@ const DataModalFileAdd = ({
           );
         } else if (type === "video") {
           return t(
-            "Only MP4 and MOV files under 5GB are supported. (Only 1 upload is allowed)"
+            "Only MP4 and MOV files under 1GB are supported. (Only 1 upload is allowed)"
           );
         }
       };
