@@ -491,7 +491,7 @@ const Process = (props) => {
   useEffect(() => {
     if (messages.shouldGoToMainPage) {
       dispatch(setMainPageSettingRequestAction());
-      props.history.push("/admin/project/");
+      props.history.push("/admin/train/");
     }
   }, [messages.shouldGoToMainPage]);
 

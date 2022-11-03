@@ -341,6 +341,7 @@
   "Creating project. Please wait": "Creating project. Please wait",
   "Uploading. Please wait a moment": "Uploading. Please wait a moment",
   "Enter the project name": "Enter the project name",
+  "Enter the file name": "Enter the file name",
   "Overall analysis": "Overall analysis",
   "AI+ analysis": "AI+ analysis",
   "on a median value basis": "on a median value basis",
@@ -1548,11 +1549,11 @@
   "Drag a file or click here to upload it.": "Drag a file or click here to upload it.",
   "Only 1 upload is allowed": "Only 1 upload is allowed",
   "Drag a file or click the button below to upload it.": "Drag a file or click the button below to upload it.",
-  "Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)": "Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)",
+  "Only CSV files of 1GB or less are supported. (Only 1 upload is allowed)": "Only CSV files of 1GB or less are supported. (Only 1 upload is allowed)",
   "You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/MP4 format. (Only 1 upload is allowed)": "You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/MP4 format. (Only 1 upload is allowed)",
   "You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)": "You must have at least 10 images. Only ZIP files of 1GB or less can be uploaded, and compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)",
   "You must have at least 10 images. Compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)": "You must have at least 10 images. Compressed image files are only supported in PNG/JPG/JPEG/GIF format. (Only 1 upload is allowed)",
-  "Only MP4 and MOV files under 5GB are supported. (Only 1 upload is allowed)": "Only MP4 and MOV files under 5GB are supported. (Only 1 upload is allowed)",
+  "Only MP4 and MOV files under 1GB are supported. (Only 1 upload is allowed)": "Only MP4 and MOV files under 1GB are supported. (Only 1 upload is allowed)",
   "Only MP4 and MOV files are supported. (Only 1 upload is allowed)": "Only MP4 and MOV files are supported. (Only 1 upload is allowed)",
   "(Only 1 upload is allowed)": "(Only 1 upload is allowed)",
   "Uploaded File": "Uploaded File",
@@ -2394,5 +2395,6 @@
   "Please enter the token.": "Please enter the token.",
   "Error setting the introduction page and language. Please refresh and try again.": "Error setting the introduction page and language. Please refresh and try again.",
   "Triton Config": "Triton Config",
-  "No text detected.": "No text detected."
+  "No text detected.": "No text detected.",
+  "required": "required"
 }

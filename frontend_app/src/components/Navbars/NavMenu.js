@@ -9,6 +9,13 @@ const NavMenu = () => {
 
   const routes = [
     {
+      id: "data",
+      path: "/dataconnector",
+      name: "Dataset",
+      layout: "/admin",
+      condition: true,
+    },
+    {
       id: "train",
       path: "/train",
       name: "Train",
@@ -22,13 +29,13 @@ const NavMenu = () => {
       layout: "/admin",
       condition: true,
     },
-    {
-      id: "skyhub",
-      path: "/skyhubai",
-      name: "Deploy",
-      layout: "/admin",
-      condition: true,
-    },
+    // {
+    //   id: "skyhub",
+    //   path: "/skyhubai",
+    //   name: "Deploy",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
     {
       id: "label",
       path: "/labelling",
@@ -36,20 +43,20 @@ const NavMenu = () => {
       layout: "/admin",
       condition: true,
     },
-    {
-      id: "market",
-      path: "/marketList",
-      name: "AI Market",
-      layout: "/admin",
-      condition: true,
-    },
-    {
-      id: "jupyter",
-      path: "/jupyterproject",
-      name: "Jupyter",
-      layout: "/admin",
-      condition: true,
-    },
+    // {
+    //   id: "market",
+    //   path: "/marketList",
+    //   name: "AI Market",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
+    // {
+    //   id: "jupyter",
+    //   path: "/jupyterproject",
+    //   name: "Jupyter",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
   ];
 
   const navLinkClassName =

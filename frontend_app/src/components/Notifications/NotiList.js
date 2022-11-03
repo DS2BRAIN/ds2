@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
 import { fileurl } from "controller/api";
-import { getAsynctasksRequestAction } from "redux/reducers/user.js";
+import {
+  getAsynctasksRequestAction,
+  postChecAllkAsynctasksRequestAction,
+} from "redux/reducers/user.js";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
 import { convertToLocalDateStr, openChat } from "../Function/globalFunc.js";
 import Button from "components/CustomButtons/Button.js";
@@ -123,6 +126,10 @@ const NotiList = ({ history }) => {
       await checkAsynctask(id);
       await history.push(`/admin/train/${project}`);
     }
+  };
+
+  const onMarkedAsAll = async () => {
+    await dispatch(postChecAllkAsynctasksRequestAction());
   };
 
   const onSetAsynctaskType = (e) => {
@@ -284,7 +291,18 @@ const NotiList = ({ history }) => {
         className={classes.settingTitle}
         sx={{ mt: 5, mb: 4 }}
       >
-        <Grid item>{"Notifications"}</Grid>
+        <Grid item>
+          {"Notifications"}
+          <Button
+            id="check_notiallread_btn"
+            shape="greenOutlined"
+            size="small"
+            sx={{ ml: 1.5 }}
+            onClick={onMarkedAsAll}
+          >
+            {t("Check as full read")}
+          </Button>
+        </Grid>
         <Grid item>
           <div
             style={{

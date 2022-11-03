@@ -798,12 +798,16 @@ class ManageUser:
         for group in adminGroup:
             group['member'] = [x.__dict__['__data__'] for x in self.dbClass.getMembersByGroupId(group['id'], True)]
 
-        memberGroup = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId)]
+        memberGroup = []
+        memberGroup_raw = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId)]
 
-        for group in memberGroup:
+        for group in memberGroup_raw:
             group['member'] = [x.__dict__['__data__'] for x in self.dbClass.getMembersByGroupId(group['id'], False)]
             group['hostuserList'] = self.dbClass.getHostUsersByGroupId(group['id']).__dict__['__data__']
             group['acceptcode'] = self.dbClass.getMemberByUserIdAndGroupId(userId, group['id']).__dict__['__data__']['acceptcode']
+            host_user = self.dbClass.getOneUserById(group['hostuserList']['user'], raw=True)
+            if host_user.isDeleteRequested != True:
+                memberGroup.append(group)
 
         result = {'parentsGroup' : adminGroup, 'childrenGroup' : memberGroup}
 
@@ -849,6 +853,10 @@ class ManageUser:
 
         userId = user.__dict__['__data__']['id']
         userEmail = user.__dict__['__data__']['email']
+        adminGroup = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId, 'admin')]
+        for group in adminGroup:
+            if groupName == group['groupname']:
+                raise ex.NotValidGroupNameEx()
 
         group = {'groupname': groupName, 'created_at': datetime.datetime.now(), 'updated_at': datetime.datetime.now(), 'provider': provider}
 
@@ -902,7 +910,7 @@ class ManageUser:
 
         inviteUser = self.dbClass.getUserByEmail(email)
 
-        if not inviteUser:
+        if not inviteUser or inviteUser['isDeleteRequested']:
             self.utilClass.sendSlackMessage(
                 f"파일 : manageUser\n 함수 : inviteGroupByEmail \n초대하려는 이메일이 유효하지 않습니다. user = {user['id']} groupId = {groupId} email = {email})",
                 appError=True, userInfo=user)

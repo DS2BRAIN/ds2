@@ -104,10 +104,6 @@ export default function Header(props) {
             >
               <ExitToAppIcon className={classes.fillBDhoverFF} />
             </IconButton>
-
-            <Grid className="itemsCenter">
-              <PageController />
-            </Grid>
           </Toolbar>
         </Toolbar>
       </Container>

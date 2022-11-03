@@ -375,8 +375,7 @@ class ManageUpload:
                 data_object = { **data_object,
                     "columnName": column,
                     "index": data_column_index,
-                               "length": data_object.get('unique', 0) if column == 'label' and training_method in [
-                                   'image', 'object_detection', 'cycle_gan'] else data_cnt,
+                    "length": data_cnt,
                     "dataconnector": dataconnector.id if dataconnector else None,
                 }
                 data_column_index += 1

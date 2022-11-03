@@ -48,12 +48,13 @@ import {
   TableRow,
   TablePagination,
 } from "@material-ui/core";
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, Grid, Tooltip } from "@mui/material";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
 import "assets/css/material-control.css";
 import currentTheme, { currentThemeColor } from "assets/jss/custom.js";
@@ -952,6 +953,7 @@ const LabelList = ({
                       if (head.condition)
                         return (
                           <TableCell
+                            key={head.value}
                             className={classes.tableHead}
                             align={head.align}
                             style={{ width: head.width, cursor: head.cursor }}
@@ -1047,6 +1049,7 @@ const LabelList = ({
                           if (head.condition)
                             return (
                               <TableCell
+                                key={head.value}
                                 className={classes.tableRowCell}
                                 align={head.align}
                                 onClick={() => goProjectDetail(objectData.id)}
@@ -1531,47 +1534,49 @@ const LabelList = ({
                   {(labelprojects.projectDetail?.workapp ===
                     "object_detection" ||
                     labelprojects.projectDetail?.workapp === "image") && (
-                    <form
-                      id="label_file_search_form"
-                      style={{
-                        background: "#424242",
-                        width: "190px",
-                        borderRadius: "50px",
-                        height: "32px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: "0 5px",
-                      }}
-                      //noValidate
-                    >
-                      <input
+                    <Tooltip title={t("Enter the file name")}>
+                      <form
+                        id="label_file_search_form"
                         style={{
-                          background: "transparent",
-                          color: currentThemeColor.textWhite87,
-                          border: "none",
-                          width: "100%",
-                          fontSize: "15px",
-                          padding: "0 12px",
+                          background: "#424242",
+                          width: "190px",
+                          borderRadius: "50px",
+                          height: "32px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          padding: "0 5px",
                         }}
-                        placeholder={t("Search")}
-                        value={searchedValue}
-                        onChange={onChangeSearchedValue}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            onGetSearchedFile(e);
-                          }
-                        }}
-                        id="search_file_input"
-                      />
-                      {searchedValue && searchedValue.length > 0 && (
-                        <CloseIcon
-                          id="delete_searching_value_btn"
-                          onClick={onGetDefaultFile}
-                          className={classes.pointerCursor}
+                        //noValidate
+                      >
+                        <input
+                          style={{
+                            background: "transparent",
+                            color: currentThemeColor.textWhite87,
+                            border: "none",
+                            width: "100%",
+                            fontSize: "15px",
+                            padding: "0 12px",
+                          }}
+                          placeholder={t("Search")}
+                          value={searchedValue}
+                          onChange={onChangeSearchedValue}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              onGetSearchedFile(e);
+                            }
+                          }}
+                          id="search_file_input"
                         />
-                      )}
-                    </form>
+                        {searchedValue && searchedValue.length > 0 && (
+                          <CloseIcon
+                            id="delete_searching_value_btn"
+                            onClick={onGetDefaultFile}
+                            className={classes.pointerCursor}
+                          />
+                        )}
+                      </form>
+                    </Tooltip>
                   )}
                 </Grid>
               </Grid>
@@ -1678,6 +1683,11 @@ const LabelList = ({
                             }}
                           >
                             {uploadFile.map((file, idx) => {
+                              const isKB = file.size / (1024 * 1024) < 1;
+                              const fileSize = isKB
+                                ? file.size / 1024
+                                : file.size / (1024 * 1024);
+
                               return (
                                 <li
                                   key={file.name + idx}
@@ -1693,8 +1703,19 @@ const LabelList = ({
                                       }}
                                     >
                                       {file.name}
+                                      <span
+                                        style={{
+                                          marginLeft: 16,
+                                          fontSize: 14,
+                                          textDecoration: "underline",
+                                        }}
+                                      >
+                                        {`Size:
+                                        ${fileSize.toFixed(1).toLocaleString()}
+                                        ${isKB ? "KB" : "MB"}`}
+                                      </span>
                                     </div>
-                                    <CloseIcon
+                                    <CancelRoundedIcon
                                       style={{
                                         marginLeft: "12px",
                                         cursor: "pointer",
