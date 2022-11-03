@@ -4386,7 +4386,7 @@ class ManageProject:
                             colab_model['objectDetectionModel'] = index
                             break
                 self.dbClass.createModel(colab_model)
-            project_info['status'] = 11
+            # project_info['status'] = 11
 
         self.dbClass.updateProject(projectId, project_info)
         project_info = self.dbClass.getOneProjectById(projectId)
