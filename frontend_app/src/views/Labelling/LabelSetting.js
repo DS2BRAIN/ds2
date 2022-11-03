@@ -139,14 +139,14 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
       return;
     }
 
-    if (!projectDescription) {
-      dispatch(
-        openErrorSnackbarRequestAction(
-          `${t("No text detected.")} ${t("Please enter a new description.")}`
-        )
-      );
-      return;
-    }
+    // if (!projectDescription) {
+    //   dispatch(
+    //     openErrorSnackbarRequestAction(
+    //       `${t("No text detected.")} ${t("Please enter a new description.")}`
+    //     )
+    //   );
+    //   return;
+    // }
 
     dispatch(
       askLabelProjectDetailRequestAction({
@@ -361,7 +361,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
               marginLeft: "10px",
             }}
           >
-            {t("Project Name")}
+            {t("Project Name") + "*"}
           </div>
           <InputBase
             id="project_name_input"

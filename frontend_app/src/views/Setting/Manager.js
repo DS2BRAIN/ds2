@@ -660,7 +660,7 @@ const Manager = ({ history }) => {
               <TextField
                 id={user.id}
                 key={user.id}
-                placeholder={t(user.label)}
+                placeholder={t(user.label) + "*"}
                 value={user.value}
                 type={user.type}
                 autoComplete={user.autoComplete}
@@ -741,7 +741,7 @@ const Manager = ({ history }) => {
                       <TextField
                         id={user.id}
                         key={user.id}
-                        placeholder={t(user.label)}
+                        placeholder={t(user.label) + "*"}
                         value={user.value}
                         type={user.type}
                         autoComplete={user.autoComplete}

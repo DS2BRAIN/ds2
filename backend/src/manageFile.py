@@ -361,6 +361,7 @@ class ManageFile:
 
     def upload_data(self, base_data_list, common_data, column_info=None):
 
+        print("upload_data")
         user_id = common_data['user_id']
         labelproject_name = common_data['labelproject_name']
         labelproject_id = common_data['labelproject_id']
@@ -2091,7 +2092,7 @@ class ManageFile:
         training_method = ''
         value_for_predict = ''
         has_image_Data = False
-        if ".zip" in file_name:
+        if ".zip" in file_name.lower():
             temp_file, file_size, new_file_name = self.getConnectorTempFileAndSize(file_name, file=file, isZip=True)
             has_image_Data = True
 
@@ -2155,7 +2156,7 @@ class ManageFile:
                 pass
                 df = pd.DataFrame(rows)
 
-        elif ".csv" in file_name:  # csv
+        elif ".csv" in file_name.lower():  # csv
             has_text_data = True
 
             df, dataCnt, file_size, req = self.readFile(file)
