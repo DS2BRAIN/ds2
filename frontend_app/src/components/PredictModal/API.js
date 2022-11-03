@@ -1446,13 +1446,13 @@ const API = React.memo(
                             autoFocus={idx === 0 ? true : false}
                             value={paramsValue[param]}
                             placeholder={
-                              user.language === "ko"
+                              (user.language === "ko"
                                 ? `${paramsType[param]} ${t(
                                     "Enter the value."
                                   )}`
                                 : `${t("Enter the value.")} (${
                                     paramsType[param]
-                                  })`
+                                  })`) + "*"
                             }
                             style={{
                               width: "50%",
