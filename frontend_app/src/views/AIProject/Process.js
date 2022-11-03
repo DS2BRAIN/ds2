@@ -286,7 +286,7 @@ const Process = (props) => {
         );
         onSetSampleData();
         setIsVerify(project.isVerify);
-        if (groups.childrenGroup) onSetShareGroupDict();
+        if (groups.childrenGroup || groups.parentsGroup) onSetShareGroupDict();
         setHyperParamsData(
           project.hyper_params?.length > 0 ? project.hyper_params : null
         );
@@ -417,7 +417,7 @@ const Process = (props) => {
   };
 
   useEffect(() => {
-    if (groups.childrenGroup && projects.project) {
+    if ((groups.childrenGroup || groups.parentsGroup) && projects.project) {
       (async () => {
         // await setIsLoading(true);
         await onSetShareGroupDict();
@@ -584,6 +584,14 @@ const Process = (props) => {
     // }catch{
     //     sharedgroup = [];
     // }
+    groups.parentsGroup.forEach((group) => {
+      if (sharedgroup.indexOf(group.id) > -1) {
+        tempGroupDict[group.id] = true;
+      } else {
+        tempGroupDict[group.id] = false;
+        isAllTrue = false;
+      }
+    });
     groups.childrenGroup.forEach((group) => {
       if (sharedgroup.indexOf(group.id) > -1) {
         tempGroupDict[group.id] = true;
@@ -2206,7 +2214,7 @@ const Process = (props) => {
   };
 
   const handleClickForShare = (event) => {
-    if (!(groups.childrenGroup && groups.childrenGroup.length > 0)) {
+    if (!(groups.childrenGroup && groups.childrenGroup.length > 0) && (!(groups.parentsGroup && groups.parentsGroup.length > 0))) {
       dispatch(
         openErrorSnackbarRequestAction(
           `${t("Please create a group before sharing a project.")} ${t(
@@ -3138,6 +3146,39 @@ const Process = (props) => {
                                       <b>Share to All Group</b>
                                     </div>
                                   </MenuItem>
+                                  {groups.parentsGroup &&
+                                    groups.parentsGroup.map((group) => {
+                                      var isChecked = groupCheckboxDict[
+                                        group.id
+                                      ]
+                                        ? true
+                                        : false;
+                                      return (
+                                        <MenuItem
+                                          key={`parentGroup_${group.id}`}
+                                          style={{
+                                            padding: "4px 24px 4px 16px",
+                                          }}
+                                        >
+                                          <div
+                                            className={classes.defaultContainer}
+                                          >
+                                            <Switch
+                                              className="sharegroupswitch"
+                                              value={group.id}
+                                              checked={isChecked}
+                                              color="primary"
+                                              inputProps={{
+                                                "aria-label":
+                                                  "primary checkbox",
+                                              }}
+                                              onChange={onChangeShareGroup}
+                                            />
+                                            <b>Share to {group.groupname}</b>
+                                          </div>
+                                        </MenuItem>
+                                      );
+                                    })}
                                   {groups.childrenGroup &&
                                     groups.childrenGroup.map((group) => {
                                       var isChecked = groupCheckboxDict[

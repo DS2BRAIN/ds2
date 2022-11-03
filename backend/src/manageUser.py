@@ -806,7 +806,7 @@ class ManageUser:
             group['hostuserList'] = self.dbClass.getHostUsersByGroupId(group['id']).__dict__['__data__']
             group['acceptcode'] = self.dbClass.getMemberByUserIdAndGroupId(userId, group['id']).__dict__['__data__']['acceptcode']
             host_user = self.dbClass.getOneUserById(group['hostuserList']['user'], raw=True)
-            if host_user.isDeleteRequested != True:
+            if host_user and host_user.isDeleteRequested != True:
                 memberGroup.append(group)
 
         result = {'parentsGroup' : adminGroup, 'childrenGroup' : memberGroup}
