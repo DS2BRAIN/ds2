@@ -849,6 +849,10 @@ class ManageUser:
 
         userId = user.__dict__['__data__']['id']
         userEmail = user.__dict__['__data__']['email']
+        adminGroup = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId, 'admin')]
+        for group in adminGroup:
+            if groupName == group['groupname']:
+                raise ex.NotValidGroupNameEx()
 
         group = {'groupname': groupName, 'created_at': datetime.datetime.now(), 'updated_at': datetime.datetime.now(), 'provider': provider}
 
