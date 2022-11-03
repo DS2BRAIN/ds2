@@ -1028,3 +1028,14 @@ class SendFeedbackFailedEx(APIException):
             code=f"{StatusCode.HTTP_500}{'1'.zfill(4)}",
             ex=ex,
         )
+
+class LicenseErrorEx(APIException):
+    def __init__(self, ex: Exception = None):
+        super().__init__(
+            status_code=StatusCode.HTTP_402,
+            message="라이센스 키 입력 후 사용 가능합니다.",
+            message_en="It can be used after entering the license key.",
+            detail=f"라이센스 키 입력 후 사용 가능합니다",
+            code=f"{StatusCode.HTTP_402}{'1'.zfill(4)}",
+            ex=ex,
+        )
