@@ -658,7 +658,7 @@ const Group = () => {
                     <GridItem xs={10} style={{ padding: 0 }}>
                       <TextField
                         id="add_group_input"
-                        placeholder={t("Please enter the group name.")}
+                        placeholder={t("Please enter the group name.") + "*"}
                         onChange={onChangeGroupName}
                         value={groupName}
                         className={classes.textField}
