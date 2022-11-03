@@ -290,7 +290,7 @@ export default function NewProject({ history }) {
       );
     } else {
       return t(
-        "Only CSV files of 2GB or less are supported. (Only 1 upload is allowed)"
+        "Only CSV files of 1GB or less are supported. (Only 1 upload is allowed)"
       );
     }
   };
