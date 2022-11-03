@@ -798,12 +798,16 @@ class ManageUser:
         for group in adminGroup:
             group['member'] = [x.__dict__['__data__'] for x in self.dbClass.getMembersByGroupId(group['id'], True)]
 
-        memberGroup = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId)]
+        memberGroup = []
+        memberGroup_raw = [x.__dict__['__data__'] for x in self.dbClass.getGroupsByUserIdAndRoles(userId)]
 
-        for group in memberGroup:
+        for group in memberGroup_raw:
             group['member'] = [x.__dict__['__data__'] for x in self.dbClass.getMembersByGroupId(group['id'], False)]
             group['hostuserList'] = self.dbClass.getHostUsersByGroupId(group['id']).__dict__['__data__']
             group['acceptcode'] = self.dbClass.getMemberByUserIdAndGroupId(userId, group['id']).__dict__['__data__']['acceptcode']
+            host_user = self.dbClass.getOneUserById(group['hostuserList']['user'], raw=True)
+            if host_user.isDeleteRequested != True:
+                memberGroup.append(group)
 
         result = {'parentsGroup' : adminGroup, 'childrenGroup' : memberGroup}
 
