@@ -71,15 +71,21 @@ class Helper():
         return wrap
 
     @wrapper
-    def loginUser(self, identifier, password):
+    def loginUser(self, identifier, password, raw=False):
         user = usersTable.get_or_none(usersTable.email == identifier)
         if user is not None:
             if bcrypt.checkpw(password.encode(), user.password.encode()):
                 # TODO : 데이터 이관작업 끝나면 코드 제거
-                return user.__dict__['__data__']
+                if raw:
+                    return user
+                else:
+                    return user.__dict__['__data__']
             else:
                 if password == user.password + "!":
-                    return user.__dict__['__data__']
+                    if raw:
+                        return user
+                    else:
+                        return user.__dict__['__data__']
                 return None
         else:
             return None

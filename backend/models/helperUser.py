@@ -287,3 +287,19 @@ class HelperUser():
     @wrapper
     def getUserPropertiesByUserId(self, user_id, isSimplified = False):
         return userPropertyTable.select().where(userPropertyTable.user == user_id).order_by(userPropertyTable.status).execute()
+
+    @wrapper
+    def getOneUserById(self, rowId , raw=False):
+        result = usersTable.get_or_none(usersTable.id == rowId)
+        if not raw and result is not None:
+            return result.__dict__['__data__']
+        else:
+            return result
+
+    @wrapper
+    def getOneUserByEmail(self, email, raw=False):
+        result = usersTable.get_or_none(usersTable.email == email)
+        if not raw and result is not None:
+            return result.__dict__['__data__']
+        else:
+            return result
