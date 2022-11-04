@@ -421,14 +421,6 @@ class HelperProject():
         return projectsTable.select().where(projectsTable.dataset == datasetId).execute()
 
     @wrapper
-    def getOneUserById(self, rowId ,raw=False):
-        result = usersTable.get_or_none(usersTable.id == rowId)
-        if not raw and result is not None:
-            return result.__dict__['__data__']
-        else:
-            return result
-
-    @wrapper
     def get_one_team_user_by_id(self, row_id, raw=False):
         result = teamUsersTable.get_or_none(teamUsersTable.id == row_id)
         if not raw and result is not None:
