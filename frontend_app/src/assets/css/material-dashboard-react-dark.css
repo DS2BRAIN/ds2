@@ -702,6 +702,10 @@ form > svg > path {
 .Mui-disabled {
   color: var(--textMediumGrey) !important;
 }
+#label_project_name.Mui-disabled, 
+#label_project_detail.Mui-disabled {
+  color: var(--textWhite87) !important;
+}
 #projectName.Mui-disabled,
 #projectComment.Mui-disabled {
   color: var(--textWhite87) !important;

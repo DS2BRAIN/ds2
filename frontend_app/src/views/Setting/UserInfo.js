@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
@@ -27,8 +27,14 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button";
 
-import { Modal, TextField } from "@material-ui/core";
-import { CircularProgress, Container, Grid, IconButton } from "@mui/material";
+import { Modal, TextField, Dialog } from "@material-ui/core";
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  IconButton,
+  Box,
+} from "@mui/material";
 import CloseIcon from "@material-ui/icons/Close";
 import RefreshIcon from "@material-ui/icons/Refresh";
 
@@ -68,6 +74,10 @@ const UserInfo = ({ history }) => {
   const [modalLoading, setIsModalLoading] = useState(false);
   const [userCreatedDate, setUserCreatedDate] = useState("");
   const [imgUrl, setImgUrl] = useState({ file: "", url: "" });
+  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+  const [verificationPassword, setVerificationPassword] = useState("");
+  const [isVerificationLoading, setIsVerificationLoading] = useState(false);
+
   const amazon_color =
     fileurl + "asset/front/img/externalAiLogo/Amazon logo color.png";
   const amazon_gray =
@@ -231,13 +241,13 @@ const UserInfo = ({ history }) => {
     };
     dispatch(postWithdrawRequestAction(data));
   };
-  const infoChangeSubmit = (event) => {
-    event.preventDefault();
+  const infoChangeSubmit = () => {
     const data = {
       name: userName,
       promotionCode: promotionCode,
       company: company,
     };
+
     setIsModalLoading(true);
     dispatch(putUserRequestAction(data));
     if (imgUrl.file) {
@@ -354,6 +364,113 @@ const UserInfo = ({ history }) => {
       window.location.reload();
     }
   };
+
+  const onChangeVerificationPassword = (e) => {
+    const value = e.target.value;
+
+    setVerificationPassword(value);
+  };
+
+  const verifyPassword = useCallback(() => {
+    setIsVerificationLoading(true);
+
+    const data = {
+      id: user.me.email,
+      password: verificationPassword,
+    };
+
+    api
+      .Login(data)
+      .then(async () => {
+        await infoChangeSubmit();
+        await setIsVerificationModalOpen(false);
+      })
+      .catch((e) => {
+        console.error(e);
+
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("Authentication failed. please try again.")
+          )
+        );
+      })
+      .finally(() => {
+        setIsVerificationLoading(false);
+      });
+  }, [verificationPassword, user.me]);
+
+  const VerificationModal = (
+    <Dialog
+      open={isVerificationModalOpen}
+      onClose={() => setIsVerificationModalOpen(false)}
+      className={classes.modalContainer}
+    >
+      <Grid
+        container
+        alignItems="center"
+        sx={{ maxWidth: 400, background: "var(--background2)", p: 3 }}
+      >
+        <Grid item xs={12} sx={{ mb: 2 }}>
+          <span
+            style={{
+              fontSize: 20,
+              fontWeight: 500,
+              color: "var(--textWhite87)",
+            }}
+          >
+            {t("Personal information verification process")}
+          </span>
+        </Grid>
+        <Grid item xs={12}>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={(e) => {
+              e.preventDefault();
+              verifyPassword();
+            }}
+          >
+            <TextField
+              label={null}
+              type={"password"}
+              variant="outlined"
+              fullWidth
+              autoFocus
+              value={verificationPassword}
+              onChange={onChangeVerificationPassword}
+              sx={{
+                "& legend": { display: "none" },
+                "& fieldset": { height: "100%", top: 0 },
+              }}
+              placeholder={t("Please enter your password.")}
+            />
+          </Box>
+        </Grid>
+        <Grid container justifyContent="center" sx={{ mt: 4 }}>
+          <Button shape="greenContainedSquare" onClick={verifyPassword}>
+            <span>{t("Confirm")}</span>
+
+            {isVerificationLoading && (
+              <CircularProgress
+                size={15}
+                color="inherit"
+                sx={{
+                  color: "var(--textWhite87)",
+                  verticalAlign: "middle",
+                  ml: 1,
+                }}
+              />
+            )}
+          </Button>
+        </Grid>
+      </Grid>
+    </Dialog>
+  );
+
+  useEffect(() => {
+    setVerificationPassword("");
+  }, [isVerificationModalOpen]);
 
   // <GridItem xs={6} lg={4} >
   //     {t('제공자')}
@@ -670,7 +787,7 @@ const UserInfo = ({ history }) => {
                 {userCreatedDate}
               </div>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <div className={classes.settingFontWhite6}>{t("App code")}</div>
               <div
                 className={classes.settingFontWhite87}
@@ -694,7 +811,7 @@ const UserInfo = ({ history }) => {
               <div className={classes.settingFontWhite87} id="userCompany">
                 {user.me.deposit - user.me.usedPrice}
               </div>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid
             item
@@ -747,6 +864,7 @@ const UserInfo = ({ history }) => {
               : t("Delete account")}
           </Button>
         </Grid>
+
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
@@ -932,15 +1050,19 @@ const UserInfo = ({ history }) => {
                     id="submitBtn"
                     shape="greenOutlined"
                     sx={{ minWidth: "160px" }}
-                    onClick={infoChangeSubmit}
+                    // onClick={infoChangeSubmit}
+                    onClick={() => setIsVerificationModalOpen(true)}
                   >
                     {t("Submit")}
                   </Button>
                 </Grid>
               </Grid>
             )}
+
+            {VerificationModal}
           </div>
         </Modal>
+
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
@@ -1001,6 +1123,7 @@ const UserInfo = ({ history }) => {
             )}
           </div>
         </Modal>
+
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"

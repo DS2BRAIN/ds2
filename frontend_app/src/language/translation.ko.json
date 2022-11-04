@@ -2356,5 +2356,9 @@
   "Triton Config": "Triton 설정",
   "No text detected.": "인식된 텍스트가 없습니다.",
   "required": "필수",
-  "End labeling": "라벨링 종료"
+  "End labeling": "라벨링 종료",
+  "You have already read all notifications.": "이미 모든 알람을 읽으셨습니다.",
+  "Please enter the password for personal information verification.": "개인정보 인증을 위한 비밀번호를 입력해주세요.",
+  "Personal information verification process": "개인정보 인증 절차",
+  "Authentication failed. please try again.": "인증에 실패했습니다. 다시 시도해주세요."
 }
