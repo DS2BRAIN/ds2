@@ -337,7 +337,7 @@ const PasswordCard = ({ type, props }) => {
                 className={classes.logo}
                 style={{ width: "120px" }}
               />
-              <Language />
+              {/* <Language /> */}
             </div>
             {isLoading ? (
               <div className={classes.loading}>
