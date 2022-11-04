@@ -477,7 +477,7 @@ const AutoMLProject = ({ history, route }) => {
             shape="greenContained"
             onClick={openStartProject}
           >
-            {t("New Project")}
+            {t("Upload data")}
           </Button>
         </Grid>
         {process.env.REACT_APP_ENTERPRISE !== "true" && (
