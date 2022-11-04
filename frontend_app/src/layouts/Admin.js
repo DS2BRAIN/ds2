@@ -318,6 +318,18 @@ const Admin = ({ history, ...rest }) => {
   // }, [mainPanel]);
 
   useEffect(() => {
+    function onBeforeUnload() {
+      history.push("/signout");
+    }
+
+    window.addEventListener("beforeunload", onBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     console.log("amplitude init");
     amplitude.getInstance().init("446d673fc8928366cc815f058ba93381");
 
