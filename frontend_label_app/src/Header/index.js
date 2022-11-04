@@ -19,6 +19,7 @@ import KeyframeTimeline from "../KeyframeTimeline"
 import classnames from "classnames"
 import { useTranslation } from "react-i18next"
 import Language from "../lang/Language"
+import ExitToAppIcon from "@material-ui/icons/ExitToApp"
 
 const useStyles = makeStyles(styles)
 
@@ -144,6 +145,13 @@ export const Header = ({
             name={`${t("다음")} (d)`}
             id="nextBtn"
             Icon={NextIcon}
+          />
+          <HeaderButton
+            images={images}
+            action="exit"
+            name={`${t("종료")}`}
+            id="exitBtn"
+            Icon={ExitToAppIcon}
           />
         </HeaderButtonContext.Provider>
       </div>

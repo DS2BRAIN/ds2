@@ -47,5 +47,7 @@
     "폴리건 포인트 삭제": "Delete Polygon Point",
     "매직툴 모델 타입": "Magic tool Model Type",
     "매직툴 민감도": "Magic tool Sensitivity",
-    "키포인트 생성": "Create Key Point"
+    "키포인트 생성": "Create Key Point",
+    "라벨링 종료": "End labeling",
+    "종료": "Exit"
 }
