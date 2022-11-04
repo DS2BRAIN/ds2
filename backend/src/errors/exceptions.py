@@ -433,9 +433,9 @@ class SetBlockUserEx(APIException):
     def __init__(self, email: int = None, ex: Exception = None):
         super().__init__(
             status_code=StatusCode.HTTP_503,
-            message="패스워드를 5회 이상 틀려서 정지되었습니다. 관리자에게 문의바랍니다.",
-            message_en="It was stopped because the password was wrong more than 5 times. Please contact the administrator.",
-            detail=f"패스워드를 5회 이상 틀려서 정지되었습니다. 관리자에게 문의바랍니다. | UserEmail : {email}",
+            message="패스워드를 5회 이상 틀려서 정지되었습니다. contact@dslab.global 로 문의바랍니다.",
+            message_en="It was stopped because the password was wrong more than 5 times. Please contact to contact@dslab.global .",
+            detail=f"패스워드를 5회 이상 틀려서 정지되었습니다. contact@dslab.global 로 문의바랍니다. | UserEmail : {email}",
             code=f"{StatusCode.HTTP_503}{'1'.zfill(4)}",
             ex=ex,
         )
