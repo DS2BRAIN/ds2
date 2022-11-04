@@ -29,13 +29,13 @@ const NavMenu = () => {
       layout: "/admin",
       condition: true,
     },
-    {
-      id: "verify",
-      path: "/verifyproject",
-      name: "Verify",
-      layout: "/admin",
-      condition: true,
-    },
+    // {
+    //   id: "verify",
+    //   path: "/verifyproject",
+    //   name: "Verify",
+    //   layout: "/admin",
+    //   condition: true,
+    // },
     // {
     //   id: "skyhub",
     //   path: "/skyhubai",

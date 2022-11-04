@@ -1286,7 +1286,7 @@ const Dataconnector = ({ history }) => {
         <Grid item>{btnSampleTemplate()}</Grid>
         <Grid item>{btnLabelingStart()}</Grid>
         <Grid item>{btnProjectStart("develop")}</Grid>
-        <Grid item>{btnProjectStart("verify")}</Grid>
+        {/* <Grid item>{btnProjectStart("verify")}</Grid> */}
         <Grid item>{reloadButton}</Grid>
       </>
     );
