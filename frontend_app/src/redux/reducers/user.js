@@ -378,7 +378,6 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        asynctasks: state.asynctasks.filter((task) => task.id !== action.data),
         isAsynctaskDone: true,
         isSuccess: true,
       };
