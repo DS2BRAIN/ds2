@@ -72,7 +72,13 @@ const NotiPopover = () => {
         onClick={handleNotiPopOpen}
       >
         <Badge
-          badgeContent={notis ? (notis.length >= 30 ? "30+" : notis.length) : 0}
+          badgeContent={
+            notis && !isNotiLoading
+              ? notis.length >= 30
+                ? "30+"
+                : notis.length
+              : 0
+          }
           color="error"
         >
           <NotificationsIcon className={classes.fillBDhoverFF} />
