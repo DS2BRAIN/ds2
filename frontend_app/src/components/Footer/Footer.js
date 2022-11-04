@@ -177,7 +177,7 @@ export default function Footer({ footerHeight, containerWidth }) {
           width="auto"
           sx={{ mr: 1.5 }}
         >
-          {handleLanguageBtns()}
+          {/* {handleLanguageBtns()} */}
           <Button
             id="footer_priceguide_btn"
             className="hoverOutlineGreen"
