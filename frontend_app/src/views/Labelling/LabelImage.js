@@ -816,7 +816,7 @@ const LabelImage = ({ history }) => {
                   >
                     {t("Next")} (d)
                   </Button>
-                  <Language />
+                  {/* <Language /> */}
                 </Grid>
               </Grid>
             </Grid>

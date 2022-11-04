@@ -16,6 +16,13 @@ const NavMenu = () => {
       condition: true,
     },
     {
+      id: "label",
+      path: "/labelling",
+      name: "Labeling",
+      layout: "/admin",
+      condition: true,
+    },
+    {
       id: "train",
       path: "/train",
       name: "Train",
@@ -36,13 +43,6 @@ const NavMenu = () => {
     //   layout: "/admin",
     //   condition: true,
     // },
-    {
-      id: "label",
-      path: "/labelling",
-      name: "Labeling",
-      layout: "/admin",
-      condition: true,
-    },
     // {
     //   id: "market",
     //   path: "/marketList",
