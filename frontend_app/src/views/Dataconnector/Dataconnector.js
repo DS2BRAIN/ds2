@@ -488,7 +488,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const publicTableHeads = [
-    { value: "No.", width: "5%", type: "dataNum", align: "center" },
+    // { value: "No.", width: "5%", type: "dataNum", align: "center" },
     {
       value: "Preview",
       width: "12.5%",
