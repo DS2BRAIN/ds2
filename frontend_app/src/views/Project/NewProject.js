@@ -400,7 +400,9 @@ export default function NewProject({ history }) {
                     autoFocus
                     value={projectNameValue}
                     onChange={changeProjectNameValue}
-                    placeholder={t("Please enter a project name.*")}
+                    placeholder={`${t("Please enter a project name.*")} (${t(
+                      "required"
+                    )})`}
                     id="projectNameInput"
                   />
                 </Grid>
@@ -433,7 +435,7 @@ export default function NewProject({ history }) {
               <FormControl component="fieldset">
                 <FormLabel component="legend">
                   <span style={{ fontWeight: 600 }}>
-                    {t("Select Data Category")} &#42;
+                    {t("Select Data Category")} &#42; ({t("required")})
                   </span>
                 </FormLabel>
                 <RadioGroup

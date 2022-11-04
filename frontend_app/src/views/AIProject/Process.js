@@ -186,13 +186,13 @@ const Process = (props) => {
 
   const path = window.location.pathname;
 
-  useEffect(() => {
-    const url = window.location.href;
+  // useEffect(() => {
+  //   const url = window.location.href;
 
-    if (url.indexOf("verifyproject/") !== -1) {
-      setIsVerify(true);
-    }
-  }, []);
+  //   if (url.indexOf("verifyproject/") !== -1) {
+  //     setIsVerify(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (hasStructuredData) setTrainMethod("normal");
@@ -285,7 +285,7 @@ const Process = (props) => {
             : project.preprocessingInfoValue
         );
         onSetSampleData();
-        setIsVerify(project.isVerify);
+        // setIsVerify(project.isVerify);
         if (groups.childrenGroup || groups.parentsGroup) onSetShareGroupDict();
         setHyperParamsData(
           project.hyper_params?.length > 0 ? project.hyper_params : null
@@ -491,7 +491,7 @@ const Process = (props) => {
   useEffect(() => {
     if (messages.shouldGoToMainPage) {
       dispatch(setMainPageSettingRequestAction());
-      props.history.push("/admin/project/");
+      props.history.push("/admin/train/");
     }
   }, [messages.shouldGoToMainPage]);
 
@@ -1920,7 +1920,16 @@ const Process = (props) => {
       ];
     }
 
-    console.log(projectInfo);
+    let totalFileSize = 0;
+    project.dataconnectorsList.map((dataconnector) => {
+      if (dataconnector.fileSize) totalFileSize += dataconnector.fileSize;
+    });
+    console.log(totalFileSize);
+
+    let totalHour = totalFileSize / (1024 * 1024 * 100);
+    totalHour = totalHour.toFixed(0);
+    if (totalHour < 1) totalHour = 1;
+
     if (
       valueForPredictInfo["unique"] > 250 &&
       (project.trainingMethod === "text" ||
@@ -1945,7 +1954,9 @@ const Process = (props) => {
         askStartProjectRequestAction({
           message: `${t(
             "If there are more than 25 unique values that you want to predict, the accuracy may decrease. If preprocessing is not performed, the rows with missing values will be removed."
-          )} ${t("Would you like to proceed?")}`,
+          )} (${t("Estimated time")}: ${totalHour + t("hour")}) ${t(
+            "Would you like to proceed?"
+          )}`,
           project: projectInfo,
         })
       );
@@ -1960,7 +1971,9 @@ const Process = (props) => {
         askStartProjectRequestAction({
           message: `${t(
             "If preprocessing is not performed, the rows with missing values will be removed."
-          )} ${t("Would you like to proceed?")}`,
+          )} (${t("Estimated time")}: ${totalHour + t("hour")}) ${t(
+            "Would you like to proceed?"
+          )}`,
           project: projectInfo,
         })
       );
@@ -1973,15 +1986,18 @@ const Process = (props) => {
         askStartProjectRequestAction({
           message: `${t(
             "If there are more than 25 unique values that you want to predict, the accuracy may decrease."
-          )} ${t("Would you like to proceed?")}`,
+          )} (${t("Estimated time")}: ${totalHour + t("hour")}) ${t(
+            "Would you like to proceed?"
+          )}`,
           project: projectInfo,
         })
       );
     } else {
       await dispatch(
         askStartProjectRequestAction({
-          message:
-            "Would you like to start modeling your project with the selected options?",
+          message: `${t(
+            "Would you like to start modeling your project with the selected options?"
+          )} (${t("Estimated time")}: ${totalHour + t("hour")})`,
           project: projectInfo,
         })
       );
@@ -2214,7 +2230,10 @@ const Process = (props) => {
   };
 
   const handleClickForShare = (event) => {
-    if (!(groups.childrenGroup && groups.childrenGroup.length > 0) && (!(groups.parentsGroup && groups.parentsGroup.length > 0))) {
+    if (
+      !(groups.childrenGroup && groups.childrenGroup.length > 0) &&
+      !(groups.parentsGroup && groups.parentsGroup.length > 0)
+    ) {
       dispatch(
         openErrorSnackbarRequestAction(
           `${t("Please create a group before sharing a project.")} ${t(

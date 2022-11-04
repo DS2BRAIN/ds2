@@ -488,7 +488,7 @@ const Dataconnector = ({ history }) => {
   };
 
   const publicTableHeads = [
-    { value: "No.", width: "5%", type: "dataNum", align: "center" },
+    // { value: "No.", width: "5%", type: "dataNum", align: "center" },
     {
       value: "Preview",
       width: "12.5%",
@@ -1286,7 +1286,7 @@ const Dataconnector = ({ history }) => {
         <Grid item>{btnSampleTemplate()}</Grid>
         <Grid item>{btnLabelingStart()}</Grid>
         <Grid item>{btnProjectStart("develop")}</Grid>
-        <Grid item>{btnProjectStart("verify")}</Grid>
+        {/* <Grid item>{btnProjectStart("verify")}</Grid> */}
         <Grid item>{reloadButton}</Grid>
       </>
     );

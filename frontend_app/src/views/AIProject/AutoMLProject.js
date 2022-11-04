@@ -355,7 +355,7 @@ const AutoMLProject = ({ history, route }) => {
           cont = cont ? cont.substring(0, 10) : "";
         else if (type === "status") {
           let [text, color] = onSetStatusDisplay(cont);
-          cont = <span style={{ color: color }}>{`⦁ ${text}`}</span>;
+          cont = <span style={{ color: color }}>{`⦁ ${t(text)}`}</span>;
         }
 
         if (!cont) cont = "-";
@@ -477,7 +477,7 @@ const AutoMLProject = ({ history, route }) => {
             shape="greenContained"
             onClick={openStartProject}
           >
-            {t("New Project")}
+            {t("Upload data")}
           </Button>
         </Grid>
         {process.env.REACT_APP_ENTERPRISE !== "true" && (

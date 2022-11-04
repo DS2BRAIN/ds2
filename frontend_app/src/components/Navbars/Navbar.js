@@ -44,7 +44,7 @@ export default function Header(props) {
   return (
     <AppBar
       className={classes.appBar + appBarClasses}
-      style={{ height: `${props.headerHeight}px`, minWidth: 1400, left: 0 }}
+      style={{ height: `${props.headerHeight}px`, left: 0 }}
     >
       <Container
         maxWidth="false"
@@ -104,10 +104,6 @@ export default function Header(props) {
             >
               <ExitToAppIcon className={classes.fillBDhoverFF} />
             </IconButton>
-
-            <Grid className="itemsCenter">
-              <PageController />
-            </Grid>
           </Toolbar>
         </Toolbar>
       </Container>

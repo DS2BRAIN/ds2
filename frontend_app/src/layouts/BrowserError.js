@@ -43,7 +43,11 @@ export default function BrowserError() {
   return (
     <div className={classes.signInContainer} style={{ height: "100vh" }}>
       <ReactTitle title={"DS2.ai - " + t("Mobile")} />
-      <Container component="main" maxWidth="xs" className="forgetPasswordContainer">
+      <Container
+        component="main"
+        maxWidth="xs"
+        className="forgetPasswordContainer"
+      >
         <div className={classes.paper}>
           <div
             id="navbar"
@@ -55,10 +59,19 @@ export default function BrowserError() {
               marginBottom: "20px",
             }}
           >
-            <img src={logo} alt={"logo"} className={classes.logo} style={{ width: "160px" }} />
-            <Language />
+            <img
+              src={logo}
+              alt={"logo"}
+              className={classes.logo}
+              style={{ width: "160px" }}
+            />
+            {/* <Language /> */}
           </div>
-          <div className={classes.description}>{t("CLICK AI platform is only available in the Chrome browser for PC users.")}</div>
+          <div className={classes.description}>
+            {t(
+              "CLICK AI platform is only available in the Chrome browser for PC users."
+            )}
+          </div>
           <div
             style={{
               width: "100%",
@@ -66,7 +79,10 @@ export default function BrowserError() {
               justifyContent: "flex-end",
             }}
           >
-            <Button style={{ color: currentThemeColor.primary1, fontSize: "10px" }} onClick={onLogOut}>
+            <Button
+              style={{ color: currentThemeColor.primary1, fontSize: "10px" }}
+              onClick={onLogOut}
+            >
               {t("Login")}
             </Button>
           </div>

@@ -241,11 +241,11 @@ const LabelprojectList = ({ history }) => {
 
   const tableHeads = [
     // { value: "No.", width: "10%", name: "" },
-    { value: "Project name", width: "25%", name: "name" },
+    { value: "Project name", width: "40%", name: "name" },
     { value: "Role", width: "10%", name: "role" },
-    { value: "Type", width: "15%", name: "workapp" },
-    { value: "Date created", width: "15%", name: "created_at" },
-    { value: "Date updated", width: "15%", name: "updated_at" },
+    { value: "Type", width: "20%", name: "workapp" },
+    { value: "Date created", width: "10%", name: "created_at" },
+    { value: "Date updated", width: "10%", name: "updated_at" },
     { value: "Status", width: "10%", name: "status" },
   ];
 
@@ -273,7 +273,7 @@ const LabelprojectList = ({ history }) => {
               <TableCell
                 className={classes.tableHead}
                 align="center"
-                style={{ width: "10" }}
+                style={{ width: "5%" }}
               >
                 <Checkbox
                   value="all"
@@ -459,11 +459,11 @@ const LabelprojectList = ({ history }) => {
               >
                 <Button
                   id="add_project_btn"
-                  shape="greenOutlined"
+                  shape="greenContained"
                   style={{ height: 32 }}
                   onClick={onStartLabelProject}
                 >
-                  {t("Start labeling")}
+                  {t("Upload data")}
                 </Button>
 
                 <Tooltip

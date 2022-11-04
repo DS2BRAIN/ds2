@@ -120,7 +120,7 @@ const App = () => {
         </Switch>
       </BrowserRouter>
 
-      {IS_ENTERPRISE && (
+      {/* {IS_ENTERPRISE && (
         <div id="feedback_container">
           <MinimalFeedback
             id="feedback_box"
@@ -132,7 +132,7 @@ const App = () => {
             style={{ color: "var(--surface1)" }}
           />
         </div>
-      )}
+      )} */}
 
       {isDevEnv && (
         <span style={versionStyle}>{process.env.REACT_APP_GIT_SHA}</span>

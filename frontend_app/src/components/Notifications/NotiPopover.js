@@ -38,9 +38,13 @@ const NotiPopover = () => {
 
   useEffect(() => {
     if (user.isAsynctaskDone) {
-      setIsNotiLoading(false);
+      getAsyncTaskData();
     }
   }, [user.isAsynctaskDone]);
+
+  useEffect(() => {
+    setIsNotiLoading(user.isLoading);
+  }, [user.isLoading]);
 
   const handleNotiPopClose = () => {
     setAnchorEl(null);
@@ -68,7 +72,13 @@ const NotiPopover = () => {
         onClick={handleNotiPopOpen}
       >
         <Badge
-          badgeContent={notis ? (notis.length >= 29 ? "30+" : notis.length) : 0}
+          badgeContent={
+            notis && !isNotiLoading
+              ? notis.length >= 30
+                ? "30+"
+                : notis.length
+              : 0
+          }
           color="error"
         >
           <NotificationsIcon className={classes.fillBDhoverFF} />
@@ -143,13 +153,13 @@ const NotiPopover = () => {
       const onClickLabellingProject = async (id, project) => {
         setAnchorEl(null);
         await dispatch(postCheckAsynctasksRequestAction(id));
-        await history.push(`/admin/labelling/${project}`);
+        history.push(`/admin/labelling/${project}`);
       };
 
       const onClickDevelopProject = async (id, project) => {
         setAnchorEl(null);
         await dispatch(postCheckAsynctasksRequestAction(id));
-        await history.push(`/admin/train/${project}`);
+        history.push(`/admin/train/${project}`);
       };
 
       const onCheckNavbarAlarm = async (id) => {
@@ -169,7 +179,7 @@ const NotiPopover = () => {
           }}
         >
           <CircularProgress />
-          <div>{t("Marking notifications as read")}...</div>
+          <div>{t("Refreshing notifications.")}..</div>
         </Grid>
       );
 

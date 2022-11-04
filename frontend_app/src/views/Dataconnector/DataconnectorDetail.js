@@ -347,7 +347,7 @@ const DataconnectorDetail = ({ history, match }) => {
                 )}
               </Button>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Button
                 id="start_verify_btn"
                 shape="greenOutlined"
@@ -368,7 +368,7 @@ const DataconnectorDetail = ({ history, match }) => {
                   />
                 )}
               </Button>
-            </Grid>
+            </Grid> */}
           </>
         )}
       </Grid>
