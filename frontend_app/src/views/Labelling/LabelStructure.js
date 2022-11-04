@@ -33,6 +33,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "components/CustomButtons/Button";
 import Language from "components/Language/Language";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 const useModalStyles = makeStyles({
   modalContainer: {
@@ -851,6 +852,20 @@ const LabelStructure = ({ history }) => {
                     {t("Next")} (d)
                   </Button>
                   {/* <Language /> */}
+                  <Button
+                    style={{
+                      minWidth: 120,
+                      marginLeft: 16,
+                      color: "var(--textWhite87)",
+                      borderBottom: "3px solid var(--error)",
+                      fontWeight: 600,
+                      borderRadius: 0,
+                    }}
+                    endIcon={<ExitToAppIcon />}
+                    onClick={() => window.close()}
+                  >
+                    {t("End labeling")}
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>

@@ -24,6 +24,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Language from "components/Language/Language";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { fileurl } from "controller/api";
 
 const useModalStyles = makeStyles({
@@ -817,6 +818,21 @@ const LabelImage = ({ history }) => {
                     {t("Next")} (d)
                   </Button>
                   {/* <Language /> */}
+
+                  <Button
+                    style={{
+                      minWidth: 120,
+                      marginLeft: 16,
+                      color: "var(--textWhite87)",
+                      borderBottom: "3px solid var(--error)",
+                      fontWeight: 600,
+                      borderRadius: 0,
+                    }}
+                    endIcon={<ExitToAppIcon />}
+                    onClick={() => window.close()}
+                  >
+                    {t("End labeling")}
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>

@@ -160,6 +160,9 @@ export const HeaderButton = ({
         setIsNextBtnClicked(true)
         setIsLoadingModalOpen(true)
         break
+      case "exit":
+        window.close()
+        break
       case "play":
         break
       case "pause":

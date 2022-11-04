@@ -2355,5 +2355,6 @@
   "Error setting the introduction page and language. Please refresh and try again.": "소개 페이지 및 언어 설정 오류입니다. 새로고침 후 다시 시도해주세요.",
   "Triton Config": "Triton 설정",
   "No text detected.": "인식된 텍스트가 없습니다.",
-  "required": "필수"
+  "required": "필수",
+  "End labeling": "라벨링 종료"
 }
