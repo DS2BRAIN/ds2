@@ -186,13 +186,13 @@ const Process = (props) => {
 
   const path = window.location.pathname;
 
-  useEffect(() => {
-    const url = window.location.href;
+  // useEffect(() => {
+  //   const url = window.location.href;
 
-    if (url.indexOf("verifyproject/") !== -1) {
-      setIsVerify(true);
-    }
-  }, []);
+  //   if (url.indexOf("verifyproject/") !== -1) {
+  //     setIsVerify(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (hasStructuredData) setTrainMethod("normal");
@@ -285,7 +285,7 @@ const Process = (props) => {
             : project.preprocessingInfoValue
         );
         onSetSampleData();
-        setIsVerify(project.isVerify);
+        // setIsVerify(project.isVerify);
         if (groups.childrenGroup || groups.parentsGroup) onSetShareGroupDict();
         setHyperParamsData(
           project.hyper_params?.length > 0 ? project.hyper_params : null
@@ -2230,7 +2230,10 @@ const Process = (props) => {
   };
 
   const handleClickForShare = (event) => {
-    if (!(groups.childrenGroup && groups.childrenGroup.length > 0) && (!(groups.parentsGroup && groups.parentsGroup.length > 0))) {
+    if (
+      !(groups.childrenGroup && groups.childrenGroup.length > 0) &&
+      !(groups.parentsGroup && groups.parentsGroup.length > 0)
+    ) {
       dispatch(
         openErrorSnackbarRequestAction(
           `${t("Please create a group before sharing a project.")} ${t(

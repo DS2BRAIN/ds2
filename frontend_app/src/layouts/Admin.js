@@ -163,12 +163,12 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <Process {...props} />}
       />
-      <Route
+      {/* <Route
         exact
         path="/admin/verifyproject/:id"
         {...rest}
         render={(props) => <Process {...props} />}
-      />
+      /> */}
       <Route
         exact
         path="/admin/labelling/:id"
@@ -241,12 +241,12 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <AutoMLProject {...props} route="train" />}
       />
-      <Route
+      {/* <Route
         exact
         path="/admin/verifyproject"
         {...rest}
         render={(props) => <AutoMLProject {...props} route="verifyproject" />}
-      />
+      /> */}
       {/* <Route
         exact
         path="/admin/newjupyterproject"
@@ -295,7 +295,7 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <DataconnectorDetail {...props} />}
       />
-      <Route render={() => <Page404 isAdminPage />} />
+      <Route render={() => <Page404 history={history} isAdminPage />} />
     </Switch>
   );
 
