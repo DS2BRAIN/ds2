@@ -87,7 +87,7 @@ class Helper():
     @wrapper
     def get_enterprise_key_or_none(self):
         key = self.getAdminKey()
-        utilClass.isValidKey(key)
+        return utilClass.isValidKey(key)
 
     @wrapper
     def loginUserBySocialId(self, email, socialId):

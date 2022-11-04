@@ -53,7 +53,7 @@ export const renderSnackbarMessage = (type, response, replace) => {
     errorMessage === "허용되지 않은 토큰 값입니다." ||
     errorMessage === "Token value not allowed."
   )
-    window.location.href = "/signout";
+    window.history.go(-1);
 
   return errorMessage;
 };
