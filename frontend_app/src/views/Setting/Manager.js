@@ -233,6 +233,19 @@ const Manager = ({ history }) => {
       return;
     }
 
+    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{8,50}$/;
+    if (passwordAdd.match(passwordRegExp) === null) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"
+          )
+        )
+      );
+
+      return;
+    }
+
     let tempAddUserRequest = {
       name: userAdd,
       email: emailAdd,
@@ -279,12 +292,12 @@ const Manager = ({ history }) => {
       return false;
     }
 
-    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{3,50}$/;
+    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{8,50}$/;
     if (passwordChange.match(passwordRegExp) === null) {
       dispatch(
         openErrorSnackbarRequestAction(
           t(
-            "Password must contain at least one letter, number, and special character."
+            "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"
           )
         )
       );
