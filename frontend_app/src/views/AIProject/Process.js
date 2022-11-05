@@ -3286,7 +3286,7 @@ const Process = (props) => {
                                 projects.project.status !== 0 ||
                                 projects.project?.option === "labeling"
                               }
-                              value={projects.project.trainingMethod}
+                              value={projects.project.trainingMethod ?? ""}
                               defaultValue={trainMethod}
                               onChange={methodChange}
                             >
