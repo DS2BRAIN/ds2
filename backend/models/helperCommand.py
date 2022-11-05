@@ -290,14 +290,6 @@ class HelperCommand():
         return commandTable.select().where(commandTable.dataset == datasetId).execute()
 
     @wrapper
-    def getOneUserById(self, rowId ,raw=False):
-        result = usersTable.get_or_none(usersTable.id == rowId)
-        if not raw and result is not None:
-            return result.__dict__['__data__']
-        else:
-            return result
-
-    @wrapper
     def getAsnycTaskByCommandId(self, commandId):
         return asynctasksTable.get(asynctasksTable.command == commandId)
 

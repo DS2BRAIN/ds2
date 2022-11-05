@@ -313,9 +313,12 @@ class ManageUser:
     def loginUser(self, userLoginInfo):
 
         userInfo = {}
+        user = None
 
         if userLoginInfo.socialType == 'DS2.ai':
-            userInfo['user'] = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password)
+            user = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password, raw=True)
+            if user:
+                userInfo['user'] = user.__dict__['__data__']
         elif userLoginInfo.socialType == 'google':
             user_data = self.dbClass.loginUserBySocialId(userLoginInfo.identifier, userLoginInfo.password)
 
@@ -329,6 +332,12 @@ class ManageUser:
 
             if req.status_code != 200:
                 raise ex.NotAllowedTokenEx(userLoginInfo['identifier'])
+        if not user:
+            user = self.dbClass.getOneUserByEmail(userLoginInfo.identifier, raw=True)
+            if user and user.blocked:
+                self.utilClass.sendSlackMessage(f'blocked 된 회원이 로그인을 시도하였습니다. {user.email}',
+                                                appLog=True)
+                raise ex.BlockUserEx(userLoginInfo.identifier)
 
         if userInfo.get('user') is not None:
 
@@ -358,6 +367,8 @@ class ManageUser:
                                                 appLog=True)
                 raise ex.DeleteUserEx(userLoginInfo.identifier)
             elif self.utilClass.configOption == 'enterprise' or userInfo['user']['confirmed']:
+                user.number_of_login_attempts = 0
+                user.save()
                 self.utilClass.sendSlackMessage(f"로그인하였습니다. {userInfo['user']['email']} (ID: {userInfo['user']['id']})", appLog=True)
                 appTokenCode = userInfo['user']['appTokenCode']
                 isAgreedWithPolicy = userInfo['user']['isAgreedWithPolicy']
@@ -368,6 +379,18 @@ class ManageUser:
                                                 appLog=True)
                 raise ex.NotConfirmEmailEx(userLoginInfo.identifier)
         else:
+            if user:
+                if not user.number_of_login_attempts:
+                    user.number_of_login_attempts = 0
+                user.number_of_login_attempts += 1
+                if user.number_of_login_attempts >= 5:
+                    user.blocked = 1
+                user.save()
+                if user.blocked:
+                    self.utilClass.sendSlackMessage(f'blocked 되었습니다. {user.email}',
+                                                    appLog=True)
+                    raise ex.SetBlockUserEx(userLoginInfo.identifier)
+
             self.utilClass.sendSlackMessage(f"로그인 시도 실패입니다. " + json.dumps(userLoginInfo.__dict__.get('identifier'), indent=4, ensure_ascii=False),
                                             appLog=True)
             raise ex.LoginEx()
