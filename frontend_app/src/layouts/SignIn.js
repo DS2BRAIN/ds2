@@ -146,12 +146,12 @@ export default function SignIn() {
     return api
       .Login(user)
       .then((res) => {
-        Cookies.setCookie("jwt", res.data.jwt, 90);
-        Cookies.setCookie("user", JSON.stringify(res.data.user), 90);
+        Cookies.setCookie("jwt", res.data.jwt, 3);
+        Cookies.setCookie("user", JSON.stringify(res.data.user), 3);
         Cookies.setCookie(
           "apptoken",
           JSON.stringify(res.data.user.appTokenCode),
-          90
+          3
         );
         return res.data.user.isAgreedWithPolicy;
       })

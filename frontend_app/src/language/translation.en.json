@@ -2399,5 +2399,9 @@
   "Triton Config": "Triton Config",
   "No text detected.": "No text detected.",
   "required": "required",
-  "End labeling": "End labeling"
+  "End labeling": "End labeling",
+  "You have already read all notifications.": "You have already read all notifications.",
+  "Please enter the password for personal information verification.": "Please enter the password for personal information verification.",
+  "Personal information verification process": "Personal information verification process",
+  "Authentication failed. please try again.": "Authentication failed. please try again."
 }

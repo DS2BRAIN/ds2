@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 
@@ -26,6 +26,9 @@ import {
   Paper,
   Modal,
   InputBase,
+  Dialog,
+  Box,
+  CircularProgress,
 } from "@mui/material";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@mui/icons-material/Search";
@@ -62,6 +65,9 @@ const Manager = ({ history }) => {
   const [isSelectedUserModalOpen, setIsSelectedUserModalOpen] = useState(false);
   const [isSelectedUserDelete, setIsSelectedUserDelete] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
+  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+  const [verificationPassword, setVerificationPassword] = useState("");
+  const [isVerificationLoading, setIsVerificationLoading] = useState(false);
 
   const tableHeads = [
     {
@@ -227,6 +233,19 @@ const Manager = ({ history }) => {
       return;
     }
 
+    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{8,50}$/;
+    if (passwordAdd.match(passwordRegExp) === null) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"
+          )
+        )
+      );
+
+      return;
+    }
+
     let tempAddUserRequest = {
       name: userAdd,
       email: emailAdd,
@@ -251,32 +270,45 @@ const Manager = ({ history }) => {
       });
   };
 
-  const onChangePasswordAction = () => {
+  const checkIsValidPassword = () => {
+    if (
+      passwordChange.trim().length === 0 ||
+      passwordVerifyChange.trim().length === 0
+    ) {
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t("Please enter the password you want to change.")
+        )
+      );
+      return false;
+    }
+
     if (passwordChange !== passwordVerifyChange) {
       dispatch(
         openErrorSnackbarRequestAction(
           t("The password you entered and Confirm Password do not match.")
         )
       );
-      return;
+      return false;
     }
 
-    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{3,50}$/;
+    const passwordRegExp = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{8,50}$/;
     if (passwordChange.match(passwordRegExp) === null) {
-      if (user.language === "en")
-        dispatch(
-          openErrorSnackbarRequestAction(
-            "Password must contain at least one letter, number, and special character."
+      dispatch(
+        openErrorSnackbarRequestAction(
+          t(
+            "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!"
           )
-        );
-      else
-        dispatch(
-          openErrorSnackbarRequestAction(
-            "영어, 숫자, 특수기호가 최소 1개이상 포함되어야 합니다."
-          )
-        );
+        )
+      );
+
+      return false;
     }
 
+    return true;
+  };
+
+  const changePasswordAction = useCallback(() => {
     let tempChangePasswordRequest = {
       user_id: selectedUser.id,
       password: passwordChange,
@@ -303,7 +335,128 @@ const Manager = ({ history }) => {
           dispatch(openErrorSnackbarRequestAction(resData.message_en));
         else dispatch(openErrorSnackbarRequestAction(t(resData.message)));
       });
+  }, [passwordChange, passwordVerifyChange]);
+
+  const onChangeVerificationPassword = (e) => {
+    const value = e.target.value;
+
+    setVerificationPassword(value);
   };
+
+  const verifyPassword = useCallback(() => {
+    if (verificationPassword.trim().length === 0) {
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your password."))
+      );
+
+      return;
+    }
+
+    setIsVerificationLoading(true);
+
+    const data = {
+      id: user.me.email,
+      password: verificationPassword,
+    };
+
+    api
+      .Login(data)
+      .then(async () => {
+        await changePasswordAction();
+        await setIsVerificationModalOpen(false);
+      })
+      .catch((e) => {
+        console.error(e);
+
+        setVerificationPassword("");
+        dispatch(
+          openErrorSnackbarRequestAction(
+            t("Authentication failed. please try again.")
+          )
+        );
+      })
+      .finally(() => {
+        setIsVerificationLoading(false);
+      });
+  }, [verificationPassword, user.me]);
+
+  const VerificationModal = (
+    <Dialog
+      open={isVerificationModalOpen}
+      onClose={() => setIsVerificationModalOpen(false)}
+      className={classes.modalContainer}
+    >
+      <Grid
+        container
+        alignItems="center"
+        sx={{ maxWidth: 400, background: "var(--background2)", p: 3 }}
+      >
+        <Grid item xs={12} sx={{ mb: 2 }}>
+          <span
+            style={{
+              fontSize: 20,
+              fontWeight: 500,
+              color: "var(--textWhite87)",
+            }}
+          >
+            {t("Personal information verification process")}
+          </span>
+        </Grid>
+        <Grid item xs={12}>
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off"
+            onSubmit={(e) => {
+              e.preventDefault();
+              verifyPassword();
+            }}
+          >
+            <TextField
+              label={null}
+              type={"password"}
+              variant="outlined"
+              fullWidth
+              autoFocus
+              value={verificationPassword}
+              onChange={onChangeVerificationPassword}
+              sx={{
+                "& legend": { display: "none" },
+                "& fieldset": { height: "100%", top: 0 },
+              }}
+              placeholder={t("Please enter your password.")}
+            />
+          </Box>
+        </Grid>
+        <Grid container justifyContent="center" sx={{ mt: 4 }}>
+          <Button shape="greenContainedSquare" onClick={verifyPassword}>
+            <span>{t("Confirm")}</span>
+
+            {isVerificationLoading && (
+              <CircularProgress
+                size={15}
+                color="inherit"
+                sx={{
+                  color: "var(--textWhite87)",
+                  verticalAlign: "middle",
+                  ml: 1,
+                }}
+              />
+            )}
+          </Button>
+        </Grid>
+      </Grid>
+    </Dialog>
+  );
+
+  useEffect(() => {
+    setVerificationPassword("");
+  }, [isVerificationModalOpen]);
+
+  useEffect(() => {
+    setPasswordChange("");
+    setPasswordVerifyChange("");
+  }, [isSelectedUserModalOpen]);
 
   const onSearchUser = (e) => {
     let tempSearched = e.target.value;
@@ -778,7 +931,11 @@ const Manager = ({ history }) => {
                       id="reset_userpassword_btn"
                       shape="greenOutlinedSquare"
                       size="lg"
-                      onClick={onChangePasswordAction}
+                      // onClick={changePasswordAction}
+                      onClick={() => {
+                        if (checkIsValidPassword())
+                          setIsVerificationModalOpen(true);
+                      }}
                     >
                       {t("Change password")}
                     </Button>
@@ -789,6 +946,7 @@ const Manager = ({ history }) => {
           ) : (
             <Grid>{t("No user selected.")}</Grid>
           )}
+          {VerificationModal}
         </Grid>
       </Modal>
 
