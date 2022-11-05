@@ -1994,15 +1994,19 @@ const LabelDetail = ({ history, match }) => {
                             <InputBase
                               id="label_project_detail"
                               className={classes.settingFontWhite87}
-                              style={
+                              sx={
                                 isUnableToChangeDetail
-                                  ? { width: "100%" }
+                                  ? {
+                                      width: "100%",
+                                    }
                                   : {
                                       width: "100%",
                                       borderBottom: "1px solid gray",
                                     }
                               }
-                              value={nextProjectDetail}
+                              value={
+                                nextProjectDetail ? nextProjectDetail : "-"
+                              }
                               disabled={isUnableToChangeDetail}
                               // autoFocus={true}
                               onChange={onChangeDetailInput}
@@ -2013,12 +2017,12 @@ const LabelDetail = ({ history, match }) => {
                                 )
                               }
                               multiline={true}
-                              placeholder={
-                                user.me &&
-                                !user.me.isAiTrainer &&
-                                !isShared &&
-                                t("Please enter a description.")
-                              }
+                              // placeholder={
+                              //   user.me &&
+                              //   !user.me.isAiTrainer &&
+                              //   !isShared &&
+                              //   t("Please enter a description.")
+                              // }
                               inputRef={detailRef}
                             />
                           </Grid>
