@@ -69,7 +69,7 @@ const useStyles = makeStyles(styles);
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-const DEFAULT_DELAY_TIME = 1000 * 60 * 15; // 로그인 유지 시간 15분
+const DEFAULT_DELAY_TIME = 1000 * 60 * 3; // 로그인 유지 시간 3분
 // const DEFAULT_DELAY_TIME = 5000; // 테스트용 5초
 
 const Admin = ({ history, ...rest }) => {
@@ -318,14 +318,22 @@ const Admin = ({ history, ...rest }) => {
   };
 
   function setDefaultDelayTime() {
+    const jwt = Cookies.getCookie("jwt");
+    const apptoken = Cookies.getCookie("apptoken");
+
     clearTimer();
     registerTimer();
+
+    Cookies.setCookie("jwt", jwt, 3);
+    Cookies.setCookie("apptoken", apptoken, 3);
   }
 
   useEffect(() => {
-    const events = ["click", "scroll", "wheel", "keypress"];
+    const events = ["click", "scroll", "wheel", "keypress", "mousemove"];
+    const jwt = Cookies.getCookie("jwt");
+    const apptoken = Cookies.getCookie("apptoken");
 
-    if (Cookies.getCookie("jwt") && Cookies.getCookie("apptoken"))
+    if (jwt && apptoken)
       events.map((event) => {
         document.addEventListener(event, setDefaultDelayTime);
       });
@@ -339,9 +347,10 @@ const Admin = ({ history, ...rest }) => {
 
   useEffect(() => {
     clearTimer();
+    const jwt = Cookies.getCookie("jwt");
+    const apptoken = Cookies.getCookie("apptoken");
 
-    if (Cookies.getCookie("jwt") && Cookies.getCookie("apptoken"))
-      registerTimer();
+    if (jwt && apptoken) registerTimer();
 
     return () => {
       clearTimer();
@@ -369,6 +378,7 @@ const Admin = ({ history, ...rest }) => {
   //     window.removeEventListener("resize", resizeFunction);
   //   };
   // }, [mainPanel]);
+
   // useEffect(() => {
   //   function onBeforeUnload() {
   //     history.push("/signout");
