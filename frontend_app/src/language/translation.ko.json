@@ -13,7 +13,7 @@
   "Checked": "확인 완료",
   "(Optional) Please enter your company name.": "재직중인 회사를 입력해주세요. (선택사항)",
   "(Optional) Please enter the promotion code.": "프로모션 코드가 있을 시에 입력해주세요. (선택사항)",
-  "The e-mail address is not valid": "이메일주소가 올바르지 않습니다. (영문 소문자만 입력가능)",
+  "The e-mail address is not valid": "올바른 이메일 형식을 입력해주세요.",
   "Please proceed after ID duplicate check": "아이디 중복 검사 후에 진행해주세요.",
   "Your password must be at least eight characters long. It must contain letters, numbers, and special character such as @#$%!": "비밀번호는 영문, 숫자, 특수문자 3종류를 조합하여 최소 8자리 이상의 길이로 구성하여야합니다.",
   "Thank you for creating an account": "회원가입이 되었습니다.",
@@ -2152,7 +2152,7 @@
   "Enter new user e-mail.": "추가할 유저 이메일을 입력해주세요.",
   "Enter new user password.": "추가할 유저 비밀번호을 설정해주세요.",
   "Enter new user password again.": "설정한 유저 비밀번호를 한번 더 입력해주세요.",
-  "Please enter the password you want to change.": "변경할 비밀번호을 입력해주세요.",
+  "Please enter the password you want to change.": "변경할 비밀번호를 입력해주세요.",
   "Please re-enter the password you want to change.": "변경할 비밀번호를 한번 더 입력해주세요.",
   "Password change is complete. Please log in again.": "비밀번호 변경이 완료되었습니다. 다시 로그인 해주세요.",
   "No user selected.": "선택된 유저가 없습니다.",
@@ -2356,5 +2356,9 @@
   "Triton Config": "Triton 설정",
   "No text detected.": "인식된 텍스트가 없습니다.",
   "required": "필수",
-  "End labeling": "라벨링 종료"
+  "End labeling": "라벨링 종료",
+  "You have already read all notifications.": "이미 모든 알람을 읽으셨습니다.",
+  "Please enter the password for personal information verification.": "개인정보 인증을 위한 비밀번호를 입력해주세요.",
+  "Personal information verification process": "개인정보 인증 절차",
+  "Authentication failed. please try again.": "인증에 실패했습니다. 다시 시도해주세요."
 }

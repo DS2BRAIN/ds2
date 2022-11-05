@@ -78,9 +78,9 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
     });
   };
 
-  const openAddServerModal = () => {
-    setIsAddServerModalOpen(true);
-  };
+  // const openAddServerModal = () => {
+  //   setIsAddServerModalOpen(true);
+  // };
 
   const closeAddServerModal = () => {
     setIsAddServerModalOpen(false);
@@ -170,7 +170,7 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
       <Grid sx={{ p: 1.5 }}>
         {serverDataList ? (
           <>
-            {isStatusZero && (
+            {/* {isStatusZero && (
               <Grid container justifyContent="flex-end">
                 <Grid sx={{ mt: -9, mr: -2 }}>
                   <Button
@@ -183,7 +183,7 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
                   </Button>
                 </Grid>
               </Grid>
-            )}
+            )} */}
             <Grid container rowSpacing={1}>
               {Object.keys(availableGpuListTotal).map((serverName) => {
                 let serverId = serverName;

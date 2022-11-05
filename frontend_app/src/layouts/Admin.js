@@ -69,6 +69,9 @@ const useStyles = makeStyles(styles);
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+const DEFAULT_DELAY_TIME = 1000 * 60 * 15; // 로그인 유지 시간 15분
+// const DEFAULT_DELAY_TIME = 5000; // 테스트용 5초
+
 const Admin = ({ history, ...rest }) => {
   const dispatch = useDispatch();
   const { user, messages } = useSelector(
@@ -82,6 +85,7 @@ const Admin = ({ history, ...rest }) => {
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
   );
+  const [delayTime, setDelayTime] = useState(DEFAULT_DELAY_TIME);
 
   const { t } = useTranslation();
 
@@ -299,6 +303,55 @@ const Admin = ({ history, ...rest }) => {
     </Switch>
   );
 
+  let timerId = null;
+
+  const clearTimer = () => {
+    clearInterval(timerId);
+  };
+
+  const registerTimer = () => {
+    setDelayTime(DEFAULT_DELAY_TIME);
+
+    timerId = setInterval(() => {
+      setDelayTime((prev) => (prev === 0 ? 0 : prev - 1000));
+    }, 1000);
+  };
+
+  function setDefaultDelayTime() {
+    clearTimer();
+    registerTimer();
+  }
+
+  useEffect(() => {
+    const events = ["click", "scroll", "wheel", "keypress"];
+
+    if (Cookies.getCookie("jwt") && Cookies.getCookie("apptoken"))
+      events.map((event) => {
+        document.addEventListener(event, setDefaultDelayTime);
+      });
+
+    return () => {
+      events.map((event) => {
+        document.removeEventListener(event, setDefaultDelayTime);
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    clearTimer();
+
+    if (Cookies.getCookie("jwt") && Cookies.getCookie("apptoken"))
+      registerTimer();
+
+    return () => {
+      clearTimer();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (delayTime === 0) history.push("/signout");
+  }, [delayTime]);
+
   // useEffect(() => {
   //   if (navigator.platform.indexOf("Win") > -1) {
   //     ps = new PerfectScrollbar(mainPanel.current, {
@@ -316,6 +369,18 @@ const Admin = ({ history, ...rest }) => {
   //     window.removeEventListener("resize", resizeFunction);
   //   };
   // }, [mainPanel]);
+
+  useEffect(() => {
+    function onBeforeUnload() {
+      history.push("/signout");
+    }
+
+    window.addEventListener("beforeunload", onBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     console.log("amplitude init");
@@ -424,7 +489,6 @@ const Admin = ({ history, ...rest }) => {
       Cookies.getCookie("apptoken") &&
       Cookies.getCookie("jwt") !== "null" &&
       Cookies.getCookie("apptoken") !== "null";
-
     if (!isLogined) history.push("/signout");
   });
 
