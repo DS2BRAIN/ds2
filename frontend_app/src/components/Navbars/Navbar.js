@@ -57,7 +57,8 @@ export default function Header(props) {
               id="logoToAdmin"
               onClick={() => {
                 // toHome(history);
-                window.location.href = "/admin/train";
+                // window.location.href = "/admin/train";
+                props.history.push("/admin/train");
               }}
               style={{ cursor: "pointer", lineHeight: "60px", marginRight: 48 }}
             >
@@ -67,12 +68,13 @@ export default function Header(props) {
             <NavMenu />
           </Grid>
           <Toolbar disableGutters>
-            <a
+            <span
               key="setting"
-              href="/admin/setting/userinfo"
+              // href="/admin/setting/userinfo"
               className={classes.freeLink}
               id="setting_link"
-              style={{ alignItems: "center" }}
+              style={{ alignItems: "center", cursor: "pointer" }}
+              onClick={() => props.history.push("/admin/setting/userinfo")}
             >
               <AccountCircleOutlinedIcon
                 style={{ marginTop: "3px", marginRight: "10px" }}
@@ -93,8 +95,8 @@ export default function Header(props) {
                   {user?.me.name ? user.me.name : user.me.email}
                 </b>
               )}
-            </a>
-            <NotiPopover />
+            </span>
+            <NotiPopover history={props.history} />
             <IconButton
               id="logoutLink"
               sx={{ ml: 1, mr: 2, mt: 0.25 }}

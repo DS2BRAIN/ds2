@@ -369,18 +369,17 @@ const Admin = ({ history, ...rest }) => {
   //     window.removeEventListener("resize", resizeFunction);
   //   };
   // }, [mainPanel]);
+  // useEffect(() => {
+  //   function onBeforeUnload() {
+  //     history.push("/signout");
+  //   }
 
-  useEffect(() => {
-    function onBeforeUnload() {
-      history.push("/signout");
-    }
+  //   window.addEventListener("beforeunload", onBeforeUnload);
 
-    window.addEventListener("beforeunload", onBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", onBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", onBeforeUnload);
+  //   };
+  // }, []);
 
   useEffect(() => {
     console.log("amplitude init");
@@ -567,6 +566,7 @@ const Admin = ({ history, ...rest }) => {
             handleDrawerToggle={handleDrawerToggle}
             headerHeight={headerHeight}
             containerWidth={containerWidth}
+            history={history}
             {...rest}
           />
         )}
