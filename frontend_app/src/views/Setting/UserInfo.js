@@ -372,6 +372,14 @@ const UserInfo = ({ history }) => {
   };
 
   const verifyPassword = useCallback(() => {
+    if (verificationPassword.trim().length === 0) {
+      dispatch(
+        openErrorSnackbarRequestAction(t("Please enter your password."))
+      );
+
+      return;
+    }
+
     setIsVerificationLoading(true);
 
     const data = {
@@ -388,6 +396,7 @@ const UserInfo = ({ history }) => {
       .catch((e) => {
         console.error(e);
 
+        setVerificationPassword("");
         dispatch(
           openErrorSnackbarRequestAction(
             t("Authentication failed. please try again.")
