@@ -14,6 +14,7 @@ import BrowserError from "layouts/BrowserError.js";
 import EmailConfirm from "layouts/EmailConfirm.js";
 import Page404 from "views/Error/Page404";
 import { IS_ENTERPRISE } from "variables/common";
+import Button from "components/CustomButtons/Button";
 
 import MinimalFeedback from "minimal-feedback";
 
@@ -105,6 +106,8 @@ const App = () => {
 
   return (
     <div id="app_container">
+      <Button style={{ display: "none" }} />
+
       <BrowserRouter>
         <Switch>
           <Route path="/error" component={BrowserError} />
@@ -120,7 +123,7 @@ const App = () => {
         </Switch>
       </BrowserRouter>
 
-      {IS_ENTERPRISE && (
+      {/* {IS_ENTERPRISE && (
         <div id="feedback_container">
           <MinimalFeedback
             id="feedback_box"
@@ -132,7 +135,7 @@ const App = () => {
             style={{ color: "var(--surface1)" }}
           />
         </div>
-      )}
+      )} */}
 
       {isDevEnv && (
         <span style={versionStyle}>{process.env.REACT_APP_GIT_SHA}</span>

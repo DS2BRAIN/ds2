@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import * as api from "controller/api.js";
@@ -30,12 +30,14 @@ import {
 import { CircularProgress, Container, Grid } from "@mui/material";
 import CheckCircleOutlinedIcon from "@material-ui/icons/CheckCircleOutlined";
 import CloseIcon from "@material-ui/icons/Close";
+import { openSuccessSnackbarRequestAction } from "redux/reducers/messages.js";
 
 const NotiList = ({ history }) => {
   const classes = currentTheme();
   const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
+  const { user } = useSelector((state) => ({ user: state.user }), []);
 
   const [isLoading, setIsLoading] = useState(true);
   const [asyncTasks, setAsyncTasks] = useState(null);
@@ -128,9 +130,16 @@ const NotiList = ({ history }) => {
     }
   };
 
-  const onMarkedAsAll = async () => {
-    await dispatch(postChecAllkAsynctasksRequestAction());
-  };
+  const onMarkedAsAll = useCallback(async () => {
+    if (user.asynctasks?.length > 0)
+      await dispatch(postChecAllkAsynctasksRequestAction());
+    else
+      dispatch(
+        openSuccessSnackbarRequestAction(
+          t("You have already read all notifications.")
+        )
+      );
+  }, [user.asynctasks]);
 
   const onSetAsynctaskType = (e) => {
     setAsynctaskType(e.target.value);
