@@ -27,7 +27,9 @@ manageExternalAiClass = ManageExternalAi()
 import os
 from src.managePredict import ManagePredict
 predictClass = ManagePredict()
-
+SevMain = None
+if os.path.exists('./src/training/aistore_config.py'):
+    from src.training.predictSevMain import SevMain
 
 class PredictObject(BaseModel):
     modelid: str = None
@@ -249,4 +251,14 @@ def predictDevelopedAiModel(response: Response, apptoken: str = Form(None), mode
             "message": "예측하고자 하는 데이터를 다시 확인해주십시오."
         }
     response.status_code, result = manageExternalAiClass.predictByDevelopedModel(apptoken, modelId, file, textdata, modeltoken=modeltoken)
+    return result
+
+@router.post("/predict-sev/")
+def predictSev(response: Response, et: str = Form(...), el: str = Form(None),
+               fi: UploadFile = File(None), rf: UploadFile = File(None), hd: UploadFile = File(None),
+               gcoa: UploadFile = File(None), hdi: UploadFile = File(None), mt: UploadFile = File(None),
+               rao: UploadFile = File(None), raoo: UploadFile = File(None), rta: UploadFile = File(None)):
+
+    response.status_code, result = SevMain().predict_sev(et, el, fi, rf, hd, gcoa, hdi, mt, rao, raoo, rta)
+
     return result
