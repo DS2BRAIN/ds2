@@ -599,6 +599,14 @@ export default function SignUp() {
 
       const inputEmailValue = (e) => {
         e.preventDefault();
+        const koreanRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
+        if (koreanRegExp.test(e.target.value)) {
+          setSnackbarOption(
+            "error",
+            t("Please enter a valid email. (Only English input is allowed)")
+          );
+          return;
+        }
         setEmail(e.target.value);
         setIsAbleEmail(false); // 중복 확인한 후에 아이디 값 바꾸면 다시 IsAbleEmail False로 바꾸기
       };
