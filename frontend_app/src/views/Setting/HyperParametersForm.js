@@ -402,7 +402,9 @@ const HyperParametersForm = ({
         (Number(value) < info[key].max ||
           (info[key].between && Number(value) <= info[key].max))) ||
       (valueType === "Max" && Number(value) < info[key].range?.min) ||
-      (valueType === "Min" && Number(value) > info[key].range?.max);
+      (valueType === "Max" && Number(value) < info[key]?.min) ||
+      (valueType === "Min" && Number(value) > info[key].range?.max) ||
+      (valueType === "Min" && Number(value) > info[key]?.max);
 
     if (notAllowedRange && value) {
       dispatch(
@@ -412,13 +414,12 @@ const HyperParametersForm = ({
         )
       );
 
-      const tmpValue = info[key].range?.min
-        ? info[key].range.min
-        : typeof info[key].min === "number"
-        ? info[key].between
-          ? info[key].min + 0.1
-          : info[key].min
-        : 0;
+      const tmpValue =
+        typeof info[key].min === "number"
+          ? info[key].between
+            ? info[key].min + 0.1
+            : info[key].min
+          : 0;
 
       setAlgorithmValue(option, key, valueType, tmpValue);
     }
