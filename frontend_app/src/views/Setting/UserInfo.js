@@ -918,7 +918,7 @@ const UserInfo = ({ history }) => {
                       className={classes.textField}
                     />
                   </Grid>
-                  {IS_ENTERPRISE ? (
+                  {IS_ENTERPRISE && !user.me?.is_admin ? (
                     <>
                       <Grid item xs={4}>
                         {t("Password")}
