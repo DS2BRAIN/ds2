@@ -254,10 +254,12 @@ def predictDevelopedAiModel(response: Response, apptoken: str = Form(None), mode
     return result
 
 @router.post("/predict-sev/")
-def predictSev(response: Response, et: str = Form(...), el: str = Form(None),
-               fi: UploadFile = File(None), rf: UploadFile = File(None), hd: UploadFile = File(None),
+def predictSev(response: Response, et: str = Form(...), el: float = Form(None),
+               fi: UploadFile = File(None),
+               rf: UploadFile = File(None), hd: UploadFile = File(None),
                gcoa: UploadFile = File(None), hdi: UploadFile = File(None), mt: UploadFile = File(None),
-               rao: UploadFile = File(None), raoo: UploadFile = File(None), rta: UploadFile = File(None)):
+               rao: UploadFile = File(None), raoo: UploadFile = File(None), rta: UploadFile = File(None)
+               ):
 
     response.status_code, result = SevMain().predict_sev(et, el, fi, rf, hd, gcoa, hdi, mt, rao, raoo, rta)
 
