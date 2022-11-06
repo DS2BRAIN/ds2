@@ -64,6 +64,9 @@ export const convertToLocalDateStr = (reqDate) => {
     ? new Date(reqDate)
     : new Date(reqDate + "Z");
 
+  // gs 인증용 서버 시간 더블 로컬라이징 임시 해제
+  createdDate.setHours(createdDate.getHours() - 9);
+
   let dataSet = {
     year: createdDate.getFullYear(),
     month: createdDate.getMonth() + 1,
@@ -189,9 +192,10 @@ export const getLabelAppUrl = (category) => {
   }
 
   if (window.location.href.indexOf("https") > -1) {
-    labelAppUrl = category === "object_detection"
-      ? window.location.origin.replaceAll("console", "labelapp") + "/"
-      : window.location.origin + "/";
+    labelAppUrl =
+      category === "object_detection"
+        ? window.location.origin.replaceAll("console", "labelapp") + "/"
+        : window.location.origin + "/";
   }
 
   return labelAppUrl;

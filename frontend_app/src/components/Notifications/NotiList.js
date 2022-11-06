@@ -52,6 +52,10 @@ const NotiList = ({ history }) => {
     getAsynctasksAll(alarmListPage, rowsPerAlarmListPage);
   }, []);
 
+  useEffect(() => {
+    getAsynctasksAll(alarmListPage, rowsPerAlarmListPage);
+  }, [user.isAsynctaskDone]);
+
   const getAsynctasksAll = (start, count, rawType) => {
     const type = rawType ? rawType : asynctaskType;
     const asynctaskInfo = { start: start, count: count, tasktype: type };
