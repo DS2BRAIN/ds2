@@ -399,8 +399,8 @@ const HyperParametersForm = ({
           (info[key].between && Number(value) <= info[key].min))) ||
       (typeof info[key].max === "number" &&
         valueType === "Max" &&
-        (Number(value) < info[key].max ||
-          (info[key].between && Number(value) <= info[key].max))) ||
+        (Number(value) > info[key].max ||
+          (info[key].between && Number(value) >= info[key].max))) ||
       (valueType === "Max" && Number(value) < info[key].range?.min) ||
       (valueType === "Max" && Number(value) < info[key]?.min) ||
       (valueType === "Min" && Number(value) > info[key].range?.max) ||
