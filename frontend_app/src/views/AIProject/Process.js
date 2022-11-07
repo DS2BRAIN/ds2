@@ -3271,7 +3271,7 @@ const Process = (props) => {
                           onSetTrainingDevice("gpu", projects.project)}
                         <GridItem xs={12} style={{ marginTop: "16px" }}>
                           <p className={classes.text87size16}>
-                            {t("Training Method")}
+                            {t("Training method")}
                             {handleHelpIconTip("method")}
                           </p>
                           <FormControl className={classes.formControl}>
