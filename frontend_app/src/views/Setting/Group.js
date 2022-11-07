@@ -504,11 +504,10 @@ const Group = () => {
         className={classes.settingTitle}
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           alignItems: "center",
         }}
       >
-        <div>{t("Groups")}</div>
         <Button id="add_group_btn" shape="greenOutlined" onClick={onAddGroup}>
           {t("Add Group")}
         </Button>
@@ -619,7 +618,7 @@ const Group = () => {
                 style={{ width: "30%" }}
                 align="center"
               >
-                <b>{t("Actions")}</b>
+                {/* <b>{t("Actions")}</b> */}
               </TableCell>
             </TableRow>
           </TableHead>

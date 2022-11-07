@@ -39,7 +39,7 @@ const LabelMember = ({ history }) => {
   const TABLE_HEADS = [
     { value: "No.", width: "10%" },
     { value: "Group Name", width: "25%" },
-    { value: "Account(email)", width: "30%" },
+    { value: "Email", width: "30%" },
     { value: "Role", width: "20%" },
     {
       value: !labelprojects.projectDetail?.isShared ? "Delete" : "",

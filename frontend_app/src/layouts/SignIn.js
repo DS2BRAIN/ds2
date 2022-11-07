@@ -484,7 +484,8 @@ export default function SignIn() {
               color: currentThemeColor.textWhite,
             }}
           >
-            {t("All processes of building your customized AI")},<br />
+            {t("All processes of building your customized AI")}
+            <br />
           </div>
           <div
             style={{

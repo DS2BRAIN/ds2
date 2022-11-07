@@ -350,6 +350,7 @@ const AutoMLProject = ({ history, route }) => {
         };
 
         if (type === "option") cont = t(PREFERRED_OPTION[cont]);
+        else if (type === "role") cont = t(cont);
         else if (type === "trainingMethod") cont = t(TRAINING_METHOD[cont]);
         else if (type === "created_at")
           cont = cont ? cont.substring(0, 10) : "";
