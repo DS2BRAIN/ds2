@@ -740,9 +740,7 @@ const UserInfo = ({ history }) => {
         disableGutters
         className={classes.mainCard}
       >
-        <Grid className={classes.settingTitle} sx={{ mt: 7, mb: 3.5 }}>
-          Account Info
-        </Grid>
+        <Grid className={classes.settingTitle} sx={{ mt: 7, mb: 3.5 }}></Grid>
         <Grid container rowSpacing={3} sx={{ px: 3, pb: 3 }}>
           {user.me && user.me.name && (
             <Grid
