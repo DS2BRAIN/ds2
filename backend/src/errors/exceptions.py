@@ -444,9 +444,9 @@ class BlockUserEx(APIException):
     def __init__(self, email: int = None, ex: Exception = None):
         super().__init__(
             status_code=StatusCode.HTTP_503,
-            message="block 상태인 회원입니다. 로그인이 제한됩니다.",
-            message_en="You are a member in block status. Login is restricted.",
-            detail=f"block 상태인 회원입니다. 로그인이 제한됩니다. | UserEmail : {email}",
+            message="비밀번호를 5회 이상 잘못 입력하여 서비스를 이용하실 수 없습니다. contact@dslab.global 으로 문의하여 재설정 후 다시 로그인해주세요.",
+            message_en="You cannot use the service by entering the wrong password more than 5 times. Please contact us at contact@dslab.global to reset and log in again.",
+            detail=f"비밀번호를 5회 이상 잘못 입력하여 서비스를 이용하실 수 없습니다. contact@dslab.global 으로 문의하여 재설정 후 다시 로그인해주세요. | UserEmail : {email}",
             code=f"{StatusCode.HTTP_503}{'1'.zfill(4)}",
             ex=ex,
         )
