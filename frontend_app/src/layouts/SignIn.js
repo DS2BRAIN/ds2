@@ -180,6 +180,7 @@ export default function SignIn() {
                   lang
                 )
               );
+              setPassword("");
             }
           } else {
             setSnackbarOption(
