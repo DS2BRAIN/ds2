@@ -2310,7 +2310,7 @@ const API = React.memo(
 
     const handleSelectedImageClass = (preVal) => {
       if (preVal) return preVal;
-      else if (predictedInfo) {
+      else if (predictedValue) {
         let topValueLabel = "";
         let topValue = 0;
         predictedValue.forEach((data) => {
