@@ -9,7 +9,7 @@ import {
 } from "redux/reducers/user.js";
 
 import Copyright from "components/Footer/Copyright";
-import GuidePDF from "assets/DS2.ai(v1.0)_사용자_취급_설명서.pdf";
+import GuidePDF from "assets/DS2.ai(v1.0)_사용자_취급_설명서(11.07).pdf";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
