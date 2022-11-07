@@ -1262,6 +1262,7 @@ class usersTable(MySQLModel):
     tradier_name = pw.CharField(null=True)
     otp_key = pw.CharField(null=True)
     isAgreedBehaviorStatistics = pw.BooleanField(null=True)
+    number_of_login_attempts = pw.IntegerField(null=0)
 
 class userhistoriesTable(MySQLModel):
     class Meta:
