@@ -20,6 +20,7 @@ import classnames from "classnames"
 import { useTranslation } from "react-i18next"
 import Language from "../lang/Language"
 import ExitToAppIcon from "@material-ui/icons/ExitToApp"
+import SaveAltIcon from "@material-ui/icons/SaveAlt"
 
 const useStyles = makeStyles(styles)
 
@@ -137,7 +138,7 @@ export const Header = ({
             action="save"
             name={`${t("저장")} (s)`}
             id="saveBtn"
-            Icon={ExitIcon}
+            Icon={SaveAltIcon}
           />
           <HeaderButton
             images={images}
