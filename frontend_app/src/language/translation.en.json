@@ -1319,6 +1319,8 @@
   "Team": "Team",
   "Group": "Group",
   "Role": "Role",
+  "admin": "admin",
+  "member": "member",
   "Click the Save VOC button to save the labeling information in a XML format.": "Click the Save VOC button to save the labeling information in a XML format.",
   "Click the Save button to save the labeling information in a file format.": "Click the Save button to save the labeling information in a file format.",
   "Project Name": "Project Name",

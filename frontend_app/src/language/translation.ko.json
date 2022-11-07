@@ -1268,6 +1268,8 @@
   "Team": "팀",
   "Group": "그룹",
   "Role": "역할",
+  "admin": "관리자",
+  "member": "멤버",
   "Click the Save VOC button to save the labeling information in a XML format.": "VOC 저장 버튼을 클릭하면 라벨링 정보를 XML 파일로 저장할 수 있습니다.",
   "Click the Save button to save the labeling information in a file format.": "저장 버튼을 클릭하면 라벨링 정보를 파일로 저장할 수 있습니다.",
   "Project Name": "프로젝트 이름",
