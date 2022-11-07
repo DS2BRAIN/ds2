@@ -85,7 +85,7 @@ const Manager = ({ history }) => {
       sorting: true,
     },
     {
-      name: "email",
+      name: "Email",
       value: "email",
       width: "40%",
       align: "left",

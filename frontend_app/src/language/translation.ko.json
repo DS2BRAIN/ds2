@@ -2143,6 +2143,7 @@
   "User management": "관리자 모드",
   "name": "이름",
   "User name": "유저명",
+  "Email": "이메일",
   "Delete user": "유저 삭제",
   "sort by creation date": "생성일 순",
   "search e-mail": "이메일 검색",
