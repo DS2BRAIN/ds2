@@ -137,9 +137,7 @@ const App = () => {
         </div>
       )} */}
 
-      {isDevEnv && (
-        <span style={versionStyle}>{process.env.REACT_APP_GIT_SHA}</span>
-      )}
+      <span style={versionStyle}>{"v1.0"}</span>
     </div>
   );
 };

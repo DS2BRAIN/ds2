@@ -305,12 +305,10 @@ const NotiList = ({ history }) => {
         sx={{ mt: 5, mb: 4 }}
       >
         <Grid item>
-          {"Notifications"}
           <Button
             id="check_notiallread_btn"
             shape="greenOutlined"
             size="small"
-            sx={{ ml: 1.5 }}
             onClick={onMarkedAsAll}
           >
             {t("Check as full read")}
@@ -419,7 +417,7 @@ const NotiList = ({ history }) => {
                       style={{ width: "15%" }}
                       align="center"
                     >
-                      <b style={{ color: "var(--textWhite87)" }}>Action</b>
+                      {/* <b style={{ color: "var(--textWhite87)" }}>Action</b> */}
                     </TableCell>
                   </TableRow>
                 </TableHead>
