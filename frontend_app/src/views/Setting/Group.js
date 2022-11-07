@@ -618,7 +618,7 @@ const Group = () => {
                 style={{ width: "30%" }}
                 align="center"
               >
-                <b>{t("Actions")}</b>
+                {/* <b>{t("Actions")}</b> */}
               </TableCell>
             </TableRow>
           </TableHead>

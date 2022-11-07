@@ -187,7 +187,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
     { value: "No.", width: "10%" },
     { value: "Notification content", width: "40%" },
     { value: "Date created", width: "25%" },
-    { value: "action", width: "25%" },
+    { value: "", width: "25%" },
   ];
 
   const tableBodys = [

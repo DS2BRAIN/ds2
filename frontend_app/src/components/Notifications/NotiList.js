@@ -417,7 +417,7 @@ const NotiList = ({ history }) => {
                       style={{ width: "15%" }}
                       align="center"
                     >
-                      <b style={{ color: "var(--textWhite87)" }}>Action</b>
+                      {/* <b style={{ color: "var(--textWhite87)" }}>Action</b> */}
                     </TableCell>
                   </TableRow>
                 </TableHead>
