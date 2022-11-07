@@ -665,16 +665,20 @@ const Manager = ({ history }) => {
   };
 
   return (
-    <Container component="main" maxWidth={false} className={classes.mainCard}>
+    <Container
+      component="main"
+      maxWidth={false}
+      disableGutters
+      className={classes.mainCard}
+    >
       <div
         className={classes.settingTitle}
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           alignItems: "center",
         }}
       >
-        <div>{"Users"}</div>
         <Button
           id="addUserBtn"
           shape="greenOutlined"

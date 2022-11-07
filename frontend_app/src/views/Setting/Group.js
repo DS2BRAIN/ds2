@@ -504,11 +504,10 @@ const Group = () => {
         className={classes.settingTitle}
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           alignItems: "center",
         }}
       >
-        <div>{t("Groups")}</div>
         <Button id="add_group_btn" shape="greenOutlined" onClick={onAddGroup}>
           {t("Add Group")}
         </Button>
