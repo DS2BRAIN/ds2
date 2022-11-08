@@ -240,13 +240,13 @@ const LabelprojectList = ({ history }) => {
   };
 
   const tableHeads = [
-    // { value: "No.", width: "10%", name: "" },
-    { value: "Project name", width: "40%", name: "name" },
-    { value: "Role", width: "10%", name: "role" },
-    { value: "Type", width: "20%", name: "workapp" },
-    { value: "Date created", width: "10%", name: "created_at" },
-    { value: "Date updated", width: "10%", name: "updated_at" },
-    { value: "Status", width: "10%", name: "status" },
+    // { value: "No.", width: "10%", type: "" },
+    { value: "Project name", width: "40%", type: "name" },
+    { value: "Role", width: "10%", type: "role" },
+    { value: "Type", width: "20%", type: "workapp" },
+    { value: "Date created", width: "10%", type: "created_at" },
+    { value: "Date updated", width: "10%", type: "updated_at" },
+    { value: "Status", width: "10%", type: "status" },
   ];
 
   const tableBodys = [
@@ -292,11 +292,11 @@ const LabelprojectList = ({ history }) => {
                     cursor: tableHead.value !== "No." ? "pointer" : "default",
                   }}
                   onClick={() =>
-                    tableHead.value !== "No." && onSetSortValue(tableHead.name)
+                    tableHead.value !== "No." && onSetSortValue(tableHead.type)
                   }
                 >
                   <div className={classes.tableHeader}>
-                    {sortingValue === tableHead.name &&
+                    {sortingValue === tableHead.type &&
                       (!isSortDesc ? (
                         <ArrowUpwardIcon fontSize="small" />
                       ) : (
@@ -335,46 +335,50 @@ const LabelprojectList = ({ history }) => {
                   {labelprojects.totalLength -
                     (projectRowsPerPage * projectPage + idx)}
                 </TableCell> */}
-                {tableBodys.map((tableBody, idx) => (
-                  <TableCell
-                    key={idx}
-                    className={classes.tableRowCell}
-                    align="center"
-                    onClick={() => goProjectDetail(project)}
-                  >
-                    <div
-                      id="labeling_project_list"
-                      style={{ wordBreak: "break-all" }}
+                {tableHeads.map((tableHead, idx) => {
+                  let headType = tableHead.type;
+
+                  return (
+                    <TableCell
+                      key={idx}
+                      className={classes.tableRowCell}
+                      align="center"
+                      onClick={() => goProjectDetail(project)}
                     >
-                      {tableBody === "created_at" ||
-                      tableBody === "updated_at" ? (
-                        project[tableBody] ? (
-                          project[tableBody]?.substring(0, 10)
+                      <div
+                        id="labeling_project_list"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {headType === "created_at" ||
+                        headType === "updated_at" ? (
+                          project[headType] ? (
+                            project[headType]?.substring(0, 10)
+                          ) : (
+                            "-"
+                          )
+                        ) : headType === "status" ? (
+                          <span
+                            style={
+                              project[headType] === 1
+                                ? { color: "#1BC6B4" }
+                                : project[headType] === 99
+                                ? { color: "#BD2020" }
+                                : project[headType] === 100
+                                ? { color: "#0A84FF" }
+                                : null
+                            }
+                          >
+                            {statusText[project[headType]]
+                              ? "⦁ " + t(statusText[project[headType]])
+                              : "-"}
+                          </span>
                         ) : (
-                          "-"
-                        )
-                      ) : tableBody === "status" ? (
-                        <span
-                          style={
-                            project[tableBody] === 1
-                              ? { color: "#1BC6B4" }
-                              : project[tableBody] === 99
-                              ? { color: "#BD2020" }
-                              : project[tableBody] === 100
-                              ? { color: "#0A84FF" }
-                              : null
-                          }
-                        >
-                          {statusText[project[tableBody]]
-                            ? "⦁ " + t(statusText[project[tableBody]])
-                            : "-"}
-                        </span>
-                      ) : (
-                        t(project[tableBody] ? project[tableBody] : "-")
-                      )}
-                    </div>
-                  </TableCell>
-                ))}
+                          t(project[headType] ? project[headType] : "-")
+                        )}
+                      </div>
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))}
           </TableBody>
