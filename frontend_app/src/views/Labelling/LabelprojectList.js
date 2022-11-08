@@ -337,6 +337,32 @@ const LabelprojectList = ({ history }) => {
                 </TableCell> */}
                 {tableHeads.map((tableHead, idx) => {
                   let headType = tableHead.type;
+                  let value = "";
+                  let cont = "";
+                  let color = "";
+
+                  let isTypeDate =
+                    headType === "created_at" || headType === "updated_at";
+                  let isTypeStatus = headType === "status";
+
+                  if (project[headType]) {
+                    value = project[headType];
+                    if (isTypeDate) cont = value.substring(0, 10);
+                    if (isTypeStatus) {
+                      console.log(value);
+                      if (value === 1) color = "#1BC6B4";
+                      else if (value === 99) color = "#BD2020";
+                      else if (value === 100) color = "#0A84FF";
+                      cont = (
+                        <span style={{ color: color }}>{`⦁ ${t(
+                          statusText[value]
+                        )}`}</span>
+                      );
+                    }
+                    if (!cont) cont = t(value);
+                  }
+
+                  if (!cont) cont = "-";
 
                   return (
                     <TableCell
@@ -349,32 +375,7 @@ const LabelprojectList = ({ history }) => {
                         id="labeling_project_list"
                         style={{ wordBreak: "break-all" }}
                       >
-                        {headType === "created_at" ||
-                        headType === "updated_at" ? (
-                          project[headType] ? (
-                            project[headType]?.substring(0, 10)
-                          ) : (
-                            "-"
-                          )
-                        ) : headType === "status" ? (
-                          <span
-                            style={
-                              project[headType] === 1
-                                ? { color: "#1BC6B4" }
-                                : project[headType] === 99
-                                ? { color: "#BD2020" }
-                                : project[headType] === 100
-                                ? { color: "#0A84FF" }
-                                : null
-                            }
-                          >
-                            {statusText[project[headType]]
-                              ? "⦁ " + t(statusText[project[headType]])
-                              : "-"}
-                          </span>
-                        ) : (
-                          t(project[headType] ? project[headType] : "-")
-                        )}
+                        {cont}
                       </div>
                     </TableCell>
                   );
