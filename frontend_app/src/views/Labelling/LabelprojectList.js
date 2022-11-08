@@ -273,15 +273,6 @@ const LabelprojectList = ({ history }) => {
     { value: "Status", width: "10%", type: "status" },
   ];
 
-  const tableBodys = [
-    "name",
-    "role",
-    "workapp",
-    "created_at",
-    "updated_at",
-    "status",
-  ];
-
   const statusText = {
     1: "Creating",
     99: "Error",
