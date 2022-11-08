@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import {
   getLabelProjectsRequestAction,
   stopLabelProjectsLoadingRequestAction,
-  setObjectlistsSearchedValue,
 } from "redux/reducers/labelprojects";
 import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
 import {
@@ -59,6 +58,8 @@ const LabelprojectList = ({ history }) => {
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
+  const [selectedProjectIdList, setSelectedProjectIdList] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
   const [projectPage, setProjectPage] = useState(0);
   const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
   const [searchedValue, setSearchedValue] = useState("");
@@ -91,6 +92,11 @@ const LabelprojectList = ({ history }) => {
       setIsProjectRequested(false);
     }
   }, [isProjectRequested]);
+
+  useEffect(() => {
+    if (labelprojects.projects?.length)
+      checkNewPageAllSelected(labelprojects.projects, selectedProjectIdList);
+  }, [labelprojects.projects, selectedProjectIdList]);
 
   useEffect(() => {
     let urlSP = urlSearchParams;
@@ -129,12 +135,6 @@ const LabelprojectList = ({ history }) => {
   }, [messages.shouldCloseModal]);
 
   useEffect(() => {
-    if (labelprojects.projects) {
-      setProjectSettings();
-    }
-  }, [labelprojects.projects]);
-
-  useEffect(() => {
     setIsLoading(labelprojects.isLoading);
   }, [labelprojects.isLoading]);
 
@@ -159,28 +159,52 @@ const LabelprojectList = ({ history }) => {
     history.push(urlPath + "?" + searchPar);
   };
 
-  const setProjectSettings = () => {
-    setProjectCheckedValue({ all: false });
-    for (let i = 0; i < labelprojects.projects.length; i++) {
-      const value = labelprojects.projects[i].id;
-      setProjectCheckedValue((prevState) => {
-        return { ...prevState, [value]: false };
-      });
-    }
-  };
-  const onSetProjectCheckedValue = (value) => {
-    setProjectCheckedValue((prevState) => {
-      return { ...prevState, all: false, [value]: !projectCheckedValue[value] };
+  const checkNewPageAllSelected = (projects, selIdList) => {
+    let isAllSelected = true;
+    if (selIdList.length < projects.length) isAllSelected = false;
+    projects.forEach((data) => {
+      if (!selIdList.includes(data.id)) isAllSelected = false;
     });
+    setAllSelected(isAllSelected);
   };
-  const onSetProjectCheckedValueAll = () => {
-    const result = projectCheckedValue["all"] ? false : true;
-    const tmpObject = { all: result };
-    for (let i = 0; i < labelprojects.projects.length; i++) {
-      const id = labelprojects.projects[i].id;
-      tmpObject[id] = result;
+
+  const onChangeSelectedProject = (projectId) => {
+    let idList = [...selectedProjectIdList];
+    let idIndex = idList.indexOf(projectId);
+
+    if (idIndex === -1) {
+      idList.push(projectId);
+    } else {
+      idList.splice(idIndex, 1);
     }
-    setProjectCheckedValue(tmpObject);
+
+    setSelectedProjectIdList(idList);
+  };
+
+  const onChangeSelectedAll = () => {
+    let isChecked = !allSelected;
+    let idList = [...selectedProjectIdList];
+
+    labelprojects.projects.forEach((project) => {
+      let projectId = project.id;
+      let idIndex = idList.indexOf(projectId);
+
+      if (isChecked) {
+        if (idIndex === -1) {
+          idList.push(projectId);
+        } else {
+          idList.splice(idIndex, 1);
+          idList.push(projectId);
+        }
+      } else {
+        if (idIndex > -1) {
+          idList.splice(idIndex, 1);
+        }
+      }
+    });
+
+    setAllSelected(isChecked);
+    setSelectedProjectIdList(idList);
   };
 
   const onSetSortValue = async (value) => {
@@ -277,8 +301,8 @@ const LabelprojectList = ({ history }) => {
               >
                 <Checkbox
                   value="all"
-                  checked={projectCheckedValue["all"]}
-                  onChange={onSetProjectCheckedValueAll}
+                  checked={allSelected}
+                  onChange={onChangeSelectedAll}
                 />
               </TableCell>
               {tableHeads.map((tableHead, idx) => (
@@ -323,8 +347,8 @@ const LabelprojectList = ({ history }) => {
                 <TableCell className={classes.tableRowCell} align="center">
                   <Checkbox
                     value={project.id}
-                    checked={projectCheckedValue[project.id] ? true : false}
-                    onChange={() => onSetProjectCheckedValue(project.id)}
+                    checked={selectedProjectIdList.includes(project.id)}
+                    onChange={() => onChangeSelectedProject(project.id)}
                   />
                 </TableCell>
                 {/* <TableCell
