@@ -451,7 +451,7 @@ const Dataconnector = ({ history }) => {
                 align="center"
                 width={tableHead.width}
                 style={{
-                  cursor: tableHead.value !== "No." ? "pointer" : "default",
+                  cursor: tableHead.type !== "dataNum" ? "pointer" : "default",
                 }}
                 onClick={() =>
                   tableHead.type !== "dataNum" &&
