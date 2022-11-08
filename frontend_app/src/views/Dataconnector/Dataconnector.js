@@ -317,11 +317,7 @@ const Dataconnector = ({ history }) => {
     { value: "Date created", width: "15%", type: "created_at" },
     { value: "Status", width: "10%", type: "status" },
   ];
-  const dataStatusToText = {
-    1: { name: "Uploading", color: "var(--secondary1)" },
-    99: { name: "Error", color: "var(--error)" },
-    100: { name: "Completed", color: "var(--primary1)" },
-  };
+
   const privateDataTable = () => {
     const privateDataTableBody = (priDataArr) =>
       priDataArr.map((data, idx) => {
@@ -370,54 +366,57 @@ const Dataconnector = ({ history }) => {
                 />
               </TableCell>
               {privateTableHeads.map((privateHead) => {
-                let tmpType = privateHead.type;
-                let rawValue = data[tmpType];
-                let tmpValue = "";
-                let isStatus = false;
-                let isProgressBar = false;
+                let headType = privateHead.type;
+                let rawValue = data[headType];
 
-                if (tmpType === "dataNum") tmpValue = dataNum;
-                else if (tmpType === "dataconnectortype")
-                  tmpValue = rawValue.dataconnectortypeName;
-                else if (tmpType === "hasLabelData")
-                  tmpValue = rawValue ? t("Possible") : t("Impossible");
-                else if (tmpType === "created_at")
-                  tmpValue = rawValue?.substring(0, 10);
-                else if (tmpType === "status") {
-                  isStatus = true;
-                  if (rawValue === 1) {
-                    isProgressBar = true;
-                    tmpValue = data.progress;
-                  } else tmpValue = rawValue;
-                } else tmpValue = rawValue;
+                const renderContent = (type, value) => {
+                  const dataStatusToText = {
+                    1: { name: "Uploading", color: "var(--secondary1)" },
+                    99: { name: "Error", color: "var(--error)" },
+                    100: { name: "Completed", color: "var(--primary1)" },
+                  };
+
+                  switch (type) {
+                    case "dataNum":
+                      return dataNum;
+                    case "dataconnectortype":
+                      if (value) return value.dataconnectortypeName;
+                    case "hasLabelData":
+                      return value ? t("Possible") : t("Impossible");
+                    case "created_at":
+                      if (value) return value.substring(0, 10);
+                    case "status":
+                      if (value === 1)
+                        return (
+                          <LinearProgress
+                            className={classes.linearProgressLightBackground}
+                            variant="determinate"
+                            value={dataProgress ? dataProgress : 0}
+                          />
+                        );
+                      else
+                        return (
+                          <span
+                            className="nowrap"
+                            style={{ color: dataStatusToText[value].color }}
+                          >
+                            {`⦁ ${t(dataStatusToText[value].name)}`}
+                          </span>
+                        );
+                    default:
+                      if (value) return t(value);
+                      else return "-";
+                  }
+                };
 
                 return (
                   <TableCell
-                    key={`datatablecell_page${datatablePage}row${idx}_${tmpType}`}
-                    id={`datatablecell_page${datatablePage}row${idx}_${tmpType}`}
+                    key={`datatablecell_page${datatablePage}row${idx}_${headType}`}
+                    id={`datatablecell_page${datatablePage}row${idx}_${headType}`}
                     className={classes.tableRowCell}
                     align="center"
                   >
-                    {isStatus ? (
-                      isProgressBar ? (
-                        <LinearProgress
-                          className={classes.linearProgressLightBackground}
-                          variant="determinate"
-                          value={dataProgress ? dataProgress : 0}
-                        />
-                      ) : (
-                        <span
-                          className="nowrap"
-                          style={{ color: dataStatusToText[tmpValue].color }}
-                        >
-                          {"⦁ " + t(dataStatusToText[tmpValue].name)}
-                        </span>
-                      )
-                    ) : tmpValue ? (
-                      tmpValue
-                    ) : (
-                      "-"
-                    )}
+                    {renderContent(headType, rawValue)}
                   </TableCell>
                 );
               })}
@@ -455,7 +454,7 @@ const Dataconnector = ({ history }) => {
                   cursor: tableHead.value !== "No." ? "pointer" : "default",
                 }}
                 onClick={() =>
-                  tableHead.value !== "No." &&
+                  tableHead.type !== "dataNum" &&
                   onSetSortDataValue(tableHead.type)
                 }
               >
