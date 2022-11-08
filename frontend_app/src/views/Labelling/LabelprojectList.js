@@ -99,6 +99,13 @@ const LabelprojectList = ({ history }) => {
   }, [labelprojects.projects, selectedProjectIdList]);
 
   useEffect(() => {
+    if (labelprojects.isDeleteLabelprojectsSuccess) {
+      setSelectedProjectIdList([]);
+      labelprojects.isDeleteLabelprojectsSuccess = false;
+    }
+  }, [labelprojects.isDeleteLabelprojectsSuccess]);
+
+  useEffect(() => {
     let urlSP = urlSearchParams;
     let searchVal = searchedValue;
     if (searchVal) {
@@ -245,14 +252,9 @@ const LabelprojectList = ({ history }) => {
   };
 
   const onAskDeleteProjects = () => {
-    const deleteFilesArr = [];
-    for (let file in projectCheckedValue) {
-      if (file !== "all" && projectCheckedValue[file])
-        deleteFilesArr.push(file);
-    }
     dispatch(
       askDeleteLabelProjectReqeustAction({
-        labelProjects: deleteFilesArr,
+        labelProjects: selectedProjectIdList,
         sortInfo: {
           sorting: sortingValue,
           count: projectRowsPerPage,
@@ -412,7 +414,7 @@ const LabelprojectList = ({ history }) => {
               id="deleteProject"
               shape="redOutlined"
               size="sm"
-              disabled={!Object.values(projectCheckedValue).includes(true)}
+              disabled={selectedProjectIdList.length === 0}
               style={{
                 marginTop: ".2rem",
                 zIndex: "5",
