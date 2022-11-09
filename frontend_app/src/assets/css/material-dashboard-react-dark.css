@@ -702,7 +702,7 @@ form > svg > path {
 .Mui-disabled {
   color: var(--textMediumGrey) !important;
 }
-#label_project_name.Mui-disabled, 
+#label_project_name.Mui-disabled,
 #label_project_detail.Mui-disabled {
   color: var(--textWhite87) !important;
 }
@@ -993,9 +993,6 @@ td {
   color: var(--textWhite6) !important;
 }
 #lastTableCell {
-  border: none !important;
-}
-#groupTableBody > tr:last-child > td {
   border: none !important;
 }
 .MuiInputBase-multiline {

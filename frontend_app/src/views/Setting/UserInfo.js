@@ -740,61 +740,80 @@ const UserInfo = ({ history }) => {
         disableGutters
         className={classes.mainCard}
       >
-        <Grid className={classes.settingTitle} sx={{ mt: 7, mb: 3.5 }}></Grid>
-        <Grid container rowSpacing={3} sx={{ px: 3, pb: 3 }}>
-          {user.me && user.me.name && (
-            <Grid
-              item
-              xs={12}
-              id="userName"
-              className={classes.accountNameTitle}
+        <Grid container justifyContent="flex-end">
+          {IS_ENTERPRISE ? null : (
+            <Button
+              id="change_password_btn"
+              shape="whiteOutlined"
+              onClick={() => {
+                openPasswordModal();
+              }}
             >
-              {user.me.name ? user.me.name : t("name")}
+              {t("Change password")}
+            </Button>
+          )}
+          <Button
+            id="change_userinfo_btn"
+            shape="whiteOutlined"
+            sx={{ ml: 1.5 }}
+            onClick={openInfoModal}
+          >
+            {t("Edit info")}
+          </Button>
+        </Grid>
+        <hr
+          style={{
+            marginTop: "10px",
+            marginBottom: "24px",
+            borderBottom: "1px solid var(--secondary1)",
+          }}
+        />
+        <Grid container rowSpacing={2} sx={{ px: 3 }}>
+          {user.me && user.me.name && (
+            <Grid item xs={12} id="userName" sx={{ ml: -1 }}>
+              <span style={{ fontSize: "20px" }}>
+                {user.me.name ? user.me.name : t("name")}
+              </span>
             </Grid>
           )}
-          <Grid item container xs={10} rowSpacing={2} sx={{ p: 2 }}>
-            <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>{t("E-mail")}</div>
-              <div className={classes.settingFontWhite87} id="userEmail">
-                {user.me.email}
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>
-                {t("Company name")}
-              </div>
-              <div className={classes.settingFontWhite87} id="userCompany">
-                {user.me.company ? user.me.company : "-"}
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>
-                {t("Company logo")}
-              </div>
-              <div className={classes.settingFontWhite87}>
-                {user && user.me && user.me.companyLogoUrl ? (
-                  <img
-                    id="userCompanyLogo"
-                    src={
-                      (IS_ENTERPRISE ? fileurl + "static" : "") +
-                      user.me.companyLogoUrl
-                    }
-                    style={{ width: "50px", maxHeight: "50px" }}
-                  />
-                ) : (
-                  "-"
-                )}
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.settingFontWhite6}>
-                {t("Member since …")}
-              </div>
-              <div className={classes.settingFontWhite87} id="userCreateDate">
-                {userCreatedDate}
-              </div>
-            </Grid>
-            {/* <Grid item xs={12}>
+          <Grid item xs={12}>
+            <div className={classes.settingFontWhite6}>{t("E-mail")}</div>
+            <div className={classes.settingFontWhite87} id="userEmail">
+              {user.me.email}
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <div className={classes.settingFontWhite6}>{t("Company name")}</div>
+            <div className={classes.settingFontWhite87} id="userCompany">
+              {user.me.company ? user.me.company : "-"}
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <div className={classes.settingFontWhite6}>{t("Company logo")}</div>
+            <div className={classes.settingFontWhite87}>
+              {user && user.me && user.me.companyLogoUrl ? (
+                <img
+                  id="userCompanyLogo"
+                  src={
+                    (IS_ENTERPRISE ? fileurl + "static" : "") +
+                    user.me.companyLogoUrl
+                  }
+                  style={{ width: "50px", maxHeight: "50px" }}
+                />
+              ) : (
+                "-"
+              )}
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <div className={classes.settingFontWhite6}>
+              {t("Member since …")}
+            </div>
+            <div className={classes.settingFontWhite87} id="userCreateDate">
+              {userCreatedDate}
+            </div>
+          </Grid>
+          {/* <Grid item xs={12}>
               <div className={classes.settingFontWhite6}>{t("App code")}</div>
               <div
                 className={classes.settingFontWhite87}
@@ -819,49 +838,18 @@ const UserInfo = ({ history }) => {
                 {user.me.deposit - user.me.usedPrice}
               </div>
             </Grid> */}
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-            }}
-          >
-            {IS_ENTERPRISE ? null : (
-              <Button
-                id="change_password_btn"
-                shape="whiteOutlined"
-                sx={{ mb: 2 }}
-                onClick={() => {
-                  openPasswordModal();
-                }}
-              >
-                {t("Change password")}
-              </Button>
-            )}
-            <Button
-              id="change_userinfo_btn"
-              shape="whiteOutlined"
-              onClick={openInfoModal}
-            >
-              {t("Edit info")}
-            </Button>
-          </Grid>
         </Grid>
-        <div className={classes.settingTitle}></div>
-        <Grid
-          sx={{
-            mt: 2,
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
+        <hr
+          style={{
+            marginTop: "20px",
+            marginBottom: "10px",
+            borderBottom: "1px solid var(--secondary1)",
           }}
-        >
+        />
+        <Grid container justifyContent="flex-end">
           <Button
             id="withdrawUser"
-            shape={"whiteOutlined"}
+            shape="whiteOutlined"
             size="sm"
             disabled={user.me && user.me.is_admin}
             onClick={openWithdrawModal}

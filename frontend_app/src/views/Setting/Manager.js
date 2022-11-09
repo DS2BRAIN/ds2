@@ -22,7 +22,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TablePagination,
   Paper,
   Modal,
   InputBase,
@@ -30,7 +29,7 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
-import TextField from "@material-ui/core/TextField";
+import { TablePagination, TextField } from "@material-ui/core";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -510,6 +509,128 @@ const Manager = ({ history }) => {
     let userlistNum = rowsPerPage * pageNum;
     let mapArr = userList;
 
+    return (
+      <TableBody id="groupTableBody">
+        {isLoading ? (
+          <TableRow>
+            <TableCell
+              colSpan={5}
+              align="center"
+              className="tableRowCellCustom"
+              id="lastTableCell"
+            >
+              <Grid sx={{ py: 20 }}>{t("Loading user list")}</Grid>
+            </TableCell>
+          </TableRow>
+        ) : mapArr.length ? (
+          mapArr.map((managedUser, idx) => {
+            userlistNum++;
+            return (
+              <TableRow key={`user_${managedUser.id}`}>
+                {tableHeads.map((tableHead) => {
+                  if (tableHead.value === "number")
+                    return (
+                      <TableCell
+                        key={`No_${userlistNum}`}
+                        className="tableRowCellCustom"
+                        align={tableHead.align}
+                      >
+                        {userlistNum}
+                      </TableCell>
+                    );
+                  else if (tableHead.value?.includes("Btn")) {
+                    let headVal = tableHead.value;
+                    let isDelete = headVal === "deleteBtn";
+                    return (
+                      <TableCell
+                        key={`${headVal}_${managedUser.id}`}
+                        className="tableRowCellCustom"
+                        align={tableHead.align}
+                      >
+                        {user.me?.is_admin &&
+                        user.me?.id === managedUser.id &&
+                        isDelete ? (
+                          <span>-</span>
+                        ) : (
+                          <Button
+                            id={`${isDelete ? "delete" : "reset"}_user${
+                              managedUser.id
+                            }_btn`}
+                            shape="whiteOutlined"
+                            size="sm"
+                            onClick={() => {
+                              if (isDelete) setIsSelectedUserDelete(true);
+                              else setIsSelectedUserDelete(false);
+                              setSelectedUser(managedUser);
+                              setIsSelectedUserModalOpen(true);
+                            }}
+                            startIcon={
+                              isDelete ? <CloseIcon fontSize="small" /> : null
+                            }
+                          >
+                            {isDelete ? t("Delete") : t("Edit")}
+                          </Button>
+                        )}
+                      </TableCell>
+                    );
+                  } else
+                    return (
+                      <TableCell
+                        key={`${managedUser[tableHead.value]}_${
+                          managedUser.id
+                        }`}
+                        className="tableRowCellCustom"
+                        align={tableHead.align}
+                      >
+                        {managedUser[tableHead.value]
+                          ? managedUser[tableHead.value]
+                          : "-"}
+
+                        {tableHead.value === "email" &&
+                          user.me?.is_admin &&
+                          user.me?.id === managedUser.id && (
+                            <span
+                              style={{
+                                padding: "4px 8px",
+                                fontSize: 12,
+                                color: "var(--secondary1)",
+                                border: "1px solid var(--secondary1)",
+                                borderRadius: 20,
+                                marginLeft: 16,
+                              }}
+                            >
+                              Admin
+                            </span>
+                          )}
+                      </TableCell>
+                    );
+                })}
+              </TableRow>
+            );
+          })
+        ) : (
+          <TableRow>
+            <TableCell
+              colSpan={5}
+              align="center"
+              className="tableRowCellCustom"
+              id="lastTableCell"
+            >
+              <Grid sx={{ py: 20 }}>
+                {searchValueToPost
+                  ? t(
+                      "No user found containing the keyword you have searched for."
+                    )
+                  : t("No user to manage.")}
+              </Grid>
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    );
+  };
+
+  const userTablePagination = () => {
     const handlePageChange = (e, newPage) => {
       setPageNum(newPage);
     };
@@ -521,146 +642,16 @@ const Manager = ({ history }) => {
     };
 
     return (
-      <>
-        <TableBody id="groupTableBody">
-          {isLoading ? (
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                align="center"
-                className="tableRowCellCustom"
-                id="lastTableCell"
-              >
-                <Grid sx={{ py: 20 }}>{t("Loading user list")}</Grid>
-              </TableCell>
-            </TableRow>
-          ) : mapArr.length ? (
-            <>
-              {mapArr.map((managedUser, idx) => {
-                userlistNum++;
-                return (
-                  <TableRow
-                    className={classes.tableRow}
-                    key={`user_${managedUser.id}`}
-                  >
-                    {tableHeads.map((tableHead) => {
-                      if (tableHead.value === "number")
-                        return (
-                          <TableCell
-                            key={`No_${userlistNum}`}
-                            className="tableRowCellCustom"
-                            align={tableHead.align}
-                          >
-                            {userlistNum}
-                          </TableCell>
-                        );
-                      else if (tableHead.value?.includes("Btn")) {
-                        let headVal = tableHead.value;
-                        let isDelete = headVal === "deleteBtn";
-                        return (
-                          <TableCell
-                            key={`${headVal}_${managedUser.id}`}
-                            className="tableRowCellCustom"
-                            align={tableHead.align}
-                          >
-                            {user.me?.is_admin &&
-                            user.me?.id === managedUser.id &&
-                            isDelete ? (
-                              <span>-</span>
-                            ) : (
-                              <Button
-                                id={`${isDelete ? "delete" : "reset"}_user${
-                                  managedUser.id
-                                }_btn`}
-                                shape="whiteOutlined"
-                                size="sm"
-                                onClick={() => {
-                                  if (isDelete) setIsSelectedUserDelete(true);
-                                  else setIsSelectedUserDelete(false);
-                                  setSelectedUser(managedUser);
-                                  setIsSelectedUserModalOpen(true);
-                                }}
-                                startIcon={
-                                  isDelete ? (
-                                    <CloseIcon fontSize="small" />
-                                  ) : null
-                                }
-                              >
-                                {isDelete ? t("Delete") : t("Edit")}
-                              </Button>
-                            )}
-                          </TableCell>
-                        );
-                      } else
-                        return (
-                          <TableCell
-                            key={`${managedUser[tableHead.value]}_${
-                              managedUser.id
-                            }`}
-                            className="tableRowCellCustom"
-                            align={tableHead.align}
-                          >
-                            {managedUser[tableHead.value]
-                              ? managedUser[tableHead.value]
-                              : "-"}
-
-                            {tableHead.value === "email" &&
-                              user.me?.is_admin &&
-                              user.me?.id === managedUser.id && (
-                                <span
-                                  style={{
-                                    padding: "4px 8px",
-                                    fontSize: 12,
-                                    color: "var(--secondary1)",
-                                    border: "1px solid var(--secondary1)",
-                                    borderRadius: 20,
-                                    marginLeft: 16,
-                                  }}
-                                >
-                                  Admin
-                                </span>
-                              )}
-                          </TableCell>
-                        );
-                    })}
-                  </TableRow>
-                );
-              })}
-              {mapArr.length ? (
-                <TableRow>
-                  <TablePagination
-                    className="paginationCustom"
-                    count={totalUserNum}
-                    onPageChange={handlePageChange}
-                    page={pageNum}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleRowsPerPageChange}
-                    rowsPerPageOptions={[10, 20, 50]}
-                    sx={{ paddingTop: "0 !important" }}
-                  />
-                </TableRow>
-              ) : null}
-            </>
-          ) : (
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                align="center"
-                className="tableRowCellCustom"
-                id="lastTableCell"
-              >
-                <Grid sx={{ py: 20 }}>
-                  {searchValueToPost
-                    ? t(
-                        "No user found containing the keyword you have searched for."
-                      )
-                    : t("No user to manage.")}
-                </Grid>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </>
+      <TablePagination
+        component="div"
+        count={totalUserNum}
+        onPageChange={handlePageChange}
+        page={pageNum}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[10, 20, 50]}
+        style={{ borderBottom: "none" }}
+      />
     );
   };
 
@@ -671,14 +662,7 @@ const Manager = ({ history }) => {
       disableGutters
       className={classes.mainCard}
     >
-      <div
-        className={classes.settingTitle}
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-        }}
-      >
+      <Grid container justifyContent="flex-end">
         <Button
           id="addUserBtn"
           shape="greenOutlined"
@@ -688,15 +672,19 @@ const Manager = ({ history }) => {
         >
           {t("add user")}
         </Button>
-      </div>
+      </Grid>
+      <hr
+        style={{
+          borderBottom: "1px solid var(--secondary1)",
+          marginTop: "10px",
+        }}
+      />
       {(totalUserNum || (!totalUserNum && searchValueToPost)) && (
         <Grid
-          sx={{ mt: 4.5, mb: 3 }}
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 1.5 }}
         >
           <Grid
             style={{ cursor: "pointer" }}
@@ -752,7 +740,7 @@ const Manager = ({ history }) => {
           </Grid>
         </Grid>
       )}
-      <Table className={classes.table} aria-label="simple table" sx={{ mb: 3 }}>
+      <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             {tableHeads.map((tableHead) => (
@@ -788,7 +776,8 @@ const Manager = ({ history }) => {
         </TableHead>
         {renderUserList()}
       </Table>
-      <div className={classes.settingTitle}></div>
+      {userList?.length ? userTablePagination() : null}
+      <hr style={{ borderBottom: "1px solid var(--secondary1)", margin: 0 }} />
       <Modal
         open={isAddModalOpen}
         onClose={closeModalOpen}
