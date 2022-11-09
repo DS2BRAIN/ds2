@@ -740,7 +740,34 @@ const UserInfo = ({ history }) => {
         disableGutters
         className={classes.mainCard}
       >
-        <Grid className={classes.settingTitle} sx={{ mt: 7, mb: 3.5 }}></Grid>
+        <Grid container justifyContent="flex-end">
+          {IS_ENTERPRISE ? null : (
+            <Button
+              id="change_password_btn"
+              shape="whiteOutlined"
+              onClick={() => {
+                openPasswordModal();
+              }}
+            >
+              {t("Change password")}
+            </Button>
+          )}
+          <Button
+            id="change_userinfo_btn"
+            shape="whiteOutlined"
+            sx={{ ml: 1.5 }}
+            onClick={openInfoModal}
+          >
+            {t("Edit info")}
+          </Button>
+        </Grid>
+        <hr
+          style={{
+            marginTop: "12px",
+            marginBottom: "24px",
+            borderBottom: "1px solid var(--secondary1)",
+          }}
+        />
         <Grid container rowSpacing={3} sx={{ px: 3, pb: 3 }}>
           {user.me && user.me.name && (
             <Grid
@@ -752,7 +779,7 @@ const UserInfo = ({ history }) => {
               {user.me.name ? user.me.name : t("name")}
             </Grid>
           )}
-          <Grid item container xs={10} rowSpacing={2} sx={{ p: 2 }}>
+          <Grid item container rowSpacing={2} sx={{ p: 2 }}>
             <Grid item xs={12}>
               <div className={classes.settingFontWhite6}>{t("E-mail")}</div>
               <div className={classes.settingFontWhite87} id="userEmail">
@@ -819,35 +846,6 @@ const UserInfo = ({ history }) => {
                 {user.me.deposit - user.me.usedPrice}
               </div>
             </Grid> */}
-          </Grid>
-          <Grid
-            item
-            xs={2}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-            }}
-          >
-            {IS_ENTERPRISE ? null : (
-              <Button
-                id="change_password_btn"
-                shape="whiteOutlined"
-                sx={{ mb: 2 }}
-                onClick={() => {
-                  openPasswordModal();
-                }}
-              >
-                {t("Change password")}
-              </Button>
-            )}
-            <Button
-              id="change_userinfo_btn"
-              shape="whiteOutlined"
-              onClick={openInfoModal}
-            >
-              {t("Edit info")}
-            </Button>
           </Grid>
         </Grid>
         <div className={classes.settingTitle}></div>
