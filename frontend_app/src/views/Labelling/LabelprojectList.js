@@ -15,8 +15,6 @@ import {
 import currentTheme from "assets/jss/custom";
 import { listPagination } from "components/Function/globalFunc";
 import Button from "components/CustomButtons/Button";
-import GridItem from "components/Grid/GridItem";
-import GridContainer from "components/Grid/GridContainer";
 import SearchInputBox from "components/Table/SearchInputBox";
 import LabelIntro from "components/Guide/LabelIntro";
 
@@ -30,10 +28,11 @@ import {
   TablePagination,
   Tooltip,
 } from "@material-ui/core";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import PageTitle from "components/Title/PageTitle";
 
 const LabelprojectList = ({ history }) => {
   const classes = currentTheme();
@@ -462,100 +461,85 @@ const LabelprojectList = ({ history }) => {
         />
       ) : (
         <>
-          <GridItem xs={12}>
-            <div className={classes.topTitle}>
-              {t("Training Data Labeling")}
-            </div>
-            <div
-              className={classes.subTitleText}
-              style={{ marginBottom: "20px" }}
-            >
-              {t("Labeling tool for deep learning-based AI training.")}
-            </div>
-          </GridItem>
-          <div>
-            <GridContainer style={{ paddingTop: "24px", alignItems: "center" }}>
-              <GridItem
-                xs={7}
-                style={{ display: "flex", alignItems: "center" }}
+          <PageTitle
+            topTitleText={"Training Data Labeling"}
+            subTitleText={"Labeling tool for deep learning-based AI training."}
+          />
+          <Grid container style={{ paddingTop: "24px", alignItems: "center" }}>
+            <Grid item xs={7} style={{ display: "flex", alignItems: "center" }}>
+              <Button
+                id="add_project_btn"
+                shape="greenContained"
+                style={{ height: 32 }}
+                onClick={onStartLabelProject}
               >
-                <Button
-                  id="add_project_btn"
-                  shape="greenContained"
-                  style={{ height: 32 }}
-                  onClick={onStartLabelProject}
-                >
-                  {t("Upload data")}
-                </Button>
+                {t("Upload data")}
+              </Button>
 
-                <Tooltip
-                  title={
-                    <div style={{ fontSize: "12px" }}>
-                      {user.language === "ko"
-                        ? t("Project list") + " " + t("Refresh")
-                        : t("Refresh") + " " + t("Project list")}
-                    </div>
+              <Tooltip
+                title={
+                  <div style={{ fontSize: "12px" }}>
+                    {user.language === "ko"
+                      ? t("Project list") + " " + t("Refresh")
+                      : t("Refresh") + " " + t("Project list")}
+                  </div>
+                }
+                placement="top"
+              >
+                <AutorenewIcon
+                  id="label_project_refresh_btn"
+                  className={
+                    isLoading === false
+                      ? classes.refreshIconActive
+                      : classes.refreshIconDefault
                   }
-                  placement="top"
-                >
-                  <AutorenewIcon
-                    id="label_project_refresh_btn"
-                    className={
-                      isLoading === false
-                        ? classes.refreshIconActive
-                        : classes.refreshIconDefault
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    padding: "4px",
+                    borderRadius: "50px",
+                    fill: "var(--textWhite87)",
+                    marginLeft: 4,
+                  }}
+                  onClick={() => {
+                    if (!isLoading) {
+                      getProjectByDispatch();
                     }
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      padding: "4px",
-                      borderRadius: "50px",
-                      fill: "var(--textWhite87)",
-                      marginLeft: 4,
-                    }}
-                    onClick={() => {
-                      if (!isLoading) {
-                        getProjectByDispatch();
-                      }
-                    }}
-                  />
-                </Tooltip>
-              </GridItem>
-              <GridItem xs={5}>
-                <SearchInputBox />
-              </GridItem>
-              {isLoading ? (
-                <div className="emptyListTable">
-                  <CircularProgress size={40} />
-                </div>
-              ) : (
-                <GridItem xs={12} sm={12} md={12} style={{ marginTop: "26px" }}>
-                  {labelprojects.totalLength &&
-                  labelprojects.totalLength !== 0 ? (
-                    renderProjectTable()
-                  ) : (
-                    <div
-                      id="labeling_no_project_text"
-                      className="emptyListTable"
-                    >
-                      {isShared
-                        ? t("No Shared Label projects")
-                        : user.me?.isAiTrainer
-                        ? t("There is no labeling project under request.")
-                        : searchedValue
-                        ? user.language === "ko"
-                          ? `"${searchedValue}" ` +
-                            "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
-                          : `There were no results found for "${searchedValue}"`
-                        : t(
-                            "There is no labeling project in process. Please create a new project"
-                          )}
-                    </div>
-                  )}
-                </GridItem>
-              )}
-            </GridContainer>
-          </div>
+                  }}
+                />
+              </Tooltip>
+            </Grid>
+            <Grid item xs={5}>
+              <SearchInputBox />
+            </Grid>
+            {isLoading ? (
+              <div className="emptyListTable">
+                <CircularProgress size={40} />
+              </div>
+            ) : (
+              <Grid item xs={12} style={{ marginTop: "26px" }}>
+                {labelprojects.totalLength &&
+                labelprojects.totalLength !== 0 ? (
+                  renderProjectTable()
+                ) : (
+                  <div id="labeling_no_project_text" className="emptyListTable">
+                    {isShared
+                      ? t("No Shared Label projects")
+                      : user.me?.isAiTrainer
+                      ? t("There is no labeling project under request.")
+                      : searchedValue
+                      ? user.language === "ko"
+                        ? `"${searchedValue}" ` +
+                          "에 대한 검색 결과가 없습니다. 다시 검색해주세요."
+                        : `There were no results found for "${searchedValue}"`
+                      : t(
+                          "There is no labeling project in process. Please create a new project"
+                        )}
+                  </div>
+                )}
+              </Grid>
+            )}
+          </Grid>
         </>
       )}
     </>

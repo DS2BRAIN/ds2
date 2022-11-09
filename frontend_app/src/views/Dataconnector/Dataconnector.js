@@ -46,6 +46,7 @@ import {
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
+import PageTitle from "components/Title/PageTitle";
 
 const Dataconnector = ({ history }) => {
   const classes = currentTheme();
@@ -1303,12 +1304,12 @@ const Dataconnector = ({ history }) => {
         />
       ) : (
         <>
-          <Grid sx={{ mb: 2 }}>
-            <div className={classes.topTitle}>{t("Data Storage")}</div>
-            <div className={classes.subTitleText}>
-              {t("Begin your AI model development with your own dataset.")}
-            </div>
-          </Grid>
+          <PageTitle
+            topTitleText={"Data Storage"}
+            subTitleText={
+              "Begin your AI model development with your own dataset."
+            }
+          />
           <Grid container sx={{ mb: 2 }}>
             <Grid item xs={8} className="flex itemsCenter">
               {privateDataTab}

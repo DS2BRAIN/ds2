@@ -17,6 +17,7 @@ import Manager from "views/Setting/Manager.js";
 
 import { useTranslation } from "react-i18next";
 import { ReactTitle } from "react-meta-tags";
+import PageTitle from "components/Title/PageTitle";
 
 const Setting = ({ history }) => {
   const classes = currentTheme();
@@ -76,17 +77,10 @@ const Setting = ({ history }) => {
       <ReactTitle title={"DS2.ai - " + t("Account settings")} />
       {
         <div className={classes.container}>
-          <GridContainer>
-            <GridItem
-              xs={12}
-              style={{ color: currentTheme.subText, padding: "0" }}
-            >
-              <div className={classes.topTitle}>{t("Account settings")}</div>
-              {/* <div className={classes.subTitleText}>
-                {t("You can view and edit your account information.")}
-              </div> */}
-            </GridItem>
-          </GridContainer>
+          <PageTitle
+            topTitleText={"Account settings"}
+            // subTitleText={"You can view and edit your account information."}
+          />
           <GridContainer style={{ margin: "30px 0", flexWrap: "nowrap" }}>
             {tabList.map((tab) => {
               if (tab.condition)

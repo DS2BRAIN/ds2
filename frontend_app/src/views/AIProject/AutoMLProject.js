@@ -30,6 +30,7 @@ import { Grid } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import PageTitle from "components/Title/PageTitle";
 
 const AutoMLProject = ({ history, route }) => {
   const classes = currentTheme();
@@ -520,20 +521,14 @@ const AutoMLProject = ({ history, route }) => {
       ) : (
         <>
           <ReactTitle title={"DS2.ai - " + t(isVerify ? "Verify" : "Train")} />
-          <Grid>
-            <div className={classes.topTitle}>
-              {t(`AI ${isVerify ? "verification" : "development"}`)}
-            </div>
-            <div className={classes.subTitleText}>
-              {t(
-                `Create new projects and ${
-                  isVerify ? "verify" : "develop"
-                } your own AI models. Analyze your data and make ${
-                  isVerify ? "verifications" : "predictions"
-                }.`
-              )}
-            </div>
-          </Grid>
+          <PageTitle
+            topTitleText={`AI ${isVerify ? "verification" : "development"}`}
+            subTitleText={`Create new projects and ${
+              isVerify ? "verify" : "develop"
+            } your own AI models. Analyze your data and make ${
+              isVerify ? "verifications" : "predictions"
+            }.`}
+          />
           <Grid sx={{ my: 8 }}>
             <ProjectListStepper step={activeStep} page={route} />
           </Grid>
