@@ -301,55 +301,52 @@ const NotiList = ({ history }) => {
       <Grid
         container
         justifyContent="space-between"
+        alignItems="center"
         className={classes.settingTitle}
-        sx={{ mt: 5, mb: 4 }}
+        sx={{ mt: 5, mb: 2 }}
       >
-        <Grid item>
-          <Button
-            id="check_notiallread_btn"
-            shape="greenOutlined"
-            size="small"
-            onClick={onMarkedAsAll}
-          >
-            {t("Check as full read")}
-          </Button>
-        </Grid>
-        <Grid item>
+        <Button
+          id="check_notiallread_btn"
+          shape="greenOutlined"
+          size="small"
+          onClick={onMarkedAsAll}
+        >
+          {t("Check as full read")}
+        </Button>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
+              fontSize: 16,
+              marginRight: "20px",
+              color: currentThemeColor.textWhite87,
             }}
           >
-            <div
-              style={{
-                fontSize: 16,
-                marginRight: "20px",
-                color: currentThemeColor.textWhite87,
-              }}
-            >
-              TYPE:{" "}
-            </div>
-            <FormControl style={{ width: "200px" }}>
-              <Select
-                labelid="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={asynctaskType}
-                className={classes.selectForm}
-                onChange={onSetAsynctaskType}
-              >
-                <MenuItem value="all">{t("All")}</MenuItem>
-                <MenuItem value="ds2Dataset">{t("Dataset")}</MenuItem>
-                <MenuItem value="labelingAi">{t("Labeling")}</MenuItem>
-                <MenuItem value="clickAi">{t("Modeling")}</MenuItem>
-                {!IS_ENTERPRISE && (
-                  <MenuItem value="payment">{t("Payment")}</MenuItem>
-                )}
-              </Select>
-            </FormControl>
+            TYPE:{" "}
           </div>
-        </Grid>
+          <FormControl style={{ width: "200px" }}>
+            <Select
+              labelid="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={asynctaskType}
+              className={classes.selectForm}
+              onChange={onSetAsynctaskType}
+            >
+              <MenuItem value="all">{t("All")}</MenuItem>
+              <MenuItem value="ds2Dataset">{t("Dataset")}</MenuItem>
+              <MenuItem value="labelingAi">{t("Labeling")}</MenuItem>
+              <MenuItem value="clickAi">{t("Modeling")}</MenuItem>
+              {!IS_ENTERPRISE && (
+                <MenuItem value="payment">{t("Payment")}</MenuItem>
+              )}
+            </Select>
+          </FormControl>
+        </div>
       </Grid>
       {isLoading ? (
         <div className={classes.loading}>
@@ -512,7 +509,6 @@ const NotiList = ({ history }) => {
                 }}
                 onPageChange={changeAlarmListPage}
                 onRowsPerPageChange={changeRowsPerAlarmListPage}
-                style={{ marginTop: 16 }}
               />
             </>
           ) : (
