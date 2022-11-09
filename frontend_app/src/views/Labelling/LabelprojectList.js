@@ -35,6 +35,7 @@ import { CircularProgress } from "@mui/material";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import PageTitle from "components/Title/PageTitle";
 
 const LabelprojectList = ({ history }) => {
   const classes = currentTheme();
@@ -440,17 +441,10 @@ const LabelprojectList = ({ history }) => {
         />
       ) : (
         <>
-          <GridItem xs={12}>
-            <div className={classes.topTitle}>
-              {t("Training Data Labeling")}
-            </div>
-            <div
-              className={classes.subTitleText}
-              style={{ marginBottom: "20px" }}
-            >
-              {t("Labeling tool for deep learning-based AI training.")}
-            </div>
-          </GridItem>
+          <PageTitle
+            topTitleText={"Training Data Labeling"}
+            subTitleText={"Labeling tool for deep learning-based AI training."}
+          />
           <div>
             <GridContainer style={{ paddingTop: "24px", alignItems: "center" }}>
               <GridItem
