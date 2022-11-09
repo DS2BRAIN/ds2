@@ -80,6 +80,7 @@ import AutorenewIcon from "@material-ui/icons/Autorenew";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import CustomAICreateModal from "components/Modal/CustomAICreateModal";
 import { setIsProjectRefreshed } from "redux/reducers/labelprojects";
+import PageTitle from "components/Title/PageTitle";
 
 const LabelDetail = ({ history, match }) => {
   const classes = currentTheme();
@@ -1604,13 +1605,9 @@ const LabelDetail = ({ history, match }) => {
           </div>
         ) : (
           <div>
+            <PageTitle topTitleText={labelprojects.projectDetail?.name} />
             <Grid container alignItems="center" sx={{ margin: "40px 0 28px" }}>
-              <Grid item className={classes.topTitle}>
-                {labelprojects.projectDetail?.name}
-              </Grid>
-              <Grid item xs style={{ marginLeft: "30px" }}>
-                <Grid container alignItems="center">
-                  {/* {user.me &&
+              {/* {user.me &&
                 !user.me.isAiTrainer &&
                 !isShared && (
                   <Tooltip
@@ -1638,7 +1635,7 @@ const LabelDetail = ({ history, match }) => {
                     />
                   </Tooltip>
                 )} */}
-                  {/* <Button
+              {/* <Button
                   style={{
                     width: "160px",
                     marginRight: "24px",
@@ -1665,34 +1662,32 @@ const LabelDetail = ({ history, match }) => {
                   {t("Request manual labeling")}
                 </Button> */}
 
-                  {upperLabelingButtons.map((btnComp) => (
-                    <Button
-                      key={btnComp.id}
-                      id={`${btnComp.id}_btn`}
-                      shape="greenOutlined"
-                      disabled={
-                        !labelprojects.projectDetail?.s3UrlID ||
-                        !labelprojects.projectDetail?.s3UrlID[btnComp.name]
-                      }
-                      style={{
-                        minWidth: "160px",
-                        marginRight: "10px",
-                      }}
-                      onClick={btnComp.onClickFunc}
-                    >
-                      {t(btnComp.label)}
-                    </Button>
-                  ))}
-                  {reloadButton}
-                  {createCustomAIBtn(
-                    creatingCustomAiProjectId &&
-                      customAiStatusTypes["error"].indexOf(
-                        customAiProjectIdStatus
-                      ) === -1 &&
-                      "add"
-                  )}
-                </Grid>
-              </Grid>
+              {upperLabelingButtons.map((btnComp) => (
+                <Button
+                  key={btnComp.id}
+                  id={`${btnComp.id}_btn`}
+                  shape="greenOutlined"
+                  disabled={
+                    !labelprojects.projectDetail?.s3UrlID ||
+                    !labelprojects.projectDetail?.s3UrlID[btnComp.name]
+                  }
+                  style={{
+                    minWidth: "160px",
+                    marginRight: "10px",
+                  }}
+                  onClick={btnComp.onClickFunc}
+                >
+                  {t(btnComp.label)}
+                </Button>
+              ))}
+              {reloadButton}
+              {createCustomAIBtn(
+                creatingCustomAiProjectId &&
+                  customAiStatusTypes["error"].indexOf(
+                    customAiProjectIdStatus
+                  ) === -1 &&
+                  "add"
+              )}
             </Grid>
             <div
               className={classes.titleContainer}
