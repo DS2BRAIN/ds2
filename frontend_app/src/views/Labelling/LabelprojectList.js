@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import {
   getLabelProjectsRequestAction,
   stopLabelProjectsLoadingRequestAction,
-  setObjectlistsSearchedValue,
 } from "redux/reducers/labelprojects";
 import { putUserRequestActionWithoutMessage } from "redux/reducers/user";
 import {
@@ -59,6 +58,8 @@ const LabelprojectList = ({ history }) => {
   const [projectCheckedValue, setProjectCheckedValue] = useState({
     all: false,
   });
+  const [selectedProjectIdList, setSelectedProjectIdList] = useState([]);
+  const [allSelected, setAllSelected] = useState(false);
   const [projectPage, setProjectPage] = useState(0);
   const [projectRowsPerPage, setProjectRowsPerPage] = useState(10);
   const [searchedValue, setSearchedValue] = useState("");
@@ -91,6 +92,18 @@ const LabelprojectList = ({ history }) => {
       setIsProjectRequested(false);
     }
   }, [isProjectRequested]);
+
+  useEffect(() => {
+    if (labelprojects.projects?.length)
+      checkNewPageAllSelected(labelprojects.projects, selectedProjectIdList);
+  }, [labelprojects.projects, selectedProjectIdList]);
+
+  useEffect(() => {
+    if (labelprojects.isDeleteLabelprojectsSuccess) {
+      setSelectedProjectIdList([]);
+      labelprojects.isDeleteLabelprojectsSuccess = false;
+    }
+  }, [labelprojects.isDeleteLabelprojectsSuccess]);
 
   useEffect(() => {
     let urlSP = urlSearchParams;
@@ -129,12 +142,6 @@ const LabelprojectList = ({ history }) => {
   }, [messages.shouldCloseModal]);
 
   useEffect(() => {
-    if (labelprojects.projects) {
-      setProjectSettings();
-    }
-  }, [labelprojects.projects]);
-
-  useEffect(() => {
     setIsLoading(labelprojects.isLoading);
   }, [labelprojects.isLoading]);
 
@@ -159,28 +166,52 @@ const LabelprojectList = ({ history }) => {
     history.push(urlPath + "?" + searchPar);
   };
 
-  const setProjectSettings = () => {
-    setProjectCheckedValue({ all: false });
-    for (let i = 0; i < labelprojects.projects.length; i++) {
-      const value = labelprojects.projects[i].id;
-      setProjectCheckedValue((prevState) => {
-        return { ...prevState, [value]: false };
-      });
-    }
-  };
-  const onSetProjectCheckedValue = (value) => {
-    setProjectCheckedValue((prevState) => {
-      return { ...prevState, all: false, [value]: !projectCheckedValue[value] };
+  const checkNewPageAllSelected = (projects, selIdList) => {
+    let isAllSelected = true;
+    if (selIdList.length < projects.length) isAllSelected = false;
+    projects.forEach((data) => {
+      if (!selIdList.includes(data.id)) isAllSelected = false;
     });
+    setAllSelected(isAllSelected);
   };
-  const onSetProjectCheckedValueAll = () => {
-    const result = projectCheckedValue["all"] ? false : true;
-    const tmpObject = { all: result };
-    for (let i = 0; i < labelprojects.projects.length; i++) {
-      const id = labelprojects.projects[i].id;
-      tmpObject[id] = result;
+
+  const onChangeSelectedProject = (projectId) => {
+    let idList = [...selectedProjectIdList];
+    let idIndex = idList.indexOf(projectId);
+
+    if (idIndex === -1) {
+      idList.push(projectId);
+    } else {
+      idList.splice(idIndex, 1);
     }
-    setProjectCheckedValue(tmpObject);
+
+    setSelectedProjectIdList(idList);
+  };
+
+  const onChangeSelectedAll = () => {
+    let isChecked = !allSelected;
+    let idList = [...selectedProjectIdList];
+
+    labelprojects.projects.forEach((project) => {
+      let projectId = project.id;
+      let idIndex = idList.indexOf(projectId);
+
+      if (isChecked) {
+        if (idIndex === -1) {
+          idList.push(projectId);
+        } else {
+          idList.splice(idIndex, 1);
+          idList.push(projectId);
+        }
+      } else {
+        if (idIndex > -1) {
+          idList.splice(idIndex, 1);
+        }
+      }
+    });
+
+    setAllSelected(isChecked);
+    setSelectedProjectIdList(idList);
   };
 
   const onSetSortValue = async (value) => {
@@ -221,14 +252,9 @@ const LabelprojectList = ({ history }) => {
   };
 
   const onAskDeleteProjects = () => {
-    const deleteFilesArr = [];
-    for (let file in projectCheckedValue) {
-      if (file !== "all" && projectCheckedValue[file])
-        deleteFilesArr.push(file);
-    }
     dispatch(
       askDeleteLabelProjectReqeustAction({
-        labelProjects: deleteFilesArr,
+        labelProjects: selectedProjectIdList,
         sortInfo: {
           sorting: sortingValue,
           count: projectRowsPerPage,
@@ -240,22 +266,13 @@ const LabelprojectList = ({ history }) => {
   };
 
   const tableHeads = [
-    // { value: "No.", width: "10%", name: "" },
-    { value: "Project name", width: "40%", name: "name" },
-    { value: "Role", width: "10%", name: "role" },
-    { value: "Type", width: "20%", name: "workapp" },
-    { value: "Date created", width: "10%", name: "created_at" },
-    { value: "Date updated", width: "10%", name: "updated_at" },
-    { value: "Status", width: "10%", name: "status" },
-  ];
-
-  const tableBodys = [
-    "name",
-    "role",
-    "workapp",
-    "created_at",
-    "updated_at",
-    "status",
+    // { value: "No.", width: "10%", type: "" },
+    { value: "Project name", width: "40%", type: "name" },
+    { value: "Role", width: "10%", type: "role" },
+    { value: "Type", width: "20%", type: "workapp" },
+    { value: "Date created", width: "10%", type: "created_at" },
+    { value: "Date updated", width: "10%", type: "updated_at" },
+    { value: "Status", width: "10%", type: "status" },
   ];
 
   const statusText = {
@@ -277,8 +294,8 @@ const LabelprojectList = ({ history }) => {
               >
                 <Checkbox
                   value="all"
-                  checked={projectCheckedValue["all"]}
-                  onChange={onSetProjectCheckedValueAll}
+                  checked={allSelected}
+                  onChange={onChangeSelectedAll}
                 />
               </TableCell>
               {tableHeads.map((tableHead, idx) => (
@@ -292,11 +309,11 @@ const LabelprojectList = ({ history }) => {
                     cursor: tableHead.value !== "No." ? "pointer" : "default",
                   }}
                   onClick={() =>
-                    tableHead.value !== "No." && onSetSortValue(tableHead.name)
+                    tableHead.value !== "No." && onSetSortValue(tableHead.type)
                   }
                 >
                   <div className={classes.tableHeader}>
-                    {sortingValue === tableHead.name &&
+                    {sortingValue === tableHead.type &&
                       (!isSortDesc ? (
                         <ArrowUpwardIcon fontSize="small" />
                       ) : (
@@ -323,8 +340,8 @@ const LabelprojectList = ({ history }) => {
                 <TableCell className={classes.tableRowCell} align="center">
                   <Checkbox
                     value={project.id}
-                    checked={projectCheckedValue[project.id] ? true : false}
-                    onChange={() => onSetProjectCheckedValue(project.id)}
+                    checked={selectedProjectIdList.includes(project.id)}
+                    onChange={() => onChangeSelectedProject(project.id)}
                   />
                 </TableCell>
                 {/* <TableCell
@@ -335,46 +352,51 @@ const LabelprojectList = ({ history }) => {
                   {labelprojects.totalLength -
                     (projectRowsPerPage * projectPage + idx)}
                 </TableCell> */}
-                {tableBodys.map((tableBody, idx) => (
-                  <TableCell
-                    key={idx}
-                    className={classes.tableRowCell}
-                    align="center"
-                    onClick={() => goProjectDetail(project)}
-                  >
-                    <div
-                      id="labeling_project_list"
-                      style={{ wordBreak: "break-all" }}
+                {tableHeads.map((tableHead, idx) => {
+                  let headType = tableHead.type;
+                  let value = "";
+                  let cont = "";
+                  let color = "";
+
+                  let isTypeDate =
+                    headType === "created_at" || headType === "updated_at";
+                  let isTypeStatus = headType === "status";
+
+                  if (project[headType]) {
+                    value = project[headType];
+                    if (isTypeDate) cont = value.substring(0, 10);
+                    if (isTypeStatus) {
+                      console.log(value);
+                      if (value === 1) color = "#1BC6B4";
+                      else if (value === 99) color = "#BD2020";
+                      else if (value === 100) color = "#0A84FF";
+                      cont = (
+                        <span style={{ color: color }}>{`⦁ ${t(
+                          statusText[value]
+                        )}`}</span>
+                      );
+                    }
+                    if (!cont) cont = t(value);
+                  }
+
+                  if (!cont) cont = "-";
+
+                  return (
+                    <TableCell
+                      key={idx}
+                      className={classes.tableRowCell}
+                      align="center"
+                      onClick={() => goProjectDetail(project)}
                     >
-                      {tableBody === "created_at" ||
-                      tableBody === "updated_at" ? (
-                        project[tableBody] ? (
-                          project[tableBody]?.substring(0, 10)
-                        ) : (
-                          "-"
-                        )
-                      ) : tableBody === "status" ? (
-                        <span
-                          style={
-                            project[tableBody] === 1
-                              ? { color: "#1BC6B4" }
-                              : project[tableBody] === 99
-                              ? { color: "#BD2020" }
-                              : project[tableBody] === 100
-                              ? { color: "#0A84FF" }
-                              : null
-                          }
-                        >
-                          {statusText[project[tableBody]]
-                            ? "⦁ " + t(statusText[project[tableBody]])
-                            : "-"}
-                        </span>
-                      ) : (
-                        t(project[tableBody] ? project[tableBody] : "-")
-                      )}
-                    </div>
-                  </TableCell>
-                ))}
+                      <div
+                        id="labeling_project_list"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {cont}
+                      </div>
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))}
           </TableBody>
@@ -392,7 +414,7 @@ const LabelprojectList = ({ history }) => {
               id="deleteProject"
               shape="redOutlined"
               size="sm"
-              disabled={!Object.values(projectCheckedValue).includes(true)}
+              disabled={selectedProjectIdList.length === 0}
               style={{
                 marginTop: ".2rem",
                 zIndex: "5",
