@@ -101,7 +101,7 @@ const LabelDetail = ({ history, match }) => {
   const [totalLabelClasses, setTotalLabelClasses] = useState([]);
   const [dataColumns, setDataColumns] = useState([]);
   const [predictColumnName, setPredictColumnName] = useState("");
-  const [selectedPage, setSelectedPage] = useState("overview");
+  const [selectedPage, setSelectedPage] = useState("");
   const [isUnableToChangeDetail, setIsUnableToChangeDetail] = useState(true);
   const [isUnableToChangeName, setIsUnableToChangeName] = useState(true);
   const [nextProjectDetail, setNextProjectDetail] = useState("");
@@ -174,6 +174,10 @@ const LabelDetail = ({ history, match }) => {
   let timer;
   let fileDownloadUrl;
 
+  const urlLoc = window.location;
+  const urlSearch = urlLoc.search;
+  const urlSearchParams = new URLSearchParams(urlSearch);
+
   if (process.env.REACT_APP_DEPLOY) {
     fileDownloadUrl = fileurl + "static/";
   } else {
@@ -188,6 +192,15 @@ const LabelDetail = ({ history, match }) => {
     if (qs.includes("class_required=true") && selectedPage !== "class")
       history.push(`/admin/labelling/${labelProjectId}`);
   }, [selectedPage]);
+
+  useEffect(() => {
+    let urlSP = urlSearchParams;
+    if (urlSP.has("tab")) setSelectedPage(urlSP.get("tab"));
+    else {
+      urlSP.set("tab", "overview");
+    }
+    handleSearchParams(urlSP);
+  }, [urlSearch]);
 
   useEffect(() => {
     if (
@@ -902,8 +915,14 @@ const LabelDetail = ({ history, match }) => {
     );
   };
 
+  const handleSearchParams = (searchPar) => {
+    history.push(path + "?" + searchPar);
+  };
+
   const onSetSelectedPage = (page) => {
-    setSelectedPage(page);
+    let urlSP = urlSearchParams;
+    urlSP.set("tab", page);
+    handleSearchParams(urlSP);
   };
 
   const onLetAbleToChangeDetail = async () => {
