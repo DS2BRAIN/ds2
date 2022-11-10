@@ -1104,7 +1104,7 @@ const LabelList = ({
                           />
                         )}
                     </TableCell>
-                    <TableCell
+                    {/* <TableCell
                       className={classes.tableHead}
                       style={{ width: "5%" }}
                       align="center"
@@ -1112,7 +1112,7 @@ const LabelList = ({
                       <b style={{ color: currentThemeColor.textMediumGrey }}>
                         No
                       </b>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       className={classes.tableHead}
                       align="center"
@@ -1201,7 +1201,7 @@ const LabelList = ({
                                 }
                               />
                             </TableCell>
-                            <TableCell
+                            {/* <TableCell
                               className={classes.tableRowCell}
                               align="center"
                             >
@@ -1209,7 +1209,7 @@ const LabelList = ({
                                 (labelprojects.projectRowsPerPage *
                                   labelprojects.projectPage +
                                   idx)}
-                            </TableCell>
+                            </TableCell> */}
                             <TableCell
                               className={classes.tableRowCell}
                               align="center"
