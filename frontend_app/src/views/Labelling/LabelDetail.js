@@ -1606,7 +1606,7 @@ const LabelDetail = ({ history, match }) => {
         ) : (
           <div>
             <PageTitle topTitleText={labelprojects.projectDetail?.name} />
-            <Grid container alignItems="center" sx={{ margin: "40px 0 28px" }}>
+            <Grid container alignItems="center" sx={{ mb: 2 }}>
               {/* {user.me &&
                 !user.me.isAiTrainer &&
                 !isShared && (
@@ -1689,91 +1689,85 @@ const LabelDetail = ({ history, match }) => {
                   "add"
               )}
             </Grid>
-            <div
-              className={classes.titleContainer}
-              style={{ width: "100%", marginBottom: "36px" }}
-            >
-              <Grid container className={classes.pageList} wrap="nowrap">
+            <Grid container sx={{ mb: 3 }}>
+              <Grid
+                item
+                onClick={() => onSetSelectedPage("overview")}
+                id="dashboard_tab"
+                className={
+                  selectedPage === "overview"
+                    ? classes.selectedListObject
+                    : classes.listObject
+                }
+              >
+                {t("Dashboard")}
+              </Grid>
+              <Grid
+                item
+                onClick={() => onSetSelectedPage("list")}
+                id="data_list_tab"
+                className={
+                  selectedPage === "list"
+                    ? classes.selectedListObject
+                    : classes.listObject
+                }
+              >
+                {t("Data List")}
+              </Grid>
+              {labelprojects.projectDetail?.workapp !== "normal_regression" && (
                 <Grid
                   item
-                  onClick={() => onSetSelectedPage("overview")}
-                  id="dashboard_tab"
+                  onClick={() => onSetSelectedPage("class")}
+                  id="class_tab"
                   className={
-                    selectedPage === "overview"
+                    selectedPage === "class"
                       ? classes.selectedListObject
                       : classes.listObject
                   }
                 >
-                  {t("Dashboard")}
+                  {isShared ? t("My class") : t("Class")}
                 </Grid>
-                <Grid
-                  item
-                  onClick={() => onSetSelectedPage("list")}
-                  id="data_list_tab"
-                  className={
-                    selectedPage === "list"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
-                  {t("Data List")}
-                </Grid>
-                {labelprojects.projectDetail?.workapp !==
-                  "normal_regression" && (
+              )}
+              <Grid
+                item
+                onClick={() => onSetSelectedPage("member")}
+                id="member_tab"
+                className={
+                  selectedPage === "member"
+                    ? classes.selectedListObject
+                    : classes.listObject
+                }
+              >
+                {t("Members")}
+              </Grid>
+              {user.me && !user.me.isAiTrainer && !isShared && (
+                <>
                   <Grid
-                    item
-                    onClick={() => onSetSelectedPage("class")}
-                    id="class_tab"
+                    onClick={() => onSetSelectedPage("export")}
+                    id="export_tab"
                     className={
-                      selectedPage === "class"
+                      selectedPage === "export"
                         ? classes.selectedListObject
                         : classes.listObject
                     }
                   >
-                    {isShared ? t("My class") : t("Class")}
+                    {t("Export")}
                   </Grid>
-                )}
-                <Grid
-                  item
-                  onClick={() => onSetSelectedPage("member")}
-                  id="member_tab"
-                  className={
-                    selectedPage === "member"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
-                  {t("Members")}
-                </Grid>
-                {user.me && !user.me.isAiTrainer && !isShared && (
-                  <>
-                    <Grid
-                      onClick={() => onSetSelectedPage("export")}
-                      id="export_tab"
-                      className={
-                        selectedPage === "export"
-                          ? classes.selectedListObject
-                          : classes.listObject
-                      }
-                    >
-                      {t("Export")}
-                    </Grid>
-                    <Grid
-                      item
-                      onClick={() => onSetSelectedPage("setting")}
-                      id="setting_tab"
-                      className={
-                        selectedPage === "setting"
-                          ? classes.selectedListObject
-                          : classes.listObject
-                      }
-                    >
-                      {t("Settings")}
-                    </Grid>
-                  </>
-                )}
-              </Grid>
-            </div>
+                  <Grid
+                    item
+                    onClick={() => onSetSelectedPage("setting")}
+                    id="setting_tab"
+                    className={
+                      selectedPage === "setting"
+                        ? classes.selectedListObject
+                        : classes.listObject
+                    }
+                  >
+                    {t("Settings")}
+                  </Grid>
+                </>
+              )}
+            </Grid>
             {/* {user.me &&
               user.me.usageplan.planName !== "trial" &&
               parseInt(user.me.id) ===
