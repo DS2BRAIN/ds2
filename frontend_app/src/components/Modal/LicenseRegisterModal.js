@@ -132,7 +132,7 @@ const LicenseRegisterModal = () => {
               component="div"
               style={{ borderBottom: "2px solid var(--secondary1)" }}
             >
-              {/* <Language languageColor="var(--secondary1)" /> */}
+              <Language languageColor="var(--secondary1)" />
             </Box>
             <CloseIcon
               aria-label="close_button"

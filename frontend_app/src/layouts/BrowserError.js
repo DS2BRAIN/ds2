@@ -65,7 +65,7 @@ export default function BrowserError() {
               className={classes.logo}
               style={{ width: "160px" }}
             />
-            {/* <Language /> */}
+            <Language />
           </div>
           <div className={classes.description}>
             {t(
