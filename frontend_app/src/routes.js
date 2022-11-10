@@ -311,14 +311,14 @@ const dashboardRoutes = !IS_ENTERPRISE
       //   component: JupyterProject,
       //   layout: "/admin",
       // },
-      // {
-      //   path: "/skyhubai",
-      //   nickName: "SKYHUB AI | Deploy",
-      //   name: "SkyhubAI",
-      //   icon: AttachFileIcon,
-      //   component: OpsProjectList,
-      //   layout: "/admin",
-      // },
+      {
+        path: "/skyhubai",
+        nickName: "SKYHUB AI | Deploy",
+        name: "SkyhubAI",
+        icon: AttachFileIcon,
+        component: OpsProjectList,
+        layout: "/admin",
+      },
       // {
       //   name: "AI Market",
       // },
