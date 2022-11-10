@@ -1585,6 +1585,67 @@ const LabelDetail = ({ history, match }) => {
   //   setIsAbleToAutoLabeling(tmpCondition);
   // }, [labelChart, labelprojects.projectDetail]);
 
+  const TABS = [
+    {
+      id: "dashboard_tab",
+      type: "overview",
+      label: "Dashboard",
+      condition: true,
+    },
+    {
+      id: "data_list_tab",
+      type: "list",
+      label: "Data List",
+      condition: true,
+    },
+    {
+      id: "class_tab",
+      type: "class",
+      label: isShared ? "My class" : "Class",
+      condition: labelprojects.projectDetail?.workapp !== "normal_regression",
+    },
+    {
+      id: "member_tab",
+      type: "member",
+      label: "Members",
+      condition: true,
+    },
+    {
+      id: "export_tab",
+      type: "export",
+      label: "Export",
+      condition: user.me && !user.me.isAiTrainer && !isShared,
+    },
+    {
+      id: "setting_tab",
+      type: "setting",
+      label: "Settings",
+      condition: user.me && !user.me.isAiTrainer && !isShared,
+    },
+  ];
+
+  const sectionSelectTab = (
+    <Grid container sx={{ mb: 3 }}>
+      {TABS.map((tab) => {
+        if (tab.condition)
+          return (
+            <Grid
+              item
+              id={tab.id}
+              onClick={() => onSetSelectedPage(tab.type)}
+              className={
+                selectedPage === tab.type
+                  ? classes.selectedListObject
+                  : classes.listObject
+              }
+            >
+              {t(tab.label)}
+            </Grid>
+          );
+      })}
+    </Grid>
+  );
+
   return (
     <div>
       <ReactTitle title={"DS2.ai - " + t("Labeling")} />
@@ -1606,7 +1667,7 @@ const LabelDetail = ({ history, match }) => {
         ) : (
           <div>
             <PageTitle topTitleText={labelprojects.projectDetail?.name} />
-            <Grid container alignItems="center" sx={{ mb: 2 }}>
+            <Grid container alignItems="center" sx={{ mb: 5 }}>
               {/* {user.me &&
                 !user.me.isAiTrainer &&
                 !isShared && (
@@ -1689,85 +1750,7 @@ const LabelDetail = ({ history, match }) => {
                   "add"
               )}
             </Grid>
-            <Grid container sx={{ mb: 3 }}>
-              <Grid
-                item
-                onClick={() => onSetSelectedPage("overview")}
-                id="dashboard_tab"
-                className={
-                  selectedPage === "overview"
-                    ? classes.selectedListObject
-                    : classes.listObject
-                }
-              >
-                {t("Dashboard")}
-              </Grid>
-              <Grid
-                item
-                onClick={() => onSetSelectedPage("list")}
-                id="data_list_tab"
-                className={
-                  selectedPage === "list"
-                    ? classes.selectedListObject
-                    : classes.listObject
-                }
-              >
-                {t("Data List")}
-              </Grid>
-              {labelprojects.projectDetail?.workapp !== "normal_regression" && (
-                <Grid
-                  item
-                  onClick={() => onSetSelectedPage("class")}
-                  id="class_tab"
-                  className={
-                    selectedPage === "class"
-                      ? classes.selectedListObject
-                      : classes.listObject
-                  }
-                >
-                  {isShared ? t("My class") : t("Class")}
-                </Grid>
-              )}
-              <Grid
-                item
-                onClick={() => onSetSelectedPage("member")}
-                id="member_tab"
-                className={
-                  selectedPage === "member"
-                    ? classes.selectedListObject
-                    : classes.listObject
-                }
-              >
-                {t("Members")}
-              </Grid>
-              {user.me && !user.me.isAiTrainer && !isShared && (
-                <>
-                  <Grid
-                    onClick={() => onSetSelectedPage("export")}
-                    id="export_tab"
-                    className={
-                      selectedPage === "export"
-                        ? classes.selectedListObject
-                        : classes.listObject
-                    }
-                  >
-                    {t("Export")}
-                  </Grid>
-                  <Grid
-                    item
-                    onClick={() => onSetSelectedPage("setting")}
-                    id="setting_tab"
-                    className={
-                      selectedPage === "setting"
-                        ? classes.selectedListObject
-                        : classes.listObject
-                    }
-                  >
-                    {t("Settings")}
-                  </Grid>
-                </>
-              )}
-            </Grid>
+            {sectionSelectTab}
             {/* {user.me &&
               user.me.usageplan.planName !== "trial" &&
               parseInt(user.me.id) ===
