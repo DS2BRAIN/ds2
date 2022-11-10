@@ -365,7 +365,6 @@ const LabelprojectList = ({ history }) => {
                     value = project[headType];
                     if (isTypeDate) cont = value.substring(0, 10);
                     if (isTypeStatus) {
-                      console.log(value);
                       if (value === 1) color = "#1BC6B4";
                       else if (value === 99) color = "#BD2020";
                       else if (value === 100) color = "#0A84FF";
