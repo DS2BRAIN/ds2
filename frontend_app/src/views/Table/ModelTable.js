@@ -1227,25 +1227,25 @@ const ModelTable = React.memo(
                       {secPredictBtns(projectTrainMethod, id)}
                       {secActionBtns(model.metabase, id)}
                     </div>
-                    {model?.prescriptionAnalyticsInfo && (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Button
-                          id={`model${id}_prescription_analysis_btn`}
-                          shape="greenContained"
-                          size="sm"
-                          sx={{ mx: 0.5 }}
-                          onClick={() => openPrescriptiveAnalyticsModal(id)}
-                        >
-                          {t("Prescriptive Analyze")}
-                        </Button>
-                      </div>
-                    )}
+                    {/*{model?.prescriptionAnalyticsInfo && (*/}
+                    {/*  <div*/}
+                    {/*    style={{*/}
+                    {/*      display: "flex",*/}
+                    {/*      alignItems: "center",*/}
+                    {/*      justifyContent: "center",*/}
+                    {/*    }}*/}
+                    {/*  >*/}
+                    {/*    <Button*/}
+                    {/*      id={`model${id}_prescription_analysis_btn`}*/}
+                    {/*      shape="greenContained"*/}
+                    {/*      size="sm"*/}
+                    {/*      sx={{ mx: 0.5 }}*/}
+                    {/*      onClick={() => openPrescriptiveAnalyticsModal(id)}*/}
+                    {/*    >*/}
+                    {/*      {t("Prescriptive Analyze")}*/}
+                    {/*    </Button>*/}
+                    {/*  </div>*/}
+                    {/*)}*/}
                   </>
                 );
               };
