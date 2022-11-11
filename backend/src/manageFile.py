@@ -1079,6 +1079,8 @@ class ManageFile:
                 self.dbClass.createLabelprojectFile(new_object_dict)
 
                 for object_dict in objects_dicts_list:
+                    if not object_dict:
+                        continue
                     if object_dict[0]['filename'] == image:
                         for object_dict_item in object_dict:
                             points = self.get_coco_segmentation(object_dict_item['segmentation'],
