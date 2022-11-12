@@ -1,15 +1,21 @@
 <p align="center">
     <img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186134066-2b9b0e78-d0a5-43cb-ac75-ad2c1b33d21e.png">
 
-English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
+    
+</p>
 
+<p align="center">
+Easiest way to use AI models without coding (Web UI & API support)
 </p>
 
 ---
 
-Easiest way to use AI models without coding (Web UI & API support)
-
+<p align="center">
+    
 ![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
+    
+</p>
+
 
  - Easy to use SOTA models including OCR, GPT, STT, TTS, Image to Text, Translations
 
@@ -27,6 +33,7 @@ Easiest way to use AI models without coding (Web UI & API support)
  
 
 ---
+English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
 
 ### Install
 
