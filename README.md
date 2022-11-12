@@ -7,7 +7,7 @@ English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
 
 ---
 
-Easist way to use AI models without coding (Web UI & API support)
+Easiest way to use AI models without coding (Web UI & API support)
 
 ![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
 
