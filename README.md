@@ -115,7 +115,7 @@ After clicking Labeling on the top menu, upload the dataset, and you can start l
 ![translation](https://user-images.githubusercontent.com/60835181/187056261-8d558ca0-6c35-4081-808b-609871b1b74e.gif)
 
 
-### Text to Image
+### Text to Image (Like stable-diffusion)
 
 ![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
 
