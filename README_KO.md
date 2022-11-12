@@ -8,7 +8,7 @@
 ---
 
 
- DS2 - 인공지능 모델을 코딩없이 쉽게 사용하세요. (Web UI & API 지원)
+ ### DS2.ai - 인공지능 모델을 코딩없이 쉽게 사용하세요. (Web UI & API 지원)
 
 ![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
 
@@ -26,10 +26,6 @@
  
  - API & Python SDK Support
 
-1) 맞춤형 AI 개발 지원
-
-DS2는 자동화된 기계 학습 파이프라인을 기반으로 고정밀 처방적 분석을 제공합니다.
-처방적 분석을 실행하기 위한 딥러닝 모델은 시간이 지남에 따라 고도화를 하면서 정확도를 더 높여갈 수 있고, 그렇게 높아지는 정확도로 만들어지는 처방적 분석은 더 높은 정확도를 가지게 됩니다. DS2 는 기계 학습 파이프라인을 자동으로 설치하여 액티브 러닝 (Active Learning) 프로세스를 통해 [학습 - 분석 - 배포 - 수집] - [재학습 - 분석 - 배포 - 수집] - … 을 별다른 노력 없이 할 수 있게끔 도와드립니다.
 ---
 
 ### 설치하기
@@ -38,9 +34,38 @@ DS2는 자동화된 기계 학습 파이프라인을 기반으로 고정밀 처�
 
 ---
 
+## 1) SOTA 모델 이용하기
+
+
+### Image to Text (그림 설명 요약)
+
+![image-to-text](https://user-images.githubusercontent.com/60835181/187056114-a891abf0-0088-4a70-af18-95daf68675d6.gif)
+
+### Speech to Text (STT)
+
+![speech-to-text](https://user-images.githubusercontent.com/60835181/187056288-0d27df5e-75c0-4fe5-84db-f3a20a2294e4.gif)
+
+### GPT (문장 합성)
+
+![GPT](https://user-images.githubusercontent.com/60835181/187056264-3db79b87-5656-4233-b23d-4ffa532ed557.gif)
+
+### 번역
+
+![translation](https://user-images.githubusercontent.com/60835181/187056261-8d558ca0-6c35-4081-808b-609871b1b74e.gif)
+
+
+### Text to Image
+
+![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
+
+
+또한 **OCR, 텍스트 요약, FILL MASK, TTS(텍스트 음성 변환)** 를 사용할 수도 있습니다. DS2 내에서 Hugging Face에서 제공하는 다른 모델로 변경해서 사용할 수도 있습니다.
+
 ---
 
-## 1) SOTA 알고리즘과 함께 쉬운 AI 모델 생성
+---
+
+## 2) SOTA 알고리즘과 함께 쉬운 커스텀 AI 모델 생성
 
 ### DS2는 자동화된 기계 학습 파이프라인을 기반으로 하는 능동적 학습 프로세스를 제공합니다.
 
@@ -100,36 +125,6 @@ DS2.ai를 통해 교육을 완료하거나 이미 생성한 모델을 DS2.ai에 
 
 ![비디오 보기](https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FdklUDntQ1Pl0m3eHCvN4%2Fuploads%2FQVuhYB5hjxlHse63uM4v%2Fautolabeling_en.gif?alt=media&token=e368e1b1-d43f-4d04-929a-51246a5993d3)
 
-
-
-## 2) SOTA 모델 이용하기
-
-
-### Image to Text (그림 설명 요약)
-
-![image-to-text](https://user-images.githubusercontent.com/60835181/187056114-a891abf0-0088-4a70-af18-95daf68675d6.gif)
-
-### Speech to Text (STT)
-
-![speech-to-text](https://user-images.githubusercontent.com/60835181/187056288-0d27df5e-75c0-4fe5-84db-f3a20a2294e4.gif)
-
-### GPT (문장 합성)
-
-![GPT](https://user-images.githubusercontent.com/60835181/187056264-3db79b87-5656-4233-b23d-4ffa532ed557.gif)
-
-### 번역
-
-![translation](https://user-images.githubusercontent.com/60835181/187056261-8d558ca0-6c35-4081-808b-609871b1b74e.gif)
-
-
-### Text to Image
-
-![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
-
-
-또한 **OCR, 텍스트 요약, FILL MASK, TTS(텍스트 음성 변환)** 를 사용할 수도 있습니다. DS2 내에서 Hugging Face에서 제공하는 다른 모델로 변경해서 사용할 수도 있습니다.
-
----
 
 
 ### Use Python SDK 
