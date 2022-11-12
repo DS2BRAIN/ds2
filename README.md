@@ -8,6 +8,12 @@
 Easiest way to use AI models without coding (Web UI & API support)
 </p>
 
+<p align="center">
+    
+English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
+    
+</p>
+
 ---
 
 <p align="center">
@@ -33,7 +39,6 @@ Easiest way to use AI models without coding (Web UI & API support)
  
 
 ---
-English | [한글](https://github.com/DS2BRAIN/ds2/blob/main/README_KO.md)
 
 ### Install
 
