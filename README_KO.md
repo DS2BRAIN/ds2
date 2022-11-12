@@ -8,11 +8,9 @@
 ---
 
 
- 안녕하세요 👋 DS2.ai 는 인공지능 모델 개발과 운영을 한 곳에서 할 수 있는 MLOps 기반 데이터 과학 솔루션입니다. 
+ DS2 - 인공지능 모델을 코딩없이 쉽게 사용하세요. (Web UI & API 지원)
 
-DS2.ai 를 사용하시면 OCR, GPT, STT, TTS, Image to Text, Translations를 포함한 SOTA 모델을 사용하기 쉽게 제공해드리고, MLOps 기반의 능동적 학습 프로세스에 의한 SOTA 알고리즘으로 맞춤형 AI 모델을 쉽게 구축할 수 있습니다.
-
-[![Watch the video](https://assetdslab.s3.ap-southeast-1.amazonaws.com/video_loading.png)](https://d1w4uf5gel2p4w.cloudfront.net/autolabeling_process_ko_high.mp4)
+![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
 
  - 메뉴얼 & 오토 라벨링 툴 (정형화, 텍스트, 이미지, 추천시스템) 
 
