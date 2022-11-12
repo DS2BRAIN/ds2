@@ -1177,7 +1177,7 @@ const ModelTable = React.memo(
                           {t("Download")}
                         </Button>
                       )} */}
-                      {/* {(category !== "sample" || hasModelAnalytics) &&
+                      {(category !== "sample" || hasModelAnalytics) &&
                         !project.isShared && (
                           <Button
                             id={`model${id}_deploy_btn`}
@@ -1188,7 +1188,7 @@ const ModelTable = React.memo(
                           >
                             {lang === "ko" ? "배포하기" : "Deploy"}
                           </Button>
-                        )} */}
+                        )}
                       {/* {(category !== "sample" || hasModelAnalytics) &&
                         !project.isShared &&
                         process.env.REACT_APP_ENTERPRISE !== "true" && (

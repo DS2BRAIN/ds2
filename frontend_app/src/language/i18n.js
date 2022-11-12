@@ -5,17 +5,17 @@ import ko from "./translation.ko";
 
 let language = "ko";
 
-// const navigatorLanguage = (
-//   window.navigator.userLanguage || window.navigator.language
-// ).toLowerCase();
-// if (
-//   navigatorLanguage.indexOf("ko") >= 0 ||
-//   navigatorLanguage.indexOf("kr") >= 0
-// ) {
-//   language = "ko";
-// } else {
-//   language = "en";
-// }
+const navigatorLanguage = (
+  window.navigator.userLanguage || window.navigator.language
+).toLowerCase();
+if (
+  navigatorLanguage.indexOf("ko") >= 0 ||
+  navigatorLanguage.indexOf("kr") >= 0
+) {
+  language = "ko";
+} else {
+  language = "en";
+}
 
 const resource = {
   en: {

@@ -428,7 +428,7 @@ export default function SignIn() {
         className={classes.logo}
         style={{ width: "140px" }}
       />
-      {/* <Language /> */}
+      <Language />
     </Grid>
   );
 

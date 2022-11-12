@@ -1011,7 +1011,7 @@ export default function SignUp() {
                   className={classes.logo}
                   style={{ width: "140px" }}
                 />
-                {/* <Language /> */}
+                <Language />
               </div>
               {!canSeeLoginForm ? (
                 <Grid container>
