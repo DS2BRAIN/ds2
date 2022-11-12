@@ -1,14 +1,19 @@
 <p align="center">
     <img width="15%" alt="logo" src="https://user-images.githubusercontent.com/60835181/186134066-2b9b0e78-d0a5-43cb-ac75-ad2c1b33d21e.png">
 
+</p>
+
+<p align="center">
+     DS2.ai - 인공지능 모델을 코딩없이 쉽게 사용하세요. (Web UI & API 지원)
+</p>
+
 [English](https://github.com/DS2BRAIN/ds2/blob/main/README.md) | 한글
 
-</p>
 
 ---
 
 
- ### DS2.ai - 인공지능 모델을 코딩없이 쉽게 사용하세요. (Web UI & API 지원)
+
 
 ![text-to-image](https://user-images.githubusercontent.com/60835181/187056253-63e20fdf-632e-4348-bb03-c389231f0d6d.gif)
 
