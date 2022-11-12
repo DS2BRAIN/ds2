@@ -2529,6 +2529,15 @@ const API = React.memo(
                           {t("Image")}
                         </div>
                       )}
+                    </div>
+                    {projects.project && projects.project.valueForPredict && (
+                      <div
+                        style={{ marginBottom: "10px", wordBreak: "break-all" }}
+                      >
+                        {t("Target value")}: {projects.project.valueForPredict}
+                      </div>
+                    )}
+                    <div style={{ display: "flex" }}>
                       {objectJson && (
                         <div
                           onClick={() => handleChangeTab("json")}
@@ -2554,13 +2563,6 @@ const API = React.memo(
                         </div>
                       )}
                     </div>
-                    {projects.project && projects.project.valueForPredict && (
-                      <div
-                        style={{ marginBottom: "10px", wordBreak: "break-all" }}
-                      >
-                        {t("Target value")}: {projects.project.valueForPredict}
-                      </div>
-                    )}
                   </div>
                 </GridItem>
                 <GridItem

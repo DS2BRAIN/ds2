@@ -996,7 +996,7 @@ const Detail = React.memo(({ datacolumns }) => {
                 >
                   <tr>
                     <th style={{ paddingBottom: "10px" }}>
-                      {t("Actual values")} ↓ | {t("predict_value")} →
+                      {t("Actual values")} ↓ | {t("Predicted values")} →
                     </th>
                     {modelDetail.yClass.map((yclass, index) => {
                       return (
