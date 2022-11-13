@@ -17,7 +17,7 @@ manageUserClass = ManageUser()
 errorResponseList = ErrorResponseList()
 API_KEY_HEADER = APIKeyHeader(name="Authorization", auto_error=True)
 
-if os.path.exists("./src/creating/managePostReview.py"):
+if os.path.exists("./src/creating/managePost.py"):
     from src.creating.managePost import ManagePost
     managePostClass = ManagePost()
 else:
@@ -58,16 +58,16 @@ def createPost(response: Response, token: str,
 
     return result
 
-@router.get("/all-posts/")
-def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
+@router.get("/posts/")
+def readPosts(response: Response, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
     response.status_code, result = managePostClass.getAllPosts(sorting, page, count, tab, desc, searching, post_type)
     return result
 
-@router.get("/posts/")
+@router.get("/my-posts/")
 def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
-    response.status_code, result = managePostClass.getPostsById(token, sorting, page, count, tab,
+    response.status_code, result = managePostClass.getAllPostsByUserId(token, sorting, page, count, tab,
                                                                       desc, searching, post_type)
     return result
 
@@ -92,7 +92,7 @@ async def deletePost(token: str, response: Response, post_id):
     response.status_code, result = managePostClass.deletePost(token, post_id)
     return result
 
-@router.post("/purchase/{post_id}/")
+@router.post("/purchase-posts/{post_id}/")
 def purchase_license_by_eximbay(response: Response, post_id):
 
     response.status_code, result = managePostClass.buyPost(post_id)

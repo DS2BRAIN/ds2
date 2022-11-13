@@ -2625,7 +2625,7 @@ class commandTable(MySQLModel):
     thumbnail_32 = pw.TextField(null=True)
     thumbnail_256 = pw.TextField(null=True)
     is_accept_iframe = pw.BooleanField(null=True)
-    is_deleted = pw.IntegerField(null=True)
+    is_deleted = pw.BooleanField(null=True)
     command_token = pw.TextField(null=True)
     is_private = pw.BooleanField(null=True)
     is_shared = pw.BooleanField(null=True)
@@ -2649,7 +2649,7 @@ class commandCollectionTable(MySQLModel):
     user = pw.IntegerField(null=True)
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
-    is_deleted = pw.IntegerField(null=True)
+    is_deleted = pw.BooleanField(null=True)
     is_shared = pw.BooleanField(null=True)
     sharedgroup = LongTextField(null=True)
     collection_group = pw.IntegerField(null=True)
@@ -2681,9 +2681,9 @@ class commandReviewTable(MySQLModel):
     is_checked_negative_positive_company_mission = pw.BooleanField(null=True)
     is_checked_negative_clear_benefits = pw.BooleanField(null=True)
 
-class postTable(MySQLModel):
+class postsTable(MySQLModel):
     class Meta:
-        db_table = 'post'
+        db_table = 'posts'
 
     id = pw.AutoField()
     title = pw.CharField(null=True)
@@ -2697,7 +2697,7 @@ class postTable(MySQLModel):
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
     user = pw.IntegerField(null=True)
     thumbnail = pw.TextField(null=True)
-    is_deleted = pw.IntegerField(null=True)
+    is_deleted = pw.BooleanField(null=True)
     is_private = pw.BooleanField(null=True)
     is_shared = pw.BooleanField(null=True)
     sharedgroup = LongTextField(null=True)

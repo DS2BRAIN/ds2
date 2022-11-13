@@ -179,3 +179,6 @@ class HelperCreate():
     @wrapper
     def createCommandReview(self, data):
         return commandReviewTable.create(**(data))
+    @wrapper
+    def createPost(self, data):
+        return postsTable.create(**(data))
