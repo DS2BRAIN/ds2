@@ -30,7 +30,7 @@ class PostData(BaseModel):
     description: str = None
     categories: list = None
     tags: list = None
-    related_post: str = None
+    related_post: int = None
     price: int = None
     file: UploadFile = None
     file_name: str = None
