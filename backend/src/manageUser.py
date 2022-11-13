@@ -70,21 +70,21 @@ class ManageUser:
         #         raise ex.AleadyRegisterEx(userInfo['email'])
 
         if userInfo['socialType'] == 'google':
-            url = f"https://oauth2.googleapis.com/tokeninfo?id_token={userInfo['socialToken']}"
-            req = requests.get(url)
-            if req.status_code != 200:
-                raise ex.AleadyRegisterEx(userInfo['email'])
-            user_data = self.dbClass.checkValidEmail(userInfo["email"])
-
-            if user_data and user_data.socialID:
-                return ALREADY_REGISTER_USER_ERROR
-            elif user_data:
-                self.dbClass.updateUser(user_data.id,
-                                        {'socialToken': userInfo["password"], 'socialID': userInfo["password"]})
-            else:
-                userInfo['socialToken'] = userInfo["password"]
-                userInfo['socialID'] = userInfo["password"]
-                userInfo['confirmed'] = True
+            # url = f"https://oauth2.googleapis.com/tokeninfo?id_token={userInfo['socialToken']}"
+            # req = requests.get(url)
+            # if req.status_code != 200:
+            #     raise ex.AleadyRegisterEx(userInfo['email'])
+            # user_data = self.dbClass.checkValidEmail(userInfo["email"])
+            #
+            # if user_data and user_data.socialID:
+            #     return ALREADY_REGISTER_USER_ERROR
+            # elif user_data:
+            #     self.dbClass.updateUser(user_data.id,
+            #                             {'socialToken': userInfo["password"], 'socialID': userInfo["password"]})
+            # else:
+            userInfo['socialToken'] = userInfo["password"]
+            userInfo['socialID'] = userInfo["password"]
+            userInfo['confirmed'] = True
 
 
         if len(re.findall("[A-Za-z]", userInfo["password"])) == 0 or len(re.findall("[0-9]", userInfo["password"])) == 0 or len(re.findall("[!@#$%^&+=]", userInfo["password"])) == 0:

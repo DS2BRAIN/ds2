@@ -77,7 +77,7 @@ class HelperProject():
         if raw:
             return [raw for raw in result]
         else:
-            return [raw.__dict__['__data__'] for raw in result]
+            return [raw.__dict__['__data__'] for raw in result if raw.isDeleted != True]
 
     @wrapper
     def get_all_labelproject_in_ids(self, ids, raw=False):
@@ -85,7 +85,7 @@ class HelperProject():
         if raw:
             return [raw for raw in result]
         else:
-            return [raw.__dict__['__data__'] for raw in result]
+            return [raw.__dict__['__data__'] for raw in result if raw.isDeleted != True]
 
     @wrapper
     def get_project_by_model_id(self, model_id, raw=False):

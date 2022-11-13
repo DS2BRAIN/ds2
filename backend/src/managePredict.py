@@ -112,12 +112,12 @@ class ManagePredict:
 
     def run(self, modelId, parameter, appToken, userId, background_tasks=None, isMarket=False, opsId=None, inputLoadedModel=None, modeltoken=None):
 
-        if self.dbClass.isUserHavingExceedPredictCount(modelId):
-            return HTTP_503_SERVICE_UNAVAILABLE, {
-                        "statusCode": 503,
-                        "error": "Bad Request",
-                        "message": "예측 기능 사용량 초과입니다."
-                    }
+        # if self.dbClass.isUserHavingExceedPredictCount(modelId):
+        #     return HTTP_503_SERVICE_UNAVAILABLE, {
+        #                 "statusCode": 503,
+        #                 "error": "Bad Request",
+        #                 "message": "예측 기능 사용량 초과입니다."
+        #             }
 
         if modeltoken:
             user = self.dbClass.getUserByModelTokenAndModelId(modeltoken, modelId)

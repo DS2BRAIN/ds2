@@ -399,9 +399,9 @@ const Dataconnector = ({ history }) => {
                         return (
                           <span
                             className="nowrap"
-                            style={{ color: dataStatusToText[value].color }}
+                            style={{ color: dataStatusToText[value]?.color }}
                           >
-                            {`⦁ ${t(dataStatusToText[value].name)}`}
+                            {`⦁ ${t(dataStatusToText[value]?.name)}`}
                           </span>
                         );
                     default:
