@@ -2681,6 +2681,32 @@ class commandReviewTable(MySQLModel):
     is_checked_negative_positive_company_mission = pw.BooleanField(null=True)
     is_checked_negative_clear_benefits = pw.BooleanField(null=True)
 
+class postTable(MySQLModel):
+    class Meta:
+        db_table = 'post'
+
+    id = pw.AutoField()
+    title = pw.CharField(null=True)
+    post_type = pw.CharField(null=True)
+    description = pw.TextField(null=True)
+    url = pw.CharField(null=True)
+    file_link = pw.CharField(null=True)
+    categories = JSONField(null=True)
+    status = pw.CharField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    user = pw.IntegerField(null=True)
+    thumbnail = pw.TextField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    is_private = pw.BooleanField(null=True)
+    is_shared = pw.BooleanField(null=True)
+    sharedgroup = LongTextField(null=True)
+    upvote = pw.IntegerField(null=True)
+    watch = pw.IntegerField(null=True)
+    related_post = pw.IntegerField(null=True)
+    price = pw.FloatField(null=True)
+    tags = JSONField(null=True)
+
 class MongoDb():
     def __init__(self):
         self.DS2DATA_COLLECTION_NAME = 'ds2data'
