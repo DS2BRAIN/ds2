@@ -1287,22 +1287,14 @@ class ManageUpload:
 
         return df
 
-    def unzipFile(self, filePath):
 
-        path_to_zip_file = filePath
-        directory_to_extract_to = os.path.splitext(filePath)[0]
-        import zipfile
-        with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
-            zipInfo = zip_ref.infolist()
-            for member in zipInfo:
-                try:
-                    member.filename = member.filename.encode('cp437').decode('utf-8', 'ignore')
-                except UnicodeEncodeError:
-                    pass
-                if ('__MACOSX' in member.filename) or ('.DS_Store' in member.filename):
-                    continue
-                result = zip_ref.extract(member, directory_to_extract_to)
-        return result
+    def unzipFile(self, filePath, folder=''):
+
+        pathToZip = filePath
+        pathToOut = os.path.splitext(filePath)[0]
+        unzip = ['unzip', '-o', pathToZip, '-d', pathToOut]
+        p = subprocess.call(unzip)
+        return pathToOut
 
     def getJSONfile(self, filePath):
         getFolderPath = os.path.splitext(filePath)[0]
