@@ -1439,8 +1439,8 @@ class Daemon():
 
             try:
                 if os.path.exists("/root/ds2ai/test_mode.txt"):
-                    with open("/root/ds2ai/test_mode.txt" , 'r') as r:
-                        modelInfos = modelInfos[:int(r.readlines()[0])]
+                    with open("/root/ds2ai/test_mode.txt", 'r') as r:
+                        modelInfos = modelInfos[:(-1 * int(r.readlines()[0]))]
             except:
                 pass
 
