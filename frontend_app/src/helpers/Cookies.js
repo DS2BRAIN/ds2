@@ -4,10 +4,10 @@ const Cookies = {
     return v ? v[2] : null;
   },
 
-  setCookie: (name, value, minutes) => {
+  setCookie: (name, value, days) => {
     var d = new Date();
-    // d.setTime(d.getTime() + 24*60*60*1000*days);
-    d.setTime(d.getTime() + 60 * 1000 * minutes);
+    d.setTime(d.getTime() + 24*60*60*1000*days);
+    // d.setTime(d.getTime() + 60 * 1000  * minutes);
     document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
   },
 
