@@ -146,7 +146,7 @@ class DaemonSMS():
 
             if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
                 python_path = "/home/yeo/miniconda3/envs/p3.9/bin/python"
-                jupyter_path = "/home/yeo/.local/bin/jupyter"
+                jupyter_path = "/home/yeo/miniconda3/envs/p3.9/bin/jupyter"
                 execute_path = "/home/yeo/projects/ds2/backend/"
 
             if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):

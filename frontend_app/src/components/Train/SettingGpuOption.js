@@ -30,7 +30,7 @@ const SettingGpuOption = ({ status, gpuList, checkedDict, setCheckedDict }) => {
   const [selectedServer, setSelectedServer] = useState({});
   const [hostValue, setHostValue] = useState("");
   const [tokenValue, setTokenValue] = useState("");
-  const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList);
+  const [availableGpuListTotal, setAvailableGpuListTotal] = useState(gpuList ? gpuList : []);
 
   const submitAddServer = () => {
     console.log("hostValue", hostValue);
