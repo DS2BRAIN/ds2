@@ -220,7 +220,7 @@ export const RegionSelectorSidebarBox = ({
   const { t } = useTranslation()
   const [myClasses, setMyClasses] = useState([])
   const [selectedColor, setSelectedColor] = useState(null)
-  const [selectedClass, setSelectedClass] = useState(null)
+  const [selectedClass, setSelectedClass] = useState("")
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -306,6 +306,7 @@ export const RegionSelectorSidebarBox = ({
                 {myClasses.map((each, idx) => {
                   return (
                     <MenuItem
+                      key={each.name + idx}
                       value={each.name}
                       onClick={() => {
                         changeColor(each.color)
