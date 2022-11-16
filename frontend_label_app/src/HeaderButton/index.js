@@ -90,19 +90,7 @@ const MemoizedHeaderButton = memo(
     prevProps.disabled === nextProps.disabled
 )
 
-export const HeaderButton = ({
-  images,
-  action,
-  name,
-  disabled,
-  Icon,
-}: {
-  images: any,
-  action: string,
-  name: string,
-  disabled?: boolean,
-  Icon: any,
-}) => {
+export const HeaderButton = ({ images, action, name, disabled, Icon }) => {
   const classes = useStyles()
   const { onHeaderButtonClick } = useContext(HeaderButtonContext)
   const [isListModalOpen, setIsListModalOpen] = useState(false)

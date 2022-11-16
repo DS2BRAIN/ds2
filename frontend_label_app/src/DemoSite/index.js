@@ -10,7 +10,7 @@ import Loading from "../Loading/Loading.js"
 
 export default () => {
   const [annotatorOpen, changeAnnotatorOpen] = useState(false)
-  const [annotatorProps, changeAnnotatorProps] = useState(null)
+  const [annotatorProps, changeAnnotatorProps] = useState([])
   const [lastOutput, changeLastOutput] = useState()
   const [labelProjectId, setLabelProjectId] = useState(null)
   const [labelFileId, setLabelFileId] = useState(null)
@@ -126,20 +126,28 @@ export default () => {
   return isValidUrl ? (
     <div>
       {annotatorOpen ? (
-        <ErrorBoundaryDialog
-          onClose={() => {
+        // <ErrorBoundaryDialog
+        //   onClose={() => {
+        //     changeAnnotatorOpen(false)
+        //   }}
+        // >
+        //   <Annotator
+        //     {...annotatorProps}
+        //     onExit={(output) => {
+        //       delete output["lastAction"]
+        //       changeLastOutput(output)
+        //       changeAnnotatorOpen(false)
+        //     }}
+        //   />
+        // </ErrorBoundaryDialog>
+        <Annotator
+          {...annotatorProps}
+          onExit={(output) => {
+            delete output["lastAction"]
+            changeLastOutput(output)
             changeAnnotatorOpen(false)
           }}
-        >
-          <Annotator
-            {...(annotatorProps: any)}
-            onExit={(output) => {
-              delete (output: any)["lastAction"]
-              changeLastOutput(output)
-              changeAnnotatorOpen(false)
-            }}
-          />
-        </ErrorBoundaryDialog>
+        />
       ) : (
         <Editor
           labelProjectId={labelProjectId}
