@@ -29,6 +29,8 @@ import Person from "@material-ui/icons/Person";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import LabelIcon from "@material-ui/icons/Label";
+import JupyterProject from "views/JupyterProject/JupyterProjectList";
+import NewJupyterProject from "views/JupyterProject/NewJupyterProject/NewJupyterProject";
 
 const dashboardRoutes = !IS_ENTERPRISE
   ? [
@@ -108,14 +110,14 @@ const dashboardRoutes = !IS_ENTERPRISE
       //   component: FavoriteLists,
       //   layout: "/admin",
       // },
-      // {
-      //   path: "/jupyterproject",
-      //   nickName: "학습서버 임대",
-      //   name: "jupyterproject",
-      //   icon: AttachFileIcon,
-      //   component: JupyterProject,
-      //   layout: "/admin",
-      // },
+      {
+        path: "/jupyterproject",
+        nickName: "학습서버 임대",
+        name: "jupyterproject",
+        icon: AttachFileIcon,
+        component: JupyterProject,
+        layout: "/admin",
+      },
       {
         path: "/skyhubai",
         nickName: "SKYHUB AI | Deploy",
@@ -312,6 +314,14 @@ const dashboardRoutes = !IS_ENTERPRISE
       //   layout: "/admin",
       // },
       {
+        path: "/jupyterproject",
+        nickName: "학습서버 임대",
+        name: "jupyterproject",
+        icon: AttachFileIcon,
+        component: JupyterProject,
+        layout: "/admin",
+      },
+      {
         path: "/skyhubai",
         nickName: "SKYHUB AI | Deploy",
         name: "SkyhubAI",
@@ -322,14 +332,14 @@ const dashboardRoutes = !IS_ENTERPRISE
       // {
       //   name: "AI Market",
       // },
-      // {
-      //   path: "/marketList",
-      //   nickName: "상품 리스트",
-      //   name: "MarketList",
-      //   icon: AttachFileIcon,
-      //   component: MarketList,
-      //   layout: "/admin",
-      // },
+      {
+        path: "/marketList",
+        nickName: "상품 리스트",
+        name: "MarketList",
+        icon: AttachFileIcon,
+        component: MarketList,
+        layout: "/admin",
+      },
       // {
       //   path: "/marketPurchaseList",
       //   nickName: "내 상품",
