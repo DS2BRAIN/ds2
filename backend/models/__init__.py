@@ -2948,6 +2948,43 @@ class MongoDb():
     def get_collection_list(self, db_name=None):
         client = self.get_mongo_client(db_name=db_name) if db_name else self.get_mongo_client()
         return client.list_collection_names()
+    def get_t_documents(self, collection_name, dataconnector_id, conditions=None, lang_code=None, sort=None, limit=None, db_name=None):
+
+        collection = self.get_mongo_collection(collection_name, db_name=db_name) if db_name else self.get_mongo_collection(collection_name)
+
+        conditions = conditions if conditions is not None else []
+        sort = sort if sort is not None else []
+        results = {}
+
+        results_raw = list(collection.aggregate(
+            # [{"$sort":sort}, {"$match": {'rawData': {'lang_code': lang_code}, 'dataconnector': dataconnector_id}}, {"$limit": limit}], allowDiskUse=True))
+            [{"$match": {'dataconnector': dataconnector_id}}], allowDiskUse=True))
+        for result_raw in results_raw:
+            raw_lang_code = result_raw['rawData'].get('lang_code')
+            label_lang_code = result_raw['labelData'].get('lang_code')
+            if raw_lang_code != lang_code and label_lang_code != lang_code:
+                continue
+            for condition in conditions:
+                for key, value in condition.items():
+                    eval_code = result_raw['rawData'].get('eval_code', result_raw['labelData'].get('eval_code'))
+                    if result_raw['rawData'].get(key) == value or result_raw['labelData'].get(key) == value:
+                        if not results.get(eval_code):
+                            results[eval_code] = {"info": [], 'matched': 0}
+                        matched_info = result_raw['rawData']
+                        matched_info.update(result_raw['labelData'])
+                        results[eval_code]['info'].append(matched_info)
+                        matched_score = 1
+                        if sort:
+                            matched_score = len(sort) - sort.index(key) + 1
+                        results[eval_code]['matched'] += matched_score
+        results = sorted(results.items(), key=lambda item: item[1]['matched'], reverse=True)
+
+        if not results:
+            for result_raw in results_raw:
+                results[result_raw['id']] = result_raw
+        if limit:
+            results = results[:limit]
+        return results
 
 import peewee
 
