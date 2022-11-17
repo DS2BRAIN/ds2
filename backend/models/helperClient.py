@@ -48,3 +48,8 @@ class HelperClient():
 
     def get_contents(self):
         return ContentsTable.select().order_by(ContentsTable.id.desc()).dicts()
+
+    @wrapper
+    def get_t_query(self, dataconnector_id, conditions=None, lang_code=None, sort=None, limit=None, db_name=None):
+        return mongoDb.get_t_documents(collection_name=mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME,
+                                   dataconnector_id=dataconnector_id, conditions=conditions, lang_code=lang_code, sort=sort, limit=limit, db_name=db_name)

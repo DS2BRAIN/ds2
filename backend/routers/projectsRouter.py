@@ -170,3 +170,13 @@ def fillAutomaticData(response: Response, projectId: str, token: str):
 @router.get('/sse/project-status/{project_id}/')
 async def sse_model_info(request: Request, project_id: int, token: str):
     return EventSourceResponse(manageProjectClass.get_project_status(token, project_id, request))
+
+class DataQueryInfo(BaseModel):
+    lang_code: str = None
+    limit: int = None
+    conditions: list = None
+    sort: list = None
+@router.get("/tquery/{dataconnector_id}")
+def getExternalais(token: str, response: Response, dataconnector_id:int, dataQueryInfo: DataQueryInfo):
+    response.status_code, result = manageExternalAiClass.getTQuery(token, dataconnector_id, dataQueryInfo)
+    return result
