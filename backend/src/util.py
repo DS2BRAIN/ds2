@@ -192,7 +192,7 @@ class Util():
 
 
         self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif']
-        self.videoExtensionName = ['mp4', 'mov']
+        self.videoExtensionName = ['mp4', 'mov', 'webm']
         self.soundExtensionName = ['mp4','mp3','wav','flac']
         self.compressionExtensionName = ['zip']
         self.textExtensionName = ['csv']

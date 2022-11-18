@@ -2609,7 +2609,7 @@ class commandTable(MySQLModel):
 
     id = pw.AutoField()
     command = pw.CharField(null=True)
-    url = pw.CharField(null=True)
+    url = LongTextField(null=True)
     short_description = pw.TextField(null=True)
     description = pw.TextField(null=True)
     option = pw.TextField(null=True)
@@ -2691,8 +2691,8 @@ class postsTable(MySQLModel):
     item_type = pw.CharField(null=True)
     description = pw.TextField(null=True)
     url = pw.CharField(null=True)
-    file_link = pw.CharField(null=True)
-    thumbnail_link = pw.CharField(null=True)
+    file_link = LongTextField(null=True)
+    thumbnail_link = LongTextField(null=True)
     categories = JSONField(null=True)
     status = pw.CharField(null=True)
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
@@ -2706,7 +2706,8 @@ class postsTable(MySQLModel):
     upvote = pw.IntegerField(null=True)
     watch = pw.IntegerField(null=True)
     related_post = pw.IntegerField(null=True)
-    price = pw.FloatField(null=True)
+    related_command = pw.IntegerField(null=True)
+    credit = pw.FloatField(null=True)
     tags = JSONField(null=True)
 
 class MongoDb():
