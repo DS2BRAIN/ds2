@@ -96,10 +96,10 @@ async def deletePost(token: str, response: Response, post_id):
     response.status_code, result = managePostClass.deletePost(token, post_id)
     return result
 
-@router.post("/purchase-posts/{post_id}/")
-def purchase_license_by_eximbay(response: Response, token: str, return_url: str, post_id):
+@router.post("/buy-posts/{post_id}/")
+def buyPost(response: Response, token: str, post_id):
 
-    response.status_code, result = managePostClass.buyPost(token, post_id, return_url)
+    response.status_code, result = managePostClass.buyPost(token, post_id)
     return result
 
 @router.post("/watch/posts/{post_id}/")
