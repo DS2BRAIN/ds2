@@ -192,6 +192,73 @@ class HelperPost():
         return post_query.where((tableInstance.title.contains(searching)) & (tableInstance.status.in_(status_list)
                         ) & (tableInstance.user == user_id) & (
                 common_where)).order_by(sorting).paginate(start, count).execute()
+
+    @wrapper
+    def getBuyPostByUserId(self, user_id, post_ids, sorting='created_at', tab='all', desc=False, searching='',
+                           page=0, count=10, post_type=""):
+        if sorting == 'created_at':
+            sorting = postsTable.created_at
+        elif sorting == 'updated_at':
+            sorting = postsTable.updated_at
+        elif sorting == 'option':
+            sorting = postsTable.option
+        elif sorting == 'title':
+            sorting = postsTable.title
+        elif sorting == 'status':
+            sorting = peewee.Case(postsTable.status, (
+                (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
+                (61, 12)), 0)
+
+        if desc and sorting != 'status':
+            sorting = sorting.desc()
+        common_where = ((postsTable.is_deleted == None) | (postsTable.is_deleted == False)) & (
+                (postsTable.user == user_id) | (postsTable.id.in_(post_ids)))
+        if post_type:
+            common_where = common_where & (postsTable.post_type == post_type)
+        if searching:
+            common_where = common_where & (postsTable.title.contains(searching))
+
+        common_where = common_where & (creditHistoriesTable.credit_type == "buy_post")
+
+        post_query = postsTable.select(postsTable, creditHistoriesTable)\
+            .join(creditHistoriesTable, on=(postsTable.user == creditHistoriesTable.user))
+
+        query = post_query.where(common_where)
+
+        return query.order_by(sorting).paginate(page, count).execute(), query.count()
+    @wrapper
+    def getSellPostByUserId(self, user_id, post_ids, sorting='created_at', tab='all', desc=False, searching='',
+                           page=0, count=10, post_type=""):
+        if sorting == 'created_at':
+            sorting = postsTable.created_at
+        elif sorting == 'updated_at':
+            sorting = postsTable.updated_at
+        elif sorting == 'option':
+            sorting = postsTable.option
+        elif sorting == 'title':
+            sorting = postsTable.title
+        elif sorting == 'status':
+            sorting = peewee.Case(postsTable.status, (
+                (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
+                (61, 12)), 0)
+
+        if desc and sorting != 'status':
+            sorting = sorting.desc()
+        common_where = ((postsTable.is_deleted == None) | (postsTable.is_deleted == False)) & (
+                (postsTable.user == user_id) | (postsTable.id.in_(post_ids)))
+        if post_type:
+            common_where = common_where & (postsTable.post_type == post_type)
+        if searching:
+            common_where = common_where & (postsTable.title.contains(searching))
+
+        common_where = common_where & (creditHistoriesTable.credit_type == "sell_post")
+
+        post_query = postsTable.select(postsTable, creditHistoriesTable)\
+            .join(creditHistoriesTable, on=(postsTable.user == creditHistoriesTable.user))
+
+        query = post_query.where(common_where)
+
+        return query.order_by(sorting).paginate(page, count).execute(), query.count()
     @wrapper
     def getPostsById(self, postId):
         return postsTable.select().where(postsTable.id == postId).execute()
