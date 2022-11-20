@@ -188,3 +188,6 @@ class HelperCreate():
     @wrapper
     def createPostComment(self, data):
         return postCommentsTable.create(**(data))
+    @wrapper
+    def createCreditHistory(self, data):
+        return creditHistoriesTable.create(**(data))

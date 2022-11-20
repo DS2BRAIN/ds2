@@ -1263,6 +1263,9 @@ class usersTable(MySQLModel):
     otp_key = pw.CharField(null=True)
     isAgreedBehaviorStatistics = pw.BooleanField(null=True)
     number_of_login_attempts = pw.IntegerField(null=0)
+    credit = pw.IntegerField(null=True)
+    last_posted_at = pw.DateTimeField(null=True)
+    last_email_sent_at = pw.DateTimeField(null=True)
 
 class userhistoriesTable(MySQLModel):
     class Meta:
@@ -2733,6 +2736,17 @@ class postCommentsTable(MySQLModel):
     status = pw.TextField(null=True)
     rating = pw.IntegerField(null=True)
     comment = LongTextField(null=True)
+
+class creditHistoriesTable(MySQLModel):
+    class Meta:
+        db_table = 'credit_histories'
+
+    id = pw.AutoField()
+    credit = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    credit_type = pw.TextField(null=True)
 
 class MongoDb():
     def __init__(self):
