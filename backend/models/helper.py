@@ -11,6 +11,8 @@ from models.helperCommand import HelperCommand
 from models.helperCommandCollection import HelperCommandCollection
 from models.helperCommandReview import HelperCommandReview
 from models.helperPost import HelperPost
+from models.helperPostBookmark import HelperPostBookmark
+from models.helperPostComment import HelperPostComment
 from models.helperFlow import HelperFlow
 from models.helperFlowNode import HelperFlowNode
 from models.helperMonitoringAlert import HelperMonitoringAlert
@@ -607,6 +609,10 @@ class Helper():
         return projectcategoriesTable.get(projectcategoriesTable.id == rowId)
 
     @wrapper
+    def getNotFinishedSevProjects(self):
+        return projectsTable.select().where((projectsTable.id > 15815) & (projectsTable.status != 100)).execute()
+
+    @wrapper
     def getProjectCategories(self):
         return projectcategoriesTable.select().execute()
 
@@ -843,7 +849,8 @@ class Helper():
 for helperClass in [HelperSub, HelperInstance, HelperCreate, HelperCRU, HelperLabel, HelperDataconnector,
                     HelperModel, HelperPayment, HelperUser, HelperProject, HelperSthreefile, HelperClient,
                     HelperFlow, HelperFlowNode, HelperMonitoringAlert,
-                    HelperCommand, HelperCommandCollection, HelperCommandReview, HelperPost]:
+                    HelperCommand, HelperCommandCollection, HelperCommandReview, HelperPost, HelperPostBookmark,
+                    HelperPostComment]:
     methodList = [func for func in dir(helperClass) if callable(getattr(helperClass, func)) and '__' not in func]
     for i, methodRaw in enumerate(methodList):
         setattr(Helper, methodRaw, classmethod(getattr(helperClass, methodRaw)))

@@ -2709,6 +2709,30 @@ class postsTable(MySQLModel):
     related_command = pw.IntegerField(null=True)
     credit = pw.FloatField(null=True)
     tags = JSONField(null=True)
+class postBookmarksTable(MySQLModel):
+    class Meta:
+        db_table = 'post_bookmark'
+
+    id = pw.AutoField()
+    post = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    is_deleted = pw.BooleanField(null=True)
+    is_shared = pw.BooleanField(null=True)
+
+class postCommentsTable(MySQLModel):
+    class Meta:
+        db_table = 'post_comment'
+
+    id = pw.AutoField()
+    post = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    status = pw.TextField(null=True)
+    rating = pw.IntegerField(null=True)
+    comment = LongTextField(null=True)
 
 class MongoDb():
     def __init__(self):

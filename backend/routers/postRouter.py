@@ -62,13 +62,13 @@ def createPost(response: Response, token: str,
 
     return result
 
-@router.get("/posts/")
+@router.get("/all-posts/")
 def readPosts(response: Response, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
     response.status_code, result = managePostClass.getAllPosts(sorting, page, count, tab, desc, searching, post_type)
     return result
 
-@router.get("/my-posts/")
+@router.get("/posts/")
 def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
     response.status_code, result = managePostClass.getAllPostsByUserId(token, sorting, page, count, tab,
@@ -100,4 +100,10 @@ async def deletePost(token: str, response: Response, post_id):
 def purchase_license_by_eximbay(response: Response, token: str, return_url: str, post_id):
 
     response.status_code, result = managePostClass.buyPost(token, post_id, return_url)
+    return result
+
+@router.post("/watch/posts/{post_id}/")
+async def updateCommand(post_id: str, response: Response):
+    response.status_code, result = managePostClass.watchPost(post_id)
+
     return result
