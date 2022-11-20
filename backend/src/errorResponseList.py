@@ -581,6 +581,20 @@ NO_SUPPORT_FOR_OPENSOURCE = HTTP_500_INTERNAL_SERVER_ERROR, {
     "message_en": "This function is not supported for open-source."
 }
 
+EXCEED_POST_ERROR = HTTP_503_SERVICE_UNAVAILABLE, {
+            "statusCode": 503,
+            "error": "Bad Request",
+            "message": "사용량 초과입니다.",
+            "message_en": "Exceeded 100 usage per day."
+        }
+
+EXCEED_SELL_POST_ERROR = HTTP_503_SERVICE_UNAVAILABLE, {
+            "statusCode": 503,
+            "error": "Bad Request",
+            "message": "사용량 초과입니다.",
+            "message_en": "Exceeded 20 usage to sell."
+        }
+
 class ErrorResponseList:
     def verifyError(self, message):
         return HTTP_400_BAD_REQUEST, {

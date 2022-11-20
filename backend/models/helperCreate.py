@@ -182,3 +182,12 @@ class HelperCreate():
     @wrapper
     def createPost(self, data):
         return postsTable.create(**(data))
+    @wrapper
+    def createPostBookmark(self, data):
+        return postBookmarksTable.create(**(data))
+    @wrapper
+    def createPostComment(self, data):
+        return postCommentsTable.create(**(data))
+    @wrapper
+    def createCreditHistory(self, data):
+        return creditHistoriesTable.create(**(data))

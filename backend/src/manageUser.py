@@ -131,6 +131,7 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'dynos': 1,
+                'credit': 10,
                 'is_admin': 1
             }
 
@@ -144,6 +145,7 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'dynos': 1,
+                'credit': 10,
                 'isAiTrainer': userInfo['isAiTrainer']
             }
             if not userInit['confirmed']:
@@ -156,6 +158,12 @@ class ManageUser:
         except:
             print(traceback.format_exc())
             return ALREADY_REGISTER_EMAIL_ERROR
+
+        self.dbClass.createCreditHistory({
+            "user": userInfo['id'],
+            "credit": 10,
+            "credit_type": "register"
+        })
 
         userInfo = {**userInfo, **userInit}
 
@@ -649,8 +657,11 @@ class ManageUser:
             user = self.dbClass.getUser(token)
 
             user["billings"] = []
-            user['hasFirstTrialTeam'] = self.dbClass.getFirstTrialTeamByUserId(user['id'])
-            user['user_properties'] = self.dbClass.getUserPropertiesByUserId(user['id'])
+            try:
+                user['hasFirstTrialTeam'] = self.dbClass.getFirstTrialTeamByUserId(user['id'])
+                user['user_properties'] = self.dbClass.getUserPropertiesByUserId(user['id'])
+            except:
+                pass
 
             try:
                 user["usageplan"] = self.dbClass.getOneUsageplanById(user["usageplan"])

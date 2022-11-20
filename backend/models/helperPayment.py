@@ -176,3 +176,10 @@ class HelperPayment():
     def delete_market_request_by_market_project_id(self, market_project_id, user_id):
         common_query = (marketRequests.marketproject == market_project_id) & (marketRequests.userId == user_id)
         return marketRequests.update({'isDeleted': True}).where(common_query).execute()
+
+    @wrapper
+    def get_credit_histories_by_post_id_and_user_id(self, post_id, user_id):
+        return creditHistoriesTable.select().where(creditHistoriesTable.post == post_id) & (creditHistoriesTable.userId == user_id).execute()
+    @wrapper
+    def get_buy_histories_by_post_id_and_user_id(self, post_id, user_id):
+        return creditHistoriesTable.select().where((creditHistoriesTable.post == post_id) & (creditHistoriesTable.credit_type == 'buy_post') & (creditHistoriesTable.user == user_id)).execute()

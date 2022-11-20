@@ -1263,6 +1263,9 @@ class usersTable(MySQLModel):
     otp_key = pw.CharField(null=True)
     isAgreedBehaviorStatistics = pw.BooleanField(null=True)
     number_of_login_attempts = pw.IntegerField(null=0)
+    credit = pw.FloatField(null=True)
+    last_posted_at = pw.DateTimeField(null=True)
+    last_email_sent_at = pw.DateTimeField(null=True)
 
 class userhistoriesTable(MySQLModel):
     class Meta:
@@ -2609,7 +2612,7 @@ class commandTable(MySQLModel):
 
     id = pw.AutoField()
     command = pw.CharField(null=True)
-    url = pw.CharField(null=True)
+    url = LongTextField(null=True)
     short_description = pw.TextField(null=True)
     description = pw.TextField(null=True)
     option = pw.TextField(null=True)
@@ -2691,8 +2694,8 @@ class postsTable(MySQLModel):
     item_type = pw.CharField(null=True)
     description = pw.TextField(null=True)
     url = pw.CharField(null=True)
-    file_link = pw.CharField(null=True)
-    thumbnail_link = pw.CharField(null=True)
+    file_link = LongTextField(null=True)
+    thumbnail_link = LongTextField(null=True)
     categories = JSONField(null=True)
     status = pw.CharField(null=True)
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
@@ -2706,8 +2709,45 @@ class postsTable(MySQLModel):
     upvote = pw.IntegerField(null=True)
     watch = pw.IntegerField(null=True)
     related_post = pw.IntegerField(null=True)
-    price = pw.FloatField(null=True)
+    related_command = pw.IntegerField(null=True)
+    credit = pw.FloatField(null=True)
     tags = JSONField(null=True)
+class postBookmarksTable(MySQLModel):
+    class Meta:
+        db_table = 'post_bookmark'
+
+    id = pw.AutoField()
+    post = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    is_deleted = pw.BooleanField(null=True)
+    is_shared = pw.BooleanField(null=True)
+
+class postCommentsTable(MySQLModel):
+    class Meta:
+        db_table = 'post_comment'
+
+    id = pw.AutoField()
+    post = pw.IntegerField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    status = pw.TextField(null=True)
+    rating = pw.IntegerField(null=True)
+    comment = LongTextField(null=True)
+
+class creditHistoriesTable(MySQLModel):
+    class Meta:
+        db_table = 'credit_histories'
+
+    id = pw.AutoField()
+    credit = pw.FloatField(null=True)
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    credit_type = pw.TextField(null=True)
+    post = pw.IntegerField(null=True)
 
 class MongoDb():
     def __init__(self):

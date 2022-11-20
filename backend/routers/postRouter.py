@@ -31,7 +31,8 @@ class PostData(BaseModel):
     categories: list = None
     tags: list = None
     related_post: int = None
-    price: int = None
+    related_command: int = None
+    credit: int = None
     file: UploadFile = None
     file_name: str = None
     post_type: str = None
@@ -40,9 +41,9 @@ class PostData(BaseModel):
 @router.post("/posts/")
 def createPost(response: Response, token: str,
                file: UploadFile = File(None), title: str = Form(...), url: str = Form(None),
-               price: int = Form(None), tags: list = Form(None),
-               description: int = Form(None), categories: list = Form(None),
-               related_post: int = Form(None), post_type: str = Form(None), item_type: str = Form(None)
+               credit: int = Form(None), tags: list = Form(None),
+               description: str = Form(None), categories: list = Form(None),
+               related_post: int = Form(None), related_command: int = Form(None), post_type: str = Form(None), item_type: str = Form(None)
                ):
     post_data = PostData(
         title=title,
@@ -51,22 +52,23 @@ def createPost(response: Response, token: str,
         categories=categories,
         tags=tags,
         related_post=related_post,
+        related_command=related_command,
         post_type=post_type,
         item_type=item_type,
-        price=price,
+        credit=credit,
         file=file,
     )
     response.status_code, result = managePostClass.createPost(token, post_data)
 
     return result
 
-@router.get("/posts/")
+@router.get("/all-posts/")
 def readPosts(response: Response, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
     response.status_code, result = managePostClass.getAllPosts(sorting, page, count, tab, desc, searching, post_type)
     return result
 
-@router.get("/my-posts/")
+@router.get("/posts/")
 def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
     response.status_code, result = managePostClass.getAllPostsByUserId(token, sorting, page, count, tab,
@@ -94,8 +96,14 @@ async def deletePost(token: str, response: Response, post_id):
     response.status_code, result = managePostClass.deletePost(token, post_id)
     return result
 
-@router.post("/purchase-posts/{post_id}/")
-def purchase_license_by_eximbay(response: Response, token: str, return_url: str, post_id):
+@router.post("/buy-posts/{post_id}/")
+def buyPost(response: Response, token: str, post_id):
 
-    response.status_code, result = managePostClass.buyPost(token, post_id, return_url)
+    response.status_code, result = managePostClass.buyPost(token, post_id)
+    return result
+
+@router.post("/watch/posts/{post_id}/")
+async def updateCommand(post_id: str, response: Response):
+    response.status_code, result = managePostClass.watchPost(post_id)
+
     return result
