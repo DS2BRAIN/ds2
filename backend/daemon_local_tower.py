@@ -40,4 +40,4 @@ if __name__ == "__main__":
     else:
         daemonLocalTower = DaemonLocalTower()
 
-    daemonLocalTower.run()
+    daemonLocalTower.create_xml()
