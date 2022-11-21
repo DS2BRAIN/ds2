@@ -69,9 +69,6 @@ const useStyles = makeStyles(styles);
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-const DEFAULT_DELAY_TIME = 1000 * 60 * 3; // 로그인 유지 시간 3분
-// const DEFAULT_DELAY_TIME = 5000; // 테스트용 5초
-
 const Admin = ({ history, ...rest }) => {
   const dispatch = useDispatch();
   const { user, messages } = useSelector(
@@ -85,7 +82,6 @@ const Admin = ({ history, ...rest }) => {
   const [isAgreedBehaviorStatistics, setIsAgreedBehaviorStatistics] = useState(
     false
   );
-  const [delayTime, setDelayTime] = useState(DEFAULT_DELAY_TIME);
 
   const { t } = useTranslation();
 
@@ -303,64 +299,6 @@ const Admin = ({ history, ...rest }) => {
     </Switch>
   );
 
-  let timerId = null;
-
-  const clearTimer = () => {
-    clearInterval(timerId);
-  };
-
-  const registerTimer = () => {
-    setDelayTime(DEFAULT_DELAY_TIME);
-
-    timerId = setInterval(() => {
-      setDelayTime((prev) => (prev === 0 ? 0 : prev - 1000));
-    }, 1000);
-  };
-
-  function setDefaultDelayTime() {
-    const jwt = Cookies.getCookie("jwt");
-    const apptoken = Cookies.getCookie("apptoken");
-
-    clearTimer();
-    registerTimer();
-
-    Cookies.setCookie("jwt", jwt, 3);
-    Cookies.setCookie("apptoken", apptoken, 3);
-  }
-
-  useEffect(() => {
-    const events = ["click", "scroll", "wheel", "keypress", "mousemove"];
-    const jwt = Cookies.getCookie("jwt");
-    const apptoken = Cookies.getCookie("apptoken");
-
-    if (jwt && apptoken)
-      events.map((event) => {
-        document.addEventListener(event, setDefaultDelayTime);
-      });
-
-    return () => {
-      events.map((event) => {
-        document.removeEventListener(event, setDefaultDelayTime);
-      });
-    };
-  }, []);
-
-  useEffect(() => {
-    clearTimer();
-    const jwt = Cookies.getCookie("jwt");
-    const apptoken = Cookies.getCookie("apptoken");
-
-    if (jwt && apptoken) registerTimer();
-
-    return () => {
-      clearTimer();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (delayTime === 0) history.push("/signout");
-  }, [delayTime]);
-
   // useEffect(() => {
   //   if (navigator.platform.indexOf("Win") > -1) {
   //     ps = new PerfectScrollbar(mainPanel.current, {
@@ -498,6 +436,7 @@ const Admin = ({ history, ...rest }) => {
       Cookies.getCookie("apptoken") &&
       Cookies.getCookie("jwt") !== "null" &&
       Cookies.getCookie("apptoken") !== "null";
+
     if (!isLogined) history.push("/signout");
   });
 
