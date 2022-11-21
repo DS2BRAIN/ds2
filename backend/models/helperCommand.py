@@ -129,6 +129,8 @@ class HelperCommand():
             sorting = commandTable.option
         elif sorting == 'command':
             sorting = commandTable.command
+        elif sorting == 'upvote':
+            sorting = commandTable.upvote
         elif sorting == 'status':
             sorting = peewee.Case(commandTable.status, (
             (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
