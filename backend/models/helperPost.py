@@ -99,6 +99,8 @@ class HelperPost():
             sorting = postsTable.option
         elif sorting == 'title':
             sorting = postsTable.title
+        elif sorting == 'upvote':
+            sorting = postsTable.upvote
         elif sorting == 'status':
             sorting = peewee.Case(postsTable.status, (
             (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),

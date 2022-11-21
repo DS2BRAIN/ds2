@@ -67,6 +67,11 @@ def readPosts(response: Response, sorting: str = 'created_at', tab: str = 'all',
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
     response.status_code, result = managePostClass.getAllPosts(sorting, page, count, tab, desc, searching, post_type)
     return result
+@router.get("/home-contents/")
+def readPosts(response: Response, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
+                 page: int = 0, desc: bool = False, searching: str = ''):
+    response.status_code, result = managePostClass.getHomeContents(sorting, page, count, tab, desc, searching)
+    return result
 
 @router.get("/posts/")
 def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
