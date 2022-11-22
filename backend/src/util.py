@@ -191,7 +191,7 @@ class Util():
         self.jupyterAMI = util_configs.get('jupyterAMI', {})
 
 
-        self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif', 'jiff']
+        self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif', 'jfif']
         self.videoExtensionName = ['mp4', 'mov', 'webm']
         self.soundExtensionName = ['mp4','mp3','wav','flac']
         self.compressionExtensionName = ['zip']
