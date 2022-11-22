@@ -823,6 +823,16 @@ class ManageFile:
                         #     annotation['segmentation'] = [[x1, y1, x2, y1, x2, y2, x1, y2]]
                         bbox = {}
                         points = None
+
+                        # labeltype = 'polygon'
+                        labeltype = 'box'
+
+                        if annotation['segmentation']:
+                            if type(annotation['segmentation'][0]) != list:
+                                points = self.get_coco_segmentation(annotation['segmentation'], width, height)
+                            else:
+                                points = self.get_coco_segmentation(annotation['segmentation'][0], width, height)
+
                         if annotation['bbox']:
                             x = annotation['bbox'][0] / width
                             y = annotation['bbox'][1] / height
@@ -834,19 +844,12 @@ class ManageFile:
                                 "w": w,
                                 "h": h
                             }
-                            points = json.dumps([[x, y], [x + w, y], [x + w, y + h], [x, y + h]])
-                        # bbox = self.get_coco_segmentation(annotation['bbox'], width, height)
 
-                        labeltype = 'polygon'
-
-                        if annotation['segmentation']:
-                            if type(annotation['segmentation'][0]) != list:
-                                points = self.get_coco_segmentation(annotation['segmentation'], width, height)
-                            else:
-                                points = self.get_coco_segmentation(annotation['segmentation'][0], width, height)
-
-                        if bbox:
-                            labeltype = 'box'
+                        if points:
+                            labeltype = 'polygon'
+                        else:
+                            if annotation['bbox']:
+                                points = json.dumps([[x, y], [x + w, y], [x + w, y + h], [x, y + h]])
 
                         label_data = {
                                           'labeltype': labeltype,
@@ -2567,60 +2570,61 @@ class ManageFile:
         if dataconnector.get('user') != user.get('id'):
             raise ex.NotAllowedTokenEx()
 
-        mb = None
-        table_status = 0
-        url = None
-        try:
-            import asyncio
-            mb = self.utilClass.get_metabase_client()
-            if mb is None:
-                asyncio.sleep(120)
-                mb = self.utilClass.get_metabase_client()
-        except Exception as e:
-            print(e.args[0].text)
-
-        is_first = True
-        while True:
-            if await request.is_disconnected():
-                break
-            if mb:
-                new_table_status = 0
-                try:
-                    # session_id = getattr(mb, 'session_id', None)
-                    model_task = self.dbClass.get_metabase_async_task(user.get('id'), 'dataconnector', dataconnector_id)
-                    if model_task:
-                        new_table_status = getattr(model_task, 'status', 1)
-                        view_name = f"dataconnector_{dataconnector_id}_table"
-                        table_id = mb.get_item_id('table', view_name)
-                        url = f":{self.utilClass.metabase_port}/auto/dashboard/table/{table_id}"
-                        if new_table_status == 1:
-                            if mb.get_item_info('table', table_id).get('initial_sync_status') == 'complete':
-                                self.dbClass.update_async_task_complete_by_id(model_task.id)
-                                new_table_status = 100
-                except:
-                    pass
-            else:
-                new_table_status = 99
-
-            if (table_status != new_table_status) or is_first:
-                table_status = new_table_status
-                metabase = {
-                    'status': table_status,
-                    'url': url
-                    # 'X-Metabase-Session': session_id
-                }
-                yield {
-                    "event": "new_message",
-                    "id": "message_id",
-                    "retry": 30000,
-                    "data": json.dumps(metabase)
-                }
-                is_first = False if is_first else False
-
-            # if mb is None or table_status == 100:
-            #     break
-
-            await asyncio.sleep(3)
+        # mb = None
+        # table_status = 0
+        # url = None
+        # try:
+        #     import asyncio
+        #     mb = self.utilClass.get_metabase_client()
+        #     if mb is None:
+        #         asyncio.sleep(120)
+        #         mb = self.utilClass.get_metabase_client()
+        # except Exception as e:
+            # print(e.args[0].text)
+            # pass
+        #
+        # is_first = True
+        # while True:
+        #     if await request.is_disconnected():
+        #         break
+        #     if mb:
+        #         new_table_status = 0
+        #         try:
+        #             # session_id = getattr(mb, 'session_id', None)
+        #             model_task = self.dbClass.get_metabase_async_task(user.get('id'), 'dataconnector', dataconnector_id)
+        #             if model_task:
+        #                 new_table_status = getattr(model_task, 'status', 1)
+        #                 view_name = f"dataconnector_{dataconnector_id}_table"
+        #                 table_id = mb.get_item_id('table', view_name)
+        #                 url = f":{self.utilClass.metabase_port}/auto/dashboard/table/{table_id}"
+        #                 if new_table_status == 1:
+        #                     if mb.get_item_info('table', table_id).get('initial_sync_status') == 'complete':
+        #                         self.dbClass.update_async_task_complete_by_id(model_task.id)
+        #                         new_table_status = 100
+        #         except:
+        #             pass
+        #     else:
+        #         new_table_status = 99
+        #
+        #     if (table_status != new_table_status) or is_first:
+        #         table_status = new_table_status
+        #         metabase = {
+        #             'status': table_status,
+        #             'url': url
+        #             # 'X-Metabase-Session': session_id
+        #         }
+        #         yield {
+        #             "event": "new_message",
+        #             "id": "message_id",
+        #             "retry": 30000,
+        #             "data": json.dumps(metabase)
+        #         }
+        #         is_first = False if is_first else False
+        #
+        #     # if mb is None or table_status == 100:
+        #     #     break
+        #
+        #     await asyncio.sleep(3)
 
 if __name__ == "__main__":
     manageFile = ManageFile()
