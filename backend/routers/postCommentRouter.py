@@ -67,3 +67,16 @@ async def deletePostComment(token: str, response: Response, comment_id):
 async def readPostComment(post_id: int, token: str, response: Response):
     response.status_code, result = managePostCommentClass.getPostCommentsByPostId(token, post_id)
     return result
+
+
+@router.post("/review-post-comments/{post_id}/{result}/")
+def createPostBookmark(response: Response, post_id: int, result: str, token: str):
+    response.status_code, result = managePostCommentClass.reviewPostComment(token, post_id, result)
+
+    return result
+@router.get("/review-post-comments/")
+def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
+                 page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
+    response.status_code, result = managePostCommentClass.getAllReviewPostComments(token, sorting, page, count, tab,
+                                                                      desc, searching, post_type)
+    return result

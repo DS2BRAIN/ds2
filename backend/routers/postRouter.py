@@ -79,6 +79,12 @@ def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: 
     response.status_code, result = managePostClass.getAllPostsByUserId(token, sorting, page, count, tab,
                                                                       desc, searching, post_type)
     return result
+
+@router.post("/review-posts/{post_id}/{result}/")
+def createPostBookmark(response: Response, post_id: int, result: str, token: str):
+    response.status_code, result = managePostClass.reviewPost(token, post_id, result)
+
+    return result
 @router.get("/review-posts/")
 def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):

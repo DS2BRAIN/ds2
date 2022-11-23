@@ -100,3 +100,28 @@ class HelperPostComment():
         return postCommentsTable.select(postCommentsTable, usersTable) \
                 .join(usersTable, on=(postCommentsTable.user == usersTable.id))\
                 .where(postCommentsTable.post == post_id).execute()
+
+    @wrapper
+    def getAllReviewPostComment(self, post_ids, sorting='created_at', tab='all', desc=False, searching='',
+                           page=0, count=10, post_type=""):
+        if sorting == 'created_at':
+            sorting = postCommentsTable.created_at
+        elif sorting == 'updated_at':
+            sorting = postCommentsTable.updated_at
+        elif sorting == 'status':
+            sorting = peewee.Case(postCommentsTable.status, (
+                (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
+                (61, 12)), 0)
+
+        if desc and sorting != 'status':
+            sorting = sorting.desc()
+        common_where = ((postCommentsTable.is_deleted == None) | (postCommentsTable.is_deleted == False))
+        if post_ids:
+            common_where = common_where & (postCommentsTable.id.in_(post_ids))
+
+        common_where = common_where & (postCommentsTable.status == 'Under Review')
+        
+        post_query = postCommentsTable.select(postCommentsTable)
+        query = post_query.where(common_where)
+
+        return query.order_by(sorting).paginate(page, count).execute(), query.count()
