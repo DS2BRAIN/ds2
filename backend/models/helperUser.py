@@ -303,3 +303,7 @@ class HelperUser():
             return result.__dict__['__data__']
         else:
             return result
+
+    @wrapper
+    def getUserCreditHistoryByPostIdAndCreditType(self, post_id, credit_type):
+        return creditHistoriesTable.get_or_none((creditHistoriesTable.post == post_id) & (creditHistoriesTable.credit_type == credit_type))

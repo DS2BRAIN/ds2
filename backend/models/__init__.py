@@ -1265,6 +1265,7 @@ class usersTable(MySQLModel):
     number_of_login_attempts = pw.IntegerField(null=0)
     credit = pw.FloatField(null=True)
     last_posted_at = pw.DateTimeField(null=True)
+    last_paid_posted_at = pw.DateTimeField(null=True)
     last_email_sent_at = pw.DateTimeField(null=True)
 
 class userhistoriesTable(MySQLModel):
@@ -2736,6 +2737,7 @@ class postCommentsTable(MySQLModel):
     status = pw.TextField(null=True)
     rating = pw.IntegerField(null=True)
     comment = LongTextField(null=True)
+    is_deleted = pw.BooleanField(null=True)
 
 class creditHistoriesTable(MySQLModel):
     class Meta:
