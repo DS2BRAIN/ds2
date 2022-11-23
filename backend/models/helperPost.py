@@ -117,7 +117,7 @@ class HelperPost():
             common_where = common_where & (postsTable.title.contains(searching))
         if post_type == "creation":
             post_query = postsTable.select(postsTable,commandTable,usersTable)\
-                .join(commandTable, on=(postsTable.related_command == commandTable.id)) \
+                .join(commandTable, on=(postsTable.related_command == commandTable.id), join_type="left") \
                 .switch(postsTable)\
                 .join(usersTable, on=(postsTable.user == usersTable.id))
         else:
@@ -155,9 +155,11 @@ class HelperPost():
         if searching:
             common_where = common_where & (postsTable.title.contains(searching))
 
-        post_query = postsTable.select()
-
-        query = post_query.where(common_where)
+        if post_type == "creation":
+            query = postsTable.select(postsTable,commandTable)\
+                .join(commandTable, on=(postsTable.related_command == commandTable.id), join_type="left")
+        else:
+            query = postsTable.select(postsTable)
 
         return query.order_by(sorting).paginate(page, count).execute(), query.count()
 
