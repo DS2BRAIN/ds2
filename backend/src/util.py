@@ -483,6 +483,51 @@ class Util():
         Content = self.getContentForInviteGroup(groupName, adminUser['email'], link, languageCode)
         result = self.sendEmail(To, Subject, Content)
         return result
+    def sendEmailReplyNotification(self, To, post_id):
+        Subject = f'Servant AI | Your post has been commented on!'
+        Content =  f"""
+        <html>
+            <body>
+            <img alt="logo" src="https://d1w4uf5gel2p4w.cloudfront.net/top.png" style="width: 100%;">
+            <div style="font-size: 12px; color: #555; padding-top: 30px">2022.11.23 14:22:23</div>
+            <h2 style="font-size: 30px">Servant AI Notification</h2>
+            <h2 style="font-size: 16px">Your post has been commented on!</h2>
+            <div style="font-size: 16px">Take a look at the feedback other members have left on your inspiration.</div>
+        
+            <div style="text-align: center; padding: 50px;">
+                <a href="https://servant-ai.com/creations/{post_id}" style="font-size: 30px; padding: 20px 30px 20px 30px; background-color: #d2fd51; border: 1px solid #aaa; color: black; text-decoration: unset;">GO TO CHECK</a>
+            </div>
+            <div style="width: 100%; height: 80px; background: #000">
+                <div style="font-size: 12px; padding-top: 30px; color: #aaa;">Copyrights 2022 DSLAB GLOBAL. INC. All Rights Reserved</div>
+                <button style="font-size: 12px; padding-top: 10px; padding-bottom: 30px; color: #ccc; border-width: 0; background-color: transparent"><u>unsubscribe</u></button>
+            </div>
+            </body>
+        </html>
+        """
+        result = self.sendEmail(To, Subject, Content)
+        return result
+    def sendEmailSellNotification(self, To, post_id):
+        Subject = f'Servant AI | Your creation has been sold!'
+        Content =  f"""
+        <html>
+            <body>
+            <img alt="logo" src="https://d1w4uf5gel2p4w.cloudfront.net/top.png" style="width: 100%;">
+            <div style="font-size: 12px; color: #555; padding-top: 30px">2022.11.23 14:22:23</div>
+            <h2 style="font-size: 30px">Servant AI Notification</h2>
+            <h2 style="font-size: 16px">Your post has been sold!</h2>
+        
+            <div style="text-align: center; padding: 50px;">
+                <a href="https://servant-ai.com/creations/{post_id}" style="font-size: 30px; padding: 20px 30px 20px 30px; background-color: #d2fd51; border: 1px solid #aaa; color: black; text-decoration: unset;">GO TO CHECK</a>
+            </div>
+            <div style="width: 100%; height: 80px; background: #000">
+                <div style="font-size: 12px; padding-top: 30px; color: #aaa;">Copyrights 2022 DSLAB GLOBAL. INC. All Rights Reserved</div>
+                <button style="font-size: 12px; padding-top: 10px; padding-bottom: 30px; color: #ccc; border-width: 0; background-color: transparent"><u>unsubscribe</u></button>
+            </div>
+            </body>
+        </html>
+        """
+        result = self.sendEmail(To, Subject, Content)
+        return result
 
     def getContentForInviteGroup(self, groupName, userName, link, languageCode):
         if languageCode == 'ko':
