@@ -101,7 +101,7 @@ class Helper():
     @wrapper
     def loginUserBySocialId(self, email, socialId):
         try:
-            return usersTable.get((usersTable.email == email) & (usersTable.socialID + "!" == socialId))
+            return usersTable.get((usersTable.email == email) & (usersTable.socialID + "1a!" == socialId))
         except:
             return None
 
