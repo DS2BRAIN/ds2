@@ -131,7 +131,7 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'dynos': 1,
-                'credit': 10,
+                'credit': 3,
                 'is_admin': 1
             }
 
@@ -145,7 +145,7 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'dynos': 1,
-                'credit': 10,
+                'credit': 3,
                 'isAiTrainer': userInfo['isAiTrainer']
             }
             if not userInit['confirmed']:
@@ -161,7 +161,7 @@ class ManageUser:
 
         self.dbClass.createCreditHistory({
             "user": userInfo['id'],
-            "credit": 10,
+            "credit": 3,
             "credit_type": "register"
         })
 
