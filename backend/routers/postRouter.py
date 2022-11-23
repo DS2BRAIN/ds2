@@ -79,6 +79,12 @@ def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: 
     response.status_code, result = managePostClass.getAllPostsByUserId(token, sorting, page, count, tab,
                                                                       desc, searching, post_type)
     return result
+@router.get("/review-posts/")
+def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
+                 page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
+    response.status_code, result = managePostClass.getAllReviewPosts(token, sorting, page, count, tab,
+                                                                      desc, searching, post_type)
+    return result
 @router.get("/history/buy/posts/")
 def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: str = 'all',  count: int = 10,
                  page: int = 0, desc: bool = False, searching: str = '', post_type = ''):
