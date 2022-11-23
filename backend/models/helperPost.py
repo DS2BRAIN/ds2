@@ -90,7 +90,7 @@ class HelperPost():
 
     @wrapper
     def getAllPost(self, sorting='created_at', tab='all', desc=False, searching='',
-                              page=0, count=10, post_type=''):
+                              page=0, count=10, post_type='', item_type=''):
         if sorting == 'created_at':
             sorting = postsTable.created_at
         elif sorting == 'updated_at':
@@ -113,6 +113,8 @@ class HelperPost():
         common_where = ((postsTable.is_deleted == False) | (postsTable.is_deleted == None)) & (postsTable.status != "Under Review")
         if post_type:
             common_where = common_where & (postsTable.post_type == post_type)
+        if item_type:
+            common_where = common_where & (postsTable.item_type == item_type)
         if searching:
             common_where = common_where & (postsTable.title.contains(searching))
         if post_type == "creation":
