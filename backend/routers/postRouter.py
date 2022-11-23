@@ -93,7 +93,7 @@ def readPosts(response: Response, token: str, sorting: str = 'created_at', tab: 
     return result
 
 @router.get("/posts/{post_id}/")
-async def readPost(post_id: int, token: str, response: Response):
+async def readPost(post_id: int, response: Response, token: str = None):
     response.status_code, result = managePostClass.getPostById(token, post_id)
     return result
 
