@@ -130,6 +130,45 @@ class HelperPost():
         return query.order_by(sorting).paginate(page, count).execute(), query.count()
 
     @wrapper
+    def getAllReviewPost(self, post_ids, sorting='created_at', tab='all', desc=False, searching='',
+                           page=0, count=10, post_type=""):
+        if sorting == 'created_at':
+            sorting = postsTable.created_at
+        elif sorting == 'updated_at':
+            sorting = postsTable.updated_at
+        elif sorting == 'option':
+            sorting = postsTable.option
+        elif sorting == 'title':
+            sorting = postsTable.title
+        elif sorting == 'status':
+            sorting = peewee.Case(postsTable.status, (
+            (100, 1), (9, 2), (99, 3), (1, 4), (10, 5), (11, 6), (20, 7), (21, 8), (30, 9), (31, 10), (60, 11),
+            (61, 12)), 0)
+
+        if desc and sorting != 'status':
+            sorting = sorting.desc()
+        common_where = ((postsTable.is_deleted == None) | (postsTable.is_deleted == False))
+        if post_ids:
+            common_where = common_where & (postsTable.id.in_(post_ids))
+
+        if post_type:
+            common_where = common_where & (postsTable.post_type == post_type)
+
+        if searching:
+            common_where = common_where & (postsTable.title.contains(searching))
+
+        common_where = common_where & (postsTable.status == 'Under Review')
+
+        if post_type == "creation":
+            post_query = postsTable.select(postsTable, commandTable) \
+                .join(commandTable, on=(postsTable.related_command == commandTable.id), join_type="left")
+        else:
+            post_query = postsTable.select(postsTable)
+
+        query = post_query.where(common_where)
+
+        return query.order_by(sorting).paginate(page, count).execute(), query.count()
+    @wrapper
     def getAllPostByUserId(self, user_id, post_ids, sorting='created_at', tab='all', desc=False, searching='',
                               page=0, count=10, post_type=""):
         if sorting == 'created_at':
@@ -147,21 +186,24 @@ class HelperPost():
 
         if desc and sorting != 'status':
             sorting = sorting.desc()
-        common_where = ((postsTable.is_deleted == None) | (postsTable.is_deleted == False)) & (
-                    (postsTable.user == user_id) | (postsTable.id.in_(post_ids)))
-        if post_type:
-            common_where = common_where & (postsTable.post_type == post_type)
+        common_where = ((postsTable.is_deleted == None) | (postsTable.is_deleted == False))
+
+        if post_ids:
+            common_where = common_where & (postsTable.id.in_(post_ids))
 
         if post_type:
             common_where = common_where & (postsTable.post_type == post_type)
+
         if searching:
             common_where = common_where & (postsTable.title.contains(searching))
 
         if post_type == "creation":
-            query = postsTable.select(postsTable,commandTable)\
+            post_query = postsTable.select(postsTable,commandTable)\
                 .join(commandTable, on=(postsTable.related_command == commandTable.id), join_type="left")
         else:
-            query = postsTable.select(postsTable)
+            post_query = postsTable.select(postsTable)
+
+        query = post_query.where(common_where)
 
         return query.order_by(sorting).paginate(page, count).execute(), query.count()
 
