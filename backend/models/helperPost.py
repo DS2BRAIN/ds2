@@ -188,6 +188,8 @@ class HelperPost():
             sorting = sorting.desc()
         common_where = ((postsTable.is_deleted == None) | (postsTable.is_deleted == False))
 
+        common_where = common_where & (postsTable.user == user_id)
+
         if post_ids:
             common_where = common_where & (postsTable.id.in_(post_ids))
 
