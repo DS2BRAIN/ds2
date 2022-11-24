@@ -685,6 +685,23 @@ class ManageUser:
             userUsage['ClickAi'] = user['cumulativePredictCount']
             user['usage'] = userUsage
 
+            notifications = []
+            try:
+                for notification_raw in self.dbClass.getUserActivitiesByInfo({"target_user": user['id']}):
+                    try:
+                        notification = notification_raw.__dict__['__data__']
+                        notification['user_name'] = notification_raw.userstable.username
+                        notification['user_thumbnail'] = notification_raw.userstable.companyLogoUrl
+                        notification['post'] = notification_raw.poststable.__dict__['__data__']
+                        notifications.append(notification)
+                    except:
+                        print(traceback.format_exc())
+                        pass
+            except:
+                print(traceback.format_exc())
+
+            user['notifications'] = notifications
+
             return HTTP_200_OK, user
         except:
             self.utilClass.sendSlackMessage(
