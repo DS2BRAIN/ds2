@@ -307,3 +307,43 @@ class HelperUser():
     @wrapper
     def getUserCreditHistoryByPostIdAndCreditType(self, post_id, credit_type):
         return creditHistoriesTable.get_or_none((creditHistoriesTable.post == post_id) & (creditHistoriesTable.credit_type == credit_type))
+    @wrapper
+    def getUserActivitiyByInfo(self, item):
+        commonWhere = (userActivitiesTable.target_user == item.get('target_user'))
+        if item.get('user'):
+            commonWhere = commonWhere & (userActivitiesTable.user == item['user'])
+        if item.get('activity'):
+            commonWhere = commonWhere & (userActivitiesTable.activity == item['activity'])
+        if item.get('item_type'):
+            commonWhere = commonWhere & (userActivitiesTable.item_type == item['item_type'])
+        if item.get('target_id'):
+            commonWhere = commonWhere & (userActivitiesTable.target_id == item['target_id'])
+        if item.get('target_type'):
+            commonWhere = commonWhere & (userActivitiesTable.target_type == item['target_type'])
+        if item.get('item_id'):
+            commonWhere = (userActivitiesTable.item_id == item['item_id'])
+
+        return userActivitiesTable.get_or_none(commonWhere)
+    @wrapper
+    def getUserActivitiesByInfo(self, item):
+
+        commonWhere = (userActivitiesTable.target_user == item.get('target_user'))
+
+        if item.get('user'):
+            commonWhere = commonWhere & (userActivitiesTable.user == item['user'])
+        if item.get('activity'):
+            commonWhere = commonWhere & (userActivitiesTable.activity == item['activity'])
+        if item.get('item_type'):
+            commonWhere = commonWhere & (userActivitiesTable.item_type == item['item_type'])
+        if item.get('target_id'):
+            commonWhere = commonWhere & (userActivitiesTable.target_id == item['target_id'])
+        if item.get('target_type'):
+            commonWhere = commonWhere & (userActivitiesTable.target_type == item['target_type'])
+        if item.get('item_id'):
+            commonWhere = (userActivitiesTable.item_id == item['item_id'])
+
+        return userActivitiesTable.select(userActivitiesTable, usersTable, postsTable)\
+            .join(usersTable, on=(userActivitiesTable.user == usersTable.id))\
+            .switch(userActivitiesTable)\
+            .join(postsTable, on=(userActivitiesTable.item_id == postsTable.id), join_type="left")\
+            .where(commonWhere).execute()

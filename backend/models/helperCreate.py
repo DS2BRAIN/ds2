@@ -191,3 +191,6 @@ class HelperCreate():
     @wrapper
     def createCreditHistory(self, data):
         return creditHistoriesTable.create(**(data))
+    @wrapper
+    def createUserActivities(self, data):
+        return userActivitiesTable.create(**(data))

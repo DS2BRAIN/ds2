@@ -2739,6 +2739,21 @@ class postCommentsTable(MySQLModel):
     comment = LongTextField(null=True)
     is_deleted = pw.BooleanField(null=True)
 
+class userActivitiesTable(MySQLModel):
+    class Meta:
+        db_table = 'user_activities'
+
+    id = pw.AutoField()
+    user = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    activity = pw.TextField(null=True)
+    item_type = pw.TextField(null=True)
+    item_id = pw.IntegerField(null=True)
+    target_type = pw.TextField(null=True)
+    target_id = pw.IntegerField(null=True)
+    target_user = pw.IntegerField(null=True)
+
 class creditHistoriesTable(MySQLModel):
     class Meta:
         db_table = 'credit_histories'
