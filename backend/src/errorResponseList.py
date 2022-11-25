@@ -595,6 +595,13 @@ EXCEED_SELL_POST_ERROR = HTTP_503_SERVICE_UNAVAILABLE, {
             "message_en": "Exceeded 20 usage to sell."
         }
 
+DUPLICATE_USER_NAME_ERROR = HTTP_500_INTERNAL_SERVER_ERROR, {
+            "statusCode": 500,
+            "error": "Bad Request",
+            "message": "다른 사용자가 해당 유저 이름을 사용하고 있습니다. 다른 이름으로 다시 시도해주시길 바랍니다.",
+            "message_en": "Someone is using this user name. Please try another one."
+}
+
 class ErrorResponseList:
     def verifyError(self, message):
         return HTTP_400_BAD_REQUEST, {

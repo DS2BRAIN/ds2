@@ -161,6 +161,10 @@ class Helper():
             return None
 
     @wrapper
+    def getUserByUsername(self, username):
+        return usersTable.get_or_none(usersTable.username == username)
+
+    @wrapper
     def get_user_by_id(self, user_id, raw=False):
         try:
             return usersTable.get(usersTable.id == user_id).__dict__['__data__'] if not raw else usersTable.get(

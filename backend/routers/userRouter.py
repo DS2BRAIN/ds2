@@ -127,6 +127,7 @@ def delete_admin_users(response: Response,
 
 class UserLoginInfo(BaseModel):
     identifier: str
+    username: str
     password: str
     googleIdToken: str = None
     tokenObj: dict = None
@@ -192,7 +193,7 @@ def emailConfirm(response: Response):
     return result
 
 class UserChangableInfo(BaseModel):
-    name: str = None
+    username: str = None
     isBetaUser: bool = None
     promotionCode: str = None
     isAgreedWithPolicy: bool = None

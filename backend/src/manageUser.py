@@ -39,7 +39,7 @@ from src.errorResponseList import ErrorResponseList, NOT_FOUND_USER_ERROR, NOT_A
     WRONG_PASSWORD_ERROR, NOT_ACCESS_ERROR, NOT_FOUND_GROUP_ERROR, ALREADY_REGISTER_GROUP_MEMBER, NOT_VALID_EMAIL, \
     NOT_HOST_USER_ERROR, PERMISSION_DENIED_GROUP_ERROR, LEAVE_ADMIN_USER_ERROR, EXCEED_PROJECT_ERROR, \
     NOT_EXISTENT_GROUP_ERROR, NOT_FOUND_AI_ERROR, TOO_MANY_INVITE_ERROR, ALREADY_INVITATION_USER_ERROR, PRICING_ERROR, \
-    DO_NOT_EXIT_ADMIN_USER, SEARCH_PROJECT_ERROR, ALREADY_DELETED_OBJECT
+    DO_NOT_EXIT_ADMIN_USER, SEARCH_PROJECT_ERROR, ALREADY_DELETED_OBJECT, DUPLICATE_USER_NAME_ERROR
 
 errorResponseList = ErrorResponseList()
 
@@ -114,17 +114,18 @@ class ManageUser:
         usagePlan = self.dbClass.getOneUsageplanByPlanName('business')
         if self.utilClass.configOption == 'enterprise':
             key = self.dbClass.getAdminKey()
-            if key and self.utilClass.isValidKey(key):
-                key_info = self.utilClass.get_key_info(key)
-                if self.dbClass.getUserCount() >= key_info["maxuser"] and not self.utilClass.is_prod_server:
-                    return EXCEED_USER_ERROR
-            else:
-                if self.dbClass.getUserCount() > 1 and not self.utilClass.is_prod_server:
-                    return EXCEED_USER_ERROR
+            # if key and self.utilClass.isValidKey(key):
+            #     key_info = self.utilClass.get_key_info(key)
+            #     if self.dbClass.getUserCount() >= key_info["maxuser"] and not self.utilClass.is_prod_server:
+            #         return EXCEED_USER_ERROR
+            # else:
+            #     if self.dbClass.getUserCount() > 1 and not self.utilClass.is_prod_server:
+            #         return EXCEED_USER_ERROR
 
             userInit = {
                 "confirmed": True,
                 "emailTokenCode": uuid.uuid4().hex,
+                "username": userInfo.get("username"),
                 "appTokenCode": uuid.uuid4().hex,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
@@ -138,6 +139,7 @@ class ManageUser:
         else:
             userInit = {
                 "confirmed": userInfo['confirmed'],
+                "username": userInfo.get("username"),
                 "emailTokenCode": uuid.uuid4().hex,
                 "appTokenCode": uuid.uuid4().hex,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
@@ -273,6 +275,7 @@ class ManageUser:
         usagePlan = self.dbClass.getOneUsageplanByPlanName('business')
         userInit = {
             "confirmed": userInfo['confirmed'],
+            "username": userInfo.get("username"),
             "emailTokenCode": uuid.uuid4().hex,
             "appTokenCode": uuid.uuid4().hex,
             "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
@@ -615,6 +618,9 @@ class ManageUser:
                 f"파일 : manageUser.py \n함수 : putUser \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
                 appError=True, userInfo=user)
             return NOT_FOUND_USER_ERROR
+
+        if userChangableInfoRaw.username and self.dbClass.getUserByUsername(userChangableInfoRaw.username):
+            return DUPLICATE_USER_NAME_ERROR
 
         isDeleteRequested = userChangableInfoRaw.isDeleteRequested
         userChangableInfo = {**userChangableInfoRaw.__dict__}
