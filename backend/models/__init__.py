@@ -2766,6 +2766,20 @@ class creditHistoriesTable(MySQLModel):
     credit_type = pw.TextField(null=True)
     post = pw.IntegerField(null=True)
 
+class reviewHistoriesTable(MySQLModel):
+    class Meta:
+        db_table = 'review_histories'
+
+    id = pw.AutoField()
+    item_id = pw.IntegerField(null=True)
+    item_type = pw.TextField(null=True)
+    reviewer = pw.IntegerField(null=True)
+    result = pw.TextField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
+                                  null=True)
+
+
 class MongoDb():
     def __init__(self):
         self.DS2DATA_COLLECTION_NAME = 'ds2data'

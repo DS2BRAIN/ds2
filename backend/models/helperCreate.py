@@ -194,3 +194,6 @@ class HelperCreate():
     @wrapper
     def createUserActivities(self, data):
         return userActivitiesTable.create(**(data))
+    @wrapper
+    def createReviewHistories(self, data):
+        return reviewHistoriesTable.create(**(data))
