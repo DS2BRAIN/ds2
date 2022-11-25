@@ -1971,7 +1971,26 @@ class ManagePayment:
 
         return HTTP_301_MOVED_PERMANENTLY, RedirectResponse(
             url=front_url + f"?paid={paid_result}", status_code=301)
+    def withdraw_credit(self, token, withdraw_data):
 
+        user = self.dbClass.getUser(token, raw=True)
+        if not user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : managePayment.py \n함수 : requestRefund \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True, userInfo=user)
+            return NOT_FOUND_USER_ERROR
+
+        self.dbClass.createwithdrawHistories({
+            "user": user.id,
+            "credit": withdraw_data.credit,
+            "status": "Under Review"
+        })
+
+        self.utilClass.sendSlackMessage(
+            f"credit 출금을 신청하였습니다. {user.email} (ID: {user.id}) , credit : {withdraw_data.credit}",
+            appLog=True, contact=True, userInfo=user, is_agreed_behavior_statistics=True)
+
+        return HTTP_200_OK, True
     def sendEmailPaymentSuccess(self, user, price, card_num):
 
         to_email = user.email

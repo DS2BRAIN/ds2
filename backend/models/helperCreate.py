@@ -200,4 +200,7 @@ class HelperCreate():
     @wrapper
     def createGenKeywordHistories(self, data):
         return genKeywordHistoriesTable.create(**(data))
+    @wrapper
+    def createwithdrawHistories(self, data):
+        return withdrawHistoriesTable.create(**(data))
 

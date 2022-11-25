@@ -2795,6 +2795,18 @@ class genKeywordHistoriesTable(MySQLModel):
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
                                   null=True)
 
+class withdrawHistoriesTable(MySQLModel):
+    class Meta:
+        db_table = 'withdraw_histories'
+
+    id = pw.AutoField()
+    user = pw.IntegerField(null=True)
+    credit = pw.FloatField(null=True)
+    status = pw.TextField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
+                                  null=True)
+
 
 class MongoDb():
     def __init__(self):

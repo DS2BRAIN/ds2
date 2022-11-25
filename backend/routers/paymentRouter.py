@@ -152,6 +152,16 @@ def purchase_credit(response: Response, token: str, creditData: CreditData):
 
     return result
 
+
+class WithdrawData(BaseModel):
+    credit: float = None
+@router.post("/withdraw-credit/")
+def purchase_credit(response: Response, token: str, withdrawData: WithdrawData):
+
+    response.status_code, result = managePayment.withdraw_credit(token, withdrawData)
+
+    return result
+
 class PlanData(BaseModel):
     amount: float = None
     currency: str = None

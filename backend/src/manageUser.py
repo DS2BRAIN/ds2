@@ -707,6 +707,7 @@ class ManageUser:
                 print(traceback.format_exc())
 
             user['notifications'] = notifications
+            user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
 
             return HTTP_200_OK, user
         except:

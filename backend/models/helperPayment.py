@@ -178,8 +178,17 @@ class HelperPayment():
         return marketRequests.update({'isDeleted': True}).where(common_query).execute()
 
     @wrapper
+    def get_credit_histories_by_user_id(self, user_id):
+        return creditHistoriesTable.select().where(creditHistoriesTable.userId == user_id).execute()
+
+    @wrapper
+    def get_charge_histories_by_user_id(self, user_id):
+        return creditHistoriesTable.select().where((creditHistoriesTable.credit_type == "charge") & (creditHistoriesTable.user == user_id)).execute()
+
+    @wrapper
     def get_credit_histories_by_post_id_and_user_id(self, post_id, user_id):
-        return creditHistoriesTable.select().where(creditHistoriesTable.post == post_id) & (creditHistoriesTable.userId == user_id).execute()
+        return creditHistoriesTable.select().where((creditHistoriesTable.post == post_id) & (creditHistoriesTable.userId == user_id)).execute()
+
     @wrapper
     def get_buy_histories_by_post_id_and_user_id(self, post_id, user_id):
         return creditHistoriesTable.select().where((creditHistoriesTable.post == post_id) & (creditHistoriesTable.credit_type == 'buy_post') & (creditHistoriesTable.user == user_id)).execute()
