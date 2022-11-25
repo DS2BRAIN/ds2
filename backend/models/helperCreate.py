@@ -197,3 +197,7 @@ class HelperCreate():
     @wrapper
     def createReviewHistories(self, data):
         return reviewHistoriesTable.create(**(data))
+    @wrapper
+    def createGenKeywordHistories(self, data):
+        return genKeywordHistoriesTable.create(**(data))
+

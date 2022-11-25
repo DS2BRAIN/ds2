@@ -2779,6 +2779,20 @@ class reviewHistoriesTable(MySQLModel):
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
                                   null=True)
 
+class genKeywordHistoriesTable(MySQLModel):
+    class Meta:
+        db_table = 'image_keyword_histories'
+
+    id = pw.AutoField()
+    keyword = pw.TextField(null=True)
+    prompt = LongTextField(null=True)
+    keyword_source = pw.TextField(null=True)
+    status = pw.TextField(null=True)
+    count = pw.IntegerField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
+                                  null=True)
+
 
 class MongoDb():
     def __init__(self):
