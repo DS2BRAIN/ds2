@@ -110,21 +110,26 @@ class HelperPost():
 
         # if desc and sorting == 'status':
         sorting = sorting.desc()
-        common_where = ((postsTable.is_deleted == False) | (postsTable.is_deleted == None)) & (postsTable.status != "Under Review")
+        common_where = ((postsTable.is_deleted == False) | (postsTable.is_deleted == None))
+                       # & (postsTable.status != "Under Review") #TODO: TEST
         if post_type:
             common_where = common_where & (postsTable.post_type == post_type)
         if item_type:
             common_where = common_where & (postsTable.item_type == item_type)
-        if searching:
-            common_where = common_where & (postsTable.title.contains(searching))
         if post_type == "creation":
             post_query = postsTable.select(postsTable,commandTable,usersTable)\
                 .join(commandTable, on=(postsTable.related_command == commandTable.id), join_type="left") \
                 .switch(postsTable)\
                 .join(usersTable, on=(postsTable.user == usersTable.id))
+            if searching:
+                common_where = common_where & (postsTable.title.contains(searching) | commandTable.command.contains(searching))
         else:
             post_query = postsTable.select(postsTable, usersTable) \
                 .join(usersTable, on=(postsTable.user == usersTable.id))
+
+            if searching:
+                common_where = common_where & (
+                            (postsTable.title.contains(searching)) | (postsTable.title.contains(searching)))
 
         query = post_query.where(common_where)
         return query.order_by(sorting).paginate(page, count).execute(), query.count()

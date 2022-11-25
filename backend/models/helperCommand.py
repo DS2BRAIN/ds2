@@ -157,7 +157,7 @@ class HelperCommand():
         else:
             query = command_query.where(
                 (commandTable.command.contains(searching)) & (commandTable.status.in_(status_list)) & (common_where))
-        return query.order_by(commandTable.is_accept_iframe.desc(), sorting).paginate(page, count).execute(), query.count()
+        return query.order_by(commandTable.rank.desc(), commandTable.is_accept_iframe.desc(), sorting).paginate(page, count).execute(), query.count()
 
     @wrapper
     def getAllCommandByUserId(self, user_id, command_ids, sorting='created_at', tab='all', desc=False, searching='',

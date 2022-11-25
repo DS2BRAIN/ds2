@@ -2644,6 +2644,8 @@ class commandTable(MySQLModel):
     trainingColumnInfo = pw.CharField(null=True)
     useFrontendOnly = pw.BooleanField(null=True)
     useInstantly = pw.BooleanField(null=True)
+    rank = pw.IntegerField(null=True)
+    real_use = pw.BooleanField(null=True)
 class commandCollectionTable(MySQLModel):
     class Meta:
         db_table = 'command_collection'
