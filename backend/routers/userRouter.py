@@ -54,7 +54,7 @@ def cancelUsage(token: str, response: Response):
 class UserInfo(BaseModel):
     email: str
     password: str
-    name: str = None
+    username: str = None
     provider: str = None
     socialID: str = None
     birth: str = None
@@ -127,7 +127,6 @@ def delete_admin_users(response: Response,
 
 class UserLoginInfo(BaseModel):
     identifier: str
-    username: str
     password: str
     googleIdToken: str = None
     tokenObj: dict = None
