@@ -140,6 +140,11 @@ if __name__ == "__main__":
 
     if os.environ.get('DS2_DAEMON_TASK_MODE'):
         DaemonAsyncTask(testMode=False).run()
+
+    if os.environ.get('DS2_KEY'):
+        if os.path.exists("./src/creating/gen.py"):
+            from src.creating.gen import Gen
+        Gen().run()
     else:
         Process(target=daemon_sms.sub, args=("reader1",)).start()
     time.sleep(3)
