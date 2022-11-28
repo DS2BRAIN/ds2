@@ -296,7 +296,6 @@ dependencies:
     - uritemplate==4.1.1
     - urllib3==1.25.11
     - uvicorn==0.17.6
-    - v==0.0.0
     - websockets==10.3
     - werkzeug==2.1.2
     - wrapt==1.14.1

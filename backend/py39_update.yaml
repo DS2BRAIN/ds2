@@ -447,7 +447,6 @@ dependencies:
     - uritemplate==3.0.1
     - urllib3==1.25.11
     - uvicorn==0.17.6
-    - v==0.0.0
     - validators==0.18.2
     - wcwidth==0.2.5
     - webencodings==0.5.1
