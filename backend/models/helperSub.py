@@ -460,3 +460,7 @@ class HelperSub():
         if data:
             return data.__dict__['__data__'] if not raw else data
         return data
+
+    @wrapper
+    def getGenKeywordHistories(self):
+        return genKeywordHistoriesTable.select().execute()
