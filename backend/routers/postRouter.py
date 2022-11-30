@@ -143,7 +143,7 @@ async def get_keyword_histories(token: str, response: Response):
 
     return result
 @router.post("/gen-keyword-count/")
-async def get_keyword_histories(token: str, response: Response):
-    response.status_code, result = managePostClass.post_gen_keyword_histories_count(token)
+async def get_keyword_histories(token: str, keyword: str, response: Response):
+    response.status_code, result = managePostClass.post_gen_keyword_histories_count(token, keyword)
 
     return result
