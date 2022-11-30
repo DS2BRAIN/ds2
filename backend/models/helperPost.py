@@ -331,3 +331,11 @@ class HelperPost():
         #     postData.update(data)
         #     posthistoriesTable.create(**(postData))
         return postsTable.update(**data).where(postsTable.id == rowId).execute()
+
+    @wrapper
+    def getGenKeywordHistoryByKeyword(self):
+        return genKeywordHistoriesTable.get_or_none(genKeywordHistoriesTable.keyword)
+
+    @wrapper
+    def getGenKeywordHistories(self):
+        return genKeywordHistoriesTable.select().where(genKeywordHistoriesTable.count == 0)

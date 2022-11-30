@@ -136,3 +136,14 @@ async def updateCommand(post_id: str, response: Response):
     response.status_code, result = managePostClass.watchPost(post_id)
 
     return result
+
+@router.get("/gen-keyword-histories/")
+async def get_keyword_histories(token: str, response: Response):
+    response.status_code, result = managePostClass.get_gen_keyword_histories(token)
+
+    return result
+@router.post("/gen-keyword-count/")
+async def get_keyword_histories(token: str, response: Response):
+    response.status_code, result = managePostClass.post_gen_keyword_histories_count(token)
+
+    return result
