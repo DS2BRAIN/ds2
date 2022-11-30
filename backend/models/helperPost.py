@@ -333,8 +333,8 @@ class HelperPost():
         return postsTable.update(**data).where(postsTable.id == rowId).execute()
 
     @wrapper
-    def getGenKeywordHistoryByKeyword(self):
-        return genKeywordHistoriesTable.get_or_none(genKeywordHistoriesTable.keyword)
+    def getGenKeywordHistoryByKeyword(self, keyword):
+        return genKeywordHistoriesTable.get_or_none(genKeywordHistoriesTable.keyword == keyword)
 
     @wrapper
     def getNoGenKeywordHistories(self):
