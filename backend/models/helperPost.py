@@ -337,5 +337,5 @@ class HelperPost():
         return genKeywordHistoriesTable.get_or_none(genKeywordHistoriesTable.keyword)
 
     @wrapper
-    def getGenKeywordHistories(self):
+    def getNoGenKeywordHistories(self):
         return genKeywordHistoriesTable.select().where(genKeywordHistoriesTable.count == 0)
