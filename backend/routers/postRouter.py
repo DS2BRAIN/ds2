@@ -37,13 +37,15 @@ class PostData(BaseModel):
     file_name: str = None
     post_type: str = None
     item_type: str = None
+    contest: int = None
 
 @router.post("/posts/")
 def createPost(response: Response, token: str,
                file: UploadFile = File(None), title: str = Form(...), url: str = Form(None),
                credit: int = Form(None), tags: list = Form(None),
                description: str = Form(None), categories: list = Form(None),
-               related_post: int = Form(None), related_command: int = Form(None), post_type: str = Form(None), item_type: str = Form(None)
+               related_post: int = Form(None), related_command: int = Form(None), post_type: str = Form(None)
+               , item_type: str = Form(None), contest: int = Form(None)
                ):
     post_data = PostData(
         title=title,
@@ -57,6 +59,7 @@ def createPost(response: Response, token: str,
         item_type=item_type,
         credit=credit,
         file=file,
+        contest=contest,
     )
     response.status_code, result = managePostClass.createPost(token, post_data)
 
