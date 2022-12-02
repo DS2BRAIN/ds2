@@ -27,6 +27,7 @@ from models.helperCreate import HelperCreate
 from models.helperCRU import HelperCRU
 from models.helperLabel import HelperLabel
 from models.helperUser import HelperUser
+from models.helperContest import HelperContest
 
 
 class Helper():
@@ -854,7 +855,7 @@ for helperClass in [HelperSub, HelperInstance, HelperCreate, HelperCRU, HelperLa
                     HelperModel, HelperPayment, HelperUser, HelperProject, HelperSthreefile, HelperClient,
                     HelperFlow, HelperFlowNode, HelperMonitoringAlert,
                     HelperCommand, HelperCommandCollection, HelperCommandReview, HelperPost, HelperPostBookmark,
-                    HelperPostComment]:
+                    HelperPostComment, HelperContest]:
     methodList = [func for func in dir(helperClass) if callable(getattr(helperClass, func)) and '__' not in func]
     for i, methodRaw in enumerate(methodList):
         setattr(Helper, methodRaw, classmethod(getattr(helperClass, methodRaw)))

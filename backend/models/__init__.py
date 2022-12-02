@@ -2715,6 +2715,7 @@ class postsTable(MySQLModel):
     related_command = pw.IntegerField(null=True)
     credit = pw.FloatField(null=True)
     tags = JSONField(null=True)
+    contest = pw.IntegerField(null=True)
 class postBookmarksTable(MySQLModel):
     class Meta:
         db_table = 'post_bookmark'
@@ -2806,6 +2807,30 @@ class withdrawHistoriesTable(MySQLModel):
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
                                   null=True)
+
+class contestsTable(MySQLModel):
+    class Meta:
+        db_table = 'contests'
+
+    id = pw.AutoField()
+    user = pw.IntegerField(null=True)
+    title = pw.TextField(null=True)
+    option = pw.TextField(null=True)
+    status = pw.TextField(null=True)
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')],
+                                  null=True)
+    end_at = pw.DateTimeField()
+    upvote = pw.IntegerField(null=True)
+    share = pw.IntegerField(null=True)
+    watch = pw.IntegerField(null=True)
+    thumbnail = pw.TextField(null=True)
+    thumbnail_32 = pw.TextField(null=True)
+    thumbnail_256 = pw.TextField(null=True)
+    limit = pw.IntegerField(null=True)
+    is_deleted = pw.IntegerField(null=True)
+    item_type = pw.TextField(null=True)
+    price = pw.FloatField(null=True)
 
 
 class MongoDb():

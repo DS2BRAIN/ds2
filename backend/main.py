@@ -61,7 +61,7 @@ from starlette.status import HTTP_200_OK
 from routers import apiRouter, dataconnectorRouter, etcRouter, fileRouter, modelsRouter, marketRouter, projectsRouter, \
     flowRouter, flowNodeRouter, monitoringAlertRouter, predictRouter, labelRouter, userRouter, paymentRouter, \
     jupyterRouter, opsRouter, commandRouter, commandCollectionRouter, commandReviewRouter, postRouter, \
-    postBookmarkRouter, postCommentRouter
+    postBookmarkRouter, postCommentRouter, contestRouter
 from fastapi import Depends
 from fastapi.security import APIKeyHeader
 from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
@@ -135,6 +135,7 @@ app.include_router(commandReviewRouter.router, tags=["Command Review Router"])
 app.include_router(postRouter.router, tags=["Post Router"])
 app.include_router(postBookmarkRouter.router, tags=["Post Bookmark Router"])
 app.include_router(postCommentRouter.router, tags=["Post Comment Router"])
+app.include_router(contestRouter.router, tags=["Contest Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)

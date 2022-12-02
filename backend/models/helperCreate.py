@@ -203,4 +203,7 @@ class HelperCreate():
     @wrapper
     def createwithdrawHistories(self, data):
         return withdrawHistoriesTable.create(**(data))
+    @wrapper
+    def createContest(self, data):
+        return contestsTable.create(**(data))
 
