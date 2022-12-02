@@ -141,8 +141,6 @@ class DaemonSMS():
 
             if gpu:
                 my_env["CUDA_VISIBLE_DEVICES"] = gpu
-            else:
-                my_env["CUDA_VISIBLE_DEVICES"] = "0"
 
             if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
                 python_path = "/home/yeo/miniconda3/envs/p3.9/bin/python"
