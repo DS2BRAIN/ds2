@@ -26,6 +26,15 @@ if os.path.exists('./astoredaemon/util_config.py'):
 else:
     util_configs = {}
 
+if os.path.exists('./astoredaemon/t_config.py'):
+    from astoredaemon.t_config import internal_survey
+    from astoredaemon.t_config import external_survey
+    from astoredaemon.t_config import t_rating
+    from astoredaemon.t_config import survey_key_t
+    from astoredaemon.t_config import process_t
+else:
+    util_configs = {}
+
 
 rd = None
 try:
@@ -3107,29 +3116,11 @@ class MongoDb():
 
         conditions = conditions if conditions is not None else []
         sort = sort if sort is not None else []
-        results = {}
 
         results_raw = list(collection.aggregate(
             # [{"$sort":sort}, {"$match": {'rawData': {'lang_code': lang_code}, 'dataconnector': dataconnector_id}}, {"$limit": limit}], allowDiskUse=True))
             [{"$match": {'dataconnector': dataconnector_id}}], allowDiskUse=True))
-        for result_raw in results_raw:
-            raw_lang_code = result_raw['rawData'].get('lang_code')
-            label_lang_code = result_raw['labelData'].get('lang_code')
-            if raw_lang_code != lang_code and label_lang_code != lang_code:
-                continue
-            for condition in conditions:
-                for key, value in condition.items():
-                    eval_code = result_raw['rawData'].get('eval_code', result_raw['labelData'].get('eval_code'))
-                    if result_raw['rawData'].get(key) == value or result_raw['labelData'].get(key) == value:
-                        if not results.get(eval_code):
-                            results[eval_code] = {"info": [], 'matched': 0}
-                        matched_info = result_raw['rawData']
-                        matched_info.update(result_raw['labelData'])
-                        results[eval_code]['info'].append(matched_info)
-                        matched_score = 1
-                        if sort:
-                            matched_score = len(sort) - sort.index(key) + 1
-                        results[eval_code]['matched'] += matched_score
+        results = process_t(lang_code, conditions, sort, results_raw)
         results = sorted(results.items(), key=lambda item: item[1]['matched'], reverse=True)
 
         if not results:
@@ -3137,6 +3128,8 @@ class MongoDb():
                 results[result_raw['id']] = result_raw
         if limit:
             results = results[:limit]
+        else:
+            results = results[:10]
         return results
 
 import peewee
