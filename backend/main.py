@@ -68,6 +68,11 @@ from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
 import requests
 import orjson
 
+if os.path.exists('./src/creating/routers/'):
+    from src.creating.routers import maRouter
+    from src.creating.routers import mosRouter
+    from src.creating.routers import msRouter
+
 class ORJSONResponse(JSONResponse):
     media_type = "application/json"
 
@@ -136,6 +141,11 @@ app.include_router(postRouter.router, tags=["Post Router"])
 app.include_router(postBookmarkRouter.router, tags=["Post Bookmark Router"])
 app.include_router(postCommentRouter.router, tags=["Post Comment Router"])
 app.include_router(contestRouter.router, tags=["Contest Router"])
+
+if os.path.exists('./src/creating/routers/'):
+    app.include_router(maRouter.router, tags=["ma Router"])
+    app.include_router(mosRouter.router, tags=["mos Router"])
+    app.include_router(msRouter.router, tags=["ms Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)
