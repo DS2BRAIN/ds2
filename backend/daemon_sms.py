@@ -141,6 +141,18 @@ if __name__ == "__main__":
     if os.environ.get('DS2_DAEMON_TASK_MODE'):
         DaemonAsyncTask(testMode=False).run()
 
+    if os.environ.get('DS2_MYNT_MODE'):
+        if os.path.exists("./src/creating/mynA.py"):
+            from src.creating.mynA import MynA
+            mac = MynA()
+            mac.mynt()
+
+    if os.environ.get('DS2_MYNI_MODE'):
+        if os.path.exists("./src/creating/mynS.py"):
+            from src.creating.mynS import MynS
+            msc = MynS()
+            msc.myni()
+
     if os.environ.get('DS2_KEY'):
         if os.path.exists("./src/creating/gen.py"):
             from src.creating.gen import Gen
