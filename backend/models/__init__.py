@@ -2888,7 +2888,7 @@ class MongoDb():
 
             if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
                 db_conn_dict[db_name] = MongoClient(
-                    f"mongodb://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
+                    f"mongodb://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?authSource=admin&retryWrites=true&w=majority")[
                     db_name]
             else:
                 if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
@@ -2915,7 +2915,7 @@ class MongoDb():
             return db_conn_dict[db_name]
         if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
             db_conn_dict[db_name] = MongoClient(
-                f"mongodb://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?retryWrites=true&w=majority")[
+                f"mongodb://{util_configs['staging_mongodb_user']}:{util_configs['staging_mongodb_passwd']}@{util_configs['staging_mongodb_host']}/myFirstDatabase?authSource=admin&retryWrites=true&w=majority")[
                 db_name]
         else:
             if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
