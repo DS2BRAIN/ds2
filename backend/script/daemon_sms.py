@@ -147,10 +147,10 @@ class DaemonSMS():
                 jupyter_path = "/home/yeo/miniconda3/envs/p3.9/bin/jupyter"
                 execute_path = "/home/yeo/projects/ds2/backend/"
 
-            if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):
-                python_path = "/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"
+            if os.path.exists("/var/lib/jenkins/miniconda3/envs/p3.9/bin/python"):
+                python_path = "/var/lib/jenkins/miniconda3/envs/p3.9/bin/python"
                 jupyter_path = "/home/dslab/.local/bin/jupyter"
-                execute_path = "/var/lib/jenkins/projects/ds2-staging/backend/"
+                execute_path = "/var/lib/jenkins/projects/ds2/backend/"
                 my_env["DS2_DEV_TEST"] = "true"
 
             if "jupyterProject" in data:

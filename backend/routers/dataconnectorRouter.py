@@ -49,9 +49,9 @@ async def create_dataconnector_metabase(dataconnector_id: int, token: str, backg
     status_code = manage_external_ai_class.create_metabase(background_tasks=background_tasks, token=token, source_type='dataconnector', source_id=dataconnector_id)
     return Response(status_code=status_code)
 
-@router.get("/dataconnector/{dataconnector_id}/sse/")
-async def sse_model_info(request: Request, token: str, dataconnector_id: int):
-    return EventSourceResponse(manageFileClass.get_dataconnector_sse(request, token, dataconnector_id))
+# @router.get("/dataconnector/{dataconnector_id}/sse/")
+# async def sse_model_info(request: Request, token: str, dataconnector_id: int):
+#     return EventSourceResponse(manageFileClass.get_dataconnector_sse(request, token, dataconnector_id))
 
 
 @router.get("/sse/dataconnector/")
