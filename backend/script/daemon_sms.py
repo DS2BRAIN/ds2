@@ -110,8 +110,8 @@ class DaemonSMS():
         if os.path.exists("/home/yeo/miniconda3/envs/p3.9/bin/python"):
             execute_path = "/home/yeo/projects/ds2/backend/"
 
-        if os.path.exists("/var/lib/jenkins/anaconda3/envs/p3.9/bin/python"):
-            execute_path = "/var/lib/jenkins/projects/ds2-staging/backend/"
+        if os.path.exists("/var/lib/jenkins/miniconda3/envs/p3.9/bin/python"):
+            execute_path = "/var/lib/jenkins/projects/ds2/backend/"
 
         if self.checkIfProcessRunning(f"{execute_path}daemon_async_task.py"):
             is_available = False
