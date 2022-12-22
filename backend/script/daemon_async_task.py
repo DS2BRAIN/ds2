@@ -249,7 +249,7 @@ class DaemonAsyncTask():
 
                 # self.s3.upload_file(response, self.utilClass.bucket_name,f"user/{task.user}/{response.split('temp/')[-1]}")
                 # task.outputFilePath = f"https://{self.utilClass.bucket_name}.s3.ap-northeast-2.amazonaws.com/user/{task.user}/{response.split('temp/')[-1]}"
-                task.outputFilePath = f"user/{task.user}/{response.split('temp/')[-1]}"
+                task.outputFilePath = f"/user/{task.user}/{response.split('temp/')[-1]}"
                 os.remove(response)
                 pass
             elif "runAnalyzing" in task.taskType:
