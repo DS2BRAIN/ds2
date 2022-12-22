@@ -73,15 +73,15 @@ class ManageModel:
         if project.get('user') != user.get('id'):
             raise ex.NotAllowedTokenEx()
 
-        mb = None
-        try:
-            import asyncio
-            mb = self.utilClass.get_metabase_client()
-            if mb is None:
-                asyncio.sleep(120)
-                mb = self.utilClass.get_metabase_client()
-        except Exception as e:
-            print(e.args[0].text)
+        # mb = None
+        # try:
+        #     import asyncio
+        #     mb = self.utilClass.get_metabase_client()
+        #     if mb is None:
+        #         asyncio.sleep(120)
+        #         mb = self.utilClass.get_metabase_client()
+        # except Exception as e:
+        #     print(e.args[0].text)
         while True:
             if await request.is_disconnected():
                 break
@@ -92,23 +92,23 @@ class ManageModel:
                 url = None
                 # session_id = None
                 table_status = 0
-                if mb:
-                    try:
-                        # session_id = mb.session_id
-                        model_task = self.dbClass.get_metabase_async_task(user.get('id'), 'model', model.get('id'))
-                        if model_task:
-                            view_name = f"model_{model['id']}_table"
-                            table_id = mb.get_item_id('table', view_name)
-                            url = f":{self.utilClass.metabase_port}/auto/dashboard/table/{table_id}"
-                            table_status = model_task.status
-                            if table_status == 1:
-                                if mb.get_item_info('table', table_id).get('initial_sync_status') == 'complete':
-                                    self.dbClass.update_async_task_complete_by_id(model_task.id)
-                                    table_status = 100
-                    except:
-                        table_status = 1
-                elif mb is None:
-                    table_status = 99
+                # if mb:
+                try:
+                    # session_id = mb.session_id
+                    model_task = self.dbClass.get_metabase_async_task(user.get('id'), 'model', model.get('id'))
+                    if model_task:
+                        view_name = f"model_{model['id']}_table"
+                        # table_id = mb.get_item_id('table', view_name)
+                        # url = f":{self.utilClass.metabase_port}/auto/dashboard/table/{table_id}"
+                        # table_status = model_task.status
+                        # if table_status == 1:
+                            # if mb.get_item_info('table', table_id).get('initial_sync_status') == 'complete':
+                            #     self.dbClass.update_async_task_complete_by_id(model_task.id)
+                            #     table_status = 100
+                except:
+                    table_status = 1
+                # elif mb is None:
+                #     table_status = 99
                 model['metabase'] = {
                     'status': table_status,
                     'url': url,
