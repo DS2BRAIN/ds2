@@ -199,7 +199,7 @@ const API = React.memo(
       let isTrainOrAiTypeImage =
         trainMethod === "image" || models.model.externalAiType === "image";
       let isTrainMethodSampleAvailable =
-        trainMethod === "object_detection" || trainMethod === "cycle_gan";
+        trainMethod === "object_detection" || trainMethod === "detection_3d" || trainMethod === "cycle_gan";
       if (isTrainOrAiTypeImage || isTrainMethodSampleAvailable) {
         api.getSampleDataByModelId(models.chosenModel).then((res) => {
           if (res.data) setRandomFiles(res.data);
@@ -737,7 +737,8 @@ const API = React.memo(
               return new Blob([response.data]);
             })
             .then(async (blob) => {
-              if (projects.project.trainingMethod === "object_detection") {
+              if (projects.project.trainingMethod === "object_detection" || 
+              projects.project.trainingMethod === "detection_3d") {
                 let imageFile = files;
                 if (!imageFile && randomFile) imageFile = randomFile;
                 try {
@@ -869,7 +870,8 @@ const API = React.memo(
               dispatch(getUserCountRequestAction());
               setIsPredictImageDone(true);
               setApiLoading("done");
-              if (projects.project.trainingMethod === "object_detection") {
+              if (projects.project.trainingMethod === "object_detection" || 
+              projects.project.trainingMethod === "detection_3d") {
                 let imageFile = files;
                 if (!imageFile && randomFile) imageFile = randomFile;
                 try {
@@ -1199,6 +1201,7 @@ const API = React.memo(
         caseTrainMethodImage();
       } else if (
         trainMethod === "object_detection" ||
+        trainMethod === "detection_3d" ||
         trainMethod === "cycle_gan"
       ) {
         caseTrainMethodObjectCycle();
@@ -1309,6 +1312,7 @@ const API = React.memo(
         models.model.externalAiType === "image" ||
         models.model.externalAiType === "audio" ||
         trainMethod === "object_detection" ||
+        trainMethod === "detection_3d" ||
         trainMethod === "cycle_gan"
       ) {
         setIsPredictImageInfoDone(false);
@@ -2082,7 +2086,8 @@ const API = React.memo(
           </>
         );
       else if (resultImageUrl) {
-        if (projects.project.trainingMethod === "object_detection")
+        if (projects.project.trainingMethod === "object_detection" ||
+        projects.project.trainingMethod === "detection_3d")
           return (
             <div style={{ alignSelf: "center", width: "100%" }} id="resultDiv">
               {selectedObjectTab === "image" ? (

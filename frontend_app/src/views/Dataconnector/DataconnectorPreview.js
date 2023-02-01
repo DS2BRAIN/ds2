@@ -224,7 +224,8 @@ const DataconnectorPreview = ({
   return (
     <>
       {connectorInfo.trainingMethod === "image" ||
-      connectorInfo.trainingMethod === "object_detection" ? (
+      connectorInfo.trainingMethod === "object_detection" ||
+      connectorInfo.trainingMethod === "detection_3d" ? (
         <>
           {connectorInfo.dataconnectortype.dataconnectortypeName ===
             "Video" && (

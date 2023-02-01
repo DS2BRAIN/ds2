@@ -428,7 +428,8 @@ export default function MarketList({ history }) {
       await dispatch(getMarketModelRequestAction(marketModel.id)); //id => model
       if (
         marketModel?.externalAiType?.indexOf("image") > -1 ||
-        marketModel?.externalAiType?.indexOf("object_detection") > -1
+        marketModel?.externalAiType?.indexOf("object_detection") > -1 ||
+        marketModel?.externalAiType?.indexOf("detection_3d") > -1
       ) {
         setChosenItem("apiImage");
       } else if (marketModel?.externalAiType?.indexOf("audio") > -1) {

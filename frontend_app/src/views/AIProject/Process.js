@@ -348,7 +348,7 @@ const Process = (props) => {
       putOptionRequestAction(
         project?.option
           ? project?.option
-          : project?.trainingMethod === "object_detection"
+          : (project?.trainingMethod === "object_detection" || project?.trainingMethod === "detection_3d")
           ? "colab"
           : ["image", "text", "recommender"].indexOf(project?.trainingMethod) >
             -1
@@ -537,7 +537,7 @@ const Process = (props) => {
         setIsMagicCodePossible(false);
       }
     } else if (projects.project?.hasImageData) {
-      if (tempTM === "object_detection") {
+      if (tempTM === "object_detection" || tempTM === "detection_3d") {
         setIsMagicCodePossible(true);
       } else {
         setIsMagicCodePossible(false);
@@ -1044,7 +1044,7 @@ const Process = (props) => {
   const methodChange = (e) => {
     const value = e.target.value;
     const algorithmType =
-      ["object_detection", "cycle_gan", "recommender"].indexOf(value) > -1 ||
+      ["object_detection", "detection_3d", "cycle_gan", "recommender"].indexOf(value) > -1 ||
       (projects.project.option === "colab" && !value.includes("normal"))
         ? "auto"
         : INITIAL_ALGORITHM_TYPE;
@@ -1059,10 +1059,14 @@ const Process = (props) => {
       return;
     }
     let hasNoError = true;
-    if (value === "object_detection" || value === "cycle_gan") {
+    if (value === "object_detection" || value === "detection_3d" || value === "cycle_gan") {
       if (value === "cycle_gan") {
         dispatch(putValueForPredictRequestAction(""));
         dispatch(putTrainingMethodRequestAction("cycle_gan"));
+      } else if (value === "detection_3d") {
+        dispatch(putValueForPredictRequestAction("label"));
+        dispatch(putTrainingMethodRequestAction("detection_3d"));
+        dispatch(putOptionRequestAction("colab"));
       } else {
         dispatch(putValueForPredictRequestAction("label"));
         dispatch(putTrainingMethodRequestAction("object_detection"));
@@ -1617,7 +1621,7 @@ const Process = (props) => {
 
     if (
       project?.available_gpu_list?.length > 0 &&
-      trainMethod === "object_detection" &&
+        (trainMethod === "object_detection" || trainMethod === "detection_3d") &&
       !isDeviceAllSelected &&
       selectedDeviceArr.length === 0
     ) {
@@ -1631,7 +1635,7 @@ const Process = (props) => {
 
     if (
       project?.available_gpu_list?.length > 0 &&
-      trainMethod === "object_detection" &&
+        (trainMethod === "object_detection" || trainMethod === "detection_3d") &&
       !isDeviceAllSelected &&
       selectedDeviceArr.length === 0
     ) {
@@ -1724,7 +1728,8 @@ const Process = (props) => {
     if (
       !(
         project.trainingMethod.indexOf("image") > -1 ||
-        project.trainingMethod.indexOf("object_detection") > -1
+        project.trainingMethod.indexOf("object_detection") > -1 ||
+        project.trainingMethod.indexOf("detection_3d") > -1
       ) &&
       !project.valueForPredictColumnId
     ) {
@@ -1935,6 +1940,7 @@ const Process = (props) => {
       (project.trainingMethod === "text" ||
         project.trainingMethod === "image" ||
         project.trainingMethod === "object_detection" ||
+        project.trainingMethod === "detection_3d" ||
         project.trainingMethod === "normal_classification")
     ) {
       dispatch(
@@ -2605,7 +2611,8 @@ const Process = (props) => {
   const partSelectTab = (project) => {
     let isMethodCsv = !(
       project.trainingMethod === "image" ||
-      project.trainingMethod === "object_detection"
+      project.trainingMethod === "object_detection" ||
+      project.trainingMethod === "detection_3d"
     );
 
     const handleChangeTab = (event) => {
@@ -3329,6 +3336,11 @@ const Process = (props) => {
                                   {t("Object Detection")}
                                 </MenuItem>
                               )}
+                              {hasImageLabelData && (
+                                <MenuItem value="detection_3d">
+                                  {t("3D Object Detection")}
+                                </MenuItem>
+                              )}
                               {/* {hasTimeSeriesData && (
                             <MenuItem value="time_series">
                               {t("Time Series Prediction")}
@@ -3378,8 +3390,9 @@ const Process = (props) => {
                                 projects.project?.option
                                   ? projects.project?.option
                                   : isMagicCodePossible
-                                  ? projects.project.trainingMethod ===
-                                    "object_detection"
+                                  ? (projects.project.trainingMethod ===
+                                    "object_detection" || projects.project.trainingMethod ===
+                                    "detection_3d")
                                     ? "colab"
                                     : "custom"
                                   : "speed"
@@ -3441,6 +3454,9 @@ const Process = (props) => {
                             projects.project.trainingMethod.indexOf("image") >
                               -1 ||
                             projects.project.trainingMethod.indexOf(
+                              "detection_3d"
+                            ) > -1 ||
+                            projects.project.trainingMethod.indexOf(
                               "object_detection"
                             ) > -1
                           ) && (
@@ -3467,6 +3483,9 @@ const Process = (props) => {
                                     ) > -1 ||
                                       projects.project.trainingMethod.indexOf(
                                         "object_detection"
+                                      ) > -1 ||
+                                      projects.project.trainingMethod.indexOf(
+                                        "detection_3d"
                                       ) > -1)
                                   }
                                   className={classes.selectForm}
@@ -3534,6 +3553,9 @@ const Process = (props) => {
                                     ) > -1 ||
                                       projects.project.trainingMethod.indexOf(
                                         "object_detection"
+                                      ) > -1 ||
+                                      projects.project.trainingMethod.indexOf(
+                                        "detection_3d"
                                       ) > -1)
                                   }
                                   className={classes.selectForm}
@@ -3588,6 +3610,9 @@ const Process = (props) => {
                                     ) > -1 ||
                                       projects.project.trainingMethod.indexOf(
                                         "object_detection"
+                                      ) > -1 ||
+                                      projects.project.trainingMethod.indexOf(
+                                        "detection_3d"
                                       ) > -1)
                                   }
                                   className={classes.selectForm}
@@ -3616,6 +3641,7 @@ const Process = (props) => {
                         {((!projects.project?.option &&
                           [
                             "object_detection",
+                            "detection_3d",
                             "normal",
                             "normal_regression",
                             "normal_classification",
@@ -3717,8 +3743,9 @@ const Process = (props) => {
                             preferedMethod={
                               projects.project?.option
                                 ? projects.project?.option
-                                : projects.project.trainingMethod ===
-                                  "object_detection"
+                                :( projects.project.trainingMethod ===
+                                  "object_detection" ||  projects.project.trainingMethod ===
+                                  "detection_3d")
                                 ? "colab"
                                 : "custom"
                             }

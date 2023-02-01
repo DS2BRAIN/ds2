@@ -538,6 +538,20 @@ const LabelExport = ({ history }) => {
           </div>
         </>
       );
+
+    else if (workApp === "detection_3d")
+      return (
+        <>
+          <div>
+            {renderExportData("")}
+            <div className={classes.text87}>
+              {t(
+                "Click the Save COCO button to save the labeling information in a JSON format."
+              )}
+            </div>
+          </div>
+        </>
+      );
     else
       return (
         <div>

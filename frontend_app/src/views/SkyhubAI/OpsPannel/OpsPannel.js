@@ -2188,6 +2188,7 @@ const OpsPannel = (props) => {
           closeModal={closeModal}
           chosenItem={
             projects.opsProject?.trainingMethod !== "object_detection" &&
+            projects.opsProject?.trainingMethod !== "detection_3d" &&
             projects.opsProject?.trainingMethod !== "cycle_gan" &&
             projects.opsProject?.trainingMethod !== "image"
               ? "api"
@@ -2200,6 +2201,7 @@ const OpsPannel = (props) => {
           opsId={projects.opsProject?.id}
           chosenItem={
             projects.opsProject?.trainingMethod !== "object_detection" &&
+            projects.opsProject?.trainingMethod !== "detection_3d" &&
             projects.opsProject?.trainingMethod !== "cycle_gan" &&
             projects.opsProject?.trainingMethod !== "image"
               ? projects?.project?.option?.indexOf("load") === -1

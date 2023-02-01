@@ -351,6 +351,7 @@ const LabelDetail = ({ history, match }) => {
       const isDesc =
         Boolean(labelChart.review) ||
         (labelprojects.projectDetail.workapp !== "object_detection" &&
+          labelprojects.projectDetail.workapp !== "detection_3d" &&
           labelprojects.projectDetail.workapp !== "image");
       dispatch(setObjectlistsIsDesc(isDesc));
       dispatch(setObjectlistsSortingValue(labelChart.review ? "status" : "id"));
@@ -677,7 +678,7 @@ const LabelDetail = ({ history, match }) => {
         //   );
         // return;
         // }
-        if (category === "object_detection") {
+        if (category === "object_detection" || category === "detection_3d") {
           window.open(
             `${tempLabellingUrl}${labelprojects.projectDetail.id}/${
               labelprojects.projectDetail.s3UrlID["prepare"]
@@ -781,7 +782,7 @@ const LabelDetail = ({ history, match }) => {
         // } else {
 
         // }
-        if (category === "object_detection") {
+        if (category === "object_detection" || category === "detection_3d") {
           window.open(
             `${tempLabellingUrl}${labelprojects.projectDetail.id}/${
               labelprojects.projectDetail.s3UrlID["review"]
@@ -1384,6 +1385,7 @@ const LabelDetail = ({ history, match }) => {
     // !6/24 모델 배포하며 생성된 라벨프로젝트일 경우 임시적으로 normal 타입으로 설정
     if (!workapp || workapp.includes("normal")) isNormalProject = true;
     if (workapp === "object_detection") isObjectDetection = true;
+    if (workapp === "detection_3d") isObjectDetection = true;
 
     if (
       (isLastStatusExist || isLabelProjectNotExist) &&
@@ -1567,10 +1569,10 @@ const LabelDetail = ({ history, match }) => {
     const canOnlyUseGeneralAI =
       (hasNoAutoLabelingData ||
         (!isCustomAiLoading && !creatingCustomAiProjectId)) &&
-      project?.workapp === "object_detection";
+        (project?.workapp === "object_detection" || project?.workapp === "detection_3d");
     const isRequiredCustomAIModel =
       project?.customAiModels?.length === 0 &&
-      project?.workapp !== "object_detection";
+        (project?.workapp !== "object_detection" || project?.workapp !== "detection_3d");
 
     setAutolabelingState({
       hasNoAutoLabelingData,
@@ -1903,8 +1905,9 @@ const LabelDetail = ({ history, match }) => {
                           customAiProjectIdStatus
                         ) === -1
                           ? customAiProjectIdStatus === 100 &&
-                            labelprojects.projectDetail?.workapp ===
-                              "object_detection" && (
+                            (labelprojects.projectDetail?.workapp ===
+                              "object_detection" || labelprojects.projectDetail?.workapp ===
+                              "detection_3d") && (
                               <Button
                                 id="select_bestcustomai_btn"
                                 shape="greenOutlined"
@@ -2330,8 +2333,9 @@ const LabelDetail = ({ history, match }) => {
                   )}
                 </GridItem>
                 {labelprojects.projectDetail?.workage?.length > 0 &&
-                  labelprojects.projectDetail.workapp ===
-                    "object_detection" && (
+                    (labelprojects.projectDetail.workapp ===
+                    "object_detection" || labelprojects.projectDetail.workapp ===
+                    "detection_3d") && (
                     <GridItem xs={12} style={{ padding: "0 5px" }}>
                       <div className={classes.dashboardMain}>
                         <Typography
@@ -2703,8 +2707,9 @@ const LabelDetail = ({ history, match }) => {
                           checked={autoLabelingAiType === "custom"}
                           disabled={
                             customAiModels?.length === 0 ||
-                            (labelprojects.projectDetail?.workapp ===
-                              "object_detection" &&
+                            ((labelprojects.projectDetail?.workapp ===
+                              "object_detection" || labelprojects.projectDetail?.workapp ===
+                              "detection_3d") &&
                               labelChart.review > 1)
                           }
                           label={`Custom AI : ${t(
@@ -2769,8 +2774,9 @@ const LabelDetail = ({ history, match }) => {
                           >
                             {btnDisabled.customAI ? (
                               <>
-                                {labelprojects.projectDetail?.workapp ===
-                                  "object_detection" && (
+                                {(labelprojects.projectDetail?.workapp ===
+                                  "object_detection" || labelprojects.projectDetail?.workapp ===
+                                  "detection_3d") && (
                                   <div style={{ marginRight: 12 }}>
                                     <AnnouncementIcon
                                       fontSize="small"
@@ -2817,8 +2823,9 @@ const LabelDetail = ({ history, match }) => {
                             )}
                           </Typography>
                         )}
-                        {labelprojects.projectDetail?.workapp ===
-                          "object_detection" && (
+                        {(labelprojects.projectDetail?.workapp ===
+                          "object_detection" || labelprojects.projectDetail?.workapp ===
+                          "detection_3d") && (
                           <>
                             <FormControlLabel
                               name="general"
@@ -3047,8 +3054,9 @@ const LabelDetail = ({ history, match }) => {
                 </Grid>
                 <Grid item xs={6}>
                   {(labelprojects.projectDetail &&
-                    labelprojects.projectDetail.workapp !==
-                      "object_detection") ||
+                      (labelprojects.projectDetail.workapp !==
+                      "object_detection" || labelprojects.projectDetail.workapp !==
+                      "detection_3d")) ||
                   autoLabelingAiType ? (
                     <>
                       <Button

@@ -271,6 +271,9 @@ const Project = ({ history }) => {
         case "object_detection":
           trainingMethod = "물체 인식";
           break;
+        case "detection_3d":
+          trainingMethod = "3D 물체 인식";
+          break;
         case "cycle_gan":
           trainingMethod = "이미지 생성(GAN)";
           break;

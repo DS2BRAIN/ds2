@@ -163,21 +163,29 @@ export const getLabelAppUrl = (category) => {
   let labelAppUrl =
     category === "object_detection"
       ? `http://localhost:${IS_ENTERPRISE ? 13001 : 3001}/`
+      : category === "detection_3d"
+      ? `http://localhost:${IS_ENTERPRISE ? 13003 : 3003}/`
       : `http://localhost:${IS_ENTERPRISE ? 13000 : 3000}/`;
 
   if (IS_DEPLOY) {
     labelAppUrl =
       category === "object_detection"
         ? process.env.REACT_APP_LABELAPP_URL
-        : process.env.REACT_APP_FRONTEND_URL;
+        : category === "detection_3d"
+        ? process.env.REACT_APP_3D_LABELAPP_URL :
+          process.env.REACT_APP_FRONTEND_URL;
 
     if (IS_ENTERPRISE) {
       labelAppUrl = IS_DEV
         ? category === "object_detection"
           ? "https://staginglabelapp.ds2.ai/"
+          : category === "detection_3d"
+          ? "https://staging3dlabelapp.ds2.ai/"
           : "https://refactoring.ds2.ai/"
         : category === "object_detection"
         ? "http://" + window.location.host.split(":")[0] + ":13001/"
+        : category === "detection_3d"
+        ? "http://" + window.location.host.split(":")[0] + ":13003/"
         : "http://" + window.location.host.split(":")[0] + ":13000/";
 
       labelAppUrl =
@@ -185,6 +193,10 @@ export const getLabelAppUrl = (category) => {
           ? IS_DEV
             ? "https://staginglabelapp.ds2.ai/"
             : "http://" + window.location.host.split(":")[0] + ":13001/"
+          : category === "detection_3d"
+          ? IS_DEV
+            ? "https://staging3dlabelapp.ds2.ai/"
+            : "http://" + window.location.host.split(":")[0] + ":13003/"
           : IS_DEV
           ? "https://refactoring.ds2.ai/"
           : "http://" + window.location.host.split(":")[0] + ":13000/";
@@ -195,6 +207,8 @@ export const getLabelAppUrl = (category) => {
     labelAppUrl =
       category === "object_detection"
         ? window.location.origin.replaceAll("console", "labelapp") + "/"
+        : category === "detection_3d"
+        ? window.location.origin.replaceAll("console", "3dlabelapp") + "/"
         : window.location.origin + "/";
   }
 

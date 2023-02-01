@@ -225,6 +225,7 @@ const LabelSetting = ({ history, onSetSelectedPage }) => {
 
   const workapp = {
     object_detection: "Object Detection",
+    detection_3d: "3D Detection",
     voice: "Voice",
     normal_classification: "Normal classification",
     normal_regression: "Normal regression",

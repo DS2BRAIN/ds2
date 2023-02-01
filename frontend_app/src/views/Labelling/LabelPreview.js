@@ -334,6 +334,13 @@ const LabelPreview = ({
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"
             );
+          } else if (category !== "detection_3d") {
+            window.open(
+              `${tempLabellingUrl}admin/${routes[category]}/${
+                labelprojects.projectDetail.id
+              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
+              "_blank"
+            );
           } else {
             window.open(
               `${tempLabellingUrl}${
@@ -449,7 +456,8 @@ const LabelPreview = ({
       >
         {labelprojects.projectDetail &&
         labelprojects.projectDetail.workapp &&
-        labelprojects.projectDetail.workapp === "object_detection" ? (
+        (labelprojects.projectDetail.workapp === "object_detection" ||
+        labelprojects.projectDetail.workapp === "detection_3d") ? (
           <>
             {tempClasses.length > 0 ? (
               tempClasses.map((item) => {
@@ -623,7 +631,8 @@ const LabelPreview = ({
                   </Grid>
                   <Grid item xs={8} className={classes.text}>
                     <div id="classType">
-                      {labelFileDetail?.fileType === "object_detection"
+                      {(labelFileDetail?.fileType === "object_detection" ||
+                      labelFileDetail?.fileType === "detection_3d")
                         ? t("Object Detection")
                         : t("Image Classification")}
                     </div>

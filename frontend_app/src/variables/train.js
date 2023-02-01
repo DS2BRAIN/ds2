@@ -13,6 +13,7 @@ export const TRAINING_METHOD = {
   normal_regression: "General Regression",
   normal_classification: "General Category Classification",
   object_detection: "Object Detection",
+  detection_3d: "3D Detection",
   cycle_gan: "Generative Adversarial Network (GAN)",
   time_series: "Time Series Prediction",
   time_series_classification: "Time Series Prediction",

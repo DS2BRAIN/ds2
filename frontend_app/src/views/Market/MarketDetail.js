@@ -1470,8 +1470,9 @@ const MarketDetail = ({ history, match }) => {
                                   <b>{t("Assignee")}</b>
                                 </TableCell>
                                 {projects.project &&
-                                  projects.project.workapp ===
-                                    "object_detection" && (
+                                    (projects.project.workapp ===
+                                    "object_detection" || projects.project.workapp ===
+                                    "detection_3d") && (
                                     <>
                                       <TableCell
                                         className={classes.tableHead}
@@ -1538,8 +1539,9 @@ const MarketDetail = ({ history, match }) => {
                                         : user.me.email}
                                     </TableCell>
                                     {projects.project &&
-                                      projects.project.workapp ===
-                                        "object_detection" && (
+                                        (projects.project.workapp ===
+                                        "object_detection" || projects.project.workapp ===
+                                        "detection_3d") && (
                                         <>
                                           <TableCell
                                             className={classes.tableRowCell}
