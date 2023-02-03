@@ -506,9 +506,9 @@ const LabelList = ({
             return;
           }
         } else {
-          if (category !== "object_detection") {
+          if (category === "object_detection") {
             window.open(
-              `${tempLabellingUrl}admin/${routes[category]}/${
+              `${tempLabellingUrl}${
                 labelprojects.projectDetail.id
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"
@@ -522,7 +522,7 @@ const LabelList = ({
             );
           } else {
             window.open(
-              `${tempLabellingUrl}${
+              `${tempLabellingUrl}admin/${routes[category]}/${
                 labelprojects.projectDetail.id
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"

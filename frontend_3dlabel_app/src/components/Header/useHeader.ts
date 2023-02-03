@@ -195,7 +195,7 @@ export default function useHeader() {
         try {
             await editor.saveObject([frame], true);
             await api.submitData(frame.id);
-            await updateDataStatus(frame);
+            await updateDataStatus(bsState.query.recordId, frame);
             editor.showMsg('success', 'Submit Success');
         } catch (error: any) {
             editor.handleErr(error, 'Operation Error');
@@ -226,8 +226,8 @@ export default function useHeader() {
         }
     }
 
-    async function updateDataStatus(frame: IFrame) {
-        let statusMap = await api.getDataStatus([frame.id]);
+    async function updateDataStatus(labelproject: string, frame: IFrame) {
+        let statusMap = await api.getDataStatus(labelproject);
 
         if (statusMap[frame.id]) {
             let status = statusMap[frame.id];

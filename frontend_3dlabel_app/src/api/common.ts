@@ -22,7 +22,7 @@ export async function getUrl(url: string) {
 }
 
 export async function saveObject(config: any) {
-    let url = 'http://localhost:2502/api/annotate/data/save';
+    let url = 'http://localhost:13002/api/annotate/data/save';
     let data = await post(url, config);
     data = data.data || [];
     console.log(data);
@@ -39,7 +39,7 @@ export async function saveObject(config: any) {
 export async function getDataObject(dataIds: string[] | string) {
     if (!Array.isArray(dataIds)) dataIds = [dataIds];
 
-    let url = 'http://localhost:2502/api/annotate/data/listByDataIds';
+    let url = 'http://localhost:13002/api/annotate/data/listByDataIds';
     let argsStr = queryStr({ dataIds });
     let data = await get(`${url}?${argsStr}`);
     data = data.data || [];
@@ -88,10 +88,10 @@ export async function unlockRecord(recordId: string) {
     return await post(url);
 }
 
-export async function getDataStatus(dataIds: string[]) {
-    let url = 'http://localhost:2502/api/data/getDataStatusByIds';
-    let argsStr = queryStr({ dataIds });
-    let data = await get(`${url}?${argsStr}`);
+export async function getDataStatus(recordId: string) {
+    let url = `http://localhost:13002/api/data/getDataStatusByIds/${recordId}`;
+    // let argsStr = queryStr({ dataIds });
+    let data = await get(`${url}`);
 
     let statusMap = {};
     data.data.forEach((e: any) => {
@@ -100,8 +100,8 @@ export async function getDataStatus(dataIds: string[]) {
     return statusMap;
 }
 
-export async function getInfoByRecordId(recordId: string) {
-    let url = `/api/data/findDataAnnotationRecord/${recordId}`;
+export async function getInfoByRecordId(recordId: string, token: string) {
+    let url = `/api/data/findDataAnnotationRecord/${recordId}?token=${token}`;
     let data = await get(url);
     data = data.data;
     // no data
@@ -143,7 +143,7 @@ export async function getInfoByRecordId(recordId: string) {
     });
 
     let ids = dataInfos.map((e) => e.id);
-    let stateMap = await getDataStatus(ids);
+    let stateMap = await getDataStatus(recordId);
 
     dataInfos.forEach((data) => {
         let status = stateMap[data.id];

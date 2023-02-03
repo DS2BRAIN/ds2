@@ -19,6 +19,7 @@ export interface IBSState {
     datasetName: string;
     datasetType: string;
     seriesFrameId?: string;
+    token?: string;
     //
     user: IUser;
 }

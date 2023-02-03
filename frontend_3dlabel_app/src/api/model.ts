@@ -2,7 +2,7 @@ import { get, post } from './base';
 import { IModel } from 'pc-editor';
 
 export async function getModelList() {
-    let url = 'http://localhost:2502/api/model/list';
+    let url = 'http://localhost:13002/api/model/list';
     let data = await get(url);
     data = data.data || [];
 
@@ -31,7 +31,7 @@ export async function clearModel(dataIds: number[], recordId: string) {
 }
 
 export async function getModelResult(dataIds: string[], recordId: string) {
-    let url = 'http://localhost:2502/api/data/modelAnnotationResult';
+    let url = 'http://localhost:13002/api/data/modelAnnotationResult';
     let args = [];
     dataIds.forEach((e) => {
         args.push(`dataIds=${e}`);
@@ -41,6 +41,6 @@ export async function getModelResult(dataIds: string[], recordId: string) {
 }
 
 export async function runModel(config: any) {
-    let url = 'http://localhost:2502/api/data/modelAnnotate';
+    let url = 'http://localhost:13002/api/data/modelAnnotate';
     return await post(url, config);
 }

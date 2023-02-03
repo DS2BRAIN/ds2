@@ -742,7 +742,7 @@ class HelperLabel():
 
     @wrapper
     def getLabelsBySthreeId(self, sthreefileId):
-        condition = {"sthreefile": int(sthreefileId)}
+        condition = {"sthreefile": sthreefileId}
         return mongoDb.get_documents(collection_name=mongoDb.LABELS_COLLECTION_NAME, condition=condition)
 
     @wrapper

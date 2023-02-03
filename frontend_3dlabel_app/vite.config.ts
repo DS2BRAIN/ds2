@@ -8,12 +8,12 @@ let localConfig = getLocalConfig();
 const config = defineConfig({
     server: {
         open: true,
-        port: 3003,
+        port: 13003,
         // api proxy when development
         proxy: {
             '/api': {
                 changeOrigin: true,
-                target: 'http://localhost:2502',
+                target: 'http://localhost:13002',
             },
         },
     },

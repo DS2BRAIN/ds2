@@ -327,23 +327,23 @@ const LabelPreview = ({
             return;
           }
         } else {
-          if (category !== "object_detection") {
+          if (category === "object_detection") {
             window.open(
-              `${tempLabellingUrl}admin/${routes[category]}/${
+              `${tempLabellingUrl}${
                 labelprojects.projectDetail.id
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"
             );
-          } else if (category !== "detection_3d") {
+          } else if (category === "detection_3d") {
             window.open(
-              `${tempLabellingUrl}admin/${routes[category]}/${
+              `${tempLabellingUrl}/${routes[category]}/${
                 labelprojects.projectDetail.id
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"
             );
           } else {
             window.open(
-              `${tempLabellingUrl}${
+              `${tempLabellingUrl}admin/${routes[category]}/${
                 labelprojects.projectDetail.id
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"

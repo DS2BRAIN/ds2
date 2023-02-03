@@ -824,11 +824,11 @@ class ManageFile:
                         s3Folder = f"user/{user_id}/{connector_id}/{root.split('/')[-1]}"
                         # s3key = f'{s3Folder}{timestamp}{file_ext}'
                         # s3key = f'{s3Folder}{file_ext}'
-                        # self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
+                        s3key = f'{s3Folder}/{file}'
+                        self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
                         s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{file}').replace(
                             'https%3A//',
                             'https://')
-                        self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
                         if file.lower().endswith((".pcd")):
                             # if file.lower().endswith((".jpg", ".jpeg", ".png")):
                             data = {
@@ -882,11 +882,11 @@ class ManageFile:
 
                         s3Folder = f"user/{user_id}/{connector_id}/{root.split('/')[-1]}"
                         # s3key = f'{s3Folder}{timestamp}{file_ext}'
-                        # s3key = f'{s3Folder}{file_ext}'
+                        # s3key = f'{s3Folder}/{file}'
                         # self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
-                        s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{file}').replace(
-                            'https%3A//',
-                            'https://')
+                        # s3key = urllib.parse.quote(f'{s3Folder}/{file}').replace(
+                        #     'https%3A//',
+                        #     'https://')
                         if 'result' in root:
                             with open(filePath, 'r') as r:
                                 classes_raw = json.load(r)
@@ -909,6 +909,7 @@ class ManageFile:
                                         connector_raw.progress = progress
                                         connector_raw.save()
                     except Exception as e:
+                        print(traceback.format_exc())
                         fail_file_list.append(file)
                         self.utilClass.sendSlackMessage(traceback.format_exc())
 
@@ -2268,7 +2269,7 @@ class ManageFile:
         #         appError=True, userInfo=user)
         #     return NOT_FOUND_USER_ERROR
         try:
-            path = os.getcwd() + "/data/" + filePath
+            path = self.utilClass.save_path + "/asset/" + filePath
             print(path + " 경로의 파일 읽기 시작")
             data = open(path, 'rb')
             print(f"파일 읽기 성공")
