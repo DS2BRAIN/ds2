@@ -198,6 +198,10 @@ class ManageUpload:
                     root = f"{voc_path}/{origin_dirs[0]}"
                     label_files = list(pathlib.Path(root).glob('*.xml'))
                     df, y_class = self.readObjectDetectionVOCFile(label_files)
+                elif base_data['data_type'] == 'detection_3d':
+                    origin_dirs = base_data['root_dir']
+                    df = pd.DataFrame([1] * 10)
+                    y_class = [1]
                 else:
                     training_method = 'image'
                     for (root_dir, dir_names, file_names) in os.walk(unzipped_dir):
@@ -774,6 +778,8 @@ class ManageUpload:
                             error_file_list = self.manageFileClass.upload_coco_folder(base_data, common_data, connector_id)
                         elif base_data['data_type'] == "voc":
                             error_file_list = self.manageFileClass.upload_voc_folder(base_data, common_data, connector_id)
+                        elif base_data['data_type'] == "detection_3d":
+                            error_file_list = self.manageFileClass.upload_3d_folder(base_data, common_data, connector_id)
                         connector_raw.originalLabelproject = new_label_project.id
                         connector_raw.save()
                     #   2. 라벨링 없는 이미지 분류

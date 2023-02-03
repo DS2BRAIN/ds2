@@ -678,11 +678,16 @@ const LabelDetail = ({ history, match }) => {
         //   );
         // return;
         // }
-        if (category === "object_detection" || category === "detection_3d") {
+        if (category === "object_detection") {
           window.open(
             `${tempLabellingUrl}${labelprojects.projectDetail.id}/${
               labelprojects.projectDetail.s3UrlID["prepare"]
             }/?token=${token}&start=true&appStatus=prepare&timeStamp=${Date.now()}`,
+            "_blank"
+          );
+        } else if (category === "detection_3d") {
+          window.open(
+            `${tempLabellingUrl}tool/pc/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}&recordId=${labelprojects.projectDetail.id}&start_id=${labelprojects.projectDetail.s3UrlID["review"]}`,
             "_blank"
           );
         } else {
@@ -782,11 +787,16 @@ const LabelDetail = ({ history, match }) => {
         // } else {
 
         // }
-        if (category === "object_detection" || category === "detection_3d") {
+        if (category === "object_detection" ) {
           window.open(
             `${tempLabellingUrl}${labelprojects.projectDetail.id}/${
               labelprojects.projectDetail.s3UrlID["review"]
             }/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}`,
+            "_blank"
+          );
+        } else if (category === "detection_3d") {
+          window.open(
+            `${tempLabellingUrl}tool/pc/?token=${token}&start=true&appStatus=review&timeStamp=${Date.now()}&recordId=${labelprojects.projectDetail.id}&start_id=${labelprojects.projectDetail.s3UrlID["review"]}`,
             "_blank"
           );
         } else {
@@ -819,6 +829,7 @@ const LabelDetail = ({ history, match }) => {
   };
 
   const renderStatusChart = () => {
+    console.log(labelChart);
     const dataList = [
       { name: "In queue", value: labelChart.prepare, color: "#585c61" },
       { name: "In process", value: labelChart.working, color: "#41D4D7" },

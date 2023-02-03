@@ -1,5 +1,6 @@
 import ast
 import datetime
+import glob
 import io
 import json
 import pathlib
@@ -288,34 +289,41 @@ class ManageFile:
                     break
                 if file.lower().endswith((".jpg", ".jpeg", ".png")):
                     img_path = root
-            if len(dirs) > 2:
-                is_voc, voc_path, origin_dirs = self.check_exists_voc(root, dirs, base_data['file_name'],
-                                                                      common_data['user_id'])
-                if is_voc:
-                    if base_data['data_type'] is None:
-                        base_data['data_type'] = 'voc'
-                        base_data['voc_path'] = voc_path
-                        base_data['origin_dirs'] = origin_dirs
-                        break
-                    else:
-                        raise ex.TooManyExistFileEx(user_id=user_id)
 
-            if len(files) > 0:
-                has_json = False
-                for file in files:
-                    if file.lower().endswith(".json"):
-                        has_json = True
-                if has_json:
-                    is_coco, json_data = self.check_exists_coco(root)
-                    if is_coco is None:
-                        raise ex.TooManyExistFileEx(user_id=user_id)
-                    if is_coco:
+            if "camera_config" in dirs: #detection_3d separator
+                base_data['data_type'] = "detection_3d"
+                base_data['root_dir'] = root
+
+            else:
+                if len(dirs) > 2:
+                    is_voc, voc_path, origin_dirs = self.check_exists_voc(root, dirs, base_data['file_name'],
+                                                                          common_data['user_id'])
+                    if is_voc:
                         if base_data['data_type'] is None:
-                            base_data['data_type'] = 'coco'
-                            base_data['json_data'] = json_data
+                            base_data['data_type'] = 'voc'
+                            base_data['voc_path'] = voc_path
+                            base_data['origin_dirs'] = origin_dirs
                             break
                         else:
                             raise ex.TooManyExistFileEx(user_id=user_id)
+
+                if len(files) > 0:
+                    has_json = False
+                    for file in files:
+                        if file.lower().endswith(".json"):
+                            has_json = True
+                    if has_json:
+                        is_coco, json_data = self.check_exists_coco(root)
+                        # if is_coco is None:
+                        #     if base_data['data_type'] is None:
+                        #         base_data['data_type'] = "detection_3d"
+                        if is_coco:
+                            if base_data['data_type'] is None:
+                                base_data['data_type'] = 'coco'
+                                base_data['json_data'] = json_data
+                                break
+                            else:
+                                raise ex.TooManyExistFileEx(user_id=user_id)
 
         if base_data['data_type'] is None:
             if img_path is None:
@@ -361,6 +369,10 @@ class ManageFile:
             return False, None
         with open(json_file_list[0]) as json_file:
             json_data = json.load(json_file)
+            if type(json_data) == list:
+                return False, None
+            if json_data.get('result'):
+                return False, None
             if json_data.get('images', False) and json_data.get('categories', False) and json_data.get('annotations',
                                                                                                        False):
                 return True, json_data
@@ -768,6 +780,185 @@ class ManageFile:
 
         if len(labelproject_ds2data) == 0:
             raise ex.NotExistFileEx(user_id=user_id, obj="이미지 파일")
+
+        return fail_file_list
+
+
+    def upload_3d_folder(self, base_data, common_data, connector_id, is_labelproject=False):
+
+        user_id = common_data['user_id']
+        user_email = common_data['email']
+        labelproject_id = common_data['labelproject_id']
+        root_dir = base_data['root_dir']
+        categories_dict = {}
+        ds2datas = []
+        labelproject_ds2datas = []
+        labels = []
+        preprocessing_json_data = {}
+        file_path_dict = {}
+        fail_file_list = []
+
+
+        # 3d
+
+        if not is_labelproject:
+            connector_raw = self.dbClass.getOneDataconnectorById(connector_id)
+
+        try:
+            total_progress = len(glob.glob(f"{root_dir}/*"))
+            progress = 0
+            for root, dirs, files in os.walk(root_dir):
+                if '__MACOSX' in root:
+                    continue
+                for idx, file in enumerate(files):
+                    try:
+                        file_size = os.path.getsize(f"{root}/{file}")
+                        # timestamp = time.strftime('%y%m%d%H%M%S')
+                        file_name, file_ext = os.path.splitext(file)
+                        if not preprocessing_json_data.get(file):
+                            preprocessing_json_data[file_name] = {'labels': []}
+                        # newfileName = f"{file_name}{timestamp}{file_ext}"
+                        filePath = f'{root}/{file}'
+                        file_path_dict[file] = filePath
+
+                        s3Folder = f"user/{user_id}/{connector_id}/{root.split('/')[-1]}"
+                        # s3key = f'{s3Folder}{timestamp}{file_ext}'
+                        # s3key = f'{s3Folder}{file_ext}'
+                        # self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
+                        s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{file}').replace(
+                            'https%3A//',
+                            'https://')
+                        self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
+                        if file.lower().endswith((".pcd")):
+                            # if file.lower().endswith((".jpg", ".jpeg", ".png")):
+                            data = {
+                                "fileName": f"{root.split('/')[-1]}/{file}",  # or f"{s3Folder}/{file}"?
+                                "fileSize": file_size,
+                                "user": user_id,
+                                "s3key": s3key,
+                                "originalFileName": file,
+                                "created_at": datetime.datetime.utcnow(),
+                                "updated_at": datetime.datetime.utcnow(),
+                                "fileType": common_data['workapp'],
+                                "dataconnector": connector_id,
+                            }
+                            ds2datas.append(data)
+                            preprocessing_json_data[file_name].update(data)
+                        elif 'classes.json' in file:
+                            with open(filePath, 'r') as r:
+                                classes_raw = json.load(r)
+                                for category in classes_raw:
+                                    is_exist = False
+                                    labelclasses = [x.__dict__['__data__'] for x in
+                                                    self.dbClass.getLabelClassesByLabelProjectId(labelproject_id)]
+                                    for labelclass in labelclasses:
+                                        if labelclass['name'] == category['name']:
+                                            labelclass_id = labelclass['id']
+                                            is_exist = True
+                                    if not is_exist:
+                                        color = self.get_random_hex_color()
+                                        data = {'name': category['name'], 'color': color,
+                                                'labelproject': labelproject_id}
+                                        new_labelclass = self.dbClass.createLabelclass(data)
+                                        labelclass_id = new_labelclass.id
+                                    categories_dict[category['id']] = labelclass_id
+                    except Exception as e:
+                        fail_file_list.append(file)
+                        self.utilClass.sendSlackMessage(traceback.format_exc())
+
+            for root, dirs, files in os.walk(root_dir):
+                if '__MACOSX' in root:
+                    continue
+                for idx, file in enumerate(files):
+                    try:
+                        file_size = os.path.getsize(f"{root}/{file}")
+                        # timestamp = time.strftime('%y%m%d%H%M%S')
+                        file_name, file_ext = os.path.splitext(file)
+                        if not preprocessing_json_data.get(file_name):
+                            preprocessing_json_data[file_name] = {'labels': []}
+                        # newfileName = f"{file_name}{timestamp}{file_ext}"
+                        filePath = f'{root}/{file}'
+                        file_path_dict[file] = filePath
+
+                        s3Folder = f"user/{user_id}/{connector_id}/{root.split('/')[-1]}"
+                        # s3key = f'{s3Folder}{timestamp}{file_ext}'
+                        # s3key = f'{s3Folder}{file_ext}'
+                        # self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
+                        s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{file}').replace(
+                            'https%3A//',
+                            'https://')
+                        if 'result' in root:
+                            with open(filePath, 'r') as r:
+                                classes_raw = json.load(r)
+
+                                for annotation in classes_raw['result']['objects']:
+
+                                    label_data = {
+                                        'color': '#ff000',
+                                        'status': 'done', 'user': user_id,
+                                        'workAssignee': user_id,
+                                        'labelclass': categories_dict.get(annotation['classType']) if annotation['classType'] else 0,
+                                    }
+                                    label_data.update(annotation)
+                                    preprocessing_json_data[file_name]['labels'].append(label_data)
+
+                                if not is_labelproject:
+                                    new_progress = int(((idx + 1) / (total_progress)) * 8) * 10
+                                    if progress != new_progress:
+                                        progress = new_progress
+                                        connector_raw.progress = progress
+                                        connector_raw.save()
+                    except Exception as e:
+                        fail_file_list.append(file)
+                        self.utilClass.sendSlackMessage(traceback.format_exc())
+
+        except Exception as e:
+            print(traceback.format_exc())
+            fail_file_list.append('json')
+            shutil.rmtree(root_dir)
+            return fail_file_list
+
+        if not is_labelproject:
+            connector_raw.progress = 90
+            connector_raw.save()
+
+        if len(ds2datas) > 0:
+            self.dbClass.createFile(ds2datas)
+
+            for data in ds2datas:
+                ds2data_id = data['id']
+                del data['id']
+                data.update({
+                    "status": "prepare",
+                    "status_sort_code": 0,
+                    "workAssignee": None,
+                    "isDeleted": False,
+                    "reviewer": None,
+                    "ds2data": ds2data_id,
+                    "labelproject": labelproject_id
+                })
+                labelproject_ds2datas.append(data)
+            self.dbClass.createLabelprojectFile(labelproject_ds2datas)
+
+            for data in labelproject_ds2datas:
+                json_key = data['originalFileName']
+                file_name, file_ext = os.path.splitext(json_key)
+                #
+
+                if preprocessing_json_data.get(file_name):
+                    [label_info.update({'labelproject': labelproject_id, 'sthreefile': data['id']}) for label_info
+                     in preprocessing_json_data[file_name]['labels']]
+
+                    if preprocessing_json_data[file_name]['labels']:
+                        labels += preprocessing_json_data[file_name]['labels']
+                        update_sthree_data = {'status': 'done', 'workAssignee': user_email}
+                        self.dbClass.updateSthreeFileById(data['id'], update_sthree_data)
+
+            if labels:
+                self.dbClass.createLabel(labels)
+
+        connector_raw.progress = 100
+        connector_raw.save()
 
         return fail_file_list
 
@@ -1611,8 +1802,8 @@ class ManageFile:
                     'file_name': image_data['originalFileName'],
                     'status': image_data['status'],
                     's3key': image_data['s3key'],
-                    'width': image_data['width'],
-                    'height': image_data['height']
+                    'width': image_data['width'] if image_data.get('width')else 0,
+                    'height': image_data['height'] if image_data.get('height') else 0
                 })
 
             dataconnector.update({

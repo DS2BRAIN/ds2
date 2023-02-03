@@ -353,7 +353,7 @@ class ManageLabeling:
             return NOT_ALLOWED_TOKEN_ERROR
 
         user_dict['id'] = int(user_dict['id']) if type(user_dict['id']) == str else user_dict['id']
-
+        labelclasses = []
         labelproject_list = []
         is_first = True
         dataconnector_raws = self.dbClass.getDataconnectorsByIds(dataconnectors)
@@ -382,6 +382,9 @@ class ManageLabeling:
                     column['dataconnector'] = new_dataconnector.id
                     self.dbClass.createDatacolumn(column)
 
+                for labelclass in self.dbClass.getLabelClassesByLabelProjectId(x.originalLabelproject):
+                    labelclasses.append(labelclass)
+
         for data in self.dbClass.getSthreeFilesByDataconnectors(dataconnectors):
             del data['id']
             data['dataconnector'] = new_dataconnector.id
@@ -400,6 +403,12 @@ class ManageLabeling:
             "status": 1
         }
         new_label_project = self.dbClass.createLabelProject(label_project_info)
+
+        for labelclass in labelclasses:
+            copy_labelclass = model_to_dict(labelclass)
+            copy_labelclass['labelproject'] = new_label_project.id
+            del copy_labelclass['id']
+            self.dbClass.createLabelclass(copy_labelclass)
 
         data = {
             'taskName': f'{create_labelproject_request_object.name}',
