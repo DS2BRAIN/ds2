@@ -1583,7 +1583,7 @@ const LabelDetail = ({ history, match }) => {
         (project?.workapp === "object_detection" || project?.workapp === "detection_3d");
     const isRequiredCustomAIModel =
       project?.customAiModels?.length === 0 &&
-        (project?.workapp !== "object_detection" || project?.workapp !== "detection_3d");
+        (project?.workapp !== "object_detection" && project?.workapp !== "detection_3d");
 
     setAutolabelingState({
       hasNoAutoLabelingData,
@@ -2865,7 +2865,7 @@ const LabelDetail = ({ history, match }) => {
                                   onChangeGeneralAIType(e.target.name);
                                 }}
                               >
-                                {GENERAL_AI_GROUPS.map((group, idx) => {
+                                {labelprojects.projectDetail?.workapp ==="object_detection" && GENERAL_AI_GROUPS.map((group, idx) => {
                                   return (
                                     <FormControlLabel
                                       name={group.name}
@@ -2881,7 +2881,7 @@ const LabelDetail = ({ history, match }) => {
                         )}
                       </RadioGroup>
                     </FormControl>
-                    {autoLabelingAiType === "general" && (
+                    {labelprojects.projectDetail?.workapp ==="object_detection" && autoLabelingAiType === "general" && (
                       <>
                         <Grid item xs={12}>
                           <span style={{ fontWeight: 600, marginRight: 8 }}>

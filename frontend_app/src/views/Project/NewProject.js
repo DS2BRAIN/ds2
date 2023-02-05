@@ -316,7 +316,7 @@ export default function NewProject({ history }) {
         if (dataCategory === "object_detection" || dataCategory === "detection_3d" || dataCategory === "image") {
           if (
             idx < 100 &&
-            /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())
+            /\.(jpg|jpeg|png|zip|bin|pcd|mp4|quicktime|mov)$/g.test(name.toLowerCase())
           ) {
             tmpFiles.push(files[idx]);
           } else {

@@ -583,6 +583,290 @@ class CheckDataset():
         else:
             return result
 
+    def export3dData(self, labelProjectInfo, projectId=None, isAsync=False, is_get_image=False,
+                       has_project_data=False, has_median_data=False, is_suffle=True, is_train_data=True,
+                       asynctask=None):
+        print("exportCoCoData")
+        trainannotation = []
+        testannotations = []
+        status = 0
+        class_ids = []
+
+        try:
+            labelProject = labelProjectInfo.__dict__['__data__']
+            if isAsync:
+                if not asynctask:
+                    data = {
+                        'taskName': f'{labelProject["name"]}',
+                        'taskNameEn': f'{labelProject["name"]}',
+                        'taskType': 'export3D',
+                        'status': status,
+                        'labelproject': labelProject['id'],
+                        'user': labelProject['user'],
+                        'outputFilePath': '',
+                        'isChecked': 0
+                    }
+                    self.dbClass.createAsyncTask(data)
+
+            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}', exist_ok=True)
+            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/training', exist_ok=True)
+            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/testing', exist_ok=True)
+            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/training/label_2', exist_ok=True)
+            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/testing/label_2', exist_ok=True)
+
+            if has_median_data:
+                class_label_count_dict = {}
+                group_query = {'_id': '$labelclass', 'count': {'$sum': 1}}
+                condition = {"$and": [{"labelproject": labelProjectInfo.id},
+                                      {"$or": [{"isDeleted": False}, {"isDeleted": None}]}]}
+                labelProject['labelclasses'] = []
+                labelProject['labels'] = []
+                label_count = [x['count'] for x in
+                               mongoDb.get_group_documents(collection_name=mongoDb.LABELS_COLLECTION_NAME,
+                                                           condition=condition, group_query=group_query)]
+
+                if len(label_count) >= 5:
+                    label_count.remove(max(label_count))
+                    label_count.remove(max(label_count))
+
+                label_limit = int(np.median(label_count)) * 2
+
+                for labelclass in self.dbClass.getCoCoLabelClassesByLabelProjectId(labelProjectInfo.id):
+                    labelclass = model_to_dict(labelclass)
+                    class_label_count_dict[labelclass['id']] = 0
+                    labelProject['labelclasses'].append(labelclass)
+
+                done_label_class_count = 0
+                label_class_count = len(labelProject['labelclasses'])
+
+            else:
+                labelProject['labelclasses'] = [x.__dict__['__data__'] for x in
+                                                self.dbClass.getCoCoLabelClassesByLabelProjectId(labelProjectInfo.id)]
+            labelProject['sthreefile'] = self.dbClass.getDoneDs2DataAndLabelsByLabelprojectId(labelProject['id'])
+
+            if projectId:
+                class_temps = []
+                class_ids = []
+
+                project_dict = self.dbClass.getOneProjectById(projectId)
+                project_dict['yClass'] = ast.literal_eval(project_dict['yClass'])
+                for label_class_info in labelProject['labelclasses']:
+                    if label_class_info['name'] in project_dict['yClass']:
+                        class_temps.append(label_class_info)
+                        class_ids.append(label_class_info['id'])
+
+                labelProject['labelclasses'] = class_temps
+
+            else:
+                for label_class in labelProject['labelclasses']:
+                    if label_class['id'] not in class_ids:
+                        class_ids.append(label_class['id'])
+
+            if projectId or is_get_image:
+                labelProject['sthreefile'] = self.download_sthreefile(
+                    labelProject['sthreefile'], labelProject['id'], project_id=projectId)
+
+            images = []
+            labels_count = 1
+            images_count = 1
+            image_point = 0
+
+            if is_suffle:
+                shuffle(labelProject['sthreefile'])
+
+            train_image_count = int(len(labelProject['sthreefile']) * 0.8) if is_train_data else len(
+                labelProject['sthreefile'])
+
+            for sthreefile in tqdm(labelProject['sthreefile']):
+                if has_median_data and label_class_count == done_label_class_count:
+                    break
+                # fileName = 'images/' + sthreefile['fileName'] if isAsync else sthreefile['fileName']
+                fileName = sthreefile['fileName'] if isAsync else sthreefile['fileName']
+                images_count += 1
+                images.append({
+                    "id": images_count,
+                    "file_name": fileName,
+                    "width": int(sthreefile['width']),
+                    "height": int(sthreefile['height'])
+                })
+
+                image_point += 1
+
+                for label in sthreefile['labels']:
+                    if has_median_data:
+                        if class_label_count_dict[label['labelclass']] < label_limit:
+                            class_label_count_dict[label['labelclass']] += 1
+                        elif class_label_count_dict[label['labelclass']] == label_limit:
+                            done_label_class_count += 1
+                            class_label_count_dict[label['labelclass']] += 1
+                            continue
+                        elif class_label_count_dict[label['labelclass']] > label_limit:
+                            continue
+
+                    if label['labelclass'] not in class_ids:
+                        continue
+
+                    # {
+                    #   "id": 4,
+                    #   "datasetId": 1,
+                    #   "dataId": 2,
+                    #   "classId": None,
+                    #   "classAttributes": {
+                    #     "id": "938EE33B-6101-462A-A319-1AC3E8A9C21D",
+                    #     "meta": {
+                    #       "classType": "",
+                    #       "isProjection": False
+                    #     },
+                    #     "type": "3D_BOX",
+                    #     "classId": "",
+                    #     "contour": {
+                    #       "pointN": 2051,
+                    #       "points": [],
+                    #       "size3D": { dimention?
+                    #         "x": 2.1456626780418304,
+                    #         "y": 4.338818579025611,
+                    #         "z": 2.106992752931931
+                    #       },
+                    #       "center3D": { location?
+                    #         "x": -6.420481146403377,
+                    #         "y": -1.0389368722688466,
+                    #         "z": 0.69437681018617
+                    #       },
+                    #       "viewIndex": 0,
+                    #       "rotation3D": { rotation?
+                    #         "x": 0,
+                    #         "y": 0,
+                    #         "z": 2.4137840624629816
+                    #       }
+                    #     },
+                    #     "frontId": "938EE33B-6101-462A-A319-1AC3E8A9C21D",
+                    #     "trackId": "sjrEFbdyTYCtyvux",
+                    #     "version": 1,
+                    #     "className": "",
+                    #     "createdAt": "2023-01-31T10:31:26Z",
+                    #     "createdBy": 2,
+                    #     "trackName": "1",
+                    #     "modelClass": "",
+                    #     "classValues": []
+                    #   },
+                    #   "objectCount": None,
+                    #   "frontId": None,
+                    #   "lockedBy": None
+                    # }
+                    points = label['classAttributes']['points']
+                    min_x = 9999999999999999999
+                    max_x = 0
+                    min_y = 9999999999999999999
+                    max_y = 0
+                    for point_x, point_y in points:
+                        if min_x > point_x:
+                            min_x = point_x
+                        if min_y > point_y:
+                            min_y = point_y
+                        if max_x < point_x:
+                            max_x = point_x
+                        if max_y < point_y:
+                            max_y = point_y
+
+                    data = {
+                        "iscrowd": 0,
+                        "ignore": 0,
+                        "image_id": images_count,
+                        "min_x": min_x,
+                        "min_y": min_y,
+                        "max_x": max_x,
+                        "max_y": max_y,
+                        "category_id": label['labelclass'],
+                        "fileName": sthreefile['fileName'],
+                        "id": labels_count
+                    }
+                    data.update(label)
+
+                    labels_count += 1
+                    if image_point < train_image_count:
+                        trainannotation.append(data)
+                    else:
+                        testannotations.append(data)
+
+                annotation_text = ""
+                for annotation in trainannotation:
+                    try:
+                        annotation_text += f"{annotation['classAttributes']['className']} 0 0 0 {annotation['min_x']} {annotation['min_y']} {annotation['max_x']} {annotation['max_y']} {annotation['classAttributes']['size3D']['x']} {annotation['classAttributes']['size3D']['y']} {annotation['classAttributes']['size3D']['z']} {annotation['classAttributes']['center3D']['x']} {annotation['classAttributes']['center3D']['y']} {annotation['classAttributes']['center3D']['z']} {annotation['classAttributes']['rotation3D']['y']}\n"
+                    except:
+                        pass
+
+                label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/testing/label_2/{fileName.replace(".pcd", ".txt")}'
+                if image_point < train_image_count:
+                    label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/training/label_2/{fileName.replace(".pcd", ".txt")}'
+
+                with open(label_file_path, 'w') as f:
+                    f.write(annotation_text)
+
+            categories = []
+            new_project_yClass = []
+            for x in labelProject['labelclasses']:
+                categories.append({"supercategory": "none", "id": x['id'], "name": x['name']})
+                new_project_yClass.append(x['name'])
+
+            if projectId:
+                self.dbClass.updateProject(projectId, {'yClass': new_project_yClass})
+
+            trainCocodata = {"images": images[:train_image_count], "type": "instances", "annotations": trainannotation,
+                             "categories": categories}
+            testCocodata = {"images": images[train_image_count:], "type": "instances", "annotations": testannotations,
+                            "categories": categories}
+
+            result = {'trainCocodata': trainCocodata, 'testCocodata': testCocodata} if is_train_data else trainCocodata
+            # print(result)
+            # result = json.dumps(result, ensure_ascii=False)
+        except:
+            print(traceback.format_exc())
+            result = {}
+            outputFilePath = ''
+            status = 99
+            pass
+        if isAsync:
+            try:
+                if status == 0:
+                    label_project_dir = f'{self.utilClass.save_path}/labelproject/{labelProject["id"]}'
+                    os.makedirs(label_project_dir, exist_ok=True)
+                    with open(f'{label_project_dir}/coco.json', 'w') as outfile:
+                        json.dump(result, outfile, indent=4)
+                    timestamp = time.strftime('%y%m%d%H%M%S')
+                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/', exist_ok=True)
+                    zip_file_path = f'{self.utilClass.save_path}/user/{labelProject["user"]}/{labelProject["id"]}'
+                    self.make_archive(label_project_dir, f'{zip_file_path}.zip')
+                    self.s3.upload_file(f'{zip_file_path}.zip', self.utilClass.bucket_name,
+                                        f'user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip')
+                    outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip'
+                    status = 100
+                    shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
+                    os.remove(f'{label_project_dir}/{zip_file_path}.zip')
+                    # if os.path.isdir(label_project_dir):
+                    #     shutil.rmtree(label_project_dir)
+            except:
+                print(traceback.format_exc())
+                outputFilePath = ''
+                status = 99
+                pass
+            if asynctask:
+                asynctask.outputFilePath = outputFilePath
+                asynctask.status = status
+                asynctask.save()
+            else:
+                data = {
+                    'taskName': f'{labelProject["name"]}',
+                    'taskType': 'export3D',
+                    'status': status,
+                    'labelproject': labelProject['id'],
+                    'user': labelProject['user'],
+                    'outputFilePath': outputFilePath,
+                    'isChecked': 0
+                }
+                self.dbClass.createAsyncTask(data)
+            return result
+        else:
+            return result
     def zip_folder(self, folder_name, data_path):
 
         commands = f'cd {data_path}/{folder_name}; zip -r {folder_name}.zip ./*'

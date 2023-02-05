@@ -463,7 +463,7 @@ export default function MarketList({ history }) {
         const name = files[idx].name;
         if (
           idx < 100 &&
-          /\.(jpg|jpeg|png|zip|csv|mp4|quicktime|mov)$/g.test(
+          /\.(jpg|jpeg|png|zip|bin|pcd|csv|mp4|quicktime|mov)$/g.test(
             name.toLowerCase()
           )
         ) {

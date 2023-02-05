@@ -183,6 +183,8 @@ class DaemonAsyncTask():
             return
         elif 'exportCoco' in task.taskType:
             return
+        elif 'export3D' in task.taskType:
+            return
         print("not stt")
         startTime = datetime.now()
         time.sleep(round(random.uniform(1, 6), 3))

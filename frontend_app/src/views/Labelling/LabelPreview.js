@@ -23,6 +23,11 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "components/CustomButtons/Button";
+import * as THREE from "three";
+import {PCDLoader} from "three/examples/jsm/loaders/PCDLoader";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import CircularProgress from "@mui/material/CircularProgress";
 
 const LabelPreview = ({
   history,
@@ -48,6 +53,7 @@ const LabelPreview = ({
   const [labelFileDetail, setLabelFileDetail] = useState(null);
   const [labelData, setLabelData] = useState(null);
   const [clientIp, setClientIp] = useState("");
+  const [isPcdImgLoading, setIsPcdImgLoading] = useState(false);
 
   const imageRef = React.createRef();
   let ref = useRef();
@@ -66,6 +72,100 @@ const LabelPreview = ({
   } else {
     fileDownloadUrl = "https://astoredslab.s3.ap-northeast-2.amazonaws.com/";
   }
+  let camera, scene, renderer;
+
+  function init() {
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth / 4, window.innerHeight / 2 );
+    // document.body.appendChild( renderer.domElement );
+    renderer.sortObjects = false;
+    renderer.autoClear = false;
+    // let aspect = this.width / this.height;
+    // let depth = 100;
+    // let fov_y = 35;
+    // let height_ortho = depth * 2 * Math.atan((fov_y * (Math.PI / 180)) / 2);
+    // let width_ortho = height_ortho * aspect;
+    // this.camera = new THREE.OrthographicCamera(width_ortho / -2, width_ortho / 2, height_ortho / 2, height_ortho / -2, 0.01, 30000);
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight * 2, 1, 100000 );
+    camera.position.set(0, -100, 100);
+    camera.up.set(0, 0, 0);
+    camera.lookAt(0, 0, 0);
+    // camera.position.set( 0, 0, 1 );
+    scene.add( camera );
+
+    const controls = new OrbitControls( camera, renderer.domElement );
+    controls.addEventListener( 'change', render ); // use if there is no animation loop
+    // controls.minDistance = 0.5;
+    // controls.maxDistance = 10;
+
+    //scene.add( new THREE.AxesHelper( 1 ) );
+
+    const loader = new PCDLoader();
+    loader.load(
+        // 'https://threejs.org/examples/models/pcd/binary/Zaghetto.pcd'
+        process.env.REACT_APP_ENTERPRISE === "true"
+                    ? fileurl + "static" + labelFileDetail.s3key
+                    : labelFileDetail.s3key
+        , function ( points ) {
+
+        // points.material.size = 1;
+        points.geometry.center();
+        // points.geometry.rotateX( Math.PI );
+        points.name = 'Zaghetto.pcd';
+        scene.add( points );
+
+        //
+
+        // const gui = new GUI();
+        //
+        // gui.add( points.material, 'size', 0.001, 0.01 ).onChange( render );
+        // gui.addColor( points.material, 'color' ).onChange( render );
+        // gui.open();
+
+        //
+        document.getElementById("canvas02").appendChild(renderer.domElement);
+
+        render();
+        setIsPcdImgLoading(false);
+
+    } );
+
+    window.addEventListener( 'resize', onWindowResize );
+
+  }
+
+  function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+    render();
+  }
+
+  function render() {
+      renderer.render( scene, camera )
+  }
+
+
+  useEffect(() => {
+    if (!isPreviewModalLoading) {
+      if (labelFileDetail.s3key.indexOf('.pcd') > -1) {
+
+        console.log("PCD init");
+        setIsPcdImgLoading(true);
+        init();
+        render();
+      }
+    }
+  }, [isPreviewModalLoading]);
+
 
   const getPath = () => {
     try {
@@ -552,7 +652,27 @@ const LabelPreview = ({
           }}
         >
           <div className={classes.imageCard} id="imageCard">
-            <img
+
+              {isPcdImgLoading && (
+                    <Grid
+                      container
+                      width="100%"
+                      height="100%"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <CircularProgress
+                        size={35}
+                        thickness={4}
+                        color="inherit"
+                        sx={{
+                          color: "var(--secondary1)",
+                        }}
+                      />
+                    </Grid>
+                  )}
+
+            {labelFileDetail.s3key.indexOf('.pcd') > -1 ? <div id="canvas02" className={classes.canvasDiv}></div> : <img
               src={getS3key(labelFileDetail.s3key)}
               height="100%"
               id="previewImage"
@@ -562,7 +682,7 @@ const LabelPreview = ({
                 left: 0,
                 top: 0,
               }}
-            />
+            />}
             {(labelprojects.projectDetail?.labelclasses ||
               labelprojects.projectDetail.labelclasses.length > 0) && (
               <canvas
