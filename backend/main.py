@@ -69,7 +69,7 @@ import requests
 import orjson
 
 if os.path.exists('./src/creating/routers/'):
-    from src.creating.routers import maRouter
+    from src.creating.routers import maRouter, detection3dRouter
     from src.creating.routers import mosRouter
     from src.creating.routers import msRouter
 
@@ -146,6 +146,7 @@ if os.path.exists('./src/creating/routers/'):
     app.include_router(maRouter.router, tags=["ma Router"])
     app.include_router(mosRouter.router, tags=["mos Router"])
     app.include_router(msRouter.router, tags=["ms Router"])
+    app.include_router(detection3dRouter.router, tags=["3d detection Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)
