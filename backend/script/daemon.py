@@ -540,7 +540,7 @@ class Daemon():
             return False
             pass
 
-        if df is not None and df.shape[0] == 0:
+        if df is not None and df.shape[0] == 0 and project['trainingMethod'] != "detection_3d":
             self.dbClass.updateProjectStatusById(project['id'], 9, "9 : 전처리 조건에 의해 모든 행이 삭제되었습니다. 조건을 재확인해주세요.")
             return False
 
@@ -973,6 +973,14 @@ class Daemon():
                             except:
                                 print(traceback.format_exc())
                                 pass
+                elif 'detection_3d' in project['trainingMethod']:
+                    if 'i-00000d13' in self.instanceName:
+                        continue
+                    autolabeling_project = self.dbClass.getAutoLabelingProjectByProjectId(project['id'])
+                    if autolabeling_project and autolabeling_project.customAiStage == 1:
+                        isForFree = True
+                    model = self.trainingClass.trainingDetection3D(project, model, df, localFilePath, configFile, instancesUser)
+
                 elif 'object_detection' in project['trainingMethod']:
                     if 'i-00000d13' in self.instanceName:
                         continue
