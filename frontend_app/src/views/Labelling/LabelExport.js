@@ -546,7 +546,16 @@ const LabelExport = ({ history }) => {
             {renderExportData("")}
             <div className={classes.text87}>
               {t(
-                "Click the Save COCO button to save the labeling information in a JSON format."
+                "Click the Save button to save the labeling information in a JSON format."
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginTop: "30px" }}>
+            {renderExportData("voc")}
+            <div className={classes.text87}>
+              {t(
+                "Click the Save VOC button to save the labeling information in a XML format."
               )}
             </div>
           </div>

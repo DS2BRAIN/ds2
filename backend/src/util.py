@@ -65,6 +65,7 @@ sys.stdout=Unbuffered(sys.stdout)
 
 try:
     public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
+    public_ip_address = "0.0.0.0"
 except:
     public_ip_address = "0.0.0.0"
 
@@ -191,7 +192,7 @@ class Util():
         self.jupyterAMI = util_configs.get('jupyterAMI', {})
 
 
-        self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif', 'jfif']
+        self.imageExtensionName = ['jpg', 'jpeg', 'png', 'gif', 'jfif','pcd','bin']
         self.videoExtensionName = ['mp4', 'mov', 'webm']
         self.soundExtensionName = ['mp4','mp3','wav','flac']
         self.compressionExtensionName = ['zip']

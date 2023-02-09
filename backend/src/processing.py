@@ -239,7 +239,13 @@ class Processing():
         dataRaw = None
         yClass = project.get('yClass')
 
-        if trainingMethod not in ['image', 'object_detection', 'cycle_gan']:
+        if trainingMethod in ['detection_3d']:
+
+            yClass = project.get('yClass')
+            dep_var = 'label'
+            fileStructure = [{'columnName': 'image'}, {'columnName': 'label'}]
+
+        elif trainingMethod not in ['image', 'object_detection', 'cycle_gan']:
 
             if project.get('labelproject'):
                 labelproject_raw = self.dbClass.getLabelProjectsById(project.get('labelproject'))
@@ -659,7 +665,32 @@ class Processing():
         dataconnectors = self.getDataconnectorsInfoByDataconnectorsList(project.get('dataconnectorsList',[]))
         if dataconnectors:
             dataconnectorName = ".".join(dataconnectors[0].dataconnectorName.split('.')[:-1])
-        if project['trainingMethod'] in ['image','object_detection','cycle_gan']:
+        if project['trainingMethod'] in 'detection_3d':
+            localFilePath = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti/kitti_dbinfos_train.pkl"
+            rows = []
+            for (dirpath, dirnames, filenames) in os.walk(
+                    os.path.splitext(localFilePath)[0]
+            ):
+
+                if '__MACOSX' in dirpath:
+                    continue
+
+                folderName = ""
+                try:
+                    folderName = dirpath.split(os.path.splitext(localFilePath)[0] + "/")[1]
+                except:
+                    pass
+                for filename in filenames:
+                    if '.' in filename:
+                        if filename.split('.')[-1].lower() in ['pcd']:
+                            rows.append({
+                                'image': f"{folderName}/{filename}",
+                                'label': ''
+                            })
+
+            df = pd.DataFrame(rows)
+            pass
+        elif project['trainingMethod'] in ['image','object_detection','cycle_gan']:
             if '.zip' in localFilePath:
                 if not os.path.exists(f"{self.utilClass.save_path}/{str(project['id'])}/"):
                     os.makedirs(f"{self.utilClass.save_path}/{str(project['id'])}/")

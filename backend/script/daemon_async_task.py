@@ -362,8 +362,8 @@ class DaemonAsyncTask():
 
                         self.processingLabelingClass.startAutoLabeling(user, task, autolabelingproject=autolabelingproject)
 
-                    if task.status == 1:
-                        task.status = 100
+                    # if task.status == 1:
+                    task.status = 100
 
                 else:
                     project = self.dbClass.getOneProjectById(task.project)
