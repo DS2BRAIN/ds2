@@ -75,7 +75,7 @@ const StartProject = ({ history }) => {
         );
       } else {
         const name = files[idx].name;
-        if (idx < 100 && /\.(jpg|jpeg|png|zip)$/g.test(name.toLowerCase())) {
+        if (idx < 100 && /\.(jpg|jpeg|png|zip|bin|pcd)$/g.test(name.toLowerCase())) {
           tmpFiles.push(files[idx]);
         }
       }

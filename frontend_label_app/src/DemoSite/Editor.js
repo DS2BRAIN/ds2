@@ -182,7 +182,7 @@ const Editor = ({
                   id: sthreefile.id,
                   src: process.env.REACT_APP_ENTERPRISE
                     ? getEnterpriseS3key(sthreefile.s3key)
-                    : sthreefile.s3key,
+                    : api.backendurl + "static" + sthreefile.s3key,
                   name: sthreefile.originalFileName,
                   width: sthreefile.width,
                   height: sthreefile.height,

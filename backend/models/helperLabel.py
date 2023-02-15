@@ -481,7 +481,7 @@ class HelperLabel():
         if has_shared:
             condition = {"$and":[condition, {"workAssignee": work_assignee}]}
 
-        if workapp == 'object_detection':
+        if workapp == 'object_detection' or workapp == 'detection_3d':
             return mongoDb.get_documents_count(collection_name=mongoDb.LABELS_COLLECTION_NAME, condition=condition)
         else:
             return mongoDb.get_documents_count(collection_name=mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME, condition=condition)
@@ -570,15 +570,15 @@ class HelperLabel():
         return mongoDb.aggregate(collection_name=mongoDb.LABELS_COLLECTION_NAME, pipeline=pipeline)
 
     @wrapper
-    def getCompletedLabelCountBylabelprojectId(self, labelclassId, workapp, is_shared, workAssignee):
+    def getCompletedLabelCountBylabelprojectId(self, labelprojectId, workapp, is_shared, workAssignee):
         print('label')
         condition = {
-            'labelproject': labelclassId,
+            'labelproject': labelprojectId,
             'isDeleted': {"$ne": True},
             'status': {'$in': ['review', 'done']},
             'workAssignee': workAssignee
         } if is_shared else {
-                    'labelproject': labelclassId,
+                    'labelproject': labelprojectId,
                     'isDeleted': {"$ne": True},
                     'status': {'$in': ['review', 'done']}
                 }
@@ -597,7 +597,7 @@ class HelperLabel():
         })
 
         collection_name = mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME
-        if workapp == 'object_detection':
+        if workapp == 'object_detection' or workapp == 'detection_3d':
             collection_name = mongoDb.LABELS_COLLECTION_NAME
         return mongoDb.aggregate(collection_name=collection_name, pipeline=pipeline)
 
@@ -742,7 +742,7 @@ class HelperLabel():
 
     @wrapper
     def getLabelsBySthreeId(self, sthreefileId):
-        condition = {"sthreefile": int(sthreefileId)}
+        condition = {"sthreefile": sthreefileId}
         return mongoDb.get_documents(collection_name=mongoDb.LABELS_COLLECTION_NAME, condition=condition)
 
     @wrapper

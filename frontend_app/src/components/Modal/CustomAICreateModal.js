@@ -116,6 +116,7 @@ const CustomAICreateModal = ({
       if (
         type !== "image" &&
         type !== "object_detection" &&
+        type !== "detection_3d" &&
         useColumnArray.length === 0
       ) {
         dispatch(
@@ -268,7 +269,8 @@ const CustomAICreateModal = ({
       <div className={classes.autoLabelingContent}>
         <div>
           {labelprojects.projectDetail &&
-            labelprojects.projectDetail.workapp === "object_detection" && (
+              (labelprojects.projectDetail.workapp === "object_detection" || 
+              labelprojects.projectDetail.workapp === "detection_3d") && (
               <>
                 <Grid item xs={12} sx={{ fontWeight: 600 }}>
                   {t("Select Custom AI Type")}
@@ -310,6 +312,7 @@ const CustomAICreateModal = ({
 
           {labelprojects.projectDetail &&
             labelprojects.projectDetail.workapp !== "image" &&
+            labelprojects.projectDetail.workapp !== "detection_3d" &&
             labelprojects.projectDetail.workapp !== "object_detection" && (
               <div style={{ marginBottom: 16 }}>
                 <span style={{ fontWeight: 600 }}>

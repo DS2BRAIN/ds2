@@ -183,6 +183,8 @@ class DaemonAsyncTask():
             return
         elif 'exportCoco' in task.taskType:
             return
+        elif 'export3D' in task.taskType:
+            return
         print("not stt")
         startTime = datetime.now()
         time.sleep(round(random.uniform(1, 6), 3))
@@ -360,8 +362,8 @@ class DaemonAsyncTask():
 
                         self.processingLabelingClass.startAutoLabeling(user, task, autolabelingproject=autolabelingproject)
 
-                    if task.status == 1:
-                        task.status = 100
+                    # if task.status == 1:
+                    task.status = 100
 
                 else:
                     project = self.dbClass.getOneProjectById(task.project)

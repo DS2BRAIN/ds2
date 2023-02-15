@@ -92,7 +92,7 @@ class ManageEtc:
         if os.path.isfile(pdf_file_path) is False:
             training_method = project['trainingMethod']
             print_date_time = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime('%Y-%m-%d %H:%M%:%S')
-            image_training_method = ['object_detection', 'image', 'cycle_gan']
+            image_training_method = ['object_detection', 'image', 'cycle_gan', 'detection_3d']
 
             # 학습 방법에 따라 이미지 관련 프로젝트는 유실값, 최대값, 표준값 등의 데이터가 없기 때문에 타입과 이미지 데이터 개수만 보여주고
             # 학습 방법이 정형데이터를 사용하는 경우 이외의 데이터들도 보여주도록 처리해줍니다.

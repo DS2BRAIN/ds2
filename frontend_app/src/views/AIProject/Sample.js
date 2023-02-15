@@ -122,6 +122,7 @@ const Sample = React.memo((props) => {
     if (
       projects.project.trainingMethod === "image" ||
       projects.project.trainingMethod === "object_detection" ||
+      projects.project.trainingMethod === "detection_3d" ||
       projects.project.trainingMethod === "cycle_gan"
     ) {
       setSelectedPage("rawdata");
@@ -458,6 +459,9 @@ const Sample = React.memo((props) => {
                         <MenuItem value="object_detection">
                           {t("Object Detection")}
                         </MenuItem>
+                        <MenuItem value="detection_3d">
+                          {t("3D Object Detection")}
+                        </MenuItem>
                         {/* <MenuItem value='cycle_gan' >{t('Generative Adversarial Network (GAN)')}</MenuItem> */}
                         <MenuItem value="time_series">
                           {t("Time Series Prediction")}
@@ -485,6 +489,12 @@ const Sample = React.memo((props) => {
                         "object_detection" && (
                         <p className={classes.settingFontWhite6}>
                           {t("Training Method")} - {t("물체 인식")}
+                        </p>
+                      )}
+                      {projects.project.trainingMethod ===
+                        "detection_3d" && (
+                        <p className={classes.settingFontWhite6}>
+                          {t("Training Method")} - {t("3D 물체 인식")}
                         </p>
                       )}
                       {/* {projects.project.trainingMethod === "cycle_gan" && (
@@ -586,6 +596,7 @@ const Sample = React.memo((props) => {
               {!(
                 projects.project.trainingMethod === "image" ||
                 projects.project.trainingMethod === "object_detection" ||
+                projects.project.trainingMethod === "detection_3d" ||
                 projects.project.trainingMethod === "cycle_gan"
               ) && (
                 <div

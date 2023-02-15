@@ -276,6 +276,7 @@ const Project = ({ history }) => {
       normal_regression: t("General Regression"),
       normal_classification: t("General Category Classification"),
       object_detection: t("Object Detection"),
+      detection_3d: t("3D Object Detection"),
       cycle_gan: t("Generative Adversarial Network (GAN)"),
       time_series: t("Time Series Prediction"),
       time_series_classification: t("Time Series Prediction"),

@@ -486,6 +486,10 @@ const ModelTable = React.memo(
           if (model.ap_info?.APm) hasData.mAP = true;
           if (model.ap_info?.AP50) hasData.AP50 = true;
           if (model.ap_info?.AP75) hasData.AP75 = true;
+        } else if (trainMethod === "detection_3d") {
+          if (model.ap_info?.APm) hasData.mAP = true;
+          if (model.ap_info?.AP50) hasData.AP50 = true;
+          if (model.ap_info?.AP75) hasData.AP75 = true;
         } else {
           if (model.accuracy || model.accuracy === 0) hasData.accuracy = true;
           if (model.errorRate || model.errorRate === 0)
@@ -856,9 +860,11 @@ const ModelTable = React.memo(
               {data.totalLoss && renderDataHead("totalLoss")}
               {data.accuracy &&
                 projectTrainMethod !== "object_detection" &&
+                projectTrainMethod !== "detection_3d" &&
                 renderDataHead("accuracy")}
               {data.errorRate &&
                 projectTrainMethod !== "object_detection" &&
+                projectTrainMethod !== "detection_3d" &&
                 projectTrainMethod !== "normal_regression" &&
                 renderDataHead("errorRate")}
               {data.dice && renderDataHead("dice")}
@@ -986,9 +992,11 @@ const ModelTable = React.memo(
                       renderDataBody("totalLoss", totalLoss, model)}
                     {data.accuracy &&
                       projectTrainMethod !== "object_detection" &&
+                      projectTrainMethod !== "detection_3d" &&
                       renderDataBody("accuracy", accuracy, model)}
                     {data.errorRate &&
                       projectTrainMethod !== "object_detection" &&
+                      projectTrainMethod !== "detection_3d" &&
                       projectTrainMethod !== "normal_regression" &&
                       renderDataBody("errorRate", errorRate, model)}
                     {data.dice && renderDataBody("dice", dice, model)}
@@ -1047,10 +1055,11 @@ const ModelTable = React.memo(
                 const secPredictBtns = (method, id) => {
                   let isImage =
                     method === "object_detection" ||
+                    method === "detection_3d" ||
                     method === "cycle_gan" ||
                     method === "image";
                   let isVideo =
-                    method === "object_detection" || method === "cycle_gan";
+                    method === "object_detection" || method === "detection_3d" || method === "cycle_gan";
                   let isRecommender = method === "recommender";
 
                   const openModal = async (id, item) => {

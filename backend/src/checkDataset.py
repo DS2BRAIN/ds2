@@ -206,6 +206,10 @@ class CheckDataset():
                 ds2data = self.dbClass.getSthreeFilesByLabelprojectId(labelproject_raw.id)
             else:
                 ds2data = self.dbClass.getDonesthreefilesByLabelprojectId(labelproject_raw.id)
+            if labelproject_raw.workapp in ['detection_3d']:
+                result, outputFilePath = self.export3dData(labelproject_raw, isAsync = True, is_train_data = False, asynctask = asynctask)
+                status = 100
+
             if labelproject_raw.workapp in ['normal_classification', 'text', 'normal_regression', 'time_series', 'csv']:
                 csv_data = []
                 label_column = list(ds2data[0]['labelData'])[0].replace(self.utilClass.dot_encode_key, '.')
@@ -319,6 +323,7 @@ class CheckDataset():
             status = 99
             outputFilePath = ''
         if asynctask:
+
             asynctask.status = status
             asynctask.outputFilePath = outputFilePath
             asynctask.save()
@@ -583,6 +588,227 @@ class CheckDataset():
         else:
             return result
 
+    def export3dData(self, labelProjectInfo, projectId=None, isAsync=False, is_get_image=False,
+                       has_project_data=False, has_median_data=False, is_suffle=True, is_train_data=True,
+                       asynctask=None):
+        print("exportCoCoData")
+        trainannotation = []
+        testannotations = []
+        status = 0
+        class_ids = []
+
+        try:
+            labelProject = labelProjectInfo.__dict__['__data__']
+            if isAsync:
+                if not asynctask:
+                    data = {
+                        'taskName': f'{labelProject["name"]}',
+                        'taskNameEn': f'{labelProject["name"]}',
+                        'taskType': 'export3D',
+                        'status': status,
+                        'labelproject': labelProject['id'],
+                        'user': labelProject['user'],
+                        'outputFilePath': '',
+                        'isChecked': 0
+                    }
+                    self.dbClass.createAsyncTask(data)
+
+            outputFilePath = f'{os.getcwd()}/temp/{labelProject["id"]}'
+            # os.makedirs(outputFilePath, exist_ok=True)
+            #TODO: 데이터 커넥터 업로드 시 압축 푼걸 풀어놓은 후 재시도 필요 (혹은 이미 풀린 곳 다시 찾기 - 데이터 커넥터 아이디와 주소 매칭 안될 시 확인 필요)
+            shutil.copytree(f"{self.utilClass.save_path}/user/{labelProject['user']}/{ast.literal_eval(labelProject['dataconnectorsList'])[0]}/",
+                         outputFilePath, dirs_exist_ok=True)
+            # imgae0 -> training/image_2 test/image_2
+            # result -> training/label_2 test/label_2
+            # point_cloud -> training/velodyne testing/velodyne
+            os.makedirs(f'{outputFilePath}/result', exist_ok=True)
+            if has_median_data:
+                class_label_count_dict = {}
+                group_query = {'_id': '$labelclass', 'count': {'$sum': 1}}
+                condition = {"$and": [{"labelproject": labelProjectInfo.id},
+                                      {"$or": [{"isDeleted": False}, {"isDeleted": None}]}]}
+                labelProject['labelclasses'] = []
+                labelProject['labels'] = []
+                label_count = [x['count'] for x in
+                               mongoDb.get_group_documents(collection_name=mongoDb.LABELS_COLLECTION_NAME,
+                                                           condition=condition, group_query=group_query)]
+
+                if len(label_count) >= 5:
+                    label_count.remove(max(label_count))
+                    label_count.remove(max(label_count))
+
+                label_limit = int(np.median(label_count)) * 2
+
+                for labelclass in self.dbClass.getCoCoLabelClassesByLabelProjectId(labelProjectInfo.id):
+                    labelclass = model_to_dict(labelclass)
+                    class_label_count_dict[labelclass['id']] = 0
+                    labelProject['labelclasses'].append(labelclass)
+
+                done_label_class_count = 0
+                label_class_count = len(labelProject['labelclasses'])
+
+            else:
+                labelProject['labelclasses'] = [x.__dict__['__data__'] for x in
+                                                self.dbClass.getCoCoLabelClassesByLabelProjectId(labelProjectInfo.id)]
+            ds2data = self.dbClass.getSthreeFilesByLabelprojectId(labelProject['id'])
+            labelProject['sthreefile'] = ds2data
+            # labelProject['sthreefile'] = self.dbClass.getDoneDs2DataAndLabelsByLabelprojectId(labelProject['id'])
+
+            if projectId:
+                class_temps = []
+                class_ids = []
+
+                project_dict = self.dbClass.getOneProjectById(projectId)
+                project_dict['yClass'] = ast.literal_eval(project_dict['yClass'])
+                for label_class_info in labelProject['labelclasses']:
+                    if label_class_info['name'] in project_dict['yClass']:
+                        class_temps.append(label_class_info)
+                        class_ids.append(label_class_info['id'])
+
+                labelProject['labelclasses'] = class_temps
+
+            else:
+                for label_class in labelProject['labelclasses']:
+                    if label_class['id'] not in class_ids:
+                        class_ids.append(label_class['id'])
+
+            if projectId or is_get_image:
+                labelProject['sthreefile'] = self.download_sthreefile(
+                    labelProject['sthreefile'], labelProject['id'], project_id=projectId)
+
+            images = []
+            labels_count = 1
+            images_count = 1
+            image_point = 0
+
+            if is_suffle:
+                shuffle(labelProject['sthreefile'])
+
+            train_image_count = int(len(labelProject['sthreefile']) * 0.8) if is_train_data else len(
+                labelProject['sthreefile'])
+
+            for sthreefile in tqdm(labelProject['sthreefile']):
+                if has_median_data and label_class_count == done_label_class_count:
+                    break
+                # fileName = 'images/' + sthreefile['fileName'] if isAsync else sthreefile['fileName']
+                fileName = sthreefile['fileName'] if isAsync else sthreefile['fileName']
+                images_count += 1
+                images.append({
+                    "id": images_count,
+                    "file_name": fileName,
+                })
+
+                image_point += 1
+
+                sthreefile['labels'] = self.dbClass.getLabelsBySthreeId(sthreefile['id'])
+
+                for label in sthreefile['labels']:
+                    if has_median_data:
+                        if class_label_count_dict[label['labelclass']] < label_limit:
+                            class_label_count_dict[label['labelclass']] += 1
+                        elif class_label_count_dict[label['labelclass']] == label_limit:
+                            done_label_class_count += 1
+                            class_label_count_dict[label['labelclass']] += 1
+                            continue
+                        elif class_label_count_dict[label['labelclass']] > label_limit:
+                            continue
+
+                    labels_count += 1
+                    if image_point < train_image_count:
+                        trainannotation.append(label)
+                    else:
+                        testannotations.append(label)
+
+                # annotation_text = ""
+                annotations= {"result": {"objects": []}}
+                objects = []
+                for annotation in trainannotation:
+                    try:
+                        # annotation_text += f"{annotation['classAttributes']['className']} 0 0 0 {annotation['min_x']} {annotation['min_y']} {annotation['max_x']} {annotation['max_y']} {annotation['classAttributes']['size3D']['x']} {annotation['classAttributes']['size3D']['y']} {annotation['classAttributes']['size3D']['z']} {annotation['classAttributes']['center3D']['x']} {annotation['classAttributes']['center3D']['y']} {annotation['classAttributes']['center3D']['z']} {annotation['classAttributes']['rotation3D']['y']}\n"
+                        objects.append(annotation)
+                    except:
+                        print(traceback.format_exc())
+                        pass
+                annotations["result"]["objects"] = objects
+
+                # label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt").replace("point_cloud", "result")}'
+                # if image_point < train_image_count:
+                #     label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt").replace("point_cloud", "result")}'
+                label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
+                if image_point < train_image_count:
+                    label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
+
+                base_path = os.path.dirname(label_file_path)
+                os.makedirs(base_path, exist_ok=True)
+
+                with open(label_file_path, 'w') as f:
+                    json.dump(annotations, f)
+
+            categories = []
+            new_project_yClass = []
+            for x in labelProject['labelclasses']:
+                categories.append({"supercategory": "none", "id": x['id'], "name": x['name']})
+                new_project_yClass.append(x['name'])
+
+            if projectId:
+                self.dbClass.updateProject(projectId, {'yClass': new_project_yClass})
+
+            trainCocodata = {"images": images[:train_image_count], "type": "instances", "annotations": trainannotation,
+                             "categories": categories}
+            testCocodata = {"images": images[train_image_count:], "type": "instances", "annotations": testannotations,
+                            "categories": categories}
+
+            result = {'trainCocodata': trainCocodata, 'testCocodata': testCocodata} if is_train_data else trainCocodata
+            # print(result)
+            # result = json.dumps(result, ensure_ascii=False)
+        except:
+            print(traceback.format_exc())
+            result = {}
+            outputFilePath = ''
+            status = 99
+            pass
+        if isAsync:
+            try:
+                if status == 0:
+                    label_project_dir = f'{self.utilClass.save_path}/labelproject/{labelProject["id"]}'
+                    os.makedirs(label_project_dir, exist_ok=True)
+                    with open(f'{label_project_dir}/annotation.json', 'w') as outfile:
+                        json.dump(result, outfile, indent=4, default=str)
+                    timestamp = time.strftime('%y%m%d%H%M%S')
+                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/', exist_ok=True)
+                    zip_file_path = f'{self.utilClass.save_path}/user/{labelProject["user"]}/{labelProject["id"]}'
+                    self.make_archive(label_project_dir, f'{zip_file_path}.zip')
+                    self.s3.upload_file(f'{zip_file_path}.zip', self.utilClass.bucket_name,
+                                        f'user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip')
+                    outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip'
+                    status = 100
+                    shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
+                    # os.remove(f'{label_project_dir}/{zip_file_path}.zip')
+                    # if os.path.isdir(label_project_dir):
+                    #     shutil.rmtree(label_project_dir)
+            except:
+                print(traceback.format_exc())
+                outputFilePath = ''
+                status = 99
+                pass
+            if asynctask:
+                asynctask.outputFilePath = outputFilePath
+                asynctask.status = status
+                asynctask.save()
+            else:
+                data = {
+                    'taskName': f'{labelProject["name"]}',
+                    'taskType': 'export3D',
+                    'status': status,
+                    'labelproject': labelProject['id'],
+                    'user': labelProject['user'],
+                    'outputFilePath': outputFilePath,
+                    'isChecked': 0
+                }
+                self.dbClass.createAsyncTask(data)
+            return result, outputFilePath
+        else:
+            return result, outputFilePath
     def zip_folder(self, folder_name, data_path):
 
         commands = f'cd {data_path}/{folder_name}; zip -r {folder_name}.zip ./*'
@@ -665,6 +891,8 @@ class CheckDataset():
 
     def export_voc_data(self, label_project_info, user, is_get_image, is_async):
         try:
+
+
             label_project = label_project_info.__dict__['__data__']
             if is_async:
                 data = {
@@ -695,6 +923,9 @@ class CheckDataset():
                 test_filenames = []
                 trainval_filenames = []
                 current_idx = 0
+
+            if label_project_info.workapp == "detection_3d":
+                label_project['sthreefile'] = self.dbClass.getSthreeFilesByLabelprojectId(label_project['id'])
 
             for img in tqdm(label_project['sthreefile']):
                 if is_get_image:
@@ -728,66 +959,81 @@ class CheckDataset():
                 SubElement(owner, "name").text = user['email']
 
                 size = SubElement(root, "size")
-                SubElement(size, "width").text = str(int(img['width']))
-                SubElement(size, "height").text = str(int(img['height']))
+                if label_project_info.workapp == "detection_3d":
+                    img['labels'] = self.dbClass.getLabelsBySthreeId(img['id'])
+                else:
+                    SubElement(size, "width").text = str(int(img['width']))
+                    SubElement(size, "height").text = str(int(img['height']))
                 SubElement(size, "depth").text = "3"
 
                 SubElement(root, "segmented").text = "0"
 
                 for label in img['labels']:
-                    if label['labeltype'] == 'box':
-                        numpyarray = np.reshape((
-                            round(img['width'] * label['x']),
-                            round(img['height'] * label['y']),
-                            round(img['width'] * label['x']),
-                            round(img['height'] * (label['y'] + label['h'])),
-                            round(img['width'] * (label['x'] + label['w'])),
-                            round(img['height'] * (label['y'] + label['h'])),
-                            round(img['width'] * (label['x'] + label['w'])),
-                            round(img['height'] * label['y'])
-                        ), (4, 2))
-
-                    if label['labeltype'] == 'polygon':
-                        basiclist = ast.literal_eval(label['points']) if type(label['points']) == str else label['points']
-                        for basictemp in basiclist:
-                            basictemp[0] = round(basictemp[0] * img['width'])
-                            basictemp[1] = round(basictemp[1] * img['height'])
-                        numpyarray = np.array(basiclist)
-
-                    npmin = np.min(numpyarray, axis=0)
-                    npmax = np.max(numpyarray, axis=0)
-
-                    bndbox_info = {
-                        "xmin": str(int(npmin[0]) + 1),
-                        "ymin": str(int(npmin[1]) + 1),
-                        "xmax": str(int(npmax[0])),
-                        'ymax': str(int(npmax[1])),
-                    }
-
-                    points = [[round(img['width'] * label['x']), round(img['height'] * label['y']),
-                               round(img['width'] * (label['x'] + label['w'])), round(img['height'] * label['y']),
-                               round(img['width'] * (label['x'] + label['w'])), round(img['height'] * (label['y'] + label['h'])),
-                               round(img['width'] * label['x']), round(img['height'] * (label['y'] + label['h']))
-                               ]]
-                    numpyarray = np.array(points).reshape((-1, 2))
-                    npmin = np.min(numpyarray, axis=0)
-                    npmax = np.max(numpyarray, axis=0)
-                    area = label['w'] * label['h']
-                    bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
-
-                    label_class = self.dbClass.getOneLabelclassById(label['labelclass']).__dict__['__data__']
-
                     obj = SubElement(root, "object")
-                    SubElement(obj, 'name').text = label_class['name']
+                    if label_project_info.workapp == "detection_3d":
+                        bndbox = SubElement(obj, "bndbox")
+                        SubElement(bndbox, 'size_x').text = f"{label['classAttributes']['contour']['size3D']['x']}"
+                        SubElement(bndbox, 'size_y').text = f"{label['classAttributes']['contour']['size3D']['y']}"
+                        SubElement(bndbox, 'size_z').text = f"{label['classAttributes']['contour']['size3D']['z']}"
+                        SubElement(bndbox, 'center_x').text = f"{label['classAttributes']['contour']['center3D']['x']}"
+                        SubElement(bndbox, 'center_y').text = f"{label['classAttributes']['contour']['center3D']['y']}"
+                        SubElement(bndbox, 'center_z').text = f"{label['classAttributes']['contour']['center3D']['z']}"
+                        SubElement(bndbox, 'lotate_y').text = f"{label['classAttributes']['contour']['rotation3D']['y']}"
+
+                    else:
+                        if label['labeltype'] == 'box':
+                            numpyarray = np.reshape((
+                                round(img['width'] * label['x']),
+                                round(img['height'] * label['y']),
+                                round(img['width'] * label['x']),
+                                round(img['height'] * (label['y'] + label['h'])),
+                                round(img['width'] * (label['x'] + label['w'])),
+                                round(img['height'] * (label['y'] + label['h'])),
+                                round(img['width'] * (label['x'] + label['w'])),
+                                round(img['height'] * label['y'])
+                            ), (4, 2))
+
+                        if label['labeltype'] == 'polygon':
+                            basiclist = ast.literal_eval(label['points']) if type(label['points']) == str else label['points']
+                            for basictemp in basiclist:
+                                basictemp[0] = round(basictemp[0] * img['width'])
+                                basictemp[1] = round(basictemp[1] * img['height'])
+                            numpyarray = np.array(basiclist)
+
+                        npmin = np.min(numpyarray, axis=0)
+                        npmax = np.max(numpyarray, axis=0)
+
+                        bndbox_info = {
+                            "xmin": str(int(npmin[0]) + 1),
+                            "ymin": str(int(npmin[1]) + 1),
+                            "xmax": str(int(npmax[0])),
+                            'ymax': str(int(npmax[1])),
+                        }
+
+                        points = [[round(img['width'] * label['x']), round(img['height'] * label['y']),
+                                   round(img['width'] * (label['x'] + label['w'])), round(img['height'] * label['y']),
+                                   round(img['width'] * (label['x'] + label['w'])), round(img['height'] * (label['y'] + label['h'])),
+                                   round(img['width'] * label['x']), round(img['height'] * (label['y'] + label['h']))
+                                   ]]
+                        numpyarray = np.array(points).reshape((-1, 2))
+                        npmin = np.min(numpyarray, axis=0)
+                        npmax = np.max(numpyarray, axis=0)
+                        area = label['w'] * label['h']
+                        bbox = [int(npmin[0]), int(npmin[1]), int(npmax[0]) - int(npmin[0]), int(npmax[1]) - int(npmin[1])]
+                        bndbox = SubElement(obj, "bndbox")
+                        SubElement(bndbox, 'xmin').text = f"{bbox[0]}"
+                        SubElement(bndbox, 'ymin').text = f"{bbox[1]}"
+                        SubElement(bndbox, 'xmax').text = f"{bbox[2]}"
+                        SubElement(bndbox, 'ymax').text = f"{bbox[3]}"
+
+                    if label_project_info.workapp == "detection_3d":
+                        SubElement(obj, 'name').text = label['classAttributes']['className']
+                    else:
+                        label_class = self.dbClass.getOneLabelclassById(label['labelclass']).__dict__['__data__']
+                        SubElement(obj, 'name').text = label_class['name']
                     # SubElement(obj, 'pose').text = "Unspecified"
                     SubElement(obj, 'truncated').text = "0"
                     SubElement(obj, 'difficult').text = "0"
-
-                    bndbox = SubElement(obj, "bndbox")
-                    SubElement(bndbox, 'xmin').text = f"{bbox[0]}"
-                    SubElement(bndbox, 'ymin').text = f"{bbox[1]}"
-                    SubElement(bndbox, 'xmax').text = f"{bbox[2]}"
-                    SubElement(bndbox, 'ymax').text = f"{bbox[3]}"
 
                 only_file_name, file_ext = os.path.splitext(img['originalFileName'])
                 ElementTree(root).write(f"{folder_url}/Annotations/{only_file_name}.xml")

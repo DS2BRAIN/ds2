@@ -156,6 +156,7 @@ const MarketMovieAnalysis = ({ history, onSetSelectedPage }) => {
 
   const workapp = {
     object_detection: "물체인식",
+    detection_3d: "3D 물체인식",
     voice: "음성",
     normal_classification: "정형화 분류",
     normal_regression: "정형화 회귀",

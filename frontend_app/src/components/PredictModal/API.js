@@ -51,6 +51,9 @@ import Forward10Icon from "@material-ui/icons/Forward10";
 import Replay10Icon from "@material-ui/icons/Replay10";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import * as THREE from "three";
+import {PCDLoader} from "three/examples/jsm/loaders/PCDLoader";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 class CustomizedAxisTick extends PureComponent {
   render() {
@@ -130,6 +133,7 @@ const API = React.memo(
     const [isPredictImageDone, setIsPredictImageDone] = useState(false);
     const [isPredictImageInfoDone, setIsPredictImageInfoDone] = useState(false);
     const [vidCreatedSec, setVidCreatedSec] = useState("00");
+    const [isPcdImgLoading, setIsPcdImgLoading] = useState(false);
     const [
       isCheckedForSettingCreation,
       setIsCheckedForSettingCreation,
@@ -199,13 +203,164 @@ const API = React.memo(
       let isTrainOrAiTypeImage =
         trainMethod === "image" || models.model.externalAiType === "image";
       let isTrainMethodSampleAvailable =
-        trainMethod === "object_detection" || trainMethod === "cycle_gan";
+        trainMethod === "object_detection" || trainMethod === "detection_3d" || trainMethod === "cycle_gan";
       if (isTrainOrAiTypeImage || isTrainMethodSampleAvailable) {
         api.getSampleDataByModelId(models.chosenModel).then((res) => {
           if (res.data) setRandomFiles(res.data);
         });
       }
     };
+  let camera, scene, renderer;
+
+  function init() {
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth / 4, window.innerHeight / 2 );
+    // document.body.appendChild( renderer.domElement );
+    renderer.sortObjects = false;
+    renderer.autoClear = false;
+
+    renderer = new THREE.WebGLRenderer({alpha: true});
+    // let aspect = this.width / this.height;
+    // let depth = 100;
+    // let fov_y = 35;
+    // let height_ortho = depth * 2 * Math.atan((fov_y * (Math.PI / 180)) / 2);
+    // let width_ortho = height_ortho * aspect;
+    // this.camera = new THREE.OrthographicCamera(width_ortho / -2, width_ortho / 2, height_ortho / 2, height_ortho / -2, 0.01, 30000);
+
+    scene = new THREE.Scene();
+
+    const axesHelper = new THREE.AxesHelper( 0.1 );
+    scene.add( axesHelper );
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight * 2, 1, 100000 );
+    // camera.layers.enable( 0 );
+    // camera.layers.enable( 1 );
+    // camera.layers.enable( 2 );
+    // camera.position.x = 1.;
+    // camera.position.y = 1;
+    // camera.position.z = 1.;
+    camera.position.set(0, 0, 100);
+    // camera.up.set(0, 0, 0);
+    // camera.lookAt(0, 0, 0);
+    // camera.position.set( 0, 0, 1 );
+    scene.add( camera );
+
+    const controls = new OrbitControls( camera, renderer.domElement );
+    controls.enableDamping = true;
+    controls.dampingFactor =  0.8;
+    // controls.enableDamping = true;
+    // controls.dampingFactor =  0.8;
+    controls.addEventListener( 'change', render ); // use if there is no animation loop
+    // controls.minDistance = 0.5;
+    // controls.maxDistance = 10;
+
+    //scene.add( new THREE.AxesHelper( 1 ) );
+
+    const loader = new PCDLoader();
+    loader.load(
+        // 'https://threejs.org/examples/models/pcd/binary/Zaghetto.pcd'
+      objectJson?.asset
+      , function ( points ) {
+
+      // points.material.size = 1;
+      points.geometry.center();
+      // points.geometry.rotateX( Math.PI );
+      points.name = 'Zaghetto.pcd';
+      scene.add( points );
+
+
+        //
+
+        // const gui = new GUI();
+        //
+        // gui.add( points.material, 'size', 0.001, 0.01 ).onChange( render );
+        // gui.addColor( points.material, 'color' ).onChange( render );
+        // gui.open();
+
+        //
+        document.getElementById("canvas02").appendChild(renderer.domElement);
+
+        render();
+        setIsPcdImgLoading(false);
+
+    } );
+
+    for (let label of objectJson?.labels) {
+            console.log("label.classAttributes.contour");
+            console.log(label.classAttributes.contour);
+            var x = parseFloat(label.classAttributes.contour.center3D.x);
+            var y = parseFloat(label.classAttributes.contour.center3D.y);
+            var z = parseFloat(label.classAttributes.contour.center3D.z);
+            var l = parseFloat(label.classAttributes.contour.size3D.x);
+            var w = parseFloat(label.classAttributes.contour.size3D.y);
+            var h = parseFloat(label.classAttributes.contour.size3D.z);
+            var rot = parseFloat(label.classAttributes.contour.rotation3D.z);
+            // var r = parseFloat(bbox_csv[i].r);
+            // var g = parseFloat(bbox_csv[i].g);
+            // var b = parseFloat(bbox_csv[i].b);
+            var c = { r:0, g:0, b:255};
+
+
+            // var color = new THREE.Color(c);
+            // var geometry = new THREE.BoxBufferGeometry(h, w, l);
+            var geometry = new THREE.BoxBufferGeometry(l,w,h);
+            var edges = new THREE.EdgesGeometry(geometry);
+            var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial({linewidth: 10}));
+            // line.position.set(y, z, x);
+            line.position.set(x - 50, y - 50, z);
+            line.rotation.z = rot;
+
+            // line.position.set(y, x, z);
+            // line.position.set(y, x, z);
+            // line.rotation.z = rot;
+            // line.layers.set(1);
+            // line.material.size = 10;
+            scene.add(line);
+            // y = y + 0.001;
+            // if (info !== ' ') {
+            //     var sprite = makeTextSprite(info,
+            //         {fontsize: 25,
+            //          borderColor: {r:0, g:0, b:0, a:.0},
+            //          backgroundColor: c } );
+            //     // sprite.center = new THREE.Vector2(0,0)
+            //     sprite.position.setX(y);
+            //     sprite.position.setY(z);
+            //     sprite.position.setZ(x);
+            //     sprite.layers.set(2);
+            //     scene.add(sprite);
+            // }
+        }
+
+    window.addEventListener( 'resize', onWindowResize );
+
+  }
+
+  function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+    render();
+  }
+
+  function render() {
+      renderer.render( scene, camera )
+  }
+
+  useEffect(() => {
+    if (objectJson) {
+      if (objectJson) {
+
+        console.log("PCD init");
+        setIsPcdImgLoading(true);
+        init();
+        render();
+      }
+    }
+  }, [objectJson]);
 
     useEffect(() => {
       if (completed && apiLoading === "loading") {
@@ -720,6 +875,53 @@ const API = React.memo(
             });
         }
       };
+      const caseTrainMethodObject3DCycle = () => {
+        if (!files || files.length < 1) {
+            dispatch(
+              openErrorSnackbarRequestAction(
+                t("Please upload the file and proceed")
+              )
+            );
+            return;
+          }
+          setApiLoading("loading");
+          setCompleted(5);
+
+          api
+            .predictImageInfo(
+              models.chosenModel,
+              files,
+              isMarket,
+              opsId
+            )
+            .then((res) => {
+              setIsPredictImageDone(true);
+              setApiLoading("done");
+              console.log("success");
+              console.log(res.data);
+              setObjectJson(res.data);
+            })
+            .catch((e) => {
+              console.log("e");
+              console.log(e);
+              if (predictingCount !== 2) {
+                sendAPI(_, predictingCount + 1);
+                return;
+              }
+              if (
+                !IS_ENTERPRISE &&
+                e.response &&
+                e.response.status === 402
+              ) {
+                window.location.href =
+                  "/admin/setting/payment/?cardRequest=true";
+                return;
+              }
+              if (!process.env.REACT_APP_DEPLOY) console.log(e);
+              setObjectJson(null);
+            });
+
+      };
 
       const caseTrainMethodObjectCycle = () => {
         if (randomFile) {
@@ -737,7 +939,8 @@ const API = React.memo(
               return new Blob([response.data]);
             })
             .then(async (blob) => {
-              if (projects.project.trainingMethod === "object_detection") {
+              if (projects.project.trainingMethod === "object_detection" || 
+              projects.project.trainingMethod === "detection_3d") {
                 let imageFile = files;
                 if (!imageFile && randomFile) imageFile = randomFile;
                 try {
@@ -869,7 +1072,8 @@ const API = React.memo(
               dispatch(getUserCountRequestAction());
               setIsPredictImageDone(true);
               setApiLoading("done");
-              if (projects.project.trainingMethod === "object_detection") {
+              if (projects.project.trainingMethod === "object_detection" || 
+              projects.project.trainingMethod === "detection_3d") {
                 let imageFile = files;
                 if (!imageFile && randomFile) imageFile = randomFile;
                 try {
@@ -1198,6 +1402,10 @@ const API = React.memo(
       ) {
         caseTrainMethodImage();
       } else if (
+        trainMethod === "detection_3d"
+      ) {
+        caseTrainMethodObject3DCycle();
+      }  else if (
         trainMethod === "object_detection" ||
         trainMethod === "cycle_gan"
       ) {
@@ -1309,6 +1517,7 @@ const API = React.memo(
         models.model.externalAiType === "image" ||
         models.model.externalAiType === "audio" ||
         trainMethod === "object_detection" ||
+        trainMethod === "detection_3d" ||
         trainMethod === "cycle_gan"
       ) {
         setIsPredictImageInfoDone(false);
@@ -1482,7 +1691,7 @@ const API = React.memo(
 
       const apiDropzone = (type, acceptedFiles) => {
         let typeGuideText = null;
-        if (type === "image") typeGuideText = "png, jpg";
+        if (type === "image") typeGuideText = "png, jpg, bin (3D), pcd (3D)";
         else if (type === "video") typeGuideText = "mp4";
         else if (type === "audio") typeGuideText = "wav";
 
@@ -1583,7 +1792,11 @@ const API = React.memo(
               marginTop: resultImageUrl && "44px",
             }}
           >
-            <img src={srcFile} style={{ width: "100%", maxHeight: "24em" }} />
+            {files ? files[0].name.indexOf('.pcd') > -1 || files[0].name.indexOf('.bin') > -1 ?
+                <div>No preview for PCD & BIN files</div>
+                : <img src={srcFile} style={{ width: "100%", maxHeight: "24em" }} />
+              : <img src={srcFile} style={{ width: "100%", maxHeight: "24em" }} />
+            }
           </div>
         );
 
@@ -1992,6 +2205,8 @@ const API = React.memo(
       };
 
       let acceptedFiles = [];
+      console.log("chosenItem");
+      console.log(chosenItem);
       switch (chosenItem) {
         case "apiLoaded":
           return caseApiLoaded();
@@ -2001,7 +2216,7 @@ const API = React.memo(
           acceptedFiles = [".mp3", ".mp4", ".wav", ".flac"];
           return caseApiSpeechToText(acceptedFiles);
         case "apiImage":
-          acceptedFiles = [".jpg", ".jpeg", ".png"];
+          acceptedFiles = [".jpg", ".jpeg", ".png", ".bin", ".pcd"];
           return caseApiImage(acceptedFiles);
         case "apiVideo":
           acceptedFiles = [".mp4"];
@@ -2081,6 +2296,21 @@ const API = React.memo(
             </div>
           </>
         );
+
+      else if (projects.project.trainingMethod === "detection_3d") {
+        return (<div style={{ alignSelf: "center", width: "100%" }} id="resultDiv">
+              <>
+                  <Button
+                    id="resultDownload"
+                    className={classes.defaultHighlightButton}
+                    onClick={downloadImage}
+                  >
+                    DOWNLOAD
+                  </Button>
+                  <div id="canvas02" className={classes.canvasDiv}></div>
+                </>
+            </div>)
+      }
       else if (resultImageUrl) {
         if (projects.project.trainingMethod === "object_detection")
           return (

@@ -197,15 +197,13 @@ backend/asset/chromedriver
 .gitmodules
 backend/checkpoints
 backend/datasets
-backend/src/creating
-backend/src/training
 backend/daemon
-backend/astoredaemon
 backend/script_sejong
 backend/script_dir
 backend/astoretest/files
 backend/src/service/aidev
 backend/src/collecting/database/jars/
+backend/output
 backend/coverage
 *.pyc
 *.dsm
@@ -221,3 +219,13 @@ backend/models/bpe.model
 backend/gan/
 
 backend/src/visualizing/
+
+backend/src/service/contour/contour/models/bdcn/vgg16_c.py
+
+backend/astoredaemon
+
+backend/src/creating
+
+backend/src/training
+
+backend/temp/

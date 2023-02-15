@@ -141,6 +141,7 @@ const LabelList = ({
     text: "csv",
     image: "image",
     object_detection: "image",
+    detection_3d: "image",
   };
 
   useEffect(() => {
@@ -155,7 +156,7 @@ const LabelList = ({
     page: 0,
     isDesc:
       Boolean(labelChart.review) ||
-      (workapp !== "object_detection" && workapp !== "image"),
+      (workapp !== "object_detection" && workapp !== "detection_3d" && workapp !== "image"),
     labelprojectId: labelProjectId,
     tab: "all",
     workAssignee: "all",
@@ -505,7 +506,14 @@ const LabelList = ({
             return;
           }
         } else {
-          if (category !== "object_detection") {
+          if (category === "object_detection") {
+            window.open(
+              `${tempLabellingUrl}${
+                labelprojects.projectDetail.id
+              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
+              "_blank"
+            );
+          } else if (category === "detection_3d") {
             window.open(
               `${tempLabellingUrl}admin/${routes[category]}/${
                 labelprojects.projectDetail.id
@@ -514,7 +522,7 @@ const LabelList = ({
             );
           } else {
             window.open(
-              `${tempLabellingUrl}${
+              `${tempLabellingUrl}admin/${routes[category]}/${
                 labelprojects.projectDetail.id
               }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
               "_blank"
@@ -546,6 +554,7 @@ const LabelList = ({
         <div>
           {count === 1 &&
             (projectDetail.workapp === "object_detection" ||
+              projectDetail.workapp === "detection_3d" ||
               projectDetail.workapp === "image") && (
               <Button
                 aria-controls="customized-menu"
@@ -679,11 +688,12 @@ const LabelList = ({
         const name = files[idx].name;
         if (
           labelprojects.projectDetail.workapp === "object_detection" ||
+          labelprojects.projectDetail.workapp === "detection_3d" ||
           labelprojects.projectDetail.workapp === "image"
         ) {
           if (
             idx < 100 &&
-            /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())
+            /\.(jpg|jpeg|png|zip|bin|pcd|mp4|quicktime|mov)$/g.test(name.toLowerCase())
           ) {
             tmpFiles.push(files[idx]);
           }
@@ -904,7 +914,7 @@ const LabelList = ({
 
     let tmpWorkapp = labelprojects.projectDetail.workapp;
     if (tmpWorkapp) {
-      if (tmpWorkapp === "object_detection" || tmpWorkapp === "image") {
+      if (tmpWorkapp === "object_detection" || tmpWorkapp === "detection_3d" || tmpWorkapp === "image") {
         return (
           <>
             <div
@@ -1393,7 +1403,7 @@ const LabelList = ({
   };
 
   const dataTypeText = (type) => {
-    if (type === "object_detection" || type === "image") {
+    if (type === "object_detection" || type === "detection_3d" || type === "image") {
       return (
         <>
           {t(
@@ -1534,7 +1544,8 @@ const LabelList = ({
                 <Grid item sx={{ ml: 3 }}>
                   <Grid container alignItems="center">
                     {(labelprojects.projectDetail?.workapp ===
-                      "object_detection" ||
+                      "object_detection" || labelprojects.projectDetail?.workapp ===
+                      "detection_3d" ||
                       labelprojects.projectDetail?.workapp === "image") && (
                       <Tooltip title={t("Enter the file name")} placement="top">
                         <form

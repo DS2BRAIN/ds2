@@ -285,7 +285,8 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
   useEffect(() => {
     if (
       projects.project.trainingMethod &&
-      projects.project.trainingMethod === "object_detection" &&
+        (projects.project.trainingMethod === "object_detection" ||
+        projects.project.trainingMethod === "detection_3d") &&
       modelDetail.ap_info
     ) {
       try {
@@ -567,8 +568,9 @@ const Chart = React.memo(({ chosenChart, modelDetail }) => {
                     </a>
                   </div>
                 </div>
-              ) : projects.project.trainingMethod ===
-                "object_detection" ? null : (
+              ) : (projects.project.trainingMethod ===
+                "object_detection" || projects.project.trainingMethod ===
+                "detection_3d") ? null : (
                 <div style={{ marginLeft: "40px" }}>
                   <div>
                     Accuracy : {t("Indicates how accurate the model is.")}{" "}

@@ -114,6 +114,7 @@ export default function NewProject({ history }) {
     normal_regression: t("Regression"),
     text: t("Text"),
     image: t("Image"),
+    detection_3d: t("3D Detection"),
   };
 
   useEffect(() => {
@@ -141,6 +142,7 @@ export default function NewProject({ history }) {
         delete workapp["text"];
       } else {
         delete workapp["object_detection"];
+        delete workapp["detection_3d"];
         delete workapp["image"];
         if (projects.categoryRestrict === "normal_regression") {
           delete workapp["text"];
@@ -276,7 +278,7 @@ export default function NewProject({ history }) {
   };
 
   const dataTypeText = (type) => {
-    if (type === "object_detection" || type === "image") {
+    if (type === "object_detection" || type === "detection_3d" || type === "image") {
       return (
         <>
           {t(
@@ -311,10 +313,10 @@ export default function NewProject({ history }) {
         );
       } else {
         const name = files[idx].name;
-        if (dataCategory === "object_detection" || dataCategory === "image") {
+        if (dataCategory === "object_detection" || dataCategory === "detection_3d" || dataCategory === "image") {
           if (
             idx < 100 &&
-            /\.(jpg|jpeg|png|zip|mp4|quicktime|mov)$/g.test(name.toLowerCase())
+            /\.(jpg|jpeg|png|zip|bin|pcd|mp4|quicktime|mov)$/g.test(name.toLowerCase())
           ) {
             tmpFiles.push(files[idx]);
           } else {

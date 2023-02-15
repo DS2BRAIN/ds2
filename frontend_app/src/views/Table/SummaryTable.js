@@ -503,6 +503,7 @@ const SummaryTable = React.memo(
 
     const makeTable = () => {
       projects.project.trainingMethod === "image" ||
+      projects.project.trainingMethod === "detection_3d" ||
       projects.project.trainingMethod === "object_detection"
         ? (columns = [
             { id: "index", label: t("Index") },
@@ -530,6 +531,7 @@ const SummaryTable = React.memo(
       csv.map((dataColumn) => {
         if (
           projects.project.trainingMethod === "image" ||
+          projects.project.trainingMethod === "detection_3d" ||
           projects.project.trainingMethod === "object_detection"
         ) {
           if (dataColumn.isForGan) return;
@@ -731,6 +733,7 @@ const SummaryTable = React.memo(
               projects.project.trainingMethod &&
               !(
                 projects.project.trainingMethod.indexOf("image") > -1 ||
+                projects.project.trainingMethod.indexOf("detection_3d") > -1 ||
                 projects.project.trainingMethod.indexOf("object_detection") >
                   -1 ||
                 projects.project.trainingMethod.indexOf("cycle_gan") > -1
@@ -786,6 +789,9 @@ const SummaryTable = React.memo(
                               -1 ||
                             projects.project.trainingMethod.indexOf(
                               "object_detection"
+                            ) > -1 ||
+                            projects.project.trainingMethod.indexOf(
+                              "detection_3d"
                             ) > -1 ||
                             projects.project.trainingMethod.indexOf(
                               "cycle_gan"
@@ -961,6 +967,9 @@ const SummaryTable = React.memo(
                         projects.project.trainingMethod.indexOf("image") > -1 ||
                         projects.project.trainingMethod.indexOf(
                           "object_detection"
+                        ) > -1 ||
+                        projects.project.trainingMethod.indexOf(
+                          "detection_3d"
                         ) > -1 ||
                         projects.project.trainingMethod.indexOf("cycle_gan") >
                           -1
