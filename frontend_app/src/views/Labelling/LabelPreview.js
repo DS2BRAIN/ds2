@@ -436,9 +436,7 @@ const LabelPreview = ({
             );
           } else if (category === "detection_3d") {
             window.open(
-              `${tempLabellingUrl}/${routes[category]}/${
-                labelprojects.projectDetail.id
-              }/${id}/?token=${token}&start=true&appStatus=${labelStatus}&timeStamp=${Date.now()}`,
+              `${tempLabellingUrl}/tool/pc/?token=${token}&preview=${id}&start=true&appStatus=review&timeStamp=${Date.now()}&recordId=${labelprojects.projectDetail.id}&start_id=${id}`,
               "_blank"
             );
           } else {

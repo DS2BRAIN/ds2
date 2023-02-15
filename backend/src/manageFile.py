@@ -43,6 +43,9 @@ from src.errorResponseList import NOT_FOUND_USER_ERROR, NOT_ALLOWED_TOKEN_ERROR,
 from src.errors import exceptions as ex
 import random
 import urllib.request
+import open3d as o3d
+import struct
+
 
 errorResponseList = ErrorResponseList()
 
@@ -824,11 +827,39 @@ class ManageFile:
                         s3Folder = f"user/{user_id}/{connector_id}/{root.split('/')[-1]}"
                         # s3key = f'{s3Folder}{timestamp}{file_ext}'
                         # s3key = f'{s3Folder}{file_ext}'
-                        s3key = f'{s3Folder}/{file}'
-                        self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
-                        s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{file}').replace(
-                            'https%3A//',
-                            'https://')
+                        if file.lower().endswith((".bin")):
+                            pcd_file_path = filePath.replace('.bin', '.pcd')
+                            pcd_file = file.replace('.bin', '.pcd')
+                            pcd_file_name, pcd_file_ext = os.path.splitext(pcd_file)
+                            self.bin_to_pcd(filePath, pcd_file_path)
+                            data = {
+                                "fileName": f"{root.split('/')[-1]}/{pcd_file}",  # or f"{s3Folder}/{file}"?
+                                "fileSize": file_size,
+                                "user": user_id,
+                                "s3key": s3key,
+                                "originalFileName": pcd_file,
+                                "created_at": datetime.datetime.utcnow(),
+                                "updated_at": datetime.datetime.utcnow(),
+                                "fileType": common_data['workapp'],
+                                "dataconnector": connector_id,
+                            }
+                            ds2datas.append(data)
+                            preprocessing_json_data[pcd_file_name].update(data)
+                            os.remove(filePath)
+
+                            s3key = f'{s3Folder}/{pcd_file}'
+                            self.s3.upload_file(f'{root}/{pcd_file}', 'enterprise', s3key)
+                            s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{pcd_file}').replace(
+                                'https%3A//',
+                                'https://')
+                        else:
+
+                            s3key = f'{s3Folder}/{file}'
+                            self.s3.upload_file(f'{root}/{file}', 'enterprise', s3key)
+                            s3key = urllib.parse.quote(f'{self.utilClass.save_path}/{s3Folder}/{file}').replace(
+                                'https%3A//',
+                                'https://')
+
                         if file.lower().endswith((".pcd")):
                             # if file.lower().endswith((".jpg", ".jpeg", ".png")):
                             data = {
@@ -2762,6 +2793,20 @@ class ManageFile:
         if dataconnector.get('user') != user.get('id'):
             raise ex.NotAllowedTokenEx()
 
+    def bin_to_pcd(self, bin_file_path, pcd_file_path):
+        size_float = 4
+        list_pcd = []
+        with open(bin_file_path, "rb") as f:
+            byte = f.read(size_float * 4)
+            while byte:
+                x, y, z, intensity = struct.unpack("ffff", byte)
+                list_pcd.append([x, y, z])
+                byte = f.read(size_float * 4)
+        np_pcd = np.asarray(list_pcd)
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(np_pcd)
+        o3d.io.write_point_cloud(pcd_file_path, pcd)
+        return pcd_file_path
         # mb = None
         # table_status = 0
         # url = None

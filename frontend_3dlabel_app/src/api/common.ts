@@ -100,8 +100,11 @@ export async function getDataStatus(recordId: string) {
     return statusMap;
 }
 
-export async function getInfoByRecordId(recordId: string, token: string) {
+export async function getInfoByRecordId(recordId: string, token: string, preview: string) {
     let url = `/api/data/findDataAnnotationRecord/${recordId}?token=${token}`;
+    if (preview) {
+        url = `/api/data/findDataAnnotationRecord/${recordId}?token=${token}&preview=${preview}`;
+    }
     let data = await get(url);
     data = data.data;
     // no data

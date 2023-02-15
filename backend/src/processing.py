@@ -9,6 +9,8 @@ import ast
 import os
 import pandas as pd
 from fastai.tabular.core import add_datepart
+from pypcd import pypcd
+
 from models.helper import Helper
 import time
 from src.checkDataset import CheckDataset
@@ -21,6 +23,12 @@ import json
 import subprocess
 from PIL import Image as PImage
 import numpy as np
+import torch
+from os import path as osp
+from src.training.mmdetection3d.tools.data_converter import kitti_converter as kitti
+from src.training.mmdetection3d.tools.data_converter.create_gt_database import (
+    GTDatabaseCreater, create_groundtruth_database)
+from PIL import Image as PILImage
 
 class Processing():
 
@@ -239,7 +247,140 @@ class Processing():
         dataRaw = None
         yClass = project.get('yClass')
 
-        if trainingMethod in ['detection_3d']:
+        if 'detection_3d' in trainingMethod:
+
+            # root_path = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
+            # out_dir = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
+            root_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti"
+            out_dir = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti"
+
+            train_image_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/image_2"
+            train_point_cloud_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/velodyne"
+            train_label_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/label_2"
+            train_calib_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/calib"
+
+            test_image_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/image_2"
+            test_point_cloud_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/velodyne"
+            test_calib_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/calib"
+            image_set_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/ImageSets"
+
+            os.makedirs(root_path, exist_ok=True)
+            os.makedirs(train_image_path, exist_ok=True)
+            os.makedirs(train_point_cloud_path, exist_ok=True)
+            os.makedirs(train_label_path, exist_ok=True)
+            os.makedirs(train_calib_path, exist_ok=True)
+            os.makedirs(test_image_path, exist_ok=True)
+            os.makedirs(test_point_cloud_path, exist_ok=True)
+            os.makedirs(test_calib_path, exist_ok=True)
+            os.makedirs(image_set_path, exist_ok=True)
+
+            # origin_file_path = f"/home/yeo/ds2ai/user/159/{dataconnectorsRaw[0].id}"
+            labelproject_raw = self.dbClass.getLabelProjectsById(project.get('labelproject'))
+            trainData, origin_file_path = self.checkDatasetClass.export3dData(labelproject_raw)
+            # shutil.copy2(s3Url, origin_file_path)
+
+            label_files_length = len(os.listdir(f"{origin_file_path}/result"))
+            train_index = 0
+            file_index = 0
+            test_file_content = ""
+            train_file_content = ""
+            trainval_file_content = ""
+            val_file_content = ""
+
+            for root, dirs, files in os.walk(origin_file_path): #TODO : /home/yeo/ds2ai/project/18783/data/kitti 에 학습용 라벨링 셋 더 많이 추가해서 테스트 필요
+                if '__MACOSX' in root:
+                    continue
+                for index, file_name in enumerate(files):
+                    if 'result' in root:
+                        file_path = f'{root}/{file_name}'
+                        if train_index < label_files_length * 0.8:
+                            # PCD to Bin
+                            # Create label file
+                            self.create3dBinFile(
+                                file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
+                                f"{train_point_cloud_path}/{str(file_index).zfill(6)}.bin")
+                            self.create3dLabelFile(file_path, f"{train_label_path}/{str(file_index).zfill(6)}.txt")
+                            shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
+                                         f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
+                            img = PILImage.open(f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
+                            img.save(f"{train_image_path}/{str(file_index).zfill(6)}.png")
+
+                            with open(f"{train_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
+                                f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
+P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
+R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
+Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
+Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01
+""")
+
+                            train_index += 1
+                            trainval_file_content += f"{str(file_index).zfill(6)}\n"
+                            if train_index % 2 == 0:
+                                train_file_content += f"{str(file_index).zfill(6)}\n"
+                            else:
+                                val_file_content += f"{str(file_index).zfill(6)}\n"
+                        else:
+                            self.create3dBinFile(
+                                file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
+                                f"{test_point_cloud_path}/{str(file_index).zfill(6)}.bin")
+                            shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
+                                         f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
+                            img = PILImage.open(f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
+                            img.save(f"{test_image_path}/{str(file_index).zfill(6)}.png")
+                            test_file_content += f"{str(file_index).zfill(6)}\n"
+
+                            with open(f"{test_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
+                                f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+                            P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+                            P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
+                            P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
+                            R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
+                            Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
+                            Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01
+                            """)
+                        file_index += 1
+
+            if len(trainval_file_content) > 0:
+                train_file_content = train_file_content[:-1]
+                val_file_content = val_file_content[:-1]
+                trainval_file_content = trainval_file_content[:-1]
+            if len(test_file_content) > 0:
+                test_file_content = test_file_content[:-1]
+
+            with open(f"{image_set_path}/train.txt", 'w') as w:
+                w.write(train_file_content)
+            with open(f"{image_set_path}/val.txt", 'w') as w:
+                w.write(val_file_content)
+            with open(f"{image_set_path}/trainval.txt", 'w') as w:
+                w.write(trainval_file_content)
+            with open(f"{image_set_path}/test.txt", 'w') as w:
+                w.write(test_file_content)
+
+            info_prefix = "kitti"
+            version = f'v1.0'
+            kitti.create_kitti_info_file(root_path, info_prefix, False)
+            kitti.create_reduced_point_cloud(root_path, info_prefix)
+
+            info_train_path = osp.join(root_path, f'{info_prefix}_infos_train.pkl')
+            info_val_path = osp.join(root_path, f'{info_prefix}_infos_val.pkl')
+            info_trainval_path = osp.join(root_path,
+                                          f'{info_prefix}_infos_trainval.pkl')
+            info_test_path = osp.join(root_path, f'{info_prefix}_infos_test.pkl')
+            kitti.export_2d_annotation(root_path, info_train_path)
+            kitti.export_2d_annotation(root_path, info_val_path)
+            kitti.export_2d_annotation(root_path, info_trainval_path)
+            kitti.export_2d_annotation(root_path, info_test_path)
+
+            create_groundtruth_database(
+                'KittiDataset',
+                root_path,
+                info_prefix,
+                f'{out_dir}/{info_prefix}_infos_train.pkl',
+                relative_path=False,
+                mask_anno_path='instances_train.json',
+                with_mask=(version == 'mask'))
 
             yClass = project.get('yClass')
             dep_var = 'label'
@@ -666,7 +807,8 @@ class Processing():
         if dataconnectors:
             dataconnectorName = ".".join(dataconnectors[0].dataconnectorName.split('.')[:-1])
         if project['trainingMethod'] in 'detection_3d':
-            localFilePath = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti/kitti_dbinfos_train.pkl"
+            # localFilePath = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti/kitti_dbinfos_train.pkl"
+            localFilePath = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/kitti_dbinfos_train.pkl"
             rows = []
             for (dirpath, dirnames, filenames) in os.walk(
                     os.path.splitext(localFilePath)[0]
@@ -1082,3 +1224,32 @@ class Processing():
         archive_to = os.path.basename(source.strip(os.sep))
         shutil.make_archive(name, format, archive_from, archive_to)
         shutil.move('%s.%s' % (name, format), destination)
+
+    def create3dBinFile(self, src, dst):
+        pc = pypcd.PointCloud.from_path(src)
+        seq = 0
+        ## Get data from pcd (x, y, z, intensity, ring, time)
+        np_x = (np.array(pc.pc_data['x'], dtype=np.float32)).astype(np.float32)
+        np_y = (np.array(pc.pc_data['y'], dtype=np.float32)).astype(np.float32)
+        np_z = (np.array(pc.pc_data['z'], dtype=np.float32)).astype(np.float32)
+        np_i = (np.array(pc.pc_data['i'], dtype=np.float32)).astype(np.float32) / 256
+        # np_r = (np.array(pc.pc_data['ring'], dtype=np.float32)).astype(np.float32)
+        # np_t = (np.array(pc.pc_data['time'], dtype=np.float32)).astype(np.float32)
+
+        ## Stack all data
+        points_32 = np.transpose(np.vstack((np_x, np_y, np_z, np_i)))
+        points_32.tofile(dst)
+
+    def create3dLabelFile(self, src, dst):
+        annotation_text = ""
+        with open(src, 'r') as r:
+            j = json.load(r)
+            for annotation in j['result']['objects']:
+                try:
+                    annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
+                except:
+                    pass
+        if annotation_text:
+            annotation_text = annotation_text[:-1]
+        with open(dst, 'w') as w:
+            w.write(annotation_text)

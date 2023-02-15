@@ -284,7 +284,7 @@ export const HeaderButton = ({ images, action, name, disabled, Icon }) => {
   }
 
   const getEnterpriseS3key = (key) => {
-    let parseUrl = api.backendurl + "static" + key
+    let parseUrl = api.backendurl + "asset" + key
 
     return parseUrl
   }
@@ -332,7 +332,7 @@ export const HeaderButton = ({ images, action, name, disabled, Icon }) => {
                       src={
                         process.env.REACT_APP_ENTERPRISE
                           ? getEnterpriseS3key(file.s3key)
-                          : file.s3key
+                          : api.backendurl + "static" + file.s3key
                       }
                       style={{ width: "40px", marginRight: "8px" }}
                     />

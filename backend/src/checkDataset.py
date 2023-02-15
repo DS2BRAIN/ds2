@@ -613,12 +613,15 @@ class CheckDataset():
                     }
                     self.dbClass.createAsyncTask(data)
 
-            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}', exist_ok=True)
-            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/training', exist_ok=True)
-            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/testing', exist_ok=True)
-            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/training/label_2', exist_ok=True)
-            os.makedirs(f'{os.getcwd()}/temp/{labelProject["id"]}/testing/label_2', exist_ok=True)
-
+            outputFilePath = f'{os.getcwd()}/temp/{labelProject["id"]}'
+            # os.makedirs(outputFilePath, exist_ok=True)
+            #TODO: 데이터 커넥터 업로드 시 압축 푼걸 풀어놓은 후 재시도 필요 (혹은 이미 풀린 곳 다시 찾기 - 데이터 커넥터 아이디와 주소 매칭 안될 시 확인 필요)
+            shutil.copytree(f"{self.utilClass.save_path}/user/{labelProject['user']}/{ast.literal_eval(labelProject['dataconnectorsList'])[0]}/",
+                         outputFilePath, dirs_exist_ok=True)
+            # imgae0 -> training/image_2 test/image_2
+            # result -> training/label_2 test/label_2
+            # point_cloud -> training/velodyne testing/velodyne
+            os.makedirs(f'{outputFilePath}/result', exist_ok=True)
             if has_median_data:
                 class_label_count_dict = {}
                 group_query = {'_id': '$labelclass', 'count': {'$sum': 1}}
@@ -710,107 +713,36 @@ class CheckDataset():
                         elif class_label_count_dict[label['labelclass']] > label_limit:
                             continue
 
-                    # if label['labelclass'] not in class_ids:
-                    #     continue
-
-                    # {
-                    #   "id": 4,
-                    #   "datasetId": 1,
-                    #   "dataId": 2,
-                    #   "classId": None,
-                    #   "classAttributes": {
-                    #     "id": "938EE33B-6101-462A-A319-1AC3E8A9C21D",
-                    #     "meta": {
-                    #       "classType": "",
-                    #       "isProjection": False
-                    #     },
-                    #     "type": "3D_BOX",
-                    #     "classId": "",
-                    #     "contour": {
-                    #       "pointN": 2051,
-                    #       "points": [],
-                    #       "size3D": { dimention?
-                    #         "x": 2.1456626780418304,
-                    #         "y": 4.338818579025611,
-                    #         "z": 2.106992752931931
-                    #       },
-                    #       "center3D": { location?
-                    #         "x": -6.420481146403377,
-                    #         "y": -1.0389368722688466,
-                    #         "z": 0.69437681018617
-                    #       },
-                    #       "viewIndex": 0,
-                    #       "rotation3D": { rotation?
-                    #         "x": 0,
-                    #         "y": 0,
-                    #         "z": 2.4137840624629816
-                    #       }
-                    #     },
-                    #     "frontId": "938EE33B-6101-462A-A319-1AC3E8A9C21D",
-                    #     "trackId": "sjrEFbdyTYCtyvux",
-                    #     "version": 1,
-                    #     "className": "",
-                    #     "createdAt": "2023-01-31T10:31:26Z",
-                    #     "createdBy": 2,
-                    #     "trackName": "1",
-                    #     "modelClass": "",
-                    #     "classValues": []
-                    #   },
-                    #   "objectCount": None,
-                    #   "frontId": None,
-                    #   "lockedBy": None
-                    # }
-                    # points = label['contour']['points']
-                    # min_x = 9999999999999999999
-                    # max_x = 0
-                    # min_y = 9999999999999999999
-                    # max_y = 0
-                    # for point_x, point_y in points:
-                    #     if min_x > point_x:
-                    #         min_x = point_x
-                    #     if min_y > point_y:
-                    #         min_y = point_y
-                    #     if max_x < point_x:
-                    #         max_x = point_x
-                    #     if max_y < point_y:
-                    #         max_y = point_y
-                    #
-                    # data = {
-                    #     "iscrowd": 0,
-                    #     "ignore": 0,
-                    #     "image_id": images_count,
-                    #     "min_x": min_x,
-                    #     "min_y": min_y,
-                    #     "max_x": max_x,
-                    #     "max_y": max_y,
-                    #     "category_id": label['labelclass'],
-                    #     "fileName": sthreefile['fileName'],
-                    #     "id": labels_count
-                    # }
-                    # data.update(label)
-
                     labels_count += 1
                     if image_point < train_image_count:
                         trainannotation.append(label)
                     else:
                         testannotations.append(label)
 
-                annotation_text = ""
+                # annotation_text = ""
+                annotations= {"result": {"objects": []}}
+                objects = []
                 for annotation in trainannotation:
                     try:
-                        annotation_text += f"{annotation['classAttributes']['className']} 0 0 0 {annotation['min_x']} {annotation['min_y']} {annotation['max_x']} {annotation['max_y']} {annotation['classAttributes']['size3D']['x']} {annotation['classAttributes']['size3D']['y']} {annotation['classAttributes']['size3D']['z']} {annotation['classAttributes']['center3D']['x']} {annotation['classAttributes']['center3D']['y']} {annotation['classAttributes']['center3D']['z']} {annotation['classAttributes']['rotation3D']['y']}\n"
+                        # annotation_text += f"{annotation['classAttributes']['className']} 0 0 0 {annotation['min_x']} {annotation['min_y']} {annotation['max_x']} {annotation['max_y']} {annotation['classAttributes']['size3D']['x']} {annotation['classAttributes']['size3D']['y']} {annotation['classAttributes']['size3D']['z']} {annotation['classAttributes']['center3D']['x']} {annotation['classAttributes']['center3D']['y']} {annotation['classAttributes']['center3D']['z']} {annotation['classAttributes']['rotation3D']['y']}\n"
+                        objects.append(annotation)
                     except:
+                        print(traceback.format_exc())
                         pass
+                annotations["result"]["objects"] = objects
 
-                label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt")}'
+                # label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt").replace("point_cloud", "result")}'
+                # if image_point < train_image_count:
+                #     label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt").replace("point_cloud", "result")}'
+                label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
                 if image_point < train_image_count:
-                    label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt")}'
+                    label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
 
                 base_path = os.path.dirname(label_file_path)
                 os.makedirs(base_path, exist_ok=True)
 
                 with open(label_file_path, 'w') as f:
-                    f.write(annotation_text)
+                    json.dump(annotations, f)
 
             categories = []
             new_project_yClass = []
