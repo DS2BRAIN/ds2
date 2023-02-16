@@ -616,8 +616,14 @@ class CheckDataset():
             outputFilePath = f'{os.getcwd()}/temp/{labelProject["id"]}'
             # os.makedirs(outputFilePath, exist_ok=True)
             #TODO: 데이터 커넥터 업로드 시 압축 푼걸 풀어놓은 후 재시도 필요 (혹은 이미 풀린 곳 다시 찾기 - 데이터 커넥터 아이디와 주소 매칭 안될 시 확인 필요)
-            shutil.copytree(f"{self.utilClass.save_path}/user/{labelProject['user']}/{ast.literal_eval(labelProject['dataconnectorsList'])[0]}/",
+            current_dataconnector_id = ast.literal_eval(labelProject['dataconnectorsList'])[0]
+            current_dataconnector = self.dbClass.getOneDataconnectorById(current_dataconnector_id)
+            original_labelproject = self.dbClass.getOneLabelProjectById(current_dataconnector.originalLabelproject)
+            try:
+                shutil.copytree(f"{self.utilClass.save_path}/user/{labelProject['user']}/{ast.literal_eval(original_labelproject.dataconnectorsList)[0]}/",
                          outputFilePath, dirs_exist_ok=True)
+            except:
+                pass
             # imgae0 -> training/image_2 test/image_2
             # result -> training/label_2 test/label_2
             # point_cloud -> training/velodyne testing/velodyne

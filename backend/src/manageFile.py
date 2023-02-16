@@ -845,6 +845,8 @@ class ManageFile:
                             }
                             ds2datas.append(data)
                             preprocessing_json_data[pcd_file_name].update(data)
+                            self.s3.upload_file(f'{root}/{file}', 'enterprise', f'{s3Folder.replace("point_cloud", "bin_point_cloud")}/{file}')
+
                             os.remove(filePath)
 
                             s3key = f'{s3Folder}/{pcd_file}'

@@ -8,6 +8,7 @@ import zipfile
 import ast
 import os
 import pandas as pd
+import wget as wget
 from fastai.tabular.core import add_datepart
 from pypcd import pypcd
 
@@ -29,7 +30,14 @@ from src.training.mmdetection3d.tools.data_converter import kitti_converter as k
 from src.training.mmdetection3d.tools.data_converter.create_gt_database import (
     GTDatabaseCreater, create_groundtruth_database)
 from PIL import Image as PILImage
-
+import math
+def bar_custom(current, total, width=80):
+    width=30
+    avail_dots = width-2
+    shaded_dots = int(math.floor(float(current) / total * avail_dots))
+    percent_bar = '[' + '■'*shaded_dots + ' '*(avail_dots-shaded_dots) + ']'
+    progress = "%d%% %s [%d / %d]" % (current / total * 100, percent_bar, current, total)
+    return progress
 class Processing():
 
     def __init__(self):
@@ -280,8 +288,23 @@ class Processing():
             # shutil.copy2(s3Url, origin_file_path)
 
             label_files_length = len(os.listdir(f"{origin_file_path}/result"))
+            if label_files_length < 100:
+                if not os.path.exists("/opt/kitti/training/"):
+                    os.makedirs("/opt/kitti/", exist_ok=True)
+                    print("Download data_object_image_2.zip")
+                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip", out="/opt/kitti/data_object_image_2.zip", bar=bar_custom)
+                    print("Download data_object_velodyne.zip")
+                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_velodyne.zip", out="/opt/kitti/data_object_velodyne.zip", bar=bar_custom)
+                    print("Download data_object_calib.zip")
+                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_calib.zip", out="/opt/kitti/data_object_calib.zip", bar=bar_custom)
+                    self.unzipFile("/opt/kitti/data_object_image_2.zip")
+                    self.unzipFile("/opt/kitti/data_object_velodyne.zip")
+                    self.unzipFile("/opt/kitti/data_object_calib.zip")
+
+                shutil.copy2("/opt/kitti", f"{self.utilClass.save_path}/project/{project['id']}/data/kitti")
+
             train_index = 0
-            file_index = 0
+            file_index = 7481
             test_file_content = ""
             train_file_content = ""
             trainval_file_content = ""
@@ -300,10 +323,15 @@ class Processing():
                                 file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
                                 f"{train_point_cloud_path}/{str(file_index).zfill(6)}.bin")
                             self.create3dLabelFile(file_path, f"{train_label_path}/{str(file_index).zfill(6)}.txt")
-                            shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
+                            try:
+                                shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
                                          f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
-                            img = PILImage.open(f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
-                            img.save(f"{train_image_path}/{str(file_index).zfill(6)}.png")
+                                img = PILImage.open(f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
+                                img.save(f"{train_image_path}/{str(file_index).zfill(6)}.png")
+                            except:
+                                if os.path.exists(file_path.replace('/result/', '/image0/').replace('.json', '.png')):
+                                    shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.png'),
+                                                 f"{train_image_path}/{str(file_index).zfill(6)}.png")
 
                             with open(f"{train_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
                                 f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
@@ -325,21 +353,25 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
                             self.create3dBinFile(
                                 file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
                                 f"{test_point_cloud_path}/{str(file_index).zfill(6)}.bin")
-                            shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
-                                         f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
-                            img = PILImage.open(f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
-                            img.save(f"{test_image_path}/{str(file_index).zfill(6)}.png")
+                            try:
+                                shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
+                                             f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
+                                img = PILImage.open(f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
+                                img.save(f"{test_image_path}/{str(file_index).zfill(6)}.png")
+                            except:
+                                if os.path.exists(file_path.replace('/result/', '/image0/').replace('.json', '.png')):
+                                    shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.png'),
+                                                 f"{test_image_path}/{str(file_index).zfill(6)}.png")
                             test_file_content += f"{str(file_index).zfill(6)}\n"
 
                             with open(f"{test_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
                                 f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
-                            P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
-                            P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
-                            P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
-                            R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
-                            Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
-                            Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01
-                            """)
+P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
+P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
+R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
+Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
+Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01""")
                         file_index += 1
 
             if len(trainval_file_content) > 0:
@@ -1226,6 +1258,10 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
         shutil.move('%s.%s' % (name, format), destination)
 
     def create3dBinFile(self, src, dst):
+        bin_src = src.replace("/point_cloud/", "/bin_point_cloud/").replace(".pcd", ".bin")
+        if os.path.exists(bin_src):
+            shutil.copy2(bin_src, dst)
+            return
         pc = pypcd.PointCloud.from_path(src)
         seq = 0
         ## Get data from pcd (x, y, z, intensity, ring, time)
@@ -1246,8 +1282,10 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
             j = json.load(r)
             for annotation in j['result']['objects']:
                 try:
-                    annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
+                    # annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
+                    annotation_text += f"{annotation['classAttributes']['className']} 0 0 -10 {annotation['classAttributes']['contour']['center3D']['x'] - annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] - annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['center3D']['x'] + annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] + annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['size3D']['x']} {annotation['classAttributes']['contour']['size3D']['y']} {annotation['classAttributes']['contour']['size3D']['z']} {annotation['classAttributes']['contour']['center3D']['x']} {annotation['classAttributes']['contour']['center3D']['y']} {annotation['classAttributes']['contour']['center3D']['z']} {annotation['classAttributes']['contour']['rotation3D']['y']}\n"
                 except:
+                    print(traceback.format_exc())
                     pass
         if annotation_text:
             annotation_text = annotation_text[:-1]

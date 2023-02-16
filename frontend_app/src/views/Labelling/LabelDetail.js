@@ -1553,7 +1553,7 @@ const LabelDetail = ({ history, match }) => {
       id: "start_labelling",
       name: "prepare",
       onClickFunc: openStartProject,
-      label: "Start manual labeling",
+      label: labelprojects?.projectDetail?.workapp === "detection_3d" ? "Start manual labeling (Xtreme1)" : "Start manual labeling",
     },
     {
       id: "review_labelling",
