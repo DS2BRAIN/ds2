@@ -288,6 +288,8 @@ class Processing():
             # shutil.copy2(s3Url, origin_file_path)
 
             label_files_length = len(os.listdir(f"{origin_file_path}/result"))
+            file_index = 0
+
             if label_files_length < 100:
                 if not os.path.exists("/opt/kitti/training/"):
                     os.makedirs("/opt/kitti/", exist_ok=True)
@@ -302,9 +304,9 @@ class Processing():
                     self.unzipFile("/opt/kitti/data_object_calib.zip")
 
                 shutil.copy2("/opt/kitti", f"{self.utilClass.save_path}/project/{project['id']}/data/kitti")
+                file_index = 7481
 
             train_index = 0
-            file_index = 7481
             test_file_content = ""
             train_file_content = ""
             trainval_file_content = ""
