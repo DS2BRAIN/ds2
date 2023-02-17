@@ -141,9 +141,6 @@ app.include_router(postCommentRouter.router, tags=["Post Comment Router"])
 app.include_router(contestRouter.router, tags=["Contest Router"])
 
 if os.path.exists('./src/creating/routers/'):
-    app.include_router(maRouter.router, tags=["ma Router"])
-    app.include_router(mosRouter.router, tags=["mos Router"])
-    app.include_router(msRouter.router, tags=["ms Router"])
     app.include_router(detection3dRouter.router, tags=["3d detection Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
