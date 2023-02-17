@@ -69,9 +69,7 @@ import requests
 import orjson
 
 if os.path.exists('./src/creating/routers/'):
-    from src.creating.routers import maRouter, detection3dRouter
-    from src.creating.routers import mosRouter
-    from src.creating.routers import msRouter
+    from src.creating.routers import detection3dRouter
 
 class ORJSONResponse(JSONResponse):
     media_type = "application/json"
