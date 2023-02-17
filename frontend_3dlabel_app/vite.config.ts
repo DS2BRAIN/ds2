@@ -7,7 +7,7 @@ let localConfig = getLocalConfig();
 // https://vitejs.dev/config/
 const config = defineConfig({
     server: {
-        open: true,
+        open: false,
         port: 13003,
         // api proxy when development
         proxy: {
