@@ -24,11 +24,11 @@ export default function UseFlow() {
     async function init() {
         iniQuery();
 
-        if (!token) {
-            editor.showMsg('error', editor.lang('not-login'));
-            return;
-        }
-        setToken(token);
+        // if (!token) {
+        //     editor.showMsg('error', editor.lang('not-login'));
+        //     return;
+        // }
+        // setToken(token);
 
         initFlowEvent();
         handleUnload();
