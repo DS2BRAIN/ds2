@@ -251,7 +251,7 @@ class ManageLabeling:
         class_name_list = []
         class_color_list = []
         try:
-            if categories in ['object_detection', 'image', 'text', 'normal_classification']:
+            if categories in ['object_detection', 'image', 'text', 'normal_classification', 'detection_3d']:
                 labelclass_list = self.dbClass.getLabelClassesByLabelProjectId(labelproject_list)
 
                 for labelclass in labelclass_list:
@@ -303,7 +303,7 @@ class ManageLabeling:
 
             self.dbClass.createLabelprojectFile(create_labelproject_files)
 
-            if categories == 'object_detection':
+            if categories == 'object_detection' or categories == "detection_3d":
                 for ds2data in create_labelproject_files:
                     if label_id_dict.get(ds2data['ds2data']):
                         labels = label_id_dict[ds2data['ds2data']]
@@ -315,6 +315,8 @@ class ManageLabeling:
                             label['workAssignee'] = user_dict['id']
                             label['labelclass'] = class_id
                             label['sthreefile'] = ds2data['id']
+                            if categories == "detection_3d":
+                                label['classAttributes']['classId'] = class_id
                             label_list.append(label)
                     else:
                         continue

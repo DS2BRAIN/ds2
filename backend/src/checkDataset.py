@@ -596,7 +596,6 @@ class CheckDataset():
         testannotations = []
         status = 0
         class_ids = []
-
         try:
             labelProject = labelProjectInfo.__dict__['__data__']
             if isAsync:
@@ -612,8 +611,8 @@ class CheckDataset():
                         'isChecked': 0
                     }
                     self.dbClass.createAsyncTask(data)
-
-            outputFilePath = f'{os.getcwd()}/temp/{labelProject["id"]}'
+            timestamp = time.strftime('%y%m%d%H%M%S')
+            label_project_temp_dir = f'{os.getcwd()}/temp/{labelProject["id"]}_{timestamp}'
             # os.makedirs(outputFilePath, exist_ok=True)
             #TODO: 데이터 커넥터 업로드 시 압축 푼걸 풀어놓은 후 재시도 필요 (혹은 이미 풀린 곳 다시 찾기 - 데이터 커넥터 아이디와 주소 매칭 안될 시 확인 필요)
             current_dataconnector_id = ast.literal_eval(labelProject['dataconnectorsList'])[0]
@@ -621,13 +620,13 @@ class CheckDataset():
             original_labelproject = self.dbClass.getOneLabelProjectById(current_dataconnector.originalLabelproject)
             try:
                 shutil.copytree(f"{self.utilClass.save_path}/user/{labelProject['user']}/{ast.literal_eval(original_labelproject.dataconnectorsList)[0]}/",
-                         outputFilePath, dirs_exist_ok=True)
+                         label_project_temp_dir, dirs_exist_ok=True)
             except:
                 pass
             # imgae0 -> training/image_2 test/image_2
             # result -> training/label_2 test/label_2
             # point_cloud -> training/velodyne testing/velodyne
-            os.makedirs(f'{outputFilePath}/result', exist_ok=True)
+            os.makedirs(f'{label_project_temp_dir}/result', exist_ok=True)
             if has_median_data:
                 class_label_count_dict = {}
                 group_query = {'_id': '$labelclass', 'count': {'$sum': 1}}
@@ -731,7 +730,8 @@ class CheckDataset():
                 for annotation in trainannotation:
                     try:
                         # annotation_text += f"{annotation['classAttributes']['className']} 0 0 0 {annotation['min_x']} {annotation['min_y']} {annotation['max_x']} {annotation['max_y']} {annotation['classAttributes']['size3D']['x']} {annotation['classAttributes']['size3D']['y']} {annotation['classAttributes']['size3D']['z']} {annotation['classAttributes']['center3D']['x']} {annotation['classAttributes']['center3D']['y']} {annotation['classAttributes']['center3D']['z']} {annotation['classAttributes']['rotation3D']['y']}\n"
-                        objects.append(annotation)
+                        if sthreefile['id'] == annotation['sthreefile']:
+                            objects.append(annotation)
                     except:
                         print(traceback.format_exc())
                         pass
@@ -740,9 +740,9 @@ class CheckDataset():
                 # label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt").replace("point_cloud", "result")}'
                 # if image_point < train_image_count:
                 #     label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".txt").replace("point_cloud", "result")}'
-                label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
+                label_file_path = f'{label_project_temp_dir}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
                 if image_point < train_image_count:
-                    label_file_path = f'{os.getcwd()}/temp/{labelProject["id"]}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
+                    label_file_path = f'{label_project_temp_dir}/{fileName.replace(".pcd", ".json").replace("point_cloud", "result")}'
 
                 base_path = os.path.dirname(label_file_path)
                 os.makedirs(base_path, exist_ok=True)
@@ -776,22 +776,22 @@ class CheckDataset():
         if isAsync:
             try:
                 if status == 0:
-                    label_project_dir = f'{self.utilClass.save_path}/labelproject/{labelProject["id"]}'
-                    os.makedirs(label_project_dir, exist_ok=True)
-                    with open(f'{label_project_dir}/annotation.json', 'w') as outfile:
-                        json.dump(result, outfile, indent=4, default=str)
-                    timestamp = time.strftime('%y%m%d%H%M%S')
-                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/', exist_ok=True)
-                    zip_file_path = f'{self.utilClass.save_path}/user/{labelProject["user"]}/{labelProject["id"]}'
-                    self.make_archive(label_project_dir, f'{zip_file_path}.zip')
-                    self.s3.upload_file(f'{zip_file_path}.zip', self.utilClass.bucket_name,
+
+                    # os.makedirs(label_project_dir, exist_ok=True)
+                    # with open(f'{label_project_dir}/annotation.json', 'w') as outfile:
+                    #     json.dump(result, outfile, indent=4, default=str)
+
+                    self.zip_folder(f"{labelProject['id']}_{timestamp}", f"{os.getcwd()}/temp/")
+                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}', exist_ok=True)
+                    self.s3.upload_file(f'{os.getcwd()}/temp/{labelProject["id"]}_{timestamp}/{labelProject["id"]}_{timestamp}.zip', self.utilClass.bucket_name,
                                         f'user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip')
                     outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip'
                     status = 100
-                    shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
+                    # shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
                     # os.remove(f'{label_project_dir}/{zip_file_path}.zip')
                     # if os.path.isdir(label_project_dir):
                     #     shutil.rmtree(label_project_dir)
+                    shutil.rmtree(f"{os.getcwd()}/temp/{labelProject['id']}_{timestamp}")
             except:
                 print(traceback.format_exc())
                 outputFilePath = ''

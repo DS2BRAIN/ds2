@@ -838,6 +838,7 @@ class ManageFile:
                                 "user": user_id,
                                 "s3key": s3key,
                                 "originalFileName": pcd_file,
+                                "originalFileOnlyName": pcd_file_name,
                                 "created_at": datetime.datetime.utcnow(),
                                 "updated_at": datetime.datetime.utcnow(),
                                 "fileType": common_data['workapp'],
@@ -864,12 +865,14 @@ class ManageFile:
 
                         if file.lower().endswith((".pcd")):
                             # if file.lower().endswith((".jpg", ".jpeg", ".png")):
+                            file_name, file_ext = os.path.splitext(file)
                             data = {
                                 "fileName": f"{root.split('/')[-1]}/{file}",  # or f"{s3Folder}/{file}"?
                                 "fileSize": file_size,
                                 "user": user_id,
                                 "s3key": s3key,
                                 "originalFileName": file,
+                                "originalFileOnlyName": file_name,
                                 "created_at": datetime.datetime.utcnow(),
                                 "updated_at": datetime.datetime.utcnow(),
                                 "fileType": common_data['workapp'],
@@ -888,21 +891,24 @@ class ManageFile:
                                         if labelclass['name'] == category['name']:
                                             labelclass_id = labelclass['id']
                                             is_exist = True
+                                        categories_dict[labelclass_id] = labelclass
                                     if not is_exist:
                                         color = self.get_random_hex_color()
                                         data = {'name': category['name'], 'color': color,
                                                 'labelproject': labelproject_id}
                                         new_labelclass = self.dbClass.createLabelclass(data)
                                         labelclass_id = new_labelclass.id
-                                    categories_dict[category['id']] = labelclass_id
+                                        categories_dict[labelclass_id] = new_labelclass
                     except Exception as e:
                         fail_file_list.append(file)
                         self.utilClass.sendSlackMessage(traceback.format_exc())
 
-            for root, dirs, files in os.walk(root_dir):
-                if '__MACOSX' in root:
-                    continue
-                for idx, file in enumerate(files):
+            # for root, dirs, files in os.walk(f"{root_dir}/result"):
+            root = f"{root_dir}/result"
+            for idx, file in enumerate(os.listdir(root)):
+                    if '__MACOSX' in root:
+                        continue
+                # for idx, file in enumerate(files):
                     try:
                         file_size = os.path.getsize(f"{root}/{file}")
                         # timestamp = time.strftime('%y%m%d%H%M%S')
@@ -930,8 +936,10 @@ class ManageFile:
                                         'color': '#ff000',
                                         'status': 'done', 'user': user_id,
                                         'workAssignee': user_id,
-                                        'labelclass': categories_dict.get(annotation['classType']) if annotation['classType'] else 0,
+                                        'labelclass': categories_dict.get(annotation['classAttributes']['classId']) if annotation['classAttributes']['classId'] else 0,
                                     }
+                                    if 'id' in annotation:
+                                        del annotation['id']
                                     label_data.update(annotation)
                                     preprocessing_json_data[file_name]['labels'].append(label_data)
 
@@ -960,6 +968,8 @@ class ManageFile:
             self.dbClass.createFile(ds2datas)
 
             for data in ds2datas:
+                if 'bin_point_cloud/' in data['fileName']:
+                    continue
                 ds2data_id = data['id']
                 del data['id']
                 data.update({
@@ -969,27 +979,34 @@ class ManageFile:
                     "isDeleted": False,
                     "reviewer": None,
                     "ds2data": ds2data_id,
-                    "labelproject": labelproject_id
+                    "labelproject": labelproject_id,
+                    "labels": preprocessing_json_data[data['originalFileOnlyName']]['labels']
                 })
                 labelproject_ds2datas.append(data)
-            self.dbClass.createLabelprojectFile(labelproject_ds2datas)
+            labelprojectfiles = self.dbClass.createLabelprojectFile(labelproject_ds2datas)
 
-            for data in labelproject_ds2datas:
+            for data in labelprojectfiles:
+                if 'bin_point_cloud/' in data['fileName']:
+                    continue
                 json_key = data['originalFileName']
                 file_name, file_ext = os.path.splitext(json_key)
                 #
 
                 if preprocessing_json_data.get(file_name):
-                    [label_info.update({'labelproject': labelproject_id, 'sthreefile': data['id']}) for label_info
-                     in preprocessing_json_data[file_name]['labels']]
+                    # [label_info.update({'labelproject': labelproject_id, 'sthreefile': data['id']}) for label_info
+                    #  in preprocessing_json_data[file_name]['labels']]
 
                     if preprocessing_json_data[file_name]['labels']:
-                        labels += preprocessing_json_data[file_name]['labels']
+                        # labels += preprocessing_json_data[file_name]['labels']
+                        for label in preprocessing_json_data[file_name]['labels']:
+                            label.update({'labelproject': labelproject_id, 'sthreefile': data['id']})
+                            result = self.dbClass.createLabel(label)
                         update_sthree_data = {'status': 'done', 'workAssignee': user_email}
                         self.dbClass.updateSthreeFileById(data['id'], update_sthree_data)
-
-            if labels:
-                self.dbClass.createLabel(labels)
+            # for key, value in preprocessing_json_data.items():
+            #     labels += value['labels']
+            # if labels:
+            #     result = self.dbClass.createLabel(labels)
 
         connector_raw.progress = 100
         connector_raw.save()
