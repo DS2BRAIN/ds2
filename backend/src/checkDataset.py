@@ -773,48 +773,51 @@ class CheckDataset():
             outputFilePath = ''
             status = 99
             pass
-        if isAsync:
-            try:
-                if status == 0:
+        try:
+            if status == 0:
 
-                    # os.makedirs(label_project_dir, exist_ok=True)
-                    # with open(f'{label_project_dir}/annotation.json', 'w') as outfile:
-                    #     json.dump(result, outfile, indent=4, default=str)
+                # os.makedirs(label_project_dir, exist_ok=True)
+                # with open(f'{label_project_dir}/annotation.json', 'w') as outfile:
+                #     json.dump(result, outfile, indent=4, default=str)
 
-                    self.zip_folder(f"{labelProject['id']}_{timestamp}", f"{os.getcwd()}/temp/")
-                    os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}', exist_ok=True)
-                    self.s3.upload_file(f'{os.getcwd()}/temp/{labelProject["id"]}_{timestamp}/{labelProject["id"]}_{timestamp}.zip', self.utilClass.bucket_name,
-                                        f'user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip')
-                    outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip'
-                    status = 100
-                    # shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
-                    # os.remove(f'{label_project_dir}/{zip_file_path}.zip')
-                    # if os.path.isdir(label_project_dir):
-                    #     shutil.rmtree(label_project_dir)
+                self.zip_folder(f"{labelProject['id']}_{timestamp}", f"{os.getcwd()}/temp/")
+                os.makedirs(f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}', exist_ok=True)
+                self.s3.upload_file(f'{os.getcwd()}/temp/{labelProject["id"]}_{timestamp}/{labelProject["id"]}_{timestamp}.zip', self.utilClass.bucket_name,
+                                    f'user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip')
+                outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip'
+                status = 100
+                # shutil.rmtree(f'{os.getcwd()}/temp/{labelProject["id"]}')
+                # os.remove(f'{label_project_dir}/{zip_file_path}.zip')
+                # if os.path.isdir(label_project_dir):
+                #     shutil.rmtree(label_project_dir)
+                if isAsync:
                     shutil.rmtree(f"{os.getcwd()}/temp/{labelProject['id']}_{timestamp}")
-            except:
-                print(traceback.format_exc())
-                outputFilePath = ''
-                status = 99
-                pass
-            if asynctask:
-                asynctask.outputFilePath = outputFilePath
-                asynctask.status = status
-                asynctask.save()
-            else:
-                data = {
-                    'taskName': f'{labelProject["name"]}',
-                    'taskType': 'export3D',
-                    'status': status,
-                    'labelproject': labelProject['id'],
-                    'user': labelProject['user'],
-                    'outputFilePath': outputFilePath,
-                    'isChecked': 0
-                }
-                self.dbClass.createAsyncTask(data)
-            return result, outputFilePath
+        except:
+            print(traceback.format_exc())
+            outputFilePath = ''
+            status = 99
+            pass
+
+        if not isAsync:
+            outputFilePath = label_project_temp_dir
+        if asynctask:
+            asynctask.outputFilePath = outputFilePath
+            asynctask.status = status
+            asynctask.save()
         else:
-            return result, outputFilePath
+            data = {
+                'taskName': f'{labelProject["name"]}',
+                'taskType': 'export3D',
+                'status': status,
+                'labelproject': labelProject['id'],
+                'user': labelProject['user'],
+                'outputFilePath': outputFilePath,
+                'isChecked': 0
+            }
+            self.dbClass.createAsyncTask(data)
+        return result, outputFilePath
+        # else:
+        #     return result, outputFilePath
     def zip_folder(self, folder_name, data_path):
 
         commands = f'cd {data_path}/{folder_name}; zip -r {folder_name}.zip ./*'
