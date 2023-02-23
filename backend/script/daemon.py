@@ -1350,6 +1350,13 @@ class Daemon():
                 'usingBert': split['usingBert'],
                 'lossFunction': split['lossFunction'],
             }
+        if 'detection_3d' in trainingMethod:
+            iterations = {
+                'epoch' : [split['epoch'][0]],
+                'objectDetectionModel': [split['objectDetectionModel'][0]],
+                'learningRateFromFit': [split['learningRateFromFit'][0]],
+                'visionModel': [""],
+            }
         if 'object_detection' in trainingMethod:
             iterations = {
                 'epoch' : split['epoch'],

@@ -1559,6 +1559,8 @@ class ManageLabeling:
         for x in self.dbClass.getLabelClassesByLabelProjectId(labelProjectId):
             labelclassDict = model_to_dict(x)
             label_count = completed_label_count_dict.get(str(labelclassDict['id']), 0)
+            if labelProject['workapp'] == "detection_3d":
+                label_count = completed_label_count_dict.get(str(labelclassDict['name']), 0)
             labelclassDict['completedLabelCount'] = label_count
             totalcnt += label_count
             labelclassList.append(labelclassDict)
@@ -1876,7 +1878,8 @@ class ManageLabeling:
         total_count = 0
         for labelclass_raw in self.dbClass.getLabelClassesByLabelProjectId(labelproject_id, page, count):
             labelclass_dict = model_to_dict(labelclass_raw)
-            label_count_temp = self.dbClass.getDoneLabelCountBylabelclassId(labelclass_dict['id'], label_project_raw.workapp, has_shared, work_assignee)
+            label_count_temp = self.dbClass.getDoneLabelCountBylabelclassId(labelclass_dict['id'], label_project_raw.workapp,
+                                                                            has_shared, work_assignee, labelproject_id=labelproject_id, labelclass_name = labelclass_dict['name'])
             labelclass_dict['completedLabelCount'] = label_count_temp
             total_count += label_count_temp
             labelclass_result.append(labelclass_dict)
@@ -2197,7 +2200,7 @@ class ManageLabeling:
         if 'regression' not in labelproject_raw.workapp:
             for labelclass in self.dbClass.getLabelClassesByLabelProjectId(labelproject_id):
                 if use_class_info.get(str(labelclass.name), False):
-                    if self.dbClass.getDoneLabelCountBylabelclassId(labelclass.id, labelproject_raw.workapp, has_shared=False) < 10:
+                    if self.dbClass.getDoneLabelCountBylabelclassId(labelclass.id, labelproject_raw.workapp, has_shared=False, labelproject_id=labelproject_id, labelclass_name=labelclass.name) < 10:
                         raise ex.MinDataEx(email=user['email'], labelproject_id=labelproject_id)
                     else:
                         yClass.append(labelclass.name)

@@ -476,8 +476,11 @@ class HelperLabel():
         return labelprojectsTable.select().where(labelprojectsTable.user==userId)
 
     @wrapper
-    def getDoneLabelCountBylabelclassId(self, labelclassId, workapp, has_shared, work_assignee=None):
+    def getDoneLabelCountBylabelclassId(self, labelclassId, workapp, has_shared, work_assignee=None, labelproject_id=None, labelclass_name=None):
         condition = {"$and": [{'labelclass': labelclassId}, {'isDeleted': {"$ne": True}}]}
+        if workapp == 'detection_3d' and labelproject_id and labelclass_name:
+            condition = {"$and": [{'classAttributes.className': labelclass_name}, {'labelproject': labelproject_id}, {'isDeleted': {"$ne": True}}]}
+            # condition = {'isDeleted': {"$ne": True}}
         if has_shared:
             condition = {"$and":[condition, {"workAssignee": work_assignee}]}
 
@@ -588,13 +591,21 @@ class HelperLabel():
                 "$and": [condition]
             }
         }]
+        if workapp == "detection_3d":
 
-        pipeline.append({
-            '$group': {
-                '_id': '$labelclass',
-                'count': {'$sum': 1}
-            }
-        })
+            pipeline.append({
+                '$group': {
+                    '_id': '$classAttributes.className',
+                    'count': {'$sum': 1}
+                }
+            })
+        else:
+            pipeline.append({
+                '$group': {
+                    '_id': '$labelclass',
+                    'count': {'$sum': 1}
+                }
+            })
 
         collection_name = mongoDb.DS2DATA_LABELPROJECT_COLLECTION_NAME
         if workapp == 'object_detection' or workapp == 'detection_3d':

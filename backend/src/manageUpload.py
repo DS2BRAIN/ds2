@@ -885,7 +885,7 @@ class ManageUpload:
                 x = x.__dict__['__data__']
                 if len(trainColumnInfo):
                     if trainColumnInfo.get(str(x.id), False):
-                        if self.dbClass.getDoneLabelCountBylabelclassId(x['id'], labelProjectRaw.workapp) < 10:
+                        if self.dbClass.getDoneLabelCountBylabelclassId(x['id'], labelProjectRaw.workapp, labelproject_id=labelprojectId, labelclass_name=x['name']) < 10:
                             minimumlabelclass.append(x['id'])
                             minimumCount = True
                         else:
