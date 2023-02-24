@@ -1270,7 +1270,11 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
         np_x = (np.array(pc.pc_data['x'], dtype=np.float32)).astype(np.float32)
         np_y = (np.array(pc.pc_data['y'], dtype=np.float32)).astype(np.float32)
         np_z = (np.array(pc.pc_data['z'], dtype=np.float32)).astype(np.float32)
-        np_i = (np.array(pc.pc_data['i'], dtype=np.float32)).astype(np.float32) / 256
+        try:
+            np_i = (np.array(pc.pc_data['i'], dtype=np.float32)).astype(np.float32) / 256
+        except:
+            np_i = 0
+            pass
         # np_r = (np.array(pc.pc_data['ring'], dtype=np.float32)).astype(np.float32)
         # np_t = (np.array(pc.pc_data['time'], dtype=np.float32)).astype(np.float32)
 
