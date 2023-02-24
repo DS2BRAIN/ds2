@@ -302,8 +302,8 @@ class Processing():
                     self.unzipFile("/opt/kitti/data_object_image_2.zip")
                     self.unzipFile("/opt/kitti/data_object_velodyne.zip")
                     self.unzipFile("/opt/kitti/data_object_calib.zip")
-
-                shutil.copy2("/opt/kitti", f"{self.utilClass.save_path}/project/{project['id']}/data/kitti")
+                os.makedirs(f"{self.utilClass.save_path}/project/{project['id']}/data/kitti", exist_ok=True)
+                shutil.copytree("/opt/kitti", f"{self.utilClass.save_path}/project/{project['id']}/data/kitti", dirs_exist_ok=True)
                 file_index = 7481
 
             train_index = 0
