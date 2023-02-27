@@ -1287,8 +1287,12 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
         try:
             np_i = (np.array(pc.pc_data['i'], dtype=np.float32)).astype(np.float32) / 256
         except:
-            np_i = 0
+            np_i = (np.array(0, dtype=np.float32)).astype(np.float32) / 256
             pass
+        print("np_z")
+        print(np_z)
+        print("np_i")
+        print(np_i)
         # np_r = (np.array(pc.pc_data['ring'], dtype=np.float32)).astype(np.float32)
         # np_t = (np.array(pc.pc_data['time'], dtype=np.float32)).astype(np.float32)
 
