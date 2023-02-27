@@ -1287,7 +1287,7 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
         try:
             np_i = (np.array(pc.pc_data['i'], dtype=np.float32)).astype(np.float32) / 256
         except:
-            np_i = (np.array([1] * len(pc.pc_data['i']), dtype=np.float32)).astype(np.float32) / 256
+            np_i = (np.array([1] * len(pc.pc_data['z']), dtype=np.float32)).astype(np.float32) / 256
             pass
         print("np_z")
         print(np_z)
