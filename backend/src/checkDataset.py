@@ -801,8 +801,9 @@ class CheckDataset():
             status = 99
             pass
 
-        # if not isAsync:
-        #     outputFilePath = label_project_temp_dir
+        if not isAsync:
+            self.unzipFile(outputFilePath)
+            outputFilePath = os.path.basename(outputFilePath)
         if asynctask:
             asynctask.outputFilePath = outputFilePath
             asynctask.status = status
@@ -834,6 +835,14 @@ class CheckDataset():
             commands += ' images/*'
         process = subprocess.Popen('/bin/bash', stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         out, err = process.communicate(commands.encode('utf-8'))
+
+    def unzipFile(self, filePath, folder=''):
+
+        pathToZip = filePath
+        pathToOut = os.path.splitext(filePath)[0]
+        unzip = ['unzip', '-o', pathToZip, '-d', pathToOut]
+        p = subprocess.call(unzip)
+        return pathToOut
 
     def download_sthreefile(self, sthreefiles, labelproject_id, project_id=None, is_voc=False):
         for sthreefile in tqdm(sthreefiles):
