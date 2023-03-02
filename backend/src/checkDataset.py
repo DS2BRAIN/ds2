@@ -803,7 +803,7 @@ class CheckDataset():
 
         if not isAsync:
             self.unzipFile(outputFilePath)
-            outputFilePath = os.path.basename(outputFilePath)
+            outputFilePath = os.path.dirname(outputFilePath)
         if asynctask:
             asynctask.outputFilePath = outputFilePath
             asynctask.status = status
