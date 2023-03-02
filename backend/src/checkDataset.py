@@ -773,8 +773,11 @@ class CheckDataset():
             outputFilePath = ''
             status = 99
             pass
+
+        outputFilePath = f'{self.utilClass.save_path}/user/{labelProject["user"]}/labelproject/{labelProject["id"]}/{timestamp}/export.zip'
+
         try:
-            if status == 0:
+            if status == 0 or not os.path.exists(outputFilePath):
 
                 # os.makedirs(label_project_dir, exist_ok=True)
                 # with open(f'{label_project_dir}/annotation.json', 'w') as outfile:
@@ -798,8 +801,8 @@ class CheckDataset():
             status = 99
             pass
 
-        if not isAsync:
-            outputFilePath = label_project_temp_dir
+        # if not isAsync:
+        #     outputFilePath = label_project_temp_dir
         if asynctask:
             asynctask.outputFilePath = outputFilePath
             asynctask.status = status
