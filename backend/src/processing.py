@@ -413,7 +413,12 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
 
             info_prefix = "kitti"
             version = f'v1.0'
-            kitti.create_kitti_info_file(root_path, info_prefix, False)
+            print("root_path")
+            print(root_path)
+            try:
+                kitti.create_kitti_info_file(root_path, info_prefix, False)
+            except:
+                pass
             kitti.create_reduced_point_cloud(root_path, info_prefix)
 
             info_train_path = osp.join(root_path, f'{info_prefix}_infos_train.pkl')
