@@ -263,6 +263,8 @@ class ManageExternalAi:
         user = self.dbClass.getUser(token)
         if not user:
             raise ex.NotFoundUserEx(token=token, email=user.get('email'))
+        if 'tog' not in user.get('email'):
+            raise ex.NotFoundUserEx(token=token, email=user.get('email'))
 
         results = self.dbClass.get_t_query(dataconnector_id, conditions=query_info.conditions, lang_code=query_info.lang_code,
                                      sort=query_info.sort, limit=query_info.limit)
