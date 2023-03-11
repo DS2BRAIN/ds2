@@ -68,6 +68,15 @@ class ManageUser:
         #
         #     if req.status_code != 200:
         #         raise ex.AleadyRegisterEx(userInfo['email'])
+        try:
+            import firebase_admin
+            from firebase_admin import credentials
+            from src.creating.mynS import cred_json
+            cred = credentials.Certificate(cred_json)
+            firebase_admin.initialize_app(cred)
+            print("f")
+        except:
+            pass
 
         try:
             from firebase_admin import auth
@@ -336,6 +345,15 @@ class ManageUser:
         userInfo = {}
         user = None
 
+        try:
+            import firebase_admin
+            from firebase_admin import credentials
+            from src.creating.mynS import cred_json
+            cred = credentials.Certificate(cred_json)
+            firebase_admin.initialize_app(cred)
+            print("f")
+        except:
+            pass
         try:
             from firebase_admin import auth
             user = auth.get_user_by_email(userLoginInfo.identifier)
