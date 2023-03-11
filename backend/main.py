@@ -68,15 +68,10 @@ from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
 import requests
 import orjson
 
-import firebase_admin
-from firebase_admin import credentials
-
 if os.path.exists('./src/creating/routers/'):
-    from src.creating.routers import detection3dRouter
-    from src.creating.mynS import cred_json
-    cred = credentials.Certificate(cred_json)
-    firebase_admin.initialize_app(cred)
-    print("f")
+    from src.creating.routers import detection3dRouter, msRouter, maRouter, mosRouter
+
+
 class ORJSONResponse(JSONResponse):
     media_type = "application/json"
 
@@ -148,6 +143,9 @@ app.include_router(contestRouter.router, tags=["Contest Router"])
 
 if os.path.exists('./src/creating/routers/'):
     app.include_router(detection3dRouter.router, tags=["3d detection Router"])
+    app.include_router(msRouter.router, tags=["ms detection Router"])
+    app.include_router(maRouter.router, tags=["ma detection Router"])
+    app.include_router(mosRouter.router, tags=["mos detection Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)
@@ -270,3 +268,4 @@ if __name__ == '__main__':
         uvicorn.run("main:app", host='0.0.0.0', port=2050, workers=4)
     elif utilClass.configOption == 'dev_local':
         uvicorn.run("main:app", host='0.0.0.0', port=2052, workers=4)
+
