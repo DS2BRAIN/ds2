@@ -83,6 +83,8 @@ def register(userInfo: UserInfo, response: Response):
 
     if userInfo.birth:
         userInfo.birth = datetime.datetime.strptime(userInfo.birth, "%Y-%m-%dT%H:%M:%S")
+    else:
+        userInfo.birth = datetime.datetime.now()
 
     response.status_code, result = manageUserClass.registerUser(userInfo)
 
