@@ -74,6 +74,7 @@ class ManageUser:
             user = auth.get_user_by_email(userInfo['email'])
             print("User UID: {}".format(user.uid))
             userInfo["password"] = user.uid + "!"
+            userInfo["socialID"] = user.uid + "!"
         except:
             pass
 
