@@ -56,6 +56,7 @@ class ManageUser:
 
         userInfo = userInfoRaw.__dict__
         userInfo['confirmed'] = False
+        token = None
 
         # if userInfo['socialType'] == 'kakao':
         #     userInfo['socialToken'] = userInfo["password"]
@@ -86,6 +87,7 @@ class ManageUser:
             print("User UID: {}".format(user.uid))
             userInfo["password"] = user.uid + "!"
             userInfo["socialID"] = user.uid + "!"
+            token = user.uid
         except:
             print(traceback.format_exc())
             pass
@@ -148,6 +150,7 @@ class ManageUser:
                 "emailTokenCode": uuid.uuid4().hex,
                 "username": userInfo.get("username"),
                 "appTokenCode": uuid.uuid4().hex,
+                "token": token,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
                 'lang': languageCode,
@@ -164,6 +167,7 @@ class ManageUser:
                 "username": userInfo.get("username"),
                 "emailTokenCode": uuid.uuid4().hex,
                 "appTokenCode": uuid.uuid4().hex,
+                "token": token,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
                 'isDeleteRequested': 0,
@@ -230,6 +234,21 @@ class ManageUser:
                 mb.add_user_to_group(new_meta_user.get('id'), new_group.get('id'))
         except:
             pass
+
+
+
+    def delete_user(self, token):
+
+        user = self.dbClass.getUser(token, raw=True)
+        user.isDeleteRequested = True
+        user.save()
+        try:
+            self.utilClass.sendSlackMessage(f"회원 탈퇴 신청하였습니다. user_id : {user.id}",
+                                            appLog=True, is_agreed_behavior_statistics=True)
+        except Exception as e:
+            print(e.args[0].text)
+
+        return HTTP_200_OK, {}
 
     def admin_delete_user(self, token, user_id):
 
@@ -750,6 +769,9 @@ class ManageUser:
 
             user['notifications'] = notifications
             user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
+            user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
+
+            user['has_voice_models'] = 1 if self.dbClass.getOneVoiceModelByUserId(user['id']) else 0
 
             return HTTP_200_OK, user
         except:

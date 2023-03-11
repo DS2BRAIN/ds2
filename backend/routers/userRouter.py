@@ -118,6 +118,14 @@ def admin_users_retrieve(response: Response,
 
     return result
 
+@router.delete("/user/")
+def delete_admin_users(response: Response,
+                         token: str):
+
+    response.status_code, result = manageUserClass.delete_user(token)
+
+    return result
+
 @router.delete("/users/")
 def delete_admin_users(response: Response,
                          token: str,
