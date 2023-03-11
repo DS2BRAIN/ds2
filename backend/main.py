@@ -68,9 +68,15 @@ from src.errorResponseList import NOT_ALLOWED_TOKEN_ERROR, EXCEED_PREDICT_ERROR
 import requests
 import orjson
 
+import firebase_admin
+from firebase_admin import credentials
+
 if os.path.exists('./src/creating/routers/'):
     from src.creating.routers import detection3dRouter
-
+    from src.creating.mynS import cred_json
+    cred = credentials.Certificate(cred_json)
+    firebase_admin.initialize_app(cred)
+    print("f")
 class ORJSONResponse(JSONResponse):
     media_type = "application/json"
 
