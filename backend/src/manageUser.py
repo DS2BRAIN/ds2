@@ -76,6 +76,7 @@ class ManageUser:
             userInfo["password"] = user.uid + "!"
             userInfo["socialID"] = user.uid + "!"
         except:
+            print(traceback.format_exc())
             pass
 
         if userInfo['socialType'] == 'google':
