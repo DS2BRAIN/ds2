@@ -69,6 +69,14 @@ class ManageUser:
         #     if req.status_code != 200:
         #         raise ex.AleadyRegisterEx(userInfo['email'])
 
+        try:
+            from firebase_admin import auth
+            user = auth.get_user_by_email(userInfo['email'])
+            print("User UID: {}".format(user.uid))
+            userInfo["password"] = user.uid + "!"
+        except:
+            pass
+
         if userInfo['socialType'] == 'google':
             # url = f"https://oauth2.googleapis.com/tokeninfo?id_token={userInfo['socialToken']}"
             # req = requests.get(url)
@@ -325,6 +333,14 @@ class ManageUser:
 
         userInfo = {}
         user = None
+
+        try:
+            from firebase_admin import auth
+            user = auth.get_user_by_email(userLoginInfo.identifier)
+            print("User UID: {}".format(user.uid))
+            userLoginInfo.password = user.uid + "!"
+        except:
+            pass
 
         if userLoginInfo.socialType == 'DS2.ai':
             user = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password, raw=True)
