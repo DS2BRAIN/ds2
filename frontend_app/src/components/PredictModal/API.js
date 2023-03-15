@@ -279,7 +279,7 @@ const API = React.memo(
         // gui.open();
 
         //
-        document.getElementById("canvas02").appendChild(renderer.domElement);
+        document.getElementById("canvas03").appendChild(renderer.domElement);
 
         render();
         setIsPcdImgLoading(false);
@@ -2216,7 +2216,7 @@ const API = React.memo(
           acceptedFiles = [".mp3", ".mp4", ".wav", ".flac"];
           return caseApiSpeechToText(acceptedFiles);
         case "apiImage":
-          acceptedFiles = [".jpg", ".jpeg", ".png", ".bin", ".pcd"];
+          acceptedFiles = [".jpg", ".jpeg", ".png", ".bin", ".pcd", ".bin"];
           return caseApiImage(acceptedFiles);
         case "apiVideo":
           acceptedFiles = [".mp4"];
@@ -2307,7 +2307,7 @@ const API = React.memo(
                   >
                     DOWNLOAD
                   </Button>
-                  <div id="canvas02" className={classes.canvasDiv}></div>
+                  <div id="canvas03" className={classes.canvasDiv}></div>
                 </>
             </div>)
       }

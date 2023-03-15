@@ -369,7 +369,8 @@ class HelperSthreefile():
         elif workAssignee:
             condition = {"$and": [{'workAssignee': workAssignee}, {'isDeleted': {'$ne': True}}, {'labelproject': labelproject}]}
         if status:
-            condition = {"$and": [condition, {"status": {'$in': status}}]}
+            if status[0]:
+                condition = {"$and": [condition, {"status": {'$in': status}}]}
 
         pipeline =[
         {'$match': condition}] if has_data else [

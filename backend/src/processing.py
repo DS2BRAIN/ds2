@@ -1309,16 +1309,19 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
 
     def create3dLabelFile(self, src, dst):
         annotation_text = ""
-        with open(src, 'r') as r:
-            j = json.load(r)
-            for annotation in j['result']['objects']:
-                try:
-                    # annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
-                    annotation_text += f"{annotation['classAttributes']['className']} 0 0 -10 {annotation['classAttributes']['contour']['center3D']['x'] - annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] - annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['center3D']['x'] + annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] + annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['size3D']['x']} {annotation['classAttributes']['contour']['size3D']['y']} {annotation['classAttributes']['contour']['size3D']['z']} {annotation['classAttributes']['contour']['center3D']['x']} {annotation['classAttributes']['contour']['center3D']['y']} {annotation['classAttributes']['contour']['center3D']['z']} {annotation['classAttributes']['contour']['rotation3D']['y']}\n"
-                except:
-                    print(traceback.format_exc())
-                    pass
-        if annotation_text:
-            annotation_text = annotation_text[:-1]
+        try:
+            with open(src, 'r') as r:
+                j = json.load(r)
+                for annotation in j['result']['objects']:
+                    try:
+                        # annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
+                        annotation_text += f"{annotation['classAttributes']['className']} 0 0 -10 {annotation['classAttributes']['contour']['center3D']['x'] - annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] - annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['center3D']['x'] + annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] + annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['size3D']['x']} {annotation['classAttributes']['contour']['size3D']['y']} {annotation['classAttributes']['contour']['size3D']['z']} {annotation['classAttributes']['contour']['center3D']['x']} {annotation['classAttributes']['contour']['center3D']['y']} {annotation['classAttributes']['contour']['center3D']['z']} {annotation['classAttributes']['contour']['rotation3D']['y']}\n"
+                    except:
+                        print(traceback.format_exc())
+                        pass
+            if annotation_text:
+                annotation_text = annotation_text[:-1]
+        except:
+            pass
         with open(dst, 'w') as w:
             w.write(annotation_text)

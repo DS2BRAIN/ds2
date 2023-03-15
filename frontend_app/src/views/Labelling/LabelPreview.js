@@ -128,7 +128,7 @@ const LabelPreview = ({
         // gui.open();
 
         //
-        document.getElementById("canvas02").appendChild(renderer.domElement);
+        document.getElementById("canvas03").appendChild(renderer.domElement);
 
         render();
         setIsPcdImgLoading(false);
@@ -670,7 +670,7 @@ const LabelPreview = ({
                     </Grid>
                   )}
 
-            {labelFileDetail.s3key.indexOf('.pcd') > -1 ? <div id="canvas02" className={classes.canvasDiv}></div> : <img
+            {labelFileDetail.s3key.indexOf('.pcd') > -1 ? <div id="canvas03" className={classes.canvasDiv}></div> : <img
               src={getS3key(labelFileDetail.s3key)}
               height="100%"
               id="previewImage"
