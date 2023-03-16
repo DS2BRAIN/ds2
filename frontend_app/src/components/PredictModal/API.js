@@ -2242,8 +2242,8 @@ const API = React.memo(
 
     const download3d = () => {
       const link = document.createElement("a");
-      link.href = resultImageUrl;
-      link.setAttribute("download", objectJson?.asset ? objectJson?.asset.replaceAll(objectJson?.asset.split('/')[2], "0.0.0.0:13002") : objectJson?.asset);
+      link.href = objectJson?.asset ? objectJson?.asset.replaceAll(objectJson?.asset.split('/')[2], "0.0.0.0:13002") : objectJson?.asset;
+      link.setAttribute("download", 'download.pcd');
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
