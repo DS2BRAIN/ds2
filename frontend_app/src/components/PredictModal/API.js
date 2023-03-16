@@ -2240,6 +2240,15 @@ const API = React.memo(
       link.parentNode.removeChild(link);
     };
 
+    const download3d = () => {
+      const link = document.createElement("a");
+      link.href = resultImageUrl;
+      link.setAttribute("download", objectJson?.asset ? objectJson?.asset.replaceAll(objectJson?.asset.split('/')[2], "0.0.0.0:13002") : objectJson?.asset);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    };
+
     const downloadAudio = () => {
       const link = document.createElement("a");
       link.href = resultAudioUrl;
@@ -2304,7 +2313,7 @@ const API = React.memo(
                   <Button
                     id="resultDownload"
                     className={classes.defaultHighlightButton}
-                    onClick={downloadImage}
+                    onClick={download3d}
                   >
                     DOWNLOAD
                   </Button>
