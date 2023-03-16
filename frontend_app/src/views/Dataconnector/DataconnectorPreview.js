@@ -102,7 +102,7 @@ const DataconnectorPreview = ({
         // gui.open();
 
         //
-        document.getElementById("canvas02").appendChild(renderer.domElement);
+        document.getElementById("canvas03").appendChild(renderer.domElement);
 
         render();
         setIsPcdImgLoading(false);
@@ -553,7 +553,7 @@ const DataconnectorPreview = ({
           </DialogTitle>
           <DialogContent>
             <figure style={{ position: "relative", textAlign: "center" }}>
-              {imgData.s3key.indexOf('.pcd') > -1 ? <div id="canvas02" className={classes.canvasDiv}></div> : <img
+              {imgData.s3key.indexOf('.pcd') > -1 ? <div id="canvas03" className={classes.canvasDiv}></div> : <img
                 id="previewImage"
                 ref={imageRef}
                 alt={imgData.originalFileName}

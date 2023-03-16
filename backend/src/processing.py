@@ -257,185 +257,190 @@ class Processing():
 
         if 'detection_3d' in trainingMethod:
 
-            # root_path = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
-            # out_dir = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
-            root_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti"
-            out_dir = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti"
+            try:
 
-            train_image_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/image_2"
-            train_point_cloud_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/velodyne"
-            train_label_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/label_2"
-            train_calib_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/calib"
+                # root_path = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
+                # out_dir = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
+                root_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti"
+                out_dir = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti"
 
-            test_image_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/image_2"
-            test_point_cloud_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/velodyne"
-            test_calib_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/calib"
-            image_set_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/ImageSets"
+                train_image_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/image_2"
+                train_point_cloud_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/velodyne"
+                train_label_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/label_2"
+                train_calib_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/training/calib"
 
-            os.makedirs(root_path, exist_ok=True)
-            os.makedirs(train_image_path, exist_ok=True)
-            os.makedirs(train_point_cloud_path, exist_ok=True)
-            os.makedirs(train_label_path, exist_ok=True)
-            os.makedirs(train_calib_path, exist_ok=True)
-            os.makedirs(test_image_path, exist_ok=True)
-            os.makedirs(test_point_cloud_path, exist_ok=True)
-            os.makedirs(test_calib_path, exist_ok=True)
-            os.makedirs(image_set_path, exist_ok=True)
+                test_image_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/image_2"
+                test_point_cloud_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/velodyne"
+                test_calib_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/testing/calib"
+                image_set_path = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/ImageSets"
 
-            # origin_file_path = f"/home/yeo/ds2ai/user/159/{dataconnectorsRaw[0].id}"
-            labelproject_raw = self.dbClass.getLabelProjectsById(project.get('labelproject'))
-            trainData, origin_file_path = self.checkDatasetClass.export3dData(labelproject_raw)
-            # shutil.copy2(s3Url, origin_file_path)
+                os.makedirs(root_path, exist_ok=True)
+                os.makedirs(train_image_path, exist_ok=True)
+                os.makedirs(train_point_cloud_path, exist_ok=True)
+                os.makedirs(train_label_path, exist_ok=True)
+                os.makedirs(train_calib_path, exist_ok=True)
+                os.makedirs(test_image_path, exist_ok=True)
+                os.makedirs(test_point_cloud_path, exist_ok=True)
+                os.makedirs(test_calib_path, exist_ok=True)
+                os.makedirs(image_set_path, exist_ok=True)
 
-            label_files_length = len(os.listdir(f"{origin_file_path}/result"))
-            file_index = 0
+                # origin_file_path = f"/home/yeo/ds2ai/user/159/{dataconnectorsRaw[0].id}"
+                labelproject_raw = self.dbClass.getLabelProjectsById(project.get('labelproject'))
+                trainData, origin_file_path = self.checkDatasetClass.export3dData(labelproject_raw)
+                # shutil.copy2(s3Url, origin_file_path)
 
-            if label_files_length < 100:
-                if not os.path.exists("/opt/kitti/training/"):
-                    os.makedirs("/opt/kitti/", exist_ok=True)
-                    print("Download data_object_image_2.zip")
-                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip", out="/opt/kitti/data_object_image_2.zip", bar=bar_custom)
-                    print("Download data_object_velodyne.zip")
-                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_velodyne.zip", out="/opt/kitti/data_object_velodyne.zip", bar=bar_custom)
-                    print("Download data_object_calib.zip")
-                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_calib.zip", out="/opt/kitti/data_object_calib.zip", bar=bar_custom)
-                    print("Download data_object_label_2.zip")
-                    wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip", out="/opt/kitti/data_object_label_2.zip", bar=bar_custom)
-                    self.unzipFile("/opt/kitti/data_object_image_2.zip")
-                    self.unzipFile("/opt/kitti/data_object_label_2.zip")
-                    self.unzipFile("/opt/kitti/data_object_velodyne.zip")
-                    self.unzipFile("/opt/kitti/data_object_calib.zip")
-                    os.makedirs("/opt/kitti/training", exist_ok=True)
-                    os.makedirs("/opt/kitti/testing", exist_ok=True)
-                    shutil.move("/opt/kitti/data_object_calib/training/calib", "/opt/kitti/training/calib")
-                    shutil.move("/opt/kitti/data_object_image_2/training/image_2", "/opt/kitti/training/image_2")
-                    shutil.move("/opt/kitti/data_object_velodyne/training/velodyne", "/opt/kitti/training/velodyne")
-                    shutil.move("/opt/kitti/data_object_velodyne/training/label_2", "/opt/kitti/training/label_2")
-                    shutil.move("/opt/kitti/data_object_calib/testing/calib", "/opt/kitti/testing/calib")
-                    shutil.move("/opt/kitti/data_object_image_2/testing/image_2", "/opt/kitti/testing/image_2")
-                    shutil.move("/opt/kitti/data_object_velodyne/testing/velodyne", "/opt/kitti/testing/velodyne")
-                    shutil.move("/opt/kitti/data_object_velodyne/testing/label_2", "/opt/kitti/testing/label_2")
-                    os.remove("/opt/kitti/data_object_velodyne.zip")
-                    os.remove("/opt/kitti/data_object_image_2.zip")
-                    os.remove("/opt/kitti/data_object_calib.zip")
-                    shutil.rmtree("/opt/kitti/data_object_image_2/")
-                    shutil.rmtree("/opt/kitti/data_object_calib/")
-                    shutil.rmtree("/opt/kitti/data_object_velodyne/")
-                os.makedirs(f"{self.utilClass.save_path}/project/{project['id']}/data/kitti", exist_ok=True)
-                shutil.copytree("/opt/kitti", f"{self.utilClass.save_path}/project/{project['id']}/data/kitti", dirs_exist_ok=True)
-                file_index = 7481
+                label_files_length = len(os.listdir(f"{origin_file_path}/result"))
+                file_index = 0
 
-            train_index = 0
-            test_file_content = ""
-            train_file_content = ""
-            trainval_file_content = ""
-            val_file_content = ""
+                if label_files_length < 100:
+                    if not os.path.exists("/opt/kitti/training/"):
+                        os.makedirs("/opt/kitti/", exist_ok=True)
+                        print("Download data_object_image_2.zip")
+                        wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip", out="/opt/kitti/data_object_image_2.zip", bar=bar_custom)
+                        print("Download data_object_velodyne.zip")
+                        wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_velodyne.zip", out="/opt/kitti/data_object_velodyne.zip", bar=bar_custom)
+                        print("Download data_object_calib.zip")
+                        wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_calib.zip", out="/opt/kitti/data_object_calib.zip", bar=bar_custom)
+                        print("Download data_object_label_2.zip")
+                        wget.download("https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip", out="/opt/kitti/data_object_label_2.zip", bar=bar_custom)
+                        self.unzipFile("/opt/kitti/data_object_image_2.zip")
+                        self.unzipFile("/opt/kitti/data_object_label_2.zip")
+                        self.unzipFile("/opt/kitti/data_object_velodyne.zip")
+                        self.unzipFile("/opt/kitti/data_object_calib.zip")
+                        os.makedirs("/opt/kitti/training", exist_ok=True)
+                        os.makedirs("/opt/kitti/testing", exist_ok=True)
+                        shutil.move("/opt/kitti/data_object_calib/training/calib", "/opt/kitti/training/calib")
+                        shutil.move("/opt/kitti/data_object_image_2/training/image_2", "/opt/kitti/training/image_2")
+                        shutil.move("/opt/kitti/data_object_velodyne/training/velodyne", "/opt/kitti/training/velodyne")
+                        shutil.move("/opt/kitti/data_object_velodyne/training/label_2", "/opt/kitti/training/label_2")
+                        shutil.move("/opt/kitti/data_object_calib/testing/calib", "/opt/kitti/testing/calib")
+                        shutil.move("/opt/kitti/data_object_image_2/testing/image_2", "/opt/kitti/testing/image_2")
+                        shutil.move("/opt/kitti/data_object_velodyne/testing/velodyne", "/opt/kitti/testing/velodyne")
+                        shutil.move("/opt/kitti/data_object_velodyne/testing/label_2", "/opt/kitti/testing/label_2")
+                        os.remove("/opt/kitti/data_object_velodyne.zip")
+                        os.remove("/opt/kitti/data_object_image_2.zip")
+                        os.remove("/opt/kitti/data_object_calib.zip")
+                        shutil.rmtree("/opt/kitti/data_object_image_2/")
+                        shutil.rmtree("/opt/kitti/data_object_calib/")
+                        shutil.rmtree("/opt/kitti/data_object_velodyne/")
+                    os.makedirs(f"{self.utilClass.save_path}/project/{project['id']}/data/kitti", exist_ok=True)
+                    shutil.copytree("/opt/kitti", f"{self.utilClass.save_path}/project/{project['id']}/data/kitti", dirs_exist_ok=True)
+                    file_index = 7481
 
-            for root, dirs, files in os.walk(origin_file_path): #TODO : /home/yeo/ds2ai/project/18783/data/kitti 에 학습용 라벨링 셋 더 많이 추가해서 테스트 필요
-                if '__MACOSX' in root:
-                    continue
-                for index, file_name in enumerate(files):
-                    if 'result' in root:
-                        file_path = f'{root}/{file_name}'
-                        if train_index < label_files_length * 0.8:
-                            # PCD to Bin
-                            # Create label file
-                            self.create3dBinFile(
-                                file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
-                                f"{train_point_cloud_path}/{str(file_index).zfill(6)}.bin")
-                            self.create3dLabelFile(file_path, f"{train_label_path}/{str(file_index).zfill(6)}.txt")
-                            try:
-                                shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
-                                         f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
-                                img = PILImage.open(f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
-                                img.save(f"{train_image_path}/{str(file_index).zfill(6)}.png")
-                            except:
-                                if os.path.exists(file_path.replace('/result/', '/image0/').replace('.json', '.png')):
-                                    shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.png'),
-                                                 f"{train_image_path}/{str(file_index).zfill(6)}.png")
+                train_index = 0
+                test_file_content = ""
+                train_file_content = ""
+                trainval_file_content = ""
+                val_file_content = ""
 
-                            with open(f"{train_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
-                                f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
-P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
-P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
-P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
-R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
-Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
-Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01
-""")
+                for root, dirs, files in os.walk(origin_file_path): #TODO : /home/yeo/ds2ai/project/18783/data/kitti 에 학습용 라벨링 셋 더 많이 추가해서 테스트 필요
+                    if '__MACOSX' in root:
+                        continue
+                    for index, file_name in enumerate(files):
+                        if 'result' in root:
+                            file_path = f'{root}/{file_name}'
+                            if train_index < label_files_length * 0.8:
+                                # PCD to Bin
+                                # Create label file
+                                self.create3dBinFile(
+                                    file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
+                                    f"{train_point_cloud_path}/{str(file_index).zfill(6)}.bin")
+                                self.create3dLabelFile(file_path, f"{train_label_path}/{str(file_index).zfill(6)}.txt")
+                                try:
+                                    shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
+                                             f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
+                                    img = PILImage.open(f"{train_image_path}/{str(file_index).zfill(6)}.jpg")
+                                    img.save(f"{train_image_path}/{str(file_index).zfill(6)}.png")
+                                except:
+                                    if os.path.exists(file_path.replace('/result/', '/image0/').replace('.json', '.png')):
+                                        shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.png'),
+                                                     f"{train_image_path}/{str(file_index).zfill(6)}.png")
 
-                            train_index += 1
-                            trainval_file_content += f"{str(file_index).zfill(6)}\n"
-                            if train_index % 2 == 0:
-                                train_file_content += f"{str(file_index).zfill(6)}\n"
+                                with open(f"{train_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
+                                    f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+    P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+    P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
+    P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
+    R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
+    Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
+    Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01
+    """)
+
+                                train_index += 1
+                                trainval_file_content += f"{str(file_index).zfill(6)}\n"
+                                if train_index % 2 == 0:
+                                    train_file_content += f"{str(file_index).zfill(6)}\n"
+                                else:
+                                    val_file_content += f"{str(file_index).zfill(6)}\n"
                             else:
-                                val_file_content += f"{str(file_index).zfill(6)}\n"
-                        else:
-                            self.create3dBinFile(
-                                file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
-                                f"{test_point_cloud_path}/{str(file_index).zfill(6)}.bin")
-                            try:
-                                shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
-                                             f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
-                                img = PILImage.open(f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
-                                img.save(f"{test_image_path}/{str(file_index).zfill(6)}.png")
-                            except:
-                                if os.path.exists(file_path.replace('/result/', '/image0/').replace('.json', '.png')):
-                                    shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.png'),
-                                                 f"{test_image_path}/{str(file_index).zfill(6)}.png")
-                            test_file_content += f"{str(file_index).zfill(6)}\n"
+                                self.create3dBinFile(
+                                    file_path.replace('/result/', '/point_cloud/').replace('.json', '.pcd'),
+                                    f"{test_point_cloud_path}/{str(file_index).zfill(6)}.bin")
+                                try:
+                                    shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.jpg'),
+                                                 f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
+                                    img = PILImage.open(f"{test_image_path}/{str(file_index).zfill(6)}.jpg")
+                                    img.save(f"{test_image_path}/{str(file_index).zfill(6)}.png")
+                                except:
+                                    if os.path.exists(file_path.replace('/result/', '/image0/').replace('.json', '.png')):
+                                        shutil.copy2(file_path.replace('/result/', '/image0/').replace('.json', '.png'),
+                                                     f"{test_image_path}/{str(file_index).zfill(6)}.png")
+                                test_file_content += f"{str(file_index).zfill(6)}\n"
 
-                            with open(f"{test_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
-                                f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
-P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
-P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
-P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
-R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
-Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
-Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01""")
-                        file_index += 1
+                                with open(f"{test_calib_path}/{str(file_index).zfill(6)}.txt", "w") as f:
+                                    f.write("""P0: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 0.000000000000e+00 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+    P1: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.797842000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 0.000000000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 0.000000000000e+00
+    P2: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 4.575831000000e+01 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 -3.454157000000e-01 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 4.981016000000e-03
+    P3: 7.070493000000e+02 0.000000000000e+00 6.040814000000e+02 -3.341081000000e+02 0.000000000000e+00 7.070493000000e+02 1.805066000000e+02 2.330660000000e+00 0.000000000000e+00 0.000000000000e+00 1.000000000000e+00 3.201153000000e-03
+    R0_rect: 9.999128000000e-01 1.009263000000e-02 -8.511932000000e-03 -1.012729000000e-02 9.999406000000e-01 -4.037671000000e-03 8.470675000000e-03 4.123522000000e-03 9.999556000000e-01
+    Tr_velo_to_cam: 6.927964000000e-03 -9.999722000000e-01 -2.757829000000e-03 -2.457729000000e-02 -1.162982000000e-03 2.749836000000e-03 -9.999955000000e-01 -6.127237000000e-02 9.999753000000e-01 6.931141000000e-03 -1.143899000000e-03 -3.321029000000e-01
+    Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086759000000e-01 -7.854027000000e-04 9.998898000000e-01 -1.482298000000e-02 3.195559000000e-01 2.024406000000e-03 1.482454000000e-02 9.998881000000e-01 -7.997231000000e-01""")
+                            file_index += 1
 
-            if len(trainval_file_content) > 0:
-                train_file_content = train_file_content[:-1]
-                val_file_content = val_file_content[:-1]
-                trainval_file_content = trainval_file_content[:-1]
-            if len(test_file_content) > 0:
-                test_file_content = test_file_content[:-1]
+                if len(trainval_file_content) > 0:
+                    train_file_content = train_file_content[:-1]
+                    val_file_content = val_file_content[:-1]
+                    trainval_file_content = trainval_file_content[:-1]
+                if len(test_file_content) > 0:
+                    test_file_content = test_file_content[:-1]
 
-            with open(f"{image_set_path}/train.txt", 'w') as w:
-                w.write(train_file_content)
-            with open(f"{image_set_path}/val.txt", 'w') as w:
-                w.write(val_file_content)
-            with open(f"{image_set_path}/trainval.txt", 'w') as w:
-                w.write(trainval_file_content)
-            with open(f"{image_set_path}/test.txt", 'w') as w:
-                w.write(test_file_content)
+                with open(f"{image_set_path}/train.txt", 'w') as w:
+                    w.write(train_file_content)
+                with open(f"{image_set_path}/val.txt", 'w') as w:
+                    w.write(val_file_content)
+                with open(f"{image_set_path}/trainval.txt", 'w') as w:
+                    w.write(trainval_file_content)
+                with open(f"{image_set_path}/test.txt", 'w') as w:
+                    w.write(test_file_content)
 
-            info_prefix = "kitti"
-            version = f'v1.0'
-            print("root_path")
-            print(root_path)
-            kitti.create_kitti_info_file(root_path, info_prefix, False)
-            kitti.create_reduced_point_cloud(root_path, info_prefix)
+                info_prefix = "kitti"
+                version = f'v1.0'
+                print("root_path")
+                print(root_path)
+                kitti.create_kitti_info_file(root_path, info_prefix, False)
+                kitti.create_reduced_point_cloud(root_path, info_prefix)
 
-            info_train_path = osp.join(root_path, f'{info_prefix}_infos_train.pkl')
-            info_val_path = osp.join(root_path, f'{info_prefix}_infos_val.pkl')
-            info_trainval_path = osp.join(root_path,
-                                          f'{info_prefix}_infos_trainval.pkl')
-            info_test_path = osp.join(root_path, f'{info_prefix}_infos_test.pkl')
-            kitti.export_2d_annotation(root_path, info_train_path)
-            kitti.export_2d_annotation(root_path, info_val_path)
-            kitti.export_2d_annotation(root_path, info_trainval_path)
-            kitti.export_2d_annotation(root_path, info_test_path)
+                info_train_path = osp.join(root_path, f'{info_prefix}_infos_train.pkl')
+                info_val_path = osp.join(root_path, f'{info_prefix}_infos_val.pkl')
+                info_trainval_path = osp.join(root_path,
+                                              f'{info_prefix}_infos_trainval.pkl')
+                info_test_path = osp.join(root_path, f'{info_prefix}_infos_test.pkl')
+                kitti.export_2d_annotation(root_path, info_train_path)
+                kitti.export_2d_annotation(root_path, info_val_path)
+                kitti.export_2d_annotation(root_path, info_trainval_path)
+                kitti.export_2d_annotation(root_path, info_test_path)
 
-            create_groundtruth_database(
-                'KittiDataset',
-                root_path,
-                info_prefix,
-                f'{out_dir}/{info_prefix}_infos_train.pkl',
-                relative_path=False,
-                mask_anno_path='instances_train.json',
-                with_mask=(version == 'mask'))
+                create_groundtruth_database(
+                    'KittiDataset',
+                    root_path,
+                    info_prefix,
+                    f'{out_dir}/{info_prefix}_infos_train.pkl',
+                    relative_path=False,
+                    mask_anno_path='instances_train.json',
+                    with_mask=(version == 'mask'))
+
+            except:
+                pass
 
             yClass = project.get('yClass')
             dep_var = 'label'
@@ -1309,16 +1314,19 @@ Tr_imu_to_velo: 9.999976000000e-01 7.553071000000e-04 -2.035826000000e-03 -8.086
 
     def create3dLabelFile(self, src, dst):
         annotation_text = ""
-        with open(src, 'r') as r:
-            j = json.load(r)
-            for annotation in j['result']['objects']:
-                try:
-                    # annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
-                    annotation_text += f"{annotation['classAttributes']['className']} 0 0 -10 {annotation['classAttributes']['contour']['center3D']['x'] - annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] - annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['center3D']['x'] + annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] + annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['size3D']['x']} {annotation['classAttributes']['contour']['size3D']['y']} {annotation['classAttributes']['contour']['size3D']['z']} {annotation['classAttributes']['contour']['center3D']['x']} {annotation['classAttributes']['contour']['center3D']['y']} {annotation['classAttributes']['contour']['center3D']['z']} {annotation['classAttributes']['contour']['rotation3D']['y']}\n"
-                except:
-                    print(traceback.format_exc())
-                    pass
-        if annotation_text:
-            annotation_text = annotation_text[:-1]
+        try:
+            with open(src, 'r') as r:
+                j = json.load(r)
+                for annotation in j['result']['objects']:
+                    try:
+                        # annotation_text += f"{annotation['className']} 0 0 0 {annotation['center3D']['x'] - annotation['size3D']['x'] / 2} {annotation['center3D']['y'] - annotation['size3D']['y'] / 2} {annotation['center3D']['x'] + annotation['size3D']['x'] / 2} {annotation['center3D']['y'] + annotation['size3D']['y'] / 2} {annotation['size3D']['x']} {annotation['size3D']['y']} {annotation['size3D']['z']} {annotation['center3D']['x']} {annotation['center3D']['y']} {annotation['center3D']['z']} {annotation['rotation3D']['y']}\n"
+                        annotation_text += f"{annotation['classAttributes']['className']} 0 0 -10 {annotation['classAttributes']['contour']['center3D']['x'] - annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] - annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['center3D']['x'] + annotation['classAttributes']['contour']['size3D']['x'] / 2} {annotation['classAttributes']['contour']['center3D']['y'] + annotation['classAttributes']['contour']['size3D']['y'] / 2} {annotation['classAttributes']['contour']['size3D']['x']} {annotation['classAttributes']['contour']['size3D']['y']} {annotation['classAttributes']['contour']['size3D']['z']} {annotation['classAttributes']['contour']['center3D']['x']} {annotation['classAttributes']['contour']['center3D']['y']} {annotation['classAttributes']['contour']['center3D']['z']} {annotation['classAttributes']['contour']['rotation3D']['y']}\n"
+                    except:
+                        print(traceback.format_exc())
+                        pass
+            if annotation_text:
+                annotation_text = annotation_text[:-1]
+        except:
+            pass
         with open(dst, 'w') as w:
             w.write(annotation_text)
