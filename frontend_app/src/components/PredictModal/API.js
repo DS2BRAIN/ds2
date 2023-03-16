@@ -2308,7 +2308,7 @@ const API = React.memo(
                   >
                     DOWNLOAD
                   </Button>
-                  <div id="canvas03" className={classes.canvasDiv}></div>
+                  <div id="canvas03" className={classes.canvasDiv} style={{maxHeight: "25%", maxWidth: "25%"}}></div>
                 </>
             </div>)
       }
