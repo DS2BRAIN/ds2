@@ -260,7 +260,8 @@ const API = React.memo(
     const loader = new PCDLoader();
     loader.load(
         // 'https://threejs.org/examples/models/pcd/binary/Zaghetto.pcd'
-      objectJson?.asset
+      process.env.REACT_APP_ENTERPRISE === "true"
+                    ? objectJson?.asset ? objectJson?.asset.replaceAll(objectJson?.asset.split('/')[2], "0.0.0.0:13002") : objectJson?.asset : objectJson?.asset
       , function ( points ) {
 
       // points.material.size = 1;
