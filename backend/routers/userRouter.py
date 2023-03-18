@@ -69,6 +69,7 @@ class UserInfo(BaseModel):
     utmCampaign: str = None
     utmTerm: str = None
     utmContent: str = None
+    fcmToken: str = None
     isAgreedWithPolicy: bool = True
     isAgreedMarketing: bool = False
     isAgreedBehaviorStatistics: bool = False
