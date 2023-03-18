@@ -771,7 +771,7 @@ class ManageUser:
             user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
             user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
 
-            user['has_voice_models'] = 1 if self.dbClass.getOneVoiceModelByUserId(user['id']) else 0
+            user['has_voice_models'] = 1 if self.dbClass.getOneArtistVoiceByUserId(user['id']) else 0
 
             return HTTP_200_OK, user
         except:
