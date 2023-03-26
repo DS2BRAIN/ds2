@@ -37,19 +37,28 @@ class ManageTask:
 
         return HTTP_200_OK, asynctask.__dict__['__data__']
 
-    def putAsyncTasks(self, token, asynctaskId):
+    def putAsyncTasks(self, token, asynctaskId, asyncTaskModel):
 
         user = self.dbClass.getUser(token, raw=True)
         if not user:
             self.utilClass.sendSlackMessage(f"파일 : manageTask.py \n함수 : putAsyncTasks \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}", appError=True, userInfo=user)
             return NOT_FOUND_USER_ERROR
             pass
+        if not asyncTaskModel.status and not asyncTaskModel.working_on:
+            asynctask = self.dbClass.updateCheckAsynctaskByUserId(user.id, asynctaskId)
+            if asynctask == 0:
+                return HTTP_500_INTERNAL_SERVER_ERROR, {'asynctaskId': asynctaskId, 'result': asynctask}
 
-        asynctask = self.dbClass.updateCheckAsynctaskByUserId(user.id, asynctaskId)
-        if asynctask == 0:
-            return HTTP_500_INTERNAL_SERVER_ERROR, {'asynctaskId': asynctaskId, 'result': asynctask}
+            return HTTP_200_OK, {'asynctaskId': asynctaskId, 'result': asynctask}
+        else:
+            async_task = self.dbClass.getOneAsnycTaskById(asynctaskId)
+            if asyncTaskModel.status:
+                async_task.status = asyncTaskModel.status
+            if asyncTaskModel.working_on:
+                async_task.working_on = asyncTaskModel.working_on
+            async_task.save()
+            return HTTP_200_OK, {'result': async_task}
 
-        return HTTP_200_OK, {'asynctaskId': asynctaskId, 'result': asynctask}
 
     def deleteAsyncTask(self, token, asynctaskId):
 

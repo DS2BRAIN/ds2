@@ -1841,6 +1841,7 @@ class asynctasksTable(MySQLModel):
     provider = pw.CharField(null=True)
     require_gpus = JSONField(null=True)
     require_gpus_total = JSONField(null=True)
+    working_on = pw.CharField(null=True)
 
 class labelsTable(MySQLModel):
     class Meta:

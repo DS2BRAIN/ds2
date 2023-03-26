@@ -806,7 +806,7 @@ class Helper():
         if provider == 'DS2.ai':
             where_query = where_query & (asynctasksTable.provider == None)
         elif provider != 'DS2.ai':
-            where_query = where_query & (asynctasksTable.provider == provider)
+            where_query = ((asynctasksTable.provider == provider) & (asynctasksTable.status == 0))
 
         return asynctasksTable.select().where(where_query).order_by(asynctasksTable.id.desc()).paginate(1, 30).execute()
 
