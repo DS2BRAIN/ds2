@@ -720,7 +720,7 @@ class ManageUser:
 
     def getLastNotification(self, token):
 
-        user = self.dbClass.getUser(token)
+        user = self.dbClass.getUser(token, raw=True)
 
         if not user:
             return HTTP_503_SERVICE_UNAVAILABLE, {}
