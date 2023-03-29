@@ -728,10 +728,10 @@ class ManageUser:
         lastNotification = self.dbClass.getLastNotification()
 
         if not lastNotification:
-            return HTTP_204_NO_CONTENT, {}
+            return HTTP_503_SERVICE_UNAVAILABLE, {}
 
         if user.notification_read_until == lastNotification.id:
-            return HTTP_204_NO_CONTENT, {}
+            return HTTP_503_SERVICE_UNAVAILABLE, {}
 
         else:
             user.notification_read_until = lastNotification.id
