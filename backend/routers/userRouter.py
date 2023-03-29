@@ -257,6 +257,14 @@ def putUserLogo(response: Response, token: str = Form(...), file: UploadFile = F
 def getMe(token: str, response: Response):
     response.status_code, result = manageUserClass.getMe(token)
     return result
+@router.get("/notification/")
+def getMe(token: str, response: Response):
+    response.status_code, result = manageUserClass.getLastNotification(token)
+    return result
+@router.get("/system-info/")
+def getMe(token: str, response: Response):
+    response.status_code, result = manageUserClass.getSystemInfo(token)
+    return result
 
 @router.post("/regenerate-app-token/")
 def regenerateAppToken(token: str,  response: Response):

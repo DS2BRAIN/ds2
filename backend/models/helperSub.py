@@ -464,3 +464,11 @@ class HelperSub():
     @wrapper
     def getGenKeywordHistories(self):
         return genKeywordHistoriesTable.select().execute()
+
+    @wrapper
+    def getLastNotification(self):
+        return notificationTable.select().order_by(notificationTable.id.desc()).get_or_none()
+
+    @wrapper
+    def getSystemInfo(self):
+        return systemInfoTable.select().order_by(systemInfoTable.id.desc()).get_or_none()
