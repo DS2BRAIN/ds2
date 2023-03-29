@@ -467,7 +467,7 @@ class HelperSub():
 
     @wrapper
     def getLastNotification(self):
-        return notificationTable.select().order_by(notificationTable.id.desc()).get_or_none()
+        return notificationTable.select().order_by(notificationTable.id.desc()).get()
 
     @wrapper
     def getSystemInfo(self):
