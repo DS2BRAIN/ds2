@@ -471,4 +471,4 @@ class HelperSub():
 
     @wrapper
     def getSystemInfo(self):
-        return systemInfoTable.select().order_by(systemInfoTable.id.desc()).get_or_none()
+        return systemInfoTable.select().order_by(systemInfoTable.id.desc()).get()
