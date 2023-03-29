@@ -1105,6 +1105,26 @@ class teamUsersHistoriesTable(MySQLModel):
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
 
 
+class systemInfoTable(MySQLModel):
+    class Meta:
+        db_table = 'systeminfo'
+
+    id = pw.AutoField()
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    minAppVersion = pw.CharField(null=True)
+
+
+class notificationTable(MySQLModel):
+    class Meta:
+        db_table = 'notification'
+
+    id = pw.AutoField()
+    created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
+    updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
+    title = pw.CharField(null=True)
+    body = pw.CharField(null=True)
+
 class usersTable(MySQLModel):
     class Meta:
         db_table = 'users-permissions_user'
@@ -1276,6 +1296,7 @@ class usersTable(MySQLModel):
     last_posted_at = pw.DateTimeField(null=True)
     last_paid_posted_at = pw.DateTimeField(null=True)
     last_email_sent_at = pw.DateTimeField(null=True)
+    notification_read_until = pw.IntegerField(null=True)
 
 class userhistoriesTable(MySQLModel):
     class Meta:

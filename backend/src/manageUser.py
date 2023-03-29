@@ -718,6 +718,41 @@ class ManageUser:
     #     usagehistoryInfo['user'] = user['id']
     #     return HTTP_201_CREATED, self.dbClass.createUsagehistory(usagehistoryInfo)
 
+    def getLastNotification(self, token):
+
+        user = self.dbClass.getUser(token)
+
+        if not user:
+            return HTTP_503_SERVICE_UNAVAILABLE, {}
+
+        lastNotification = self.dbClass.getLastNotification()
+
+        if not lastNotification:
+            return HTTP_204_NO_CONTENT, {}
+
+        if user.notification_read_until == lastNotification.id:
+            return HTTP_204_NO_CONTENT, {}
+
+        else:
+            user.notification_read_until = lastNotification.id
+            user.save()
+            return HTTP_200_OK, lastNotification.__dict__['__data__']
+
+    def getSystemInfo(self, token):
+
+        user = self.dbClass.getUser(token)
+
+        if not user:
+            return HTTP_503_SERVICE_UNAVAILABLE, {}
+
+        systemInfo = self.dbClass.getSystemInfo()
+
+        if not systemInfo:
+            return HTTP_204_NO_CONTENT, {}
+
+        return HTTP_200_OK, systemInfo.__dict__['__data__']
+
+
     def getMe(self, token, provider=None):
 
         try:
