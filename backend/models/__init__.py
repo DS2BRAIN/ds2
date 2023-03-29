@@ -1124,6 +1124,8 @@ class notificationTable(MySQLModel):
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
     title = pw.CharField(null=True)
     body = pw.CharField(null=True)
+    title_ko = pw.CharField(null=True)
+    body_ko = pw.CharField(null=True)
 
 class usersTable(MySQLModel):
     class Meta:
@@ -1296,7 +1298,7 @@ class usersTable(MySQLModel):
     last_posted_at = pw.DateTimeField(null=True)
     last_paid_posted_at = pw.DateTimeField(null=True)
     last_email_sent_at = pw.DateTimeField(null=True)
-    notification_read_until = pw.IntegerField(null=True)
+    notification_read_until = pw.IntegerField(default=0, null=True)
 
 class userhistoriesTable(MySQLModel):
     class Meta:
