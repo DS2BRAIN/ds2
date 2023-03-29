@@ -1112,7 +1112,7 @@ class systemInfoTable(MySQLModel):
     id = pw.AutoField()
     created_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP')], null=True)
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
-    minAppVersion = pw.CharField(null=True)
+    minAppVersion = pw.IntegerField(null=True)
 
 
 class notificationTable(MySQLModel):
