@@ -738,6 +738,21 @@ class ManageUser:
             user.save()
             return HTTP_200_OK, lastNotification.__dict__['__data__']
 
+    def get_user(self, token, user_id):
+        admin_user = self.dbClass.getUser(token)
+        if not admin_user:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser\n 함수 : getUserSettingInfo \n허용되지 않은 토큰 값입니다. token = {token})",
+                appError=True, userInfo=admin_user)
+            return NOT_ALLOWED_TOKEN_ERROR
+
+        if not admin_user.get('is_admin'):
+            raise ex.NotFoundAdminEx()
+
+        user = self.dbClass.getOneUserById(user_id)
+
+        return HTTP_200_OK, user
+
     def getSystemInfo(self, token):
 
         user = self.dbClass.getUser(token)

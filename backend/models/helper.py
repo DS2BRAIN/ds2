@@ -800,15 +800,18 @@ class Helper():
 
 
     @wrapper
-    def getCurrentAsnycTasksByUserId(self, userId, provider='DS2.ai'):
+    def getCurrentAsnycTasksByUserId(self, userId, provider='DS2.ai', status=None):
 
         where_query = (asynctasksTable.user == userId) & (asynctasksTable.isChecked != 1)
         if provider == 'DS2.ai':
             where_query = where_query & (asynctasksTable.provider == None)
         elif provider != 'DS2.ai':
-            where_query = ((asynctasksTable.provider == provider) & (asynctasksTable.status == 0))
+            where_query = asynctasksTable.provider == provider
 
-        return asynctasksTable.select().where(where_query).order_by(asynctasksTable.id.desc()).paginate(1, 30).execute()
+        if status is not None:
+            where_query = where_query & (asynctasksTable.status == status)
+
+        return asynctasksTable.select().where(where_query).order_by(asynctasksTable.id.desc()).limit(100).execute()
 
     @wrapper
     def get_metabase_async_task(self, user_id, source_type, source_id):

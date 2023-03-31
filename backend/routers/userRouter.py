@@ -204,6 +204,7 @@ def emailConfirm(response: Response):
 
 class UserChangableInfo(BaseModel):
     username: str = None
+    token: str = None
     isBetaUser: bool = None
     promotionCode: str = None
     isAgreedWithPolicy: bool = None
@@ -252,7 +253,21 @@ def putUserLogo(response: Response, token: str = Form(...), file: UploadFile = F
     response.status_code, result = manageUserClass.putUserLogo(token, file, filename)
 
     return result
+@router.get("/users/{user_id}")
+def admin_users_retrieve(response: Response,
+                         token: str,
+                         user_id: int):
 
+    response.status_code, result = manageUserClass.get_user(token, user_id)
+
+    return result
+
+@router.put("/me/")
+def putMe(userChangableInfo: UserChangableInfo, response: Response):
+
+    response.status_code, result = manageUserClass.putUser(userChangableInfo.token, userChangableInfo)
+
+    return result
 @router.get("/me/")
 def getMe(token: str, response: Response):
     response.status_code, result = manageUserClass.getMe(token)

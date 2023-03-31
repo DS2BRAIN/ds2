@@ -96,10 +96,10 @@ class ManageTask:
 
         return HTTP_200_OK, asynctasks
 
-    def get_async_task(self, user_id, provider):
+    def get_async_task(self, user_id, provider, status=None):
         asynctasks = []
 
-        for asynctask_raw in self.dbClass.getCurrentAsnycTasksByUserId(user_id, provider):
+        for asynctask_raw in self.dbClass.getCurrentAsnycTasksByUserId(user_id, provider, status):
             async_dict = jsonable_encoder(asynctask_raw.__dict__['__data__'])
             status_text = async_dict.get('statusText')
             if status_text is not None:
@@ -111,7 +111,7 @@ class ManageTask:
 
         return asynctasks
 
-    async def get_async_tasks(self, token, provider, request):
+    async def get_async_tasks(self, token, provider, request, status=None):
 
         user = self.dbClass.getUser(token)
         if not user:
@@ -119,7 +119,7 @@ class ManageTask:
                                             appError=True, userInfo=user)
             raise ex.NotFoundUserEx()
 
-        asynctasks = self.get_async_task(user['id'], provider)
+        asynctasks = self.get_async_task(user['id'], provider, status)
 
         yield {
             "event": "new_message",
@@ -132,7 +132,7 @@ class ManageTask:
             if await request.is_disconnected():
                 break
 
-            asynctasks = self.get_async_task(user['id'], provider)
+            asynctasks = self.get_async_task(user['id'], provider, status)
 
             yield {
                 "event": "new_message",
