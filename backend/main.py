@@ -268,3 +268,4 @@ if __name__ == '__main__':
         uvicorn.run("main:app", host='0.0.0.0', port=2050, workers=4)
     elif utilClass.configOption == 'dev_local':
         uvicorn.run("main:app", host='0.0.0.0', port=2052, workers=4)
+
