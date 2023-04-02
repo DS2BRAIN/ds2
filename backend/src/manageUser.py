@@ -41,6 +41,9 @@ from src.errorResponseList import ErrorResponseList, NOT_FOUND_USER_ERROR, NOT_A
     NOT_EXISTENT_GROUP_ERROR, NOT_FOUND_AI_ERROR, TOO_MANY_INVITE_ERROR, ALREADY_INVITATION_USER_ERROR, PRICING_ERROR, \
     DO_NOT_EXIT_ADMIN_USER, SEARCH_PROJECT_ERROR, ALREADY_DELETED_OBJECT, DUPLICATE_USER_NAME_ERROR
 
+import random
+import string
+
 errorResponseList = ErrorResponseList()
 
 #TODO: 숫자 헤더면 바꿔줘야됨
@@ -821,28 +824,35 @@ class ManageUser:
         provider = reset_info.provider
         language_code = reset_info.languageCode
 
-        user = self.dbClass.getUserByEmail(email)
+        user = self.dbClass.getUserByEmail(email, raw=True)
         if not user:
             self.utilClass.sendSlackMessage(
-                f"파일 : manageUser.py \n함수 : forgotPassword \n잘못된 유저 (isDeletedREquested) | 입력한 토큰 : {user}",
-                appError=True, userInfo=user)
+                f"파일 : manageUser.py \n함수 : forgotPassword \n잘못된 유저 (isDeletedREquested) | 입력한 토큰 : {user.__dict__['__data__']}",
+                appError=True, userInfo=user.__dict__['__data__'])
             return NOT_FOUND_USER_ERROR
 
-        if user['isDeleteRequested']:
+        if user.isDeleteRequested:
             self.utilClass.sendSlackMessage(
-                f"파일 : manageUser.py \n함수 : forgotPassword \n삭제된 유저 (isDeletedREquested) | 입력한 토큰 : {user}",
-                appError=True, userInfo=user)
+                f"파일 : manageUser.py \n함수 : forgotPassword \n삭제된 유저 (isDeletedREquested) | 입력한 토큰 : {user.__dict__['__data__']}",
+                appError=True, userInfo=user.__dict__['__data__'])
             return DELETE_USER_ERROR
+
+
+        # Generate a password of length 12
+        new_password = self.generate_password(12)
+        salt = bcrypt.gensalt(10)
+        user.password = bcrypt.hashpw(new_password.encode(), salt)
+        user.save()
 
         code = jwt.encode({'email': email + str(datetime.datetime.utcnow())}, 'aistorealwayswinning',
                            algorithm='HS256')
 
-        self.utilClass.sendResetPasswordEmail(email, code, provider, 'en')
+        self.utilClass.sendResetPasswordEmail(email, new_password, provider, 'en')
 
-        self.dbClass.updateUser(user["id"], {
-            "resetPasswordVerifyTokenID": code,
-            "resetPasswordRequestDatetime": datetime.datetime.utcnow()
-        })
+        # self.dbClass.updateUser(user["id"], {
+        #     "resetPasswordVerifyTokenID": code,
+        #     "resetPasswordRequestDatetime": datetime.datetime.utcnow()
+        # })
 
         # if languageCode == 'ko':
         #     filePath = "./src/emailContent/password_reset.html"
@@ -860,7 +870,7 @@ class ManageUser:
         #         "resetPasswordRequestDatetime": datetime.datetime.utcnow()
         #     })
 
-        self.utilClass.sendSlackMessage(f"비밀번호 리셋 요청합니다. {user['email']} (ID: {user['id']})", appLog=True, userInfo=user)
+        self.utilClass.sendSlackMessage(f"비밀번호 리셋 요청합니다. {user.email} (ID: {user.id})", appLog=True, userInfo=user.__dict__['__data__'])
         result = {
             "message": "고객님의 메일로 링크를 보내드렸습니다. 메일발송까지 5-10분 정도 소요될 수 있습니다.",
             "message_en": "The link has been sent via email. It may take 5-10 minutes for the email to arrive."
@@ -1611,3 +1621,12 @@ class ManageUser:
             return HTTP_200_OK, user_property
         else:
             return SEARCH_PROJECT_ERROR
+
+    def generate_password(self, length):
+        # Define the set of characters to use in the password
+        chars = string.ascii_letters + string.digits + string.punctuation
+
+        # Generate the password
+        password = ''.join(random.choice(chars) for i in range(length))
+
+        return password

@@ -609,14 +609,14 @@ class Util():
 
         return result
 
-    def sendResetPasswordEmail(self, email, code, provider, languageCode = 'en'):
+    def sendResetPasswordEmail(self, email, new_password, provider, languageCode = 'en'):
 
         Subject = f'[{provider}] 비밀번호 초기화 메일입니다.' if languageCode == 'ko' else f'[{provider}] Please complete your password reset.'
         front_url = self.frontendURL
 
-        link = front_url + f"/resetpassword?code={code}"
+        # link = front_url + f"/resetpassword?code={code}"
         To = email
-        Content = self.get_password_reset_contents(link, languageCode, provider)
+        Content = self.get_password_reset_contents(new_password, languageCode, provider)
 
         result = self.sendEmail(To, Subject, Content, provider)
 
@@ -674,15 +674,15 @@ class Util():
             </body><html>
                 """
 
-    def get_password_reset_contents(self, link, languageCode, provider):
+    def get_password_reset_contents(self, new_password, languageCode, provider):
         if languageCode == 'ko':
             return f"""
             <html><body>
             <br>안녕하세요,
             <br>
-            <br>아래 링크를 클릭하여 비밀번호 초기화 절차를 마무리해주시길 바랍니다.
+            <br>새로운 비밀번호를 안내드립니다. 
             <br>
-            <br><a href="{link}">{link}</a>
+            <br>비밀번호 : {new_password}</a>
             <br>
             <br>감사합니다.
             <br>
@@ -695,9 +695,9 @@ class Util():
             <html><body>
             <br>Hello,
             <br>
-            <br>Please follow the link below to complete password reset process.
+            <br>Here is your new password.
             <br>
-            <br><a href="{link}">{link}</a>
+            <br>Password : {new_password }</a>
             <br>
             <br>Thank you,
             <br>{provider} Team
