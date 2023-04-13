@@ -1,5 +1,6 @@
 import ast
 import asyncio
+import datetime
 import json
 
 from src.util import Util
@@ -54,8 +55,11 @@ class ManageTask:
             async_task = self.dbClass.getOneAsnycTaskById(asynctaskId)
             if asyncTaskModel.status:
                 async_task.status = asyncTaskModel.status
+            if asyncTaskModel.previous_status:
+                async_task.previous_status = asyncTaskModel.previous_status
             if asyncTaskModel.working_on:
                 async_task.working_on = asyncTaskModel.working_on
+            async_task.updated_at = datetime.datetime.utcnow()
             async_task.save()
             return HTTP_200_OK, {'result': async_task}
 

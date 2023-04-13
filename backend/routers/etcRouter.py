@@ -244,6 +244,7 @@ def getAsyncTaskById(asnyctaskId: int, token: str, response: Response):
 class AsyncTaskModel(BaseModel):
     status: int = None
     working_on: str = None
+    previous_status: int = None
 @router.put("/asynctask/{asnyctaskId}/")
 def updateAsyncTask(asnyctaskId: int, token: str, response: Response, asyncTaskModel: AsyncTaskModel):
     response.status_code, result = manageTaskClass.putAsyncTasks(token, asnyctaskId, asyncTaskModel)
