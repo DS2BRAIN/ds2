@@ -53,9 +53,9 @@ class ManageTask:
             return HTTP_200_OK, {'asynctaskId': asynctaskId, 'result': asynctask}
         else:
             async_task = self.dbClass.getOneAsnycTaskById(asynctaskId)
-            if asyncTaskModel.status:
+            if asyncTaskModel.status is not None:
                 async_task.status = asyncTaskModel.status
-            if asyncTaskModel.previous_status:
+            if asyncTaskModel.previous_status is not None:
                 async_task.previous_status = asyncTaskModel.previous_status
             if asyncTaskModel.working_on:
                 async_task.working_on = asyncTaskModel.working_on

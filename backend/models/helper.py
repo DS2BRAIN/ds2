@@ -677,6 +677,10 @@ class Helper():
         return asynctasksTable.select().where(asynctasksTable.marketproject == market_project_id).execute()
 
     @wrapper
+    def getAsnycTasksByProjectId(self, project_id):
+        return asynctasksTable.select().where(asynctasksTable.project == project_id).execute()
+
+    @wrapper
     def getOneAsnycTaskById(self, rowId):
         return asynctasksTable.get(asynctasksTable.id == rowId)
 
