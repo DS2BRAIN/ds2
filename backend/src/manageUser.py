@@ -328,7 +328,8 @@ class ManageUser:
             'isDeleteRequested': 0,
             'usageplan': usagePlan["id"],
             'dynos': 1,
-            'isAiTrainer': userInfo['isAiTrainer']
+            'isAiTrainer': userInfo['isAiTrainer'],
+            "birth": datetime.datetime.now()
         }
         userInfo = {**userInfo, **userInit}
 
