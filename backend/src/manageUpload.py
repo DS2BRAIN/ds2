@@ -107,10 +107,12 @@ class ManageUpload:
             return EXCEED_DISKUSAGE_ERROR
 
     def clear_files(self, origin_file, unzipped_dir):
-        if os.path.exists(origin_file):
-            os.remove(origin_file)
-        if unzipped_dir and os.path.exists(unzipped_dir):
-            shutil.rmtree(unzipped_dir)
+        if origin_file:
+            if os.path.exists(origin_file):
+                os.remove(origin_file)
+        if unzipped_dir:
+            if unzipped_dir and os.path.exists(unzipped_dir):
+                shutil.rmtree(unzipped_dir)
 
     def uploadFile(self, background_tasks, token, file, filename, frame_value, hasLabelData, predictColumnName,
                    dataconnectorName=None, dataconnectortype=None, has_de_identification=False):
@@ -258,24 +260,24 @@ class ManageUpload:
                 origin_file = self.create_origin_csv(new_file_name, df, user_id)
             base_data['file_size'] = file_size
 
-            if data_cnt < 10:
-                print("MIN_DATA_ERROR")
-                self.utilClass.sendSlackMessage(
-                    f"파일 : manageUpload\n함수 : uploadFile \n데이터가 너무 적습니다. {user['email']} (ID: {user['id']})",
-                    appLog=True, userInfo=user)
-                self.clear_files(origin_file, unzipped_dir)
+            # if data_cnt < 10:
+            #     print("MIN_DATA_ERROR")
+            #     self.utilClass.sendSlackMessage(
+            #         f"파일 : manageUpload\n함수 : uploadFile \n데이터가 너무 적습니다. {user['email']} (ID: {user['id']})",
+            #         appLog=True, userInfo=user)
+            #     self.clear_files(origin_file, unzipped_dir)
+            #
+            #     return MIN_DATA_ERROR
 
-                return MIN_DATA_ERROR
-
-            elif hasLabelData and not y_class:
-                print("LABEL_FIlE_INFO_ERROR")
-                self.utilClass.sendSlackMessage(
-                    f"파일 : manageUpload\n함수 : uploadFile \n라벨 데이터가 없습니다. {user['email']} (ID: {user['id']}), "
-                    f"hasLabelData: {hasLabelData}, hasYClass: {False if y_class is None else True}",
-                    appLog=True, userInfo=user)
-                self.clear_files(origin_file, unzipped_dir)
-
-                return LABEL_FIlE_INFO_ERROR
+            # elif hasLabelData and not y_class:
+            #     print("LABEL_FIlE_INFO_ERROR")
+            #     self.utilClass.sendSlackMessage(
+            #         f"파일 : manageUpload\n함수 : uploadFile \n라벨 데이터가 없습니다. {user['email']} (ID: {user['id']}), "
+            #         f"hasLabelData: {hasLabelData}, hasYClass: {False if y_class is None else True}",
+            #         appLog=True, userInfo=user)
+            #     self.clear_files(origin_file, unzipped_dir)
+            #
+            #     return LABEL_FIlE_INFO_ERROR
 
             if self.utilClass.configOption == 'enterprise':
                 s3_url = f'{self.utilClass.save_path}/user/{user_id}/raw/{new_file_name}'
@@ -299,7 +301,7 @@ class ManageUpload:
                     "trainingMethod": training_method,
                     "valueForPredict": value_for_predict,
                     "yClass": json.dumps(y_class),
-                    "sampleData": sample_data,
+                    # "sampleData": sample_data,
                     "filePath": s3_url,
                     "user": user_id,
                     "hasImageData": has_image_data,
@@ -355,7 +357,7 @@ class ManageUpload:
                     "trainingMethod": training_method,
                     "valueForPredict": value_for_predict,
                     "yClass": y_class,
-                    "sampleData": sample_data,
+                    # "sampleData": sample_data,
                     "filePath": s3_url,
                     "user": user_id,
                     "hasImageData": has_image_data,
@@ -369,39 +371,39 @@ class ManageUpload:
                 self.dbClass.updateUserTotalDiskUsage(user_id, len(file))
                 # self.dbClass.updateUserUsedPrice(userId, amount)
 
-            for i, column in enumerate(list(df.columns)):
-                miss = df[column].isnull().sum()
-                # print('컬럼명 : ', columns[i])
-                data_object = {}
-                if file_size < 300 * 1024 * 1024 * 1024:
-                    data_object = self.utilClass.parseColumData(df[column], data_cnt)
-
-                data_object = { **data_object,
-                    "columnName": column,
-                    "index": data_column_index,
-                    "length": data_cnt,
-                    "dataconnector": dataconnector.id if dataconnector else None,
-                }
-                data_column_index += 1
-
-                self.dbClass.createDatacolumn(data_object)
-            try:
-                folder = folders[1] if folders[1] else folders[0]
-                for index, xClass in enumerate(folder):
-                    self.dbClass.createDatacolumn({
-                        "columnName": xClass,
-                        "index": data_column_index,
-                        "length": file_counts.get(xClass, 0),
-                        "miss": miss,
-                        "unique": file_counts.get(xClass, 0),
-                        "type": "object",
-                        "freq": 1,
-                        "isForGan": True,
-                        "dataconnector": dataconnector.id if dataconnector else None,
-                    })
-                    data_column_index += 1
-            except:
-                pass
+            # for i, column in enumerate(list(df.columns)):
+            #     miss = df[column].isnull().sum()
+            #     # print('컬럼명 : ', columns[i])
+            #     data_object = {}
+            #     if file_size < 300 * 1024 * 1024 * 1024:
+            #         data_object = self.utilClass.parseColumData(df[column], data_cnt)
+            #
+            #     data_object = { **data_object,
+            #         "columnName": column,
+            #         "index": data_column_index,
+            #         "length": data_cnt,
+            #         "dataconnector": dataconnector.id if dataconnector else None,
+            #     }
+            #     data_column_index += 1
+            #
+            #     self.dbClass.createDatacolumn(data_object)
+            # try:
+            #     folder = folders[1] if folders[1] else folders[0]
+            #     for index, xClass in enumerate(folder):
+            #         self.dbClass.createDatacolumn({
+            #             "columnName": xClass,
+            #             "index": data_column_index,
+            #             "length": file_counts.get(xClass, 0),
+            #             # "miss": miss,
+            #             "unique": file_counts.get(xClass, 0),
+            #             "type": "object",
+            #             "freq": 1,
+            #             "isForGan": True,
+            #             "dataconnector": dataconnector.id if dataconnector else None,
+            #         })
+            #         data_column_index += 1
+            # except:
+            #     pass
             print("all process pass")
             if project:
                 return HTTP_200_OK, project.__dict__['__data__']

@@ -26,9 +26,6 @@ from PIL import Image as PImage
 import numpy as np
 import torch
 from os import path as osp
-from src.training.mmdetection3d.tools.data_converter import kitti_converter as kitti
-from src.training.mmdetection3d.tools.data_converter.create_gt_database import (
-    GTDatabaseCreater, create_groundtruth_database)
 from PIL import Image as PILImage
 import math
 def bar_custom(current, total, width=80):
@@ -258,6 +255,10 @@ class Processing():
         if 'detection_3d' in trainingMethod:
 
             try:
+
+                from src.training.mmdetection3d.tools.data_converter import kitti_converter as kitti
+                from src.training.mmdetection3d.tools.data_converter.create_gt_database import (
+                    GTDatabaseCreater, create_groundtruth_database)
 
                 # root_path = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"
                 # out_dir = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti"

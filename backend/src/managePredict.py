@@ -38,7 +38,6 @@ from src.util import Util
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 from transformers import pipeline, set_seed
 import soundfile
-from espnet2.bin.tts_inference import Text2Speech
 from huggingsound import SpeechRecognitionModel
 from torch import autocast
 from diffusers import StableDiffusionPipeline
@@ -958,6 +957,7 @@ class ManagePredict:
             if 'text' not in a.columns:
                 return {"missing_value": 'text'}
 
+            from espnet2.bin.tts_inference import Text2Speech
             prediction_model = Text2Speech.from_pretrained(model_name if model_name else "espnet/kan-bayashi_ljspeech_vits")
 
             speech = prediction_model(a["text"][0])["wav"]
