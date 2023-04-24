@@ -170,7 +170,7 @@ class ManageTask:
                                             appError=True, userInfo=user)
             raise ex.NotFoundUserEx()
 
-        if not user.is_admin:
+        if not user['is_admin']:
             self.utilClass.sendSlackMessage(f"파일 : manageTask.py \n함수 : getAsyncTasks \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
                                             appError=True, userInfo=user)
             raise ex.NotAllowedTokenEx()
