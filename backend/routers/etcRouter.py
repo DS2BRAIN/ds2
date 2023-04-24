@@ -230,6 +230,10 @@ def getAsyncTask(response: Response, token: str, provider: str = 'DS2.ai'):
 async def getAsyncTask(request: Request, token: str, provider: str = 'DS2.ai', status: int = None):
     return EventSourceResponse(manageTaskClass.get_async_tasks(token, provider, request, status))
 
+@router.get("/sse/asynctaskall/")
+async def getAsyncTask(request: Request, token: str, provider: str = 'DS2.ai', status: int = None):
+    return EventSourceResponse(manageTaskClass.get_async_tasks_all(token, provider, request, status))
+
 @router.get("/asynctaskall/")
 def getAsyncTaskAll(response: Response, token: str, provider: str = 'DS2.ai', start: int = 1, count: int = 10, taskType: str = None, label_project_id = None, market_project_id=None):
     response.status_code, result = manageTaskClass.getAsyncAllTasks(token, provider, start, count, taskType, label_project_id, market_project_id=market_project_id)

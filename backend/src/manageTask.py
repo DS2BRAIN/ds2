@@ -115,6 +115,21 @@ class ManageTask:
 
         return asynctasks
 
+    def get_async_task_all(self, provider, status=None):
+        asynctasks = []
+
+        for asynctask_raw in self.dbClass.getCurrentAsnycTasks(provider, status):
+            async_dict = jsonable_encoder(asynctask_raw.__dict__['__data__'])
+            status_text = async_dict.get('statusText')
+            if status_text is not None:
+                try:
+                    async_dict['statusText'] = json.loads(status_text)
+                except:
+                    pass
+            asynctasks.append(async_dict)
+
+        return asynctasks
+
     async def get_async_tasks(self, token, provider, request, status=None):
 
         user = self.dbClass.getUser(token)
@@ -137,6 +152,43 @@ class ManageTask:
                 break
 
             asynctasks = self.get_async_task(user['id'], provider, status)
+
+            yield {
+                "event": "new_message",
+                "id": "message_id",
+                "retry": 50000,
+                "data": json.dumps({"result": asynctasks})
+            }
+
+            await asyncio.sleep(5)
+
+    async def get_async_tasks_all(self, token, provider, request, status=None):
+
+        user = self.dbClass.getUser(token)
+        if user is None:
+            self.utilClass.sendSlackMessage(f"파일 : manageTask.py \n함수 : getAsyncTasks \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                                            appError=True, userInfo=user)
+            raise ex.NotFoundUserEx()
+
+        if not user.is_admin:
+            self.utilClass.sendSlackMessage(f"파일 : manageTask.py \n함수 : getAsyncTasks \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                                            appError=True, userInfo=user)
+            raise ex.NotAllowedTokenEx()
+
+        asynctasks = self.get_async_task_all(provider, status)
+
+        yield {
+            "event": "new_message",
+            "id": "message_id",
+            "retry": 50000,
+            "data": json.dumps({"result": asynctasks})
+        }
+
+        while True:
+            if await request.is_disconnected():
+                break
+
+            asynctasks = self.get_async_task_all(provider, status)
 
             yield {
                 "event": "new_message",

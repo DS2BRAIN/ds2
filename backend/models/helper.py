@@ -804,6 +804,20 @@ class Helper():
 
 
     @wrapper
+    def getCurrentAsnycTasks(self, provider='DS2.ai', status=None):
+
+        where_query = None
+        if provider == 'DS2.ai':
+            where_query = where_query & (asynctasksTable.provider == None)
+        elif provider != 'DS2.ai':
+            where_query = asynctasksTable.provider == provider
+
+        if status is not None:
+            where_query = where_query & (asynctasksTable.status == status)
+
+        return asynctasksTable.select().where(where_query).order_by(asynctasksTable.id.desc()).limit(100).execute()
+
+    @wrapper
     def getCurrentAsnycTasksByUserId(self, userId, provider='DS2.ai', status=None):
 
         where_query = (asynctasksTable.user == userId) & (asynctasksTable.isChecked != 1)
