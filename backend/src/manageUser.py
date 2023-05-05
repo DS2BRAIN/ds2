@@ -326,7 +326,7 @@ class ManageUser:
             "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
             'isFirstplanDone': True,
             'isDeleteRequested': 0,
-            'usageplan': usagePlan["id"],
+            'usageplan': usagePlan["id"],\
             'dynos': 1,
             'isAiTrainer': userInfo['isAiTrainer'],
             "birth": datetime.datetime.now()
@@ -387,7 +387,6 @@ class ManageUser:
         try:
             user = auth.get_user_by_email(userLoginInfo.identifier)
             print("User UID: {}".format(user.uid))
-            userLoginInfo.password = user.uid + "!"
         except:
             pass
 
@@ -395,6 +394,12 @@ class ManageUser:
             user = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password, raw=True)
             if user:
                 userInfo['user'] = user.__dict__['__data__']
+            else:
+                userLoginInfo.password = user.uid + "!"
+                user = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password, raw=True)
+                if user:
+                    userInfo['user'] = user.__dict__['__data__']
+
         elif userLoginInfo.socialType == 'google':
             user_data = self.dbClass.loginUserBySocialId(userLoginInfo.identifier, userLoginInfo.password)
 
@@ -843,8 +848,8 @@ class ManageUser:
         user = self.dbClass.getUserByEmail(email, raw=True)
         if not user:
             self.utilClass.sendSlackMessage(
-                f"파일 : manageUser.py \n함수 : forgotPassword \n잘못된 유저 (isDeletedREquested) | 입력한 토큰 : {user.__dict__['__data__']}",
-                appError=True, userInfo=user.__dict__['__data__'])
+                f"파일 : manageUser.py \n함수 : forgotPassword \n잘못된 유저 (isDeletedREquested) | 입력한 email : {email}",
+                appError=True)
             return NOT_FOUND_USER_ERROR
 
         if user.isDeleteRequested:
@@ -855,7 +860,10 @@ class ManageUser:
 
 
         # Generate a password of length 12
+
         new_password = self.generate_password(12)
+        print("new_password")
+        print(new_password)
         salt = bcrypt.gensalt(10)
         user.password = bcrypt.hashpw(new_password.encode(), salt)
         user.save()
@@ -1640,7 +1648,7 @@ class ManageUser:
 
     def generate_password(self, length):
         # Define the set of characters to use in the password
-        chars = string.ascii_letters + string.digits + string.punctuation
+        chars = string.ascii_letters + string.digits + "!@#"
 
         # Generate the password
         password = ''.join(random.choice(chars) for i in range(length))

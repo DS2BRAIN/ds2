@@ -3193,6 +3193,8 @@ class InitHelper():
             userInfo = usersTable.get(usersTable.id == rowId).__dict__['__data__']
             userInfo['user'] = userInfo['id']
             del userInfo['id']
+            if not userInfo['birth']:
+                userInfo['birth'] = datetime.datetime.now()
             userhistoriesTable.create(**userInfo)
 
         return result

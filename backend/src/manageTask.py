@@ -59,6 +59,8 @@ class ManageTask:
                 async_task.previous_status = asyncTaskModel.previous_status
             if asyncTaskModel.working_on:
                 async_task.working_on = asyncTaskModel.working_on
+            if asyncTaskModel.outputFilePath:
+                async_task.outputFilePath = asyncTaskModel.outputFilePath
             async_task.updated_at = datetime.datetime.utcnow()
             async_task.save()
             return HTTP_200_OK, {'result': async_task}
