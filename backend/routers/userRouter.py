@@ -78,6 +78,7 @@ class UserInfo(BaseModel):
     socialType: str = 'DS2.ai'
     googleIdToken: str = None
     tokenType: str = None
+    invitedBy: int = None
 
 @router.post("/register/")
 def register(userInfo: UserInfo, response: Response):

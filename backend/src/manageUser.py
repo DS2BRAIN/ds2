@@ -159,8 +159,9 @@ class ManageUser:
                 'lang': languageCode,
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
+                'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
-                'credit': 3,
+                'credit': 0,
                 'is_admin': 1
             }
 
@@ -176,8 +177,9 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'lang': languageCode,
                 'usageplan': usagePlan["id"],
+                'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
-                'credit': 3,
+                'credit': 0,
                 'isAiTrainer': userInfo['isAiTrainer']
             }
             if not userInit['confirmed']:
