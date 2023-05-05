@@ -395,6 +395,7 @@ class ManageUser:
             if user:
                 userInfo['user'] = user.__dict__['__data__']
             else:
+                user = auth.get_user_by_email(userLoginInfo.identifier)
                 userLoginInfo.password = user.uid + "!"
                 user = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password, raw=True)
                 if user:
@@ -867,6 +868,21 @@ class ManageUser:
         salt = bcrypt.gensalt(10)
         user.password = bcrypt.hashpw(new_password.encode(), salt)
         user.save()
+
+        try:
+            import firebase_admin
+            from firebase_admin import credentials
+            from firebase_admin import auth
+            print("f0")
+            from src.creating.mynS import cred_json
+            cred = credentials.Certificate(cred_json)
+            firebase_admin.initialize_app(cred)
+            print("f")
+        except:
+            print(traceback.format_exc())
+            pass
+        firebase_user = auth.get_user_by_email(user.email)
+        auth.update_user(firebase_user.uid, password=new_password)
 
         code = jwt.encode({'email': email + str(datetime.datetime.utcnow())}, 'aistorealwayswinning',
                            algorithm='HS256')
