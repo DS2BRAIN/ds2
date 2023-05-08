@@ -161,7 +161,7 @@ class ManageUser:
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
-                'credit': 0,
+                'credit': 3,
                 'is_admin': 1
             }
 
@@ -179,7 +179,7 @@ class ManageUser:
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
-                'credit': 0,
+                'credit': 3,
                 'isAiTrainer': userInfo['isAiTrainer']
             }
             if not userInit['confirmed']:
