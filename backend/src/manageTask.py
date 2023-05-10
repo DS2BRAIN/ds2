@@ -117,10 +117,10 @@ class ManageTask:
 
         return asynctasks
 
-    def get_async_task_all(self, provider, status=None):
+    def get_async_task_all(self, provider, status=None, task_type=None):
         asynctasks = []
 
-        for asynctask_raw in self.dbClass.getCurrentAsnycTasks(provider, status):
+        for asynctask_raw in self.dbClass.getCurrentAsnycTasks(provider, status, task_type):
             async_dict = jsonable_encoder(asynctask_raw.__dict__['__data__'])
             status_text = async_dict.get('statusText')
             if status_text is not None:
@@ -164,7 +164,7 @@ class ManageTask:
 
             await asyncio.sleep(5)
 
-    async def get_async_tasks_all(self, token, provider, request, status=None):
+    async def get_async_tasks_all(self, token, provider, request, status=None, task_type=None):
 
         user = self.dbClass.getUser(token)
         if user is None:
@@ -177,7 +177,7 @@ class ManageTask:
                                             appError=True, userInfo=user)
             raise ex.NotAllowedTokenEx()
 
-        asynctasks = self.get_async_task_all(provider, status)
+        asynctasks = self.get_async_task_all(provider, status, task_type)
 
         yield {
             "event": "new_message",
@@ -190,7 +190,7 @@ class ManageTask:
             if await request.is_disconnected():
                 break
 
-            asynctasks = self.get_async_task_all(provider, status)
+            asynctasks = self.get_async_task_all(provider, status, task_type)
 
             yield {
                 "event": "new_message",

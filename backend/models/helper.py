@@ -804,7 +804,7 @@ class Helper():
 
 
     @wrapper
-    def getCurrentAsnycTasks(self, provider='DS2.ai', status=None):
+    def getCurrentAsnycTasks(self, provider='DS2.ai', status=None, task_type=None):
 
         where_query = None
         if provider == 'DS2.ai':
@@ -813,7 +813,14 @@ class Helper():
             where_query = asynctasksTable.provider == provider
 
         if status is not None:
-            where_query = where_query & (asynctasksTable.status == status)
+            if status == 101:
+                where_query = where_query & (asynctasksTable.status.not_in([1,99,100]))
+            else:
+                where_query = where_query & (asynctasksTable.status == status)
+
+        if task_type:
+            where_query = where_query & (asynctasksTable.taskType == task_type)
+
 
         return asynctasksTable.select().where(where_query).order_by(asynctasksTable.id.desc()).limit(100).execute()
 
@@ -824,7 +831,7 @@ class Helper():
         if provider == 'DS2.ai':
             where_query = where_query & (asynctasksTable.provider == None)
         elif provider != 'DS2.ai':
-            where_query = asynctasksTable.provider == provider
+            where_query = where_query & (asynctasksTable.provider == provider)
 
         if status is not None:
             where_query = where_query & (asynctasksTable.status == status)
