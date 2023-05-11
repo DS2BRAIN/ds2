@@ -822,7 +822,7 @@ class Helper():
             where_query = where_query & (asynctasksTable.taskType == task_type)
 
 
-        return asynctasksTable.select().where(where_query).order_by(asynctasksTable.id.desc()).limit(100).execute()
+        return asynctasksTable.select().where(where_query).limit(100).execute()
 
     @wrapper
     def getCurrentAsnycTasksByUserId(self, userId, provider='DS2.ai', status=None):
