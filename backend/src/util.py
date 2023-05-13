@@ -23,7 +23,7 @@ from dateutil.relativedelta import relativedelta
 from subprocess import call
 
 if os.path.exists('./src/creating/aistore_config.py'):
-    from src.training.aistore_config import aistore_configs
+    from src.creating.aistore_config import aistore_configs
 else:
     aistore_configs = {
         "slackChannelURL": None,
