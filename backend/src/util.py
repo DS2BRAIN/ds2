@@ -22,7 +22,7 @@ from src.errors import exceptions as ex
 from dateutil.relativedelta import relativedelta
 from subprocess import call
 
-if os.path.exists('./src/training/aistore_config.py'):
+if os.path.exists('./src/creating/aistore_config.py'):
     from src.training.aistore_config import aistore_configs
 else:
     aistore_configs = {
