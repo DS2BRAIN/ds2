@@ -12,8 +12,8 @@ import requests
 from src.util import Util
 
 import os
-if os.path.exists('./src/training/aistore_config.py'):
-    from src.training.aistore_config import aistore_configs
+if os.path.exists('./src/creating/aistore_config.py'):
+    from src.creating.aistore_config import aistore_configs
 else:
     aistore_configs = {}
 from playhouse.pool import PooledMySQLDatabase
