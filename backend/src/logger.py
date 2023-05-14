@@ -90,7 +90,7 @@ async def api_logger(request: Request, response=None, error=None, body_param=Non
         body_data=str(body_param)
     )
     code = log_dict['statusCode']
-    mongodbClass.create_document(mongodbClass.SERVER_LOG_COLLECTION_NAME, log_dict)
+    # mongodbClass.create_document(mongodbClass.SERVER_LOG_COLLECTION_NAME, log_dict)
     if error and error.status_code >= 400 or code >= 400:
         if log_dict["errorDetail"] and log_dict["errorDetail"].get("raised"):
             data = f'| EndPoint : {log_dict["url"]} ({log_dict["method"]}) - Result : {log_dict["statusCode"]}, {log_dict["errorDetail"]["raised"]} |\n | errorFunc : {log_dict["errorDetail"]["errorFunc"]}, location : {log_dict["errorDetail"]["location"]} |\n| client : {log_dict["client"]}, ProcessedTime : {log_dict["processedTime"]}, DateTime : {log_dict["datetimeKST"]} |'
