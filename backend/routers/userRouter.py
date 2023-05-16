@@ -173,13 +173,14 @@ def forgotPassword(reset_info: ResetInfo, response: Response):
 class ResetPasswordInfo(BaseModel):
     token: str
     user_id: int = None
+    password_current: str
     password: str
     password_confirm: str
 
 @router.post("/reset-password/")
 def post_reset_password(reset_password_info: ResetPasswordInfo, response: Response):
 
-    response.status_code, result = manageUserClass.reset_password_by_admin(reset_password_info.token, reset_password_info.user_id, reset_password_info.password, reset_password_info.password_confirm)
+    response.status_code, result = manageUserClass.reset_password_by_admin(reset_password_info.token, reset_password_info.user_id, reset_password_info.password_current, reset_password_info.password, reset_password_info.password_confirm)
 
     return result
 

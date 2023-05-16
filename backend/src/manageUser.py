@@ -162,7 +162,7 @@ class ManageUser:
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
                 'credit': 3,
-                'is_admin': 1
+                # 'is_admin': 1
             }
 
         else:
@@ -920,7 +920,7 @@ class ManageUser:
 
         return HTTP_200_OK, result
 
-    def reset_password_by_admin(self, token, user_id, password, password_confirm):
+    def reset_password_by_admin(self, token, user_id, current_password, password, password_confirm):
 
         admin_user = self.dbClass.getUser(token)
 
@@ -929,9 +929,6 @@ class ManageUser:
                 f"파일 : manageUser.py \n함수 : resetPassword \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
                 appError=True, userInfo=admin_user)
             return NOT_FOUND_USER_ERROR
-
-        if not admin_user.get('is_admin'):
-            raise ex.NotFoundAdminEx()
 
         user = self.dbClass.get_user_by_id(user_id)
 
@@ -943,6 +940,46 @@ class ManageUser:
 
         if len(re.findall("[a-z]", password)) == 0 or len(re.findall("[0-9]", password)) == 0 or len(re.findall("[!@#$%^&+=]", password)) == 0:
             return WRONG_PASSWORD_ERROR
+
+        try:
+            import firebase_admin
+            from firebase_admin import credentials
+            from firebase_admin import auth
+            print("f0")
+            from src.creating.mynS import cred_json
+            cred = credentials.Certificate(cred_json)
+            firebase_admin.initialize_app(cred)
+            print("f")
+        except:
+            print(traceback.format_exc())
+            pass
+
+        try:
+            firebase_user = auth.get_user_by_email(admin_user['email'])
+
+            url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={self.utilClass.firebase_web_api_key}"
+
+            headers = {
+                'content-type': "application/json",
+                'cache-control': "no-cache",
+            }
+
+            data = {"email":f"{admin_user['email']}","password": current_password,"returnSecureToken":True}
+            req = requests.post(url, data=json.dumps(data), headers=headers)
+            result = req.json()
+
+            url = f"https://identitytoolkit.googleapis.com/v1/accounts:update?key={self.utilClass.firebase_web_api_key}"
+
+            headers = {
+                'content-type': "application/json",
+                'cache-control': "no-cache",
+            }
+
+            data = {"idToken":f"{result['idToken']}","password": password,"returnSecureToken":True}
+            req = requests.post(url, data=json.dumps(data), headers=headers)
+        except:
+            print(traceback.format_exc())
+            pass
 
         salt = bcrypt.gensalt(10)
         password = bcrypt.hashpw(password.encode(), salt)
@@ -967,6 +1004,8 @@ class ManageUser:
 
         if len(re.findall("[a-z]", password)) == 0 or len(re.findall("[0-9]", password)) == 0 or len(re.findall("[!@#$%^&+=]", password)) == 0:
             return WRONG_PASSWORD_ERROR
+
+
 
         user = self.dbClass.getUserByForgetEmailToken(token)
         if not user:

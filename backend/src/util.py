@@ -207,6 +207,7 @@ class Util():
         self.slackChannelURL = aistore_configs.get('slackChannelURL', '')
         self.access_key = aistore_configs.get('access_key', '')
         self.secret_key = aistore_configs.get('secret_key', '')
+        self.firebase_web_api_key = aistore_configs.get('firebase_web_api_key', '')
         self.privacy = util_configs.get('privacy', {})
         self.passwd_dict = util_configs.get('passwd_dict', {})
         self.dot_encode_key = util_configs.get('dot_encode_key', '')
