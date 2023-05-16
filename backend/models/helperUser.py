@@ -40,7 +40,10 @@ class HelperUser():
 
     @wrapper
     def getOneUsageplanByPlanName(self, planName):
-        return usageplansTable.get_or_none(usageplansTable.planName == planName).__dict__['__data__']
+        result = usageplansTable.get_or_none(usageplansTable.planName == planName)
+        if result:
+            return result.__dict__['__data__']
+        return {"id": None}
 
     @wrapper
     def getUsageplans(self):
