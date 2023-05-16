@@ -167,23 +167,39 @@ class ManageUser:
 
         else:
             userInit = {
-                "confirmed": userInfo['confirmed'],
-                "username": userInfo.get("username"),
+                "confirmed": True,
                 "emailTokenCode": uuid.uuid4().hex,
+                "username": userInfo.get("username"),
                 "appTokenCode": uuid.uuid4().hex,
                 "token": token,
                 "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
                 'isFirstplanDone': True,
-                'isDeleteRequested': 0,
                 'lang': languageCode,
+                'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
                 'credit': 3,
-                'isAiTrainer': userInfo['isAiTrainer']
+                # 'is_admin': 1
             }
-            if not userInit['confirmed']:
-                userInit['confirmed'] = userInfo['isTest']
+            # userInit = {
+            #     "confirmed": userInfo['confirmed'],
+            #     "username": userInfo.get("username"),
+            #     "emailTokenCode": uuid.uuid4().hex,
+            #     "appTokenCode": uuid.uuid4().hex,
+            #     "token": token,
+            #     "appTokenCodeUpdatedAt": datetime.datetime.utcnow(),
+            #     'isFirstplanDone': True,
+            #     'isDeleteRequested': 0,
+            #     'lang': languageCode,
+            #     'usageplan': usagePlan["id"],
+            #     'invitedCode': userInfo["invitedBy"],
+            #     'dynos': 1,
+            #     'credit': 3,
+            #     'isAiTrainer': userInfo['isAiTrainer']
+            # }
+            # if not userInit['confirmed']:
+            #     userInit['confirmed'] = userInfo['isTest']
 
         try:
             userInfoRaw = self.dbClass.createUser(userInfo)
