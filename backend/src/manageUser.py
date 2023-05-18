@@ -847,7 +847,7 @@ class ManageUser:
 
             user['notifications'] = notifications
             user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
-            user['charge_histories'] = [x.__dict__['__data__'] for x in self.dbClass.get_charge_histories_by_user_id(user['id'])]
+            user['favorite_songs'] = [x.__dict__['__data__'] for x in self.dbClass.getFavoritesSongs(user['id'])[0]]
 
             user['has_voice_models'] = 1 if self.dbClass.getOneArtistVoiceByUserId(user['id']) else 0
 
