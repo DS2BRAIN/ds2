@@ -814,7 +814,7 @@ class Helper():
 
         if status is not None:
             if status == 101:
-                where_query = where_query & (asynctasksTable.status.not_in([1,99,100]))
+                where_query = where_query & (asynctasksTable.status.not_in([-1, 1,99,100]))
             else:
                 where_query = where_query & (asynctasksTable.status == status)
 
