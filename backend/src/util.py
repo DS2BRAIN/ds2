@@ -442,6 +442,20 @@ class Util():
         self.ce = self.getBotoClient('ce', region_name=None)
         self.usd_to_krw_rate = 1200
 
+    def getIp(self):
+        print("enterprise entered")
+        public_ip_address = "0.0.0.0"
+
+        try:
+            public_ip_address = requests.get('https://checkip.amazonaws.com', timeout=2).text.strip()
+            print("public_ip_address2")
+            print(public_ip_address)
+            if aistore_configs.get("public_ip_address") == public_ip_address:
+                print("public_ip_address2")
+        except:
+            print(traceback.format_exc())
+            pass
+        return public_ip_address
     def get_metabase_client(self):
         return MetabaseAPI(self.metabase_url, self.metabase_admin_email, self.metabase_admin_password)
 
