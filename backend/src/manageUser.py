@@ -161,7 +161,7 @@ class ManageUser:
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
-                'credit': 3,
+                'credit': 10,
                 # 'is_admin': 1
             }
 
@@ -179,7 +179,7 @@ class ManageUser:
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
-                'credit': 3,
+                'credit': 10,
                 # 'is_admin': 1
             }
             # userInit = {
@@ -211,7 +211,7 @@ class ManageUser:
 
         self.dbClass.createCreditHistory({
             "user": userInfo['id'],
-            "credit": 3,
+            "credit": 10,
             "credit_type": "register"
         })
 
