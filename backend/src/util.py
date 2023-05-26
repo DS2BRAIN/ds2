@@ -240,9 +240,6 @@ class Util():
                 self.configOption = 'prod'
                 break
         for argv in sys.argv:
-            if 'error' in argv:
-                self.configOption = 'enterprise'
-                break
             if 'enterprise' in argv:
                 self.configOption = 'enterprise'
                 break
