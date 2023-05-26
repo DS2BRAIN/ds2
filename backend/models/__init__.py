@@ -1124,6 +1124,7 @@ class notificationTable(MySQLModel):
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
     title = pw.CharField(null=True)
     body = pw.CharField(null=True)
+    imgUrl = pw.CharField(null=True)
     title_ko = pw.CharField(null=True)
     body_ko = pw.CharField(null=True)
 
