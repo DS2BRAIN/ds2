@@ -231,13 +231,13 @@ class ManageUser:
         if not userInfo['socialID'] and self.utilClass.configOption != 'enterprise':
         # if not userInfo['socialID']:
             self.utilClass.sendRegistrationEmail(userInfo, 'en')
-        try:
-            self.register_metabase_user(userInfo, raw_password)
-            self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
-                                            appLog=True, is_agreed_behavior_statistics=True)
-        except Exception as e:
-            print(e.args[0].text)
-            self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
+        # try:
+        #     self.register_metabase_user(userInfo, raw_password)
+        #     self.utilClass.sendSlackMessage(f"회원 가입하였습니다. {userInfo['email']} (ID: {userInfo['id']})",
+        #                                     appLog=True, is_agreed_behavior_statistics=True)
+        # except Exception as e:
+        #     print(e.args[0].text)
+        #     self.utilClass.sendSlackMessage(f"회원가입 중 메타베이스 계정 생성에 실패했습니다. {userInfo['email']} (ID: {userInfo['id']})", appLog=True)
 
         return HTTP_201_CREATED, userInfo
 
@@ -469,7 +469,7 @@ class ManageUser:
             elif self.utilClass.configOption == 'enterprise' or userInfo['user']['confirmed']:
                 user.number_of_login_attempts = 0
                 user.save()
-                self.utilClass.sendSlackMessage(f"로그인하였습니다. {userInfo['user']['email']} (ID: {userInfo['user']['id']})", appLog=True)
+                # self.utilClass.sendSlackMessage(f"로그인하였습니다. {userInfo['user']['email']} (ID: {userInfo['user']['id']})", appLog=True)
                 appTokenCode = userInfo['user']['appTokenCode']
                 isAgreedWithPolicy = userInfo['user']['isAgreedWithPolicy']
                 if isAgreedWithPolicy == 1:
@@ -692,9 +692,9 @@ class ManageUser:
                 pass
 
         userChangableInfo = {k: v for k, v in userChangableInfo.items() if v is not None}
-        self.utilClass.sendSlackMessage(
-            f"유저 정보가 변경되었습니다. {user['email']} (ID: {user['id']}) , {json.dumps(userChangableInfo,indent=4, ensure_ascii=False, default=str)}",
-            appLog=True, userInfo=user)
+        # self.utilClass.sendSlackMessage(
+        #     f"유저 정보가 변경되었습니다. {user['email']} (ID: {user['id']}) , {json.dumps(userChangableInfo,indent=4, ensure_ascii=False, default=str)}",
+        #     appLog=True, userInfo=user)
 
         if userChangableInfo:
             self.dbClass.updateUser(user.get('id'), userChangableInfo)
@@ -726,9 +726,9 @@ class ManageUser:
         userChangableInfo = {k: v for k, v in userChangableInfo.items() if v is not None}
 
 
-        self.utilClass.sendSlackMessage(
-            f"유저 정보가 변경되었습니다. {user['email']} (ID: {user['id']}) , {json.dumps(userChangableInfo,indent=4, ensure_ascii=False, default=str)}",
-            appLog=True, userInfo=user)
+        # self.utilClass.sendSlackMessage(
+        #     f"유저 정보가 변경되었습니다. {user['email']} (ID: {user['id']}) , {json.dumps(userChangableInfo,indent=4, ensure_ascii=False, default=str)}",
+        #     appLog=True, userInfo=user)
 
         if userChangableInfo:
             self.dbClass.updateUser(user.get('id'), userChangableInfo)
