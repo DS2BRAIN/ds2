@@ -804,11 +804,11 @@ class ManageUser:
             user = self.dbClass.getUser(token)
 
             user["billings"] = []
-            try:
-                user['hasFirstTrialTeam'] = self.dbClass.getFirstTrialTeamByUserId(user['id'])
-                user['user_properties'] = self.dbClass.getUserPropertiesByUserId(user['id'])
-            except:
-                pass
+            # try:
+            #     user['hasFirstTrialTeam'] = self.dbClass.getFirstTrialTeamByUserId(user['id'])
+            #     user['user_properties'] = self.dbClass.getUserPropertiesByUserId(user['id'])
+            # except:
+            #     pass
 
             try:
                 user["usageplan"] = self.dbClass.getOneUsageplanById(user["usageplan"])
