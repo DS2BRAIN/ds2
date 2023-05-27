@@ -182,62 +182,61 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup_event():
-
-
-    try:
-        if os.path.exists("/home/ubuntu/aimaker-backend-deploy"):
-            instanceId = requests.get("http://169.254.169.254/latest/meta-data/instance-id", timeout=1).text
-            r = requests.get("http://169.254.169.254/latest/dynamic/instance-identity/document")
-            response_json = r.json()
-            region_name = response_json.get('region')
-            opsId = None
-            grouptype = ""
-            ec2 = utilClass.getBotoClient('ec2', region_name=region_name)
-            allInstances = ec2.describe_instances()
-            for instanceRaw in allInstances.get("Reservations", []):
-                instances = instanceRaw.get("Instances", [{}])
-                for instance in instances:
-                    if instanceId == instance.get("InstanceId", None):
-                        notifyData = {"execute_from": "backend", "instanceId": instance['InstanceId'],
-                                      "action": "create_backend_main", "region": region_name}
-                        tags = instance.get("Tags", [])
-                        for tag in tags:
-                            if tag.get("Key") == "opsId":
-                                opsId = tag.get("Value")
-                                model = dbClass.getOneLastestOpsModelByOpsProjectId(opsId)
-                                s3Url = model.filePath
-                                print("opsId Matched")
-                                print(os.getcwd())
-                                print(s3Url)
-                                print("/".join(s3Url.split("/")[3:]))
-                                localFilePath = f"{utilClass.save_path}/" + s3Url.split("/")[-1]
-                                if not os.path.isfile(localFilePath):
-                                    utilClass.getBotoClient('s3').download_file(utilClass.bucket_name, "/".join(s3Url.split("/")[3:]), localFilePath)
-                                notifyData["ops_project"] = opsId
-
-                            if tag.get("Key") == "grouptype":
-                                grouptype = tag.get("Value")
-
-                        dbClass.createInstanceLog(notifyData)
-                        # utilClass.sendSlackMessage(
-                        #     f"{region_name} {instanceId} : 백엔드 서버를 시작합니다. {opsId}",
-                        #     server_status=True)
-
-            print("grouptype")
-            print(grouptype)
-            if opsId is None and "cpu" not in grouptype and "gpu" not in grouptype:
-                sys.exit()
-
-            # if not opsId:
-            #     for getQuickAiModel in dbClass.getQuickAiModels():
-            #         if getQuickAiModel.status == 100:
-            #             localFilePath = f"{self.utilClass.save_path}/" + getQuickAiModel.filePath.split("/")[-1]
-            #             if not os.path.isfile(localFilePath):
-            #                 s3 = utilClass.getBotoClient('s3')
-            #                 s3.download_file(utilClass.bucket_name, "/".join(getQuickAiModel.filePath.split("/")[3:]),
-            #                                  localFilePath)
-    except:
-        pass
+    print("startup")
+    # try:
+    #     if os.path.exists("/home/ubuntu/aimaker-backend-deploy"):
+    #         instanceId = requests.get("http://169.254.169.254/latest/meta-data/instance-id", timeout=1).text
+    #         r = requests.get("http://169.254.169.254/latest/dynamic/instance-identity/document")
+    #         response_json = r.json()
+    #         region_name = response_json.get('region')
+    #         opsId = None
+    #         grouptype = ""
+    #         ec2 = utilClass.getBotoClient('ec2', region_name=region_name)
+    #         allInstances = ec2.describe_instances()
+    #         for instanceRaw in allInstances.get("Reservations", []):
+    #             instances = instanceRaw.get("Instances", [{}])
+    #             for instance in instances:
+    #                 if instanceId == instance.get("InstanceId", None):
+    #                     notifyData = {"execute_from": "backend", "instanceId": instance['InstanceId'],
+    #                                   "action": "create_backend_main", "region": region_name}
+    #                     tags = instance.get("Tags", [])
+    #                     for tag in tags:
+    #                         if tag.get("Key") == "opsId":
+    #                             opsId = tag.get("Value")
+    #                             model = dbClass.getOneLastestOpsModelByOpsProjectId(opsId)
+    #                             s3Url = model.filePath
+    #                             print("opsId Matched")
+    #                             print(os.getcwd())
+    #                             print(s3Url)
+    #                             print("/".join(s3Url.split("/")[3:]))
+    #                             localFilePath = f"{utilClass.save_path}/" + s3Url.split("/")[-1]
+    #                             if not os.path.isfile(localFilePath):
+    #                                 utilClass.getBotoClient('s3').download_file(utilClass.bucket_name, "/".join(s3Url.split("/")[3:]), localFilePath)
+    #                             notifyData["ops_project"] = opsId
+    #
+    #                         if tag.get("Key") == "grouptype":
+    #                             grouptype = tag.get("Value")
+    #
+    #                     dbClass.createInstanceLog(notifyData)
+    #                     # utilClass.sendSlackMessage(
+    #                     #     f"{region_name} {instanceId} : 백엔드 서버를 시작합니다. {opsId}",
+    #                     #     server_status=True)
+    #
+    #         print("grouptype")
+    #         print(grouptype)
+    #         if opsId is None and "cpu" not in grouptype and "gpu" not in grouptype:
+    #             sys.exit()
+    #
+    #         # if not opsId:
+    #         #     for getQuickAiModel in dbClass.getQuickAiModels():
+    #         #         if getQuickAiModel.status == 100:
+    #         #             localFilePath = f"{self.utilClass.save_path}/" + getQuickAiModel.filePath.split("/")[-1]
+    #         #             if not os.path.isfile(localFilePath):
+    #         #                 s3 = utilClass.getBotoClient('s3')
+    #         #                 s3.download_file(utilClass.bucket_name, "/".join(getQuickAiModel.filePath.split("/")[3:]),
+    #         #                                  localFilePath)
+    # except:
+    #     pass
 
 @app.on_event("shutdown")
 def shutdown_event():
