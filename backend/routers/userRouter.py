@@ -225,6 +225,7 @@ class UserChangableInfo(BaseModel):
     intro3Checked: bool = None
     intro4Checked: bool = None
     isUsingDiscoveryByManual: bool = None
+    fcmToken: str = None
 
 @router.put("/user/")
 def putUser(token: str, userChangableInfo: UserChangableInfo, response: Response):
