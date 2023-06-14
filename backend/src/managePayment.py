@@ -381,6 +381,7 @@ class ManagePayment:
             param_dict['cur'] = "KRW"
             param_dict['amt'] = "1000"
             param_dict['lang'] = "KR"
+            param_dict['issuercountry'] = "KR"
             param_dict['mid'] = self.exim_mid_ko
             exim_key = self.exim_key_ko
 
@@ -656,6 +657,7 @@ class ManagePayment:
             param_dict['cur'] = "KRW"
             param_dict['amt'] = "1000"
             param_dict['lang'] = "KR"
+            param_dict['issuercountry'] = "KR"
             param_dict['mid'] = self.exim_mid_ko
             exim_key = self.exim_key_ko
 
@@ -746,6 +748,7 @@ class ManagePayment:
             param_dict['cur'] = "KRW"
             param_dict['amt'] = "1000"
             param_dict['lang'] = "KR"
+            param_dict['issuercountry'] = "KR"
             param_dict['mid'] = self.exim_mid_ko
             exim_key = self.exim_key_ko
 
