@@ -64,6 +64,7 @@ class ManagePayment:
         self.exim_basic_url = self.utilClass.eximbay_basic_url
         self.exim_direct_url = self.utilClass.eximbay_direct_url
         self.exim_mid = self.utilClass.eximbay_mid
+        self.exim_mid_ko = self.utilClass.eximbay_mid_ko
         self.back_url = self.utilClass.backendURL
         self.front_url = self.utilClass.frontendURL
         # self.back_url = 'http://10.177.195.167:2052'
@@ -607,7 +608,7 @@ class ManagePayment:
                 appError=True, userInfo=user)
             return NOT_FOUND_PGREGISTER_ERROR
 
-    def eximbay_registration_start(self, token):
+    def eximbay_registration_start(self, token, lang):
 
         user = self.dbClass.getUser(token)
         if not user:
@@ -640,6 +641,10 @@ class ManagePayment:
             # 'returnurl': f'{self.back_url}/eximbay-registration-end/?token={token}',
             'statusurl': f'{self.back_url}/eximbay-registration-end/?token={token}'
         }
+
+        if lang == "ko":
+            param_dict['ucr'] = "KRW"
+            param_dict['mid'] = self.exim_mid_ko
         param_dict_list = sorted(param_dict.items())
         params = ""
         for key, value in param_dict_list:

@@ -372,6 +372,8 @@ class Util():
         self.paypleHeaders = {'referer': "https://console.ds2.ai"}
         self.eximbay_secret_key = aistore_configs.get('eximbay_secret_key')
         self.eximbay_mid = aistore_configs.get('eximbay_mid')
+        self.eximbay_secret_key_ko = aistore_configs.get('eximbay_secret_key_ko', '')
+        self.eximbay_mid_ko = aistore_configs.get('eximbay_mid_ko', '')
         self.enterprise_key = "enterprise_key_dev"
         self.metabase_port = "13009"
         self.metabase_url = f'http://0.0.0.0:{self.metabase_port}'
@@ -413,6 +415,8 @@ class Util():
             self.stripe_api_key = aistore_configs.get('stripe_api_key', '')
             self.eximbay_secret_key = aistore_configs.get('eximbay_secret_key', '')
             self.eximbay_mid = aistore_configs.get('eximbay_mid', '')
+            self.eximbay_secret_key_ko = aistore_configs.get('eximbay_secret_key_ko', '')
+            self.eximbay_mid_ko = aistore_configs.get('eximbay_mid_ko', '')
             self.paypal_client_id = aistore_configs.get('paypal_client_id', '')
             self.paypal_client_secret = aistore_configs.get('paypal_client_secret', '')
             self.tradier_client_id = aistore_configs.get('tradier_client_id', '')

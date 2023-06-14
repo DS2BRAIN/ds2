@@ -182,9 +182,9 @@ def eximbay_registration_billing(response: Response, token: str, price: int = Fo
     return result
 
 @router.post("/eximbay-registration-start/")
-def eximbay_registration_start(response: Response, token: str):
+def eximbay_registration_start(response: Response, token: str, lang: str):
 
-    response.status_code, result = managePayment.eximbay_registration_start(token)
+    response.status_code, result = managePayment.eximbay_registration_start(token, lang)
 
     return result
 
