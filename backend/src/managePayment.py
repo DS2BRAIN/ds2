@@ -61,6 +61,7 @@ class ManagePayment:
         self.stripe = stripe
         self.stripe.api_key = self.utilClass.stripe_api_key
         self.exim_key = self.utilClass.eximbay_secret_key
+        self.exim_key_ko = self.utilClass.eximbay_secret_key_ko
         self.exim_basic_url = self.utilClass.eximbay_basic_url
         self.exim_direct_url = self.utilClass.eximbay_direct_url
         self.exim_mid = self.utilClass.eximbay_mid
@@ -350,6 +351,7 @@ class ManagePayment:
             raise ex.NotValideAmountEx()
 
         email_splt = user_email.split('@')[0]
+        exim_key = self.exim_key
 
         timestamp = time.strftime('%y%m%d%H%M%S')
         ref = f'{email_splt}_{timestamp}'
@@ -374,11 +376,18 @@ class ManagePayment:
             'returnurl': return_url,
             'statusurl': f'{self.back_url}/webhook/eximbay/license/'
         }
+
+        if eximbay_data.lang == "ko":
+            param_dict['cur'] = "KRW"
+            param_dict['lang'] = "KR"
+            param_dict['mid'] = self.exim_mid_ko
+            exim_key = self.exim_key_ko
+
         param_dict_list = sorted(param_dict.items())
         params = ""
         for key, value in param_dict_list:
             params = f'{params}{key}={value}&'
-        fgkey = f'{self.exim_key}?{params[:-1]}'
+        fgkey = f'{exim_key}?{params[:-1]}'
         fgkey_encypted = hashlib.sha256(fgkey.encode())
         param_dict['fgkey'] = fgkey_encypted.hexdigest()
 
@@ -619,7 +628,7 @@ class ManagePayment:
 
         timestamp = time.strftime('%y%m%d%H%M%S')
         ref = f'{user["id"]}_{timestamp}'
-
+        exim_key = self.exim_key
         param_dict = {
             'ver': '230',
             'txntype': 'PAYMENT',
@@ -646,11 +655,13 @@ class ManagePayment:
             param_dict['cur'] = "KRW"
             param_dict['lang'] = "KR"
             param_dict['mid'] = self.exim_mid_ko
+            exim_key = self.exim_key_ko
+
         param_dict_list = sorted(param_dict.items())
         params = ""
         for key, value in param_dict_list:
             params = f'{params}{key}={value}&'
-        fgkey = f'{self.exim_key}?{params[:-1]}'
+        fgkey = f'{exim_key}?{params[:-1]}'
         fgkey_encypted = hashlib.sha256(fgkey.encode())
         param_dict['fgkey'] = fgkey_encypted.hexdigest()
 
@@ -671,7 +682,7 @@ class ManagePayment:
 
         if rescode == "0000":
             info = {
-                'mid': self.exim_mid,
+                'mid': self.exim_mid if user['lang'] != "ko" else self.exim_mid_ko,
                 'ref': ref,
                 'trans_id': trans_id
                     }
@@ -728,11 +739,19 @@ class ManagePayment:
             'reason': 'registraion',
             'lang': 'EN',
         }
+        exim_key = self.exim_key
+        if user['lang'] == "ko":
+            param_dict['cur'] = "KRW"
+            param_dict['lang'] = "KR"
+            param_dict['mid'] = self.exim_mid_ko
+            exim_key = self.exim_key_ko
+
         param_dict_list = sorted(param_dict.items())
         params = ""
         for key, value in param_dict_list:
             params = f'{params}{key}={value}&'
-        fgkey = f'{self.exim_key}?{params[:-1]}'
+
+        fgkey = f'{exim_key}?{params[:-1]}'
         fgkey_encypted = hashlib.sha256(fgkey.encode())
         param_dict['fgkey'] = fgkey_encypted.hexdigest()
 

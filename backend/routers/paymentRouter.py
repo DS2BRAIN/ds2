@@ -114,6 +114,7 @@ class EximbayLicenseData(BaseModel):
     user_email: str           # 사용자 이메일
     amount: str               # 결제 금액
     return_url: str           # 결제 후 redirect url
+    lang: str = "en"          # 결제 후 redirect url
 
 @router.post("/license/eximbay/")
 def purchase_license_by_eximbay(response: Response, eximbay_data: EximbayLicenseData):
