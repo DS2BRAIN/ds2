@@ -643,7 +643,8 @@ class ManagePayment:
         }
 
         if lang == "ko":
-            param_dict['ucr'] = "KRW"
+            param_dict['cur'] = "KRW"
+            param_dict['lang'] = "KR"
             param_dict['mid'] = self.exim_mid_ko
         param_dict_list = sorted(param_dict.items())
         params = ""
