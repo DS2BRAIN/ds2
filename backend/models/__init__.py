@@ -1250,7 +1250,7 @@ class usersTable(MySQLModel):
     inferenceCountDI = pw.IntegerField(default=0, null=True)
     inferenceCountOCR = pw.IntegerField(default=0, null=True)
     salesManager = pw.CharField(null=True)
-    deposit = pw.DoubleField(default=10, null=True)
+    deposit = pw.DoubleField(default=0, null=True)
     usedPrice = pw.DoubleField(default=0, null=True)
     serverUsedPrice = pw.DoubleField(default=0, null=True)
     paymentDay = pw.IntegerField(default=5, null=True)
@@ -1300,6 +1300,10 @@ class usersTable(MySQLModel):
     last_paid_posted_at = pw.DateTimeField(null=True)
     last_email_sent_at = pw.DateTimeField(null=True)
     notification_read_until = pw.IntegerField(default=0, null=True)
+    is_business_account = pw.BooleanField(null=True)
+    is_invited_business_account = pw.BooleanField(null=True)
+    is_agreed_to_business_account = pw.BooleanField(null=True)
+    is_agreed_to_business_account = pw.BooleanField(null=True)
 
 class userhistoriesTable(MySQLModel):
     class Meta:
