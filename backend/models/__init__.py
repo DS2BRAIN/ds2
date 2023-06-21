@@ -1296,7 +1296,7 @@ class usersTable(MySQLModel):
     isAgreedBehaviorStatistics = pw.BooleanField(null=True)
     number_of_login_attempts = pw.IntegerField(null=0)
     credit = pw.FloatField(null=True)
-    custom_model_credit = pw.FloatField(default=0)
+    custom_model_credit = pw.IntegerField(default=0)
     last_posted_at = pw.DateTimeField(null=True)
     last_paid_posted_at = pw.DateTimeField(null=True)
     last_email_sent_at = pw.DateTimeField(null=True)
