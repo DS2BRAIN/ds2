@@ -389,6 +389,7 @@ class ManageUser:
 
         userInfo = {}
         user = None
+        uid = None
 
         try:
             import firebase_admin
@@ -405,6 +406,7 @@ class ManageUser:
         try:
             user = auth.get_user_by_email(userLoginInfo.identifier)
             print("User UID: {}".format(user.uid))
+            uid = user.uid
         except:
             pass
 
@@ -418,6 +420,10 @@ class ManageUser:
                 user = self.dbClass.loginUser(userLoginInfo.identifier, userLoginInfo.password, raw=True)
                 if user:
                     userInfo['user'] = user.__dict__['__data__']
+            if user:
+                if not user.uid:
+                    user.uid = uid
+                    user.save()
 
         elif userLoginInfo.socialType == 'google':
             user_data = self.dbClass.loginUserBySocialId(userLoginInfo.identifier, userLoginInfo.password)
