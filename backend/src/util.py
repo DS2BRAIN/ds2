@@ -358,6 +358,8 @@ class Util():
         self.stripe_api_key = util_configs.get('stripe_api_key', '')
         self.eximbay_basic_url = util_configs.get('eximbay_basic_url', '')
         self.eximbay_direct_url = util_configs.get('eximbay_direct_url', '')
+        self.eximbay_basic_url_test = util_configs.get('eximbay_basic_url_test', '')
+        self.eximbay_direct_url_test = util_configs.get('eximbay_direct_url_test', '')
         self.paypal_client_id = util_configs.get('paypal_client_id', '')
         self.paypal_client_secret = util_configs.get('paypal_client_secret', '')
         self.zoom_ouath_token = util_configs.get('zoom_ouath_token', '')
