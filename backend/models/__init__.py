@@ -1305,6 +1305,7 @@ class usersTable(MySQLModel):
     is_invited_business_account = pw.BooleanField(null=True)
     is_agreed_to_business_account = pw.BooleanField(null=True)
     is_agreed_to_business_account = pw.BooleanField(null=True)
+    uid = pw.CharField(null=True)
 
 class userhistoriesTable(MySQLModel):
     class Meta:
