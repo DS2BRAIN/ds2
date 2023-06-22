@@ -409,6 +409,8 @@ class Util():
             self.zoom_client_id = aistore_configs.get('zoom_client_id', '')
             self.eximbay_basic_url = aistore_configs.get('eximbay_basic_url', '')
             self.eximbay_direct_url = aistore_configs.get('eximbay_direct_url', '')
+            self.eximbay_basic_url_test = aistore_configs.get('eximbay_basic_url_test', '')
+            self.eximbay_direct_url_test = aistore_configs.get('eximbay_direct_url_test', '')
             self.tradier_url = aistore_configs.get('tradier_url', '')
             self.backendURL = "https://api.ds2.ai"
             self.frontendURL = "https://console.ds2.ai"

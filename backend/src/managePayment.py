@@ -63,7 +63,9 @@ class ManagePayment:
         self.exim_key = self.utilClass.eximbay_secret_key
         self.exim_key_ko = self.utilClass.eximbay_secret_key_ko
         self.exim_basic_url = self.utilClass.eximbay_basic_url
+        self.exim_basic_url_test = self.utilClass.eximbay_basic_url_test
         self.exim_direct_url = self.utilClass.eximbay_direct_url
+        self.exim_direct_url_test = self.utilClass.eximbay_direct_url_test
         self.exim_mid = self.utilClass.eximbay_mid
         self.exim_mid_ko = self.utilClass.eximbay_mid_ko
         self.back_url = self.utilClass.backendURL
@@ -398,6 +400,9 @@ class ManagePayment:
             'url': self.exim_basic_url
         }
 
+        if eximbay_data.lang == "ko":
+            result['url'] = self.exim_basic_url_test
+
         return HTTP_200_OK, result
 
     def send_ds2ai_license(self, user_email, lang, mac):
@@ -673,6 +678,10 @@ class ManagePayment:
             'params': param_dict,
             'url': self.exim_basic_url
                  }
+
+        if lang == "ko":
+            result['url'] = self.exim_basic_url_test
+
         return HTTP_200_OK, result
 
     def eximbay_registration_end(self, token, rescode, resmsg, token_id, cardno1, cardno4, ref, trans_id):
