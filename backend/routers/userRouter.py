@@ -226,6 +226,7 @@ class UserChangableInfo(BaseModel):
     intro4Checked: bool = None
     isUsingDiscoveryByManual: bool = None
     fcmToken: str = None
+    stripeID: str = None
 
 @router.put("/user/")
 def putUser(token: str, userChangableInfo: UserChangableInfo, response: Response):
