@@ -274,6 +274,11 @@ class ManageUser:
     def admin_delete_user(self, token, user_id):
 
         user_raw = self.dbClass.getUser(token, raw=True)
+        if not user_raw:
+            self.utilClass.sendSlackMessage(
+                f"파일 : manageUser.py \n함수 : putArtist \n잘못된 토큰으로 에러 | 입력한 토큰 : {token}",
+                appError=True)
+            return NOT_FOUND_USER_ERROR
         user = model_to_dict(user_raw)
         if not user or not user.get('is_admin'):
             raise ex.NotFoundAdminEx(token)
