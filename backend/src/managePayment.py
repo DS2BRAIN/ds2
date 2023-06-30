@@ -862,6 +862,9 @@ class ManagePayment:
                 "PCD_PAY_CARDNUM": lastRegistrationInfo["PCD_PAY_CARDNUM"],
             }
         except Exception as e:
+            self.utilClass.sendSlackMessageV2(
+                f"카드 결제 실패 : USER ID : {user.id}\n{traceback.format_exc()}",
+                self.utilClass.slackPGRegistrationFail)
             paidInfo['PCD_PAY_RST'] = 'error'
             paidInfo['PCD_PAY_MSG'] = e
 
