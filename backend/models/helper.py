@@ -32,11 +32,24 @@ from models.helperContest import HelperContest
 HelperA = None
 helperS = None
 HelperOS = None
+HelperV = None
+HelperU = None
+HelperM = None
+HelperG = None
+HelperO = None
+HelperE = None
+HelperC = None
 
 if os.path.exists('./src/creating/models/'):
     from src.creating.models.helperS import HelperS
     from src.creating.models.helperOS import HelperOS
     from src.creating.models.helperA import HelperA
+    from src.creating.models.helperV import HelperV
+    from src.creating.models.helperU import HelperU
+    from src.creating.models.helperM import HelperM
+    from src.creating.models.helperG import HelperG
+    from src.creating.models.helperO import HelperO
+    from src.creating.models.helperC import HelperC
 
 class Helper():
 
@@ -894,7 +907,8 @@ for helperClass in [HelperSub, HelperInstance, HelperCreate, HelperCRU, HelperLa
                     HelperModel, HelperPayment, HelperUser, HelperProject, HelperSthreefile, HelperClient,
                     HelperFlow, HelperFlowNode, HelperMonitoringAlert,
                     HelperCommand, HelperCommandCollection, HelperCommandReview, HelperPost, HelperPostBookmark,
-                    HelperPostComment, HelperContest, HelperS, HelperA, HelperOS]:
+                    HelperPostComment, HelperContest, HelperS, HelperA, HelperOS,
+                    HelperV, HelperU, HelperM, HelperG, HelperO, HelperE, HelperC]:
     methodList = [func for func in dir(helperClass) if callable(getattr(helperClass, func)) and '__' not in func]
     for i, methodRaw in enumerate(methodList):
         setattr(Helper, methodRaw, classmethod(getattr(helperClass, methodRaw)))
