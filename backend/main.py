@@ -70,7 +70,7 @@ import orjson
 
 if os.path.exists('./src/creating/routers/'):
     from src.creating.routers import detection3dRouter, msRouter, maRouter, mosRouter, \
-        mcRouter, meRouter, mgRouter, mmRouter, moRouter, muRouter, mvRouter
+        mcRouter, meRouter, mgRouter, mmRouter, moRouter, muRouter, mvRouter, mfRouter
 
 
 class ORJSONResponse(JSONResponse):
@@ -154,6 +154,7 @@ if os.path.exists('./src/creating/routers/'):
     app.include_router(mgRouter.router, tags=["mg detection Router"])
     app.include_router(moRouter.router, tags=["mo detection Router"])
     app.include_router(mcRouter.router, tags=["mc detection Router"])
+    app.include_router(mfRouter.router, tags=["mf detection Router"])
 
 # if utilClass.configOption not in ['dev_local', 'enterprise']:
     # app.add_middleware(HTTPSRedirectMiddleware)
