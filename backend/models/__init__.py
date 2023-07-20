@@ -1303,6 +1303,8 @@ class usersTable(MySQLModel):
     notification_read_until = pw.IntegerField(default=0, null=True)
     is_business_account = pw.BooleanField(null=True)
     is_invited_business_account = pw.BooleanField(null=True)
+    is_pro_plan_account = pw.BooleanField(null=True)
+    is_artist_plan_account = pw.BooleanField(null=True)
     is_agreed_to_business_account = pw.BooleanField(null=True)
     uid = pw.CharField(null=True)
     latlng = pw.CharField(null=True)
