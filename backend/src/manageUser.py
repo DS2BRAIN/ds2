@@ -180,6 +180,7 @@ class ManageUser:
                 'invitedCode': userInfo["invitedBy"],
                 'dynos': 1,
                 'credit': 10,
+                'free_credit': 10,
                 # 'is_admin': 1
             }
             # userInit = {

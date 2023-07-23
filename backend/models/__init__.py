@@ -1309,7 +1309,10 @@ class usersTable(MySQLModel):
     uid = pw.CharField(null=True)
     latlng = pw.CharField(null=True)
     country = pw.CharField(null=True)
-
+    free_credit = pw.FloatField(null=True)
+    paid_credit = pw.FloatField(null=True)
+    reward_free_credit_total = pw.FloatField(null=True)
+    referral_registration_count = pw.IntegerField(default=0)
 class userhistoriesTable(MySQLModel):
     class Meta:
         db_table = 'userhistories'
@@ -2812,6 +2815,8 @@ class creditHistoriesTable(MySQLModel):
     updated_at = pw.DateTimeField(constraints=[pw.SQL('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')], null=True)
     credit_type = pw.TextField(null=True)
     post = pw.IntegerField(null=True)
+    artist = pw.IntegerField(null=True)
+    is_free_credit = pw.BooleanField(null=True)
 
 class reviewHistoriesTable(MySQLModel):
     class Meta:
