@@ -34,6 +34,7 @@ HelperA = None
 helperS = None
 HelperOS = None
 HelperV = None
+HelperP = None
 HelperU = None
 HelperM = None
 HelperG = None
@@ -46,6 +47,7 @@ if os.path.exists('./src/creating/models/'):
     from src.creating.models.helperOS import HelperOS
     from src.creating.models.helperA import HelperA
     from src.creating.models.helperV import HelperV
+    from src.creating.models.helperP import HelperP
     from src.creating.models.helperU import HelperU
     from src.creating.models.helperM import HelperM
     from src.creating.models.helperG import HelperG
@@ -909,7 +911,7 @@ for helperClass in [HelperSub, HelperInstance, HelperCreate, HelperCRU, HelperLa
                     HelperFlow, HelperFlowNode, HelperMonitoringAlert,
                     HelperCommand, HelperCommandCollection, HelperCommandReview, HelperPost, HelperPostBookmark,
                     HelperPostComment, HelperContest, HelperS, HelperA, HelperOS,
-                    HelperV, HelperU, HelperM, HelperG, HelperO, HelperE, HelperC, HelperF]:
+                    HelperV, HelperU, HelperM, HelperG, HelperO, HelperE, HelperC, HelperF, HelperP]:
     methodList = [func for func in dir(helperClass) if callable(getattr(helperClass, func)) and '__' not in func]
     for i, methodRaw in enumerate(methodList):
         setattr(Helper, methodRaw, classmethod(getattr(helperClass, methodRaw)))
