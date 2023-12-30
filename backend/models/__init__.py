@@ -2932,9 +2932,11 @@ class MongoDb():
                     db_name]
             else:
                 if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local' or config_option == "prod":
-                    db_conn_dict[db_name] = MongoClient(
-                        f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[
-                        db_name]
+                    # db_conn_dict[db_name] = MongoClient(
+                    #     f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[
+                    #     db_name]
+                    db_conn_dict[db_name] = MongoClient(host=aistore_configs['prod_mongodb_host'], port=13007, username=aistore_configs['prod_mongodb_user'], password=aistore_configs['prod_mongodb_passwd'])[db_name]
+
                 elif utilClass.configOption == 'enterprise':
                     db_conn_dict[db_name] = \
                         MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13007 if check_open_new_port() else 27017, username="root", password="dslabglobal")[db_name]
