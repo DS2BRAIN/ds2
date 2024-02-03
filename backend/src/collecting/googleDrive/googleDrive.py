@@ -20,7 +20,7 @@ def test():
     from unicodedata import normalize
 
     from google_auth_oauthlib.flow import InstalledAppFlow
-    from googleapiclient.discovery import build
+    # from googleapiclient.discovery import build
     from googleapiclient.http import MediaIoBaseDownload
     from google.auth.transport.requests import Request
 
@@ -46,7 +46,7 @@ def test():
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
-    drive_service = build('drive', 'v3', credentials=creds)
+    # drive_service = build('drive', 'v3', credentials=creds)
 
     file_id = '1w8AQjhujqhMDXhLrz1t4Vtz7M557jiVW'
     file_info = drive_service.files().get(fileId=file_id).execute()

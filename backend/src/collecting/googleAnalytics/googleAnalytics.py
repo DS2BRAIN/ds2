@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 
-from apiclient.discovery import build
+# from apiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 
 from src.collecting.connector import Connector
@@ -24,7 +24,7 @@ class GoogleAnalytics(Connector):
     def get_service(keyFileInfo):
         # googleAnalytics 서비스 가져오기 (v3)
         credentials = ServiceAccountCredentials._from_parsed_json_keyfile(keyFileInfo, SCOPES)
-        return build('analytics', 'v3', credentials=credentials, cache_discovery=False)
+        # return build('analytics', 'v3', credentials=credentials, cache_discovery=False)
 
     def get_profiles(self):
         accounts = self.service.management().accounts().list().execute()
