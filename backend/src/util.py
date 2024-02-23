@@ -766,8 +766,8 @@ class Util():
             userInfo = {}
             pass
 
-        if 'isBetaUser' in userInfo and userInfo['isBetaUser']:
-            return 'Test'
+        # if 'isBetaUser' in userInfo and userInfo['isBetaUser']:
+        #     return 'Test'
 
         try:
             if trainingError or daemonError or appError:

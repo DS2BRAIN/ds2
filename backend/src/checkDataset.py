@@ -272,8 +272,11 @@ class CheckDataset():
                 timestamp = time.strftime('%y%m%d%H%M%S')
                 zip_dir_path = f'{self.utilClass.save_path}/user/{labelproject_raw.user}/{timestamp}{labelproject_raw.id}'
                 for data in ds2data:
-                    s3key = urllib.parse.unquote_plus(data['s3key']) if self.utilClass.configOption == "enterprise" else \
+                    try:
+                        s3key = urllib.parse.unquote_plus(data['s3key']) if self.utilClass.configOption == "enterprise" else \
                             urllib.parse.unquote_plus(data['s3key'].split('amazonaws.com/')[1])
+                    except:
+                        s3key = urllib.parse.unquote_plus(data['s3key'])
                     s3key = urllib.parse.unquote_plus(s3key)
                     class_name = data.get('labelData', 'non_class')
                     dir_name = f'{self.utilClass.save_path}/user/{labelproject_raw.user}/{timestamp}{labelproject_raw.id}/{class_name}'
@@ -314,10 +317,10 @@ class CheckDataset():
 
                 outputFilePath = s3Url
                 status = 100
-                try:
-                    shutil.rmtree(f"{self.utilClass.save_path}/user/{labelproject_raw.user}/{timestamp}{labelproject_raw.name}")
-                except:
-                    pass
+                # try:
+                #     shutil.rmtree(f"{self.utilClass.save_path}/user/{labelproject_raw.user}/{timestamp}{labelproject_raw.name}")
+                # except:
+                #     pass
         except:
             print(traceback.format_exc())
             status = 99

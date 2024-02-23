@@ -2115,10 +2115,10 @@ class ManageFile:
                 appError=True, userInfo=user)
             return NOT_FOUND_USER_ERROR
 
-        if self.dbClass.isUserHavingExceedErrorProjectCount(user.__dict__['__data__']):
-            self.utilClass.sendSlackMessage(f"유저 ID : {user.id} - 오류 프로젝트를 지나치게 많이 생성하고 있으니 조치바랍니다.", inquiry=True,
-                                            userInfo=user)
-            return TOO_MANY_ERROR_PROJECT
+        # if self.dbClass.isUserHavingExceedErrorProjectCount(user.__dict__['__data__']):
+        #     self.utilClass.sendSlackMessage(f"유저 ID : {user.id} - 오류 프로젝트를 지나치게 많이 생성하고 있으니 조치바랍니다.", inquiry=True,
+        #                                     userInfo=user)
+        #     return TOO_MANY_ERROR_PROJECT
 
         # if self.dbClass.isUserHavingExceedProjectCount(user.__dict__['__data__']):
         #     self.utilClass.sendSlackMessage(

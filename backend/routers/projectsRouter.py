@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Form, Request, Depends
 from fastapi.security import APIKeyHeader
 from src.util import Util
@@ -49,44 +49,43 @@ async def readProjectasync(projectId: str, token: str, response: Response):
     response.status_code, result = manageProjectClass.getProjectAsyncById(token, projectId)
     return result
 
-
 class ProjectInfo(BaseModel):
-    projectName: str = None
-    description: str = None
-    valueForPredict: str = None
-    option: str = None
-    csvupload: int = None
-    fileStructure: str = None
-    filePath: str = None
-    status: int = None
-    statusText: str = None
-    originalFileName: str = None
-    trainingMethod: str = None
-    fileSize: int = None
-    joinInfo: dict = None
-    preprocessingInfo: dict = None
-    preprocessingInfoValue: dict = None
-    trainingColumnInfo: dict = None
-    timeSeriesColumnInfo: dict = None
-    valueForPredictColumnId: str = None
-    valueForItemColumnId: int = None
-    valueForUserColumnId: int = None
-    analyticsStandard: str = None
-    startTimeSeriesDatetime: str = None
-    endTimeSeriesDatetime: str = None
-    webhookURL: str = None
-    webhookMethod: str = None
-    isParameterCompressed: bool = None
-    background: str = None
-    resultJson: str = None
-    priority_flag: bool = None
-    instanceType: str = None
-    algorithmType: str = None
-    hyper_params: dict = {}
-    algorithm: str = None
-    models: list = None
-    require_gpus: list = None
-    require_gpus_total: dict = None
+    projectName: Optional[str] = None
+    description: Optional[str] = None
+    valueForPredict: Optional[str] = None
+    option: Optional[str] = None
+    csvupload: Optional[int] = None
+    fileStructure: Optional[str] = None
+    filePath: Optional[str] = None
+    status: Optional[int] = None
+    statusText: Optional[str] = None
+    originalFileName: Optional[str] = None
+    trainingMethod: Optional[str] = None
+    fileSize: Optional[int] = None
+    joinInfo: Optional[list] = None
+    preprocessingInfo: Optional[dict] = None
+    preprocessingInfoValue: Optional[dict] = None
+    trainingColumnInfo: Optional[dict] = None
+    timeSeriesColumnInfo: Optional[dict] = None
+    valueForPredictColumnId: Optional[str] = None
+    valueForItemColumnId: Optional[int] = None
+    valueForUserColumnId: Optional[int] = None
+    analyticsStandard: Optional[str] = None
+    startTimeSeriesDatetime: Optional[str] = None
+    endTimeSeriesDatetime: Optional[str] = None
+    webhookURL: Optional[str] = None
+    webhookMethod: Optional[str] = None
+    isParameterCompressed: Optional[bool] = None
+    background: Optional[str] = None
+    resultJson: Optional[str] = None
+    priority_flag: Optional[bool] = None
+    instanceType: Optional[str] = None
+    algorithmType: Optional[str] = None
+    hyper_params: Optional[dict] = {}
+    algorithm: Optional[str] = None
+    models: Optional[list] = None
+    require_gpus: Optional[list] = None
+    require_gpus_total: Optional[dict] = None
 
 @router.put("/projects/{projectId}/")
 async def updateProject(projectId: str, token: str, projectInfo: ProjectInfo, response: Response):
@@ -98,12 +97,12 @@ class StartTrainInfo(BaseModel):
     trainingMethod: str
     valueForPredict: str
     option: str
-    trainingColumnInfo: dict = None
-    joinInfo: dict = None
-    preprocessingInfo: dict = None
-    preprocessingInfoValue: dict = None
-    hyper_params: dict = None
-    algorithm: str = None
+    trainingColumnInfo: Optional[dict] = None
+    joinInfo: Optional[dict] = None
+    preprocessingInfo: Optional[dict] = None
+    preprocessingInfoValue: Optional[dict] = None
+    hyper_params: Optional[dict] = None
+    algorithm: Optional[str] = None
 
 @router.post("/train/{projectId}/")
 def getMagicCode(projectId: str, token: str, response: Response, startTrainInfo: StartTrainInfo):
@@ -172,10 +171,10 @@ async def sse_model_info(request: Request, project_id: int, token: str):
     return EventSourceResponse(manageProjectClass.get_project_status(token, project_id, request))
 
 class DataQueryInfo(BaseModel):
-    lang_code: str = None
-    limit: int = None
-    conditions: list = None
-    sort: list = None
+    lang_code: Optional[str] = None
+    limit: Optional[int] = None
+    conditions: Optional[list] = None
+    sort: Optional[list] = None
 @router.get("/tquery/{dataconnector_id}")
 def getExternalais(token: str, response: Response, dataconnector_id:int, dataQueryInfo: DataQueryInfo):
     response.status_code, result = manageExternalAiClass.getTQuery(token, dataconnector_id, dataQueryInfo)

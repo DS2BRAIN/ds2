@@ -180,6 +180,7 @@ class Daemon():
                         raise Exception("모델 생성 실패")
                     else:
                         self.dbClass.updateProjectStatusById(project['id'], 1, "1: 학습이 시작되었습니다.")
+                self.createModels(project, isTest=True)
                 self.trainModels(project, self.instanceName)
             # else:
             #     self._run()
@@ -1414,6 +1415,8 @@ class Daemon():
                                             for objectDetectionModelIndex, objectDetectionModel in enumerate(iterations.get("objectDetectionModel", [None])):
                                                 for timeSeriesTrainingRowIndex, timeSeriesTrainingRow in enumerate(iterations.get("timeSeriesTrainingRow", [None])):
                                                     if 'recommender' in trainingMethod and i > 1:
+                                                        break
+                                                    if isTest and i > 1:
                                                         break
                                                     randomNum = random.randint(0, 10000)
                                                     while True:

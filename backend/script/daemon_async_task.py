@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import argparse
 import datetime
 import time
 import traceback
@@ -23,6 +24,10 @@ from fastai.basics import *
 # if platform.system() != "Darwin":
 #     from fastai.tabular import *
 #     from fastai.basics import *
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--daemon-task-id", default=None, type=int)
+args = parser.parse_args()
 
 class DaemonAsyncTask():
 
@@ -137,7 +142,10 @@ class DaemonAsyncTask():
         print("os.environ.get('DS2_TASK_ID')")
         print(os.environ.get('DS2_TASK_ID'))
 
-        if os.environ.get('DS2_TASK_ID'):
+        if args.daemon_task_id:
+            task = self.dbClass.getAsnycTasksById(int(args.daemon_task_id))
+            self._run(task, is_selected=True)
+        elif os.environ.get('DS2_TASK_ID'):
             task = self.dbClass.getAsnycTasksById(int(os.environ.get('DS2_TASK_ID')))
             self._run(task, is_selected=True)
         elif len(sys.argv) == 5:

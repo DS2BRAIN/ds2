@@ -160,6 +160,7 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
+                'discount_rate': 0.2 if userInfo["invitedBy"] else 0,
                 'dynos': 1,
                 'credit': 10,
                 # 'is_admin': 1
@@ -178,6 +179,7 @@ class ManageUser:
                 'isDeleteRequested': 0,
                 'usageplan': usagePlan["id"],
                 'invitedCode': userInfo["invitedBy"],
+                'discount_rate': 0.2 if userInfo["invitedBy"] else 0,
                 'dynos': 1,
                 'credit': 10,
                 'free_credit': 10,
