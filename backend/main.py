@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+import logging
 import shutil
 import sys
 import traceback
@@ -12,6 +14,63 @@ from distutils.dir_util import copy_tree
 from models.helper import Helper
 from src.util import Util
 import json
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+##########################
+# OpenTelemetry Settings #
+##########################
+from opentelemetry.sdk.resources import Resource
+import uuid
+
+OTEL_RESOURCE_ATTRIBUTES = {
+    "service.instance.id": str(uuid.uuid1()),
+    "environment": "local"
+}
+##########
+# Traces #
+##########
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.trace.status import Status, StatusCode
+
+# Initialize tracing and an exporter that can send data to an OTLP endpoint
+# SELECT * FROM Span WHERE instrumentation.provider='opentelemetry'
+trace.set_tracer_provider(TracerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES)))
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+###########
+# Metrics #
+###########
+from opentelemetry import metrics
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+
+# Initialize metering and an exporter that can send data to an OTLP endpoint
+# SELECT count(`http.server.active_requests`) FROM Metric FACET `service.name` TIMESERIES
+metrics.set_meter_provider(MeterProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES), metric_readers=[PeriodicExportingMetricReader(OTLPMetricExporter())]))
+metrics.get_meter_provider()
+fib_counter = metrics.get_meter("opentelemetry.instrumentation.custom").create_counter("fibonacci.invocations", unit="1", description="Measures the number of times the fibonacci method is invoked.")
+
+########
+# Logs # - OpenTelemetry Logs are still in the experimental state, so function names may change in the future
+########
+logging.basicConfig(level=logging.INFO)
+
+from opentelemetry import _logs
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
+
+# Initialize logging and an exporter that can send data to an OTLP endpoint by attaching OTLP handler to root logger
+# SELECT * FROM Log WHERE instrumentation.provider='opentelemetry'
+_logs.set_logger_provider(LoggerProvider(resource=Resource.create(OTEL_RESOURCE_ATTRIBUTES)))
+logging.getLogger().addHandler(LoggingHandler(logger_provider=_logs.get_logger_provider().add_log_record_processor(BatchLogRecordProcessor(OTLPLogExporter()))))
+
+
 dbClass = Helper(init=True)
 
 
@@ -168,6 +227,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+FastAPIInstrumentor.instrument_app(app)
+
+
 #TODO : 토큰처리 해야됨
 
 # @app.middleware("http")
@@ -271,7 +334,9 @@ def checkVersion(response: Response):
 if __name__ == '__main__':
     import uvicorn
 
-    if utilClass.configOption == 'enterprise':
+    if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
+        uvicorn.run("main:app", host='0.0.0.0', port=2502, workers=4)
+    elif utilClass.configOption == 'enterprise':
         uvicorn.run("main:app", host='0.0.0.0', port=13002, workers=4)
     elif utilClass.configOption == 'prod_local':
         uvicorn.run("main:app", host='0.0.0.0', port=2050, workers=4)
