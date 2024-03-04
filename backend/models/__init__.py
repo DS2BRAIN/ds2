@@ -36,6 +36,10 @@ else:
     util_configs = {}
 
 
+from playhouse.shortcuts import ReconnectMixin
+class ReconnectMySQLDatabase(ReconnectMixin, pw.MySQLDatabase):
+    pass
+
 rd = None
 try:
 
@@ -65,12 +69,12 @@ def check_open_new_port():
 
 if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
     result = check_open_new_port()
-    skyhub = pw.MySQLDatabase(util_configs.get('staging_db_schema'),
+    skyhub = ReconnectMySQLDatabase(util_configs.get('staging_db_schema'),
                               host=util_configs.get('test_db_host'),
                               port=util_configs.get('test_db_port'),
                               user=util_configs.get('test_db_user'),
                               passwd=util_configs.get('test_db_passwd'))
-    # skyhub = pw.MySQLDatabase('astore',
+    # skyhub = ReconnectMySQLDatabase('astore',
     #                           host="0.0.0.0",
     #                           port=13006,
     #                           user="root",
@@ -79,7 +83,7 @@ if 'true' in os.environ.get('DS2_DEV_TEST', 'false'):
     quentdb = 'quent'
 else:
     if utilClass.configOption in 'prod' or utilClass.configOption == 'prod_local':
-        skyhub = pw.MySQLDatabase(aistore_configs['prod_db_schema'], host=aistore_configs['prod_db_host'],
+        skyhub = ReconnectMySQLDatabase(aistore_configs['prod_db_schema'], host=aistore_configs['prod_db_host'],
                                   port=13006 if check_open_new_port() else 3306,
                                   user=aistore_configs['prod_db_user'], passwd=aistore_configs['prod_db_passwd'])
         mongodb = 'astore'
@@ -99,18 +103,18 @@ else:
         except:
             pass
 
-        skyhub = pw.MySQLDatabase("astore", host=master_ip if master_ip else "0.0.0.0", port=13006 if check_open_new_port() else 3306,
+        skyhub = ReconnectMySQLDatabase("astore", host=master_ip if master_ip else "0.0.0.0", port=13006 if check_open_new_port() else 3306,
                                   user=user, passwd=passwd)
         mongodb = 'astoretest'
         quentdb = 'quent'
     elif utilClass.configOption in 'prod_test':
-        skyhub = pw.MySQLDatabase(aistore_configs['prod_db_test_schema'], host=aistore_configs['prod_db_host'],
+        skyhub = ReconnectMySQLDatabase(aistore_configs['prod_db_test_schema'], host=aistore_configs['prod_db_host'],
                                   port=13006 if check_open_new_port() else 3306,
                                   user=aistore_configs['prod_db_user'], passwd=aistore_configs['prod_db_passwd'])
         mongodb = 'astore'
         quentdb = 'quent'
     elif utilClass.configOption == 'dev_test':
-        skyhub = pw.MySQLDatabase(util_configs.get('test_db_schema'),
+        skyhub = ReconnectMySQLDatabase(util_configs.get('test_db_schema'),
                                   host=util_configs.get('test_db_host'),
                                   port=util_configs.get('test_db_port'),
                                   user=util_configs.get('test_db_user'),
@@ -118,7 +122,7 @@ else:
         mongodb = 'astoretest'
         quentdb = 'quent'
     else:
-        skyhub = pw.MySQLDatabase(util_configs.get('staging_db_schema'),
+        skyhub = ReconnectMySQLDatabase(util_configs.get('staging_db_schema'),
                                   host=util_configs.get('test_db_host'),
                                   port=util_configs.get('test_db_port'),
                                   user=util_configs.get('test_db_user'),
