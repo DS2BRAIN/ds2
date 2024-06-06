@@ -83,7 +83,7 @@ class Daemon():
         self.analysingClass = Analysing()
         # self.daemonAsyncTaskClass = DaemonAsyncTask(testMode=False)
         self.testMode = testMode
-        self.generateModelStatus = 21
+        self.generateModelStatus = 0
         self.HelpModelStatus = 31
         self.runCount = 0
         self.is_quant_training_server = False
@@ -182,11 +182,11 @@ class Daemon():
                         self.dbClass.updateProjectStatusById(project['id'], 1, "1: 학습이 시작되었습니다.")
                 self.createModels(project, isTest=True)
                 self.trainModels(project, self.instanceName)
-            # else:
-            #     self._run()
-            #     time.sleep(15)
-            #     if not checkAvailablity:
-            #         self._run(checkAvailablity=True)
+            else:
+                self._run()
+                time.sleep(15)
+                if not checkAvailablity:
+                    self._run(checkAvailablity=True)
         except:
             print(traceback.format_exc())
             pass
@@ -246,12 +246,12 @@ class Daemon():
                 # print(f"#{project['id']} - 이미 만들어진 프로젝트라 스킵합니다.")
                 continue
 
-            if not self.isAvailableProject(project) and not self.testMode and not checkAvailablity:
-                self.utilClass.sendSlackMessage(f"{self.instanceName}: {self.utilClass.configOption}, checkAvailablity : {checkAvailablity} "
-                                                f"{self.utilClass.planOption if len(sys.argv) > 2 else ''}"
-                                                f"유저의 dyno가 모두 사용 중이라 해당 프로젝트를 스킵합니다.", daemon=True)
-                # print(f"#{project['id']} - 유저의 dyno가 모두 사용 중이라 해당 프로젝트를 스킵합니다.")
-                continue
+            # if not self.isAvailableProject(project) and not self.testMode and not checkAvailablity:
+            #     self.utilClass.sendSlackMessage(f"{self.instanceName}: {self.utilClass.configOption}, checkAvailablity : {checkAvailablity} "
+            #                                     f"{self.utilClass.planOption if len(sys.argv) > 2 else ''}"
+            #                                     f"유저의 dyno가 모두 사용 중이라 해당 프로젝트를 스킵합니다.", daemon=True)
+            #     # print(f"#{project['id']} - 유저의 dyno가 모두 사용 중이라 해당 프로젝트를 스킵합니다.")
+            #     continue
 
             self.dbClass.updateUserCumulativeProjectCount(project['user'], 1)
 
@@ -775,7 +775,8 @@ class Daemon():
         if project.get('option', '') == 'colab':
             return
 
-        if project.get('filePath'):
+        # if project.get('filePath'):
+        if False:
             localFilePath = self.processingClass.downloadData(project)
             df, num_cols, str_cols, dep_var, configFile = self.processingClass.preProcessing(project, localFilePath,
                                                                                              isProcessed=True)
@@ -784,6 +785,7 @@ class Daemon():
                 project)
 
         self.dbClass.updateProjectStatusById(project['id'], 11, "11 : 모델 학습이 시작되었습니다.")
+        self.dbClass.updateProject(project['id'], {"filePath": localFilePath})
 
         model_dir_path = f'{self.utilClass.save_path}/models'
         if not os.path.exists(model_dir_path):
@@ -1160,6 +1162,7 @@ class Daemon():
                 sys.exit()
                 pass
             except:
+                print(traceback.format_exc())
                 instancesUser.isDeleted = True
                 instancesUser.save()
                 self.countUnexpectError(model, project=project, instanceId=instanceId, instancesUser=instancesUser)
@@ -1290,6 +1293,8 @@ class Daemon():
         option = project['option']
         labelType = project.get("labelType")
         trainingMethod = project['trainingMethod']
+        if not option:
+            option = ""
 
         if 'speed' in option:
             split = self.splitingClass.getSplitFast()

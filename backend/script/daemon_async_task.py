@@ -25,9 +25,6 @@ from fastai.basics import *
 #     from fastai.tabular import *
 #     from fastai.basics import *
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--daemon-task-id", default=None, type=int)
-args = parser.parse_args()
 
 class DaemonAsyncTask():
 
@@ -142,6 +139,9 @@ class DaemonAsyncTask():
         print("os.environ.get('DS2_TASK_ID')")
         print(os.environ.get('DS2_TASK_ID'))
 
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--daemon-task-id", default=None, type=int)
+        args = parser.parse_args()
         if args.daemon_task_id:
             task = self.dbClass.getAsnycTasksById(int(args.daemon_task_id))
             self._run(task, is_selected=True)
@@ -230,6 +230,7 @@ class DaemonAsyncTask():
             if "train" in task.taskType or 'customAi' in task.taskType or 'verify' in task.taskType:
                 self.daemonClass.run(project_id=task.project)
                 task.status = 100
+                task.save()
                 code = 200
             if "runAll" in task.taskType:
                 code, response = self.machine_learning_class.predict_all(user.appTokenCode, user.id, localFile, localFilePath, task.model, None, return_type="file")
@@ -444,8 +445,8 @@ class DaemonAsyncTask():
             pass
         if task.status != 100:
             task.status = 99
-        if task.taskType in ("train", "customAi", "verify"):
-            task.status = task_before_status
+        # if task.taskType in ("train", "customAi", "verify"):
+        #     task.status = task_before_status
 
         endTime = datetime.now()
         print("durationTime : " + str(endTime - startTime))

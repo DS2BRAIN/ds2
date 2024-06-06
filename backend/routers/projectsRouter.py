@@ -67,7 +67,7 @@ class ProjectInfo(BaseModel):
     preprocessingInfoValue: Optional[dict] = None
     trainingColumnInfo: Optional[dict] = None
     timeSeriesColumnInfo: Optional[dict] = None
-    valueForPredictColumnId: Optional[str] = None
+    valueForPredictColumnId: Optional[int] = None
     valueForItemColumnId: Optional[int] = None
     valueForUserColumnId: Optional[int] = None
     analyticsStandard: Optional[str] = None

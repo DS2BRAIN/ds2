@@ -145,6 +145,7 @@ class ManageUpload:
             file_name = file_name[:50] if len(file_name) > 50 else file_name
             new_file_name = f'{timestamp}{file_name}{file_type}'
             df = None
+            training_method = "normal"
 
             if file_type in ['.mp4', '.mov']:
                 sample_data = None
@@ -302,7 +303,7 @@ class ManageUpload:
                     "valueForPredict": value_for_predict,
                     "yClass": json.dumps(y_class),
                     # "sampleData": sample_data,
-                    "filePath": s3_url,
+                    # "filePath": s3_url,
                     "user": user_id,
                     "hasImageData": has_image_data,
                     "hasTextData": has_text_data,
@@ -371,39 +372,39 @@ class ManageUpload:
                 self.dbClass.updateUserTotalDiskUsage(user_id, len(file))
                 # self.dbClass.updateUserUsedPrice(userId, amount)
 
-            # for i, column in enumerate(list(df.columns)):
-            #     miss = df[column].isnull().sum()
-            #     # print('컬럼명 : ', columns[i])
-            #     data_object = {}
-            #     if file_size < 300 * 1024 * 1024 * 1024:
-            #         data_object = self.utilClass.parseColumData(df[column], data_cnt)
-            #
-            #     data_object = { **data_object,
-            #         "columnName": column,
-            #         "index": data_column_index,
-            #         "length": data_cnt,
-            #         "dataconnector": dataconnector.id if dataconnector else None,
-            #     }
-            #     data_column_index += 1
-            #
-            #     self.dbClass.createDatacolumn(data_object)
-            # try:
-            #     folder = folders[1] if folders[1] else folders[0]
-            #     for index, xClass in enumerate(folder):
-            #         self.dbClass.createDatacolumn({
-            #             "columnName": xClass,
-            #             "index": data_column_index,
-            #             "length": file_counts.get(xClass, 0),
-            #             # "miss": miss,
-            #             "unique": file_counts.get(xClass, 0),
-            #             "type": "object",
-            #             "freq": 1,
-            #             "isForGan": True,
-            #             "dataconnector": dataconnector.id if dataconnector else None,
-            #         })
-            #         data_column_index += 1
-            # except:
-            #     pass
+            for i, column in enumerate(list(df.columns)):
+                miss = df[column].isnull().sum()
+                # print('컬럼명 : ', columns[i])
+                data_object = {}
+                if file_size < 300 * 1024 * 1024 * 1024:
+                    data_object = self.utilClass.parseColumData(df[column], data_cnt)
+
+                data_object = { **data_object,
+                    "columnName": column,
+                    "index": data_column_index,
+                    "length": data_cnt,
+                    "dataconnector": dataconnector.id if dataconnector else None,
+                }
+                data_column_index += 1
+
+                self.dbClass.createDatacolumn(data_object)
+            try:
+                folder = folders[1] if folders[1] else folders[0]
+                for index, xClass in enumerate(folder):
+                    self.dbClass.createDatacolumn({
+                        "columnName": xClass,
+                        "index": data_column_index,
+                        "length": file_counts.get(xClass, 0),
+                        # "miss": miss,
+                        "unique": file_counts.get(xClass, 0),
+                        "type": "object",
+                        "freq": 1,
+                        "isForGan": True,
+                        "dataconnector": dataconnector.id if dataconnector else None,
+                    })
+                    data_column_index += 1
+            except:
+                pass
             print("all process pass")
             if project:
                 return HTTP_200_OK, project.__dict__['__data__']

@@ -516,7 +516,7 @@ class Processing():
                     columnInfo['dataconnectorName'] = dataconnector.dataconnectorName
                     columnsInfo[columnInfo['id']] = columnInfo
                     columnInfo['originalColumnName'] = columnInfo['columnName']
-                    if dataconnector.originalLabelproject:
+                    if dataconnector.originalLabelproject and dataconnector.dataconnectorName not in columnInfo['columnName']:
                         columnInfo['columnName'] = columnInfo['columnName'] + "__" + dataconnector.dataconnectorName
                     else:
                         print("No originalLabelproject")
@@ -556,7 +556,10 @@ class Processing():
                 dataFarmeColumnsName = []
                 # if project.get("labelproject"):
                 for dataFarmeColumn in dataRaw.columns:
-                    dataFarmeColumnsName.append(dataFarmeColumn + "__" + dataconnector.dataconnectorName)
+                    if dataconnector.dataconnectorName not in dataFarmeColumn:
+                        dataFarmeColumnsName.append(dataFarmeColumn + "__" + dataconnector.dataconnectorName)
+                    else:
+                        dataFarmeColumnsName.append(dataFarmeColumn)
                 dataRaw.columns = dataFarmeColumnsName
 
                 df, num_col, str_col, _, configFile = self.preProcessing(project, localFilePath,
@@ -798,7 +801,7 @@ class Processing():
             'yClass': yClass,
         })
 
-        project = {**project, **{
+        result = {**project, **{
             'valueForPredict': dep_var,
             'recommenderUserColumn': recommenderUserColumn,
             'recommenderItemColumn': recommenderItemColumn,
@@ -806,7 +809,7 @@ class Processing():
             'fileStructure': json.dumps(fileStructure, ensure_ascii=False, default=str),
         }}
 
-        return s3Url, trainData, num_cols, str_cols, dep_var, configFile, project
+        return s3Url, trainData, num_cols, str_cols, dep_var, configFile, result
 
     def downloadModel(self, model, GAN=False):
         s3Url = self.utilClass.unquote_url(model['filePath'])
@@ -867,7 +870,7 @@ class Processing():
         dataconnectors = self.getDataconnectorsInfoByDataconnectorsList(project.get('dataconnectorsList',[]))
         if dataconnectors:
             dataconnectorName = ".".join(dataconnectors[0].dataconnectorName.split('.')[:-1])
-        if project['trainingMethod'] in 'detection_3d':
+        if project['trainingMethod'] == 'detection_3d':
             # localFilePath = f"{self.utilClass.save_path}/src/training/mmdetection3d/data/kitti/kitti_dbinfos_train.pkl"
             localFilePath = f"{self.utilClass.save_path}/project/{project['id']}/data/kitti/kitti_dbinfos_train.pkl"
             rows = []

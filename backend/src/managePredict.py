@@ -38,7 +38,7 @@ from src.util import Util
 from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
 from transformers import pipeline, set_seed
 import soundfile
-from huggingsound import SpeechRecognitionModel
+# from huggingsound import SpeechRecognitionModel
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 
