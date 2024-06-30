@@ -62,7 +62,7 @@ class ProjectInfo(BaseModel):
     originalFileName: Optional[str] = None
     trainingMethod: Optional[str] = None
     fileSize: Optional[int] = None
-    joinInfo: Optional[list] = None
+    joinInfo: Optional[dict] = None
     preprocessingInfo: Optional[dict] = None
     preprocessingInfoValue: Optional[dict] = None
     trainingColumnInfo: Optional[dict] = None
