@@ -32,7 +32,7 @@ if os.path.exists('./src/training/aistore_config.py'):
     from src.training.predictSevMain import SevMain
 
 class PredictObject(BaseModel):
-    modelid: str = None
+    modelid: int = None
     apptoken: str = None
     modeltoken: str = None
     inputLoadedModel: str = None
@@ -51,7 +51,7 @@ def getPredict(response: Response, predictObject: PredictObject, userId):
 
 @router.post("/predictimage/{userId}/")
 def getPredictImage(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                    modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
@@ -73,7 +73,7 @@ def getPredictImage(response: Response, userId, file: UploadFile = File(...), fi
     return result
 
 class PredictWithURLObject(BaseModel):
-    modelid: str = None
+    modelid: int = None
     apptoken: str = None
     modeltoken: str = None
     url: str
@@ -90,7 +90,7 @@ def getPredictImageByUrl(response: Response, predictObject: PredictWithURLObject
 
 @router.post("/predictimagexai/{userId}/")
 def getPredictImagexai(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                    modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
@@ -130,7 +130,7 @@ def getPredictImageByUrl(response: Response, predictObject: PredictWithURLObject
 
 @router.post("/predictimageinfo/{userId}/")
 def getPredictImageInfo(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                    modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
         return result
@@ -153,7 +153,7 @@ def getPredictImageInfo(response: Response, userId, file: UploadFile = File(...)
 
 @router.post("/predictall/{userId}/")
 def getPredictAll(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                  modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                  modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
 
     if filename.split('.')[-1].lower() not in ['csv']:
         response.status_code, result = EXTENSION_NAME_ERROR
@@ -167,7 +167,7 @@ def getPredictAll(response: Response, userId, file: UploadFile = File(...), file
 
 @router.post("/predictallasync/{userId}/")
 def getPredictAllAsync(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                  modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                  modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
 
     if filename.split('.')[-1].lower() not in ['csv']:
         response.status_code, result = EXTENSION_NAME_ERROR
@@ -180,7 +180,7 @@ def getPredictAllAsync(response: Response, userId, file: UploadFile = File(...),
 
 @router.post("/labelingasync/{userId}/")
 def getPredictAllAsync(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                  modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                  modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
 
     file = file.file.read()
     if filename.split('.')[-1].lower() not in ['csv']:
@@ -192,7 +192,7 @@ def getPredictAllAsync(response: Response, userId, file: UploadFile = File(...),
 
 @router.post("/predictmovieasync/{userId}/")
 def getPredictMovieAsync(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                    modelid: str = Form(...), marketProjectId: str = Form(None), apptoken: str = Form(None),
+                    modelid: int = Form(...), marketProjectId: str = Form(None), apptoken: str = Form(None),
                          modeltoken: str = Form(None), isStandardMovie: bool = Form(None), sync_cut_at: float = Form(None)):
     if not modelid:
         response.status_code, result = NOT_FOUND_ERROR
@@ -212,7 +212,7 @@ def getPredictMovieAsync(response: Response, userId, file: UploadFile = File(...
 
 @router.post("/predictallimage/{userId}/")
 def getPredictAllImage(response: Response, userId, file: UploadFile = File(...), filename: str = Form(...),
-                       modelid: str = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
+                       modelid: int = Form(...), apptoken: str = Form(None), modeltoken: str = Form(None)):
     # if not modelid:
     #     return 204
 
@@ -230,7 +230,7 @@ class PredictWithURLObject(BaseModel):
     url: str
 
 @router.post("/predict/developedAiModel/")
-def predictDevelopedAiModel(response: Response, apptoken: str = Form(None), modeltoken: str = Form(None), modelId: str = Form(...), textdata: str = Form(None), file: UploadFile = File(None)):
+def predictDevelopedAiModel(response: Response, apptoken: str = Form(None), modeltoken: str = Form(None), modelId: int = Form(...), textdata: str = Form(None), file: UploadFile = File(None)):
     """
     `추천시스템 예제` : {"grade_id":11, "school_id":10837, "type":"HS","school_jibun_address1":"서울 강남구 대치동 952-1", "subject":"영어", "channel": "강남"}
     """
