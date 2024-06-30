@@ -133,7 +133,7 @@ const Process = (props) => {
 
   const [mainConnector, setMainConnector] = useState([]);
   const [subConnectors, setSubConnectors] = useState([]);
-  const [joinInfo, setjoinInfo] = useState([]);
+  const [joinInfo, setjoinInfo] = useState({});
   const [preprocessingInfo, setPreprocessingInfo] = useState({});
   const [preprocessingInfoValue, setPreprocessingInfoValue] = useState({});
   const [modelPercentage, setModelPercentage] = useState(0);
@@ -686,7 +686,7 @@ const Process = (props) => {
       projects.project.dataconnectorsList.length === 1
     ) {
       setSubConnectors([]);
-      setjoinInfo([]);
+      setjoinInfo({});
     }
 
     projects.project.analyticsStandard &&
