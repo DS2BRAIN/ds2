@@ -201,11 +201,11 @@ export default function SignUp() {
         promotionCode: promotionCode,
         company: company,
         isAiTrainer: isAiTrainer,
-        utmSource: Cookies.getCookie("utm_source", ""),
-        utmMedium: Cookies.getCookie("utm_medium", ""),
-        utmCampaign: Cookies.getCookie("utm_campaign", ""),
-        utmTerm: Cookies.getCookie("utm_term", ""),
-        utmContent: Cookies.getCookie("utm_content", ""),
+        utmSource: Cookies.getCookie("utm_source") ? Cookies.getCookie("utm_source") : "",
+        utmMedium: Cookies.getCookie("utm_medium") ? Cookies.getCookie("utm_medium") : "",
+        utmCampaign: Cookies.getCookie("utm_campaign") ? Cookies.getCookie("utm_campaign") : "",
+        utmTerm: Cookies.getCookie("utm_term") ? Cookies.getCookie("utm_term") : "",
+        utmContent: Cookies.getCookie("utm_content") ? Cookies.getCookie("utm_content") : "",
         languageCode: user.language ? user.language : "ko",
         isAgreedMarketing: isAgreetoMarketing,
         isAgreedBehaviorStatistics: isAgreedBehaviorStatistics,
@@ -452,6 +452,11 @@ export default function SignUp() {
       socialType: "google",
       isAgreedMarketing: true,
       birth: "2001-01-01T01:01:01",
+      utmSource: Cookies.getCookie("utm_source") ? Cookies.getCookie("utm_source") : "",
+      utmMedium: Cookies.getCookie("utm_medium") ? Cookies.getCookie("utm_medium") : "",
+      utmCampaign: Cookies.getCookie("utm_campaign") ? Cookies.getCookie("utm_campaign") : "",
+      utmTerm: Cookies.getCookie("utm_term") ? Cookies.getCookie("utm_term") : "",
+      utmContent: Cookies.getCookie("utm_content") ? Cookies.getCookie("utm_content") : "",
     };
     await tryRegister(RegisterInfo);
   };
