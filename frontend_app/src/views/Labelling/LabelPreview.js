@@ -105,35 +105,35 @@ const LabelPreview = ({
 
     //scene.add( new THREE.AxesHelper( 1 ) );
 
-    const loader = new PCDLoader();
-    loader.load(
-        // 'https://threejs.org/examples/models/pcd/binary/Zaghetto.pcd'
-        process.env.REACT_APP_ENTERPRISE === "true"
-                    ? fileurl + "static" + labelFileDetail.s3key
-                    : labelFileDetail.s3key
-        , function ( points ) {
-
-        // points.material.size = 1;
-        points.geometry.center();
-        // points.geometry.rotateX( Math.PI );
-        points.name = 'Zaghetto.pcd';
-        scene.add( points );
-
-        //
-
-        // const gui = new GUI();
-        //
-        // gui.add( points.material, 'size', 0.001, 0.01 ).onChange( render );
-        // gui.addColor( points.material, 'color' ).onChange( render );
-        // gui.open();
-
-        //
-        document.getElementById("canvas03").appendChild(renderer.domElement);
-
-        render();
-        setIsPcdImgLoading(false);
-
-    } );
+    // const loader = new PCDLoader();
+    // loader.load(
+    //     // 'https://threejs.org/examples/models/pcd/binary/Zaghetto.pcd'
+    //     process.env.REACT_APP_ENTERPRISE === "true"
+    //                 ? fileurl + "static" + labelFileDetail.s3key
+    //                 : labelFileDetail.s3key
+    //     , function ( points ) {
+    //
+    //     // points.material.size = 1;
+    //     points.geometry.center();
+    //     // points.geometry.rotateX( Math.PI );
+    //     points.name = 'Zaghetto.pcd';
+    //     scene.add( points );
+    //
+    //     //
+    //
+    //     // const gui = new GUI();
+    //     //
+    //     // gui.add( points.material, 'size', 0.001, 0.01 ).onChange( render );
+    //     // gui.addColor( points.material, 'color' ).onChange( render );
+    //     // gui.open();
+    //
+    //     //
+    //     document.getElementById("canvas03").appendChild(renderer.domElement);
+    //
+    //     render();
+    //     setIsPcdImgLoading(false);
+    //
+    // } );
 
     window.addEventListener( 'resize', onWindowResize );
 
