@@ -499,7 +499,8 @@ const LabelDetail = ({ history, match }) => {
     }
     setIsAutoLabelingButtonLoading(true);
     setIsLoading(true);
-    api
+    if (modelId) {
+      api
       .postAutoLabeling({
         labelproject_id: labelprojects.projectDetail.id,
         autolabeling_type: autoLabelingType,
@@ -567,6 +568,77 @@ const LabelDetail = ({ history, match }) => {
         setIsAutoLabelingButtonLoading(false);
         setIsAutoLabelingModalOpen(false);
       });
+    } else {
+      api
+      .postAutoLabeling({
+        labelproject_id: labelprojects.projectDetail.id,
+        autolabeling_type: autoLabelingType,
+        autolabeling_ai_type: autoLabelingAiType, //custom, general, inference
+        // model_id: modelId,
+        custom_ai_stage: customAIStageValue,
+        general_ai_type: generalAIType,
+        inference_ai_type: inferenceAIType,
+        preprocessing_ai_type: preprocessingAIClass,
+        autolabeling_amount: autoLabelingAmount,
+        labeling_class: tmpArray,
+      })
+      .then((res) => {
+        setShouldUpdate(true); //점검
+        setIsAutoLabelingLoading(true);
+
+        dispatch(
+          openSuccessSnackbarRequestAction(
+            t(
+              "Auto-labeling will start now. We’ll e-mail you when auto-labeling is complete"
+            )
+          )
+        );
+        dispatch(getLabelProjectRequestAction(labelProjectId));
+      })
+      .catch((e) => {
+        setIsAutoLabelingLoading(false);
+        if (IS_ENTERPRISE && e.response && e.response.status === 402) {
+          window.location.href = "/admin/setting/payment/?cardRequest=true";
+          return;
+        }
+        if (e.response && e.response.status === 401) {
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t("You have been logged out automatically, please log in again")
+            )
+          );
+          setTimeout(() => {
+            Cookies.deleteAllCookies();
+            history.push("/signin/");
+          }, 2000);
+          return;
+        }
+        if (e.response && e.response.data.message) {
+          dispatch(
+            openErrorSnackbarRequestAction(
+              sendErrorMessage(
+                e.response.data.message,
+                e.response.data.message_en,
+                i18n?.language
+              )
+            )
+          );
+        } else {
+          dispatch(
+            openErrorSnackbarRequestAction(
+              t(
+                "An error occurred during the developing process. Please try again in a moment"
+              )
+            )
+          );
+        }
+      })
+      .finally(() => {
+        setIsAutoLabelingButtonLoading(false);
+        setIsAutoLabelingModalOpen(false);
+      });
+    }
+
   };
 
   const openInspectingModal = () => {

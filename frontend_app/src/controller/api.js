@@ -1530,11 +1530,19 @@ export function updateShareGroup(sharegroupInfo) {
 export function postAutoLabeling(labelId, projectId, modelId) {
   const token = Cookies.getCookie("jwt");
   const query = backendurl.concat(`autolabeling/?token=` + token);
-  return axios.post(query, {
+  if (modelId) {
+    return axios.post(query, {
     labelprojectId: parseInt(labelId),
     modelId: modelId,
     projectId: projectId,
   });
+  } else {
+    return axios.post(query, {
+    labelprojectId: parseInt(labelId),
+    projectId: projectId,
+  });
+  }
+
 }
 
 export function getAllWorkage() {
