@@ -163,12 +163,12 @@ const Admin = ({ history, ...rest }) => {
         {...rest}
         render={(props) => <Process {...props} />}
       />
-      {/* <Route
+      <Route
         exact
         path="/admin/verifyproject/:id"
         {...rest}
         render={(props) => <Process {...props} />}
-      /> */}
+      />
       <Route
         exact
         path="/admin/labelling/:id"

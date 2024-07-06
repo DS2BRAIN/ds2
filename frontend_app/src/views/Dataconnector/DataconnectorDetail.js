@@ -347,28 +347,28 @@ const DataconnectorDetail = ({ history, match }) => {
                 )}
               </Button>
             </Grid>
-            <Grid item>
-              <Button
-                id="start_verify_btn"
-                shape="greenOutlined"
-                disabled={isDisabledStartBtn}
-                sx={startBtnStyle}
-                onClick={() => startProject(connectorInfo.id, "verify")}
-              >
-                <span>{t("Start AI verification")}</span>
-                {isStartLoading["verify"] && (
-                  <CircularProgress
-                    size={15}
-                    color="inherit"
-                    sx={{
-                      color: "var(--secondary1)",
-                      verticalAlign: "middle",
-                      ml: 1,
-                    }}
-                  />
-                )}
-              </Button>
-            </Grid>
+            {/*<Grid item>*/}
+            {/*  <Button*/}
+            {/*    id="start_verify_btn"*/}
+            {/*    shape="greenOutlined"*/}
+            {/*    disabled={isDisabledStartBtn}*/}
+            {/*    sx={startBtnStyle}*/}
+            {/*    onClick={() => startProject(connectorInfo.id, "verify")}*/}
+            {/*  >*/}
+            {/*    <span>{t("Start AI verification")}</span>*/}
+            {/*    {isStartLoading["verify"] && (*/}
+            {/*      <CircularProgress*/}
+            {/*        size={15}*/}
+            {/*        color="inherit"*/}
+            {/*        sx={{*/}
+            {/*          color: "var(--secondary1)",*/}
+            {/*          verticalAlign: "middle",*/}
+            {/*          ml: 1,*/}
+            {/*        }}*/}
+            {/*      />*/}
+            {/*    )}*/}
+            {/*  </Button>*/}
+            {/*</Grid>*/}
           </>
         )}
       </Grid>

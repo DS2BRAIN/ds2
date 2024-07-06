@@ -229,7 +229,7 @@ dependencies:
     - google-cloud-vision==2.3.0
     - googleads==24.0.0
     - googleapis-common-protos==1.56.2
-    - googletrans==3.0.0
+    - googletrans==4.0.0-rc1
     - greenlet==1.1.2
     - grpcio==1.47.0
     - h11==0.9.0

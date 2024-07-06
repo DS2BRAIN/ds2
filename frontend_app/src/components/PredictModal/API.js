@@ -1189,7 +1189,7 @@ const API = React.memo(
           paramsList.forEach(function(value, index, array) {
             const param = value[1];
             if (param === undefined || param === null || param === "") {
-              if (value[0].indexOf("(Optional)") === -1) {
+              if (value[0].indexOf("(Optional)") === -1 && !files) {
                 dispatch(
                   openErrorSnackbarRequestAction(
                     t("Please fill in all the data and proceed.")
@@ -1403,7 +1403,7 @@ const API = React.memo(
       } else if (chosenItem === "ApiSpeechToText") {
         caseItemApiSpeechToText();
       } else if (
-        trainMethod === "image" ||
+        trainMethod === "image" || trainMethod === "image_to_text" ||
         trainMethod === "ocr" ||
         models.model.externalAiType === "image"
       ) {

@@ -609,12 +609,12 @@ const Project = ({ history }) => {
         />
       ) : (
         <>
-          <ReactTitle title={"DS2.AI - " + t("Lease Training Server")} />
+          <ReactTitle title={"DS2.AI - " + t("Training Server")} />
           <GridItem xs={12} style={currentTheme.titleGridItem}>
-            <div className={classes.topTitle}>{t("Lease Training Server")}</div>
+            <div className={classes.topTitle}>{t("Training Server")}</div>
             <div className={classes.subTitleText}>
               {t(
-                "Create a new project to lease a cloud training server and start custom development."
+                "Create a new project to start custom development."
               )}
             </div>
           </GridItem>

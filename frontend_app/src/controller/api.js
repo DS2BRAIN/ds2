@@ -368,6 +368,7 @@ export function postAPI(params, isMarket, opsId) {
   }
   let result = axios.post(query, params, {
     headers: {
+      'content-type': "application/json",
       "Access-Control-Allow-Origin": "*",
       "access-control-allow-methods": "POST",
     },
@@ -391,7 +392,7 @@ export function predict_for_file_response(params, isMarket, opsId) {
   let result = axios.post(query, params, {
     responseType: "blob",
     headers: {
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
       "Access-Control-Allow-Origin": "*",
       "access-control-allow-methods": "POST",
     },
@@ -1330,7 +1331,8 @@ export function postMarketTextApi(text, modelid) {
   return axios.post(query, formData, {
     responseType: "json",
     headers: {
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
+      'content-type': "application/json",
       "Access-Control-Allow-Origin": "*",
       "access-control-allow-methods": "POST",
     },
