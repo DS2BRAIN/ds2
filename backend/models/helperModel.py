@@ -197,6 +197,7 @@ class HelperModel():
         return modelsTable.select(
                 modelsTable.id,
                 modelsTable.name,
+                modelsTable.filePath,
                 modelsTable.status,
                 modelsTable.statusText,
                 modelsTable.progress,

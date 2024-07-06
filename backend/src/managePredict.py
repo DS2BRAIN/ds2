@@ -733,6 +733,9 @@ class ManagePredict:
         if not parameter.get("inputData"):
             parameter["inputData"] = parameter.copy()
         result = result.copy()
+
+        if not isinstance(result, dict):
+            result = {"predict_value" : result}
         if result.get('predict_value'):
             del result['predict_value']
         if result.get('predict_value_info'):
@@ -809,6 +812,9 @@ class ManagePredict:
                 label_data = label_data.tolist()
             except:
                 pass
+
+            if not isinstance(label_data, dict):
+                label_data = {"predict_value" : label_data}
             if label_data.get('predict_value'):
                 del label_data['predict_value']
             if label_data.get('predict_value_info'):
@@ -934,6 +940,7 @@ class ManagePredict:
                 self.quickMarketModels["gpt"] = pipeline('text-generation', model=model_name if model_name else 'gpt2')
             set_seed(42)
             generated_text = []
+            input_value = a["text"][0]
             results = self.quickMarketModels["gpt"](a["text"][0], max_length=a["max_length"][0], num_return_sequences=a["num_return_sequences"][0])
             for result in results:
                 generated_text.append(result["generated_text"])

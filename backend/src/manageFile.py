@@ -1898,7 +1898,7 @@ class ManageFile:
                 'labelprojects': labelprojects,
                 'total_count': total_count
             })
-        return HTTP_200_OK, dataconnector
+        return HTTP_200_OK, json.loads(json.dumps(dataconnector, default=str))
 
     def createDataconnector(self, token, dataconnectorInfoRaw):
         user = self.dbClass.getUser(token, raw=True)
@@ -2661,13 +2661,18 @@ class ManageFile:
 
         project = self.dbClass.getProjectByModelId(modelId)
 
-        if project.user != user.id:
+        try:
+            project.user
+        except:
+            project = None
+
+        if project and project.user != user.id:
             sharedProjects = []
             for temp in self.dbClass.getSharedProjectIdByUserId(user.id):
                 if temp.projectsid:
                     sharedProjects = list(set(sharedProjects + ast.literal_eval(temp.projectsid)))
 
-            if project.id not in sharedProjects:
+            if project and project.id not in sharedProjects:
                 raise ex.NotAllowedTokenEx(user.email)
 
         sampleData = []

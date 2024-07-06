@@ -472,3 +472,6 @@ class HelperSub():
     @wrapper
     def getSystemInfo(self):
         return systemInfoTable.select().order_by(systemInfoTable.id.desc()).get()
+
+    def getProjectsWithAboveIds(self, pid):
+        return projectsTable.select().where(projectsTable.id > pid).execute()

@@ -33,10 +33,10 @@ predictClass = ManagePredict()
 
 
 class PredictObject(BaseModel):
-    modelid: str = None
+    modelid: int = None
     apptoken: str = None
     modeltoken: str = None
-    userId: str = None
+    userId: int = None
     inputLoadedModel: str = None
     parameter: dict
 

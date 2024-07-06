@@ -351,17 +351,17 @@ const API = React.memo(
       renderer.render( scene, camera )
   }
 
-  useEffect(() => {
-    if (objectJson) {
-      if (objectJson) {
-
-        console.log("PCD init");
-        setIsPcdImgLoading(true);
-        init();
-        render();
-      }
-    }
-  }, [objectJson]);
+  // useEffect(() => {
+  //   if (objectJson) {
+  //     if (objectJson) {
+  //
+  //       console.log("PCD init");
+  //       setIsPcdImgLoading(true);
+  //       init();
+  //       render();
+  //     }
+  //   }
+  // }, [objectJson]);
 
     useEffect(() => {
       if (completed && apiLoading === "loading") {
@@ -1277,12 +1277,18 @@ const API = React.memo(
           api
             .postAPI(parameter, isMarket, opsId)
             .then((res) => {
+              console.log(res);
               const response =
                 res.data === null || res.data === undefined ? "오류" : res.data;
               setResponse(response);
               var responseJson = {};
               if (typeof response === "string")
-                responseJson = JSON.parse(response);
+                try {
+                  responseJson = JSON.parse(response);
+                } catch {
+                  responseJson = {"result": response};
+                  setPredictedValue(response);
+                }
               else if (typeof response === "object") responseJson = response;
               if (
                 projects.project.trainingMethod === "recommender" ||

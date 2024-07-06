@@ -33,9 +33,9 @@ predictClass = ManagePredict()
 
 
 class PredictObject(BaseModel):
-    modelid: str = None
+    modelid: int = None
     apptoken: str = None
-    userId: str = None
+    userId: int = None
     inputLoadedModel: str = None
     parameter: dict
 
@@ -287,7 +287,7 @@ class PredictWithURLObject(BaseModel):
 
 
 @router.post("/market/predict/developedAiModel/")
-def predictDevelopedAiModel(response: Response, apptoken: str = Form(...), modelId: str = Form(...),
+def predictDevelopedAiModel(response: Response, apptoken: str = Form(...), modelId: int = Form(...),
                             textdata: str = Form(None), file: bytes = File(None)):
     """
     `추천시스템 예제` : {"grade_id":11, "school_id":10837, "type":"HS","school_jibun_address1":"서울 강남구 대치동 952-1", "subject":"영어", "channel": "강남"}
