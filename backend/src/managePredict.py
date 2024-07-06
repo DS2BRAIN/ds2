@@ -156,16 +156,16 @@ class ManagePredict:
         try:
             model, modelPath, learn, predictor, opt = self.loadModel(modelId, isMarket=isMarket, opsId=opsId)
 
-            try:
-                if "text_to_speech" not in model['project']['trainingMethod'] \
-                        and 'text_to_image' not in model['project']['trainingMethod']:
-                    data = rd.get(
-                        f"||{modelId}||{json.dumps(parameter)}||{userId}||{isMarket}||{inputLoadedModel}||{opsId}||{modeltoken}||")
-                    if data:
-                        return HTTP_200_OK, data
-            except:
-                print(traceback.format_exc())
-                pass
+            # try:
+            #     if "text_to_speech" not in model['project']['trainingMethod'] \
+            #             and 'text_to_image' not in model['project']['trainingMethod']:
+            #         data = rd.get(
+            #             f"||{modelId}||{json.dumps(parameter)}||{userId}||{isMarket}||{inputLoadedModel}||{opsId}||{modeltoken}||")
+            #         if data:
+            #             return HTTP_200_OK, data
+            # except:
+            #     print(traceback.format_exc())
+            #     pass
 
             if "load_torch" in model['project']['option']:
 
