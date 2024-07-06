@@ -681,11 +681,11 @@ class ManageEtc:
 
     def register_enterprise_key(self, key):
         key_result = self.utilClass.isValidKey(key)
-        key_result['key'] = key
-        self.dbClass.register_admin_key(key_result)
-        return HTTP_200_OK, {
-            "status_code": 200,
-            "message": "key 등록이 완료되었습니다.",
+        if key_result:
+            self.dbClass.register_admin_key({"key": key})
+            return HTTP_200_OK, {
+                "status_code": 200,
+                "message": "key 등록이 완료되었습니다.",
             "message_en": "Key registration is complete."
         }
 
