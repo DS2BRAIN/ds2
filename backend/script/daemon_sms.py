@@ -10,7 +10,7 @@ import peewee
 import redis
 import json
 from multiprocessing import Process
-from tensorflow.python.client import device_lib
+# from tensorflow.python.client import device_lib
 
 from models.helper import Helper
 from src.util import Util
@@ -34,14 +34,14 @@ class DaemonSMS():
         self.dbClass = Helper(init=True)
         self.utilClass = Util()
 
-        for gpu_name in self.get_available_gpus():
-            self.gpu_wait_list[gpu_name] = []
+        # for gpu_name in self.get_available_gpus():
+        #     self.gpu_wait_list[gpu_name] = []
 
         os.makedirs(self.utilClass.save_path, exist_ok=True)
 
-    def get_available_gpus(self):
-        local_device_protos = device_lib.list_local_devices()
-        return [x.name for x in local_device_protos if x.device_type == 'GPU']
+    # def get_available_gpus(self):
+    #     local_device_protos = device_lib.list_local_devices()
+    #     return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
     def checkIfProcessRunning(self, processName):
         '''
