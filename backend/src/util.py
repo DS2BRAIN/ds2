@@ -176,8 +176,10 @@ class Util():
 
         # self.available_gpu_list = [x.name for x in local_device_protos if x.device_type == 'GPU']
 
-        self.available_gpu_name_list = [torch.cuda.get_device_name(n) for n in range(torch.cuda.device_count())]
-        self.available_gpu_list = [f'/device:GPU:{n}' for n in range(torch.cuda.device_count())]
+        # self.available_gpu_name_list = [torch.cuda.get_device_name(n) for n in range(torch.cuda.device_count())]
+        # self.available_gpu_list = [f'/device:GPU:{n}' for n in range(torch.cuda.device_count())]
+        self.available_gpu_name_list = ["all"]
+        self.available_gpu_list = ["/device:GPU:all"]
         self.slackHeader = {
             'Content-Type': "application/x-www-form-urlencoded",
             'Accept': "*/*",
