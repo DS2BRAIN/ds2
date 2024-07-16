@@ -114,7 +114,7 @@ export default function NewProject({ history }) {
     normal_regression: t("Regression"),
     text: t("Text"),
     image: t("Image"),
-    detection_3d: t("3D Detection"),
+    // detection_3d: t("3D Detection"),
   };
 
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function NewProject({ history }) {
         delete workapp["text"];
       } else {
         delete workapp["object_detection"];
-        delete workapp["detection_3d"];
+        // delete workapp["detection_3d"];
         delete workapp["image"];
         if (projects.categoryRestrict === "normal_regression") {
           delete workapp["text"];
