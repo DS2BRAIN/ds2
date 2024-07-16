@@ -73,18 +73,21 @@ class DaemonSMS():
 
                     print("self.is_gpu_available(reqiure_gpus)")
                     print(self.is_gpu_available(reqiure_gpus))
-
-                    if self.is_gpu_available(reqiure_gpus) or data.get('jupyterProject'):
+                    if data.get('jupyterProject'):
                         data["is_started"] = True
                         self.start_daemon(data, reqiure_gpus)
-                    else:
-                        for reqiure_gpu in reqiure_gpus:
-                            if self.gpu_wait_list.get(reqiure_gpu):
-                                self.gpu_wait_list[reqiure_gpu].append(data)
-                            else:
-                                self.gpu_wait_list[reqiure_gpu] = [data]
-                        if not reqiure_gpus:
-                            self.gpu_wait_list["/device:GPU:all"] = [data]
+
+                    # if self.is_gpu_available(reqiure_gpus) or data.get('jupyterProject'):
+                    #     data["is_started"] = True
+                    #     self.start_daemon(data, reqiure_gpus)
+                    # else:
+                    #     for reqiure_gpu in reqiure_gpus:
+                    #         if self.gpu_wait_list.get(reqiure_gpu):
+                    #             self.gpu_wait_list[reqiure_gpu].append(data)
+                    #         else:
+                    #             self.gpu_wait_list[reqiure_gpu] = [data]
+                    #     if not reqiure_gpus:
+                    #         self.gpu_wait_list["/device:GPU:all"] = [data]
 
                     print("self.gpu_wait_list")
                     print(self.gpu_wait_list)
