@@ -2975,7 +2975,7 @@ class MongoDb():
                 # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
                 # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
             if utilClass.configOption == 'enterprise' or config_option == "prod":
-                db_conn_dict[db_name] = MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13007 if check_open_new_port() else 27017, username="root", password="dslabglobal")[
+                db_conn_dict[db_name] = MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13008, username="root", password="dslabglobal")[
                     db_name]
         return db_conn_dict[db_name]
 
