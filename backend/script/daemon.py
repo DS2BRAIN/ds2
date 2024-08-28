@@ -1092,7 +1092,7 @@ class Daemon():
 
                 self.utilClass.sendSlackMessage(f"{instanceId} : 학습을 완료하였습니다. "
                                                 f"(Project ID: {project['id']}, Model ID: {model['id']} )", daemon=True)
-                # self.finishProject(project)
+                self.finishProject(project)
                 endTime = datetime.datetime.now()
                 print("endTime : " + str(endTime))
                 print("durationTime : " + str(endTime - startTime))
