@@ -2939,11 +2939,11 @@ class MongoDb():
                     # db_conn_dict[db_name] = MongoClient(
                     #     f"mongodb+srv://{aistore_configs['prod_mongodb_user']}:{aistore_configs['prod_mongodb_passwd']}@{aistore_configs['prod_mongodb_host']}/{aistore_configs['prod_mongodb_schema']}?retryWrites=true&w=majority")[
                     #     db_name]
-                    db_conn_dict[db_name] = MongoClient(host=aistore_configs['prod_mongodb_host'], port=13008, username=aistore_configs['prod_mongodb_user'], password=aistore_configs['prod_mongodb_passwd'])[db_name]
+                    db_conn_dict[db_name] = MongoClient(host=aistore_configs['prod_mongodb_host'], port=13007, username=aistore_configs['prod_mongodb_user'], password=aistore_configs['prod_mongodb_passwd'])[db_name]
 
                 elif utilClass.configOption == 'enterprise':
                     db_conn_dict[db_name] = \
-                        MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13008, username="root", password="dslabglobal")[db_name]
+                        MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13007, username="root", password="dslabglobal")[db_name]
                 else:
                     db_conn_dict[db_name] = MongoClient(
                         f"mongodb+srv://{util_configs.get('staging_mongodb_user')}:{util_configs.get('staging_mongodb_passwd')}@{util_configs.get('staging_mongodb_host')}/{util_configs.get('staging_mongodb_schema')}?retryWrites=true&w=majority")[
@@ -2975,7 +2975,7 @@ class MongoDb():
                 # conn_uri = f"mongodb://{conn_host}?{conn_opt}"
                 # db_conn_dict[db_name] = MongoClient(conn_uri)[db_name]
             if utilClass.configOption == 'enterprise' or config_option == "prod":
-                db_conn_dict[db_name] = MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13008, username="root", password="dslabglobal")[
+                db_conn_dict[db_name] = MongoClient(host=master_ip if master_ip else "0.0.0.0", port=13007, username="root", password="dslabglobal")[
                     db_name]
         return db_conn_dict[db_name]
 

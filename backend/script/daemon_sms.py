@@ -166,6 +166,7 @@ class DaemonSMS():
                 my_env["DS2_DAEMON_TASK_MODE"] = "true"
                 my_env["DS2_TASK_ID"] = str(data['id'])
                 my_env["DS2_CONFIG_OPTION"] = "enterprise"
+                my_env["LD_LIBRARY_PATH"] = "/root/miniconda3/eenvs/p3.9/lib/python3.9/site-packages/nvidia/cudnn/lib:$LD_LIBRARY_PATH"
 
                 cmd = f"{python_path} {execute_path}daemon_async_task.py prod business enterprise {data['id']}"
 
