@@ -133,14 +133,17 @@ const CustomAICreateModal = ({
   };
 
   const postCustomAI = (predictColumnId) => {
-    api
-      .postCustomAI({
+    var values = {
         labelproject_id: labelprojects.projectDetail.id,
         custom_ai_type: customAIType,
         use_class_info: useClass,
         trainingColumnInfo: useColumn,
-        valueForPredictColumnId: predictColumnId,
-      })
+      }
+      if (predictColumnId) {
+        values["valueForPredictColumnId"] = predictColumnId;
+      }
+    api
+      .postCustomAI(values)
       .then((res) => {
         getProjectsStatus();
         setIsCustomAiLoading(true);

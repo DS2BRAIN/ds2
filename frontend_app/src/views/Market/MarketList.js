@@ -35,6 +35,8 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import CloseIcon from "@material-ui/icons/Close";
+import {fileurl} from "controller/api.js";
+const market_image_url = fileurl + "asset/front/img/img_market.jpg";
 
 export default function MarketList({ history }) {
   const classes = currentTheme();
@@ -294,7 +296,7 @@ export default function MarketList({ history }) {
                       >
                         {tableBody.value === "thumbnail" ? (
                           <img
-                            src={marketModel[tableBody.value]}
+                            src={market_image_url}
                             style={{ width: "80px", height: "80px" }}
                           />
                         ) : (
