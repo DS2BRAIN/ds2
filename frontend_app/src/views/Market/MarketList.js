@@ -79,8 +79,8 @@ export default function MarketList({ history }) {
   const [isKor, setIsKor] = useState(false);
 
   const tableHeads = [
-    { value: "Category", width: "12%" },
-    { value: "Preview", width: "8%" },
+    // { value: "Category", width: "12%" },
+    // { value: "Preview", width: "8%" },
     { value: "Title", width: "20%" },
     { value: "Input data", width: "20%" },
     { value: "Output data", width: "24%" },
@@ -90,8 +90,8 @@ export default function MarketList({ history }) {
   ];
 
   const tableBodys = [
-    { value: "category", name: "카테고리" },
-    { value: "thumbnail", name: "미리보기" },
+    // { value: "category", name: "카테고리" },
+    // { value: "thumbnail", name: "미리보기" },
     { value: isKor ? "name_kr" : "name_en", name: "제목" },
     {
       value: isKor ? "inputData_kr" : "inputData_en",
